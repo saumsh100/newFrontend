@@ -38,6 +38,6 @@ export const httpClient = config =>
 
 export const bookingWidgetHttpClient = config =>
   buildHttpClient(getTokenBookingWidget, {
-    baseURL: process.env.MY_HOST,
+    baseURL: `${process.env.API_SERVER_URL}/my`,
     ...config,
   });

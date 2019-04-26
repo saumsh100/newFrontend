@@ -1,5 +1,4 @@
-
-@import '../../../../ui.scss';
+@import '../../../../ui';
 
 .userWrapper {
   display: flex;
@@ -42,7 +41,7 @@
 }
 
 .greeting {
-  font-family: $medium-font;
+  font-family: 'Roboto', sans-serif;
   color: black;
 }
 
@@ -55,11 +54,12 @@
 .businessName {
   font-size: 10px;
   color: $primary-darkgrey;
-
 }
 
 .userAvatar {
-  margin-right: 5px;
+  margin-right: 2px;
+  background: var(--primaryColor);
+  font-weight: bold;
 }
 
 .dropdownUserMenu {
@@ -68,4 +68,3 @@
     width: 150px;
   }
 }
-

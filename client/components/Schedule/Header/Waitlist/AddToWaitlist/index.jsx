@@ -10,7 +10,7 @@ import { Grid, Row, Col, Avatar, Icon, Button, DialogBox } from '../../../../lib
 import { Create as CreateWaitSpot } from '../../../../GraphQLWaitlist';
 import { isHub } from '../../../../../util/hub';
 import CheckboxButton from '../../../../library/CheckboxButton';
-import { availabilitiesGroupedByPeriod } from '../../../../WidgetV2/Booking/Review/helpers';
+import { availabilitiesGroupedByPeriod } from '../../../../Widget/Booking/Review/helpers';
 import PatientSearch from '../../../../PatientSearch';
 import { loadWeeklySchedule } from '../../../../../thunks/waitlist';
 import Loading from '../../../../library/Loading';
@@ -449,18 +449,24 @@ AddToWaitlist.propTypes = {
   createWaitSpotHandler: PropTypes.func.isRequired,
   timezone: PropTypes.string,
   availabilities: PropTypes.shape({
-    evening: PropTypes.arrayOf(PropTypes.shape({
-      endDate: PropTypes.string,
-      startDate: PropTypes.string,
-    })),
-    afternoon: PropTypes.arrayOf(PropTypes.shape({
-      endDate: PropTypes.string,
-      startDate: PropTypes.string,
-    })),
-    morning: PropTypes.arrayOf(PropTypes.shape({
-      endDate: PropTypes.string,
-      startDate: PropTypes.string,
-    })),
+    evening: PropTypes.arrayOf(
+      PropTypes.shape({
+        endDate: PropTypes.string,
+        startDate: PropTypes.string,
+      }),
+    ),
+    afternoon: PropTypes.arrayOf(
+      PropTypes.shape({
+        endDate: PropTypes.string,
+        startDate: PropTypes.string,
+      }),
+    ),
+    morning: PropTypes.arrayOf(
+      PropTypes.shape({
+        endDate: PropTypes.string,
+        startDate: PropTypes.string,
+      }),
+    ),
     total: PropTypes.number,
   }),
 };

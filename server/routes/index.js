@@ -3,18 +3,15 @@ import { Router } from 'express';
 import subdomain from 'express-subdomain';
 import graphQLRouter from 'CareCruGraphQL/server';
 import apiRouter from './_api';
+import myRouter from './_api/my';
 import authRouter from './_auth';
 import callsRouter from './_callrail';
-import myRouter from './_my';
 import twilioRouter from './_twilio';
 import signupRouter from './_signup';
 import vendastaRouter from './_vendasta';
 import resetRouter from './reset';
-import {
-  Invite,
-  PasswordReset,
-  User,
-} from '../_models';
+import myWidgetRenderRouter from './widgets';
+import { Invite, PasswordReset, User } from '../_models';
 import graphQLClient from '../util/graphQLClient';
 import { sequelizeAuthMiddleware } from '../middleware/auth';
 import isFeatureFlagEnabled from '../lib/featureFlag';
@@ -22,9 +19,7 @@ import isFeatureFlagEnabled from '../lib/featureFlag';
 const rootRouter = Router();
 
 // Bind subdomain capturing
-// Will be removed once microservices are in full effect
-rootRouter.use(subdomain('my', myRouter));
-rootRouter.use(subdomain('my2', myRouter));
+rootRouter.use(subdomain('my', myWidgetRenderRouter));
 
 // Bind auth route to generate tokens
 rootRouter.use('/auth', authRouter);
@@ -33,19 +28,24 @@ rootRouter.use('/signup', signupRouter);
 rootRouter.use('/resetpassword', resetRouter);
 
 // Bind REST API
+rootRouter.use('/my', myRouter);
 rootRouter.use('/api', apiRouter);
 
 // Bind GraphQL endpoint
 rootRouter.use('/graphql', graphQLRouter);
-rootRouter.post('/newgraphql', sequelizeAuthMiddleware, async (req, res, next) => {
-  try {
-    const { data } = await graphQLClient(req.body);
+rootRouter.post(
+  '/newgraphql',
+  sequelizeAuthMiddleware,
+  async (req, res, next) => {
+    try {
+      const { data } = await graphQLClient(req.body);
 
-    res.send(data);
-  } catch ({ data }) {
-    res.status(400).send(data);
-  }
-});
+      res.send(data);
+    } catch ({ data }) {
+      res.status(400).send(data);
+    }
+  },
+);
 
 // Webhooks!
 rootRouter.use('/twilio', twilioRouter);

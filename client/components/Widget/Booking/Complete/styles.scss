@@ -1,113 +1,78 @@
+@import '../styles';
 
-@import '../../../../ui';
-
-.completedWrapper {
-  padding: 20px;
-  @media screen and (min-width: $widget-mobile-width) {
-    padding: 40px;
-  }
-}
-
-.label {
-  text-align: left;
-  text-transform: uppercase;
-  font-size: 10px;
-  letter-spacing: 0.9px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  color: #C1D2D8;
-}
-
-.gridContainer {
-  padding: 20px;
-  box-sizing: border-box;
-  clear: both;
-}
-
-
-.submitButtonWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  // padding: 0 20px;
-  > button {
-    width: 100%;
-    max-width: 300px;
-  }
-}
-
-.well {
-  color: $primary-dark;
-  padding: 15px 10px;
-  background-color: $primary-white;
-  border: 1px solid darken($primary-white, 10%);
-  margin-bottom: 10px;
-  > div {
-    padding: 5px 0;
-    text-transform: capitalize;
-  }
-}
-
-.bold {
-  font-family: $medium-font;
-  text-transform: none !important;
-}
-
-.service {
-  @extend .bold;
-}
-
-.date {
-  @extend .bold;
+.heading {
+  font-size: 1rem;
   color: var(--primaryColor);
+  margin-bottom: var(--widget-spacer);
 }
 
-.textArea {
-  padding-top: 0;
-  > textarea {
-    padding: 10px;
-    border: 1px solid $primary-gray;
-    color: black;
-  }
+.actionButton {
+  @extend .actionButton;
+  margin-bottom: var(--widget-spacer);
 }
 
-.message {
+.container {
+  @extend .container;
   text-align: center;
-  margin: 0 auto;
-  margin-top: 10px;
+}
+.content {
+  @extend .content;
+  text-align: center;
+}
+.requestTitle {
+  @extend .subtitle;
+  margin-bottom: 8px;
+}
+.requestPatient {
+  @extend .title;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.requestCard {
+  background: $widget-grey-lightest;
+  padding: var(--widget-spacer);
+  text-align: center;
+}
+.requestInfo {
+  @extend .subtitle;
   margin-bottom: 10px;
-  // margin-bottom: 20px;
-  max-width: 245px;
-  line-height: 20px;
-  font-size: 12px;
-  color: $primary-darkgrey;
-  flex: 1;
-  @media screen and (min-width: $widget-mobile-width) {
-    margin-top: 20px;
-    // margin-bottom: 20px;
-    max-width: 350px;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+  > strong {
+    display: block;
+    font-size: 13px;
+    color: $widget-grey;
   }
 }
+.afterCardMessage {
+  @extend .subtitle;
+  margin-top: var(--widget-spacer);
+  margin-bottom: 4px;
+  padding: 0 var(--widget-spacer);
+}
 
-.header {
-  composes: header from 'sass-loader!../../../../fonts.scss';
-  padding: 10px 0;
+.svgWrapper {
   text-align: center;
-  color: $primary-dark;
+  margin-bottom: 20px;
+  width: 100%;
+}
+.bookingType {
+  color: $widget-grey;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  margin-top: 0;
 }
 
-.doneButtonWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  > button {
-    width: 100%;
-    max-width: 270px;
-    &:hover {
-      background-color: var(--primaryColor);
-    }
-  }
+.title {
+  @extend .title;
+  margin-bottom: var(--widget-spacer);
+}
+
+hr {
+  border: 0;
+  margin: var(--widget-spacer) 0;
+  background: $widget-grey-lighter;
+  height: 1px;
 }

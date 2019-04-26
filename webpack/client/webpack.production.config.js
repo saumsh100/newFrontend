@@ -23,7 +23,6 @@ const developmentConfig = merge(baseConfig, {
   entry: {
     app: entryPath('app'),
     reviews: entryPath('reviews'),
-    my: entryPath('my'),
     hub: entryPath('hub'),
   },
 

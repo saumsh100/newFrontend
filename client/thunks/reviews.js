@@ -6,7 +6,7 @@ import {
   mergeReviewValues,
   mergeSentReviewValues,
 } from '../reducers/reviewsWidget';
-import { httpClient } from '../util/httpClient';
+import { bookingWidgetHttpClient } from '../util/httpClient';
 
 /**
  * createReview will post to the API to create the review instance
@@ -21,7 +21,7 @@ export function createReview(values) {
     // TODO: vs. organic so that we can add the relation (mark SentReview as successful)
     const { reviews } = getState();
     const accountId = reviews.getIn(['account', 'id']);
-    return httpClient()
+    return bookingWidgetHttpClient()
       .post(`/reviews/${accountId}`, values)
       .then(({ data }) => {
         // No normalizr structure here
@@ -51,7 +51,7 @@ export function saveReview() {
       savedReview = review.set('description', null);
     }
 
-    return httpClient()
+    return bookingWidgetHttpClient()
       .post(`/reviews/${accountId}/${sentReviewId}`, savedReview.toJS())
       .then(({ data }) =>
         // No normalizr structure here
@@ -71,7 +71,7 @@ export function updateReview() {
     const reviewId = reviews.getIn(['review', 'id']);
     const patientUserId = auth.getIn(['patientUser', 'id']);
     const reviewData = { patientUserId };
-    return httpClient()
+    return bookingWidgetHttpClient()
       .put(`/reviews/${reviewId}`, reviewData)
       .then(({ data }) => {
         // No normalizr structure here
@@ -94,7 +94,7 @@ export function loadSentReview() {
     const sentReviewId = reviews.getIn(['sentReview', 'id']);
 
     // TODO: is it okay to just open up
-    return httpClient()
+    return bookingWidgetHttpClient()
       .get(`/sentReviews/${sentReviewId}`)
       .then(({ data }) => {
         if (data.sentReview.isCompleted) {

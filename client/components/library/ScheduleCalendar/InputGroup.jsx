@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
 import DropdownTimeSuggestion from '../DropdownTimeSuggestion';
-import { dropdownTheme } from '../../WidgetV2/theme';
+import { dropdownTheme } from '../../Widget/theme';
 import { DeleteIcon } from './Icons';
 import styles from './modal.scss';
 import schedule from './schedule.scss';
@@ -129,10 +129,12 @@ InputGroup.propTypes = {
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func,
   startTime: PropTypes.string.isRequired,
-  timeOptions: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
-    label: PropTypes.string,
-  })).isRequired,
+  timeOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+  ).isRequired,
   renderList: PropTypes.func.isRequired,
   theme: PropTypes.objectOf(PropTypes.string),
   error: PropTypes.bool,

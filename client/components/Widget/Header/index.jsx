@@ -3,151 +3,85 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { ConnectedRouter as Router } from 'react-router-redux';
-import {
-  /* BrowserRouter as Router, */ Redirect,
-  Route,
-  Switch,
-  withRouter,
-} from 'react-router-dom';
-import moment from 'moment';
+import { withRouter } from 'react-router-dom';
+import classNames from 'classnames';
+import BackButton from './BackButton';
+import Button from '../../library/Button';
 import { closeBookingModal } from '../../../thunks/availabilities';
-import { setSelectedStartDate, setIsFetching } from '../../../actions/availabilities';
-import { Avatar, IconButton, DayPicker } from '../../library';
-import PatientUserMenu from './PatientUserMenu';
+import { historyShape, locationShape } from '../../library/PropTypeShapes/routerShapes';
+import { CloseBookingModalSVG } from '../SVGs';
 import styles from './styles.scss';
-
-const b = (path = '') => `/widgets/:accountId/app${path}`;
-
-const map = {
-  '/book': 'Availabilities Page',
-  '/signup': 'Sign Up Page',
-  '/login': 'Login Page',
-};
-
-function generateIsDisabledDay(currentDate) {
-  return date => moment(date).isBefore(currentDate);
-}
 
 class Header extends Component {
   constructor(props) {
     super(props);
-
     this.goBack = this.goBack.bind(this);
   }
 
   goBack(path) {
-    return () => this.props.history.push(path);
+    return () => {
+      this.props.history.push(path);
+    };
   }
 
   render() {
     const {
-      isAuth, patientUser, hasWaitList, selectedStartDate, account, floorDate,
+      history,
+      location,
+      routesState: { isCompleteRoute, isFirstRoute },
+      isReviewApp,
     } = this.props;
 
-    const backButton = path => () => (
-      <IconButton icon="arrow-left" onClick={this.goBack(path)} className={styles.backButton} />
-    );
-
-    const titleDiv = title => () => <div className={styles.title}>{title}</div>;
-
-    const accountTimezone = account.get('timezone');
+    const path = location.pathname
+      .split('/')
+      .filter((_, i) => i > 3)
+      .join('/');
 
     return (
-      <div className={styles.headerContainer}>
-        {/* Back Button */}
-        <Router history={this.props.history}>
-          <Switch>
-            <Route exact path={b('/signup')} component={backButton('./book')} />
-            <Route exact path={b('/signup/confirm')} component={backButton('../book')} />
-            <Route exact path={b('/login')} component={backButton('./book')} />
-            <Route exact path={b('/book/review')} component={backButton('../book')} />
-            <Route exact path={b('/book/wait')} component={backButton('../book')} />
-            <Route exact path={b('/patient/add')} component={backButton('../book/review')} />
-            <Route path={b('/patient/edit')} component={backButton('../../book/review')} />
-          </Switch>
-        </Router>
-        {/* Title Div */}
-        <Router history={this.props.history}>
-          <div className={styles.titleWrapper}>
-            <Route exact path={b('/book')} component={titleDiv('Select Availability')} />
-            <Route exact path={b('/book/review')} component={titleDiv('Review & Book')} />
-            <Route exact path={b('/patient/add')} component={titleDiv('Add New Patient')} />
-            <Route path={b('/patient/edit')} component={titleDiv('Edit Patient')} />
-            <Route
-              exact
-              path={b('/book/wait')}
-              component={titleDiv(`${hasWaitList ? 'Edit' : 'Join'} Waitlist`)}
-            />
+      <div className={styles.topHead}>
+        <div className={styles.headerContainer}>
+          <div
+            className={classNames({
+              [styles.headerLeftArea]: true,
+              [styles.hideBack]: isCompleteRoute || isFirstRoute || isReviewApp,
+            })}
+          >
+            <BackButton history={history} goBack={this.goBack} />
           </div>
-        </Router>
-        <div className={styles.pullRight}>
-          <Router history={this.props.history}>
-            <div>
-              <Route
-                exact
-                path={b('/book')}
-                component={() => (
-                  <div>
-                    {/* <IconButton
-                    icon="filter"
-                    onClick={this.props.closeBookingModal}
-                    className={styles.iconButton}
-                  /> */}
-                    <DayPicker
-                      target="icon"
-                      value={selectedStartDate}
-                      onChange={(value) => {
-                        this.props.setIsFetching(true);
-                        this.props.setSelectedStartDate(value);
-                      }}
-                      tipSize={0.01}
-                      timezone={accountTimezone}
-                      disabledDays={generateIsDisabledDay(floorDate)}
-                      iconClassName={styles.calendarButton}
-                    />
-                  </div>
-                )}
-              />
-            </div>
-          </Router>
-          {isAuth ? <PatientUserMenu user={patientUser} /> : null}
-          <IconButton
-            icon="times"
-            onClick={() => this.props.closeBookingModal()}
-            className={styles.closeButton}
-          />
+          <div className={styles.headerCenterArea}>
+            <h2 className={classNames(styles.pageTitle, { [styles.complete]: isCompleteRoute })}>
+              {isReviewApp ? 'Review Your Visit' : 'Schedule Your Appointment'}
+            </h2>
+          </div>
+          <div className={styles.headerRightArea}>
+            <Button
+              className={styles.closeButton}
+              onClick={() => this.props.closeBookingModal(path)}
+            >
+              <CloseBookingModalSVG />
+            </Button>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-Header.propTypes = {};
-
-function mapStateToProps({ auth, availabilities }) {
-  return {
-    patientUser: auth.get('patientUser'),
-    isAuth: auth.get('isAuthenticated'),
-    hasWaitList: availabilities.get('hasWaitList'),
-    selectedStartDate: availabilities.get('selectedStartDate'),
-    floorDate: availabilities.get('floorDate'),
-    account: availabilities.get('account'),
-  };
-}
-
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      closeBookingModal,
-      setSelectedStartDate,
-      setIsFetching,
-    },
-    dispatch,
-  );
+  return bindActionCreators({ closeBookingModal }, dispatch);
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Header));
+Header.propTypes = {
+  closeBookingModal: PropTypes.func.isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
+  routesState: PropTypes.objectOf(PropTypes.bool).isRequired,
+  isReviewApp: PropTypes.bool.isRequired,
+};
+
+export default withRouter(
+  connect(
+    null,
+    mapDispatchToProps,
+  )(Header),
+);

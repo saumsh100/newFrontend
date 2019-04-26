@@ -1,121 +1,219 @@
 
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React from 'react';
 import { bindActionCreators } from 'redux';
-import { withRouter } from 'react-router-dom';
-import moment from 'moment';
-import keys from 'lodash/keys';
-import omitBy from 'lodash/omitBy';
-import { Button, Link } from '../../../library';
-import { refreshAvailabilitiesState } from '../../../../actions/availabilities';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Map } from 'immutable';
+import { dateFormatter } from '@carecru/isomorphic';
+import { Button } from '../../../library';
+import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
+import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
+import Practitioner from '../../../../entities/models/Practitioners';
+import Service from '../../../../entities/models/Service';
+import {
+  refreshAvailabilitiesState,
+  getSelectedDaysOfTheWeek,
+} from '../../../../reducers/availabilities';
+import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
+import { BookingConfirmedSVG } from '../../SVGs';
+import { availabilitiesGroupedByPeriod, waitlistDates, waitlistTimes } from '../Review/helpers';
+import SummaryItem from '../Review/SummaryItem';
+import { hideButton } from '../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
 
-const generateCSW = (object) => {
-  // Get true keys
-  const filtered = keys(omitBy(object, value => !value));
-  if (!filtered.length) {
-    return 'none';
-  }
+const NOT_PROVIDED_TEXT = 'Not Provided';
 
-  return filtered.join(', ');
-};
+function Complete({
+  dateAndTime,
+  history,
+  location,
+  patientUser,
+  selectedService,
+  officeHours,
+  selectedPractitioner,
+  timezone,
+  waitSpot,
+  selectedDaysOfTheWeek,
+  notes,
+  ...props
+}) {
+  props.hideButton();
 
-class Complete extends Component {
-  constructor(props) {
-    super(props);
+  /**
+   * Generates the availabilities using the office openings,
+   * also group them inside the specific time-frame.
+   */
+  const availabilities =
+    selectedService &&
+    availabilitiesGroupedByPeriod(
+      Object.values(officeHours),
+      timezone,
+      selectedService.get('duration'),
+    );
 
-    this.complete = this.complete.bind(this);
-  }
-
-  complete() {
-    this.props.refreshAvailabilitiesState();
-    this.props.history.push('../book');
-  }
-
-  render() {
-    const {
-      selectedAvailability,
-      selectedService,
-      hasWaitList,
-      waitSpot,
-    } = this.props;
-
-    let serviceName = null;
-    let selectedDay = null;
-    if (selectedAvailability) {
-      serviceName = selectedService.get('name');
-
-      const mDate = moment(selectedAvailability.startDate);
-      selectedDay = `${mDate.format('ddd, MMM Do')} at ${mDate.format('h:mm a')}`;
-    }
-
-    let preferredDays = null;
-    let preferredTime = null;
-    if (hasWaitList) {
-      preferredDays = generateCSW(waitSpot.get('daysOfTheWeek').toJS());
-      preferredTime = generateCSW(waitSpot.get('preferences').toJS());
-    }
-
-    return (
-      <div className={styles.completedWrapper}>
-        <div className={styles.header}>Thank you!</div>
-        <div className={styles.message}>
-          Your appointment has been successfully requested. We will be in touch
-          shortly. Please wait for our confirmation.
-        </div>
-        {selectedAvailability ? (
-          <div>
-            <div className={styles.label}>Appointment Summary</div>
-            <div className={styles.well}>
-              <div className={styles.service}>{serviceName}</div>
-              <div className={styles.date}>{selectedDay}</div>
-            </div>
+  const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId ||
+    NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`;
+  return (
+    <div className={styles.scrollableContainer}>
+      <div className={styles.contentWrapper}>
+        <div className={styles.container}>
+          <div className={styles.svgWrapper}>
+            <BookingConfirmedSVG />
           </div>
-        ) : null}
-        {hasWaitList ? (
-          <div>
-            <div className={styles.label}>Waitlist Information</div>
-            <div className={styles.well}>
-              <div className={styles.bold}>Preferred Day of the Week:</div>
-              <div>{preferredDays}</div>
-              <div className={styles.bold}>Preferred Time:</div>
-              <div>{preferredTime}</div>
-            </div>
-          </div>
-        ) : null}
-        <div className={styles.doneButtonWrapper}>
-          <Button onClick={this.complete}>Sounds good. Take me back</Button>
+          <h1 className={styles.heading}>
+            Thank You, {patientUser && `${patientUser.firstName} ${patientUser.lastName}`}!
+          </h1>
+          <p className={styles.description}>
+            Your request has been submitted successfully. <br />
+            We will be in touch soon, please wait for our confirmation.
+          </p>
         </div>
       </div>
-    );
-  }
+      <div className={styles.contentWrapper}>
+        {dateAndTime && (
+          <div className={styles.content}>
+            <div className={styles.bookingGroup}>
+              <h4 className={styles.title}>Appointment Details</h4>
+              <SummaryItem label="Reason" value={selectedService.get('name')} />
+              {selectedPractitioner && selectedPractitioner.getPrettyName() ? (
+                <SummaryItem label="Practitioner" value={selectedPractitioner.getPrettyName()} />
+              ) : (
+                <SummaryItem label="Practitioner" value="No Preference" />
+              )}
+              <SummaryItem
+                label="Date"
+                value={`${dateFormatter(
+                  dateAndTime.startDate,
+                  timezone,
+                  'ddd, MMM Do',
+                )} at ${dateFormatter(dateAndTime.startDate, timezone, 'h:mm a')}`}
+              />
+            </div>
+            <hr />
+            {selectedDaysOfTheWeek.size > 0 && (
+              <div className={styles.bookingGroup}>
+                <h4 className={styles.title}>Waitlist Details</h4>
+                <SummaryItem label="Available Dates" value={waitlistDates(selectedDaysOfTheWeek)} />
+                <SummaryItem
+                  label="Times"
+                  value={waitlistTimes(waitSpot, availabilities, timezone)}
+                />
+              </div>
+            )}
+          </div>
+        )}
+        <div className={styles.content}>
+          <div className={styles.bookingGroup}>
+            <h4 className={styles.title}>Patient Details</h4>
+            <SummaryItem
+              label="Patient"
+              value={`${patientUser.firstName} ${patientUser.lastName}`}
+            />
+            <SummaryItem
+              label="Insurance Carrier"
+              value={`${patientUser.insuranceCarrier || NOT_PROVIDED_TEXT}`}
+            />
+            <SummaryItem label="Insurance Member ID & Group ID" value={insuranceMemberAndGroupID} />
+            <SummaryItem label="Notes" value={notes || NOT_PROVIDED_TEXT} />
+          </div>
+        </div>
+        <div className={styles.container}>
+          <Button
+            className={styles.actionButton}
+            onClick={() => {
+              props.refreshAvailabilitiesState();
+              history.push({
+                ...location,
+                pathname: '../book/reason',
+                state: {
+                  ...location.state,
+                  isCompleteRoute: false,
+                },
+              });
+            }}
+          >
+            Start New Booking
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function mapStateToProps({ auth, availabilities, entities }) {
+  const getPatientUser =
+    availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
+      ? auth
+        .get('familyPatients')
+        .find(patient => patient.id === availabilities.get('familyPatientUser'))
+      : false;
+
+  const selectedDaysOfTheWeek = getSelectedDaysOfTheWeek(availabilities.get('waitSpot'));
+
+  return {
+    notes: availabilities.get('notes'),
+    dateAndTime: availabilities.get('selectedAvailability'),
+    officeHours: availabilities.get('officeHours').toJS(),
+    timezone: availabilities.get('account').get('timezone'),
+    selectedDaysOfTheWeek,
+    selectedService: entities.getIn([
+      'services',
+      'models',
+      availabilities.get('selectedServiceId'),
+    ]),
+    selectedPractitioner: entities.getIn([
+      'practitioners',
+      'models',
+      availabilities.get('selectedPractitionerId'),
+    ]),
+    patientUser: getPatientUser,
+    waitSpot: availabilities.get('waitSpot'),
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       refreshAvailabilitiesState,
+      hideButton,
     },
     dispatch,
   );
 }
 
-function mapStateToProps({ availabilities, entities }) {
-  return {
-    hasWaitList: availabilities.get('hasWaitList'),
-    waitSpot: availabilities.get('waitSpot'),
-    selectedAvailability: availabilities.get('selectedAvailability'),
-    notes: availabilities.get('notes'),
-    selectedService: entities.getIn([
-      'services',
-      'models',
-      availabilities.get('selectedServiceId'),
-    ]),
-  };
-}
-
-export default withRouter(connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Complete));
+)(Complete);
+
+Complete.propTypes = {
+  dateAndTime: PropTypes.shape({
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
+    practitionerId: PropTypes.string,
+  }),
+  location: PropTypes.shape(locationShape).isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
+  officeHours: PropTypes.shape(officeHoursShape).isRequired,
+  patientUser: PropTypes.oneOfType([PropTypes.shape(patientUserShape), PropTypes.bool]),
+  selectedPractitioner: PropTypes.oneOfType([PropTypes.instanceOf(Practitioner), PropTypes.string]),
+  selectedService: PropTypes.oneOfType([PropTypes.instanceOf(Service), PropTypes.string]),
+  timezone: PropTypes.string.isRequired,
+  refreshAvailabilitiesState: PropTypes.func.isRequired,
+  waitSpot: PropTypes.instanceOf(Map).isRequired,
+  selectedDaysOfTheWeek: PropTypes.instanceOf(Map).isRequired,
+  notes: PropTypes.string,
+  hideButton: PropTypes.func.isRequired,
+};
+
+Complete.defaultProps = {
+  dateAndTime: {
+    startDate: '',
+    endDate: '',
+    practitionerId: '',
+  },
+  notes: '',
+  patientUser: null,
+  selectedPractitioner: '',
+  selectedService: '',
+};

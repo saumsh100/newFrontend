@@ -1,213 +1,43 @@
-@import '../../../../ui';
+@import '../styles';
 
-.reviewAndBookWrapper {
-  padding: 20px;
-  @media screen and (min-width: $widget-mobile-width) {
-    flex-direction: column;
-    padding: 40px;
-  }
-}
-
-.label {
-  text-align: left;
-  text-transform: uppercase;
-  font-size: 10px;
-  letter-spacing: 0.9px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  color: #c1d2d8;
-  flex: 1;
-}
-
-.gridContainer {
-  padding: 20px;
-  box-sizing: border-box;
-  clear: both;
-}
-
-.submitButtonWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  // padding: 0 20px;
-  > button {
-    width: 100%;
-    max-width: 300px;
-    &:hover {
-      background-color: var(--primaryColor);
-    }
-  }
-}
-
-.well {
-  color: $primary-dark;
-  padding: 15px 10px;
-  background-color: $primary-lightgray;
-  border: 1px solid darken($primary-white, 10%);
-  > div {
-    padding: 5px 0;
-    text-transform: capitalize;
-  }
-}
-
-.bold {
-  font-family: $medium-font;
-  text-transform: none !important;
-}
-
-.service {
-  @extend .bold;
-}
-
-.date {
-  @extend .bold;
-  color: var(--primaryColor);
-}
-
-.editWrapper {
-  display: flex;
-  flex-direction: row;
-  > a {
-    margin-left: auto;
-    > button {
-      font-family: $medium-font;
-      color: $primary-blue;
-      text-decoration: none;
-      padding-right: 0 !important;
-      padding-left: 0 !important;
-    }
-  }
-}
-
-.textArea {
-  padding-top: 0;
-  > textarea {
-    padding: 10px;
-    border: 1px solid $primary-gray;
-    color: black;
-  }
-}
-
-.preferencesWrapper {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin: 0 -20px;
-  @media screen and (max-width: $widget-mobile-width) {
-    flex-direction: column;
-    padding: 0;
-  }
-}
-.dropDownList {
-  max-height: 220px;
-  overflow-y: auto;
-  position: relative;
-  padding-bottom: 40px;
-}
-.labelPatient {
-  flex: 1;
-  padding: 13px;
-}
-.slotButton {
-  padding: 0;
-  text-align: left;
-}
-.editPatient {
-  text-transform: uppercase;
-  border: 0;
-  color: $primary-darkgrey;
-  font-size: $small-size;
-  margin: 0 13px;
-  cursor: pointer;
-  &:hover {
-    color: $primary-dark;
-  }
-}
-.addNewPatient {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  border: 0;
-  background: $chat-lightgrey;
-  text-transform: uppercase;
-  color: $primary-dark;
-  line-height: 40px;
-  text-align: left;
-  font-family: $medium-font;
-  cursor: pointer;
-  padding: 0 0 0 12px;
-  &:hover {
-    background: $primary-lightgrey;
-  }
-}
-.fieldWrapper {
-  padding: 0 20px;
-  align-items: center;
-  flex-wrap: wrap;
-  width: 100%;
-  box-sizing: border-box;
-  &.flexibleField {
-    // display: flex;
-    @media screen and (min-width: $widget-mobile-width) {
-      // flex: 1;
-      box-sizing: border-box;
-    }
-  }
-  &.fullFieldWrapper {
-    width: 100%;
-  }
-  > div {
-    width: 100%;
-  }
-}
-.toggleInput {
-  position: absolute;
-  right: 0;
-  bottom: 25px;
-  border: 0;
-  padding: 0;
-  outline: none;
-  cursor: pointer;
-}
-.inputError {
-  top: 31px;
-}
-.errorIcon {
-  color: red;
-}
-.inputInsurance {
-  padding-top: 0;
-}
-.reviewAndBookSlot {
-  text-align: left !important;
-  justify-content: flex-start !important;
-}
-.reviewAndBookInputWrapper {
-  padding: 0 0 20px !important;
-}
-
-.reviewAndBookPlaceholder {
-  &::placeholder {
-    font-style: italic;
-    color: $inactive-color;
-    font-weight: 200;
-  }
-}
-
-.flexWrapper {
+.joinWaitlist {
   display: flex;
 }
 
-.boxWrapper {
-  margin-bottom: 20px;
+.block {
+  display: block;
 }
-.iconWrapper {
-  position: absolute;
-  right: 0;
-  bottom: 30px;
-  opacity: 0.5;
+
+.title {
+  @extend .title;
+  margin-bottom: var(--widget-spacer);
+}
+
+.titleWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.editLink {
+  @extend .editLink;
+  width: auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
+  svg {
+    margin-right: 4px;
+  }
+}
+
+.content {
+  hr {
+    border: 0;
+    margin: var(--widget-spacer) 0;
+    background: $widget-grey-lighter;
+    height: 1px;
+  }
+}
+.emptyWaitlistTitle {
+  @extend .title;
+  margin-bottom: 0;
 }

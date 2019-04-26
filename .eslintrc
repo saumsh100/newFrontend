@@ -39,7 +39,8 @@
     ],
     "consistent-return": "warn",
     "prefer-promise-reject-errors": "warn",
-    "function-paren-newline": ["error", "consistent"]
+    "function-paren-newline": ["error", "consistent"],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
   },
   "settings": {
     "import/resolver": {

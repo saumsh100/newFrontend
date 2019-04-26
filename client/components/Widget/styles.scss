@@ -1,15 +1,12 @@
-
-@import '../../ui.scss';
-
-:global(.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)) {
-  background-color: var(--primaryColor);
-}
+@import '../../ui';
 
 .reviewsWidgetContainer {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
+  font-family: Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .reviewsWidgetCenter {
@@ -17,25 +14,29 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  max-width: 800px;
   width: 100%;
-  max-height: 675px;
-  background-color: white;
   > h1 {
     margin: 0;
   }
 }
 
-.container {
+.widgetContainer {
   display: flex;
   flex: 1;
   width: 100%;
   overflow: auto;
+  flex-direction: column;
   > div {
     display: flex;
     flex: 1;
     width: 100%;
     flex-direction: column;
+  }
+  .stepsWrapper {
+    width: auto;
+    flex: none;
+    padding: var(--widget-spacer) var(--widget-spacer) 0;
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -46,7 +47,7 @@
   flex-direction: row;
   align-items: center;
   height: 60px;
-  box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 2px 5px rgba(0,0,0,.16);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px rgba(0, 0, 0, 0.16);
 }
 
 .col {
@@ -55,7 +56,7 @@
 
 .service {
   font-size: 12px;
-  font-family: $medium-font;
+  font-family: 'Roboto', sans-serif;
   padding-bottom: 5px;
 }
 
@@ -63,3 +64,140 @@
   font-size: 12px;
 }
 
+.poweredBy {
+  padding-top: var(--widget-spacer);
+  text-align: center;
+  color: $widget-grey-light;
+  background: $widget-white;
+  border-top: 1px solid $widget-grey-lighter;
+  padding-bottom: var(--widget-spacer);
+  z-index: 2;
+  transform: translateY(60px);
+  animation: movePoweredBy 0.75s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
+  img {
+    max-height: 16px;
+    margin-bottom: -2px;
+    margin-left: 3px;
+  }
+}
+
+@keyframes movePoweredBy {
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.actionButton {
+  border-radius: 4px;
+  width: 100%;
+  font-size: 14px;
+  padding: 12px 0;
+  transition: all 0.2s ease;
+  min-height: 41px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  &:hover {
+    transition: all 0.2s ease;
+    opacity: 0.9;
+  }
+}
+
+.floatingButton {
+  @extend .actionButton;
+  height: 100%;
+  border-radius: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
+}
+
+.steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  .step {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    color: $widget-grey-light;
+    z-index: 2;
+    flex: 1;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    &[disabled] {
+      background: transparent !important;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      height: 3px;
+      width: calc(100% - 15px);
+      background: $widget-grey-light;
+      top: 29px;
+      left: calc(-50% + 10px);
+      z-index: -1;
+      @media (min-width: 350px) {
+        top: 33px;
+      }
+    }
+    &.active {
+      color: $widget-white;
+      &:after {
+        background: var(--primaryColor);
+      }
+      span {
+        background: var(--primaryColor);
+        border-color: var(--primaryColor);
+        color: $widget-white;
+      }
+      strong {
+        color: var(--primaryColor);
+      }
+    }
+    strong {
+      text-transform: uppercase;
+      font-size: 10px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      @media (min-width: 350px) {
+        font-size: 11px;
+      }
+    }
+    &:first-of-type {
+      z-index: 3;
+      &:after {
+        content: none;
+      }
+    }
+    &:last-of-type {
+      z-index: 1;
+    }
+    span {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      border: 3px solid $widget-grey-light;
+      border-radius: 50%;
+      color: $widget-grey-light;
+      background: $widget-grey-lightest;
+      @media (min-width: 350px) {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    svg {
+      width: 14px;
+      height: auto;
+      fill: currentColor;
+    }
+  }
+}

@@ -28,7 +28,7 @@ const {
 
 const developmentConfig = merge(baseConfig, {
   mode: 'development',
-  entry: entries('app', 'reviews', 'my', 'hub'),
+  entry: entries('app', 'reviews', 'hub'),
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
