@@ -22,7 +22,7 @@ module.exports = {
     const services = [
       {
         id: serviceId,
-        accountId2,
+        accountId: accountId2,
         name: 'Local Test Service',
         duration: 60,
         createdAt: new Date(),
