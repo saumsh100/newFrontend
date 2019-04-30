@@ -21,6 +21,18 @@ import invertFillers from './invertFillers';
 const mergeDateAndTime = (date, time, timezone) =>
   moment.tz(`${date} ${time}`, timezone).toDate();
 
+// Used to help produce the array of "set availability overrides"
+const createSetAvailabilities = (startDate, endDate, availabilities) =>
+  availabilities
+    .filter(a => (
+      startDate <= a.startDate &&
+      endDate >= a.endDate
+    ))
+    .map(a => ({
+      ...a,
+      isSetAvailability: true, // Helpful for debugging
+    }));
+
 /**
  * getCorrectPractitonerWeeklySchedule will modify the practitioner's weeklySchedule
  * by assigning the account's officeHours if isCustomSchedule is false
@@ -190,12 +202,9 @@ export function computeOpeningsDataForDay(options) {
     // If not closed, check if there are "set availabilities",
     // If there are, early return those as the openings
     (reasonDailyHours && reasonDailyHours.availabilities.length
-      ? reasonDailyHours.availabilities.map(a => ({
-        ...a,
-        isSetAvailability: true, // Helpful for debugging
-      }))
-      : // Else, do the computation to find the openings between the fillers
-      computeDatesAndInvertFillers({
+      ? createSetAvailabilities(startDate, endDate, reasonDailyHours.availabilities)
+      // Else, do the computation to find the openings between the fillers
+      : computeDatesAndInvertFillers({
         fillers,
         dailySchedule,
         startDate,
@@ -288,11 +297,13 @@ export function computeOpeningsForPractitioner(options) {
       ...returnObj,
       [day]: reasonDailyHours && {
         ...reasonDailyHours,
-        availabilities: reasonDailyHours.availabilities.map(a => ({
-          ...a,
-          startDate: mergeDateAndTime(day, a.startTime, timezone),
-          endDate: mergeDateAndTime(day, a.endTime, timezone),
-        })),
+        availabilities: reasonDailyHours.availabilities
+          .map(a => ({
+            ...a,
+            startDate: mergeDateAndTime(day, a.startTime, timezone),
+            endDate: mergeDateAndTime(day, a.endTime, timezone),
+          }))
+          .sort((a, b) => a.startDate - b.endDate),
         breaks: reasonDailyHours.breaks.map(t => ({
           ...t,
           startDate: mergeDateAndTime(day, t.startTime, timezone),
