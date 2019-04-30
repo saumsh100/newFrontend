@@ -11,7 +11,11 @@ import { Reminder } from '../../../_models';
 import StatusError from '../../../util/StatusError';
 import { getRemindersOutboxList } from '../../../lib/reminders';
 import { mapPatientsToReminders } from '../../../lib/reminders/helpers';
+import { getMessageFromTemplates } from '../../../services/communicationTemplate';
+import { formatPhoneNumber } from '../../../util/formatters';
+import isFeatureFlagEnabled from '../../../lib/featureFlag';
 
+const NUM_DAYS_DEFAULT = 2;
 const remindersRouter = Router();
 
 remindersRouter.param('accountId', sequelizeLoader('account', 'Account'));
@@ -140,7 +144,7 @@ remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermission
       return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
     }
 
-    const { reminder, account } = req;
+    const { reminder, account, userId } = req;
     const { isConfirmable } = req.query;
     const patient = {
       firstName: 'Jane',
@@ -152,8 +156,30 @@ remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermission
     const formattedDate = mDate.minutes(roundedMinute).seconds(0);
     const appointmentDate = formattedDate.format('dddd, MMMM Do');
     const appointmentTime = formattedDate.format('h:mma');
+    const accountId = account.id;
+    const enterpriseId = account.enterpriseId;
 
-    const templateName = getReminderTemplateName({ isConfirmable, reminder, account });
+    const reminderEmailFooter = await getMessageFromTemplates(
+      accountId,
+      'reminder-email-final-message',
+      {
+        numDays: NUM_DAYS_DEFAULT,
+        phoneNumber: formatPhoneNumber(account.phoneNumber),
+      },
+    );
+
+    const version = await isFeatureFlagEnabled(
+      'reminder-email-template-version',
+      null,
+      {
+        accountId,
+        enterpriseId,
+        userId,
+        domain: req.hostname,
+      },
+    );
+
+    const templateName = getReminderTemplateName({ isConfirmable, reminder, account, version });
     const html = await renderTemplate({
       templateName,
       mergeVars: [
@@ -166,6 +192,10 @@ remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermission
         {
           name: 'APPOINTMENT_TIME',
           content: appointmentTime,
+        },
+        {
+          name: 'REMINDER_EMAIL_FOOTER',
+          content: reminderEmailFooter || '',
         },
       ],
     });

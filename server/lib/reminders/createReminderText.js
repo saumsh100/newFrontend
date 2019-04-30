@@ -162,7 +162,7 @@ export function getReminderType({
   return 'weeksAway';
 }
 
-export function getReminderTemplateName({ isConfirmable, reminder, account }) {
+export function getReminderTemplateName({ isConfirmable, reminder, account, version }) {
   const typeMap = {
     weeksAway: 'Weeks Away',
     weekAway: 'Week Away',
@@ -174,5 +174,7 @@ export function getReminderTemplateName({ isConfirmable, reminder, account }) {
   const isCustomConfirm = reminder.isCustomConfirm ? 'Preconfirmed' : 'Unconfirmed';
   const confirmType = JSON.parse(isConfirmable) ? isCustomConfirm : 'Confirmed';
 
-  return `Patient Reminder - ${typeMap[type]} - ${confirmType}`;
+  return !version || version === '0' ?
+    `Patient Reminder - ${typeMap[type]} - ${confirmType}` :
+    `Reminder - ${typeMap[type]} - ${confirmType} - ${version}`;
 }
