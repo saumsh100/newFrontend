@@ -118,7 +118,8 @@
   padding-bottom: 8px;
 
   &_note {
-    max-height: 80px;
+    max-height: 40px;
+    overflow: auto;
   }
 
   &_text {
@@ -215,7 +216,6 @@
 }
 
 .requestedAt {
-  margin-top: 15px;
   font-size: $extra-small-size;
   composes: fontDefault from 'sass-loader!../../../fonts.scss';
   color: #808081;
