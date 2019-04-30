@@ -46,12 +46,19 @@ function buildErrors(err, model) {
  */
 async function preValidate(dataArray, Model, extraSetValidators = [], extraModelValidators = []) {
   const errors = [];
-  const docs = dataArray.map(p => {
-    const model = Model.build(p);
-
-    model.request = p;
-    return model;
-  });
+  const docs = [];
+  
+  for (const p of dataArray) {
+    let model;
+    try {
+      model = Model.build(p);
+      model.request = p;
+      docs.push(model);
+    } catch(err) {
+      CCLogger.error(err);
+      errors.push(err);
+    }
+  }
 
   // Now Do ORM Validation
   let validatedDocs = [];
