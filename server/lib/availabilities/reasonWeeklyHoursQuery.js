@@ -1,5 +1,6 @@
 
 export default () => `fragment dailyParts on ReasonDailyHours {
+                        isClosed
                         availabilities {
                           startTime
                           endTime
