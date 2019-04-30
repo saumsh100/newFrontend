@@ -52,7 +52,7 @@ const WeeklyHoursModifiers = ({ modifiers, ...props }) => {
   return (
     <div className={styles.modifiers}>
       {Object.entries(modifiers).map(([modifierKey, values]) =>
-        Object.values(values).map(({ startTime, endTime }, index) => (
+        Object.values(values).map(({ startTime, endTime }) => (
           <ScheduleModifier
             type={modifierKey}
             startTime={startTime}
@@ -62,11 +62,7 @@ const WeeklyHoursModifiers = ({ modifiers, ...props }) => {
             })}
             value={moment.tz(startTime, props.allowedTimeFormat, props.timezone).format('LT')}
             height={getModifierHeight(modifierKey, endTime, startTime, props)}
-            label={
-              modifierKey === AVAILABILITIES
-                ? `Set Availability ${index + 1}`
-                : `Blocked ${index + 1}`
-            }
+            label={modifierKey === AVAILABILITIES ? 'Set Availability' : 'Blocked'}
           />
         )))}
     </div>
@@ -80,14 +76,18 @@ WeeklyHoursModifiers.propTypes = {
   allowedTimeFormat: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string])
     .isRequired,
   modifiers: PropTypes.shape({
-    availabilities: PropTypes.arrayOf(PropTypes.shape({
-      startTime: PropTypes.string,
-      endTime: PropTypes.string,
-    })),
-    breaks: PropTypes.arrayOf(PropTypes.shape({
-      startTime: PropTypes.string,
-      endTime: PropTypes.string,
-    })),
+    availabilities: PropTypes.arrayOf(
+      PropTypes.shape({
+        startTime: PropTypes.string,
+        endTime: PropTypes.string,
+      }),
+    ),
+    breaks: PropTypes.arrayOf(
+      PropTypes.shape({
+        startTime: PropTypes.string,
+        endTime: PropTypes.string,
+      }),
+    ),
   }).isRequired,
 };
 

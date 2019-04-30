@@ -305,6 +305,10 @@ class ReasonWeeklyHoursWrapper extends Component {
   }
 
   render() {
+    const timeOptions = timeOptionsWithTimezone(this.props.timezone, 30).map(option => ({
+      ...option,
+      value: moment.tz(option.label, 'LT', this.props.timezone).toISOString(),
+    }));
     return (
       <div>
         <ReasonHours
@@ -318,7 +322,7 @@ class ReasonWeeklyHoursWrapper extends Component {
               data={this.state.data}
               active={this.state.active}
               timeToIsoString={time => timeToMoment(time, this.props.timezone).toISOString()}
-              timeOptions={timeOptionsWithTimezone(this.props.timezone, 30)}
+              timeOptions={timeOptions}
               handleOverrideDropdownChange={this.handleDropdownChange}
               timezone={this.props.timezone}
               validate={dateRange => validate(dateRange, this.props.timezone)}

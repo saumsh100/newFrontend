@@ -26,16 +26,7 @@ const validTimeFormats = ['LT', 'YYYY-MM-DDTHH:mm:ss.sssZ'];
  */
 const formatTimeField = (value, timezone) => {
   const time = moment.tz(value, validTimeFormats, true, timezone);
-  return (
-    time.isValid() &&
-    time
-      .set({
-        year: 1970,
-        months: 1,
-        date: 0,
-      })
-      .toISOString()
-  );
+  return time.isValid() && time.toISOString();
 };
 /**
  * The default format for the label kry must be
