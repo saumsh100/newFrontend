@@ -9,12 +9,13 @@ ARG MODE_ANALYTICS_ACCESS_KEY
 ARG GOOGLE_API_KEY
 ARG HOST
 ARG API_URL
+ARG API_SERVER_URL
 
 ARG TZ=America/Los_Angeles
 ARG CI=true
 
 RUN apk update \
-	&& apk --no-cache add --virtual builds-deps build-base python 
+	&& apk --no-cache add --virtual builds-deps build-base python
 
 RUN apk add --no-cache \
 	vips-dev fftw-dev libc6-compat git tzdata \
@@ -38,7 +39,6 @@ RUN npm ci
 COPY statics/ /app/statics/
 COPY client/ /app/client/
 COPY server/ /app/server/
-COPY webpack/ /app/webpack/
 
 RUN npm run postinstall
 

@@ -96,9 +96,13 @@ EOF
 
 ## Run
 
-1.  In a separate tab run: `npm run startdev`
+1.  In a separate tab you can run different start commands: 
+* `npm run start:dev` - runs all CareCru services at once in development mode
+* `npm run start:web` - runs only the web service and the cron job, serving as a base to the other services 
+* `npm run start:commsJobs` - runs the communications jobs those serving to send reminders, recalls and reviews.
+* `npm run start:patientCache` - runs the patient cache jobs that updates information on the patients table for easier querying on the API. eg. first, next and last appointment dates and hygiene and recalls due dates.
 > **Note:**
-> Don't run `npm start` unless you know what you are doing. This command will enable communication jobs, as well as the main application, such as the emails and reminders services. If any real patient information is loaded into the database, this will result in them being contacted.
+> Don't run `npm start:dev` or `npm run start:commsJobs` unless you know what you are doing. Those commands will enable communication jobs, as stated above. If any real patient information is loaded into the database, this will result in them being contacted.
 
 2.  Navigate to `localhost:5000` to see application running
 > **Note:**
@@ -122,7 +126,7 @@ If this is the first time running the development environment, in the root proje
 
 1. `npm install`.
 
-2. To start up the dev evironment run: `npm run startdev`.
+2. To start up the dev environment run: `npm run start:dev`.
 
 > **Note:**
 > Don't worry if this takes long. It usually takes about 20-30 mins to install everything.
@@ -198,14 +202,17 @@ Before running Cypress E2E tests, please restart the server with the following c
 > You can use this command instead of `npm start` when developing.
 > Each time you run the Cypress test suite, the test database is re-seeded. Cypress runs this command: `NODE_ENV="test" npm run seeds`
 
-Run the following command to execute all tests:
-`npm run test`
+Run the following command to execute all backend tests: `npm run test`
 
-To execute E2E tests only:
-`npm run test:cypress`
+To run api tests: `npm run test:api`
 
-To run server jest tests only:
-`npm run test:jest`
+To run lib tests: `npm run test:lib`
+
+To run graphql tests: `npm run test:graphql`
+
+To run E2E tests: `npm run test:cypress`
+
+To run all unit tests (including the existing frontend): `npm run test:jest`
 
 ### Adding new model
 

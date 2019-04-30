@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from 'react-html-email';
-import ItemCol from '../ItemCol/index';
+import ItemCol from '../ItemCol';
 
 export default function SpaceTable({ height }) {
   return (

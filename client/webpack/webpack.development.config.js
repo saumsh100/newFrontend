@@ -6,13 +6,12 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const baseConfig = require('./webpack.base.config');
 const devServer = require('./dev-server.config');
-const { appEntries } = require('../utils');
-const globals = require('../../server/config/globals');
+const { appEntries } = require('./utils');
 
 const entries = appEntries(name => [
   'babel-polyfill',
   'react-hot-loader/patch',
-  `./client/entries/${name}.js`,
+  `./entries/${name}.js`,
 ]);
 
 const {
@@ -22,6 +21,7 @@ const {
   FEATURE_FLAG_KEY,
   MODE_ANALYTICS_ACCESS_KEY,
   GOOGLE_API_KEY,
+  HOST,
   MY_HOST,
   API_SERVER_URL,
 } = process.env;
@@ -43,7 +43,7 @@ const developmentConfig = merge(baseConfig, {
           GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q',
         ),
         CI: JSON.stringify(!!CI),
-        HOST: JSON.stringify(globals.host),
+        HOST: JSON.stringify(HOST),
         MY_HOST: JSON.stringify(MY_HOST),
         API_SERVER_URL: JSON.stringify(API_SERVER_URL),
       },

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import * as Templates from '../../../client/emailTemplates/templates';
+import * as Templates from './templates';
 
 export default function renderTemplates(props) {
   const {

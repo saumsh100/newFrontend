@@ -15,7 +15,6 @@ import { namespaces } from '../../../config/globals';
 import patientEventsAggregator from '../../../lib/events';
 import getPatientBasedOnFieldsProvided from '../../../lib/contactInfo/getPatient';
 import StatusError from '../../../util/StatusError';
-import Appointments from '../../../../client/entities/models/Appointments';
 import { whereCellPhoneNumber, getCellPhoneNumberFallback } from '../../../lib/contactInfo/getPatientFromCellPhoneNumber';
 
 const patientsRouter = new Router();
@@ -326,7 +325,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
         as: 'appointments',
         where: {
           startDate: { $gte: new Date(requestCreatedAt) },
-          ...Appointments.getCommonSearchAppointmentSchema(),
+          ...Appointment.getCommonSearchAppointmentSchema(),
         },
         order: [['startDate', 'ASC']],
         required: false,
@@ -350,7 +349,7 @@ patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:rea
       where: {
         patientId: req.patient.id,
         startDate: { $gte: new Date(requestCreatedAt) },
-        ...Appointments.getCommonSearchAppointmentSchema(),
+        ...Appointment.getCommonSearchAppointmentSchema(),
       },
       order: [['startDate', 'ASC']],
     });

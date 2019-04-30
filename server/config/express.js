@@ -1,3 +1,4 @@
+
 'use strict';
 
 import { Deserializer } from 'jsonapi-serializer';
@@ -8,7 +9,7 @@ import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
-import globals from './globals';
+import { staticPath, assetsPath } from './globals';
 
 const app = express();
 
@@ -21,18 +22,18 @@ app.use(cors());
 // for all request that traverse through the middleware,
 // based on the given options.
 // Level 9 is the best compression.
-app.use(compress({
-  level: 9,
-  filter(req, res) {
-    return /json|text|javascript|css/.test(res.getHeader('Content-Type'));
-  },
-}));
+app.use(
+  compress({
+    level: 9,
+    filter(req, res) {
+      return /json|text|javascript|css/.test(res.getHeader('Content-Type'));
+    },
+  }),
+);
 
 // Bind middle ware to show favicon and set up static routes
-// app.use(favicon(`${globals.root}/public/images/favicon.ico`));
-app.use(express.static(globals.staticPath));
-
-// app.use(express.static(`${globals.root}/${globals.loader}`));
+app.use('/statics', express.static(staticPath));
+app.use('/statics/assets', express.static(assetsPath));
 
 // Allows the use of PUT and DELETE from clients that do not support those HTTP Methods
 app.use(methodOverride());
@@ -40,10 +41,12 @@ app.use(cookieParser());
 
 // Parse URL query strings into the body,
 // extended=true means that we use qs as the parser for Object syntax
-app.use(bodyParser.urlencoded({
-  limit: '10mb',
-  extended: true,
-}));
+app.use(
+  bodyParser.urlencoded({
+    limit: '10mb',
+    extended: true,
+  }),
+);
 
 // Support for parsing application/vnd.api+json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
@@ -51,7 +54,9 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 // Deserialize jsonapi request bodies
 app.use(async (req, res, next) => {
   if (req.header('Content-Type') === 'application/vnd.api+json') {
-    req.body = await new Deserializer({ keyForAttribute: 'camelCase' }).deserialize(req.body);
+    req.body = await new Deserializer({
+      keyForAttribute: 'camelCase',
+    }).deserialize(req.body);
   }
   next();
 });

@@ -2,7 +2,7 @@
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
-const { appEntries } = require('../utils');
+const { appEntries } = require('./utils');
 const packageJSON = require('../../package.json');
 
 const nodeVersion = packageJSON.engines.node;

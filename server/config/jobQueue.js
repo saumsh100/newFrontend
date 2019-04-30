@@ -14,21 +14,17 @@ export function createJob(name, jobData = {}, config = {}) {
   config.ttl = config.ttl || DEFAULT_JOB_EXPIRY;
   const job = jobQueue.create(name, jobData).ttl(config.ttl).save((err) => {
     if (err) {
-      console.error(`Creating ${name} job failed`);
-      console.error(err);
+      console.error(`Creating ${name} job failed`, err);
     } else {
-      console.log(`${name} job started at ${jobData.date}`);
-      console.log(`job ID = ${job.id}`);
+      console.log(`${name} job started at ${jobData.date}`, `job ID = ${job.id}`);
     }
   });
 
   job.on('complete', () => {
     console.log(`${name} job completed`);
   }).on('failed attempt', (err, doneAttempts) => {
-    console.error(`${name} job attempt failed, done attempts = ${doneAttempts}`);
-    console.error(err);
+    console.error(`${name} job attempt failed, done attempts = ${doneAttempts}`, err);
   }).on('failed', (err) => {
-    console.error(`ERROR: ${name} job failed`);
-    console.error(err);
+    console.error(`ERROR: ${name} job failed`, err);
   });
 }

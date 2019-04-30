@@ -4,7 +4,7 @@ import { Box, Item } from 'react-html-email';
 import ItemCol from '../ItemCol';
 import Row from '../Row';
 import CenterElement from '../CenterElement';
-import CenterContainer from '../CenterContainer/index';
+import CenterContainer from '../CenterContainer';
 
 const subHeaderStyle = {
   textAlign: 'center',

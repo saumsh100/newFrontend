@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const baseConfig = require('./webpack.base.config');
-const globals = require('../../server/config/globals');
+const { appEntries } = require('./utils');
 
 const {
   CI,
@@ -12,20 +12,16 @@ const {
   FEATURE_FLAG_KEY,
   MODE_ANALYTICS_ACCESS_KEY,
   GOOGLE_API_KEY,
+  HOST,
   MY_HOST,
   API_SERVER_URL,
 } = process.env;
 
-const entryPath = name => `./client/entries/${name}.js`;
+const entries = appEntries(name => `./entries/${name}.js`);
+
 const developmentConfig = merge(baseConfig, {
   mode: 'production',
-
-  entry: {
-    app: entryPath('app'),
-    reviews: entryPath('reviews'),
-    hub: entryPath('hub'),
-  },
-
+  entry: entries('app', 'reviews', 'hub'),
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -36,7 +32,7 @@ const developmentConfig = merge(baseConfig, {
         MODE_ANALYTICS_ACCESS_KEY: JSON.stringify(MODE_ANALYTICS_ACCESS_KEY),
         GOOGLE_API_KEY: JSON.stringify(GOOGLE_API_KEY),
         CI: JSON.stringify(!!CI),
-        HOST: JSON.stringify(globals.host),
+        HOST: JSON.stringify(HOST),
         MY_HOST: JSON.stringify(MY_HOST),
         API_SERVER_URL: JSON.stringify(API_SERVER_URL),
       },

@@ -2,10 +2,9 @@
 const webpack = require('webpack');
 const postcssPresetEnv = require('postcss-preset-env');
 const path = require('path');
-const { projectRoot } = require('../utils');
+const { projectRoot } = require('./utils');
 
 const localIdentName = '[name]__[local]___[hash:base64:5]';
-
 
 const isDevMode = process.env.NODE_ENV === 'development';
 
@@ -16,27 +15,25 @@ module.exports = {
   resolve: {
     extensions: ['.mjs', '.js', '.jsx'],
     symlinks: false,
-    cacheWithContext: false
+    cacheWithContext: false,
   },
 
   output: {
-    path: path.resolve(projectRoot, 'statics/assets/'),
+    path: path.resolve(projectRoot, 'build'),
     publicPath: '/assets/',
     filename: '[name].js',
   },
 
   context: projectRoot,
 
-  plugins: [
-    new webpack.LoaderOptionsPlugin({ debug: isDevMode }),
-  ],
+  plugins: [new webpack.LoaderOptionsPlugin({ debug: isDevMode })],
 
   module: {
     rules: [
       {
         test: /\.mjs$/,
         include: /node_modules/,
-        type: "javascript/auto",
+        type: 'javascript/auto',
       },
       {
         test: /\.jsx?$/,

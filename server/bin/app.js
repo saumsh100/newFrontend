@@ -1,11 +1,11 @@
 
-import '../config/initializeCodeTranspiler';
 import chalk from 'chalk';
 import expressReactNews from 'express-react-views';
+import EventsService from '../config/events';
+import app from '../config/express';
 import globals from '../config/globals';
 import handleErrors from '../middleware/handleErrors';
-import app from '../config/express';
-import EventsService from '../config/events';
+import '../config/initializeCodeTranspiler';
 import '../_models';
 
 // Connect the EventsService and pass to express app so the
@@ -30,7 +30,7 @@ app.engine('jsx', expressReactNews.createEngine({
 }));
 
 // Extra logging for communication with server
-app.use((req, res, next) => { 
+app.use((req, res, next) => {
   CCLogger.info(chalk.blue(req.method, req.originalUrl));
   next();
 });

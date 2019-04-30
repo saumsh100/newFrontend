@@ -142,6 +142,7 @@ const recalls = {
 };
 
 const staticPath = path.normalize(path.join(root, '../statics'));
+const assetsPath = path.normalize(path.join(root, '../client/build'));
 
 const logger = { logLevel: environmentVariables.LOG_LEVEL || 'debug' };
 
@@ -160,6 +161,7 @@ const authService = {
 
 module.exports = {
   staticPath,
+  assetsPath,
   root,
   tokenSecret,
   tokenExpiry,
