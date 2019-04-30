@@ -6,7 +6,7 @@
   width: 100%;
   min-width: 120px;
   border-radius: $rounded;
-  background-color: $green;
+  background-color: $teal-dark;
   padding: 16px;
   box-shadow: $shadow;
   font-weight: 500;
@@ -20,12 +20,12 @@
   cursor: pointer;
 
   &:hover {
-    background: $green-light;
+    background: $teal;
   }
 
   &[disabled] {
     background-color: $grey-lighter;
-    color: $grey-light;
+    color: $grey-dark;
     cursor: not-allowed;
   }
 }

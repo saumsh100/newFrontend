@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import queryString from 'query-string';
+import PropTypes from 'prop-types';
 import DropdownSelect from '../library/ui-kit/DropdownSelect';
 import PrimaryButton from '../library/ui-kit/Button/PrimaryButton';
 import SelectPill from '../library/ui-kit/SelectPill';
@@ -237,8 +238,9 @@ export default class ReportParametersForm extends Component {
               dateRange: {
                 label: 'Date Range',
                 popover: true,
-                from: params[page].dateRange ? params[page].dateRange.from : null,
-                to: params[page].dateRange ? params[page].dateRange.to : null,
+                fromDate: params[page].dateRange ? params[page].dateRange.fromDate : null,
+                toDate: params[page].dateRange ? params[page].dateRange.toDate : null,
+                timezone: this.props.timezone,
                 onChange: value => this.setParam('dateRange', value),
               },
               categories: {
@@ -269,3 +271,7 @@ export default class ReportParametersForm extends Component {
     );
   }
 }
+
+ReportParametersForm.propTypes = {
+  timezone: PropTypes.string.isRequired,
+};

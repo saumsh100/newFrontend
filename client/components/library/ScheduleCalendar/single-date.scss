@@ -59,7 +59,7 @@
 
 .breakTitle {
   font-size: 11px;
-  color: $grey-light;
+  color: $grey-dark;
   font-weight: 500;
   flex: 0;
 }
@@ -67,7 +67,7 @@
 .breaks {
   display: flex;
   font-size: 11px;
-  color: $grey-light;
+  color: $grey-dark;
   font-weight: 500;
   width: 100%;
   margin: 8px 0 0;
@@ -96,7 +96,7 @@
 .settings {
   padding: 0;
   flex: 0;
-  color: $grey-light;
+  color: $grey-dark;
   background: transparent;
   margin: 0;
   transition: all 0.2s ease-in;
@@ -111,7 +111,7 @@
 .edit {
   justify-content: center;
   align-items: flex-start;
-  color: $grey-light;
+  color: $grey-dark;
   transition: all 0.2s ease-in;
   svg {
     width: 12px;
@@ -119,6 +119,6 @@
   }
   &:hover {
     transition: all 0.2s ease-in;
-    color: $grey;
+    color: $grey-dark;
   }
 }

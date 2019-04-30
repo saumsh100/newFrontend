@@ -62,7 +62,7 @@
   text-align: center;
   font-size: 15px;
   margin-bottom: 20px;
-  color: $grey;
+  color: $grey-dark;
 }
 
 .weekdays {
@@ -144,7 +144,7 @@
 
 .selected {
   color: $primary-white;
-  background-color: $green-light;
+  background-color: $teal;
   border-radius: 0;
 }
 
@@ -176,7 +176,7 @@
 
 .rangePickerDaySelected {
   color: $primary-white;
-  background-color: $green-lighter;
+  background-color: $teal-light;
   border-radius: 0;
 }
 

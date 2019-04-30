@@ -21,7 +21,7 @@
 
   .title {
     font-size: 16px;
-    color: $green-light;
+    color: $teal;
     letter-spacing: 0;
     padding: 0;
     margin: 0 0 10px;
@@ -78,7 +78,7 @@
     margin-left: 10px;
     padding: 8px 10px;
     background: transparent;
-    color: $grey-light;
+    color: $grey-dark;
 
     &.disabled {
       display: none;
@@ -113,7 +113,7 @@
     border: 1px solid $grey-lighter;
     box-shadow: $shadow;
     font-size: 12px;
-    color: $grey-light;
+    color: $grey-dark;
     border-radius: 4px;
     text-align: center;
   }
@@ -129,13 +129,13 @@
   font-weight: bold;
   font-size: 11px;
   padding: 0;
-  color: $grey;
+  color: $grey-dark;
   background: transparent;
 }
 
 .optionButton {
   display: block;
-  color: $grey;
+  color: $grey-dark;
   background: $white;
   padding: 10px;
   font-size: 10px;
@@ -144,14 +144,14 @@
   margin: 0;
 
   &:hover {
-    color: $green;
+    color: $teal-dark;
     background: $calendar-background;
   }
 }
 
 .closeMessage {
   font-size: 12px;
-  color: $grey-light;
+  color: $grey-dark;
   font-style: italic;
   margin: 4px 0 16px;
 }
@@ -185,7 +185,7 @@
   text-align: right;
 
   .save {
-    background: $green-light;
+    background: $teal;
     box-shadow: $shadow;
     border-radius: 4px;
     transition: all 0.2s ease-in;
@@ -193,13 +193,13 @@
 
     &:hover {
       transition: all 0.2s ease-in;
-      background: $green;
+      background: $teal-dark;
     }
   }
 
   .cancel {
     background: transparent;
-    color: $grey-light;
+    color: $grey-dark;
     border-radius: 4px;
     transition: all 0.2s ease-in;
 

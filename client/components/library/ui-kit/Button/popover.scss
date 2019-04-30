@@ -5,7 +5,7 @@
   @extend .ui-kit-smoother;
   width: 100%;
   border-radius: 4px;
-  background-color: $green;
+  background-color: $teal;
   padding: 7px 12px;
   box-shadow: $shadow;
   font-weight: 500;
@@ -17,14 +17,16 @@
   border: none;
   cursor: pointer;
   box-sizing: border-box;
+  transition: 0.2s ease all;
 
   &:hover {
-    background: $green-light;
+    transition: 0.2s ease all;
+    background: $teal-dark;
   }
 
   &[disabled] {
     background-color: $grey-lighter;
-    color: $grey;
+    color: $grey-dark;
     cursor: not-allowed;
   }
 }
@@ -39,21 +41,23 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 10px;
-  color: $grey;
+  color: $grey-dark;
   text-align: center;
   outline: none;
   border: none;
   cursor: pointer;
   box-sizing: border-box;
+  transition: 0.2s ease all;
 
   &:hover {
-    background: $grey-lightest;
-    color: $grey-dark;
+    transition: 0.2s ease all;
+    background: $grey-lighter;
+    color: $grey-darker;
   }
 
   &[disabled] {
     background-color: $grey-lighter;
-    color: $grey;
+    color: $grey-dark;
     cursor: not-allowed;
   }
 }

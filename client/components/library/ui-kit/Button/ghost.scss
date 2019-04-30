@@ -3,6 +3,7 @@
 
 .button {
   @extend .ui-kit-smoother;
+  @extend .fx;
   width: 100%;
   min-width: 120px;
   border-radius: $rounded;
@@ -12,20 +13,22 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 12px;
-  color: $grey;
+  color: $grey-dark;
   text-align: center;
   outline: none;
   cursor: pointer;
   border: 1px solid $grey-lighter;
 
-  &:hover {
-    border-color: $grey-light;
-    color: $grey-dark;
+  &:hover,
+  &:focus {
+    @extend .fx;
+    border-color: $grey;
+    color: $grey-darker;
   }
 
   &[disabled] {
     background-color: $grey-lighter;
-    color: $grey-light;
+    color: $grey-dark;
     cursor: not-allowed;
   }
 }

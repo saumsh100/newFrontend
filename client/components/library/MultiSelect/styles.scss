@@ -3,7 +3,7 @@
 @import '../ScheduleCalendar/color';
 
 .placeholder {
-  color: $grey-light;
+  color: $grey-dark;
   padding-left: 8px;
   font-weight: normal;
   font-size: 12px;
@@ -29,7 +29,7 @@
 
   &:focus {
     transition: all 0.2s ease;
-    border-color: $grey-light;
+    border-color: $grey-dark;
   }
 
   &:focus ~ .label {
@@ -57,7 +57,7 @@
     justify-content: space-between;
 
     .remove {
-      color: $grey-light;
+      color: $grey-dark;
       margin-left: 8px;
     }
   }
@@ -83,7 +83,7 @@
 }
 
 .iconWrapper {
-  color: $grey-light;
+  color: $grey-dark;
   min-width: 30px;
 }
 

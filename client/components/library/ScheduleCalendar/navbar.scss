@@ -37,7 +37,7 @@
   background-color: transparent;
 
   &:hover {
-    color: $grey;
+    color: $grey-dark;
     transition: all 0.2s ease-out;
   }
 
@@ -83,7 +83,7 @@
 
   &.active {
     transition: all 0.2s ease-in;
-    background: $green;
+    background: $teal-dark;
     color: $white;
   }
 }

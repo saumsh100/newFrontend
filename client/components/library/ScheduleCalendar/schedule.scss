@@ -46,7 +46,7 @@
   border: 0;
 
   .caretIconWrapper {
-    color: $grey-light;
+    color: $grey-dark;
   }
 }
 
@@ -118,7 +118,7 @@
 
   &:focus {
     transition: border-color 0.2s ease;
-    border-color: $grey-light;
+    border-color: $grey-dark;
   }
 
   &:focus ~ .label {
@@ -134,7 +134,7 @@
 
 .inputActive {
   transition: all 0.2s ease;
-  border-color: $grey-light;
+  border-color: $grey-dark;
 }
 
 .textarea {
@@ -209,7 +209,7 @@
       background: $white;
       border-bottom-right-radius: 4px;
       border-bottom-left-radius: 4px;
-      border: 1px solid $grey-light;
+      border: 1px solid $grey-dark;
       border-top: 0;
 
       > div {

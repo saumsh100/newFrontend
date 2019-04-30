@@ -10,18 +10,36 @@ $rounded: 4px;
 
 //Colors
 $white: #fff;
-$grey-lightest: #f1f1f1;
+$black: #000;
+
+$grey-lightest: #fafafa;
 $grey-lighter: #efefef;
-$grey-light: #aaaaaa;
-$grey: #6e6e6e;
-$grey-dark: #333;
+$grey-light: #cdcdcd;
+$grey: #aaa;
+$grey-dark: #6e6e6e;
+$grey-darker: #444;
+$grey-darkest: #202020;
 
-$green-lightest: #abd0a2;
-$green-lighter: #548d9f;
-$green-light: #206477;
-$green: #184b5a;
+$green-light: #abd0a2;
+$green: #74c261;
+$green-dark: #518f42;
 
-$red: #eb5353;
+$teal-lightest: #f1f7f9;
+$teal-light: #5999ab;
+$teal: #206477;
+$teal-dark: #064152;
+
+$red-light: #f6a2a2;
+$red: #dc3535;
+$red-dark: #a81818;
+
+$salmon-light: #ff9180;
+$salmon: #ff715a;
+$salmon-dark: #df4b34;
+
+.fx {
+  transition: all 0.2s ease;
+}
 
 .dropdown {
   &__input__wrapper {
@@ -35,7 +53,7 @@ $red: #eb5353;
     background: $white;
 
     &:hover {
-      border-color: $grey-light;
+      border-color: $grey-dark;
       transition: border-color 0.2s ease;
     }
   }
@@ -44,7 +62,7 @@ $red: #eb5353;
     font-family: $inter;
     font-weight: 500;
     font-size: 13px;
-    color: $grey;
+    color: $grey-dark;
   }
 
   &__wrapper {
@@ -63,7 +81,7 @@ $red: #eb5353;
     font-family: $inter;
     font-weight: 500;
     font-size: 13px;
-    color: $grey;
+    color: $grey-dark;
     justify-content: flex-start;
     border: 0;
     padding: 0 16px;
@@ -95,7 +113,7 @@ $red: #eb5353;
     font-family: $inter;
     font-weight: 500;
     font-size: 18px;
-    color: $green;
+    color: $teal-dark;
     padding: 0;
     margin: 0;
   }
@@ -104,7 +122,7 @@ $red: #eb5353;
     font-family: $inter;
     font-weight: 500;
     font-size: 14px;
-    color: $grey;
+    color: $grey-dark;
     margin: 18px 0 12px;
   }
 
@@ -113,7 +131,7 @@ $red: #eb5353;
     border: 1px solid $grey-lighter;
     box-shadow: $shadow;
     font-size: 13px;
-    color: $grey-light;
+    color: $grey-dark;
     border-radius: 4px;
     text-align: center;
     font-family: $inter;
@@ -124,7 +142,7 @@ $red: #eb5353;
 
   &__cancel {
     background: transparent;
-    color: $grey-light;
+    color: $grey-dark;
     border-radius: 4px;
     border: 1px solid transparent;
     transition: all 0.2s ease-in;
@@ -145,7 +163,7 @@ $red: #eb5353;
     font-family: $inter;
     font-weight: 500;
     font-size: 14px;
-    background: $green-light;
+    background: $teal;
     box-shadow: $shadow;
     border-radius: 4px;
     transition: all 0.2s ease-in;
@@ -155,7 +173,7 @@ $red: #eb5353;
     &:hover {
       box-shadow: $shadow;
       transition: all 0.2s ease-in;
-      background: $green;
+      background: $teal-dark;
     }
   }
 
@@ -174,7 +192,7 @@ $red: #eb5353;
     font-family: $inter;
     font-weight: normal;
     font-size: 12px;
-    color: $grey-light;
+    color: $grey;
   }
 }
 
@@ -187,28 +205,4 @@ $red: #eb5353;
   line-height: 12px;
   font-family: $inter;
   font-weight: 400;
-}
-
-.lightThemeButton {
-  box-shadow: $shadow-md;
-  border-radius: $rounded;
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  font-family: $inter;
-  background: $white;
-  color: $grey;
-  font-size: 12px;
-  transition: border-color 0.2s ease;
-  border: 1px solid $grey-lighter;
-
-  &:hover {
-    border-color: $grey-light;
-    background: $white;
-    transition: all 0.2s ease;
-  }
-
-  &.active {
-    border-color: $grey-light;
-    transition: all 0.2s ease;
-  }
 }
