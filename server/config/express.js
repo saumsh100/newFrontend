@@ -32,8 +32,8 @@ app.use(
 );
 
 // Bind middle ware to show favicon and set up static routes
-app.use('/statics', express.static(staticPath));
-app.use('/statics/assets', express.static(assetsPath));
+app.use('/', express.static(staticPath));
+app.use('/assets', express.static(assetsPath));
 
 // Allows the use of PUT and DELETE from clients that do not support those HTTP Methods
 app.use(methodOverride());
