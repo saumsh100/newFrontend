@@ -1,7 +1,7 @@
 
 import { Router } from 'express';
 import normalize from '../_api/normalize';
-import { protocol } from '../../config/globals';
+import { protocol, assetsPath } from '../../config/globals';
 import { readFile, replaceJavascriptFile } from '../../util/file';
 import { sequelizeLoader } from '../util/loaders';
 import { Practitioner } from '../../_models';
@@ -94,7 +94,7 @@ widgetsRouter.get('/:accountId/cc.js', async (req, res, next) => {
   try {
     const { account } = req;
     const cwd = process.cwd();
-    const jsPath = `${cwd}/statics/assets/cc.js`;
+    const jsPath = `${assetsPath}/cc.js`;
     const cssPath = `${cwd}/server/routes/_api/my/widgets/widget.css`;
 
     // /book route by default to load widget
