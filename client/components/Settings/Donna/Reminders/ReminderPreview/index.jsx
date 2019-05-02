@@ -1,43 +1,11 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { convertIntervalStringToObject } from '@carecru/isomorphic';
-import { Tabs, Tab, Header, SContainer, SHeader, SBody, SMSPreview } from '../../../../library';
-import createReminderText from '../../../../../../server/lib/reminders/createReminderText';
+import { Tabs, Tab, Header, SContainer, SHeader, SBody } from '../../../../library';
 import EmailPreview from '../../../Shared/EmailPreview';
+import SmsPreview from '../../../Shared/SmsPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
-// import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import styles from './styles.scss';
-
-const formatPhoneNumber = phone =>
-  `+1 (${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8, 4)}`;
-
-const wordMap = {
-  sms: 'SMS',
-  phone: 'Voice',
-  email: 'Email',
-};
-
-function ReminderSMSPreview({ patient, account, appointment, reminder }) {
-  const reminderMessage = createReminderText({
-    patient,
-    account,
-    appointment,
-    reminder,
-  });
-  const smsPhoneNumber =
-    account.twilioPhoneNumber ||
-    account.destinationPhoneNumber ||
-    account.phoneNumber ||
-    '+1112223333';
-
-  return (
-    <div className={styles.smsPreviewWrapper}>
-      <SMSPreview from={formatPhoneNumber(smsPhoneNumber)} message={reminderMessage} />
-    </div>
-  );
-}
 
 class ReminderPreview extends Component {
   constructor(props) {
@@ -55,27 +23,13 @@ class ReminderPreview extends Component {
 
   render() {
     const { reminder, account } = this.props;
-
     const { primaryTypes } = reminder;
     const { index } = this.state;
     const isConfirmable = index === 0;
 
-    // Fake Jane Doe Data
-    const patient = {
-      firstName: 'Jane',
-      lastName: 'Doe',
-    };
-
-    const intervalObject = convertIntervalStringToObject(reminder.interval);
-    // Fake Appt Data
-    const appointment = {
-      // 1 day from now with no minutes
-      startDate: moment()
-        .add(intervalObject)
-        .minutes(0)
-        .toISOString(),
-      isPatientConfirmed: !isConfirmable,
-    };
+    const getUrl = slug =>
+      `/api/accounts/${account.id}/reminders/${reminder.id}` +
+      `/${slug}?isConfirmable=${isConfirmable}`;
 
     // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
     const commsPreviewSections = primaryTypes
@@ -86,21 +40,13 @@ class ReminderPreview extends Component {
         if (type === 'sms') {
           typePreview = (
             <div>
-              <ReminderSMSPreview
-                appointment={appointment}
-                patient={patient}
-                account={account}
-                reminder={reminder}
-              />
+              <SmsPreview account={account} url={getUrl('sms')} />
             </div>
           );
         } else if (type === 'email') {
-          const url = `/api/accounts/${account.id}/reminders/${
-            reminder.id
-          }/preview?isConfirmable=${isConfirmable}`;
           typePreview = (
             <div>
-              <EmailPreview url={url} />
+              <EmailPreview url={getUrl('preview')} />
             </div>
           );
         } else if (type === 'phone') {
@@ -132,7 +78,6 @@ class ReminderPreview extends Component {
           </div>
         </SHeader>
         <SBody className={styles.previewSBody}>
-          {/* TODO: No need for Tabs here, just need to be able to determine type and isConfirmable */}
           <CommsPreview>{commsPreviewSections}</CommsPreview>
         </SBody>
       </SContainer>
@@ -141,8 +86,13 @@ class ReminderPreview extends Component {
 }
 
 ReminderPreview.propTypes = {
-  reminder: PropTypes.object.isRequired,
-  account: PropTypes.object.isRequired,
+  reminder: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    primaryTypes: PropTypes.array.isRequired,
+  }).isRequired,
+  account: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default ReminderPreview;

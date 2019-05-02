@@ -1,9 +1,10 @@
 
 import { Router } from 'express';
 import moment from 'moment';
-import { getDayStart, getDayEnd } from '@carecru/isomorphic';
+import { getDayStart, getDayEnd, convertIntervalStringToObject } from '@carecru/isomorphic';
 import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
 import { getReminderTemplateName } from '../../../lib/reminders/createReminderText';
+import getReminderText from '../../../lib/reminders/getReminderText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
@@ -134,7 +135,7 @@ remindersRouter.delete('/:accountId/reminders/:reminderId', checkPermissions('ac
 });
 
 /**
- * DELETE /:accountId/reminders/:reminderId/preview
+ * GET /:accountId/reminders/:reminderId/preview
  *
  * - purpose of this route is mainly for email templates as we have to go to mandrill
  */
@@ -203,6 +204,47 @@ remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermission
     return res.send(html);
   } catch (err) {
     console.error(err);
+    return next(err);
+  }
+});
+
+/**
+ * GET /:accountId/reminders/:reminderId/sms
+ *
+ * - purpose of this route is for rendering the text that the SMS reminder displays
+ */
+remindersRouter.get('/:accountId/reminders/:reminderId/sms', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    if (req.accountId !== req.account.id) {
+      return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+    }
+
+    const { reminder, account } = req;
+    const { isConfirmable } = req.query;
+    const patient = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+    };
+
+    const mDate = moment();
+    const roundedMinute = Math.round(mDate.minute() / 15) * 15;
+    const roundedDate = mDate.minutes(roundedMinute).seconds(0);
+    const startDate = roundedDate
+      .clone()
+      .add(convertIntervalStringToObject(reminder.interval))
+      .toISOString();
+
+    const message = await getReminderText({
+      patient,
+      account,
+      reminder,
+      appointment: { startDate },
+      currentDate: mDate.toISOString(),
+      isConfirmable: JSON.parse(isConfirmable),
+    });
+
+    return res.send(message);
+  } catch (err) {
     return next(err);
   }
 });

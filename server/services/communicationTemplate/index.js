@@ -81,7 +81,8 @@ export function extractCorrectTemplate(accountId, templates = []) {
 export function composeMessage(templateString, params = {}) {
   let compiledMessage = templateString;
   for (const param in params) {
-    compiledMessage = replace(compiledMessage, `\${${param}}`, params[param]);
+    const regex = new RegExp(`\\$\\{${param}\\}`, 'g');
+    compiledMessage = replace(compiledMessage, regex, params[param]);
   }
   return compiledMessage;
 }
