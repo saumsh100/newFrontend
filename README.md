@@ -195,13 +195,6 @@ If you use tmux you can run `sh scripts/run-server.sh`. This will spin up 3 pane
 
 ### Running Tests
 
-Before running Cypress E2E tests, please restart the server with the following command:
-`NODE_ENV="test" npm run start dev`
-
-> **Note:**
-> You can use this command instead of `npm start` when developing.
-> Each time you run the Cypress test suite, the test database is re-seeded. Cypress runs this command: `NODE_ENV="test" npm run seeds`
-
 Run the following command to execute all backend tests: `npm run test`
 
 To run api tests: `npm run test:api`
@@ -209,8 +202,6 @@ To run api tests: `npm run test:api`
 To run lib tests: `npm run test:lib`
 
 To run graphql tests: `npm run test:graphql`
-
-To run E2E tests: `npm run test:cypress`
 
 To run all unit tests (including the existing frontend): `npm run test:jest`
 
