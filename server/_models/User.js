@@ -55,7 +55,7 @@ export default function (sequelize, DataTypes) {
 
     sendBookingRequestEmail: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
       allowNull: false,
     },
   });
