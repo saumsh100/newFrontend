@@ -280,8 +280,16 @@ class DateTime extends PureComponent {
      * @returns {*}
      */
     const availabilitiesDisplay = () => {
-      if (availabilities.total === 0 && nextAvailability && !isFetching) {
-        return nextAvailabilityButton(nextAvailability);
+      console.log(availabilities, nextAvailability, isFetching);
+      if (availabilities.total === 0 && !isFetching) {
+        if (nextAvailability) {
+          return nextAvailabilityButton(nextAvailability);
+        }
+        return (
+          <div className={styles.regularText}>
+            <h3>There is no availability</h3>
+          </div>
+        );
       }
       return (
         selectedStartDate &&

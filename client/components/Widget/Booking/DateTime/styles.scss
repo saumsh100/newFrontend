@@ -135,9 +135,10 @@
     color: var(--primaryColor) !important;
   }
 }
-.spinnerWrapper {
+
+.regularText {
+  color: $widget-grey-light;
   text-align: center;
-  color: var(--primaryColor);
   position: absolute;
   left: 0;
   bottom: 0;
@@ -146,6 +147,11 @@
   background: $widget-grey-lightest;
   display: flex;
   justify-content: center;
+}
+
+.spinnerWrapper {
+  @extend .regularText;
+  color: var(--primaryColor);
   opacity: 0;
   visibility: hidden;
   h3 {

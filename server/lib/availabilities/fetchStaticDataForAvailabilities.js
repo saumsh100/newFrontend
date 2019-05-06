@@ -131,7 +131,7 @@ export default async function fetchStaticDataForAvailabilities({
   // Can't use destructuring cause it loses model getter functions
   const { services, chairs } = account;
   const service = services[0];
-  if (service.reasonWeeklyHoursId) {
+  if (service && service.reasonWeeklyHoursId) {
     try {
       const { data: { data: { reasonWeeklyHours } } } = await graphQLClient({
         variables: { reasonWeeklyHoursId: service.reasonWeeklyHoursId },
