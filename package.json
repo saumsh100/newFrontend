@@ -227,7 +227,7 @@
     "eslint-plugin-react": "^7.9.1",
     "foreman": "^2.0.0",
     "hard-source-webpack-plugin": "^0.12.0",
-    "husky": "^0.14.3",
+    "husky": "^2.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^22.4.3",
     "jest-dom": "^1.12.1",
