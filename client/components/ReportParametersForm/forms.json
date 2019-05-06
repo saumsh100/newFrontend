@@ -1,6 +1,7 @@
 {
   "onlineBooking": {
     "userFriendlyName": "Online Booking",
+    "reportId": "9992a4865dd0",
     "fields": [
       {
         "name": "dateRange",
@@ -11,7 +12,7 @@
       {
         "name": "categories",
         "component": "dropdown",
-        "defaultValue": "TotalRequests",
+        "defaultValue": "TotalRequestsReceived",
         "size": 4,
         "required": true
       },
@@ -23,7 +24,7 @@
       {
         "name": "dateRangeFilter",
         "component": "selectPill",
-        "defaultValue": "month",
+        "defaultValue": "day",
         "size": "row",
         "required": true
       }
@@ -31,6 +32,7 @@
   },
   "donnasReminders": {
     "userFriendlyName": "Donna's Reminders",
+    "reportId": "db339ad9e4ff",
     "fields": [
       {
         "name": "dateRange",
@@ -55,6 +57,7 @@
   },
   "donnasRecalls": {
     "userFriendlyName": "Donna's Recalls",
+    "reportId": "e11a00158d85",
     "fields": [
       {
         "name": "dateRange",
@@ -79,6 +82,7 @@
   },
   "donnasReviews": {
     "userFriendlyName": "Donna's Reviews",
+    "reportId": "cbe0fe48cf98",
     "fields": [
       {
         "name": "dateRange",
@@ -103,6 +107,7 @@
   },
   "totalProduction": {
     "userFriendlyName": "Total Production",
+    "reportId": "5b166cb90d50",
     "fields": [
       {
         "name": "dateRange",

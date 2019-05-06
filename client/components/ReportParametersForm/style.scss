@@ -4,6 +4,14 @@
   margin-bottom: 10px;
 }
 
+.wrapper {
+  height: 100%;
+}
+
+.gridWrapper {
+  height: auto;
+}
+
 .mainRowWrapper {
   @extend .row;
   padding: 0 20px;

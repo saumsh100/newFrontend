@@ -5,17 +5,17 @@ import classNames from 'classnames';
 import DonnaLoading from '../DonnaLoading';
 import styles from './styles.scss';
 
-function Card({
+const Card = ({
   children,
   className,
   noBorder,
   runAnimation,
   loaded,
   contentStyle,
-  donnaLoadingText,
-  donnaLoadingAccount,
+  message,
+  accountName,
   ...props
-}) {
+}) => {
   const isLoading = runAnimation && !loaded;
   const withoutBorder = () => noBorder || isLoading;
 
@@ -26,17 +26,13 @@ function Card({
 
   return (
     <div {...props} className={classes}>
-      <DonnaLoading
-        isLoading={isLoading}
-        accountName={donnaLoadingAccount}
-        dataLoading={donnaLoadingText}
-      />
+      <DonnaLoading isLoading={isLoading} accountName={accountName} message={message} />
       <div className={innerCardStyle}>
         <div className={childrenWrapper}>{children}</div>
       </div>
     </div>
   );
-}
+};
 
 Card.propTypes = {
   noBorder: PropTypes.bool,
@@ -45,8 +41,8 @@ Card.propTypes = {
   runAnimation: PropTypes.bool,
   loaded: PropTypes.oneOfType([PropTypes.bool, PropTypes.objectOf(PropTypes.any)]),
   contentStyle: PropTypes.string,
-  donnaLoadingText: PropTypes.string,
-  donnaLoadingAccount: PropTypes.string,
+  message: PropTypes.string,
+  accountName: PropTypes.string,
 };
 
 Card.defaultProps = {
@@ -56,8 +52,8 @@ Card.defaultProps = {
   loaded: false,
   children: null,
   contentStyle: null,
-  donnaLoadingText: null,
-  donnaLoadingAccount: null,
+  message: null,
+  accountName: null,
 };
 
 export default Card;

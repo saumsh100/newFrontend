@@ -2,6 +2,10 @@
 import React, { Component } from 'react';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
+import { Map } from 'immutable';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { accountShape } from '../library/PropTypeShapes';
 import DropdownSelect from '../library/ui-kit/DropdownSelect';
 import PrimaryButton from '../library/ui-kit/Button/PrimaryButton';
 import SelectPill from '../library/ui-kit/SelectPill';
@@ -11,6 +15,9 @@ import FormGenerator from './formGenerator';
 import { categories } from '../Reports/Pulse/utils';
 import DayRangeWithHelpers from '../library/ui-kit/DayPicker/DayRangeWithHelpers';
 import forms from './forms.json';
+import FormParamsMapper from './helpers';
+import { setActiveReport, setReportParameters } from '../../reducers/intelligenceReports';
+import ModeReport from '../ModeReport';
 import styles from './style.scss';
 
 const DATE_RANGE = 'dateRange';
@@ -18,6 +25,8 @@ const TOGGLE = 'toggle';
 const SELECT_PILL = 'selectPill';
 const DROPDOWN = 'dropdown';
 const BUTTON = 'button';
+
+const getStringDate = date => date.split('T')[0];
 
 /**
  * Map components used within forms.json with the actual Components.
@@ -32,62 +41,53 @@ const parameters = {
     [BUTTON]: PrimaryButton,
   },
 };
-/*
-will need this for future
-const pages = [
-  {
-    value: 'onlineBooking',
-    label: 'Online Booking',
-  },
-  {
-    value: 'donnasReminders',
-    label: 'Donna\'s Reminders',
-  },
-  {
-    value: 'donnasRecalls',
-    label: 'Donna\'s Recalls',
-  },
-  {
-    value: 'donnasReviews',
-    label: 'Donna\'s Reviews',
-  },
-  {
-    value: 'totalProduction',
-    label: 'Total Production',
-  },
-]; */
 
 const DatePills = [{ value: 'day' }, { value: 'week' }, { value: 'month' }, { value: 'quarter' }];
 
-export default class ReportParametersForm extends Component {
+class ReportParametersForm extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      page: 'onlineBooking',
       canReRun: false,
-      params: {},
     };
 
     this.changePage = this.changePage.bind(this);
     this.setParam = this.setParam.bind(this);
+    this.reRunReports = this.reRunReports.bind(this);
   }
 
   componentDidMount() {
-    this.setDefaultParamValues();
-    this.decodeUrlAndSetParams();
+    const { page, dateRange } = queryString.parse(window.location.search);
+    if (page) {
+      this.decodeUrlAndSetParams();
+      if (dateRange) {
+        this.reRunReports();
+      }
+    } else {
+      this.props.setActiveReport('onlineBooking');
+      this.setDefaultParamValues('onlineBooking');
+    }
   }
 
   /**
    * Sets query url based on params used in form.
    */
-  setQueryUrl() {
-    const { page, params } = this.state;
+  setQueryUrl(active, obj = null) {
+    const { reports } = this.props;
+    const params = obj || reports.get(active);
+
+    this.props.setReportParameters({
+      key: active,
+      value: params,
+    });
+    this.allFormConditionsValidated(params);
+
     const paramsListed = queryString.stringify(
       {
-        page,
-        ...params[page],
-        [DATE_RANGE]: JSON.stringify(params[page][DATE_RANGE]),
+        page: active,
+        ...params,
+        [DATE_RANGE]: JSON.stringify(params[DATE_RANGE]),
       },
       { arrayFormat: 'bracket' },
     );
@@ -99,49 +99,65 @@ export default class ReportParametersForm extends Component {
    * After thats done, update query url and check form validity.
    * @param param
    * @param value
+   * @param rerun
    */
-  setParam(param, value) {
-    const { page } = this.state;
-
-    this.setState(
-      {
-        params: {
-          ...this.state.params,
-          [page]: {
-            ...this.state.params[page],
-            [param]: value,
-          },
+  setParam(param, value, rerun = false) {
+    const { active, reports } = this.props;
+    if (reports.get(active)[param] !== value) {
+      this.setQueryUrl(active, {
+        ...reports.get(active),
+        [param]: value,
+      });
+      this.allFormConditionsValidated(
+        {
+          ...reports.get(active),
+          [param]: value,
         },
-      },
-      () => {
-        this.setQueryUrl();
-        this.allFormConditionsValidated();
-      },
-    );
+        rerun,
+      );
+    }
+  }
+
+  setDateValue(param, { fromDate, toDate }) {
+    const { reports, active } = this.props;
+    const { dateRange } = reports.get(active);
+    const [sanitizedFromDate, sanitizedToDate] = [getStringDate(fromDate), getStringDate(toDate)];
+    if (
+      !dateRange ||
+      dateRange.fromDate !== sanitizedFromDate ||
+      dateRange.toDate !== sanitizedToDate
+    ) {
+      this.setParam(param, {
+        fromDate: sanitizedFromDate,
+        toDate: sanitizedToDate,
+      });
+    }
   }
 
   /**
    * After page is selected for the first time, take default values out of forms.json
    * for each field, and set it in state.
    */
-  setDefaultParamValues() {
-    const { page } = this.state;
-    if (this.state.params[page]) return;
+  setDefaultParamValues(page) {
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
     const defaultParams = forms[page].fields
       .filter(field => field.component !== BUTTON)
-      .map(({ name, defaultValue }) => ({ [name]: defaultValue || null }));
+      .map(({ name, defaultValue }) => {
+        const placeholder = defaultValue || null;
+        const paramValue =
+          name === 'dateRange'
+            ? {
+              fromDate: getStringDate(firstDay.toISOString()),
+              toDate: getStringDate(lastDay.toISOString()),
+            }
+            : placeholder;
+        return { [name]: paramValue };
+      });
 
-    this.setState(
-      {
-        ...this.state,
-        params: {
-          ...this.state.params,
-          [page]: Object.assign(...defaultParams),
-        },
-      },
-      () => this.setQueryUrl(),
-    );
+    this.setQueryUrl(page, Object.assign(...defaultParams));
   }
 
   /**
@@ -178,34 +194,30 @@ export default class ReportParametersForm extends Component {
       (field === DATE_RANGE ? JSON.parse(decodeURI(params[field])) : params[field]);
 
     const finalListOfParams = validPageFields.map(field => ({ [field]: parseFieldIfDate(field) }));
-    this.setState(
-      {
-        page,
-        params: {
-          ...this.state.params,
-          [page]: Object.assign(...finalListOfParams),
-        },
-      },
-      this.allFormConditionsValidated,
-    );
+    this.props.setActiveReport(page);
+    this.props.setReportParameters({
+      key: page,
+      value: Object.assign(...finalListOfParams),
+    });
+
+    this.allFormConditionsValidated(Object.assign(...finalListOfParams));
   }
 
   /**
    * Validate that all required form fields are provided.
    * Set state after that.
    */
-  allFormConditionsValidated() {
-    const { page, params } = this.state;
+  allFormConditionsValidated(data, rerun = false) {
+    const { active } = this.props;
 
-    const formRequiredFields = forms[page].fields
+    const formRequiredFields = forms[active].fields
       .filter(field => field.required)
       .map(field => field.name);
 
     const isFieldSet = (key, value) => (!value || value === '') && formRequiredFields.includes(key);
 
-    const errorField = Object.entries(params[page]).find(([key, value]) => isFieldSet(key, value));
-
-    this.setState({ canReRun: !errorField });
+    const errorField = Object.entries(data).find(([key, value]) => isFieldSet(key, value));
+    this.setState({ canReRun: !rerun && !errorField });
   }
 
   /**
@@ -213,60 +225,76 @@ export default class ReportParametersForm extends Component {
    * @param page
    */
   changePage(page) {
-    this.setState({ page }, () => {
-      this.state.params[page] ? this.setQueryUrl() : this.setDefaultParamValues();
+    this.props.setActiveReport(page);
+
+    this.props.reports.get(page) ? this.setQueryUrl(page) : this.setDefaultParamValues(page);
+  }
+
+  reRunReports() {
+    this.setState({
+      canReRun: false,
     });
   }
 
   render() {
-    const { params, page } = this.state;
+    const { active, account, reports } = this.props;
+    const params = reports.get(active);
 
     return (
-      <div>
+      <div className={styles.wrapper}>
         <div className={styles.navDropdownListWrapper}>
           <NavDropdownList
             onChange={this.changePage}
             options={this.getListOfPages()}
-            selected={this.state.page}
+            selected={active}
           />
         </div>
-        {params[page] && (
+        {params && (
           <FormGenerator
             parameters={parameters}
-            page={this.state.page}
+            page={active}
             componentProps={{
               dateRange: {
                 label: 'Date Range',
                 popover: true,
-                fromDate: params[page].dateRange ? params[page].dateRange.fromDate : null,
-                toDate: params[page].dateRange ? params[page].dateRange.toDate : null,
+                fromDate: params.dateRange.fromDate,
+                toDate: params.dateRange,
                 timezone: this.props.timezone,
-                onChange: value => this.setParam('dateRange', value),
+                onChange: value => this.setDateValue('dateRange', value),
               },
               categories: {
                 options: categories,
-                selected: params[page].categories,
+                selected: params.categories,
                 label: 'Category',
                 onChange: value => this.setParam('categories', value),
               },
               showComparisons: {
                 label: 'Display Comparisons',
-                checked: params[page].showComparisons,
+                checked: params.showComparisons,
                 onChange: value => this.setParam('showComparisons', value.target.checked),
               },
               dateRangeFilter: {
                 options: DatePills,
-                selected: params[page].dateRangeFilter,
-                onChange: value => this.setParam('dateRangeFilter', value),
+                selected: params.dateRangeFilter,
+                onChange: value => this.setParam('dateRangeFilter', value, true),
               },
               submit: {
                 label: 'Re-run Reports',
                 disabled: !this.state.canReRun,
-                onClick: () => this.setState({ canReRun: false }),
+                onClick: this.reRunReports,
               },
             }}
           />
         )}
+        <ModeReport
+          reportId={forms[active].reportId}
+          reportActionTitle={forms[active].userFriendlyName}
+          reportActionAccountName={account.get('name')}
+          parameters={{
+            Account_name: account.get('id'),
+            ...FormParamsMapper(active, params),
+          }}
+        />
       </div>
     );
   }
@@ -274,4 +302,29 @@ export default class ReportParametersForm extends Component {
 
 ReportParametersForm.propTypes = {
   timezone: PropTypes.string.isRequired,
+  account: PropTypes.shape(accountShape).isRequired,
+  setActiveReport: PropTypes.func.isRequired,
+  setReportParameters: PropTypes.func.isRequired,
+  active: PropTypes.string.isRequired,
+  reports: PropTypes.instanceOf(Map).isRequired,
 };
+
+const mapStateToProps = ({ entities, auth, intelligenceReports }) => ({
+  active: intelligenceReports.get('active'),
+  reports: intelligenceReports.getIn(['reports']),
+  account: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      setActiveReport,
+      setReportParameters,
+    },
+    dispatch,
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReportParametersForm);

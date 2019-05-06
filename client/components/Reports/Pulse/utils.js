@@ -1,12 +1,12 @@
 
 export const categories = [
   {
-    value: 'TotalRequests',
-    label: 'Total Requests',
+    value: 'TotalRequestsReceived',
+    label: 'Total Requests Received',
   },
   {
-    value: 'OnlineAppointments',
-    label: 'Online Appointments',
+    value: 'TotalRequestsBooked',
+    label: 'Total Requests Booked',
   },
   {
     value: 'NewPatients',

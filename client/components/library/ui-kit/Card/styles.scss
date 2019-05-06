@@ -11,6 +11,12 @@ $border-radius: 4px;
 
 .contentStyle {
   padding: 15px;
+  height: 100%;
+  box-sizing: border-box;
+
+  > div {
+    height: 100%;
+  }
 }
 
 .noBorder {

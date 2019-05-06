@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import signModeUrl from './signModeUrl';
+import Card from '../library/ui-kit/Card';
 import styles from './styles.scss';
 
 class ModeReport extends Component {
@@ -16,6 +17,16 @@ class ModeReport extends Component {
 
   componentDidMount() {
     this.signUrl(this.props);
+
+    this.iframeRef.addEventListener(
+      'load',
+      () => {
+        setTimeout(() => {
+          this.setState({ loading: false });
+        }, 1000);
+      },
+      true,
+    );
   }
 
   componentDidUpdate(prevProps) {
@@ -29,31 +40,37 @@ class ModeReport extends Component {
 
   async signUrl(options) {
     try {
+      this.setState({ loading: true });
       const url = await signModeUrl(options);
-      this.setState({
-        url,
-        loading: false,
-      });
+      this.setState({ url });
     } catch (err) {
       console.log('WAITING TILL FINAL IMPLEMENTATION TO DECIDE WHAT TO DO HERE');
     }
   }
 
   render() {
+    const { reportActionTitle, reportActionAccountName } = this.props;
+
     return (
-      <div className={styles.report}>
-        {this.state.loading ? (
-          'Loading...'
-        ) : (
-          <iframe
-            title={`Mode Report ${this.state.url}`}
-            src={this.state.url}
-            width="100%"
-            height="100%"
-            frameBorder="0"
-          />
-        )}
-      </div>
+      <Card
+        runAnimation
+        className={styles.report}
+        contentStyle={styles.contentStyle}
+        loaded={!this.state.loading}
+        message={`fetch ${reportActionTitle} data`}
+        accountName={reportActionAccountName}
+      >
+        <iframe
+          title={`Mode Report ${this.state.url}`}
+          src={this.state.url}
+          width="100%"
+          height="100%"
+          frameBorder="0"
+          ref={(ref) => {
+            this.iframeRef = ref;
+          }}
+        />
+      </Card>
     );
   }
 }
@@ -61,8 +78,14 @@ class ModeReport extends Component {
 ModeReport.propTypes = {
   reportId: PropTypes.string.isRequired,
   parameters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+  reportActionTitle: PropTypes.string,
+  reportActionAccountName: PropTypes.string,
 };
 
-ModeReport.defaultProps = { parameters: {} };
+ModeReport.defaultProps = {
+  reportActionTitle: null,
+  parameters: {},
+  reportActionAccountName: null,
+};
 
 export default ModeReport;

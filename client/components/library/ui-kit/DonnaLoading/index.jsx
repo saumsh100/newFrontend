@@ -12,24 +12,24 @@ const LoadingBars = () => (
   </div>
 );
 
-const DonnaLoading = ({ donnaLoadingAccount, donnaLoadingText, isLoading }) =>
+const DonnaLoading = ({ accountName, message, isLoading }) =>
   isLoading && (
     <div>
       <LoadingBars />
-      <DonnaMessage accountName={donnaLoadingAccount} dataLoading={donnaLoadingText} />
+      <DonnaMessage accountName={accountName} message={message} />
     </div>
   );
 
 DonnaLoading.propTypes = {
   isLoading: PropTypes.bool,
-  donnaLoadingAccount: PropTypes.string,
-  donnaLoadingText: PropTypes.string,
+  accountName: PropTypes.string,
+  message: PropTypes.string,
 };
 
 DonnaLoading.defaultProps = {
   isLoading: false,
-  donnaLoadingAccount: '',
-  donnaLoadingText: '',
+  accountName: '',
+  message: '',
 };
 
 export default DonnaLoading;

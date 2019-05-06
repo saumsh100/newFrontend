@@ -47,7 +47,7 @@ export default function FormGenerator({ page, parameters, componentProps }) {
     });
 
   return (
-    <Grid>
+    <Grid className={style.gridWrapper}>
       <Row className={style.mainRowWrapper}>{sameRowComponents}</Row>
       {newRowComponents}
     </Grid>

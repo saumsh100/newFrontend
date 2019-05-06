@@ -23,6 +23,7 @@ import schedule from './schedule';
 import reviews from './vendastaReviews';
 import segments from './segments';
 import toolbar from './toolbar';
+import intelligenceReports from './intelligenceReports';
 
 const appReducer = combineReducers({
   accountSettings,
@@ -39,6 +40,7 @@ const appReducer = combineReducers({
   featureFlags,
   form,
   intelligence,
+  intelligenceReports,
   patientList,
   patientTable,
   reputation,

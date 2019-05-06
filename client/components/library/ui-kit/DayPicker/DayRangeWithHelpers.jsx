@@ -25,10 +25,11 @@ class DayRangeWithHelpers extends Component {
 
     this.state = {
       isOpen: false,
-      fromDate: props.fromDate,
-      toDate: props.toDate,
+      fromDate: valueToDate(props.fromDate),
+      toDate: valueToDate(props.toDate),
       activeElement: null,
       typeName: defaultTypeName,
+      visibleMonth: new Date(),
     };
 
     this.handleOutsideClick = this.handleOutsideClick.bind(this);
@@ -46,6 +47,16 @@ class DayRangeWithHelpers extends Component {
    */
   componentDidMount() {
     window.addEventListener('click', this.handleOutsideClick);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.setState({
+        fromDate: valueToDate(this.props.fromDate),
+        toDate: valueToDate(this.props.toDate),
+        visibleMonth: valueToDate(this.props.fromDate),
+      });
+    }
   }
 
   /**
@@ -197,9 +208,16 @@ class DayRangeWithHelpers extends Component {
     if (!input.value || dateFormatter(date, null, 'll') !== input.value) {
       input.value = dateFormatter(date, null, 'll');
     }
-    this.setState({ activeElement: input.name }, () => {
-      input.focus();
-    });
+
+    this.setState(
+      {
+        activeElement: input.name,
+        visibleMonth: valueToDate(date),
+      },
+      () => {
+        input.focus();
+      },
+    );
   }
 
   render() {
@@ -227,9 +245,14 @@ class DayRangeWithHelpers extends Component {
               })}
               role="button"
               tabIndex={0}
-              onKeyDown={({ keyCode }) =>
-                keyCode === 13 && this.setState(prevState => ({ isOpen: !prevState.isOpen }))
-              }
+              onKeyDown={({ keyCode }) => {
+                if (keyCode === 13) {
+                  if (this.state.isOpen) {
+                    return this.confirmRangeChanges();
+                  }
+                  return this.setState({ isOpen: true });
+                }
+              }}
               onClick={this.handleClickWrapper}
             >
               {this.state.fromDate ? (
@@ -307,7 +330,7 @@ class DayRangeWithHelpers extends Component {
                     [dayPicker.start]: valueToDate(this.state.fromDate),
                     [dayPicker.end]: valueToDate(this.state.toDate),
                   }}
-                  initialMonth={valueToDate(this.state.fromDate) || new Date()}
+                  month={this.state.visibleMonth}
                 />
               </div>
               <div className={styles.footer}>
