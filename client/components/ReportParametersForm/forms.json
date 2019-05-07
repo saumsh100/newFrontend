@@ -17,11 +17,6 @@
         "required": true
       },
       {
-        "name": "submit",
-        "component": "button",
-        "size": 2
-      },
-      {
         "name": "dateRangeFilter",
         "component": "selectPill",
         "defaultValue": "day",
@@ -41,15 +36,9 @@
         "required": true
       },
       {
-        "name": "submit",
-        "component": "button",
-        "offset": 4,
-        "size": 2
-      },
-      {
         "name": "dateRangeFilter",
         "component": "selectPill",
-        "defaultValue": "month",
+        "defaultValue": "day",
         "size": "row",
         "required": true
       }
@@ -66,15 +55,9 @@
         "required": true
       },
       {
-        "name": "submit",
-        "component": "button",
-        "offset": 4,
-        "size": 2
-      },
-      {
         "name": "dateRangeFilter",
         "component": "selectPill",
-        "defaultValue": "month",
+        "defaultValue": "day",
         "size": "row",
         "required": true
       }
@@ -91,15 +74,9 @@
         "required": true
       },
       {
-        "name": "submit",
-        "component": "button",
-        "offset": 4,
-        "size": 2
-      },
-      {
         "name": "dateRangeFilter",
         "component": "selectPill",
-        "defaultValue": "month",
+        "defaultValue": "day",
         "size": "row",
         "required": true
       }
@@ -121,15 +98,9 @@
         "size": 2
       },
       {
-        "name": "submit",
-        "component": "button",
-        "offset": 2,
-        "size": 2
-      },
-      {
         "name": "dateRangeFilter",
         "component": "selectPill",
-        "defaultValue": "month",
+        "defaultValue": "day",
         "size": "row",
         "required": true
       }

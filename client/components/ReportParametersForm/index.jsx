@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { accountShape } from '../library/PropTypeShapes';
 import DropdownSelect from '../library/ui-kit/DropdownSelect';
-import PrimaryButton from '../library/ui-kit/Button/PrimaryButton';
 import SelectPill from '../library/ui-kit/SelectPill';
 import Toggle from '../library/ui-kit/Toggle';
 import NavDropdownList from '../library/NavDropdownList';
@@ -24,7 +23,6 @@ const DATE_RANGE = 'dateRange';
 const TOGGLE = 'toggle';
 const SELECT_PILL = 'selectPill';
 const DROPDOWN = 'dropdown';
-const BUTTON = 'button';
 
 const getStringDate = date => date.split('T')[0];
 
@@ -38,7 +36,6 @@ const parameters = {
     [TOGGLE]: Toggle,
     [SELECT_PILL]: SelectPill,
     [DROPDOWN]: DropdownSelect,
-    [BUTTON]: PrimaryButton,
   },
 };
 
@@ -143,19 +140,17 @@ class ReportParametersForm extends Component {
     const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
     const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-    const defaultParams = forms[page].fields
-      .filter(field => field.component !== BUTTON)
-      .map(({ name, defaultValue }) => {
-        const placeholder = defaultValue || null;
-        const paramValue =
-          name === 'dateRange'
-            ? {
-              fromDate: getStringDate(firstDay.toISOString()),
-              toDate: getStringDate(lastDay.toISOString()),
-            }
-            : placeholder;
-        return { [name]: paramValue };
-      });
+    const defaultParams = forms[page].fields.map(({ name, defaultValue }) => {
+      const placeholder = defaultValue || null;
+      const paramValue =
+        name === 'dateRange'
+          ? {
+            fromDate: getStringDate(firstDay.toISOString()),
+            toDate: getStringDate(lastDay.toISOString()),
+          }
+          : placeholder;
+      return { [name]: paramValue };
+    });
 
     this.setQueryUrl(page, Object.assign(...defaultParams));
   }
@@ -166,7 +161,7 @@ class ReportParametersForm extends Component {
    * @return {*}
    */
   getPageValidFields(page) {
-    return forms[page].fields.filter(field => field.component !== BUTTON).map(field => field.name);
+    return forms[page].fields.map(field => field.name);
   }
 
   getListOfPages() {
@@ -189,7 +184,6 @@ class ReportParametersForm extends Component {
     if (!page) return;
 
     const validPageFields = this.getPageValidFields(page);
-
     const parseFieldIfDate = field =>
       (field === DATE_RANGE ? JSON.parse(decodeURI(params[field])) : params[field]);
 
@@ -258,7 +252,7 @@ class ReportParametersForm extends Component {
                 label: 'Date Range',
                 popover: true,
                 fromDate: params.dateRange.fromDate,
-                toDate: params.dateRange,
+                toDate: params.dateRange.toDate,
                 timezone: this.props.timezone,
                 onChange: value => this.setDateValue('dateRange', value),
               },
@@ -277,11 +271,6 @@ class ReportParametersForm extends Component {
                 options: DatePills,
                 selected: params.dateRangeFilter,
                 onChange: value => this.setParam('dateRangeFilter', value, true),
-              },
-              submit: {
-                label: 'Re-run Reports',
-                disabled: !this.state.canReRun,
-                onClick: this.reRunReports,
               },
             }}
           />

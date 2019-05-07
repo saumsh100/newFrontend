@@ -15,16 +15,10 @@ export default function FormGenerator({ page, parameters, componentProps }) {
     .map((formComponent) => {
       const Element = parameters.defaultComponents[formComponent.component];
       const elementProps = componentProps[formComponent.name];
-
       return (
-        <Col
-          md={formComponent.size}
-          smOffset={formComponent.offset}
-          key={formComponent.name}
-          className={style.col}
-        >
+        <div className={style.col}>
           <Element {...elementProps} />
-        </Col>
+        </div>
       );
     });
 

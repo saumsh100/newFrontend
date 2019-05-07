@@ -28,7 +28,6 @@
   visibility: hidden;
   opacity: 0;
   transform: translateY(-25%);
-  transition: opacity 0.15s ease, transform 0.3s ease, visibility 0.3s ease;
   display: flex;
   flex-direction: column;
   z-index: 100;
@@ -37,7 +36,6 @@
     opacity: 1;
     visibility: visible;
     transform: translateY(0%);
-    transition: all 0.25s ease;
   }
 }
 

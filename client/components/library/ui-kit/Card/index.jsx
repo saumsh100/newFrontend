@@ -19,7 +19,10 @@ const Card = ({
   const isLoading = runAnimation && !loaded;
   const withoutBorder = () => noBorder || isLoading;
 
-  const classes = classNames(styles.card, className, { [styles.noBorder]: withoutBorder() });
+  const classes = classNames(styles.card, className, {
+    [styles.noBorder]: withoutBorder(),
+    [styles.loadedCard]: loaded,
+  });
   const childrenWrapper = classNames({ [styles.isLoadingContent]: isLoading });
 
   const innerCardStyle = classNames(styles.contentStyle, contentStyle);

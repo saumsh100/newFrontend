@@ -6,7 +6,11 @@ $border-radius: 4px;
   background-color: $primary-white;
   border-top: 3px solid $card-border-color;
   border-radius: $border-radius;
-  box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
+
+  &.loadedCard {
+    border-top-color: transparent;
+    background: transparent;
+  }
 }
 
 .contentStyle {
