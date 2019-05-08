@@ -1,52 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Header, SBody, SContainer, SHeader, SMSPreview } from '../../../../library';
+import { Header, SBody, SContainer, SHeader } from '../../../../library';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
+import SmsPreview from '../../../Shared/SmsPreview';
 import styles from './styles.scss';
-
-const formatPhoneNumber = phone =>
-  `+1 (${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8, 4)}`;
-
-function ReviewSMSPreview({ patient, account }) {
-  const link = 'carecru.co/a35fg';
-  const recallMessage = `${patient.firstName}, we hope you had a lovely visit at ${
-    account.name
-  }. Let us know how it went by clicking the link below. ${link}`;
-  const smsPhoneNumber =
-    account.twilioPhoneNumber ||
-    account.destinationPhoneNumber ||
-    account.phoneNumber ||
-    '+1112223333';
-
-  return (
-    <div className={styles.smsPreviewWrapper}>
-      <SMSPreview from={formatPhoneNumber(smsPhoneNumber)} message={recallMessage} />
-    </div>
-  );
-}
-
-ReviewSMSPreview.propTypes = {
-  patient: PropTypes.shape({ firstName: PropTypes.string }).isRequired,
-  account: PropTypes.shape({
-    name: PropTypes.string,
-    twilioPhoneNumber: PropTypes.string,
-    destinationPhoneNumber: PropTypes.string,
-    phoneNumber: PropTypes.string,
-  }).isRequired,
-};
 
 function ReviewPreview(props) {
   const { review, account } = props;
-
   const { primaryTypes } = review;
-
-  // Fake Jane Doe Data
-  const patient = {
-    firstName: 'Jane',
-    lastName: 'Doe',
-  };
 
   // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
   const commsPreviewSections = primaryTypes
@@ -55,13 +18,20 @@ function ReviewPreview(props) {
     .map((type) => {
       let typePreview = null;
       if (type === 'sms') {
+        const templateName = 'review-request';
+        const link = 'carecru.co/a35fg';
+        const firstName = 'Jane';
+        const url = `/api/accounts/${account.id}/renderedTemplate` +
+          `?templateName=${templateName}` +
+          `&parameters[link]=${link}` +
+          `&parameters[account][name]=${account.name}` +
+          `&parameters[patient][firstName]=${firstName}`;
         typePreview = (
           <div>
-            <ReviewSMSPreview review={review} patient={patient} account={account} />
+            <SmsPreview account={account} url={url} />
           </div>
         );
       } else if (type === 'email') {
-        // TODO URL NOT FOUND (NOT DONE)
         const url = `/api/accounts/${account.id}/emails/preview?templateName=Patient Review`;
         typePreview = (
           <div>

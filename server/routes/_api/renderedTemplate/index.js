@@ -13,7 +13,7 @@ renderedTemplateRouter.param('accountId', sequelizeLoader('account', 'Account'))
 renderedTemplateRouter.get(
   '/:accountId/renderedTemplate',
   checkPermissions('accounts:read'),
-  async ({ account, query: { templateName, ...parameters } }, res, next) => {
+  async ({ account, query: { templateName, parameters } }, res, next) => {
     try {
       const renderedMessage = await getMessageFromTemplates(account.id, templateName, parameters);
       return res.send(renderedMessage);
