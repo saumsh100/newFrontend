@@ -11,7 +11,7 @@ import SelectPill from '../library/ui-kit/SelectPill';
 import Toggle from '../library/ui-kit/Toggle';
 import NavDropdownList from '../library/NavDropdownList';
 import FormGenerator from './formGenerator';
-import { categories } from '../Reports/Pulse/utils';
+import { categories } from '../Reports/utils';
 import DayRangeWithHelpers from '../library/ui-kit/DayPicker/DayRangeWithHelpers';
 import forms from './forms.json';
 import FormParamsMapper from './helpers';
@@ -265,7 +265,7 @@ class ReportParametersForm extends Component {
               showComparisons: {
                 label: 'Display Comparisons',
                 checked: params.showComparisons,
-                onChange: value => this.setParam('showComparisons', value.target.checked),
+                onChange: value => this.setParam('showComparisons', +value.target.checked),
               },
               dateRangeFilter: {
                 options: DatePills,

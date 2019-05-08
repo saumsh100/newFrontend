@@ -16,7 +16,7 @@ export default function FormGenerator({ page, parameters, componentProps }) {
       const Element = parameters.defaultComponents[formComponent.component];
       const elementProps = componentProps[formComponent.name];
       return (
-        <div className={style.col}>
+        <div className={style.col} key={formComponent.name}>
           <Element {...elementProps} />
         </div>
       );
@@ -71,7 +71,7 @@ FormGenerator.propTypes = {
     }),
     showComparisons: PropTypes.shape({
       label: PropTypes.string,
-      checked: PropTypes.string,
+      checked: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       onChange: PropTypes.func,
     }),
     dateRangeFilter: PropTypes.shape({
