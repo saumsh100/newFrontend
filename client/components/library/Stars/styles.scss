@@ -1,5 +1,5 @@
-
-@import '../../../ui.scss';
+@import '../../../ui';
+@import '../../../ui-kit';
 
 .starsContainer {
   display: flex;
@@ -57,26 +57,26 @@
 }
 
 .starChild {
-  -webkit-text-stroke: 3px white;
   padding: 0 3px;
+  font-weight: 100;
 }
 
 .starChildDynamic {
   cursor: pointer;
   &:hover {
-    color: lighten($primary-yellow, 5%);
-    // font-size: 5em !important;
+    color: $yellow;
   }
 }
 
 .empty {
   @extend .starChild;
-  color: lighten($primary-darkgrey, 15%);
+  color: $grey-light;
 }
 
 .filled {
   @extend .starChild;
-  color: $primary-yellow;
+  color: $yellow;
+  font-weight: 900;
 }
 
 .selected {

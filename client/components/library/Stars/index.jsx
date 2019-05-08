@@ -29,9 +29,7 @@ export default class Stars extends Component {
   }
 
   render() {
-    const {
-      size, value, isStatic, isMinimal,
-    } = this.props;
+    const { size, value, isStatic, isMinimal } = this.props;
 
     const CustomStar = (props) => {
       const { i } = props;
@@ -48,8 +46,7 @@ export default class Stars extends Component {
       }
 
       const wrapperClass = isStatic ? '' : styles.starWrapper;
-      const labelClass =
-        isSelected && !isStatic ? styles.labelSelected : styles.label;
+      const labelClass = isSelected && !isStatic ? styles.labelSelected : styles.label;
       const iconProps = {
         className: starClass,
         size,
@@ -86,9 +83,6 @@ export default class Stars extends Component {
           <CustomStar i={4} />
           <CustomStar i={5} />
         </div>
-        {isMinimal ? (
-          <div className={styles.minimalRatingsText}>{text}</div>
-        ) : null}
       </div>
     );
   }
@@ -101,7 +95,9 @@ Stars.defaultProps = {
 };
 
 Stars.propTypes = {
-  size: PropTypes.number.isRequired,
-  isStatic: PropTypes.bool.isRequired,
-  isMinimal: PropTypes.bool.isRequired,
+  size: PropTypes.number,
+  isStatic: PropTypes.bool,
+  isMinimal: PropTypes.bool,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };

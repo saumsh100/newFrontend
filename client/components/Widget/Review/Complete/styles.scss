@@ -1,5 +1,5 @@
-
 @import '../../../../ui';
+@import '../../../../ui-kit';
 
 .main {
   padding: 20px;
@@ -48,20 +48,20 @@
 .completeHeader {
   @extend .text-centered;
   @extend .row;
-  padding: 20px 10px;
   box-sizing: border-box;
+  padding: 20px 10px 10px;
   margin: 0 auto; // when you add max-width you need this
-  max-width: 210px;
-  font-size: 1.8em;
-  color: $primary-blue;
-  // font-family: $medium-font;
+  font-size: 26px;
+  color: $grey-darker;
+  font-weight: 400;
+  font-family: Roboto, sans-serif;
+  letter-spacing: 0.04px;
 }
 
 .starsWrapper {
   padding: 40px 0 10px;
   box-sizing: border-box;
 }
-
 
 .message {
   @extend .text-centered;
@@ -73,11 +73,26 @@
 }
 
 .button {
+  @extend .fx;
   width: 100%;
+  max-width: 300px;
   font-size: 14px;
-  background-color: var(--primaryColor);
+  color: $white;
+  border-radius: $rounded;
+  box-shadow: $shadow;
+  font-weight: 500;
+  font-family: Roboto, sans-serif;
+  background: var(--primaryColor);
+  margin-right: 0;
+
+  &[disabled] {
+    background: $grey-lighter !important;
+    color: $grey-light !important;
+  }
   &:hover {
-    background-color: var(--primaryColor);
+    opacity: 0.9;
+    background: var(--primaryColor);
+    @extend .fx;
   }
 }
 
@@ -121,4 +136,3 @@
   @extend .row;
   flex-direction: column;
 }
-

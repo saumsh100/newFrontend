@@ -1,4 +1,5 @@
 @import '../../../../ui';
+@import '../../../../ui-kit';
 
 .main {
   padding: 20px;
@@ -61,29 +62,54 @@
   box-sizing: border-box;
   padding: 20px 10px 10px;
   margin: 0 auto; // when you add max-width you need this
-  // max-width: 210px;
-  font-size: 1.8em;
-  color: $primary-dark;
-  // font-family: $medium-font;
+  font-size: 26px;
+  color: $grey-darker;
+  font-weight: 400;
+  font-family: Roboto, sans-serif;
+  letter-spacing: 0.04px;
 }
 
 .message {
   @extend .text-centered;
   padding: 5px 10px;
-  font-size: 12px;
   line-height: 20px;
-  color: $primary-darkgrey;
-  max-width: 300px;
+  font-size: 14px;
+  color: $grey-dark;
+  max-width: 360px;
   margin: 0 auto;
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+}
+.poorShare {
+  background-color: transparent;
+  color: $grey;
+  border-bottom: 1px solid $grey-light;
+  font-family: Roboto, sans-serif;
+  margin-top: 16px;
+  font-size: 12px;
+  padding: 0 0 2px;
 }
 
 .button {
+  @extend .fx;
   width: 100%;
   max-width: 300px;
   font-size: 14px;
-  background-color: var(--primaryColor);
+  color: $white;
+  border-radius: $rounded;
+  box-shadow: $shadow;
+  font-weight: 500;
+  font-family: Roboto, sans-serif;
+  background: var(--primaryColor);
+  margin-right: 0;
+
+  &[disabled] {
+    background: $grey-lighter !important;
+    color: $grey-light !important;
+  }
   &:hover {
-    background-color: var(--primaryColor);
+    opacity: 0.9;
+    @extend .fx;
   }
 }
 
@@ -95,6 +121,7 @@
   align-items: center;
   padding-left: 1.75em;
   padding-right: 1.75em;
+
   > i {
     margin-left: auto;
   }
@@ -117,22 +144,34 @@
   justify-content: center;
 }
 
+.label {
+  color: $grey;
+  font-size: 13px !important;
+  font-weight: 300;
+  font-family: Roboto, sans-serif;
+}
+
 .textArea {
   width: 100%;
+  padding-top: 0;
+
   > div {
     font-size: 12px;
     color: $primary-darkgrey;
     top: -20px;
   }
 
-  padding-top: 0;
   > textarea {
-    line-height: normal;
     box-sizing: border-box;
-    border-radius: 0; // for ios
     height: 80px;
     padding: 10px;
-    border: 1px solid $primary-gray;
-    color: black;
+    border: 1px solid $grey-lighter;
+    background: $white;
+    box-shadow: $shadow;
+    border-radius: $rounded;
+    color: $grey-dark;
+    font-family: Roboto, sans-serif;
+    font-size: 13px;
+    line-height: 16px;
   }
 }

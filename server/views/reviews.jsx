@@ -18,7 +18,7 @@ class Reviews extends React.Component {
           <title>CareCru - Reviews</title>
           <link href="/fontawesome/fontawesome-all.css" rel="stylesheet" />
           <link
-            href="https://fonts.googleapis.com/css?family=Roboto:400,500,700"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
             rel="stylesheet"
           />
 

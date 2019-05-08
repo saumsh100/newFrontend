@@ -7,8 +7,9 @@ import { withRouter } from 'react-router-dom';
 import sentimentContent from './content';
 import { mergeReviewValues } from '../../../../reducers/reviewsWidget';
 import { saveReview } from '../../../../thunks/reviews';
-import { Stars, TextArea, Button, Icon } from '../../../library';
+import { Stars, TextArea, Button } from '../../../library';
 import Picture from '../Picture';
+import EnabledFeature from '../../../library/EnabledFeature';
 import styles from './styles.scss';
 
 class Submitted extends Component {
@@ -72,18 +73,20 @@ class Submitted extends Component {
         <div className={styles.header}>{content.header}</div>
         <div className={styles.message}>{content.response}</div>
         <div className={styles.starsWrapper}>
-          <Stars value={stars} isStatic={false} isMinimal onChange={this.handleChange('stars')} />
+          <Stars isMinimal value={stars} isStatic={false} onChange={this.handleChange('stars')} />
         </div>
         <div className={styles.footer}>
           <div className={styles.textAreaWrapper}>
-            {!noStars && poorReview ? (
+            {!noStars && poorReview && (
               <TextArea
-                label="FEEDBACK"
+                label="Feedback"
                 value={description || ''}
                 onChange={this.handleChange('description')}
                 classStyles={styles.textArea}
+                theme={{ label: styles.label,
+filled: styles.label }}
               />
-            ) : null}
+            )}
           </div>
           {poorReview ? (
             <Button
@@ -94,14 +97,21 @@ class Submitted extends Component {
               Share Feedback
             </Button>
           ) : (
-            <Button
-              className={styles.googleButton}
-              iconRightComponent={props => <Icon {...props} icon="google-plus-g" type="brand" />}
-              onClick={this.submitGood}
-            >
+            <Button className={styles.button} onClick={this.submitGood}>
               Share Review on Google
             </Button>
           )}
+          <EnabledFeature
+            predicate={({ flags }) => flags.get('google-compliant-link')}
+            render={() =>
+              !noStars &&
+              poorReview && (
+                <Button className={styles.poorShare} onClick={this.share}>
+                  Share Review on Google
+                </Button>
+              )
+            }
+          />
         </div>
       </div>
     );
@@ -149,4 +159,9 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Submitted));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(Submitted),
+);
