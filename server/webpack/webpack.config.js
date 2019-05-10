@@ -38,6 +38,7 @@ module.exports = () => ({
     'remindersJob',
     'recallsJob',
     'reviewsJob',
+    'makeTestCall',
   ),
 
   resolve: {
