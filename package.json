@@ -56,7 +56,7 @@
     "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write",
     "run:job:reminders": "dotenv -- node ./server/bin/build/remindersJob.bundle.js",
     "run:job:recalls": "dotenv -- node ./server/bin/build/recallsJob.bundle.js",
-    "run:job:reviews": "dotenv -- node ./server/bin/build/reviewsJob.bundle.js"
+    "run:job:reviews": "dotenv -- node ./server/bin/build/reviewsJob.bundle.js",
     "run:test:calls": "dotenv -- node ./server/bin/build/makeTestCall.bundle.js"
   },
   "dependencies": {
