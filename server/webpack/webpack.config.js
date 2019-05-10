@@ -36,6 +36,7 @@ module.exports = () => ({
     'patientCache',
     'updateSchema',
     'remindersJob',
+    'recallsJob',
     'reviewsJob',
   ),
 

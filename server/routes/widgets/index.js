@@ -41,7 +41,7 @@ widgetsRouter.get('/:accountIdJoin/app(/*)?', async (req, res, next) => {
     const { entities } = normalize('account', req.account.get({ plain: true }));
     const selectedServiceId = req.account.services
       .filter(s => s.isDefault)
-      .map(s => s.id);
+      .map(s => s.id)[0] || null;
 
     const responseAccount = req.account.get({ plain: true });
     const responseServices = req.account.services.map(service =>
