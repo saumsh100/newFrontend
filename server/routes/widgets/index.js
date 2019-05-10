@@ -120,4 +120,12 @@ const myWidgetRenderRouter = Router();
 
 myWidgetRenderRouter.use('/widgets', widgetsRouter);
 
+myWidgetRenderRouter.get('(/*)?', (req, res, next) => {
+  try {
+    res.render('my');
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = myWidgetRenderRouter;

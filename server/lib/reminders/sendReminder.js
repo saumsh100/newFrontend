@@ -187,7 +187,7 @@ function sendEmail({ account, appointment, patient, sentReminder, reminder, depe
       {
         name: 'CONFIRMATION_URL',
         // TODO: we might have to make this a token if UUID is too easy to guess...
-        content: `${protocol}://${myHost}/sentReminders/${sentReminder.id}/confirm`,
+        content: `${process.env.API_SERVER_URL}/my/sentReminders/${sentReminder.id}/confirm`,
       },
       {
         name: 'ACCOUNT_CLINICNAME',

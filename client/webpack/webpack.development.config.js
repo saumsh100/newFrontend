@@ -28,20 +28,16 @@ const {
 
 const developmentConfig = merge(baseConfig, {
   mode: 'development',
-  entry: entries('app', 'reviews', 'hub'),
+  entry: entries('app', 'reviews', 'my', 'hub'),
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
-        LOGROCKET_APP_ID: JSON.stringify(
-          LOGROCKET_APP_ID || '7mbzb4/carecru-development',
-        ),
+        LOGROCKET_APP_ID: JSON.stringify(LOGROCKET_APP_ID || '7mbzb4/carecru-development'),
         INTERCOM_APP_ID: JSON.stringify(INTERCOM_APP_ID || 'enpxykhl'),
         FEATURE_FLAG_KEY: JSON.stringify(FEATURE_FLAG_KEY),
         MODE_ANALYTICS_ACCESS_KEY: JSON.stringify(MODE_ANALYTICS_ACCESS_KEY),
-        GOOGLE_API_KEY: JSON.stringify(
-          GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q',
-        ),
+        GOOGLE_API_KEY: JSON.stringify(GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q'),
         CI: JSON.stringify(!!CI),
         HOST: JSON.stringify(HOST),
         MY_HOST: JSON.stringify(MY_HOST),

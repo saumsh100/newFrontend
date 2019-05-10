@@ -8,7 +8,7 @@ import { updateFeatureFlagsContext, resetFeatureFlagsState } from '../featureFla
 import connectSocketToStoreLogin from '../../socket/connectSocketToStoreLogin';
 import connectSocketToConnectStore from '../../socket/connectSocketToConnectStore';
 import SubscriptionManager from '../../util/graphqlSubscriptions';
-import { httpClient } from '../../util/httpClient';
+import { httpClient, bookingWidgetHttpClient } from '../../util/httpClient';
 import socket from '../../socket';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
@@ -174,7 +174,7 @@ export function resetPassword(email) {
 
 export function resetUserPassword(location, values) {
   return () =>
-    httpClient()
+    bookingWidgetHttpClient()
       .post(`${location.pathname}`, values)
       .catch((err) => {
         const { data } = err;

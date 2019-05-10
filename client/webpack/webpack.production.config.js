@@ -21,7 +21,7 @@ const entries = appEntries(name => `./entries/${name}.js`);
 
 const developmentConfig = merge(baseConfig, {
   mode: 'production',
-  entry: entries('app', 'reviews', 'hub'),
+  entry: entries('app', 'reviews', 'my', 'hub'),
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {

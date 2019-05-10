@@ -1,12 +1,10 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connect } from 'react-redux';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
 import PatientPage from '../components/My/PatientPage';
 import FourZeroFour from '../components/FourZeroFour';
-import SignUp from '../components/SignUpInvite';
 import ResetPassword from '../components/My/PatientPage/ResetPassword';
 import ConfirmedAppointment from '../components/My/PatientPage/ConfirmedAppointment';
 import getParameterByName from '../components/My/PatientPage/Shared/getParameterByName';
@@ -16,10 +14,10 @@ import withAuthProps from '../hocs/withAuthProps';
 
 const MyRouter = ({ history }) => {
   // These routes are for the static patient-facing pages
-  const PatientPages = (props) => {
+  const PatientPages = (pageProps) => {
     const params = getParameterByName('params');
     return (
-      <PatientPage {...props} params={params}>
+      <PatientPage {...pageProps} params={params}>
         <Switch>
           <Route
             exact
@@ -29,14 +27,9 @@ const MyRouter = ({ history }) => {
           <Route
             exact
             path="/sentReminders/:sentReminderId/confirmed"
-            render={props => (
-              <ConfirmedAppointment {...props} params={params} />
-            )}
+            render={props => <ConfirmedAppointment {...props} params={params} />}
           />
-          <Route
-            path="/unsubscribe"
-            render={props => <Unsubscribe {...props} params={params} />}
-          />
+          <Route path="/unsubscribe" render={props => <Unsubscribe {...props} params={params} />} />
           <Route
             path="/signup/confirmed"
             render={props => <ConfirmedEmail {...props} params={params} />}
@@ -61,7 +54,7 @@ const MyRouter = ({ history }) => {
 };
 
 MyRouter.propTypes = {
-  history: PropTypes.object.isRequired,
+  history: PropTypes.shape({}).isRequired,
 };
 
 export default withAuthProps(MyRouter);

@@ -126,7 +126,7 @@ export function sendTemplate(config) {
   const encoded = config.patientId
     ? new Buffer(config.patientId).toString('base64')
     : new Buffer(string).toString('base64');
-  const unsubContent = `${protocol}://${myHost}/unsubscribe/${encoded}`;
+  const unsubContent = `${process.env.API_SERVER_URL}/my/unsubscribe/${encoded}`;
   const defaultMergeVars = [
     {
       name: 'UNSUB',

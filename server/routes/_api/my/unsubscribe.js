@@ -2,11 +2,12 @@
 import { Router } from 'express';
 import pick from 'lodash/pick';
 import url from 'url';
-import { Account, Patient, Review, SentReview, sequelize } from '../../../_models';
+import {
+  Account,
+  Patient,
+} from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
-import StatusError from '../../../util/StatusError';
-import normalize from '../normalize';
 
 const unsubRouter = Router();
 
@@ -101,12 +102,15 @@ unsubRouter.get('/unsubscribe/:encodedPatientId', async (req, res, next) => {
     params = JSON.stringify(params);
     params = new Buffer(params).toString('base64');
 
-    return res.redirect(url.format({
-      pathname: '/unsubscribe',
-      query: {
-        params,
-      },
-    }));
+    return res.redirect(
+      url.format({
+        host: process.env.MY_HOST,
+        pathname: '/unsubscribe',
+        query: {
+          params,
+        },
+      }),
+    );
   } catch (err) {
     next(err);
   }

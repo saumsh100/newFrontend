@@ -154,6 +154,7 @@ myRouter.get('/reset/:tokenId', (req, res, next) => {
             const params = { account: generateAccountParams(account) };
 
             res.redirect(url.format({
+              host: process.env.MY_HOST,
               pathname: `/reset-password/${tokenId}`,
               query: { params: encodeParams(params) },
             }));
@@ -209,11 +210,11 @@ myRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) =>
     };
 
     const encodedParams = encodeParams(params);
-
     const pub = req.app.get('pub');
     pub.publish('REMINDER:UPDATED', req.sentReminder.id);
 
     return res.redirect(url.format({
+      host: process.env.MY_HOST,
       pathname: `/sentReminders/${req.sentReminder.id}/confirmed`,
       query: { params: encodedParams },
     }));

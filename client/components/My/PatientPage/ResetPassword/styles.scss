@@ -1,0 +1,29 @@
+@import '../../../../ui';
+
+.header {
+  composes: header from 'sass-loader!../../../../fonts.scss';
+  text-align: center;
+  color: $primary-dark;
+}
+
+.text {
+  font-size: 14px;
+  color: $primary-darkgrey;
+  padding: 10px;
+  text-align: center;
+}
+
+.formSection {
+  > div {
+    width: 65%;
+    min-width: 290px;
+  }
+}
+
+.backToLoginButton {
+  font-size: 14px;
+}
+
+.submitButton {
+  font-size: 14px;
+}
