@@ -9,10 +9,7 @@ import {
   Invite,
   Permission,
   User,
-  AccountConfiguration,
-  Configuration,
   WeeklySchedule,
-  DailySchedule,
 } from 'CareCruModels';
 import uniqBy from 'lodash/uniqBy';
 import { UserAuth } from '../../../lib/_auth';
@@ -42,6 +39,7 @@ import {
 import { createOfficeHour, modifyOfficeHour, deleteOfficeHour } from './officeHour';
 import { deleteIsClosedFieldFromBody } from '../../../_models/WeeklySchedule';
 import generateDailyHoursForPractice from '../../../lib/schedule/generateDailyHoursForPractice';
+import { getMessageFromTemplates } from '../../../services/communicationTemplate';
 
 const accountsRouter = Router();
 
@@ -483,7 +481,7 @@ accountsRouter.get(
   async (req, res, next) => {
     try {
       if (req.accountId !== req.account.id) {
-        return next(StatusError(403, "Requesting user's activeAccountId does not match account.id"));
+        return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
       }
 
       const { account } = req;
@@ -494,12 +492,42 @@ accountsRouter.get(
         lastName: 'Doe',
       };
 
+      const accountId = account.id;
+      const parameters = {};
+      const [
+        reviewsEmailCta,
+        starSubtext1,
+        starSubtext3,
+        starSubtext5,
+      ] = await Promise.all([
+        getMessageFromTemplates(accountId, 'reviews-email-cta', parameters),
+        getMessageFromTemplates(accountId, 'reviews-email-1-star-subtext', parameters),
+        getMessageFromTemplates(accountId, 'reviews-email-3-star-subtext', parameters),
+        getMessageFromTemplates(accountId, 'reviews-email-5-star-subtext', parameters),
+      ]);
+
       const html = await renderTemplate({
         templateName,
-        mergeVars: generateClinicMergeVars({
-          account,
-          patient,
-        }),
+        mergeVars: [
+          ...generateClinicMergeVars({ account, patient }),
+          // Now add miscellaneous merge_vars only used by certain templates
+          {
+            name: 'REVIEW_REQUEST_CTA',
+            content: reviewsEmailCta,
+          },
+          {
+            name: 'STAR_SUBTEXT_1',
+            content: starSubtext1,
+          },
+          {
+            name: 'STAR_SUBTEXT_3',
+            content: starSubtext3,
+          },
+          {
+            name: 'STAR_SUBTEXT_5',
+            content: starSubtext5,
+          },
+        ],
       });
 
       return res.send(html);

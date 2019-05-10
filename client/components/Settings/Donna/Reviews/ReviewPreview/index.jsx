@@ -1,14 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Header, SBody, SContainer, SHeader } from '../../../../library';
+import { connect } from 'react-redux';
+import { Header, SBody, SContainer, SHeader, SMSPreview } from '../../../../library';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
 import SmsPreview from '../../../Shared/SmsPreview';
 import styles from './styles.scss';
 
 function ReviewPreview(props) {
-  const { review, account } = props;
+  const { review, account, reviewsTemplateName } = props;
   const { primaryTypes } = review;
 
   // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
@@ -32,7 +33,7 @@ function ReviewPreview(props) {
           </div>
         );
       } else if (type === 'email') {
-        const url = `/api/accounts/${account.id}/emails/preview?templateName=Patient Review`;
+        const url = `/api/accounts/${account.id}/emails/preview?templateName=${reviewsTemplateName}`;
         typePreview = (
           <div>
             <EmailPreview url={url} />
@@ -64,4 +65,8 @@ ReviewPreview.propTypes = {
   account: PropTypes.shape({}).isRequired,
 };
 
-export default ReviewPreview;
+const mapStateToProps = ({ featureFlags }) => ({
+  reviewsTemplateName: featureFlags.getIn(['flags', 'review-request-email-template-name']),
+});
+
+export default connect(mapStateToProps)(ReviewPreview);

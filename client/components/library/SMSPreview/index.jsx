@@ -30,5 +30,9 @@ export default function SMSPreview(props) {
 
 SMSPreview.propTypes = {
   from: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
+};
+
+SMSPreview.defaultProps = {
+  message: null,
 };
