@@ -102,7 +102,7 @@ unsubRouter.get('/unsubscribe/:encodedPatientId', async (req, res, next) => {
     params = JSON.stringify(params);
     params = new Buffer(params).toString('base64');
 
-    return res.redirect(
+    res.redirect(
       url.format({
         host: process.env.MY_HOST,
         pathname: '/unsubscribe',

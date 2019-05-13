@@ -64,7 +64,7 @@ rootRouter.get('/signupinvite/:tokenId', (req, res, next) =>
       } else if (invite && invite.deletedAt) {
         return res.status(404).send('Invite Expired/Cancelled');
       }
-      return res.redirect(`/signup/${req.params.tokenId}`);
+      res.redirect(`/signup/${req.params.tokenId}`);
     })
     .catch(next));
 

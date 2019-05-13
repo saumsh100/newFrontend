@@ -227,7 +227,7 @@ authRouter.get(
         await token.destroy();
       }
 
-      return res.redirect(
+      res.redirect(
         url.format({
           pathname: '/signup/confirmed',
           query: {

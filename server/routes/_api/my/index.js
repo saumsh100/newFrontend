@@ -213,7 +213,7 @@ myRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) =>
     const pub = req.app.get('pub');
     pub.publish('REMINDER:UPDATED', req.sentReminder.id);
 
-    return res.redirect(url.format({
+    res.redirect(url.format({
       host: process.env.MY_HOST,
       pathname: `/sentReminders/${req.sentReminder.id}/confirmed`,
       query: { params: encodedParams },
