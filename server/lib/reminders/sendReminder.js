@@ -1,14 +1,19 @@
 
+import { stringify } from 'query-string';
 import { dateFormatter } from '@carecru/isomorphic';
+import { Configuration } from 'CareCruModels';
 import twilioClient from '../../config/twilio';
-import { host, protocol, myHost } from '../../config/globals';
-import createReminderText, { getReminderTemplateName } from './createReminderText';
+import { apiServerUrl } from '../../config/globals';
+import createReminderText, {
+  getReminderTemplateName,
+} from './createReminderText';
 import { sendTemplate } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 import { formatPhoneNumber } from '../../util/formatters';
 import { sendMessage } from '../../services/chat';
 import renderFamilyRemindersHTML from '../emailTemplates/familyReminders';
 import createFamilyReminderText from './createFamilyReminderText';
+import { getAccountConnectorConfigurations } from '../accountConnectorConfigurations';
 
 /**
  * Generate the appointment confirmation text for family patient.
@@ -18,16 +23,28 @@ import createFamilyReminderText from './createFamilyReminderText';
  * @param action
  * @return {string}
  */
-function getFamilyConfirmationText(familyHead, sentRemindersPatients, account, action) {
-  const { patient: { firstName }, appointment: { startDate } } = sentRemindersPatients[0];
+function getFamilyConfirmationText(
+  familyHead,
+  sentRemindersPatients,
+  account,
+  action,
+) {
+  const {
+    patient: { firstName },
+    appointment: { startDate },
+  } = sentRemindersPatients[0];
   const sDate = dateFormatter(startDate, account.timezone, 'MMMM Do');
 
   if (sentRemindersPatients.length > 1) {
-    return `Thanks ${familyHead.firstName}! Your family's appointments with ${account.name} on ${sDate} are ${action}.`;
+    return `Thanks ${familyHead.firstName}! Your family's appointments with ${
+      account.name
+    } on ${sDate} are ${action}.`;
   }
 
   const startTime = dateFormatter(startDate, account.timezone, 'h:mma');
-  return `Thanks ${familyHead.firstName}! ${firstName}'s appointment with ${account.name} on ${sDate} at ${startTime} is ${action}.`;
+  return `Thanks ${familyHead.firstName}! ${firstName}'s appointment with ${
+    account.name
+  } on ${sDate} at ${startTime} is ${action}.`;
 }
 
 /**
@@ -38,7 +55,12 @@ function getFamilyConfirmationText(familyHead, sentRemindersPatients, account, a
  * @param action
  * @return {string}
  */
-function getPatientConfirmationText(firstName, startDate, { timezone, name }, action) {
+function getPatientConfirmationText(
+  firstName,
+  startDate,
+  { timezone, name },
+  action,
+) {
   const sDate = dateFormatter(startDate, timezone, 'MMMM Do');
   const sTime = dateFormatter(startDate, timezone, 'h:mma');
   return `Thanks ${firstName}! Your appointment with ${name} on ${sDate} at ${sTime} is ${action}.`;
@@ -52,11 +74,8 @@ function getPatientConfirmationText(firstName, startDate, { timezone, name }, ac
  * @param param.sentReminder
  * @return {string} the built callback url
  */
-function generateCallBackUrl({ account, appointment, patient, sentReminder }) {
-  const BASE_URL = `${protocol}://${host}/twilio/voice/sentReminders`;
-  const startDate = dateFormatter(appointment.startDate, account.timezone, 'MMMM Do');
-  const startTime = dateFormatter(appointment.startDate, account.timezone, 'h:mma');
-  return `${BASE_URL}/${sentReminder.id}/?firstName=${encodeURIComponent(patient.firstName)}&clinicName=${encodeURIComponent(account.name)}&startDate=${encodeURIComponent(startDate)}&startTime=${encodeURIComponent(startTime)}`;
+function generateCallBackUrl(sentReminderId) {
+  return `${apiServerUrl}/sentReminders/${sentReminderId}/confirm`;
 }
 
 /**
@@ -88,9 +107,10 @@ function sendSms({
     isConfirmable,
     dependants,
   };
-  const body = (dependants && dependants.length > 0)
-    ? createFamilyReminderText(bodyProps)
-    : createReminderText(bodyProps);
+  const body =
+    dependants && dependants.length > 0
+      ? createFamilyReminderText(bodyProps)
+      : createReminderText(bodyProps);
   return sendMessage(patient.cellPhoneNumber, body, account.id);
 }
 
@@ -102,17 +122,38 @@ function sendSms({
  * @param sentReminder
  * @return {*}
  */
-function phoneCall({ account, appointment, patient, sentReminder }) {
-  // TODO: add phoneNumber logic for patient
-  return twilioClient.makeCall({
-    to: patient.mobilePhoneNumber,
+async function phoneCall({
+  account,
+  phoneNumber,
+  name,
+  practiceName,
+  startDateTime,
+  startDateFamily,
+  familyMembersAndTimes,
+  sentReminderId,
+  confirmAppointmentEndpoint,
+}) {
+  const startDate = dateFormatter(startDateTime, account.timezone, 'MMMM Do');
+  const startTime = dateFormatter(startDateTime, account.timezone, 'h:mma');
+
+  const query = stringify({
+    practiceName,
+    startDateTime: `${startDate} at ${startTime}`,
+    startDate: startDateFamily,
+    practiceNumber: account.phoneNumber,
+    confirmAppointmentEndpoint:
+      confirmAppointmentEndpoint || generateCallBackUrl(sentReminderId),
+    familyMembersAndTimes,
+  });
+
+  const config = await getAccountConnectorConfigurations(account.id);
+  const binUrl = config.find(v => v.name === name).value;
+
+  return twilioClient.calls.create({
+    to: `${phoneNumber}`,
     from: account.twilioPhoneNumber,
-    url: generateCallBackUrl({
-      account,
-      appointment,
-      patient,
-      sentReminder,
-    }),
+    url: `${binUrl}?${query}`,
+    timeout: '15',
   });
 }
 
@@ -126,42 +167,70 @@ function phoneCall({ account, appointment, patient, sentReminder }) {
  * @param dependants
  * @return {Promise}
  */
-function sendEmail({ account, appointment, patient, sentReminder, reminder, dependants }) {
+function sendEmail({
+  account,
+  appointment,
+  patient,
+  sentReminder,
+  reminder,
+  dependants,
+}) {
   const { isConfirmable } = sentReminder;
 
-  const html = (dependants && dependants.length > 0) && renderFamilyRemindersHTML({
-    account,
-    patient,
-    appointment,
-    sentReminder,
-    familyMembers: dependants,
-    isConfirmable,
-  });
+  const html =
+    dependants &&
+    dependants.length > 0 &&
+    renderFamilyRemindersHTML({
+      account,
+      patient,
+      appointment,
+      sentReminder,
+      familyMembers: dependants,
+      isConfirmable,
+    });
 
-  const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+  const accountLogoUrl =
+    typeof account.fullLogoUrl === 'string' &&
+    account.fullLogoUrl.replace('[size]', 'original');
 
-  const appointmentMergeVars = appointment ? [{
-    name: 'APPOINTMENT_DATE',
-    content: dateFormatter(appointment.startDate, account.timezone, 'dddd, MMMM Do YYYY'),
-  },
-  {
-    name: 'APPOINTMENT_TIME',
-    content: dateFormatter(appointment.startDate, account.timezone, 'h:mm a'),
-  }] : [];
-
-  const attachmentsObj = appointment ? {
-    attachments: [
+  const appointmentMergeVars = appointment
+    ? [
       {
-        type: 'application/octet-stream',
-        name: 'appointment.ics',
-        content: Buffer.from(buildAppointmentEvent({
-          appointment,
-          patient,
-          account,
-        })).toString('base64'),
+        name: 'APPOINTMENT_DATE',
+        content: dateFormatter(
+          appointment.startDate,
+          account.timezone,
+          'dddd, MMMM Do YYYY',
+        ),
       },
-    ],
-  } : {};
+      {
+        name: 'APPOINTMENT_TIME',
+        content: dateFormatter(
+          appointment.startDate,
+          account.timezone,
+          'h:mm a',
+        ),
+      },
+    ]
+    : [];
+
+  const attachmentsObj = appointment
+    ? {
+      attachments: [
+        {
+          type: 'application/octet-stream',
+          name: 'appointment.ics',
+          content: Buffer.from(
+            buildAppointmentEvent({
+              appointment,
+              patient,
+              account,
+            }),
+          ).toString('base64'),
+        },
+      ],
+    }
+    : {};
 
   return sendTemplate({
     patientId: patient.id,
@@ -169,11 +238,13 @@ function sendEmail({ account, appointment, patient, sentReminder, reminder, depe
     fromName: account.name,
     replyTo: account.contactEmail,
     subject: html ? 'Family Reminder' : 'Appointment Reminder',
-    templateName: html ? 'test-html-template' : getReminderTemplateName({
-      isConfirmable,
-      reminder,
-      account,
-    }),
+    templateName: html
+      ? 'test-html-template'
+      : getReminderTemplateName({
+        isConfirmable,
+        reminder,
+        account,
+      }),
     html,
     mergeVars: [
       {
@@ -187,7 +258,9 @@ function sendEmail({ account, appointment, patient, sentReminder, reminder, depe
       {
         name: 'CONFIRMATION_URL',
         // TODO: we might have to make this a token if UUID is too easy to guess...
-        content: `${process.env.API_SERVER_URL}/my/sentReminders/${sentReminder.id}/confirm`,
+        content: `${process.env.API_SERVER_URL}/my/sentReminders/${
+          sentReminder.id
+        }/confirm`,
       },
       {
         name: 'ACCOUNT_CLINICNAME',
@@ -227,7 +300,9 @@ function sendEmail({ account, appointment, patient, sentReminder, reminder, depe
       },
       {
         name: 'GOOGLE_URL',
-        content: `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`,
+        content: `https://search.google.com/local/writereview?placeid=${
+          account.googlePlaceId
+        }`,
       },
       ...appointmentMergeVars,
     ],
@@ -241,13 +316,10 @@ function sendEmail({ account, appointment, patient, sentReminder, reminder, depe
  * @param reminder
  * @return {boolean}
  */
-export function getIsConfirmable({
-  isPreConfirmed,
-  isPatientConfirmed,
-}, {
-  isConfirmable,
-  isCustomConfirm,
-}) {
+export function getIsConfirmable(
+  { isPreConfirmed, isPatientConfirmed },
+  { isConfirmable, isCustomConfirm },
+) {
   if (isConfirmable) {
     return (isCustomConfirm && !isPreConfirmed) || !isPatientConfirmed;
   }
@@ -275,7 +347,12 @@ export function createConfirmationText({
   const action = reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed';
   return isFamily
     ? getFamilyConfirmationText(patient, sentRemindersPatients, account, action)
-    : getPatientConfirmationText(patient.firstName, appointment.startDate, account, action);
+    : getPatientConfirmationText(
+      patient.firstName,
+      appointment.startDate,
+      account,
+      action,
+    );
 }
 
 export default {

@@ -2,20 +2,27 @@
 import moment from 'moment';
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
-import { getDayStart, getDayEnd, formatPhoneNumber } from '@carecru/isomorphic';
+import {
+  getDayStart,
+  getDayEnd,
+  formatPhoneNumber,
+} from '@carecru/isomorphic';
 import {
   Account,
   Enterprise,
-  Invite,
   Permission,
   User,
   WeeklySchedule,
 } from 'CareCruModels';
 import uniqBy from 'lodash/uniqBy';
+import { apiServerUrl } from '../../../config/globals';
 import { UserAuth } from '../../../lib/_auth';
 import { callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
 import { callRail, vendastaFullSetup } from '../../../lib/createAccount';
-import { twilioSetup, twilioDelete } from '../../../lib/thirdPartyIntegrations/twilio';
+import {
+  twilioSetup,
+  twilioDelete,
+} from '../../../lib/thirdPartyIntegrations/twilio';
 import {
   getAccountConnectorConfigurations,
   updateAccountConnectorConfigurations,
@@ -25,7 +32,10 @@ import normalize from '../normalize';
 import format from '../../util/format';
 import StatusError from '../../../util/StatusError';
 import upload from '../../../lib/upload';
-import { getReviewPatients, generateReviewsOutbox } from '../../../lib/reviews/helpers';
+import {
+  getReviewPatients,
+  generateReviewsOutbox,
+} from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
 import {
   renderTemplate,
@@ -36,23 +46,34 @@ import {
   getPatientsWithAppInRange,
   countPatientsWithAppInRange,
 } from '../../../lib/patientsQuery/patientsWithinRange';
-import { createOfficeHour, modifyOfficeHour, deleteOfficeHour } from './officeHour';
+import {
+  createOfficeHour,
+  modifyOfficeHour,
+  deleteOfficeHour,
+} from './officeHour';
 import { deleteIsClosedFieldFromBody } from '../../../_models/WeeklySchedule';
 import generateDailyHoursForPractice from '../../../lib/schedule/generateDailyHoursForPractice';
 import { getMessageFromTemplates } from '../../../services/communicationTemplate';
+import sendReminder from '../../../lib/reminders/sendReminder';
 
 const accountsRouter = Router();
 
 accountsRouter.param('accountId', sequelizeLoader('account', 'Account'));
 accountsRouter.param(
   'joinAccountId',
-  sequelizeLoader('account', 'Account', [{
-    model: Enterprise,
-    as: 'enterprise',
-  }]),
+  sequelizeLoader('account', 'Account', [
+    {
+      model: Enterprise,
+      as: 'enterprise',
+    },
+  ]),
 );
 accountsRouter.param('inviteId', sequelizeLoader('invite', 'Invite'));
-accountsRouter.param('permissionId', sequelizeLoader('permission', 'Permission'));
+accountsRouter.param(
+  'permissionId',
+  sequelizeLoader('permission', 'Permission'),
+);
+accountsRouter.param('name', sequelizeLoader('configuration', 'Configuration'));
 
 const apiFunctionsCreate = {
   twilio: twilioSetup,
@@ -73,33 +94,39 @@ const apiFunctionsDelete = {
  * - must be a SUPERADMIN or OWNER to list all
  * - if not, it just lists the one
  */
-accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next) => {
-  try {
-    const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
-    // Fetch all if correct role, just fetch current account if not
-    let accounts;
+accountsRouter.get(
+  '/',
+  checkPermissions('accounts:read'),
+  async (req, res, next) => {
+    try {
+      const { accountId, role, enterpriseRole, enterpriseId } = req;
+      // Fetch all if correct role, just fetch current account if not
+      let accounts;
 
-    if (role === 'SUPERADMIN') {
-      // Return all accounts...
-      const accountsFind = await Account.findAll({});
-      accounts = accountsFind.map(a => a.get({ plain: true }));
-    } else if (enterpriseRole === 'OWNER') {
-      // Return all accounts under enterprise
-      const accountsFind = await Account.findAll({ where: { enterpriseId } });
+      if (role === 'SUPERADMIN') {
+        // Return all accounts...
+        const accountsFind = await Account.findAll({});
+        accounts = accountsFind.map(a => a.get({ plain: true }));
+      } else if (enterpriseRole === 'OWNER') {
+        // Return all accounts under enterprise
+        const accountsFind = await Account.findAll({ where: { enterpriseId } });
 
-      accounts = accountsFind.map(a => a.get({ plain: true }));
-    } else {
-      // Return single account
-      const accountsFind = await Account.findOne({ where: { id: accountId } });
+        accounts = accountsFind.map(a => a.get({ plain: true }));
+      } else {
+        // Return single account
+        const accountsFind = await Account.findOne({
+          where: { id: accountId },
+        });
 
-      accounts = [accountsFind.get({ plain: true })];
+        accounts = [accountsFind.get({ plain: true })];
+      }
+
+      res.send(normalize('accounts', accounts));
+    } catch (err) {
+      next(err);
     }
-
-    res.send(normalize('accounts', accounts));
-  } catch (err) {
-    next(err);
-  }
-});
+  },
+);
 
 /**
  * GET /:accountId/logo
@@ -111,7 +138,9 @@ accountsRouter.post(
   checkPermissions('accounts:update'),
   async (req, res, next) => {
     // TODO: there are no tests for this, easy route to change
-    const fileKey = `logos/${req.account.id}/${uuid.v4()}_[size]_${req.files.file.name}`;
+    const fileKey = `logos/${req.account.id}/${uuid.v4()}_[size]_${
+      req.files.file.name
+    }`;
     try {
       await upload(fileKey, req.files.file.data);
 
@@ -162,24 +191,34 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
   // User.hasOne(permission)
   return (
     Permission.findOne({ where: { id: permissionId } })
-      .then(permission =>
-        permission ||
+      .then(
+        permission =>
+          permission ||
           role === 'SUPERADMIN' ||
-          Promise.reject(StatusError(403, "User don't have permissions for this account.")))
+          Promise.reject(
+            StatusError(403, "User don't have permissions for this account."),
+          ),
+      )
       .then(async () => {
-        const { enterpriseId } = await Account.findById(accountId, { raw: true });
-        await User.update({
-          enterpriseId,
-          activeAccountId: accountId,
-        }, {
-          where: { id: userId },
+        const { enterpriseId } = await Account.findById(accountId, {
+          raw: true,
         });
+        await User.update(
+          {
+            enterpriseId,
+            activeAccountId: accountId,
+          },
+          {
+            where: { id: userId },
+          },
+        );
         return enterpriseId;
       })
-      .then(enterpriseId => UserAuth.updateSession(sessionId, sessionData, {
-        accountId,
-        enterpriseId,
-      }))
+      .then(enterpriseId =>
+        UserAuth.updateSession(sessionId, sessionData, {
+          accountId,
+          enterpriseId,
+        }))
       // TODO: do we need to do a newSession.id?
       .then(newSession =>
         UserAuth.signToken({
@@ -204,7 +243,10 @@ accountsRouter.post('/:accountId/integrations', async (req, res, next) => {
 
   try {
     for (let i = 0; i < integrations.length; i += 1) {
-      account = await apiFunctionsCreate[integrations[i].type](account, integrations[i]);
+      account = await apiFunctionsCreate[integrations[i].type](
+        account,
+        integrations[i],
+      );
     }
   } catch (e) {
     console.error(e);
@@ -247,15 +289,19 @@ accountsRouter.delete('/:accountId/integrations', async (req, res, next) => {
  * - get connector configuration settings.
  *
  */
-accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  try {
-    const configs = await getAccountConnectorConfigurations(req.accountId);
+accountsRouter.get(
+  '/configurations',
+  checkPermissions('accounts:read'),
+  async (req, res, next) => {
+    try {
+      const configs = await getAccountConnectorConfigurations(req.accountId);
 
-    return res.send(format(req, res, 'configurations', configs));
-  } catch (err) {
-    return next(err);
-  }
-});
+      return res.send(format(req, res, 'configurations', configs));
+    } catch (err) {
+      return next(err);
+    }
+  },
+);
 
 /**
  * GET /:accountId/configurations
@@ -286,23 +332,30 @@ accountsRouter.get(
  * - get basic account data
  *
  */
-accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, next) => {
-  if (req.account.id !== req.accountId) {
-    return next(StatusError(403, 'req.accountId does not match URL account id'));
-  }
+accountsRouter.get(
+  '/:accountId',
+  checkPermissions('accounts:read'),
+  (req, res, next) => {
+    if (req.account.id !== req.accountId) {
+      return next(
+        StatusError(403, 'req.accountId does not match URL account id'),
+      );
+    }
 
-  const { includeArray } = req;
+    const { includeArray } = req;
 
-  // TODO: need to add joinObject mapping to include...
+    // TODO: need to add joinObject mapping to include...
 
-  // Loader will handle 404
-  return Account.findOne({
-    where: { id: req.account.id },
-    include: includeArray,
-  })
-    .then(account => res.send(normalize('account', account.get({ plain: true }))))
-    .catch(next);
-});
+    // Loader will handle 404
+    return Account.findOne({
+      where: { id: req.account.id },
+      include: includeArray,
+    })
+      .then(account =>
+        res.send(normalize('account', account.get({ plain: true }))))
+      .catch(next);
+  },
+);
 
 /**
  * PUT /:accountId/configurations
@@ -310,17 +363,25 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
  * - Update connector configuration settings.
  *
  */
-accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  try {
-    const io = req.app.get('socketio');
+accountsRouter.put(
+  '/configurations',
+  checkPermissions('accounts:read'),
+  async (req, res, next) => {
+    try {
+      const io = req.app.get('socketio');
 
-    const config = await updateAccountConnectorConfigurations(req.body, req.accountId, io);
+      const config = await updateAccountConnectorConfigurations(
+        req.body,
+        req.accountId,
+        io,
+      );
 
-    return res.send(format(req, res, 'configuration', config));
-  } catch (err) {
-    return next(err);
-  }
-});
+      return res.send(format(req, res, 'configuration', config));
+    } catch (err) {
+      return next(err);
+    }
+  },
+);
 
 /**
  * PUT /:accountId/configurations
@@ -335,7 +396,11 @@ accountsRouter.put(
     try {
       const io = req.app.get('socketio');
 
-      const config = await updateAccountConnectorConfigurations(req.body, req.account.id, io);
+      const config = await updateAccountConnectorConfigurations(
+        req.body,
+        req.account.id,
+        io,
+      );
 
       return res.send(format(req, res, 'configuration', config));
     } catch (err) {
@@ -352,11 +417,18 @@ accountsRouter.put(
  */
 accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
   if (req.role !== 'SUPERADMIN') {
-    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
+    return next(
+      StatusError(
+        403,
+        'requesting user does not have permission to change user role/permissions',
+      ),
+    );
   }
 
   if (req.account.id !== req.accountId && req.role !== 'SUPERADMIN') {
-    return next(StatusError(403, 'req.accountId does not match URL account id'));
+    return next(
+      StatusError(403, 'req.accountId does not match URL account id'),
+    );
   }
 
   return Permission.create({ role: req.body.role })
@@ -390,11 +462,16 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
  *
  * - update clinic account data
  */
-accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) =>
-  req.account
-    .update(req.body)
-    .then(account => res.send(normalize('account', account.get({ plain: true }))))
-    .catch(next));
+accountsRouter.put(
+  '/:accountId',
+  checkPermissions('accounts:update'),
+  (req, res, next) =>
+    req.account
+      .update(req.body)
+      .then(account =>
+        res.send(normalize('account', account.get({ plain: true }))))
+      .catch(next),
+);
 
 /**
  * GET /:accountId/users
@@ -404,10 +481,12 @@ accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res
 accountsRouter.get('/:joinAccountId/users', (req, res, next) =>
   User.findAll({
     // raw: true,
-    include: [{
-      model: Permission,
-      as: 'permission',
-    }],
+    include: [
+      {
+        model: Permission,
+        as: 'permission',
+      },
+    ],
     where: {
       enterpriseId: req.account.enterprise.id,
       // TODO: i don't think this should be there...
@@ -481,7 +560,12 @@ accountsRouter.get(
   async (req, res, next) => {
     try {
       if (req.accountId !== req.account.id) {
-        return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+        return next(
+          StatusError(
+            403,
+            "Requesting user's activeAccountId does not match account.id",
+          ),
+        );
       }
 
       const { account } = req;
@@ -501,15 +585,28 @@ accountsRouter.get(
         starSubtext5,
       ] = await Promise.all([
         getMessageFromTemplates(accountId, 'reviews-email-cta', parameters),
-        getMessageFromTemplates(accountId, 'reviews-email-1-star-subtext', parameters),
-        getMessageFromTemplates(accountId, 'reviews-email-3-star-subtext', parameters),
-        getMessageFromTemplates(accountId, 'reviews-email-5-star-subtext', parameters),
+        getMessageFromTemplates(
+          accountId,
+          'reviews-email-1-star-subtext',
+          parameters,
+        ),
+        getMessageFromTemplates(
+          accountId,
+          'reviews-email-3-star-subtext',
+          parameters,
+        ),
+        getMessageFromTemplates(
+          accountId,
+          'reviews-email-5-star-subtext',
+          parameters,
+        ),
       ]);
 
       const html = await renderTemplate({
         templateName,
         mergeVars: [
-          ...generateClinicMergeVars({ account, patient }),
+          ...generateClinicMergeVars({ account,
+            patient }),
           // Now add miscellaneous merge_vars only used by certain templates
           {
             name: 'REVIEW_REQUEST_CTA',
@@ -533,6 +630,44 @@ accountsRouter.get(
       return res.send(html);
     } catch (err) {
       console.error(err);
+      return next(err);
+    }
+  },
+);
+
+/**
+ * GET /:accountId/voice/preview
+ *
+ * - purpose of this route is mainly to preview robo-calls
+ */
+accountsRouter.get(
+  '/:accountId/voice/preview',
+  checkPermissions('accounts:read'),
+  async ({ account, query: { name, parameters } }, res, next) => {
+    try {
+      const {
+        phoneNumber,
+        practiceName,
+        startDateTime,
+        startDateFamily,
+        familyMembersAndTimes,
+      } = parameters;
+
+      const confirmAppointmentEndpoint = `${apiServerUrl}/twilio/voice/sentReminders/robocallPreview/confirmed/`;
+
+      await sendReminder.phone({
+        account,
+        phoneNumber,
+        name,
+        practiceName,
+        startDateTime,
+        startDateFamily,
+        familyMembersAndTimes,
+        confirmAppointmentEndpoint,
+      });
+
+      res.send(`Calling ${phoneNumber} about ${name}`);
+    } catch (err) {
       return next(err);
     }
   },
@@ -579,12 +714,16 @@ accountsRouter.post(
       const filteredPatients = uniqBy(patients, 'email');
 
       const googlePlaceId = account.googlePlaceId
-        ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`
+        ? `https://search.google.com/local/writereview?placeid=${
+          account.googlePlaceId
+        }`
         : null;
 
       res.sendStatus(200);
 
-      console.log(`Email campaign initiated for ${filteredPatients.length} patients`);
+      console.log(
+        `Email campaign initiated for ${filteredPatients.length} patients`,
+      );
 
       const promises = filteredPatients.map(patient =>
         sendMassGeneralIntroAnnouncement({
@@ -648,7 +787,9 @@ accountsRouter.post(
             },
           ],
         }).catch((err) => {
-          console.error(`Failed to send General Intro email to ${patient.email}`);
+          console.error(
+            `Failed to send General Intro email to ${patient.email}`,
+          );
           console.error(err);
         }));
 
@@ -656,13 +797,19 @@ accountsRouter.post(
 
       response.forEach((resp) => {
         if (resp && resp[0] && resp[0].status === 'rejected') {
-          console.error(`Status Rejected. Failed to send General Intro email to ${resp[0].email}.`);
+          console.error(
+            `Status Rejected. Failed to send General Intro email to ${
+              resp[0].email
+            }.`,
+          );
         } else {
           console.log(`Sent General Intro email to ${resp[0].email}!`);
         }
       });
 
-      return await req.account.update({ massOnlineEmailSentDate: moment().toISOString() });
+      return await req.account.update({
+        massOnlineEmailSentDate: moment().toISOString(),
+      });
     } catch (err) {
       console.error(err);
       return next(err);
@@ -706,18 +853,26 @@ accountsRouter.get(
  * GET /:accountId/officeHour
  * This is the new end point for retrieving the office hour for an account.
  */
-accountsRouter.get('/:accountId/officeHour', async ({ account: { weeklyScheduleId, id } }, res, next) => {
-  if (!weeklyScheduleId) {
-    return next(new StatusError(StatusError.NOT_FOUND, `Account ${id} does not have office hour`));
-  }
+accountsRouter.get(
+  '/:accountId/officeHour',
+  async ({ account: { weeklyScheduleId, id } }, res, next) => {
+    if (!weeklyScheduleId) {
+      return next(
+        new StatusError(
+          StatusError.NOT_FOUND,
+          `Account ${id} does not have office hour`,
+        ),
+      );
+    }
 
-  try {
-    const weeklySchedule = await WeeklySchedule.findByPk(weeklyScheduleId);
-    return res.send(weeklySchedule);
-  } catch (e) {
-    return next(e);
-  }
-});
+    try {
+      const weeklySchedule = await WeeklySchedule.findByPk(weeklyScheduleId);
+      return res.send(weeklySchedule);
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
 
 /**
  * POST /connector/officeHour
@@ -745,18 +900,22 @@ accountsRouter.post('/connector/officeHour', async (req, res, next) => {
  * This is the new end point for creating the office hour for an account.
  * The request body should include from 'mondaySchedule' to 'sundaySchedule'.
  */
-accountsRouter.post('/:accountId/officeHour', async ({ body: rawOfficeHour, account }, res, next) => {
-  try {
-    const weeklySchedule = await createOfficeHour({
-      account,
-      rawOfficeHour,
-    });
-    // do not need to normalize it because the association already includes all the dailySchedule entities
-    return res.send(weeklySchedule.get({ plain: true }));
-  } catch (e) {
-    return next(e);
-  }
-});
+accountsRouter.post(
+  '/:accountId/officeHour',
+  async ({ body: rawOfficeHour, account }, res, next) => {
+    try {
+      const weeklySchedule = await createOfficeHour({
+        account,
+        rawOfficeHour,
+      });
+      // do not need to normalize it
+      // because the association already includes all the dailySchedule entities
+      return res.send(weeklySchedule.get({ plain: true }));
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
 
 /**
  * DELETE /connector/officeHour
@@ -764,28 +923,34 @@ accountsRouter.post('/:accountId/officeHour', async ({ body: rawOfficeHour, acco
  * since connector does not have the information about the accountId,
  * we need a separate endpoint for it.
  */
-accountsRouter.delete('/connector/officeHour', async ({ accountId }, res, next) => {
-  try {
-    const account = await Account.findByPk(accountId);
-    await deleteOfficeHour(account);
-    return res.sendStatus(200);
-  } catch (e) {
-    return next(e);
-  }
-});
+accountsRouter.delete(
+  '/connector/officeHour',
+  async ({ accountId }, res, next) => {
+    try {
+      const account = await Account.findByPk(accountId);
+      await deleteOfficeHour(account);
+      return res.sendStatus(200);
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
 
 /**
  * DELETE /:accountId/officeHour
  * This is the new end point for deleting the office hour for an account.
  */
-accountsRouter.delete('/:accountId/officeHour', async ({ account }, res, next) => {
-  try {
-    await deleteOfficeHour(account);
-    return res.sendStatus(200);
-  } catch (e) {
-    return next(e);
-  }
-});
+accountsRouter.delete(
+  '/:accountId/officeHour',
+  async ({ account }, res, next) => {
+    try {
+      await deleteOfficeHour(account);
+      return res.sendStatus(200);
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
 
 /**
  * PUT /connector/officeHour
@@ -793,40 +958,37 @@ accountsRouter.delete('/:accountId/officeHour', async ({ account }, res, next) =
  * since connector does not have the information about the accountId,
  * we need a separate endpoint for it.
  */
-accountsRouter.put(
-  '/connector/officeHour',
-  async (req, res, next) => {
-    try {
-      const { body, accountId } = req;
-      const rawOfficeHour = deleteIsClosedFieldFromBody(body);
-      const account = await Account.findByPk(accountId);
-      let { weeklyScheduleId } = account;
+accountsRouter.put('/connector/officeHour', async (req, res, next) => {
+  try {
+    const { body, accountId } = req;
+    const rawOfficeHour = deleteIsClosedFieldFromBody(body);
+    const account = await Account.findByPk(accountId);
+    let { weeklyScheduleId } = account;
 
-      /* Create the weeklySchedule if not exist for an account.
-       * This is due to the fact that connector is ONLY use PUT method for both
-       * creating and updating office hour.
-       */
-      if (!weeklyScheduleId) {
-        const officeHour = await createOfficeHour({
-          account,
-          rawOfficeHour,
-        });
-        weeklyScheduleId = officeHour.get('id');
-      } else {
-        await modifyOfficeHour({
-          weeklyScheduleId,
-          accountId,
-          rawOfficeHour,
-        });
-      }
-      const weeklySchedule = await WeeklySchedule.findByPk(weeklyScheduleId);
-
-      return res.send(format(req, res, 'weeklySchedule', weeklySchedule));
-    } catch (e) {
-      return next(e);
+    /* Create the weeklySchedule if not exist for an account.
+     * This is due to the fact that connector is ONLY use PUT method for both
+     * creating and updating office hour.
+     */
+    if (!weeklyScheduleId) {
+      const officeHour = await createOfficeHour({
+        account,
+        rawOfficeHour,
+      });
+      weeklyScheduleId = officeHour.get('id');
+    } else {
+      await modifyOfficeHour({
+        weeklyScheduleId,
+        accountId,
+        rawOfficeHour,
+      });
     }
-  },
-);
+    const weeklySchedule = await WeeklySchedule.findByPk(weeklyScheduleId);
+
+    return res.send(format(req, res, 'weeklySchedule', weeklySchedule));
+  } catch (e) {
+    return next(e);
+  }
+});
 
 /**
  * PUT /:accountId/officeHour
@@ -835,7 +997,11 @@ accountsRouter.put(
  */
 accountsRouter.put(
   '/:accountId/officeHour',
-  async ({ body: rawOfficeHour, account: { weeklyScheduleId, id: accountId } }, res, next) => {
+  async (
+    { body: rawOfficeHour, account: { weeklyScheduleId, id: accountId } },
+    res,
+    next,
+  ) => {
     try {
       await modifyOfficeHour({
         weeklyScheduleId,
@@ -854,19 +1020,22 @@ accountsRouter.put(
  * GET /:accountId/finalDailySchedules
  * This generates the finalDailyHours for Practice.
  */
-accountsRouter.get('/:accountId/finalDailySchedules', async ({ account, query }, res, next) => {
-  try {
-    const { startDate, endDate } = query;
-    const practiceSchedule = await generateDailyHoursForPractice({
-      account,
-      startDate,
-      endDate,
-    });
+accountsRouter.get(
+  '/:accountId/finalDailySchedules',
+  async ({ account, query }, res, next) => {
+    try {
+      const { startDate, endDate } = query;
+      const practiceSchedule = await generateDailyHoursForPractice({
+        account,
+        startDate,
+        endDate,
+      });
 
-    return res.send(practiceSchedule);
-  } catch (error) {
-    return next(error);
-  }
-});
+      return res.send(practiceSchedule);
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
 
 export default accountsRouter;

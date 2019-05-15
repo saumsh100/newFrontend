@@ -85,4 +85,18 @@ voiceRouter.get(
   },
 );
 
+voiceRouter.get('/sentReminders/robocallPreview/confirmed/', async (req, res, next) => {
+  const { VoiceResponse } = Twilio.twiml;
+  const twiml = new VoiceResponse();
+
+  try {
+    twiml.say('Thank you. Goodbye');
+
+    res.type('text/xml');
+    res.send(twiml.toString());
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = voiceRouter;
