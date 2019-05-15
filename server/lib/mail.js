@@ -91,7 +91,6 @@ export const sendPatientResetPassword = (config) => {
 
 export const sendReview = (config) => {
   config.subject = 'Tell us about your experience.';
-  config.templateName = 'Patient Review';
   return exports.sendTemplate(config);
 };
 

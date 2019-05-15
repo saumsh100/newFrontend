@@ -10,8 +10,12 @@ import { getMessageFromTemplates } from '../../services/communicationTemplate';
  * @param link
  * @return {Promise<string>}
  */
-export const createReviewText = async ({ patient, account, link }) => getMessageFromTemplates(account.id, 'review-request', {
-  account,
-  patient,
-  link,
-});
+export const createReviewText = async ({ patient, account, link }) => getMessageFromTemplates(
+  account.id,
+  'review-request',
+  {
+    account,
+    patient,
+    link,
+  },
+);

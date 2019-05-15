@@ -4,7 +4,10 @@ import compressUrl from '../../util/compressUrl';
 import { sendReview } from '../mail';
 import { createReviewText } from './createReviewText';
 import { formatPhoneNumber } from '../../util/formatters';
+import { host } from '../../config/globals';
 import { sendMessage } from '../../services/chat';
+import isFeatureFlagEnabled from '../featureFlag';
+import { getMessageFromTemplates } from '../../services/communicationTemplate';
 
 const generateReviewsUrl = ({ account, sentReview }) =>
   `${account.website}?cc=review&srid=${sentReview.id}&accountId=${account.id}`;
@@ -27,7 +30,32 @@ export default {
   },
 
   // Send Review email via Mandrill (MailChimp)
-  email({ account, patient, sentReview }) {
+  async email({ account, patient, sentReview }) {
+    const accountId = account.id;
+    const templateName = await isFeatureFlagEnabled(
+      'review-request-email-template-name',
+      'Patient Review',
+      {
+        accountId,
+        enterpriseId: account.enterpriseId,
+        host,
+        userId: 'carecru-api',
+      },
+    );
+
+    const parameters = {};
+    const [
+      reviewsEmailCta,
+      starSubtext1,
+      starSubtext3,
+      starSubtext5,
+    ] = await Promise.all([
+      getMessageFromTemplates(accountId, 'reviews-email-cta', parameters),
+      getMessageFromTemplates(accountId, 'reviews-email-1-star-subtext', parameters),
+      getMessageFromTemplates(accountId, 'reviews-email-3-star-subtext', parameters),
+      getMessageFromTemplates(accountId, 'reviews-email-5-star-subtext', parameters),
+    ]);
+
     const reviewsUrl = generateReviewsUrl({
       account,
       sentReview,
@@ -43,6 +71,7 @@ export default {
     const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
 
     return sendReview({
+      templateName,
       patientId: patient.id,
       toEmail: patient.email,
       fromName: account.name,
@@ -88,23 +117,23 @@ export default {
           name: 'PATIENT_FIRSTNAME',
           content: patient.firstName,
         },
+        {
+          name: 'REVIEW_REQUEST_CTA',
+          content: reviewsEmailCta,
+        },
+        {
+          name: 'STAR_SUBTEXT_1',
+          content: starSubtext1,
+        },
+        {
+          name: 'STAR_SUBTEXT_3',
+          content: starSubtext3,
+        },
+        {
+          name: 'STAR_SUBTEXT_5',
+          content: starSubtext5,
+        },
       ].concat(stars),
     });
   },
 };
-
-/*
-
- - First notification = 7 days ahead
- - Same Day notification = 12 hours ahead
- - Assume all preferences for now
- */
-
-function getAppointmentDate(date, timezone) {
-  return moment.tz(date, timezone).format('dddd, MMMM Do YYYY');
-}
-
-function getAppointmentTime(date, timezone) {
-  return moment.tz(date, timezone).format('h:mm a');
-}
-

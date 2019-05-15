@@ -21,9 +21,11 @@ function ldClientVariation(featureFlag, defaultValue, { userId, ...data }) {
   };
 
   return new Promise((resolve, reject) => {
-    ldClient.variation(featureFlag, metaData, defaultValue, (err, showFeature) => {
-      if (err) reject(err);
-      return resolve(showFeature);
+    ldClient.once('ready', () => {
+      ldClient.variation(featureFlag, metaData, defaultValue, (err, showFeature) => {
+        if (err) reject(err);
+        return resolve(showFeature);
+      });
     });
   });
 }
