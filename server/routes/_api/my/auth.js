@@ -17,7 +17,7 @@ import { sequelizeLoader } from '../../util/loaders';
 import { generateAccountParams, encodeParams } from './util/params';
 import StatusError from '../../../util/StatusError';
 import { sendPatientSignup, sendPatientResetPassword } from '../../../lib/mail';
-import { twilio } from '../../../config/globals';
+import { twilio, apiServerUrl, myHost } from '../../../config/globals';
 
 const authRouter = Router();
 
@@ -41,8 +41,8 @@ const signTokenAndSend = res => ({ session, model }) => {
 const createConfirmationText = pinCode =>
   `${pinCode} is your CareCru verification code.`;
 
-const generateEmailConfirmationURL = (tokenId, protocol, host) =>
-  `${protocol}://${host}/auth/signup/${tokenId}/email`;
+const generateEmailConfirmationURL = tokenId =>
+  `${apiServerUrl}/my/auth/signup/${tokenId}/email`;
 
 async function sendConfirmationMessage(patientUser) {
   // Leave console.log here, it is helpful
@@ -104,11 +104,7 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
       });
 
       // Generate the URL to confirm email
-      const confirmationURL = generateEmailConfirmationURL(
-        token.id,
-        req.protocol,
-        req.get('host'),
-      );
+      const confirmationURL = generateEmailConfirmationURL(token.id);
       const accountLogoUrl =
         typeof account.fullLogoUrl === 'string' &&
         account.fullLogoUrl.replace('[size]', 'original');
@@ -229,6 +225,7 @@ authRouter.get(
 
       res.redirect(
         url.format({
+          host: myHost,
           pathname: '/signup/confirmed',
           query: {
             params: encodeParams({ account: generateAccountParams(account) }),

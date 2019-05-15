@@ -28,7 +28,7 @@
     "server:build:prod": "dotenv -- webpack --config ./server/webpack/webpack.config.js",
     "clean": "npm run clean:assets && npm run clean:modules && npm run clean:server:bundles",
     "clean:server:bundles": "rimraf server/bin/build",
-    "clean:assets": "rimraf statics/assets",
+    "clean:assets": "rm $(find ./client/build -type f ! -name .gitignore ! -name package.json)",
     "clean:modules": "rimraf node_modules",
     "rebuild": "dotenv -- sequelize db:migrate:undo:all && sequelize db:migrate",
     "seed": "dotenv -- sequelize db:seed:all",
