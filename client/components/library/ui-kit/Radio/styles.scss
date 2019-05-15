@@ -1,0 +1,90 @@
+@import '../../../../ui';
+@import '../../../../ui-kit';
+
+.wrapper {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  background: $grey-lightest;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid $grey-light;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  display: block;
+  @extend .fx;
+
+  &:hover {
+    @extend .fx;
+    background: $grey-lighter;
+  }
+
+  &:focus {
+    @extend .fx;
+    outline: none;
+  }
+
+  &:focus:not(.disabled) {
+    border-color: $grey-dark;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    background: $grey-lighter;
+    border-color: $grey-lighter;
+    @extend .fx;
+
+    .input {
+      cursor: not-allowed;
+    }
+  }
+
+  &.checked {
+    @extend .fx;
+    background: $teal;
+    border-color: $teal;
+
+    &:focus {
+      @extend .fx;
+      background: $teal-light;
+      border-color: $teal-light;
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
+.label {
+  padding-left: 20px;
+  font-family: $inter;
+  font-size: 12px;
+  color: $grey-dark;
+  line-height: 12px;
+}
+
+.input {
+  cursor: pointer;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    opacity: 0;
+    background: $white;
+    @extend .fx;
+  }
+
+  &.checked {
+    &:after {
+      opacity: 1;
+      cursor: pointer;
+      z-index: 10;
+      @extend .fx;
+    }
+  }
+}
