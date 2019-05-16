@@ -59,11 +59,11 @@ export async function generateInsights(patients) {
       const insights = [];
       const appointment = patient.appointments[0];
 
-      if (!patient.cellPhoneNumber) {
+      if (!patient.cellPhoneNumber && patient.preferences.sms) {
         insights.push(generatePhoneNumberInsight());
       }
 
-      if (!patient.email) {
+      if (!patient.email && patient.preferences.emailNotifications) {
         insights.push(generateEmailInsight());
       }
 
