@@ -14,6 +14,7 @@ export default function unConfirmedPatients(days = 7) {
       {
         model: Appointment,
         as: 'nextAppt',
+        attributes: [],
         where: {
           startDate: {
             $between: [
@@ -25,14 +26,13 @@ export default function unConfirmedPatients(days = 7) {
           },
           ...Appointment.getCommonSearchAppointmentSchema({ isPatientConfirmed: false }),
         },
-        attributes: ['startDate'],
         groupBy: ['startDate'],
         required: true,
       },
       {
         model: Appointment,
         as: 'lastAppt',
-        attributes: ['startDate'],
+        attributes: [],
         groupBy: ['startDate'],
         required: false,
       },
