@@ -34,51 +34,6 @@ const ROUTES = {
       label: 'Donna',
     },
   ],
-
-  // This is not being used for now
-  // '/intelligence': [
-  //   {
-  //     to: '/intelligence/overview',
-  //     label: 'Overview',
-  //   },
-  //   {
-  //     to: '/intelligence/business',
-  //     label: 'Business',
-  //   },
-  // ],
-
-  '/intelligence': [
-    {
-      to: '/intelligence/growth',
-      label: 'Practice Growth',
-    },
-    {
-      to: '/intelligence/pulse',
-      label: 'Practice Pulse',
-    },
-  ],
-
-  '/reputation': [
-    {
-      to: '/reputation/reviews',
-      label: 'Reviews',
-    },
-    {
-      to: '/reputation/listings',
-      label: 'Listings',
-    },
-  ],
-
-  /* '/social': [
-    {
-      to: '/social/patient',
-      label: 'Patient Posts',
-    },
-    {
-      to: '/social/practice',
-      label: 'Practice Posts',
-    }],
-*/
   '/admin': [
     {
       to: '/admin/enterprises',
@@ -107,7 +62,9 @@ class SubTabs extends Component {
   }
 
   render() {
-    const { location: { pathname } } = this.props;
+    const {
+      location: { pathname },
+    } = this.props;
     const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
 
     return activeRoute ? <RouterTabs routes={ROUTES[activeRoute]} /> : null;

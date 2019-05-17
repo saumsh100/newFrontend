@@ -1,0 +1,109 @@
+{
+  "onlineBooking": {
+    "userFriendlyName": "Online Booking",
+    "reportId": "171bae518243",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "categories",
+        "component": "dropdown",
+        "defaultValue": "TotalRequestsReceived",
+        "size": 4,
+        "required": true
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "day",
+        "size": "row",
+        "required": true
+      }
+    ]
+  },
+  "donnasReminders": {
+    "userFriendlyName": "Donna's Reminders",
+    "reportId": "7a4a1f093b3d",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "day",
+        "size": "row",
+        "required": true
+      }
+    ]
+  },
+  "donnasRecalls": {
+    "userFriendlyName": "Donna's Recalls",
+    "reportId": "9ca2780f5467",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "day",
+        "size": "row",
+        "required": true
+      }
+    ]
+  },
+  "donnasReviews": {
+    "userFriendlyName": "Donna's Reviews",
+    "reportId": "d0907001d3f8",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "day",
+        "size": "row",
+        "required": true
+      }
+    ]
+  },
+  "totalProduction": {
+    "userFriendlyName": "Total Production",
+    "reportId": "e024c2e9e538",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "showComparisons",
+        "component": "toggle",
+        "size": 2
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "day",
+        "size": "row",
+        "required": true
+      }
+    ]
+  }
+}

@@ -13,11 +13,14 @@ import NavDropdownList from '../library/NavDropdownList';
 import FormGenerator from './formGenerator';
 import { categories } from '../Reports/utils';
 import DayRangeWithHelpers from '../library/ui-kit/DayPicker/DayRangeWithHelpers';
-import forms from './forms.json';
 import FormParamsMapper from './helpers';
 import { setActiveReport, setReportParameters } from '../../reducers/intelligenceReports';
 import ModeReport from '../ModeReport';
 import styles from './style.scss';
+
+const forms =
+  (window.location.hostname === 'carecru.io' && require('./forms-us.json')) ||
+  require('./forms-ca.json');
 
 const DATE_RANGE = 'dateRange';
 const TOGGLE = 'toggle';
@@ -141,7 +144,7 @@ class ReportParametersForm extends Component {
     const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
     const defaultParams = forms[page].fields.map(({ name, defaultValue }) => {
-      const placeholder = defaultValue || null;
+      const placeholder = name === 'showComparisons' ? 0 : defaultValue || null;
       const paramValue =
         name === 'dateRange'
           ? {
