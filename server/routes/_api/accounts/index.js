@@ -2,11 +2,7 @@
 import moment from 'moment';
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
-import {
-  getDayStart,
-  getDayEnd,
-  formatPhoneNumber,
-} from '@carecru/isomorphic';
+import { getDayStart, getDayEnd, formatPhoneNumber } from '@carecru/isomorphic';
 import {
   Account,
   Enterprise,
@@ -643,32 +639,29 @@ accountsRouter.get(
 accountsRouter.get(
   '/:accountId/voice/preview',
   checkPermissions('accounts:read'),
-  async ({ account, query: { name, parameters } }, res, next) => {
+  async (
+    {
+      account,
+      query: { binName, cellPhoneNumber, startDateTime, familyMembersAndTimes = '' },
+    },
+    res,
+    next,
+  ) => {
     try {
-      const {
-        phoneNumber,
-        practiceName,
-        startDateTime,
-        startDateFamily,
-        familyMembersAndTimes,
-      } = parameters;
-
-      const confirmAppointmentEndpoint = `${apiServerUrl}/twilio/voice/sentReminders/robocallPreview/confirmed/`;
+      const confirmAppointmentEndpoint = `${apiServerUrl}/twilio/voice/sentReminders/robocallPreview/confirmed`;
 
       await sendReminder.phone({
         account,
-        phoneNumber,
-        name,
-        practiceName,
-        startDateTime,
-        startDateFamily,
-        familyMembersAndTimes,
+        appointment: { startDateTime },
+        patient: { cellPhoneNumber },
         confirmAppointmentEndpoint,
+        binName,
+        familyMembersAndTimes,
       });
 
-      res.send(`Calling ${phoneNumber} about ${name}`);
+      res.send(`Calling ${cellPhoneNumber} about ${binName}`);
     } catch (err) {
-      return next(err);
+      next(err);
     }
   },
 );

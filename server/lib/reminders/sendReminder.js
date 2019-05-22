@@ -1,7 +1,6 @@
 
 import { stringify } from 'query-string';
 import { dateFormatter } from '@carecru/isomorphic';
-import { Configuration } from 'CareCruModels';
 import twilioClient from '../../config/twilio';
 import { apiServerUrl } from '../../config/globals';
 import createReminderText, {
@@ -14,6 +13,19 @@ import { sendMessage } from '../../services/chat';
 import renderFamilyRemindersHTML from '../emailTemplates/familyReminders';
 import createFamilyReminderText from './createFamilyReminderText';
 import { getAccountConnectorConfigurations } from '../accountConnectorConfigurations';
+
+/**
+ * Generate the voice bin name
+ * @param isConfirmable
+ * @param dependants
+ * @return {string}
+ */
+const getBinTemplateName = (isConfirmable, isFamily) => {
+  const confirmType = isConfirmable ? 'unconfirmed' : 'confirmed';
+  const familySuffix = isFamily ? '-family' : '';
+
+  return `reminder-voice-${confirmType}${familySuffix}`;
+};
 
 /**
  * Generate the appointment confirmation text for family patient.
@@ -75,7 +87,7 @@ function getPatientConfirmationText(
  * @return {string} the built callback url
  */
 function generateCallBackUrl(sentReminderId) {
-  return `${apiServerUrl}/sentReminders/${sentReminderId}/confirm`;
+  return `${apiServerUrl}/twilio/voice/sentReminders/${sentReminderId}/confirm`;
 }
 
 /**
@@ -124,30 +136,50 @@ function sendSms({
  */
 async function phoneCall({
   account,
-  phoneNumber,
-  name,
-  practiceName,
-  startDateTime,
-  startDateFamily,
-  familyMembersAndTimes,
-  sentReminderId,
+  appointment,
+  patient,
+  sentReminder: { id: sentReminderId, isConfirmable } = {},
+  dependants = [],
   confirmAppointmentEndpoint,
+  binName,
+  familyMembersAndTimes,
 }) {
+  const practiceName = account.name;
+  const practiceNumber = account.phoneNumber;
+  const phoneNumber = patient.cellPhoneNumber;
+
+  const startDateTime = appointment.startDate;
   const startDate = dateFormatter(startDateTime, account.timezone, 'MMMM Do');
   const startTime = dateFormatter(startDateTime, account.timezone, 'h:mma');
 
+  const isFamily = dependants && dependants.length > 0;
+  const familyMembers = appointment ? [patient, ...dependants] : dependants;
+
   const query = stringify({
     practiceName,
-    startDateTime: `${startDate} at ${startTime}`,
-    startDate: startDateFamily,
-    practiceNumber: account.phoneNumber,
+    startDate,
+    startTime,
+    practiceNumber,
     confirmAppointmentEndpoint:
       confirmAppointmentEndpoint || generateCallBackUrl(sentReminderId),
-    familyMembersAndTimes,
+    dependants:
+      familyMembersAndTimes ||
+      familyMembers
+        .map(
+          p =>
+            `${p.firstName} ${p.lastName} at ${dateFormatter(
+              p.appointment.startDate,
+              account.timezone,
+              'h:mma',
+            )}`,
+        )
+        .join(', '),
   });
 
   const config = await getAccountConnectorConfigurations(account.id);
-  const binUrl = config.find(v => v.name === name).value;
+  const binUrl = config.find(
+    v => v.name === (binName || getBinTemplateName(isConfirmable, isFamily)),
+  ).value;
 
   return twilioClient.calls.create({
     to: `${phoneNumber}`,
