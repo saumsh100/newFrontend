@@ -47,37 +47,21 @@ voiceRouter.param(
 voiceRouter.get(
   '/sentReminders/:sentReminderId/confirm',
   async ({ sentReminder }, res, next) => {
-    res.type('text/xml');
-
     const { VoiceResponse } = Twilio.twiml;
     const twiml = new VoiceResponse();
 
+    await sentReminder.update({ isConfirmed: true });
+
+    // For any confirmed reminder we confirm appointment
+    const { reminder, sentRemindersPatients } = sentReminder;
+
     try {
-      await sentReminder.update({ isConfirmed: true });
+      await Promise.all(
+        sentRemindersPatients.map(({ appointment }) =>
+          appointment.confirm(reminder)),
+      );
 
-      // For any confirmed reminder we confirm appointment
-      const { reminder, account, sentRemindersPatients } = sentReminder;
-
-      const appointmentString =
-        sentRemindersPatients.length === 1 ? 'appointment' : 'appointments';
-      const pluralOrNot =
-        sentRemindersPatients.length === 1
-          ? 'Your appointment was'
-          : 'Your appointments were';
-
-      try {
-        await Promise.all(
-          sentRemindersPatients.map(({ appointment }) =>
-            appointment.confirm(reminder)),
-        );
-        twiml.say(`${pluralOrNot} confirmed. Thank you. Goodbye.`);
-      } catch (e) {
-        twiml.say(
-          `Contacting the office as we were unable to confirm the ${appointmentString}`,
-        );
-        twiml.dial(account.phoneNumber);
-      }
-
+      res.type('text/xml');
       res.send(twiml.toString());
     } catch (err) {
       next(err);
@@ -85,18 +69,19 @@ voiceRouter.get(
   },
 );
 
-voiceRouter.get('/sentReminders/robocallPreview/confirmed/', async (req, res, next) => {
-  const { VoiceResponse } = Twilio.twiml;
-  const twiml = new VoiceResponse();
+voiceRouter.get(
+  '/sentReminders/robocallPreview/confirmed/',
+  async (req, res, next) => {
+    const { VoiceResponse } = Twilio.twiml;
+    const twiml = new VoiceResponse();
 
-  try {
-    twiml.say('Thank you. Goodbye');
-
-    res.type('text/xml');
-    res.send(twiml.toString());
-  } catch (err) {
-    next(err);
-  }
-});
+    try {
+      res.type('text/xml');
+      res.send(twiml.toString());
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 module.exports = voiceRouter;

@@ -28,6 +28,7 @@
     "server:build:prod": "dotenv -- webpack --config ./server/webpack/webpack.config.js",
     "ngrok": "ngrok http localhost:5100",
     "twilio:watch": "twilio-run --live --port=5101",
+    "twilio:ngrok": "twilio-run --live --port=5101 --ngrok",
     "clean": "npm run clean:assets && npm run clean:modules && npm run clean:server:bundles",
     "clean:server:bundles": "rimraf server/bin/build",
     "clean:assets": "rm $(find ./client/build -type f ! -name .gitignore ! -name package.json)",
