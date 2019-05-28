@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Tabs, Tab, Header, SContainer, SHeader, SBody } from '../../../../library';
 import EmailPreview from '../../../Shared/EmailPreview';
 import SmsPreview from '../../../Shared/SmsPreview';
+import PhonePreview from '../../../Shared/PhonePreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
 import styles from './styles.scss';
 
@@ -52,7 +53,10 @@ class ReminderPreview extends Component {
         } else if (type === 'phone') {
           typePreview = (
             <div className={styles.smsPreviewWrapper}>
-              {`Phone Preview ${isConfirmable ? '(Confirmed)' : ''}`}
+              <PhonePreview
+                confirmed={!!this.state.index}
+                openCallTestModal={this.props.openCallTestModal}
+              />
             </div>
           );
         }
@@ -93,6 +97,7 @@ ReminderPreview.propTypes = {
   account: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }).isRequired,
+  openCallTestModal: PropTypes.func.isRequired,
 };
 
 export default ReminderPreview;

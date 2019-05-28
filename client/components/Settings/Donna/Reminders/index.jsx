@@ -10,7 +10,8 @@ import {
   fetchEntities,
   createEntityRequest,
 } from '../../../../thunks/fetchEntities';
-import { Button, RemoteSubmitButton, DialogBox } from '../../../library';
+import { sendReminderPreviewCall } from '../../../../thunks/settings';
+import { Button, RemoteSubmitButton, DialogBox, Icon, DropdownMenu } from '../../../library';
 import { accountShape } from '../../../library/PropTypeShapes';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RemindersItem from './RemindersItem';
@@ -19,6 +20,8 @@ import AdvancedSettingsForm from './AdvancedSettingsForm';
 import ReminderPreview from './ReminderPreview';
 import IconCircle from '../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
+import EnabledFeature from '../../../library/EnabledFeature';
+import CreatePhoneCall from './CreatePhoneCall';
 import styles from './styles.scss';
 
 class Reminders extends Component {
@@ -27,6 +30,7 @@ class Reminders extends Component {
 
     this.state = {
       isAdding: false,
+      isTesting: false,
       selectedReminderId: null,
       selectedAdvancedReminderId: null,
     };
@@ -35,7 +39,7 @@ class Reminders extends Component {
     this.openModal = this.openModal.bind(this);
     this.selectReminder = this.selectReminder.bind(this);
     this.selectAdvancedSettings = this.selectAdvancedSettings.bind(this);
-    this.toggleAdding = this.toggleAdding.bind(this);
+    this.toggleAction = this.toggleAction.bind(this);
     this.closeAdvancedSettings = this.closeAdvancedSettings.bind(this);
     this.saveAdvancedSettingsReminder = this.saveAdvancedSettingsReminder.bind(this);
   }
@@ -44,8 +48,8 @@ class Reminders extends Component {
     this.props.fetchEntities({ url: `/api/accounts/${this.props.activeAccount.id}/reminders` });
   }
 
-  toggleAdding() {
-    this.setState({ isAdding: !this.state.isAdding });
+  toggleAction(action) {
+    this.setState(prevState => ({ [action]: !prevState[action] }));
   }
 
   openModal() {
@@ -164,7 +168,7 @@ class Reminders extends Component {
   }
 
   render() {
-    const { activeAccount, role, reminders } = this.props;
+    const { activeAccount, reminders } = this.props;
     const { selectedReminderId, selectedAdvancedReminderId } = this.state;
     if (!activeAccount || !activeAccount.id) {
       return null;
@@ -210,11 +214,16 @@ class Reminders extends Component {
 
     let previewComponent = null;
     if (selectedReminder) {
-      previewComponent = <ReminderPreview reminder={selectedReminder} account={activeAccount} />;
+      previewComponent = (
+        <ReminderPreview
+          reminder={selectedReminder}
+          account={activeAccount}
+          openCallTestModal={() => this.toggleAction('isTesting')}
+        />
+      );
     }
 
     // Used to display the cogs button to open Advanced Settings
-    const isSuperAdmin = role === 'SUPERADMIN';
     const advancedReminder = reminders.get(selectedAdvancedReminderId);
     const advancedIndex = reminders.toArray().findIndex(r => r.id === selectedAdvancedReminderId);
 
@@ -222,26 +231,57 @@ class Reminders extends Component {
       <CommunicationSettingsCard
         title="Reminders Settings"
         rightActions={
-          <Button color="blue" onClick={this.toggleAdding} data-test-id="button_createNewReminder">
-            Add
-          </Button>
+          <div>
+            <Button
+              color="blue"
+              onClick={() => this.toggleAction('isAdding')}
+              className={styles.outlineButton}
+              data-test-id="button_createNewReminder"
+            >
+              Add
+            </Button>
+            <EnabledFeature
+              predicate={({ flags }) => flags.get('voice-touchpoint-settings')}
+              render={() => (
+                <DropdownMenu
+                  labelComponent={props => (
+                    <Button {...props} compact className={styles.labelButton}>
+                      Send a Test
+                      <Icon icon="sort-down" size={1} className={styles.labelIcon} type="solid" />
+                    </Button>
+                  )}
+                  className={styles.optionMenu}
+                >
+                  <Button
+                    className={styles.listItem}
+                    onClick={() => this.toggleAction('isTesting')}
+                  >
+                    Voice
+                  </Button>
+                  <Button className={styles.listItem} disabled>
+                    SMS <span>Coming Soon</span>
+                  </Button>
+                  <Button className={styles.listItem} disabled>
+                    Email <span>Coming Soon</span>
+                  </Button>
+                </DropdownMenu>
+              )}
+            />
+          </div>
         }
         leftColumn={
           <div>
-            {reminders
-              .toArray()
-              .map((reminder, i) => (
-                <RemindersItem
-                  key={reminder.id}
-                  reminder={reminder}
-                  account={activeAccount}
-                  index={i}
-                  onSelectReminder={this.selectReminder}
-                  onSelectAdvancedSettings={this.selectAdvancedSettings}
-                  isSelected={reminder.id === selectedReminderId}
-                  isSuperAdmin={isSuperAdmin}
-                />
-              ))}
+            {reminders.toArray().map((reminder, i) => (
+              <RemindersItem
+                key={reminder.id}
+                reminder={reminder}
+                account={activeAccount}
+                index={i}
+                onSelectReminder={this.selectReminder}
+                onSelectAdvancedSettings={this.selectAdvancedSettings}
+                isSelected={reminder.id === selectedReminderId}
+              />
+            ))}
             <TouchPointItem
               noLines
               className={styles.bottomItem}
@@ -280,11 +320,18 @@ class Reminders extends Component {
           title="Add Reminder"
           type="small"
           active={this.state.isAdding}
-          onEscKeyDown={this.toggleAdding}
-          onOverlayClick={this.toggleAdding}
+          onEscKeyDown={() => this.toggleAction('isAdding')}
+          onOverlayClick={() => this.toggleAction('isAdding')}
         >
           <CreateRemindersForm formName="newReminder" sendEdit={this.newReminder} />
         </DialogBox>
+        <CreatePhoneCall
+          active={this.state.isTesting}
+          toggleAction={() => this.toggleAction('isTesting')}
+          reminders={reminders.map(a => a.get('interval')).toArray()}
+          account={this.props.activeAccount}
+          sendReminderPreviewCall={this.props.sendReminderPreviewCall}
+        />
       </CommunicationSettingsCard>
     );
   }
@@ -293,15 +340,14 @@ class Reminders extends Component {
 Reminders.propTypes = {
   activeAccount: PropTypes.shape(accountShape).isRequired,
   reminders: PropTypes.shape({ get: PropTypes.func.isRequired }).isRequired,
-  role: PropTypes.string.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   fetchEntities: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
+  sendReminderPreviewCall: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, auth }) {
-  const role = auth.get('role');
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const reminders = entities
     .getIn(['reminders', 'models'])
@@ -311,25 +357,22 @@ function mapStateToProps({ entities, auth }) {
   return {
     activeAccount,
     reminders,
-    role,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
     {
       fetchEntities,
       createEntityRequest,
       updateEntityRequest,
+      sendReminderPreviewCall,
       reset,
     },
     dispatch,
   );
-}
 
-const enhance = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
-);
-
-export default enhance(Reminders);
+)(Reminders);

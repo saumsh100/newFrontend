@@ -1,0 +1,32 @@
+@import '../../../../ui.scss';
+@import '../../../../ui-kit.scss';
+
+.button {
+  @extend .ui-kit-smoother;
+  @extend .fx;
+  width: 100%;
+  min-width: 120px;
+  border-radius: $rounded;
+  background-color: $white;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
+  color: $grey;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  border: 0;
+  text-decoration: underline;
+  padding: 0;
+
+  &:hover,
+  &:focus {
+    @extend .fx;
+    color: $grey-dark;
+  }
+
+  &[disabled] {
+    text-decoration: none;
+    cursor: not-allowed;
+  }
+}

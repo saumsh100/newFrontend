@@ -642,7 +642,7 @@ accountsRouter.get(
   async (
     {
       account,
-      query: { binName, cellPhoneNumber, startDateTime, familyMembersAndTimes = '' },
+      query: { binName, cellPhoneNumber, startDateTime, familyMembersAndTimes = true },
     },
     res,
     next,
@@ -652,7 +652,7 @@ accountsRouter.get(
 
       await sendReminder.phone({
         account,
-        appointment: { startDateTime },
+        appointment: { startDate: startDateTime },
         patient: { cellPhoneNumber },
         confirmAppointmentEndpoint,
         binName,

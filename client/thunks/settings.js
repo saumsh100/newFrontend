@@ -1,6 +1,9 @@
 
+import { setDateToTimezone } from '@carecru/isomorphic';
 import { createEntityRequest, deleteEntityRequest } from './fetchEntities';
 import { receiveEntities } from '../reducers/entities';
+import { httpClient } from '../util/httpClient';
+import { showAlertTimeout } from './alerts';
 
 const generateAlert = field => ({
   success: { body: `Successfully generated ${field}.` },
@@ -106,3 +109,44 @@ export function deleteVendastaKey(id) {
     );
   };
 }
+
+export const sendReminderPreviewCall = ({
+  accountId,
+  status,
+  cellPhoneNumber,
+  timezone,
+  amount,
+  unit,
+  callback,
+}) =>
+  async function (dispatch) {
+    try {
+      return await httpClient()
+        .get(`/api/accounts/${accountId}/voice/preview`, {
+          params: {
+            binName: `reminder-voice-${status}`,
+            cellPhoneNumber,
+            startDateTime: setDateToTimezone(new Date(), timezone)
+              .add(amount, unit)
+              .toISOString(),
+          },
+        })
+        .then(() => {
+          dispatch(
+            showAlertTimeout({
+              alert: { body: 'Test call sent with success' },
+              type: 'success',
+            }),
+          );
+          callback();
+        });
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        showAlertTimeout({
+          alert: { body: 'Test call failed' },
+          type: 'error',
+        }),
+      );
+    }
+  };

@@ -1,0 +1,154 @@
+@import '../../../../ui';
+@import '../../../../ui-kit';
+
+$background: #eeeeee;
+
+.topHeader {
+  height: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $grey-dark;
+}
+
+.previewSBody {
+  background-color: $background;
+}
+
+.previewBody {
+  padding: 0 40px;
+}
+
+.previewBodyUnconfirmed {
+  @extend .previewBody;
+}
+
+.previewBodyConfirmed {
+  @extend .previewBody;
+}
+
+.smsPreviewWrapper {
+  @extend .previewBody;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.smsPreviewWrapperFull {
+  @extend .smsPreviewWrapper;
+  padding: 0;
+  overflow: hidden;
+}
+
+.phoneArtboard {
+  background: $white;
+  border-radius: $rounded-lg;
+  width: 294px;
+  height: 520px;
+  box-shadow: $shadow;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.phoneIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #86fe65 0%, #06d315 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.01), 0 0 1px 0 rgba(134, 254, 101, 0.01);
+  color: white;
+  border-radius: 5px;
+  width: 30px;
+  font-size: 14px;
+  height: 30px;
+  margin-right: 12px;
+}
+
+.header {
+  box-shadow: inset 0 -1px 0px 0 hsla(0, 0%, 50%, 0.11);
+  border-top-left-radius: $rounded-lg;
+  border-top-right-radius: $rounded-lg;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  font-weight: 300;
+  color: $grey-darker;
+  font-size: 13px;
+  line-height: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.body {
+  padding: 30px 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+
+  audio {
+    max-width: 100%;
+    margin-top: 8px;
+  }
+}
+
+.transcript {
+  height: 18px;
+  width: 51px;
+  color: $grey;
+  font-size: 10px;
+  font-weight: 300;
+  line-height: 18px;
+}
+
+.message {
+  color: $grey-dark;
+  -webkit-font-smoothing: antialiased;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 4px;
+
+  &:before,
+  &:after {
+    content: '"';
+  }
+}
+
+.caller {
+  color: $grey;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  display: block;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.phoneNumber {
+  color: $grey-darkest;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 19px;
+  -webkit-font-smoothing: antialiased;
+  display: block;
+  text-align: center;
+}
+
+.location {
+  color: $grey-darkest;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 19px;
+  -webkit-font-smoothing: antialiased;
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.modalLink {
+  margin-top: 16px;
+}

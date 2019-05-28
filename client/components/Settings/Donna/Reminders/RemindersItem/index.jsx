@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { ordinalSuffix, intervalToNumType, numTypeToInterval } from '@carecru/isomorphic';
+import { intervalToNumType, numTypeToInterval, ordinalSuffix } from '@carecru/isomorphic';
 import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
-import { Icon, Grid, Row, Col, Toggle, Input, DropdownSelect } from '../../../../library';
+import { Col, DropdownSelect, Grid, Icon, Input, Row, Toggle } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
+import Account from '../../../../../entities/models/Account';
+import Reminders from '../../../../../entities/models/Reminder';
+import EnabledFeature from '../../../../library/EnabledFeature';
 import styles from './styles.scss';
 
 const iconsMap = {
@@ -26,15 +29,18 @@ const wordMap = {
   email_sms: 'Email & SMS',
 };
 
-const typeOptions = [{
-  label: 'Hours',
-  value: 'hours',
-}, {
-  label: 'Days',
-  value: 'days',
-}];
+const typeOptions = [
+  {
+    label: 'Hours',
+    value: 'hours',
+  },
+  {
+    label: 'Days',
+    value: 'days',
+  },
+];
 
-const primaryTypesOptions = [
+const primaryTypesOptions = (showVoiceTouchPoint = false) => [
   {
     label: 'Email',
     value: 'email',
@@ -43,28 +49,23 @@ const primaryTypesOptions = [
     label: 'SMS',
     value: 'sms',
   },
-  // { label: 'Voice', value: 'phone' },
   {
     label: 'Email & SMS',
     value: 'email_sms',
   },
+  ...(showVoiceTouchPoint ? [{ label: 'Voice',
+    value: 'phone' }] : []),
 ];
 
-function SmallIconCircle(props) {
-  const { selected, icon } = props;
-  // delete props.selected;
-  // delete props.icon;
-
+const SmallIconCircle = ({ selected, icon }) => {
   const wrapperClass = selected
     ? styles.smallReminderSelectWrapperCircleSelected
     : styles.smallReminderSelectWrapperCircle;
 
-  return <div className={wrapperClass}>{icon ? <Icon icon={icon} type="solid" /> : null}</div>;
-}
+  return <div className={wrapperClass}>{icon && <Icon icon={icon} type="solid" />}</div>;
+};
 
-function AdvancedSettingsButton(props) {
-  return <Icon icon="cogs" type="solid" {...props} />;
-}
+const AdvancedSettingsButton = props => <Icon icon="cogs" type="solid" {...props} />;
 
 class RemindersItem extends Component {
   constructor(props) {
@@ -81,7 +82,6 @@ class RemindersItem extends Component {
   }
 
   componentDidMount() {
-    // Need function to abstract
     const { num } = intervalToNumType(this.props.reminder.interval);
     if (this.state.number === num) {
       return;
@@ -91,7 +91,6 @@ class RemindersItem extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    // Need function to abstract
     const oldNumType = intervalToNumType(this.props.reminder.interval);
     const newNumType = intervalToNumType(nextProps.reminder.interval);
     if (oldNumType.num === newNumType.num) {
@@ -101,62 +100,18 @@ class RemindersItem extends Component {
     this.setState({ number: newNumType.num });
   }
 
-  editReminder(e) {
-    const isActive = e.target.checked;
-    const { reminder, account } = this.props;
-    const word = isActive ? 'active' : 'inactive';
+  onChangeNumberInput(e) {
+    const val = e.target.value;
 
-    const alert = {
-      success: {
-        title: 'Updated Reminder',
-        body: `Set the reminder to ${word}`,
-      },
+    // \D = all non digits
+    let cleanVal = val.replace(/\D/g, '');
 
-      error: {
-        title: 'Error Updating Reminder',
-        body: `Failed to set the reminder to ${word}`,
-      },
-    };
-
-    this.props.updateEntityRequest({
-      url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { isActive },
-      alert,
-    });
-  }
-
-  deleteReminder(e) {
-    // So that it doesn't bubble up and try to select this reminder
-    e.stopPropagation();
-    e.preventDefault();
-    const { reminder, account, isSelected, selectReminder } = this.props;
-    const { num, type } = intervalToNumType(reminder.interval);
-    const sure = confirm(`Are you sure you want to delete the ${num} ${type} reminder?`);
-    if (!sure) {
-      return;
+    // If zero, default to 1
+    if (parseInt(cleanVal, 10) === 0) {
+      cleanVal = 1;
     }
 
-    if (isSelected) {
-      selectReminder(null);
-    }
-
-    const alert = {
-      success: {
-        title: 'Deleted Reminder',
-        body: `You have deleted the ${num} ${type} reminder`,
-      },
-
-      error: {
-        title: 'Error Deleting Reminder',
-        body: `Failed to delete the ${num} ${type} reminder`,
-      },
-    };
-
-    this.props.updateEntityRequest({
-      url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { isDeleted: true },
-      alert,
-    });
+    return this.setState({ number: cleanVal || 1 });
   }
 
   changePrimaryTypes(value) {
@@ -235,29 +190,62 @@ class RemindersItem extends Component {
     });
   }
 
-  onChangeNumberInput(e) {
-    const val = e.target.value;
-
-    // \D = all non digits
-    let cleanVal = val.replace(/\D/g, '');
-
-    // If zero, default to 1
-    if (parseInt(cleanVal) === 0) {
-      cleanVal = 1;
+  deleteReminder(e) {
+    // So that it doesn't bubble up and try to select this reminder
+    e.stopPropagation();
+    e.preventDefault();
+    const { reminder, account } = this.props;
+    const { num, type } = intervalToNumType(reminder.interval);
+    const sure = window.confirm(`Are you sure you want to delete the ${num} ${type} reminder?`);
+    if (!sure) {
+      return;
     }
 
-    return this.setState({ number: cleanVal || 1 });
+    const alert = {
+      success: {
+        title: 'Deleted Reminder',
+        body: `You have deleted the ${num} ${type} reminder`,
+      },
+
+      error: {
+        title: 'Error Deleting Reminder',
+        body: `Failed to delete the ${num} ${type} reminder`,
+      },
+    };
+
+    this.props.updateEntityRequest({
+      url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
+      values: { isDeleted: true },
+      alert,
+    });
+  }
+
+  editReminder(e) {
+    const isActive = e.target.checked;
+    const { reminder, account } = this.props;
+    const word = isActive ? 'active' : 'inactive';
+
+    const alert = {
+      success: {
+        title: 'Updated Reminder',
+        body: `Set the reminder's interval to ${word}`,
+      },
+
+      error: {
+        title: 'Error Updating Reminder',
+        body: `Failed to set the reminder's primary communication type to ${word}`,
+      },
+    };
+
+    this.props.updateEntityRequest({
+      url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
+      values: { isActive },
+      alert,
+    });
   }
 
   render() {
-    const {
-      reminder,
-      index,
-      isSelected,
-      onSelectReminder,
-      onSelectAdvancedSettings,
-      isSuperAdmin,
-    } = this.props;
+    const { reminder, index, isSelected, onSelectReminder, onSelectAdvancedSettings } = this.props;
 
     const { interval, primaryTypes, isActive } = reminder;
 
@@ -294,18 +282,22 @@ class RemindersItem extends Component {
               </div>
               <div className={styles.dropdownsWrapper}>
                 <div className={styles.topRow}>
-                  <DropdownSelect
-                    onChange={this.changePrimaryTypes}
-                    className={dropdownSelectClass}
-                    value={primaryTypesKey}
-                    options={primaryTypesOptions}
+                  <EnabledFeature
+                    predicate={() => true}
+                    render={({ flags }) => (
+                      <DropdownSelect
+                        onChange={this.changePrimaryTypes}
+                        className={dropdownSelectClass}
+                        value={primaryTypesKey}
+                        options={primaryTypesOptions(flags.get('voice-touchpoint-settings'))}
+                      />
+                    )}
                   />
                 </div>
                 <div className={styles.bottomRow}>
                   <Grid>
                     <Row>
                       <Col xs={3}>
-                        {/* Using min, step and type=number did not work here properly so have to code around it */}
                         <Input
                           classStyles={dropdownSelectClass}
                           value={number}
@@ -330,12 +322,15 @@ class RemindersItem extends Component {
         }
         rightComponent={
           <div className={styles.hoverWrapper}>
-            {isSuperAdmin ? (
-              <AdvancedSettingsButton
-                className={styles.advancedSettingsButton}
-                onClick={() => onSelectAdvancedSettings(reminder.id)}
-              />
-            ) : null}
+            <EnabledFeature
+              predicate={({ userRole }) => userRole === 'SUPERADMIN'}
+              render={() => (
+                <AdvancedSettingsButton
+                  className={styles.advancedSettingsButton}
+                  onClick={() => onSelectAdvancedSettings(reminder.id)}
+                />
+              )}
+            />
             <TinyDeleteButton className={styles.deleteButton} onClick={this.deleteReminder} />
           </div>
         }
@@ -346,19 +341,22 @@ class RemindersItem extends Component {
 
 RemindersItem.propTypes = {
   onSelectReminder: PropTypes.func.isRequired,
-  isSuperAdmin: PropTypes.bool.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  account: PropTypes.instanceOf(Account).isRequired,
+  reminder: PropTypes.instanceOf(Reminders).isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  index: PropTypes.number.isRequired,
+  onSelectAdvancedSettings: PropTypes.func.isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    { updateEntityRequest },
-    dispatch,
-  );
-}
+SmallIconCircle.propTypes = {
+  icon: PropTypes.string.isRequired,
+  selected: PropTypes.bool.isRequired,
+};
 
-const enhance = connect(
+const mapDispatchToProps = dispatch => bindActionCreators({ updateEntityRequest }, dispatch);
+
+export default connect(
   null,
   mapDispatchToProps,
-);
-
-export default enhance(RemindersItem);
+)(RemindersItem);

@@ -34,6 +34,16 @@ const ROUTES = {
       label: 'Donna',
     },
   ],
+  '/reputation': [
+    {
+      to: '/reputation/reviews',
+      label: 'Reviews',
+    },
+    {
+      to: '/reputation/listings',
+      label: 'Listings',
+    },
+  ],
   '/admin': [
     {
       to: '/admin/enterprises',

@@ -3,23 +3,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Button from './index';
-import styles from './ghost.scss';
+import styles from './link.scss';
 
-const GhostButton = ({ className, ...props }) => (
+const LinkButton = ({ className, ...props }) => (
   <Button
     {...props}
     className={classNames(styles.button, className, { [styles.disabled]: props.disabled })}
   />
 );
 
-GhostButton.propTypes = {
+LinkButton.propTypes = {
   disabled: PropTypes.bool,
   className: PropTypes.string,
 };
 
-GhostButton.defaultProps = {
+LinkButton.defaultProps = {
   disabled: false,
   className: '',
 };
 
-export default GhostButton;
+export default LinkButton;
