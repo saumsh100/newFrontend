@@ -172,17 +172,23 @@ export function resetPassword(email) {
       });
 }
 
-export function resetUserPassword(location, values) {
-  return () =>
-    bookingWidgetHttpClient()
-      .post(`${location.pathname}`, values)
-      .catch((err) => {
-        const { data } = err;
-        throw new SubmissionError({
-          password: data,
-          confirmPassword: data,
-        });
+const resetUserPasswordFactory = (client, path, values) =>
+  client()
+    .post(`${path}`, values)
+    .catch((err) => {
+      const { data } = err;
+      throw new SubmissionError({
+        password: data,
+        confirmPassword: data,
       });
+    });
+
+export function resetUserPassword(location, values) {
+  return () => resetUserPasswordFactory(httpClient, location.pathname, values);
+}
+
+export function resetPatientPassword(location, values) {
+  return () => resetUserPasswordFactory(bookingWidgetHttpClient, location.pathname, values);
 }
 
 export function load() {

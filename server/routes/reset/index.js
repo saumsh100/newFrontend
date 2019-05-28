@@ -14,7 +14,6 @@ resetRouter.post('/:token', ({ body, params: { token } }, res, next) => {
     return next(StatusError(400, 'Passwords Do Not Match!'));
   }
 
-
   return PasswordReset.findOne({
     where: {
       token,

@@ -7,7 +7,7 @@ import { push } from 'react-router-redux';
 import { Button } from '../../../library';
 import ResetPasswordForm from '../../../ForgotPassword/ResetPassword/ResetPasswordForm';
 import Section from '../Shared/Section';
-import { resetUserPassword } from '../../../../thunks/auth';
+import { resetPatientPassword } from '../../../../thunks/auth';
 import accountShape from '../../../library/PropTypeShapes/accountShape';
 import appointmentShape from '../../../library/PropTypeShapes/appointmentShape';
 import reminderShape from '../../../library/PropTypeShapes/reminderShape';
@@ -24,7 +24,7 @@ class ResetPassword extends React.Component {
   handleSubmit(values) {
     // This just posts right back to location URL...
     return this.props
-      .resetUserPassword(this.props.location, values)
+      .resetPatientPassword(this.props.location, values)
       .then(() => this.setState({ submitted: true }));
   }
 
@@ -69,7 +69,7 @@ class ResetPassword extends React.Component {
 }
 
 ResetPassword.propTypes = {
-  resetUserPassword: PropTypes.func.isRequired,
+  resetPatientPassword: PropTypes.func.isRequired,
   params: PropTypes.shape({
     account: PropTypes.shape(accountShape),
     appointment: PropTypes.arrayOf(PropTypes.shape(appointmentShape)),
@@ -81,7 +81,7 @@ ResetPassword.propTypes = {
 const mapActionsToProps = dispatch =>
   bindActionCreators(
     {
-      resetUserPassword,
+      resetPatientPassword,
       push,
     },
     dispatch,

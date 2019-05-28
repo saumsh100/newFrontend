@@ -23,31 +23,27 @@ class ResetPassword extends Component {
 
   handleSubmit(values) {
     // This just posts right back to location URL...
-    return this.props
-      .resetUserPassword(this.props.location, values)
-      .then((data) => {
-        this.setState({ submitted: true });
-      });
+    return this.props.resetUserPassword(this.props.location, values).then(() => {
+      this.setState({ submitted: true });
+    });
   }
 
   render() {
     const { submitted } = this.state;
     const display = submitted ? (
       <div>
-        <div className={styles.textSuccess2}>
-          Password Successfully Changed!
-        </div>
-        <Button
-          onClick={() => this.props.push('/login')}
-          className={styles.displayCenter}
-        >
+        <div className={styles.textSuccess2}>Password Successfully Changed!</div>
+        <Button onClick={() => this.props.push('/login')} className={styles.displayCenter}>
           Return to Login
         </Button>
       </div>
     ) : (
       <ResetPasswordForm
         onSubmit={this.handleSubmit}
-        saveButtonProps={{ fluid: true, title: 'Reset Password' }}
+        saveButtonProps={{
+          fluid: true,
+          title: 'Reset Password',
+        }}
       />
     );
 
@@ -55,11 +51,7 @@ class ResetPassword extends Component {
       <div className={styles.backDrop}>
         <Card className={styles.loginForm}>
           <div className={styles.logoContainer}>
-            <img
-              className={styles.loginLogo}
-              src="/images/logo_black.png"
-              alt="CareCru Logo"
-            />
+            <img className={styles.loginLogo} src="/images/logo_black.png" alt="CareCru Logo" />
           </div>
           {display}
         </Card>
@@ -69,7 +61,13 @@ class ResetPassword extends Component {
   }
 }
 
-ResetPassword.propTypes = {};
+ResetPassword.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
+  resetUserPassword: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
+};
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators(
