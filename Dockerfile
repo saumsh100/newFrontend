@@ -21,7 +21,8 @@ RUN apk add --no-cache \
 	vips-dev fftw-dev libc6-compat git tzdata \
 	--update-cache \
 	--repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
-	--repository http://dl-cdn.alpinelinux.org/alpine/edge/main/
+	--repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ \
+	--repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
