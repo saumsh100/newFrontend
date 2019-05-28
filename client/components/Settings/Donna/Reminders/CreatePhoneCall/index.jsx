@@ -38,7 +38,7 @@ class CreatePhoneCall extends Component {
       timezone: this.props.account.timezone,
       amount,
       unit,
-      callback: this.setState(this.cleanFormAndCloseModal),
+      callback: () => this.setState(this.cleanFormAndCloseModal),
     };
     this.props.sendReminderPreviewCall(params);
   }
