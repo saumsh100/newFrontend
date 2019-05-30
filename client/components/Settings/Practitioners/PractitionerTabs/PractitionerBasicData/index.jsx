@@ -102,7 +102,7 @@ class PractitionerBasicData extends Component {
               name="type"
               label="Practitioner Type"
               component="DropdownSelect"
-              options={[{ value: 'Dentist' }, { value: 'Hygienist' }]}
+              options={[{ value: 'Dentist' }, { value: 'Hygienist' }, { value: 'CDA' }]}
             />
             <div className={styles.practFormContainer_practHidden}>
               <span className={styles.practFormContainer_practHidden_text}>
