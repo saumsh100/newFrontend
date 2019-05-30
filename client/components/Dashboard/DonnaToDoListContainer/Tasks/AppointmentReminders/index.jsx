@@ -52,7 +52,7 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
                 <span>
                   <div>{`${reminder.interval}`}</div>
                   <div className={classnames(styles.muted, styles.lowercase)}>
-                    {`${primaryTypeText}`}
+                    {`${primaryTypeText === 'phone' ? 'voice' : primaryTypeText}`}
                   </div>
                 </span>
               )}
@@ -101,11 +101,13 @@ export default function AppointmentReminders({ reminders, timezone }) {
 }
 
 AppointmentReminders.propTypes = {
-  reminders: PropTypes.arrayOf(PropTypes.shape({
-    patient: PropTypes.shape(patientShape),
-    primaryTypes: PropTypes.arrayOf(PropTypes.string),
-    sendDate: PropTypes.string,
-  })),
+  reminders: PropTypes.arrayOf(
+    PropTypes.shape({
+      patient: PropTypes.shape(patientShape),
+      primaryTypes: PropTypes.arrayOf(PropTypes.string),
+      sendDate: PropTypes.string,
+    }),
+  ),
   timezone: PropTypes.string.isRequired,
 };
 

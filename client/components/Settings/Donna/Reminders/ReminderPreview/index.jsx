@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Header, SContainer, SHeader, SBody } from '../../../../library';
+import Account from '../../../../../entities/models/Account';
 import EmailPreview from '../../../Shared/EmailPreview';
 import SmsPreview from '../../../Shared/SmsPreview';
 import PhonePreview from '../../../Shared/PhonePreview';
@@ -27,7 +28,6 @@ class ReminderPreview extends Component {
     const { primaryTypes } = reminder;
     const { index } = this.state;
     const isConfirmable = index === 0;
-
     const getUrl = slug =>
       `/api/accounts/${account.id}/reminders/${reminder.id}` +
       `/${slug}?isConfirmable=${isConfirmable}`;
@@ -55,6 +55,7 @@ class ReminderPreview extends Component {
             <div className={styles.smsPreviewWrapper}>
               <PhonePreview
                 confirmed={!!this.state.index}
+                twilioPhone={this.props.account.get('twilioPhoneNumber')}
                 openCallTestModal={this.props.openCallTestModal}
               />
             </div>
@@ -94,9 +95,7 @@ ReminderPreview.propTypes = {
     id: PropTypes.string.isRequired,
     primaryTypes: PropTypes.array.isRequired,
   }).isRequired,
-  account: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  }).isRequired,
+  account: PropTypes.instanceOf(Account).isRequired,
   openCallTestModal: PropTypes.func.isRequired,
 };
 

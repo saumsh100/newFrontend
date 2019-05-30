@@ -1,5 +1,5 @@
 
-import { setDateToTimezone } from '@carecru/isomorphic';
+import { normalizePhone, setDateToTimezone } from '@carecru/isomorphic';
 import { createEntityRequest, deleteEntityRequest } from './fetchEntities';
 import { receiveEntities } from '../reducers/entities';
 import { httpClient } from '../util/httpClient';
@@ -134,7 +134,7 @@ export const sendReminderPreviewCall = ({
         .then(() => {
           dispatch(
             showAlertTimeout({
-              alert: { body: 'Test call sent with success' },
+              alert: { body: `Test call sent to ${normalizePhone(cellPhoneNumber)}` },
               type: 'success',
             }),
           );

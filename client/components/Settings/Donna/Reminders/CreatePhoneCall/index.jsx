@@ -9,23 +9,23 @@ import Input from '../../../../library/Input';
 import Account from '../../../../../entities/models/Account';
 import styles from './styles.scss';
 
-const initialState = {
-  touchpoint: '',
+const initialState = ({ touchpoint = '' } = {}) => ({
+  touchpoint,
   status: 'confirmed',
   phoneNumber: '',
-};
+});
 
 class CreatePhoneCall extends Component {
   constructor(props) {
     super(props);
 
-    this.state = initialState;
+    this.state = initialState({ touchpoint: props.selectedTouchpoint });
     this.cleanFormAndCloseModal = this.cleanFormAndCloseModal.bind(this);
     this.handleTestCall = this.handleTestCall.bind(this);
   }
 
   cleanFormAndCloseModal() {
-    this.setState(initialState);
+    this.setState(initialState());
     this.props.toggleAction();
   }
 
@@ -116,6 +116,11 @@ CreatePhoneCall.propTypes = {
   toggleAction: PropTypes.func.isRequired,
   sendReminderPreviewCall: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
+  selectedTouchpoint: PropTypes.string,
+};
+
+CreatePhoneCall.defaultProps = {
+  selectedTouchpoint: '',
 };
 
 export default CreatePhoneCall;

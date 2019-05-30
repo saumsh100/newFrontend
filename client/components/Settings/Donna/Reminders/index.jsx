@@ -212,21 +212,17 @@ class Reminders extends Component {
 
     const selectedReminder = this.props.reminders.get(selectedReminderId);
 
-    let previewComponent = null;
-    if (selectedReminder) {
-      previewComponent = (
-        <ReminderPreview
-          reminder={selectedReminder}
-          account={activeAccount}
-          openCallTestModal={() => this.toggleAction('isTesting')}
-        />
-      );
-    }
+    const previewComponent = selectedReminder && (
+      <ReminderPreview
+        reminder={selectedReminder}
+        account={activeAccount}
+        openCallTestModal={() => this.toggleAction('isTesting')}
+      />
+    );
 
     // Used to display the cogs button to open Advanced Settings
     const advancedReminder = reminders.get(selectedAdvancedReminderId);
     const advancedIndex = reminders.toArray().findIndex(r => r.id === selectedAdvancedReminderId);
-
     return (
       <CommunicationSettingsCard
         title="Reminders Settings"
@@ -325,13 +321,16 @@ class Reminders extends Component {
         >
           <CreateRemindersForm formName="newReminder" sendEdit={this.newReminder} />
         </DialogBox>
-        <CreatePhoneCall
-          active={this.state.isTesting}
-          toggleAction={() => this.toggleAction('isTesting')}
-          reminders={reminders.map(a => a.get('interval')).toArray()}
-          account={this.props.activeAccount}
-          sendReminderPreviewCall={this.props.sendReminderPreviewCall}
-        />
+        {this.state.isTesting && (
+          <CreatePhoneCall
+            active={this.state.isTesting}
+            toggleAction={() => this.toggleAction('isTesting')}
+            reminders={reminders.map(a => a.get('interval')).toArray()}
+            account={this.props.activeAccount}
+            selectedTouchpoint={reminders.getIn([selectedReminderId, 'interval'])}
+            sendReminderPreviewCall={this.props.sendReminderPreviewCall}
+          />
+        )}
       </CommunicationSettingsCard>
     );
   }
@@ -353,7 +352,6 @@ function mapStateToProps({ entities, auth }) {
     .getIn(['reminders', 'models'])
     .filter(r => !r.isDeleted && !!r.interval)
     .sortBy(r => -convertIntervalToMs(r.interval));
-
   return {
     activeAccount,
     reminders,
