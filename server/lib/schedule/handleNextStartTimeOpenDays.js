@@ -32,8 +32,10 @@ export default function getNextStartTime({
 
   return normalizeResponse({
     ...filteredSchedule,
-    startTime: addBuffer(filteredSchedule.startTime, bufferBeforeOpening),
-    endTime: addBuffer(filteredSchedule.endTime, bufferAfterClosing),
+    startTime: filteredSchedule.startTime,
+    endTime: filteredSchedule.endTime,
+    startTimeWithBuffer: addBuffer(filteredSchedule.startTime, bufferBeforeOpening),
+    endTimeWithBuffer: addBuffer(filteredSchedule.endTime, bufferAfterClosing),
   });
 }
 

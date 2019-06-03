@@ -44,16 +44,16 @@ export default async function produceOutsideOfficeHours({
   return getMessageFromTemplates(id, 'donna-respond-outside-office-hours', {
     account: { name },
     nextOpenedTime: dateToRelativeTime(nextOpenDay.startTime, timezone, {
-      sameDay: '[at] hh:mma',
+      sameDay: '[at] h:mma',
       nextDay() {
         // this function runs within moment's context
         // meaning that "this" refers to the current moment object instance.
-        if (this.hours() >= 12 && this.hours() < 18) return '[tomorrow afternoon at] hh:mma';
-        else if (this.hours() >= 18) return '[tomorrow evening at] hh:mma';
-        return '[tomorrow morning at] hh:mma';
+        if (this.hours() >= 12 && this.hours() < 18) return '[tomorrow afternoon at] h:mma';
+        else if (this.hours() >= 18) return '[tomorrow evening at] h:mma';
+        return '[tomorrow morning at] h:mma';
       },
       nextWeek: 'dddd',
-      sameElse: 'MM/DD hh:mma',
+      sameElse: 'MM/DD h:mma',
     }, startDate),
   });
 }
