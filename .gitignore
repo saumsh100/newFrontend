@@ -54,3 +54,7 @@ yarn-error.log
 .uglify_cache
 .npmrc
 coverage
+
+client/build/*
+!client/build/
+!client/build/package.json

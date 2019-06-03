@@ -6,15 +6,13 @@ import { getMainDefinition } from 'apollo-utilities'; // eslint-disable-line imp
 import { split } from 'apollo-link'; // eslint-disable-line import/no-extraneous-dependencies
 import { InMemoryCache } from 'apollo-cache-inmemory'; // eslint-disable-line import/no-extraneous-dependencies
 import { WebSocketLink } from 'apollo-link-ws';
-import { getApiUrl, getSubscriptionUrl } from './hub';
-import { protocol } from '../../server/config/globals';
+import { getSubscriptionUrl } from './hub';
 
 const getTokenDefault = () => localStorage.getItem('token');
-const socketProtocol = protocol === 'https' ? 'wss' : 'ws';
 const defaultEndpoint = '/graphql';
 const nestEndpoint = '/newgraphql';
 const isNestOperation = operation => operation.search(/\w*_NEST\b/) === -1;
-const getUrlWithPath = (path = defaultEndpoint) => getApiUrl() + path;
+const getUrlWithPath = (path = defaultEndpoint) => path;
 
 export const apolloClient = () => {
   const httpLink = new HttpLink({
@@ -55,7 +53,7 @@ const fetchQuery = () => (operation, variables) =>
 
 const setupSubscription = () =>
   new WebSocketLink({
-    uri: `${socketProtocol}://${getSubscriptionUrl()}/subscriptions`,
+    uri: getSubscriptionUrl('/subscriptions'),
     reconnect: true,
     connectionParams: { Authorization: getTokenDefault() },
   });

@@ -1,16 +1,5 @@
 FROM node:8-alpine
 
-ARG NPM_TOKEN
-ARG NODE_ENV
-ARG LOGROCKET_APP_ID
-ARG INTERCOM_APP_ID
-ARG FEATURE_FLAG_KEY
-ARG MODE_ANALYTICS_ACCESS_KEY
-ARG GOOGLE_API_KEY
-ARG HOST
-ARG API_URL
-ARG API_SERVER_URL
-
 ARG TZ=America/Los_Angeles
 ARG CI=true
 
@@ -38,7 +27,6 @@ COPY .babelrc /app/
 RUN npm ci
 
 COPY statics/ /app/statics/
-COPY client/ /app/client/
 COPY server/ /app/server/
 
 RUN npm run postinstall

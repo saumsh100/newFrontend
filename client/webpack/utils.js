@@ -2,15 +2,29 @@
 const fs = require('fs');
 const { EOL } = require('os');
 const path = require('path');
-
+const shell = require('shelljs');
 
 /**
  * Convert list of names to wepbpack mapped entries
  * @param {Function} map
  */
-exports.appEntries = map =>
-  (...list) => list.reduce((entries, app) =>
-    Object.assign(entries, { [app]: map(app) }), {});
+const appEntries = map => (...list) =>
+  list.reduce(
+    (entries, app) => ({
+      ...entries,
+      [app]: map(app),
+    }),
+    {},
+  );
+
+exports.appEntries = appEntries;
+
+exports.entries = (isDevMode = false) =>
+  appEntries(
+    isDevMode
+      ? name => ['babel-polyfill', 'react-hot-loader/patch', `./entries/${name}.js`]
+      : name => `./entries/${name}.js`,
+  );
 
 /**
  * Absolute path to project root
@@ -23,8 +37,26 @@ exports.projectRoot = path.normalize(path.join(__dirname, '..'));
  * @returns {object}
  */
 exports.readEnv = envPath =>
-  fs.readFileSync(envPath).toString()
+  fs
+    .readFileSync(envPath)
+    .toString()
     .split(EOL)
     .filter(l => l)
     .map(l => l.split('='))
     .reduce((obj, [l, r]) => Object.assign(obj, { [l]: r }), {});
+
+/**
+ * Links the build folder to node_modules using npm link
+ */
+exports.linkFrontEndModule = ({
+  buildPath = 'client/build',
+  frontEndPackage = '@carecru/carecru',
+} = {}) => {
+  const root = shell.pwd().toString();
+
+  console.log(`\nLinking "${buildPath}" to module ${frontEndPackage}\n`);
+  shell.cd(buildPath);
+  shell.exec('npm link');
+  shell.cd(root);
+  shell.exec(`npm link ${frontEndPackage}`);
+};

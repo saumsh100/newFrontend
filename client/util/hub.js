@@ -1,7 +1,7 @@
 
-import { host, protocol } from '../../server/config/globals';
+const { location } = window;
 
-let PRODUCTION_API = `${protocol}://${host}`;
+let PRODUCTION_API = `${location.protocol}://${location.host}`;
 
 export const TOOLBAR_LEFT = 'left';
 export const TOOLBAR_RIGHT = 'right';
@@ -22,12 +22,12 @@ export function getApiUrl() {
   return PRODUCTION_API;
 }
 
-export function getSubscriptionUrl() {
-  if (isHub()) {
-    return PRODUCTION_API.split('://')[1];
-  }
+export function getSubscriptionUrl(path = '') {
+  const [protocol, host] = isHub()
+    ? PRODUCTION_API.split('://')
+    : [location.protocol, location.host];
 
-  return host;
+  return `${protocol === 'https:' ? 'wss:' : 'ws:'}//${host}${path}`;
 }
 
 export function getSocketUrl() {

@@ -1,23 +1,32 @@
 
 const webpack = require('webpack');
 const postcssPresetEnv = require('postcss-preset-env');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const path = require('path');
-const { projectRoot } = require('./utils');
+const { entries, projectRoot } = require('./utils');
+
+const {
+  NODE_ENV,
+  INTERCOM_APP_ID,
+  LOGROCKET_APP_ID,
+  FEATURE_FLAG_KEY,
+  MODE_ANALYTICS_ACCESS_KEY,
+  GOOGLE_API_KEY,
+} = process.env;
 
 const localIdentName = '[name]__[local]___[hash:base64:5]';
-
-const isDevMode = process.env.NODE_ENV === 'development';
+const isDevMode = NODE_ENV === 'development';
 
 module.exports = {
   cache: true,
   devtool: 'cheap-module-source-map',
-
   resolve: {
     extensions: ['.mjs', '.js', '.jsx'],
     symlinks: false,
     cacheWithContext: false,
   },
 
+  entry: entries(isDevMode)('app', 'reviews', 'my', 'hub'),
   output: {
     path: path.resolve(projectRoot, 'build'),
     publicPath: '/assets/',
@@ -25,8 +34,30 @@ module.exports = {
   },
 
   context: projectRoot,
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(NODE_ENV),
+        LOGROCKET_APP_ID: JSON.stringify(LOGROCKET_APP_ID),
+        INTERCOM_APP_ID: JSON.stringify(INTERCOM_APP_ID),
+        FEATURE_FLAG_KEY: JSON.stringify(FEATURE_FLAG_KEY),
+        MODE_ANALYTICS_ACCESS_KEY: JSON.stringify(MODE_ANALYTICS_ACCESS_KEY),
+        GOOGLE_API_KEY: JSON.stringify(GOOGLE_API_KEY),
+      },
+    }),
 
-  plugins: [new webpack.LoaderOptionsPlugin({ debug: isDevMode })],
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [
+        '**/*',
+        '!widget',
+        '!widget/*',
+        '!package.json',
+        '!.gitignore',
+      ],
+    }),
+
+    new webpack.LoaderOptionsPlugin({ debug: isDevMode }),
+  ],
 
   module: {
     rules: [

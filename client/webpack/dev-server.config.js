@@ -26,8 +26,10 @@ const contentBase = path.resolve(projectRoot, 'statics');
 // const publicPath = '/';
 
 module.exports = {
+  // Allow us to develop the with the frontend being served by the backend through npm link
+  writeToDisk: true,
+
   contentBase,
-  // publicPath,
 
   port: webpackProxyPort,
   host: webpackProxyHost,
@@ -48,20 +50,22 @@ module.exports = {
   clientLogLevel: 'warning',
   noInfo: true,
 
-  proxy: [{
-    target: targetToProxy,
-    prependPath: true,
-    ws: true,
-    // Proxy all requests except HMR ws connection
-    context: pathname => !(pathname.indexOf('/sockjs-node/') === 0),
-    bypass: (req) => {
-      const filePath = path.join(contentBase, req.path);
+  proxy: [
+    {
+      target: targetToProxy,
+      prependPath: true,
+      ws: true,
+      // Proxy all requests except HMR ws connection
+      context: pathname => !(pathname.indexOf('/sockjs-node/') === 0),
+      bypass: (req) => {
+        const filePath = path.join(contentBase, req.path);
 
-      // Return file from contentBase directory if its exists (reverse proxy)
-      if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) return req.path;
+        // Return file from contentBase directory if its exists (reverse proxy)
+        if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) return req.path;
 
-      // If not just ask server
-      return undefined;
+        // If not just ask server
+        return undefined;
+      },
     },
-  }],
+  ],
 };

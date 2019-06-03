@@ -94,7 +94,7 @@ widgetsRouter.get('/:accountId/cc.js', async (req, res, next) => {
   try {
     const { account } = req;
     const cwd = process.cwd();
-    const jsPath = `${assetsPath}/cc.js`;
+    const jsPath = `${assetsPath}/widget/cc.js`;
     const cssPath = `${cwd}/server/routes/_api/my/widgets/widget.css`;
 
     // /book route by default to load widget
@@ -119,6 +119,16 @@ widgetsRouter.get('/:accountId/cc.js', async (req, res, next) => {
 const myWidgetRenderRouter = Router();
 
 myWidgetRenderRouter.use('/widgets', widgetsRouter);
+
+/**
+ * This route is needed here to proxy my.carecru requests to www.carecru
+ * so we can rely only on relative paths
+ */
+myWidgetRenderRouter.use('/my(/*)?', (req, res, next) => {
+  const pattern = /(http[s]?:\/\/)?(\w+\.)?(.*)$/;
+  const host = req.header('host').replace(pattern, (match, p1, p2, p3) => [p1, p3].join(''));
+  res.redirect(307, `${req.protocol}://${host}${req.originalUrl}`);
+});
 
 myWidgetRenderRouter.get('(/*)?', (req, res, next) => {
   try {

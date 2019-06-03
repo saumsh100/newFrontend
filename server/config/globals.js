@@ -143,7 +143,7 @@ const recalls = {
 };
 
 const staticPath = path.normalize(path.join(root, '../statics'));
-const assetsPath = path.normalize(path.join(root, '../client/build'));
+const assetsPath = path.normalize(path.join(root, '../node_modules/@carecru/carecru'));
 
 const logger = { logLevel: environmentVariables.LOG_LEVEL || 'debug' };
 

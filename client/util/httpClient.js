@@ -32,12 +32,12 @@ const buildHttpClient = (getToken, requestConfig = {}) => {
 
 export const httpClient = config =>
   buildHttpClient(getTokenDefault, {
-    baseURL: isOnDevice() ? getApiUrl() : process.env.API_SERVER_URL,
+    baseURL: isOnDevice() ? getApiUrl() : '',
     ...config,
   });
 
 export const bookingWidgetHttpClient = config =>
   buildHttpClient(getTokenBookingWidget, {
-    baseURL: `${process.env.API_SERVER_URL}/my`,
+    baseURL: '/my',
     ...config,
   });

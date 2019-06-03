@@ -38,7 +38,7 @@ React, Redux, CSS Modules w/ SASS
 3.  run the following command to creating a *.env* file:
 ```
 cat << EOF > .env
-NODE_ENV="development"
+NODE_ENV=development
 NPM_TOKEN=
 BLUEBIRD_W_FORGOTTEN_RETURN=0
 POSTGRESQL_HOST=localhost
@@ -58,7 +58,7 @@ S3_LOGS_BUCKET_NAME=
 S3_LOGS_ACCESS_KEY_ID=
 S3_LOGS_SECRET_ACCESS_KEY=
 S3_BUCKET=
-FEATURE_FLAG_KEY=
+FEATURE_FLAG_KEY=5a332a3c95e24c205546f0df
 LAUNCH_DARKLY_SDK_KEY=
 CALLRAIL_API_KEY=
 CALLRAIL_API_ACCOUNTID=
@@ -69,7 +69,7 @@ VENDASTA_API_KEY=
 VENDASTA_API_USER=
 MODE_ANALYTICS_ACCESS_KEY=
 MODE_ANALYTICS_SECRET=
-GOOGLE_API_KEY=
+GOOGLE_API_KEY=AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q
 HOST=care.cru:5100
 MY_HOST=my.care.cru:5100
 SERVER_HOST=localhost
@@ -77,6 +77,9 @@ WP_PROXY_HOST=localhost
 API_URL=http://0.0.0.0:5100
 GRAPHQL_SERVER_URL=http://localhost:8001/graphql
 API_SERVER_URL=http://localhost:5100
+REBRANDLY_SHORT_DOMAIN=
+INTERCOM_APP_ID=enpxykhl
+LOGROCKET_APP_ID=7mbzb4/carecru-development
 EOF
 ```
 4.  Install node modules: `npm install`
