@@ -1,17 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import graphQLEnvironment from '../../../../../util/graphqlEnvironment';
 import { Grid, Row, Col, Form, FormSection } from '../../../../library';
 import patientShape from '../../../../library/PropTypeShapes';
 import Family from '../../../Shared/Family';
 import FamilyMember from '../../../Shared/FamilyMember';
 import PatientSearch from '../../../../PatientSearch';
-import removePatientFromFamily from '../../graphQL/removePatientFromFamily';
-import addPatientToFamily from '../../graphQL/addPatientToFamily';
-import addFamilyWithMembers from '../../graphQL/addFamilyWithMembers';
-import makePatientHeadOfFamily from '../../graphQL/makePatientHeadOfFamily';
+import RemovePatientFamily from '../../graphQL/removePatientFromFamily';
+import AddPatientToAFamilyOrCreateFamilyWithMembers from '../../graphQL/addPatientToFamily';
 import { isResponsive } from '../../../../../util/hub';
+import MakeHeadOfFamily from '../../graphQL/makePatientHeadOfFamily';
 import styles from './styles.scss';
 
 const patientSearchTheme = {
@@ -28,10 +26,12 @@ const relayFamilyShape = PropTypes.shape({
   ccId: PropTypes.string,
   head: PropTypes.shape(patientShape),
   members: PropTypes.shape({
-    edges: PropTypes.arrayOf(PropTypes.shape({
-      cursor: PropTypes.string,
-      node: PropTypes.shape(patientShape),
-    })),
+    edges: PropTypes.arrayOf(
+      PropTypes.shape({
+        cursor: PropTypes.string,
+        node: PropTypes.shape(patientShape),
+      }),
+    ),
     pageInfo: PropTypes.shape({
       endCursor: PropTypes.string,
       hasNextPage: PropTypes.bool,
@@ -52,24 +52,46 @@ const renderMemberList = ({ family, patientNode }) => (
         familyMembers.map(familyMember => (
           <Row>
             <Col xs={12}>
-              <FamilyMember
-                key={familyMember.id}
-                {...familyMember}
-                handleMakeHead={() =>
-                  makePatientHeadOfFamily.commit(
-                    graphQLEnvironment,
-                    familyMember.node,
-                    family,
-                  )
-                }
-                handleRemoveFromFamily={() =>
-                  removePatientFromFamily.commit(
-                    graphQLEnvironment,
-                    familyMember.node,
-                    patientNode.id,
-                  )
-                }
-              />
+              <RemovePatientFamily currentPatientId={patientNode.ccId}>
+                {removePatientFamily => (
+                  <MakeHeadOfFamily>
+                    {makeHeadOfFamily => (
+                      <FamilyMember
+                        key={familyMember.id}
+                        {...familyMember}
+                        handleMakeHead={() =>
+                          makeHeadOfFamily({
+                            variables: {
+                              input: {
+                                id: family.ccId,
+                                headId: familyMember.node.ccId,
+                                accountId: familyMember.node.accountId,
+                                clientMutationId: family.id,
+                              },
+                            },
+                          })
+                        }
+                        handleRemoveFromFamily={() =>
+                          removePatientFamily({
+                            variables: {
+                              input: {
+                                id: familyMember.node.ccId,
+                                firstName: familyMember.node.firstName,
+                                lastName: familyMember.node.lastName,
+                                omitRecallIds: familyMember.node.omitRecallIds,
+                                omitReminderIds: familyMember.node.omitReminderIds,
+                                accountId: familyMember.node.accountId,
+                                familyId: null,
+                                clientMutationId: patientNode.id,
+                              },
+                            },
+                          })
+                        }
+                      />
+                    )}
+                  </MakeHeadOfFamily>
+                )}
+              </RemovePatientFamily>
             </Col>
           </Row>
         ))
@@ -79,32 +101,54 @@ const renderMemberList = ({ family, patientNode }) => (
 );
 
 renderMemberList.propTypes = memberListPropTypes;
+renderMemberList.defaultProps = {
+  family: null,
+  patientNode: null,
+};
 
 const renderAddFamily = ({ family, patientNode }) => (
   <Row className={styles.withPadding}>
-    <PatientSearch
-      onSelect={patient =>
-        (family === null
-          ? addFamilyWithMembers.commit(
-              graphQLEnvironment,
-              [patient.id, patientNode.ccId],
-              patientNode.id,
-            )
-          : addPatientToFamily.commit(
-              graphQLEnvironment,
-              patient,
-              family.ccId,
-              patientNode.id,
-            ))
-      }
-      theme={patientSearchTheme}
-      inputProps={patientSearchInputProps}
-      focusInputOnMount
-    />
+    <AddPatientToAFamilyOrCreateFamilyWithMembers
+      currentPatientId={patientNode.ccId}
+      hasFamily={!!family}
+    >
+      {addPatientOrCreateFamily => (
+        <PatientSearch
+          focusInputOnMount
+          onSelect={patient =>
+            addPatientOrCreateFamily({
+              variables: {
+                input: {
+                  ...(family
+                    ? {
+                        id: patient.id,
+                        accountId: patient.accountId,
+                        firstName: patient.firstName,
+                        lastName: patient.lastName,
+                        omitRecallIds: patient.omitRecallIds,
+                        omitReminderIds: patient.omitReminderIds,
+                        familyId: family.ccId,
+                      }
+                    : { members: [patient.id, patientNode.ccId] }),
+                  clientMutationId: patientNode.id,
+                },
+              },
+            })
+          }
+          theme={patientSearchTheme}
+          inputProps={patientSearchInputProps}
+        />
+      )}
+    </AddPatientToAFamilyOrCreateFamilyWithMembers>
   </Row>
 );
 
 renderAddFamily.propTypes = memberListPropTypes;
+
+renderAddFamily.defaultProps = {
+  family: null,
+  patientNode: null,
+};
 
 const FamilyForm = (props) => {
   const { handleSubmit, familyLength } = props;
@@ -129,6 +173,9 @@ const FamilyForm = (props) => {
 FamilyForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   familyLength: PropTypes.number,
+};
+FamilyForm.defaultProps = {
+  familyLength: 0,
 };
 
 export default FamilyForm;

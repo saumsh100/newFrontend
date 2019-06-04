@@ -76,7 +76,6 @@ import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
 import Well from './Well';
 import PatientPopover from './PatientPopover';
-import RelayComponentRenderer from './RelayComponentRenderer';
 import Highlighter from './Highlighter';
 import Media from './Media';
 
@@ -169,7 +168,6 @@ export {
   FBLoginButton,
   VCard,
   Well,
-  RelayComponentRenderer,
   Highlighter,
   Media,
 };

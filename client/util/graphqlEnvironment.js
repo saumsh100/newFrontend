@@ -1,5 +1,4 @@
 
-import { Environment, Network, RecordSource, Store } from 'relay-runtime'; // eslint-disable-line import/no-extraneous-dependencies
 import { ApolloClient } from 'apollo-boost';
 import { HttpLink } from 'apollo-link-http'; // eslint-disable-line import/no-extraneous-dependencies
 import { getMainDefinition } from 'apollo-utilities'; // eslint-disable-line import/no-extraneous-dependencies
@@ -14,7 +13,7 @@ const nestEndpoint = '/newgraphql';
 const isNestOperation = operation => operation.search(/\w*_NEST\b/) === -1;
 const getUrlWithPath = (path = defaultEndpoint) => path;
 
-export const apolloClient = () => {
+export default () => {
   const httpLink = new HttpLink({
     // The logic below is required, so that we can support both NEST and legacy api endpoints.
     uri: ({ operationName }) =>
@@ -38,27 +37,9 @@ export const apolloClient = () => {
   });
 };
 
-const fetchQuery = () => (operation, variables) =>
-  fetch(getUrlWithPath(), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${getTokenDefault()}`,
-    },
-    body: JSON.stringify({
-      query: operation.text,
-      variables,
-    }),
-  }).then(response => response.json());
-
 const setupSubscription = () =>
   new WebSocketLink({
     uri: getSubscriptionUrl('/subscriptions'),
     reconnect: true,
     connectionParams: { Authorization: getTokenDefault() },
   });
-
-export default new Environment({
-  network: Network.create(fetchQuery(), setupSubscription),
-  store: new Store(new RecordSource()),
-});

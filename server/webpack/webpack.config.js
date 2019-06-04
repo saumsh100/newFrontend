@@ -34,7 +34,6 @@ module.exports = () => ({
     'firstNextLastApp',
     'correspondences',
     'patientCache',
-    'updateSchema',
     'remindersJob',
     'recallsJob',
     'reviewsJob',

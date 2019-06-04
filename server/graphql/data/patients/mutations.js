@@ -20,7 +20,7 @@ const addPatientMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: async args =>
-     await Patient.create(args),
+    await Patient.create(args),
 });
 
 /**
@@ -39,8 +39,7 @@ const updatePatientMutation = mutationWithClientMutationId({
       resolve: payload => payload,
     },
   },
-  mutateAndGetPayload: async ({ id, ...args }) =>
-    await Patient.findById(id).then(p => p.update(args)),
+  mutateAndGetPayload: async ({ id, ...args }) => Patient.findByPk(id).then(p => p.update(args)),
 });
 
 /**
