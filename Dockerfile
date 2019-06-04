@@ -2,6 +2,8 @@ FROM node:8-alpine
 
 ARG TZ=America/Los_Angeles
 ARG CI=true
+ARG NPM_TOKEN
+ARG NODE_ENV
 
 RUN apk update \
 	&& apk --no-cache add --virtual builds-deps build-base python
