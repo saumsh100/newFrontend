@@ -19,6 +19,9 @@ const defaultTypeName = 'Custom';
 
 const valueToDate = value => value && moment(value).toDate();
 
+const isInvalidRange = (date, isFromInput, state) =>
+  (isFromInput ? date > state.toDate : date < state.fromDate);
+
 class DayRangeWithHelpers extends Component {
   constructor(props) {
     super(props);
@@ -103,7 +106,17 @@ class DayRangeWithHelpers extends Component {
    * @param field
    */
   handleInputBlur(e, field) {
-    return this.setValidDate(moment(e.target.value, 'll', true), field);
+    const changedValue = moment(e.target.value, 'll', true);
+    if (!changedValue.isValid()) return;
+
+    const isFromInput = field === 'fromDate';
+    if (isInvalidRange(changedValue.toDate(), isFromInput, this.state)) {
+      const input = isFromInput ? 'fromInput' : 'toInput';
+      this[input].value = dateFormatter(this.state[field], null, 'll');
+      return;
+    }
+
+    this.setValidDate(changedValue, field);
   }
 
   /**
@@ -115,6 +128,9 @@ class DayRangeWithHelpers extends Component {
   handleInputChange(e, field) {
     const changedValue = moment(e.target.value);
     if (!changedValue.isValid()) return;
+
+    const isFromInput = field === 'fromDate';
+    if (isInvalidRange(changedValue.toDate(), isFromInput, this.state)) return;
 
     this.setState({ typeName: defaultTypeName }, () => this.setValidDate(changedValue, field));
   }
@@ -142,13 +158,16 @@ class DayRangeWithHelpers extends Component {
    */
   handleDayClick(day) {
     if (this.state.activeElement) {
-      const key = this.state.activeElement === 'fromInput' ? 'fromDate' : 'toDate';
+      const isFromInput = this.state.activeElement === 'fromInput';
+      if (isInvalidRange(day, isFromInput, this.state)) return;
+
+      const key = isFromInput ? 'fromDate' : 'toDate';
       this[this.state.activeElement].value = dateFormatter(day, null, 'll');
-      return this.setDateValues(key, day);
+      this.setDateValues(key, day);
     }
 
     const key = !this.state.fromDate || day < this.state.fromDate ? 'fromDate' : 'toDate';
-    return this.setDateValues(key, day);
+    this.setDateValues(key, day);
   }
 
   /**
