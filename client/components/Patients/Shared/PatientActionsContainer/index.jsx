@@ -291,14 +291,16 @@ class PatientActionsContainer extends Component {
           )}
         >
           <CreateOrUpdatePatientNoteMutation isUpdate={isUpdatingNote}>
-            {commit => (
-              <NotesForm
-                formName={getNotesFormName(selectedNote)}
-                initialValues={selectedNote}
-                onSubmit={values => this.handleNotesFormSubmit(values, commit)}
-                className={styles.notesForm}
-              />
-            )}
+            {commit =>
+              (isNoteFormActive || isUpdatingNote) && (
+                <NotesForm
+                  formName={getNotesFormName(selectedNote)}
+                  initialValues={selectedNote}
+                  onSubmit={values => this.handleNotesFormSubmit(values, commit)}
+                  className={styles.notesForm}
+                />
+              )
+            }
           </CreateOrUpdatePatientNoteMutation>
         </FormModal>
         <FormModal
@@ -313,15 +315,17 @@ class PatientActionsContainer extends Component {
           )}
         >
           <CreateOrUpdateFollowUpMutation isUpdate={isUpdatingFollowUp}>
-            {commit => (
-              <FollowUpsForm
-                isUpdate={isUpdatingFollowUp}
-                formName={getFollowUpsFormName(selectedFollowUp)}
-                initialValues={selectedFollowUp}
-                onSubmit={values => this.handleFollowUpsFormSubmit(values, commit)}
-                className={styles.notesForm}
-              />
-            )}
+            {commit =>
+              (isFollowUpsFormActive || isUpdatingFollowUp) && (
+                <FollowUpsForm
+                  isUpdate={isUpdatingFollowUp}
+                  formName={getFollowUpsFormName(selectedFollowUp)}
+                  initialValues={selectedFollowUp}
+                  onSubmit={values => this.handleFollowUpsFormSubmit(values, commit)}
+                  className={styles.notesForm}
+                />
+              )
+            }
           </CreateOrUpdateFollowUpMutation>
         </FormModal>
         <FormModal
@@ -336,20 +340,22 @@ class PatientActionsContainer extends Component {
           )}
         >
           <CreateOrUpdateSentRecallMutation isUpdate={isUpdatingRecall}>
-            {commit => (
-              <LogRecallForm
-                isUpdate={isUpdatingRecall}
-                formName={getRecallsFormName(selectedRecall)}
-                initialValues={
-                  selectedRecall || {
-                    primaryType: 'phone',
-                    createdAt: new Date().toISOString(),
+            {commit =>
+              (isRecallsFormActive || isUpdatingRecall) && (
+                <LogRecallForm
+                  isUpdate={isUpdatingRecall}
+                  formName={getRecallsFormName(selectedRecall)}
+                  initialValues={
+                    selectedRecall || {
+                      primaryType: 'phone',
+                      createdAt: new Date().toISOString(),
+                    }
                   }
-                }
-                onSubmit={values => this.handleSentRecallFormSubmit(values, commit)}
-                className={styles.notesForm}
-              />
-            )}
+                  onSubmit={values => this.handleSentRecallFormSubmit(values, commit)}
+                  className={styles.notesForm}
+                />
+              )
+            }
           </CreateOrUpdateSentRecallMutation>
         </FormModal>
       </div>
