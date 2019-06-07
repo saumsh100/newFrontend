@@ -95,7 +95,7 @@ accountsRouter.get(
   checkPermissions('accounts:read'),
   async (req, res, next) => {
     try {
-      const { accountId, role, enterpriseRole, enterpriseId } = req;
+      const { accountId, role, enterpriseId } = req;
       // Fetch all if correct role, just fetch current account if not
       let accounts;
 
@@ -103,10 +103,9 @@ accountsRouter.get(
         // Return all accounts...
         const accountsFind = await Account.findAll({});
         accounts = accountsFind.map(a => a.get({ plain: true }));
-      } else if (enterpriseRole === 'OWNER') {
+      } else if (role === 'OWNER') {
         // Return all accounts under enterprise
         const accountsFind = await Account.findAll({ where: { enterpriseId } });
-
         accounts = accountsFind.map(a => a.get({ plain: true }));
       } else {
         // Return single account
@@ -191,6 +190,7 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
         permission =>
           permission ||
           role === 'SUPERADMIN' ||
+          role === 'OWNER' ||
           Promise.reject(
             StatusError(403, "User don't have permissions for this account."),
           ),

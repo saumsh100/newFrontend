@@ -17,11 +17,18 @@ const ConnectedInnerComponent = connect((state) => {
     role,
     isAuth: session.isAuthenticated,
     isSuperAdmin,
-    withEnterprise: isSuperAdmin, // isEnterpriseOwner(),
+    withEnterprise: isEnterpriseOwner(),
     enterpriseId: session.enterpriseId,
   };
 })(InnerComponent);
 
-const withAuthProps = el => props => <ConnectedInnerComponent {...{ ...props, el }} />;
+const withAuthProps = el => props => (
+  <ConnectedInnerComponent
+    {...{
+      ...props,
+      el,
+    }}
+  />
+);
 
 export default withAuthProps;

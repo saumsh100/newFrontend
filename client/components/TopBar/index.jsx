@@ -9,10 +9,11 @@ import withAuthProps from '../../hocs/withAuthProps';
 import GraphQLPatientSearch from '../GraphQLPatientSearch';
 import accountShape from '../library/PropTypeShapes/accountShape';
 import styles from './styles.scss';
+import EnabledFeature from '../library/EnabledFeature';
 
-const UserMenu = ({ user, activeAccount, enterprise, ...props }) => {
-  const businessName =
-    props.role === 'SUPERADMIN' ? enterprise.get('name') : activeAccount && activeAccount.name;
+const UserMenu = ({ user, activeAccount, enterprise, role, multipleAccounts, ...props }) => {
+  const isEnterprise = multipleAccounts && (role === 'OWNER' || role === 'SUPERADMIN');
+  const businessName = isEnterprise ? enterprise.get('name') : activeAccount && activeAccount.name;
 
   return (
     <Button flat {...props} className={styles.userMenuButton}>
@@ -33,6 +34,7 @@ UserMenu.propTypes = {
   role: PropTypes.string.isRequired,
   activeAccount: PropTypes.shape(accountShape),
   enterprise: PropTypes.instanceOf(Map).isRequired,
+  multipleAccounts: PropTypes.bool.isRequired,
 };
 
 UserMenu.defaultProps = { activeAccount: {} };
@@ -156,7 +158,9 @@ class TopBar extends Component {
     };
 
     const searchTheme = {
-      group: classNames(styles.searchTheme, { [styles.animateSearch]: !isSearchCollapsed }),
+      group: classNames(styles.searchTheme, {
+        [styles.animateSearch]: !isSearchCollapsed,
+      }),
       bar: styles.barStyle,
       container: styles.patientSearchClass,
       suggestionsContainerOpen: styles.containerOpen,
@@ -198,21 +202,58 @@ class TopBar extends Component {
         </div>
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
-            {withEnterprise && activeAccount ? (
-              <li data-test-id="dropDown_accounts">
-                <DropdownMenu
-                  className={styles.accountsDropdownMenu}
-                  labelComponent={ActiveAccountButton}
-                  labelProps={{ account: activeAccount }}
-                >
-                  <div>{accounts.map(renderAccountItem)}</div>
-                </DropdownMenu>
-              </li>
-            ) : null}
+            <EnabledFeature
+              predicate={({ flags, userRole }) => {
+                // I know it is kinda wet but I'd rather keep it more legible for now
+                const shouldShow = (subPredicate = true) =>
+                  subPredicate && (accounts.length > 1 && withEnterprise && !!activeAccount);
+
+                const shouldShowOwner = shouldShow(
+                  userRole === 'OWNER' && flags.get('show-account-switcher-to-owners'),
+                );
+
+                const shouldShowSuperAdmin = shouldShow(userRole === 'SUPERADMIN');
+
+                return shouldShowOwner || shouldShowSuperAdmin;
+              }}
+              render={
+                <li data-test-id="dropDown_accounts">
+                  <DropdownMenu
+                    className={styles.accountsDropdownMenu}
+                    labelComponent={ActiveAccountButton}
+                    labelProps={{ account: activeAccount }}
+                  >
+                    <div>{accounts.map(renderAccountItem)}</div>
+                  </DropdownMenu>
+                </li>
+              }
+            />
             <li>
               <DropdownMenu
                 className={styles.userDropdownMenu}
-                labelComponent={props => <UserMenu {...props} {...userMenuProps} />}
+                labelComponent={props => (
+                  <EnabledFeature
+                    predicate={() => true}
+                    render={({ userRole, flags }) => {
+                      const shouldShow = (subPredicate = true) =>
+                        subPredicate && accounts.length > 1;
+
+                      const shouldShowOwner = shouldShow(
+                        userRole === 'OWNER' && flags.get('show-account-switcher-to-owners'),
+                      );
+
+                      const shouldShowSuperAdmin = shouldShow(userRole === 'SUPERADMIN');
+
+                      return (
+                        <UserMenu
+                          multipleAccounts={shouldShowOwner || shouldShowSuperAdmin}
+                          {...props}
+                          {...userMenuProps}
+                        />
+                      );
+                    }}
+                  />
+                )}
               >
                 <Link to="/profile">
                   <MenuItem className={styles.userMenuLi} icon="user">
