@@ -16,6 +16,9 @@ pub.connect('events');
 // Set the events service for the routes to be able to use
 app.set('pub', pub);
 
+// https://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', true);
+
 // Uses the NODE_ENV to determine logging full stack or not
 app.set('showStackError', true);
 
