@@ -48,6 +48,7 @@ describe('Schedule Utilities', () => {
     test('should return 0 because the next day is open', () => {
       expect(countNextClosedDays({
         weeklySchedule: fullWeekOpen,
+        timezone: 'America/Vancouver',
         startDate: new Date(), // doesn't matter its always open
       })).toBe(0);
     });
@@ -55,6 +56,7 @@ describe('Schedule Utilities', () => {
     test('should return 3 because the next 3 days are closed', () => {
       expect(countNextClosedDays({
         weeklySchedule: threeDaysClose,
+        timezone: 'America/Vancouver',
         startDate: new Date(2018, 2, 22), // Thursday
       })).toBe(3);
     });
@@ -62,6 +64,7 @@ describe('Schedule Utilities', () => {
     test('should return 1 because the next day is closed but not the day after', () => {
       expect(countNextClosedDays({
         weeklySchedule: threeDaysClose,
+        timezone: 'America/Vancouver',
         startDate: new Date(2018, 2, 24), // Saturday
       })).toBe(1);
     });
@@ -69,6 +72,7 @@ describe('Schedule Utilities', () => {
     test('should return 0 because the next day is open', () => {
       expect(countNextClosedDays({
         weeklySchedule: twoDaysClose,
+        timezone: 'America/Vancouver',
         startDate: new Date(2018, 2, 22), // Thursday
       })).toBe(0);
     });
@@ -76,6 +80,7 @@ describe('Schedule Utilities', () => {
     test('should return 5 because thats the default max', () => {
       expect(countNextClosedDays({
         weeklySchedule: fullWeekClose,
+        timezone: 'America/Vancouver',
         startDate: new Date(2018, 2, 22), // Thursday
       })).toBe(5);
     });
@@ -83,6 +88,7 @@ describe('Schedule Utilities', () => {
     test('should return 10 because thats the max supplied', () => {
       expect(countNextClosedDays({
         weeklySchedule: fullWeekClose,
+        timezone: 'America/Vancouver',
         startDate: new Date(2018, 2, 22), // Thursday
         maxDays: 10,
       })).toBe(10);

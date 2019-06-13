@@ -148,14 +148,15 @@ export async function getAppointmentsFromReminder({
   if (reminder.isDaily) {
     // Now adjust end if there are consecutive closed days
     if (reminder.dontSendWhenClosed) {
-      const weeklySchedule = await WeeklySchedule.findById(account.weeklyScheduleId);
+      const weeklySchedule = await WeeklySchedule.findByPk(account.weeklyScheduleId);
       if (weeklySchedule) {
         // Early return if the clinic is closed this day
-        if (!isOpen(weeklySchedule, getDayOfWeek(startDate))) {
+        if (!isOpen(weeklySchedule, getDayOfWeek(startDate, timezone))) {
           return [];
         }
         const consecutiveClosedDays = countNextClosedDays({
           weeklySchedule,
+          timezone,
           startDate,
         });
         if (consecutiveClosedDays) {

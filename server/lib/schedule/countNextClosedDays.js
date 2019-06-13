@@ -1,5 +1,5 @@
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 const MAX_DAYS_DEFAULT = 5;
 
@@ -8,8 +8,8 @@ const MAX_DAYS_DEFAULT = 5;
  * @param date
  * @return {string}
  */
-export function getDayOfWeek(date) {
-  return moment(date).format('dddd').toLowerCase();
+export function getDayOfWeek(date, timezone) {
+  return moment.tz(date, timezone).format('dddd').toLowerCase();
 }
 
 /**
@@ -33,12 +33,12 @@ export function isOpen(weeklySchedule, dayOfWeek) {
  * @param maxDays
  * @return number (integer)
  */
-export default function countNextClosedDays({ weeklySchedule, startDate, maxDays = MAX_DAYS_DEFAULT }) {
+export default function countNextClosedDays({ weeklySchedule, startDate, maxDays = MAX_DAYS_DEFAULT, timezone }) {
   let count;
   let nextDay = moment(startDate);
   for (count = 0; count < (maxDays - 1); count++) {
     nextDay = nextDay.add(1, 'days');
-    const nextDayOfWeek = getDayOfWeek(nextDay);
+    const nextDayOfWeek = getDayOfWeek(nextDay, timezone);
     if (isOpen(weeklySchedule, nextDayOfWeek)) {
       return count;
     }
