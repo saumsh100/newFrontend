@@ -1,7 +1,7 @@
 
 import { Router } from 'express';
 import { sequelizeLoader } from '../util/loaders';
-import { createAccount, updateAccount, deleteAccount, addListings, disableListings, addReputationManagement, disableReputationManagement, updateProductIds } from '../../lib/thirdPartyIntergrations/vendasta';
+import { createAccount, updateAccount, deleteAccount, addListings, disableListings, addReputationManagement, disableReputationManagement, updateProductIds } from '../../lib/thirdPartyIntegrations/vendasta';
 import normalize from '../_api/normalize';
 import { sequelizeAuthMiddleware } from '../../middleware/auth';
 

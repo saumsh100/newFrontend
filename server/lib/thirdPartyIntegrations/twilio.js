@@ -18,11 +18,15 @@ export async function twilioSetup(account) {
   ]);
 
   if (account.twilioPhoneNumber) {
-    throw StatusError(StatusError.BAD_REQUEST, 'This account already has twilioPhoneNumber');
+    throw StatusError(
+      StatusError.BAD_REQUEST,
+      'This account already has twilioPhoneNumber',
+    );
   }
 
   try {
     const phoneNumber = await exports.getAvailableNumber(account);
+
     await twilioClient.incomingPhoneNumbers.create({
       phoneNumber,
       friendlyName: account.name,
@@ -47,7 +51,9 @@ export async function twilioDelete(account) {
 
   try {
     const incomingPhoneNumbers = await twilioClient.incomingPhoneNumbers.list();
-    const phoneNumber = incomingPhoneNumbers.find(({ phoneNumber }) => account.twilioPhoneNumber === phoneNumber);
+    const phoneNumber = incomingPhoneNumbers.find(
+      ({ phoneNumber }) => account.twilioPhoneNumber === phoneNumber,
+    );
 
     if (!phoneNumber) {
       throw StatusError(StatusError.BAD_REQUEST, 'Twilio Number Not Found');
@@ -68,7 +74,10 @@ export async function twilioDelete(account) {
  * @param account
  * @returns {Promise<string>} phoneNumber
  */
-export async function getAvailableNumber({ address, destinationPhoneNumber }) {
+export async function getAvailableNumber({
+  address,
+  destinationPhoneNumber,
+}) {
   const defaultOpts = {
     smsEnabled: true,
     voiceEnabled: true,
@@ -76,15 +85,19 @@ export async function getAvailableNumber({ address, destinationPhoneNumber }) {
 
   const opts = [
     {
-      ...defaultOpts,
-      InPostalCode: address.zipCode,
+      inPostalCode: address.zipCode,
     },
     {
-      ...defaultOpts,
+      nearNumber: destinationPhoneNumber,
+      distance: 10, // miles
+    },
+    {
       areaCode: getAreaCode(destinationPhoneNumber),
     },
     {
-      ...defaultOpts,
+      inLocality: address.city,
+    },
+    {
       inRegion: address.state,
     },
   ];
@@ -93,7 +106,10 @@ export async function getAvailableNumber({ address, destinationPhoneNumber }) {
     // eslint-disable-next-line no-await-in-loop
     const availablePhoneNumbers = await twilioClient
       .availablePhoneNumbers(address.country)
-      .local.list(option);
+      .local.list({
+        ...defaultOpts,
+        ...option,
+      });
 
     if (availablePhoneNumbers.length > 0) {
       return availablePhoneNumbers[0].phoneNumber;
