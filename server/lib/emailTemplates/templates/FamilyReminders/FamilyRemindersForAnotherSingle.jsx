@@ -7,7 +7,7 @@ import SharedComponent from './SharedComponent';
 import SharedHeadersComponent from './SharedHeadersComponent';
 
 export default function FamilyRemindersForAnotherSingle(props) {
-  const { appointmentDate, patient, familyMembers } = props;
+  const { appointmentDate, patient, familyMembers, footerMessage } = props;
 
   const familyPatient = familyMembers[0];
 
@@ -20,7 +20,9 @@ export default function FamilyRemindersForAnotherSingle(props) {
             familyPatient.firstName
           } ${familyPatient.lastName} has an upcoming dental appointment with us.`}
         />
-        <SharedComponent {...props} text="Confirm Appointment" />
+        <SharedComponent {...props} text="Confirm Appointment" >
+          {footerMessage}
+        </SharedComponent>
       </Item>
     </ClinicEmailWrapper>
   );
@@ -35,4 +37,5 @@ FamilyRemindersForAnotherSingle.propTypes = {
       lastName: PropTypes.string,
     },
   })).isRequired,
+  footerMessage: PropTypes.string.isRequired,
 };

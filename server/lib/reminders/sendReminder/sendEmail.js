@@ -1,10 +1,11 @@
 
-import { dateFormatter } from '@carecru/isomorphic';
+import { dateFormatter, formatPhoneNumber } from '@carecru/isomorphic';
 import renderFamilyRemindersHTML from '../../emailTemplates/familyReminders';
 import { buildAppointmentEvent } from '../../ics';
 import { sendTemplate } from '../../mail';
 import { getReminderTemplateName } from '../createReminderText';
-import { formatPhoneNumber } from '../../../util/formatters';
+import { NUM_DAYS_DEFAULT } from '../../../config/globals';
+import { getMessageFromTemplates } from '../../../services/communicationTemplate';
 
 /**
  * Send a reminder email.
@@ -16,7 +17,7 @@ import { formatPhoneNumber } from '../../../util/formatters';
  * @param dependants
  * @return {Promise}
  */
-export default function sendEmail({
+export default async function sendEmail({
   account,
   appointment,
   patient,
@@ -29,14 +30,14 @@ export default function sendEmail({
   const html =
     dependants &&
     dependants.length > 0 &&
-    renderFamilyRemindersHTML({
+    (await renderFamilyRemindersHTML({
       account,
       patient,
       appointment,
       sentReminder,
       familyMembers: dependants,
       isConfirmable,
-    });
+    }));
 
   const accountLogoUrl =
     typeof account.fullLogoUrl === 'string' &&
@@ -80,6 +81,15 @@ export default function sendEmail({
       ],
     }
     : {};
+
+  const reminderEmailFooter = await getMessageFromTemplates(
+    account.id,
+    'reminder-email-final-message',
+    {
+      numDays: NUM_DAYS_DEFAULT,
+      phoneNumber: formatPhoneNumber(account.phoneNumber),
+    },
+  );
 
   return sendTemplate({
     patientId: patient.id,
@@ -152,6 +162,10 @@ export default function sendEmail({
         content: `https://search.google.com/local/writereview?placeid=${
           account.googlePlaceId
         }`,
+      },
+      {
+        name: 'REMINDER_EMAIL_FOOTER',
+        content: reminderEmailFooter || '',
       },
       ...appointmentMergeVars,
     ],

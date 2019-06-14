@@ -7,7 +7,7 @@ import SharedComponent from './SharedComponent';
 import SharedHeadersComponent from './SharedHeadersComponent';
 
 export default function FamilyRemindersForSelfAndOthersConfirmed(props) {
-  const { appointmentDate, patient } = props;
+  const { appointmentDate, patient, footerMessage } = props;
 
   return (
     <ClinicEmailWrapper {...props}>
@@ -18,7 +18,9 @@ export default function FamilyRemindersForSelfAndOthersConfirmed(props) {
             patient.firstName
           }, this is a friendly reminder that you and the following family members have upcoming dental appointments with us.`}
         />
-        <SharedComponent {...props} />
+        <SharedComponent {...props} >
+          {footerMessage}
+        </SharedComponent>
       </Item>
     </ClinicEmailWrapper>
   );
@@ -27,4 +29,5 @@ export default function FamilyRemindersForSelfAndOthersConfirmed(props) {
 FamilyRemindersForSelfAndOthersConfirmed.propTypes = {
   appointmentDate: PropTypes.string.isRequired,
   patient: PropTypes.shape({ firstName: PropTypes.string }).isRequired,
+  footerMessage: PropTypes.string.isRequired,
 };

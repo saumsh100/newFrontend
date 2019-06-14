@@ -7,18 +7,19 @@ import SharedComponent from './SharedComponent';
 import SharedHeadersComponent from './SharedHeadersComponent';
 
 export default function FamilyRemindersForAnotherMultiple(props) {
-  const { appointmentDate, patient, footerMessage } = props;
+  const { actionHeader, subHeader, isConfirmed, footerMessage } = props;
 
   return (
     <ClinicEmailWrapper {...props}>
       <Item>
         <SharedHeadersComponent
-          actionHeader={`Confirm your family's appointments on ${appointmentDate}.`}
-          subHeader={`${
-            patient.firstName
-          }, this is a friendly reminder that the following family members have upcoming dental appointments with us.`}
+          actionHeader={actionHeader}
+          subHeader={subHeader}
         />
-        <SharedComponent {...props} text="Confirm Appointments">
+        <SharedComponent
+          {...props}
+          text={isConfirmed ? '' : 'Confirm Appointments'}
+        >
           {footerMessage}
         </SharedComponent>
       </Item>
@@ -27,7 +28,8 @@ export default function FamilyRemindersForAnotherMultiple(props) {
 }
 
 FamilyRemindersForAnotherMultiple.propTypes = {
-  appointmentDate: PropTypes.string.isRequired,
-  patient: PropTypes.shape({ firstName: PropTypes.string }).isRequired,
+  actionHeader: PropTypes.string.isRequired,
+  subHeader: PropTypes.string.isRequired,
+  isConfirmed: PropTypes.bool.isRequired,
   footerMessage: PropTypes.string.isRequired,
 };

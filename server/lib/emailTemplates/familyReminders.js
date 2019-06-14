@@ -2,29 +2,42 @@
 import { dateFormatter } from '@carecru/isomorphic';
 import renderTemplates from './renderTemplates';
 
-// import { account, appointment, patient, familyMembers } from './entities';
+/**
+ * renderFamilyRemindersHTML generates the HTML for the family reminder template.
+ * @param {*} params
+ */
+export default async function renderFamilyRemindersHTML({
+  account,
+  appointment,
+  patient,
+  familyMembers,
+  isConfirmable,
+}) {
+  const confirmType = JSON.parse(isConfirmable) ? 'unconfirmed' : 'confirmed';
+  const templateName = `${getTemplateName(
+    appointment,
+    familyMembers,
+  )}`;
 
-// Family Reminder templates object
-const familyTemplates = {
-  single: {
-    unconfirmed: 'FamilyRemindersForAnotherSingle',
-    confirmed: 'FamilyRemindersForAnotherSingleConfirmed',
-  },
-
-  multiple: {
-    unconfirmed: 'FamilyRemindersForAnotherMultiple',
-    confirmed: 'FamilyRemindersForAnotherMultipleConfirmed',
-  },
-
-  self: {
-    unconfirmed: 'FamilyRemindersForSelfAndOthers',
-    confirmed: 'FamilyRemindersForSelfAndOthersConfirmed',
-  },
-};
+  return renderTemplates({
+    templateName,
+    account,
+    confirmType,
+    timezone: account.timezone,
+    appointment,
+    patient,
+    familyMembers,
+    appointmentDate: getAppointmentDate(
+      appointment,
+      familyMembers,
+      account.timezone,
+    ),
+  });
+}
 
 /**
- * getTemplateName retrieves the template that corresponds to the number of family members in the reminder
- * and whether or not the point of contact has an appointment or not.
+ * getTemplateName retrieves the template that corresponds to the number of family members in the
+ * reminder and whether or not the point of contact has an appointment or not.
  * @param {*} sentReminder
  * @param {*} appointment
  * @param {*} familyMembers
@@ -53,26 +66,4 @@ function getAppointmentDate(appointment, familyMembers, timezone) {
 
   const famApptStartDate = familyMembers[0].appointment.startDate;
   return dateFormatter(famApptStartDate, timezone, 'dddd, MMMM Do YYYY');
-}
-
-/**
- * renderFamilyRemindersHTML generates the HTML for the family reminder template.
- * @param {*} params
- */
-export default function renderFamilyRemindersHTML({ account, appointment, patient, familyMembers, isConfirmable }) {
-  const confirmType = JSON.parse(isConfirmable) ? 'unconfirmed' : 'confirmed';
-
-  const templateName = familyTemplates[getTemplateName(appointment, familyMembers)][confirmType];
-
-  const html = renderTemplates({
-    templateName,
-    account,
-    timezone: account.timezone,
-    appointment,
-    patient,
-    familyMembers,
-    appointmentDate: getAppointmentDate(appointment, familyMembers, account.timezone),
-  });
-
-  return html;
 }

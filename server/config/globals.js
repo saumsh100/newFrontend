@@ -160,6 +160,8 @@ const authService = {
   apiKey: authCarecruApiKey || 'jNNA7IQKWRqKrH37WYMIBOGC5NgjCPGSYa9O4PEWGOWFGalHV6kRZY9iVpZrIoJ3',
 };
 
+const NUM_DAYS_DEFAULT = 2;
+
 module.exports = {
   staticPath,
   assetsPath,
@@ -205,4 +207,5 @@ module.exports = {
   logger,
   authService,
   apiServerUrl,
+  NUM_DAYS_DEFAULT,
 };
