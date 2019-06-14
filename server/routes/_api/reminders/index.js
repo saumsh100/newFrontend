@@ -4,7 +4,7 @@ import moment from 'moment';
 import { getDayStart, getDayEnd, convertIntervalStringToObject } from '@carecru/isomorphic';
 import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
 import { getReminderTemplateName } from '../../../lib/reminders/createReminderText';
-import getReminderText from '../../../lib/reminders/getReminderText';
+import getSmsText from '../../../lib/reminders/reminderTemplate/getSmsText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
@@ -234,7 +234,7 @@ remindersRouter.get('/:accountId/reminders/:reminderId/sms', checkPermissions('a
       .add(convertIntervalStringToObject(reminder.interval))
       .toISOString();
 
-    const message = await getReminderText({
+    const message = await getSmsText({
       patient,
       account,
       reminder,

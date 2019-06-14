@@ -1,18 +1,16 @@
 
 import { Op } from 'sequelize';
-import { dateToRelativeTime, setDateToTimezone, setDateAndTZ } from '@carecru/isomorphic';
 import {
-  Account,
-  Chat,
-  Patient,
-  TextMessage,
-} from 'CareCruModels';
+  dateToRelativeTime,
+  setDateToTimezone,
+  setDateAndTZ,
+} from '@carecru/isomorphic';
+import { Account, Chat, Patient, TextMessage } from 'CareCruModels';
 import { namespaces } from '../../config/globals';
 import { sendSMS } from '../sms';
 import logger from '../../config/logger';
 import { handleResponse } from '../../lib/comms/util/responseChecks';
 import { confirmReminderIfExist } from '../../lib/reminders/helpers';
-import { createConfirmationText } from '../../lib/reminders/sendReminder';
 import normalize from '../../routes/_api/normalize';
 import { getPatientFromCellPhoneNumber } from '../../lib/contactInfo/getPatientFromCellPhoneNumber';
 import getRelevantSocketUpdateData from './socketUpdateData';
@@ -21,6 +19,7 @@ import { NEW_MESSAGE, UPDATE_CHAT, MARK_READ, MARK_UNREAD } from './consts';
 import getNextStartTime from '../../lib/schedule/handleNextStartTimeOpenDays';
 import fetchAndComputeFinalDailySchedules from '../../lib/schedule/fetchAndComputeFinalDailySchedules';
 import { isLimitReachedForPhoneNumber } from '../schedule/limitOutOfOfficeHoursReplays';
+import getConfirmationText from '../../lib/reminders/reminderTemplate/getConfirmationText';
 
 /**
  * Handles receiving a message.
@@ -32,10 +31,7 @@ import { isLimitReachedForPhoneNumber } from '../schedule/limitOutOfOfficeHoursR
  * @returns {Promise}
  */
 export async function receiveMessage(account, textMessageData) {
-  const {
-    from,
-    body,
-  } = textMessageData;
+  const { from, body } = textMessageData;
   // Grab account from incoming number so that we can get accountId
   const patient = await getPatientFromCellPhoneNumber({
     accountId: account.id,
@@ -44,18 +40,26 @@ export async function receiveMessage(account, textMessageData) {
 
   const chatClean = await getOrCreateChatForPatient(account.id, from, patient);
   logger.debug(`Chat ${chatClean.id} found or created.`);
-  const textMessage = await storeTextMessage({
-    ...textMessageData,
-    ...{ chatId: chatClean.id },
-  }, true);
+  const textMessage = await storeTextMessage(
+    {
+      ...textMessageData,
+      ...{ chatId: chatClean.id },
+    },
+    true,
+  );
 
   logger.debug(`TextMessage ${textMessage.get('id')} stored.`);
   const { isConfirmation, haveExtraMessage } = handleResponse(body);
 
   if (!patient || !isConfirmation) {
-    logger.debug(`Not a ${!patient ? 'patient' : 'sms confirmation'}, exiting.`);
+    logger.debug(
+      `Not a ${!patient ? 'patient' : 'sms confirmation'}, exiting.`,
+    );
     await updateUserViaSocket(chatClean.id);
-    return replyWithOutOfOfficeMessage(account, (patient && patient.get('cellPhoneNumber')) || from);
+    return replyWithOutOfOfficeMessage(
+      account,
+      (patient && patient.get('cellPhoneNumber')) || from,
+    );
   }
 
   // Mark text message and chat as unread if is only confirmation
@@ -68,24 +72,32 @@ export async function receiveMessage(account, textMessageData) {
   const sentReminders = await confirmReminderIfExist(account.id, patient.id);
   const firstSentReminder = sentReminders[0];
 
-  if (!firstSentReminder || firstSentReminder.sentRemindersPatients.length === 0) {
+  if (
+    !firstSentReminder ||
+    firstSentReminder.sentRemindersPatients.length === 0
+  ) {
     logger.debug('No reminders to confirm, exiting.');
     await updateUserViaSocket(chatClean.id);
-    return haveExtraMessage && replyWithOutOfOfficeMessage(
-      account,
-      (patient && patient.get('cellPhoneNumber')) || from,
+    return (
+      haveExtraMessage &&
+      replyWithOutOfOfficeMessage(
+        account,
+        (patient && patient.get('cellPhoneNumber')) || from,
+      )
     );
   }
 
   const { reminder, sentRemindersPatients } = firstSentReminder;
-  const pocPatient = sentRemindersPatients
-    .find(({ appointment: a }) => a.patientId === firstSentReminder.contactedPatientId);
+  const pocPatient = sentRemindersPatients.find(
+    ({ appointment: a }) => a.patientId === firstSentReminder.contactedPatientId,
+  );
 
   logger.debug(`Reminder ${firstSentReminder.id} confirmed.`);
   const sentReminderClean = firstSentReminder.get({ plain: true });
   const normalizedReminder = normalize('sentReminder', sentReminderClean);
   publishEvent(account.id, 'create:SentReminder', normalizedReminder);
-  const confirmationText = createConfirmationText({
+
+  const confirmationText = await getConfirmationText({
     patient,
     appointment: pocPatient ? pocPatient.appointment : {},
     account,
@@ -99,15 +111,21 @@ export async function receiveMessage(account, textMessageData) {
     patient.get('cellPhoneNumber') || from,
   );
 
-  const shouldSendOutOfOfficeMessage = outOfOfficeMessage &&
-    !await isLimitReachedForPhoneNumber(account.id, from);
+  const shouldSendOutOfOfficeMessage =
+    outOfOfficeMessage &&
+    !(await isLimitReachedForPhoneNumber(account.id, from));
 
-  const messageBody = shouldSendOutOfOfficeMessage && haveExtraMessage
-    ? [confirmationText, outOfOfficeMessage].join(' ')
-    : confirmationText;
+  const messageBody =
+    shouldSendOutOfOfficeMessage && haveExtraMessage
+      ? [confirmationText, outOfOfficeMessage].join(' ')
+      : confirmationText;
 
-  const confirmationTextMessage =
-    await createChatMessage(messageBody, patient, null, chatClean.id);
+  const confirmationTextMessage = await createChatMessage(
+    messageBody,
+    patient,
+    null,
+    chatClean.id,
+  );
 
   logger.debug(`Sent ${confirmationTextMessage.id} confirmation message.`);
   await updateUserViaSocket(chatClean.id);
@@ -121,8 +139,11 @@ export async function receiveMessage(account, textMessageData) {
  */
 export async function replyWithOutOfOfficeMessage(account, from) {
   const outOfOfficeMessage = await produceOutsideOfficeHours(account, from);
-  const shouldSend = outOfOfficeMessage && !await isLimitReachedForPhoneNumber(account.id, from);
-  const replay = shouldSend && await sendMessage(from, outOfOfficeMessage, account.id);
+  const shouldSend =
+    outOfOfficeMessage &&
+    !(await isLimitReachedForPhoneNumber(account.id, from));
+  const replay =
+    shouldSend && (await sendMessage(from, outOfOfficeMessage, account.id));
   if (replay) {
     await markMessageAsAutoReply(replay.id);
   }
@@ -140,34 +161,37 @@ export async function replyWithOutOfOfficeMessage(account, from) {
  * @param user {string|null} An id of user that is sending a message.
  * @returns {Promise}
  */
-export async function sendMessage(cellPhoneNumber, message, accountId, user = null) {
-  const patient = await getPatientFromCellPhoneNumber({
-    accountId,
-    cellPhoneNumber,
-  }) || unknownPatient(accountId, cellPhoneNumber);
-
-  const chat = await Chat.findOne({
-    raw: true,
-    where: {
-      patientId: patient.id,
-      patientPhoneNumber: cellPhoneNumber,
-    },
-  }) || await Chat.findOne({
-    raw: true,
-    where: {
-      patientId: null,
-      patientPhoneNumber: cellPhoneNumber,
+export async function sendMessage(
+  cellPhoneNumber,
+  message,
+  accountId,
+  user = null,
+) {
+  const patient =
+    (await getPatientFromCellPhoneNumber({
       accountId,
-    },
-  });
+      cellPhoneNumber,
+    })) || unknownPatient(accountId, cellPhoneNumber);
+
+  const chat =
+    (await Chat.findOne({
+      raw: true,
+      where: {
+        patientId: patient.id,
+        patientPhoneNumber: cellPhoneNumber,
+      },
+    })) ||
+    (await Chat.findOne({
+      raw: true,
+      where: {
+        patientId: null,
+        patientPhoneNumber: cellPhoneNumber,
+        accountId,
+      },
+    }));
 
   const chatId = chat ? chat.id : null;
-  return createChatMessage(
-    message,
-    patient,
-    user,
-    chatId,
-  );
+  return createChatMessage(message, patient, user, chatId);
 }
 
 /**
@@ -179,14 +203,23 @@ export async function sendMessage(cellPhoneNumber, message, accountId, user = nu
  * @param phoneNumber {string} Phone number of the patient.
  * @returns {Promise}
  */
-export async function markMessagesAsUnread(chatId, textMessageCreatedAt, phoneNumber) {
+export async function markMessagesAsUnread(
+  chatId,
+  textMessageCreatedAt,
+  phoneNumber,
+) {
   await TextMessage.update(
     { read: false },
     {
       where: {
         chatId,
         to: phoneNumber,
-        createdAt: { [Op.gte]: setDateToTimezone(textMessageCreatedAt, 'America/Vancouver').toDate() },
+        createdAt: {
+          [Op.gte]: setDateToTimezone(
+            textMessageCreatedAt,
+            'America/Vancouver',
+          ).toDate(),
+        },
       },
     },
   );
@@ -232,7 +265,10 @@ export function markMessageAsRead(id) {
  * @return {Promise}
  */
 export function markMessageAsAutoReply(id) {
-  return TextMessage.update({ isOutsideOfficeHoursRespond: true }, { where: { id }});
+  return TextMessage.update(
+    { isOutsideOfficeHoursRespond: true },
+    { where: { id } },
+  );
 }
 
 /**
@@ -258,7 +294,12 @@ export async function resendMessage(messageId, patientId) {
     TextMessage.findByPk(messageId),
     Patient.findByPk(patientId, { raw: true }),
   ]);
-  const newMessage = createChatMessage(oldMessage.get('body'), patient, oldMessage.get('userId'), oldMessage.get('chatId'));
+  const newMessage = createChatMessage(
+    oldMessage.get('body'),
+    patient,
+    oldMessage.get('userId'),
+    oldMessage.get('chatId'),
+  );
   await oldMessage.destroy();
   return newMessage;
 }
@@ -270,14 +311,17 @@ export async function resendMessage(messageId, patientId) {
  * @param patientPhoneNumber {string} Patient phone number
  * @returns {Promise<*>}
  */
-export async function respondOutsideOfOfficeHours({
-  id: accountId,
-  timezone,
-  weeklyScheduleId,
-  canAutoRespondOutsideOfficeHours,
-  bufferBeforeOpening,
-  bufferAfterClosing,
-}, patientPhoneNumber) {
+export async function respondOutsideOfOfficeHours(
+  {
+    id: accountId,
+    timezone,
+    weeklyScheduleId,
+    canAutoRespondOutsideOfficeHours,
+    bufferBeforeOpening,
+    bufferAfterClosing,
+  },
+  patientPhoneNumber,
+) {
   if (!canAutoRespondOutsideOfficeHours || !patientPhoneNumber) {
     return false;
   }
@@ -301,8 +345,10 @@ export async function respondOutsideOfOfficeHours({
     bufferBeforeOpening,
   );
 
-  if ((currentMoment.isAfter(after.end) || currentMoment.isBefore(after.start)) &&
-    (currentMoment.isAfter(before.end) || currentMoment.isBefore(before.start))) {
+  if (
+    (currentMoment.isAfter(after.end) || currentMoment.isBefore(after.start)) &&
+    (currentMoment.isAfter(before.end) || currentMoment.isBefore(before.start))
+  ) {
     const startDate = new Date();
     const endDate = new Date();
     endDate.setDate(startDate.getDate() + 30);
@@ -313,13 +359,23 @@ export async function respondOutsideOfOfficeHours({
       endDate: setDateToTimezone(endDate.toISOString(), timezone),
     });
 
-    const { startTime } = await getNextStartTime({
-      bufferBeforeOpening,
-      bufferAfterClosing,
-    }, schedule);
+    const { startTime } = await getNextStartTime(
+      {
+        bufferBeforeOpening,
+        bufferAfterClosing,
+      },
+      schedule,
+    );
 
-    const nextStartTime = addBuffer(startTime, {}, timezone, bufferBeforeOpening);
-    return `Practice is currently closed, the next opening time is: ${dateToRelativeTime(nextStartTime)}.`;
+    const nextStartTime = addBuffer(
+      startTime,
+      {},
+      timezone,
+      bufferBeforeOpening,
+    );
+    return `Practice is currently closed, the next opening time is: ${dateToRelativeTime(
+      nextStartTime,
+    )}.`;
   }
   return false;
 }
@@ -332,18 +388,8 @@ export async function respondOutsideOfOfficeHours({
  * @param buffer {String}
  */
 function buildTime(time, currentMoment, tz, buffer) {
-  const start = addBuffer(
-    time.startTime,
-    currentMoment,
-    tz,
-    buffer,
-  );
-  const end = addBuffer(
-    time.endTime,
-    currentMoment,
-    tz,
-    buffer,
-  );
+  const start = addBuffer(time.startTime, currentMoment, tz, buffer);
+  const end = addBuffer(time.endTime, currentMoment, tz, buffer);
 
   return {
     start,
@@ -358,12 +404,24 @@ function buildTime(time, currentMoment, tz, buffer) {
  * @param {String} tz
  * @param {String} buffer
  */
-function addBuffer(weeklyScheduleToday, { years, months, date } = {}, tz, buffer) {
-  const dt = Object.keys(arguments[1]).length > 0 ? setDateAndTZ(weeklyScheduleToday, {
-    years,
-    months,
-    date,
-  }, tz) : setDateToTimezone(weeklyScheduleToday, tz);
+function addBuffer(
+  weeklyScheduleToday,
+  { years, months, date } = {},
+  tz,
+  buffer,
+) {
+  const dt =
+    Object.keys(arguments[1]).length > 0
+      ? setDateAndTZ(
+        weeklyScheduleToday,
+        {
+          years,
+          months,
+          date,
+        },
+        tz,
+      )
+      : setDateToTimezone(weeklyScheduleToday, tz);
 
   if (buffer) {
     return dt.add(...buffer.split(' '));
@@ -429,7 +487,11 @@ async function createChatMessage(body, patient, userId, chatId) {
  * @param patient {Patient} Patient we are getting the chat for.
  * @returns {Promise<{Chat}>}
  */
-async function getOrCreateChatForPatient(accountId, patientPhoneNumber, patient) {
+async function getOrCreateChatForPatient(
+  accountId,
+  patientPhoneNumber,
+  patient,
+) {
   let chat = null;
   if (patient) {
     chat = await Chat.findOne({
@@ -468,10 +530,13 @@ async function getOrCreateChatForPatient(accountId, patientPhoneNumber, patient)
  * @returns {Promise}
  */
 function updateLastMessageData(chatId, messageId, date) {
-  return Chat.update({
-    lastTextMessageId: messageId,
-    lastTextMessageDate: date || new Date(),
-  }, { where: { id: chatId } });
+  return Chat.update(
+    {
+      lastTextMessageId: messageId,
+      lastTextMessageDate: date || new Date(),
+    },
+    { where: { id: chatId } },
+  );
 }
 
 /**
@@ -496,10 +561,11 @@ async function updateUserViaSocket(chatId, event = NEW_MESSAGE) {
  */
 function publishEvent(accountId, event, data) {
   const { io } = global;
-  io && io
-    .of(namespaces.dash)
-    .in(accountId)
-    .emit(event, data);
+  io &&
+    io
+      .of(namespaces.dash)
+      .in(accountId)
+      .emit(event, data);
 }
 
 /**
@@ -509,7 +575,11 @@ function publishEvent(accountId, event, data) {
  */
 async function storeTextMessage(textMessageData, markChatAsUnread = false) {
   const textInstance = await TextMessage.create(textMessageData);
-  await updateLastMessageData(textMessageData.chatId, textInstance.get('id'), new Date());
+  await updateLastMessageData(
+    textMessageData.chatId,
+    textInstance.get('id'),
+    new Date(),
+  );
 
   if (markChatAsUnread) {
     await setChatUnread(textMessageData.chatId);
@@ -532,8 +602,10 @@ async function setChatUnread(id, hasUnread = true) {
     },
   });
 
-  return validChatUpdate(hasUnread, textMessagesCount)
-    && Chat.update({ hasUnread }, { where: { id } });
+  return (
+    validChatUpdate(hasUnread, textMessagesCount) &&
+    Chat.update({ hasUnread }, { where: { id } })
+  );
 }
 
 /**
