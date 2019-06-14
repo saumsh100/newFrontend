@@ -1,10 +1,9 @@
 
-import moment from 'moment';
 import omit from 'lodash/omit';
 import orderBy from 'lodash/orderBy';
 import groupBy from 'lodash/groupBy';
 import forEach from 'lodash/forEach';
-import { convertIntervalStringToObject } from '@carecru/isomorphic';
+import { convertIntervalStringToObject, setDateToTimezone } from '@carecru/isomorphic';
 import {
   Appointment,
   Family,
@@ -29,7 +28,7 @@ const SAME_DAY_HOURS = GLOBALS.reviews.sameDayWindowHours;
  * @return [outboxReviews]
  */
 export async function generateReviewsOutbox({ account, startDate, endDate }) {
-  endDate = endDate || moment(startDate).endOf('day').toISOString();
+  endDate = endDate || setDateToTimezone(startDate).endOf('day').toISOString();
   const appointments = await exports.getReviewAppointments({ account, startDate, endDate });
 
   // Create array that the success-fail-organizer function can accept
@@ -45,7 +44,7 @@ export async function generateReviewsOutbox({ account, startDate, endDate }) {
   const intervalObject = convertIntervalStringToObject(account.reviewsInterval);
 
   const outboxReviews = organizedList.map((pa) => {
-    const sendDate = moment(pa.patient.appointment.endDate).add(intervalObject).toISOString();
+    const sendDate = setDateToTimezone(pa.patient.appointment.endDate).add(intervalObject).toISOString();
     return {
       ...pa,
       sendDate,
@@ -85,13 +84,13 @@ export async function getReviewPatients({ account, startDate, endDate }) {
  */
 export async function getReviewAppointments({ account, startDate, endDate, buffer = BUFFER_MINUTES }) {
   // Cron job will default to startDate + 5 minutes
-  endDate = endDate || moment(startDate).add(buffer, 'minutes').toISOString();
+  endDate = endDate || setDateToTimezone(startDate).add(buffer, 'minutes').toISOString();
 
   // We want to make sure we send to patients {account.reviewsInterval} after their endDate
   const intervalObject = convertIntervalStringToObject(account.reviewsInterval);
-  const begin = moment(startDate).subtract(intervalObject).toISOString();
-  const end = moment(endDate).subtract(intervalObject).toISOString();
-  const sameDayEnd = moment(end).add(SAME_DAY_HOURS, 'hours').toISOString();
+  const begin = setDateToTimezone(startDate).subtract(intervalObject).toISOString();
+  const end = setDateToTimezone(endDate).subtract(intervalObject).toISOString();
+  const sameDayEnd = setDateToTimezone(end).add(SAME_DAY_HOURS, 'hours').toISOString();
   const isConfirmedQuery = account.sendUnconfirmedReviews ? {} : { isPatientConfirmed: true };
 
   const appointments = await Appointment.findAll({
@@ -131,6 +130,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
             model: SentReview,
             as: 'sentReviews',
             required: false,
+            where: { isSent: true },
           },
           {
             model: Appointment,
@@ -151,6 +151,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
         model: SentReview,
         as: 'sentReviews',
         required: false,
+        where: { isSent: true },
       },
 
       // Need this for the practitioner avatar
@@ -170,16 +171,30 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
   // Filter down to appointments who have no sentReviews and
   // whose patients have not yet reviewed the clinic
   const sendableAppointments = filteredAppointments.filter((a) => {
+    const { sentReviews, reviews } = a.patient;
+    const { lastReviewInterval, lastSentReviewInterval } = account;
     const reviewNotSentForAppointment = !a.sentReviews.length;
-    const patientNotReviewed = !a.patient.reviews.length; // we may want to make another range check (within a year?)
+
+    const patientHasNoRecentReview = lastReviewInterval ?
+      reviews.every(r =>
+        setDateToTimezone(r.createdAt)
+          .add(convertIntervalStringToObject(lastReviewInterval))
+          .isBefore(startDate)
+      )
+      : !reviews.length;
+
+    const patientHasNoRecentSentReview = lastSentReviewInterval ?
+      sentReviews.every(sr =>
+        setDateToTimezone(sr.createdAt)
+          .add(convertIntervalStringToObject(lastSentReviewInterval))
+          .isBefore(startDate)
+      )
+      : !sentReviews.length;
+
     const patientHasNoLaterAppt = !a.patient.appointments.length;
-    const patientHasNoRecentSentReview = !a.patient.sentReviews.some(sr =>
-      sr.isSent &&
-      moment().diff(sr.createdAt, 'days') < 30,
-    );
 
     return reviewNotSentForAppointment &&
-      patientNotReviewed &&
+      patientHasNoRecentReview &&
       patientHasNoRecentSentReview &&
       a.patient.preferences.reminders &&
       patientHasNoLaterAppt;
@@ -204,7 +219,7 @@ export function getEarliestLatestAppointment({ appointments, account }) {
     // Group appointments by day
     // Take the earliest day but latest appt in that day
     const groupedAppts = groupBy(appts, a =>
-      moment.tz(a.startDate, account.timezone).format('YYYY-MM-DD'),
+      setDateToTimezone(a.startDate, account.timezone).format('YYYY-MM-DD'),
     );
 
     // Take earliest day and latest one in that day

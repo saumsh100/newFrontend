@@ -156,6 +156,16 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
     },
 
+    lastReviewInterval: {
+      type: DataTypes.STRING,
+      defaultValue: '1 years',
+    },
+
+    lastSentReviewInterval: {
+      type: DataTypes.STRING,
+      defaultValue: '1 months',
+    },
+
     isChairSchedulingEnabled: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
