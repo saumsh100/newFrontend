@@ -5,9 +5,9 @@ import classNames from 'classnames';
 import { capitalize } from '@carecru/isomorphic';
 import styles from './styles.scss';
 
-function SelectPill({ options, selected, className, classNamePill, onChange }) {
+const SelectPill = ({ options, defaultValue, selected, className, classNamePill, onChange }) => {
   const optionsRendered = options.map((option) => {
-    const isSelected = selected === option.value;
+    const isSelected = selected === option.value || (!selected && option.value === defaultValue);
     return (
       <li
         key={option.value}
@@ -21,7 +21,7 @@ function SelectPill({ options, selected, className, classNamePill, onChange }) {
   });
 
   return <ul className={classNames(styles.wrapper, className)}>{optionsRendered}</ul>;
-}
+};
 
 SelectPill.propTypes = {
   options: PropTypes.arrayOf(
@@ -31,6 +31,7 @@ SelectPill.propTypes = {
     }),
   ),
   selected: PropTypes.string,
+  defaultValue: PropTypes.string,
   className: PropTypes.string,
   classNamePill: PropTypes.string,
   onChange: PropTypes.func.isRequired,
@@ -39,6 +40,7 @@ SelectPill.propTypes = {
 SelectPill.defaultProps = {
   options: [],
   selected: null,
+  defaultValue: '',
   className: null,
   classNamePill: null,
 };

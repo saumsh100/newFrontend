@@ -10,11 +10,12 @@ export default function FormGenerator({ page, parameters, componentProps }) {
   /**
    * Generate components that take up the individual columns within the row.
    */
-  const sameRowComponents = formComponents.fields
-    .filter(component => component.size !== 'row')
+  const sameRowComponents = formComponents.parameters
+    .filter(({ component }) => component !== 'selectPill')
     .map((formComponent) => {
       const Element = parameters.defaultComponents[formComponent.component];
-      const elementProps = componentProps[formComponent.name];
+      const elementProps = componentProps[formComponent.component];
+
       return (
         <div className={style.col} key={formComponent.name}>
           <Element {...elementProps} />
@@ -25,11 +26,11 @@ export default function FormGenerator({ page, parameters, componentProps }) {
   /**
    * Gerate components that take up the whole row.
    */
-  const newRowComponents = formComponents.fields
-    .filter(component => component.size === 'row')
+  const newRowComponents = formComponents.parameters
+    .filter(({ component }) => component === 'selectPill')
     .map((formComponent) => {
       const Element = parameters.defaultComponents[formComponent.component];
-      const elementProps = componentProps[formComponent.name];
+      const elementProps = componentProps[formComponent.component];
 
       return (
         <Row end="xs" key={formComponent.name} className={style.row}>

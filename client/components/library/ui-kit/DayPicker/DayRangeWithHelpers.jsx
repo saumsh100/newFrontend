@@ -157,17 +157,17 @@ class DayRangeWithHelpers extends Component {
    * @return {*}
    */
   handleDayClick(day) {
-    if (this.state.activeElement) {
-      const isFromInput = this.state.activeElement === 'fromInput';
-      if (isInvalidRange(day, isFromInput, this.state)) return;
-
-      const key = isFromInput ? 'fromDate' : 'toDate';
-      this[this.state.activeElement].value = dateFormatter(day, null, 'll');
-      this.setDateValues(key, day);
+    if (!this.state.activeElement) {
+      const key = !this.state.fromDate || day < this.state.fromDate ? 'fromDate' : 'toDate';
+      return this.setDateValues(key, day);
     }
 
-    const key = !this.state.fromDate || day < this.state.fromDate ? 'fromDate' : 'toDate';
-    this.setDateValues(key, day);
+    const isFromInput = this.state.activeElement === 'fromInput';
+    if (isInvalidRange(day, isFromInput, this.state)) return;
+
+    const key = isFromInput ? 'fromDate' : 'toDate';
+    this[this.state.activeElement].value = dateFormatter(day, null, 'll');
+    return this.setDateValues(key, day);
   }
 
   /**
