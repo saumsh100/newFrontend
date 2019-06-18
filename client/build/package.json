@@ -1,6 +1,6 @@
 {
   "name": "@carecru/carecru",
-  "version": "3.2.4",
+  "version": "3.2.5",
   "description": "The carecru platform",
   "main": "app.js",
   "scripts": {
