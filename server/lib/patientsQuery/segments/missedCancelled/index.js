@@ -4,7 +4,8 @@ import { Appointment } from '../../../../_models/index';
 
 /**
  * builds a query object for sequelize query for missed and cancelled appointments segment.
- * @param hours
+ * @param duration
+ * @param unit
  * @returns {
  *  { include: {model: *, as: string,
  *    where: {
@@ -17,7 +18,7 @@ import { Appointment } from '../../../../_models/index';
  *        patientId: {$not: null}}, attributes: Array, required: boolean, duplicating: boolean}[]}
  *        }
  */
-export default function missedCancelled(hours = 48) {
+export default function missedCancelled(duration = 14, unit = 'days') {
   return {
     include: [
       {
@@ -33,7 +34,7 @@ export default function missedCancelled(hours = 48) {
           startDate: {
             $between: [
               moment()
-                .subtract(hours, 'hours')
+                .subtract(duration, unit)
                 .toISOString(),
               new Date(),
             ],
