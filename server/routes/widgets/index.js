@@ -5,6 +5,7 @@ import { protocol, assetsPath } from '../../config/globals';
 import { readFile, replaceJavascriptFile } from '../../util/file';
 import { sequelizeLoader } from '../util/loaders';
 import { Practitioner } from '../../_models';
+import { findBuiltAsset } from '../../config/jsxTemplates';
 
 const widgetsRouter = Router();
 
@@ -39,9 +40,8 @@ widgetsRouter.param(
 widgetsRouter.get('/:accountIdJoin/app(/*)?', async (req, res, next) => {
   try {
     const { entities } = normalize('account', req.account.get({ plain: true }));
-    const selectedServiceId = req.account.services
-      .filter(s => s.isDefault)
-      .map(s => s.id)[0] || null;
+    const selectedServiceId =
+      req.account.services.filter(s => s.isDefault).map(s => s.id)[0] || null;
 
     const responseAccount = req.account.get({ plain: true });
     const responseServices = req.account.services.map(service =>
@@ -94,7 +94,8 @@ widgetsRouter.get('/:accountId/cc.js', async (req, res, next) => {
   try {
     const { account } = req;
     const cwd = process.cwd();
-    const jsPath = `${assetsPath}/widget/cc.js`;
+    const fileName = findBuiltAsset('cc');
+    const jsPath = `${assetsPath}/widget/${fileName}`;
     const cssPath = `${cwd}/server/routes/_api/my/widgets/widget.css`;
 
     // /book route by default to load widget
@@ -126,7 +127,9 @@ myWidgetRenderRouter.use('/widgets', widgetsRouter);
  */
 myWidgetRenderRouter.use('/my(/*)?', (req, res, next) => {
   const pattern = /(http[s]?:\/\/)?(\w+\.)?(.*)$/;
-  const host = req.header('host').replace(pattern, (match, p1, p2, p3) => [p1, p3].join(''));
+  const host = req
+    .header('host')
+    .replace(pattern, (match, p1, p2, p3) => [p1, p3].join(''));
   res.redirect(307, `${req.protocol}://${host}${req.originalUrl}`);
 });
 

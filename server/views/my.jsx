@@ -8,6 +8,7 @@ function My() {
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* <meta name="csrf-token" content={{csrfToken}}> */}
         <title>My | CareCru</title>
@@ -37,8 +38,6 @@ function My() {
         />
         <link rel="shortcut icon" href="/favicons/favicon.ico" />
         {helpers.appendFonts()}
-        {helpers.productionCSS('my-commons.js')}
-        {helpers.productionCSS('my')}
       </head>
       <body style={{ fontFamily: 'Gotham-Book' }} className="MyPatientApp">
         {/* Regions */}

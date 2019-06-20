@@ -10,6 +10,9 @@ const { linkFrontEndModule } = require('./utils');
 
 const developmentConfig = merge(baseConfig, {
   mode: 'development',
+  output: {
+    filename: '[name].[hash].js',
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),

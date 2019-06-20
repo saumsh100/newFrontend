@@ -1,3 +1,4 @@
+
 import React from 'react';
 import helpers from '../config/jsxTemplates';
 
@@ -14,7 +15,10 @@ class Reviews extends React.Component {
             name="viewport"
             content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
           />
-
+          <meta
+            httpEquiv="Cache-Control"
+            content="no-cache, no-store, must-revalidate"
+          />
           <title>CareCru - Reviews</title>
           <link href="/fontawesome/fontawesome-all.css" rel="stylesheet" />
           <link
@@ -23,11 +27,11 @@ class Reviews extends React.Component {
           />
 
           {helpers.appendFonts()}
-
-          {helpers.productionCSS('reviews-commons.js')}
-          {helpers.productionCSS('reviews')}
         </head>
-        <body style={{ fontFamily: 'Gotham-Book' }} className="Dashboard Widget">
+        <body
+          style={{ fontFamily: 'Gotham-Book' }}
+          className="Dashboard Widget"
+        >
           {/* Regions */}
           <div id="root" />
 

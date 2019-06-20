@@ -33,7 +33,16 @@ app.use(
 
 // Bind middle ware to show favicon and set up static routes
 app.use('/', express.static(staticPath));
-app.use('/assets', express.static(assetsPath));
+app.use(
+  '/assets',
+  express.static(assetsPath, {
+    etag: false,
+    lastModified: false,
+    setHeaders: (res, path) => {
+      res.setHeader('Cache-Control', 'max-age=31536000');
+    },
+  }),
+);
 
 // Allows the use of PUT and DELETE from clients that do not support those HTTP Methods
 app.use(methodOverride());

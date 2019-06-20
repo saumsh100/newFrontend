@@ -30,7 +30,7 @@ module.exports = {
   output: {
     path: path.resolve(projectRoot, 'build'),
     publicPath: '/assets/',
-    filename: '[name].js',
+    filename: '[name].[contenthash].js',
   },
 
   context: projectRoot,
