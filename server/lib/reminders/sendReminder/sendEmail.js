@@ -6,6 +6,7 @@ import { sendTemplate } from '../../mail';
 import { getReminderTemplateName } from '../createReminderText';
 import { NUM_DAYS_DEFAULT } from '../../../config/globals';
 import { getMessageFromTemplates } from '../../../services/communicationTemplate';
+import isFeatureFlagEnabled from '../../featureFlag';
 
 /**
  * Send a reminder email.
@@ -91,19 +92,32 @@ export default async function sendEmail({
     },
   );
 
+  const version = await isFeatureFlagEnabled(
+    'reminder-email-template-version',
+    null,
+    {
+      userId: 'carecru-api',
+      accountId: account.id,
+      enterpriseId: account.enterpriseId,
+    },
+  );
+
+  const templateName = html
+    ? 'test-html-template'
+    : getReminderTemplateName({
+      isConfirmable,
+      reminder,
+      account,
+      version,
+    });
+
   return sendTemplate({
     patientId: patient.id,
     toEmail: patient.email,
     fromName: account.name,
     replyTo: account.contactEmail,
     subject: html ? 'Family Reminder' : 'Appointment Reminder',
-    templateName: html
-      ? 'test-html-template'
-      : getReminderTemplateName({
-        isConfirmable,
-        reminder,
-        account,
-      }),
+    templateName,
     html,
     mergeVars: [
       {

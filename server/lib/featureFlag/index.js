@@ -20,12 +20,9 @@ function ldClientVariation(featureFlag, defaultValue, { userId, ...data }) {
     },
   };
 
-  return new Promise((resolve, reject) => {
-    ldClient.variation(featureFlag, metaData, defaultValue, (err, showFeature) => {
-      if (err) reject(err);
-      return resolve(showFeature);
-    });
-  });
+  return ldClient
+    .waitForInitialization()
+    .then(client => client.variation(featureFlag, metaData, defaultValue));
 }
 
 /**
@@ -34,6 +31,10 @@ function ldClientVariation(featureFlag, defaultValue, { userId, ...data }) {
  * @param Boolean defaultValue - The default value that is returned if non is retrieved
  * @param { String key, ...String} metaData  - Metadata ex: account id, enterprise id, etc.
  */
-export default async function isFeatureEnabled(featureFlag, defaultValue, metaData) {
-  return await ldClientVariation(featureFlag, defaultValue, metaData);
+export default async function isFeatureEnabled(
+  featureFlag,
+  defaultValue,
+  metaData,
+) {
+  return ldClientVariation(featureFlag, defaultValue, metaData);
 }
