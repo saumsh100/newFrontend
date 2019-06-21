@@ -1,13 +1,8 @@
 
 import keyBy from 'lodash/keyBy';
 import isArray from 'lodash/isArray';
+import { Account } from 'CareCruModels';
 import logger from '../../config/logger';
-import {
-  Account,
-  Appointment,
-  AppointmentCode,
-  Patient,
-} from 'CareCruModels';
 import {
   getAccountCronConfigurations,
   updateAccountCronConfigurations,
@@ -22,9 +17,10 @@ import {
   getPatientsWithChangedDueDateInfo,
   updatePatientDueDateFromPatientRecalls,
 } from './patientRecalls';
-import produceLikeQuery from '../shared/produceLikeQuery';
 
-const isPendingApptCheck = ({ adapterType }) => adapterType === 'TRACKER_V11';
+const isPendingApptCheck = ({ adapterType }) =>
+  adapterType === 'TRACKER_V11' ||
+  adapterType === 'TRACKER_V11_API';
 
 /**
  * getConfigsForDueDates is an async function that will return the data needed to run
