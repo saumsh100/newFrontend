@@ -280,7 +280,6 @@ class DateTime extends PureComponent {
      * @returns {*}
      */
     const availabilitiesDisplay = () => {
-      console.log(availabilities, nextAvailability, isFetching);
       if (availabilities.total === 0 && !isFetching) {
         if (nextAvailability) {
           return nextAvailabilityButton(nextAvailability);
@@ -361,6 +360,7 @@ class DateTime extends PureComponent {
             <CSSTransition
               in={isFetching}
               classNames={transitions}
+              timeout={15000}
               onExiting={() => this.scrollTo('contentWrapperToScroll')}
             >
               <div className={styles.spinnerWrapper} key="fetching">
