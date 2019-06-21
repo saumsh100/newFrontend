@@ -16,23 +16,28 @@ import DayRangeWithHelpers from '../library/ui-kit/DayPicker/DayRangeWithHelpers
 import { setActiveReport, setReportParameters } from '../../reducers/intelligenceReports';
 import ModeReport from '../ModeReport';
 import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
+import MultiSelectAccount from '../library/MultiSelect/MultiSelectAccount';
 import styles from './style.scss';
 
 const DATE_RANGE = 'dateRange';
 const TOGGLE = 'toggle';
 const SELECT_PILL = 'selectPill';
 const DROPDOWN = 'dropdown';
+const MULTI_SELECT_ACCOUNT = 'multiSelectAccount';
 
 const defaultComponents = {
   [DATE_RANGE]: DayRangeWithHelpers,
   [TOGGLE]: Toggle,
+  [MULTI_SELECT_ACCOUNT]: MultiSelectAccount,
   [SELECT_PILL]: SelectPill,
   [DROPDOWN]: DropdownSelect,
 };
 
 const handleDefaultValue = (defaultValue, name) => {
   const nullIfUndefined = defaultValue === undefined ? null : defaultValue;
-  return typeof defaultValue === 'object' ? defaultValue[name] : nullIfUndefined;
+  return typeof defaultValue === 'object' && !Array.isArray(defaultValue)
+    ? defaultValue[name]
+    : nullIfUndefined;
 };
 
 class ReportParametersForm extends Component {
@@ -171,7 +176,7 @@ class ReportParametersForm extends Component {
     const query = window.location.search;
     if (!query || query === '') return;
 
-    const { page, ...params } = queryString.parse(query);
+    const { page, ...params } = queryString.parse(query, { arrayFormat: 'bracket' });
 
     if (!page) return;
 
@@ -207,6 +212,7 @@ class ReportParametersForm extends Component {
     if (!params) {
       return null;
     }
+
     const componentsProps = ({ name, component }) =>
       ({
         dateRange: {
@@ -218,6 +224,11 @@ class ReportParametersForm extends Component {
         },
         dropdown: {
           selected: params[name],
+          onChange: value => this.setParam(name, value),
+        },
+        multiSelectAccount: {
+          selected: params[name],
+          defaultValue: [account.get('id')],
           onChange: value => this.setParam(name, value),
         },
         toggle: {
@@ -240,6 +251,7 @@ class ReportParametersForm extends Component {
       }),
       {},
     );
+
     return (
       <div className={styles.wrapper}>
         <div className={styles.navDropdownListWrapper}>
@@ -255,8 +267,8 @@ class ReportParametersForm extends Component {
           reportActionTitle={parameters[active].title}
           reportActionAccountName={account.get('name')}
           parameters={{
-            Account_name: account.get('id'),
             ...params,
+            Account_name: params.Account_name || account.get('id'),
           }}
         />
       </div>

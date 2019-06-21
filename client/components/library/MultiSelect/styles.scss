@@ -64,7 +64,6 @@
 }
 
 .disabled {
-  @extend .input;
   background: $grey-lighter !important;
   box-shadow: none;
 
@@ -80,6 +79,20 @@
       background: $calendar-background;
     }
   }
+}
+
+.error {
+  border-color: $red;
+
+  &:hover,
+  &:focus {
+    border-color: $red;
+  }
+}
+
+.fieldLabel {
+  @extend .fieldLabel;
+  width: 100%;
 }
 
 .iconWrapper {
@@ -152,9 +165,26 @@
   text-align: center;
   justify-content: center;
   font-style: italic;
+
   &:hover {
     background-color: $primary-white !important;
     color: $calendar-grey !important;
     cursor: auto;
   }
+}
+
+.labelSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectWrapper {
+  width: 100%;
+  position: relative;
+}
+
+button.linkButton {
+  text-align: right;
+  background-color: transparent;
+  margin-bottom: 8px;
 }

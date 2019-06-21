@@ -9,7 +9,7 @@ const List = ({ options, isOpen, itemProps, highlightedIndex, showFallback }) =>
     {options.length > 0 ? (
       options.map((item, index) => (
         <li
-          key={item.id}
+          key={item.value}
           {...itemProps({
             item,
             index,
@@ -35,7 +35,7 @@ List.propTypes = {
   showFallback: PropTypes.bool,
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      value: PropTypes.string,
       label: PropTypes.string,
     }),
   ),

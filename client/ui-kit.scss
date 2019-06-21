@@ -210,4 +210,8 @@ $yellow-dark: #e3a83b;
   line-height: 12px;
   font-family: $inter;
   font-weight: 400;
+  display: block;
+  &.error {
+    color: $red;
+  }
 }

@@ -36,21 +36,21 @@ class MultiSelect extends Component {
 
   /**
    * Handles the action after receiveing a selection,
-   * either adding or removing the id from the sekectedItems list.
+   * either adding or removing the value from the sekectedItems list.
    * Also fire a callback, so we can manage the state on the implementation.
    *
-   * @param id
+   * @param value
    * @param downshift
    */
-  handleSelection({ id }) {
+  handleSelection({ value }) {
     const callback = () => {
       this.props.onChange(this.state.selectedItems);
     };
 
-    if (this.state.selectedItems.includes(id)) {
-      this.removeItem(id, callback);
+    if (this.state.selectedItems.includes(value)) {
+      this.removeItem(value, callback);
     } else {
-      this.addSelectedItem(id, callback);
+      this.addSelectedItem(value, callback);
     }
   }
 

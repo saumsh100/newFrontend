@@ -150,19 +150,19 @@ class EditSchedule extends Component {
     const options = Object.values(items)
       .filter(e => e.isActive)
       .map(({ id, name }) => ({
-        id,
+        value: id,
         label: name,
       }));
 
     const getSelectedItems = selectedItems =>
       selectedItems
-        .map(id => ({ id,
-          label: items[id].name }))
+        .map(value => ({ value,
+          label: items[value].name }))
         .sort(({ label: a }, { label: b }) => sortAsc(a, b));
 
     const getAvailableOptions = selectedItems =>
       options
-        .filter(({ id }) => !selectedItems.includes(id))
+        .filter(({ value }) => !selectedItems.includes(value))
         .sort(({ label: a }, { label: b }) => sortAsc(a, b));
 
     return (
@@ -221,7 +221,6 @@ class EditSchedule extends Component {
                             isOpen={isOpen}
                             options={getAvailableOptions(selectedItems)}
                             itemProps={getItemProps}
-                            selectedItems={selectedItems}
                             highlightedIndex={highlightedIndex}
                           />
                         </div>

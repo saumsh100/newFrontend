@@ -1,4 +1,5 @@
 
+import queryString from 'query-string';
 import { httpClient } from '../../util/httpClient';
 
 const defaultAccessKey = process.env.MODE_ANALYTICS_ACCESS_KEY;
@@ -26,15 +27,20 @@ export function buildModeUrl({
   reportUrl = reportUrl || generateReportUrl(reportId);
 
   // Make sure the URL parameters are in alphabetical order
-  const orderedParams = Object.keys(parameters).sort();
-  const paramsString = orderedParams.reduce(
-    (str, paramName) => `${str}&param_${paramName}=${parameters[paramName]}`,
-    '',
-  );
+  const orderedParams = Object.keys(parameters)
+    .sort()
+    .reduce(
+      (acc, curr) => ({
+        ...acc,
+        [`param_${curr}`]: parameters[curr],
+      }),
+      {},
+    );
+  const paramsString = queryString.stringify(orderedParams, { arrayFormat: 'bracket' });
 
   // Don't mess with this ordering!
   // Overall alphabetical order needs to be respected
-  return `${reportUrl}?access_key=${accessKey}&max_age=${maxAge}${paramsString}`;
+  return `${reportUrl}?access_key=${accessKey}&max_age=${maxAge}&${paramsString}`;
 }
 
 /**
@@ -45,11 +51,11 @@ export function buildModeUrl({
  * @return {Promise}
  */
 export default function signModeUrl(options) {
-  const encodedQuestion = encodeURIComponent('?');
-  const encodedAnd = encodeURIComponent('&');
   const reportUrl = buildModeUrl(options)
-    .replace(/\?/g, encodedQuestion)
-    .replace(/&/g, encodedAnd);
+    .replace(/\?/g, encodeURIComponent('?'))
+    .replace(/&/g, encodeURIComponent('&'))
+    .replace(/\[/g, encodeURIComponent('['))
+    .replace(/]/g, encodeURIComponent(']'));
   const signUrl = `/api/analytics/signUrl?url=${reportUrl}`;
   return httpClient()
     .get(signUrl)

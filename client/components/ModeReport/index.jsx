@@ -77,7 +77,9 @@ class ModeReport extends Component {
 
 ModeReport.propTypes = {
   reportId: PropTypes.string.isRequired,
-  parameters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+  parameters: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.number]),
+  ),
   reportActionTitle: PropTypes.string,
   reportActionAccountName: PropTypes.string,
 };
