@@ -67,6 +67,7 @@ describe('/api/accounts/:account/recalls', () => {
 
   afterAll(async () => {
     await wipeModel(Recall);
+    await wipeModel(Address);
     await wipeTestUsers();
   });
 

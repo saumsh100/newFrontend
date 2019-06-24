@@ -33,11 +33,9 @@ describe('CallRail tests', () => {
   describe('CallRail update phone number tests', () => {
     beforeAll(async () => {
       jest.spyOn(CallRail, 'getCallRailInformation');
-      CallRail.getCallRailInformation.mockImplementation(() => {
-        return true;
-      });
+      CallRail.getCallRailInformation.mockImplementation(() => true);
     });
-    afterEach(async () => { 
+    afterEach(async () => {
       axios.mockClear();
       CallRail.getCallRailInformation.mockClear();
     });
@@ -47,12 +45,12 @@ describe('CallRail tests', () => {
     });
 
     test('CallRail update phone number should throw error when the account does not have callRail account associate with', async () => {
-      await expect(CallRail.updatePhoneNumber(accountWithOutCallrailId)).rejects.toThrow(StatusError);
+      await expect(CallRail.updatePhoneNumber(accountWithOutCallrailId)).rejects.toThrow(Error);
       expect(axios).toHaveBeenCalledTimes(0);
     });
 
     test('CallRail update phone number should throw error when phone number is not provided', async () => {
-      await expect(CallRail.updatePhoneNumber(accountWithCallRailId)).rejects.toThrow(StatusError);
+      await expect(CallRail.updatePhoneNumber(accountWithCallRailId)).rejects.toThrow(Error);
       expect(axios).toHaveBeenCalledTimes(0);
     });
 
@@ -63,7 +61,7 @@ describe('CallRail tests', () => {
     });
 
     test('CallRail update phone number should do nothing when the no phone number matches the old phone number', async () => {
-      axios.mockReturnValueOnce({ data: { trackers: [{ status: 'active', destination_number: oldPhoneNumber }] } })
+      axios.mockReturnValueOnce({ data: { trackers: [{ status: 'active', destination_number: oldPhoneNumber }] } });
       await CallRail.updatePhoneNumber(accountWithCallRailId, oldPhoneNumber, newPhoneNumber);
       expect(axios).toHaveBeenCalledTimes(2);
     });
@@ -76,7 +74,7 @@ describe('CallRail tests', () => {
     afterAll(async () => axios.mockReset());
 
     test('CallRail update company name should throw error when the account does not have callRail account associate with', async () => {
-      await expect(CallRail.updateCompanyName(accountWithOutCallrailId)).rejects.toThrow(StatusError);
+      await expect(CallRail.updateCompanyName(accountWithOutCallrailId)).rejects.toThrow(Error);
       expect(axios).toHaveBeenCalledTimes(0);
     });
 
@@ -99,7 +97,7 @@ describe('CallRail tests', () => {
     afterAll(async () => axios.mockReset());
 
     test('CallRail get account should throw error when the account does not have callRail account associate with', async () => {
-      await expect(CallRail.getCallRailInformation(accountWithOutCallrailId)).rejects.toThrow(StatusError);
+      await expect(CallRail.getCallRailInformation(accountWithOutCallrailId)).rejects.toThrow(Error);
       expect(axios).toHaveBeenCalledTimes(0);
     });
 
@@ -110,7 +108,7 @@ describe('CallRail tests', () => {
 
     test('CallRail get account should throw error when the account is disabled', async () => {
       axios.mockReturnValue({ data: { status: 'disabled' } });
-      await expect(CallRail.getCallRailInformation(accountWithCallRailId)).rejects.toThrow(StatusError);
+      await expect(CallRail.getCallRailInformation(accountWithCallRailId)).rejects.toThrow(Error);
     });
 
     test('CallRail get account should get account information with only active information when success', async () => {
@@ -129,7 +127,7 @@ describe('CallRail tests', () => {
     afterAll(async () => axios.mockReset());
 
     test('CallRail delete account should throw error when the account does not have callRail account associate with', async () => {
-      await expect(CallRail.disableCallRailAccount(accountWithOutCallrailId)).rejects.toThrow(StatusError);
+      await expect(CallRail.disableCallRailAccount(accountWithOutCallrailId)).rejects.toThrow(Error);
       expect(axios).toHaveBeenCalledTimes(0);
     });
 
@@ -155,7 +153,7 @@ describe('CallRail tests', () => {
     afterAll(async () => axios.mockReset());
 
     test('CallRail creates account should throw error when the account already has callRail account associate with', async () => {
-      await expect(CallRail.createCallRailAccount(accountWithCallRailId)).rejects.toThrow(StatusError);
+      await expect(CallRail.createCallRailAccount(accountWithCallRailId)).rejects.toThrow(Error);
       expect(axios).toHaveBeenCalledTimes(0);
     });
 

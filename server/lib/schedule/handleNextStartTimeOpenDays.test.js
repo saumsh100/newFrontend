@@ -94,9 +94,12 @@ describe('Schedule Utilities', () => {
       await seedTestUsers();
       await saveWeeklyScheduleWithDefaults(schedule, WeeklySchedule);
       await Account.update({ weeklyScheduleId }, { where: { id: accountId } });
+      const account = await Account.findByPk(accountId);
+      jest.spyOn(Date, 'now').mockReturnValue(setDateToTimezone('2018-11-09T16:00:00.000Z', account.timezone).toDate().getTime());
     });
 
     afterAll(async () => {
+      Date.now.mockClear();
       await wipeAllModels();
     });
 
@@ -105,12 +108,12 @@ describe('Schedule Utilities', () => {
       const scheduleList = await fetchAndComputeFinalDailySchedules({
         accountId,
         timezone: account.timezone,
-        startDate: setDateToTimezone('2018-11-03T08:00:00.000Z', account.timezone),
-        endDate: setDateToTimezone('2018-12-03T08:00:00.000Z', account.timezone),
+        startDate: setDateToTimezone('2018-11-10T08:00:00.000Z', account.timezone),
+        endDate: setDateToTimezone('2018-12-10T08:00:00.000Z', account.timezone),
       });
       const result = getNextStartTime(account, scheduleList);
 
-      expect(result.startTime).toBe('2018-11-05T15:00:00.000Z');
+      expect(result.startTime).toBe('2018-11-12T15:00:00.000Z');
     });
 
     it('current (friday) is opening during the day', async () => {
@@ -118,29 +121,27 @@ describe('Schedule Utilities', () => {
       const scheduleList = await fetchAndComputeFinalDailySchedules({
         accountId,
         timezone: account.timezone,
-        startDate: setDateToTimezone('2018-11-02T08:00:00.000Z', account.timezone),
-        endDate: setDateToTimezone('2018-12-03T08:00:00.000Z', account.timezone),
-      });
-      const result = getNextStartTime(account, scheduleList);
-
-      expect(result.openAtTheMoment).toBe(false);
-      expect(result.startTime).toBe('2018-11-02T15:00:00.000Z');
-    });
-
-    it('is opened at the moment', async () => {
-      const account = await Account.findByPk(accountId);
-      jest.spyOn(Date, 'now').mockReturnValue(setDateToTimezone('2018-11-02T16:00:00.000Z', account.timezone).toDate().getTime());
-      const scheduleList = await fetchAndComputeFinalDailySchedules({
-        accountId,
-        timezone: account.timezone,
-        startDate: setDateToTimezone('2018-11-02T16:00:00.000Z', account.timezone),
-        endDate: setDateToTimezone('2018-12-03T08:00:00.000Z', account.timezone),
+        startDate: setDateToTimezone('2018-11-09T08:00:00.000Z', account.timezone),
+        endDate: setDateToTimezone('2018-12-10T08:00:00.000Z', account.timezone),
       });
       const result = getNextStartTime(account, scheduleList);
 
       expect(result.openAtTheMoment).toBe(true);
-      expect(result.startTime).toBe('2018-11-02T15:00:00.000Z');
-      Date.now.mockClear();
+      expect(result.startTime).toBe('2018-11-09T15:00:00.000Z');
+    });
+
+    it('is opened at the moment', async () => {
+      const account = await Account.findByPk(accountId);
+      const scheduleList = await fetchAndComputeFinalDailySchedules({
+        accountId,
+        timezone: account.timezone,
+        startDate: setDateToTimezone('2018-11-09T16:00:00.000Z', account.timezone),
+        endDate: setDateToTimezone('2018-12-10T08:00:00.000Z', account.timezone),
+      });
+      const result = getNextStartTime(account, scheduleList);
+
+      expect(result.openAtTheMoment).toBe(true);
+      expect(result.startTime).toBe('2018-11-09T15:00:00.000Z');
     });
 
     it('next day is open', async () => {
@@ -148,12 +149,12 @@ describe('Schedule Utilities', () => {
       const scheduleList = await fetchAndComputeFinalDailySchedules({
         accountId,
         timezone: account.timezone,
-        startDate: setDateToTimezone('2018-11-08T23:55:00.000Z', account.timezone),
-        endDate: setDateToTimezone('2018-12-07T08:00:00.000Z', account.timezone),
+        startDate: setDateToTimezone('2018-11-15T23:55:00.000Z', account.timezone),
+        endDate: setDateToTimezone('2018-12-14T08:00:00.000Z', account.timezone),
       });
       const result = getNextStartTime(account, scheduleList);
 
-      expect(result.startTime).toBe('2018-11-09T15:00:00.000Z');
+      expect(result.startTime).toBe('2018-11-16T15:00:00.000Z');
     });
 
     it('endTime has a small window of time (15 minutes)', async () => {
@@ -161,12 +162,12 @@ describe('Schedule Utilities', () => {
       const scheduleList = await fetchAndComputeFinalDailySchedules({
         accountId,
         timezone: account.timezone,
-        startDate: setDateToTimezone('2018-11-06T15:05:00.000Z', account.timezone),
-        endDate: setDateToTimezone('2018-12-07T08:00:00.000Z', account.timezone),
+        startDate: setDateToTimezone('2018-11-13T15:05:00.000Z', account.timezone),
+        endDate: setDateToTimezone('2018-12-14T08:00:00.000Z', account.timezone),
       });
       const result = getNextStartTime(account, scheduleList);
 
-      expect(result.startTime).toBe('2018-11-07T15:00:00.000Z');
+      expect(result.startTime).toBe('2018-11-14T15:00:00.000Z');
     });
 
     it('both start and endtime have the same value', async () => {
@@ -174,12 +175,12 @@ describe('Schedule Utilities', () => {
       const scheduleList = await fetchAndComputeFinalDailySchedules({
         accountId,
         timezone: account.timezone,
-        startDate: setDateToTimezone('2018-11-08T15:00:00.000Z', account.timezone),
+        startDate: setDateToTimezone('2018-11-15T15:00:00.000Z', account.timezone),
         endDate: setDateToTimezone('2018-12-07T08:00:00.000Z', account.timezone),
       });
       const result = getNextStartTime(account, scheduleList);
 
-      expect(result.startTime).toBe('2018-11-09T15:00:00.000Z');
+      expect(result.startTime).toBe('2018-11-16T15:00:00.000Z');
     });
   });
 
@@ -193,10 +194,13 @@ describe('Schedule Utilities', () => {
         bufferBeforeOpening: '-30 minutes',
         bufferAfterClosing: '30 minutes',
       }, { where: { id: accountId } });
+      const account = await Account.findByPk(accountId);
+      jest.spyOn(Date, 'now').mockReturnValue(setDateToTimezone('2018-11-05T15:15:00.000Z', account.timezone).toDate().getTime());
     });
 
     afterAll(async () => {
       await wipeAllModels();
+      Date.now.mockClear();
     });
 
     it('adds a buffer for the next working day', async () => {
@@ -209,12 +213,11 @@ describe('Schedule Utilities', () => {
       });
       const result = getNextStartTime(account, scheduleList);
 
-      expect(result.startTime).toBe('2018-11-05T14:30:00.000Z');
+      expect(result.startTimeWithBuffer).toBe('2018-11-05T14:30:00.000Z');
     });
 
     it('consider practice as open when within buffer', async () => {
       const account = await Account.findByPk(accountId);
-      jest.spyOn(Date, 'now').mockReturnValue(setDateToTimezone('2018-11-05T15:15:00.000Z', account.timezone).toDate().getTime());
       const scheduleList = await fetchAndComputeFinalDailySchedules({
         accountId,
         timezone: account.timezone,
@@ -224,8 +227,7 @@ describe('Schedule Utilities', () => {
       const result = getNextStartTime(account, scheduleList);
 
       expect(result.openAtTheMoment).toBe(true);
-      expect(result.startTime).toBe('2018-11-05T14:30:00.000Z');
-      Date.now.mockClear();
+      expect(result.startTimeWithBuffer).toBe('2018-11-05T14:30:00.000Z');
     });
   });
 });

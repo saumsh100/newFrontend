@@ -111,11 +111,6 @@ describe('/api/revenue', () => {
   });
 
   afterAll(async () => {
-    await wipeTestDeliveredProcedures();
-    await wipeTestProcedures();
-    await wipeTestPatients();
-    await wipeTestPractitioners();
-    await wipeTestUsers();
     await wipeAllModels();
   });
 

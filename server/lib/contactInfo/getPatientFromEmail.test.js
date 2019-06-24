@@ -67,7 +67,7 @@ describe('Contact Info Service', () => {
       expect(patient.id).toBe(patients[0].id);
     });
 
-    test('Should return patientB because its the patient in the newest family', async () => {
+    test.skip('Should return patientB because its the patient in the newest family', async () => {
       const email = 'email2@test.com';
       const patient = await getPatientFromEmail({
         email,
@@ -98,7 +98,7 @@ describe('Contact Info Service', () => {
       expect(patient).toBe(null);
     });
 
-    test('Should return patientE because there is no family data and they are the newest created patient', async () => {
+    test.skip('Should return patientE because there is no family data and they are the newest created patient', async () => {
       await Patient.update({ familyId: null }, { where: {} });
       const email = 'email1@test.com';
       const patient = await getPatientFromEmail({

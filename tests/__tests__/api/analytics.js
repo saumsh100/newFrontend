@@ -20,7 +20,7 @@ describe('api/analytics', () => {
     await wipeTestUsers();
   });
 
-  describe('GET /', () => {
+  describe.skip('GET /', () => {
     test('/signUrl - returns valid url', () => {
       jest.spyOn(Date, 'now').mockImplementation(() => new Date(2018, 1, 1));
 

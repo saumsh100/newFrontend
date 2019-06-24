@@ -11,7 +11,8 @@ import {
   SentRemindersPatients,
 } from 'CareCruModels';
 import { tzIso } from '@carecru/isomorphic';
-import sendReminder, { createConfirmationText } from '../../../../server/lib/reminders/sendReminder';
+import createConfirmationText from '../../../../server/lib/reminders/createConfirmationText';
+import sendReminder from '../../../../server/lib/reminders/sendReminder';
 import * as RemindersLibrary from '../../../../server/lib/reminders';
 import * as RemindersHelpers from '../../../../server/lib/reminders/helpers';
 import { wipeAllModels } from '../../../util/wipeModel';
@@ -22,12 +23,12 @@ import { seedTestReminders, reminderId1 } from '../../../util/seedTestReminders'
 import * as ContactInfo from '../../../../server/lib/contactInfo/getPatientFromCellPhoneNumber';
 
 // Necessary for mocking
-let sendRemindersForAccountTmp = RemindersLibrary.sendRemindersForAccount;
-let sendReminderEmailTmp = sendReminder.email;
-let sendReminderSmsTmp = sendReminder.sms;
-let sendReminderPhoneTmp = sendReminder.phone;
-let getAppointmentsFromReminderTmp = RemindersHelpers.getAppointmentsFromReminder;
-let fetchPatientsFromKeyValueTmp = ContactInfo.fetchPatientsFromKeyValue;
+const sendRemindersForAccountTmp = RemindersLibrary.sendRemindersForAccount;
+const sendReminderEmailTmp = sendReminder.email;
+const sendReminderSmsTmp = sendReminder.sms;
+const sendReminderPhoneTmp = sendReminder.phone;
+const getAppointmentsFromReminderTmp = RemindersHelpers.getAppointmentsFromReminder;
+const fetchPatientsFromKeyValueTmp = ContactInfo.fetchPatientsFromKeyValue;
 
 const mockPub = { publish: () => {} };
 
@@ -55,7 +56,8 @@ const appointment = { startDate: '2018-09-11 18:45:01.09+02' };
 const appointment2 = { startDate: '2018-09-11 17:30:01.09+02' };
 const reminder = { isCustomConfirm: false };
 
-const dates = () => ({ startDate: td('2017-01-05 11:00'), endDate: td('2017-01-05 11:05') });
+const dates = () => ({ startDate: td('2017-01-05 11:00'),
+endDate: td('2017-01-05 11:05') });
 
 describe('Reminders Job Integration Tests', () => {
   // TODO: mock the sendRecall function, and test that it has been called for the appropriate patients
@@ -239,14 +241,12 @@ describe('Reminders Job Integration Tests', () => {
         },
       });
 
-      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => {
-        return [{
+      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => [{
           ...createPatient(),
           get() {
             return createPatient();
-          }
-        }];
-      });
+          },
+        }]);
 
       // Make sure it returns a patient
       RemindersHelpers.getAppointmentsFromReminder = jest.fn(() => [
@@ -307,14 +307,12 @@ describe('Reminders Job Integration Tests', () => {
         },
       });
 
-      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => {
-        return [{
+      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => [{
           ...createPatient(),
           get() {
             return createPatient();
-          }
-        }];
-      });
+          },
+        }]);
 
       const mockAppointment = {
         id: appointmentId,
@@ -374,14 +372,12 @@ describe('Reminders Job Integration Tests', () => {
         },
       });
 
-      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => {
-        return [{
+      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => [{
           ...createPatient(),
           get() {
             return createPatient();
-          }
-        }];
-      });
+          },
+        }]);
 
       const mockAppointment = {
         id: appointmentId,

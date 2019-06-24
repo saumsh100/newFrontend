@@ -62,7 +62,6 @@ export async function generateInsights(patients) {
       if (!patient.cellPhoneNumber && patient.preferences.sms) {
         insights.push(generatePhoneNumberInsight());
       }
-
       if (!patient.email && patient.preferences.emailNotifications) {
         insights.push(generateEmailInsight());
       }

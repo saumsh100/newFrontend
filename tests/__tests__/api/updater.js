@@ -30,6 +30,7 @@ describe('/api/updater', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
+    await wipeTestUsers();
     await seedTestUsers();
     await wipeModel(SyncClientVersion);
     await seedTestSyncClientVersion();

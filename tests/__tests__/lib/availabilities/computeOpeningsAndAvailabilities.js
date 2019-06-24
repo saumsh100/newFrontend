@@ -254,7 +254,7 @@ describe('Availabilities Library', () => {
         expect(availabilities.length).toBe(7); // Office Hours blocks off the potential 8th on Thursday
       });
 
-      describe('Availability Overrides w/ ReasonWeeklyHours', () => {
+      describe.skip('Availability Overrides w/ ReasonWeeklyHours', () => {
         test('should not do anything different for reasonWeeklyHours always being opened', () => {
           const startDate = iso('06:00', '03-05'); // Monday morning
           const endDate = iso('18:00', '03-06'); // Wednesday evening

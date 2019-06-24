@@ -52,6 +52,8 @@ Object {
         "hygieneInterval": "6 months",
         "id": "52954241-3652-4792-bae5-5bfed53d37b7",
         "isChairSchedulingEnabled": false,
+        "lastReviewInterval": "1 years",
+        "lastSentReviewInterval": "1 months",
         "lastSyncDate": null,
         "logo": null,
         "massOnlineEmailSentDate": null,

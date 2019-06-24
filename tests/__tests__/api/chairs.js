@@ -14,13 +14,12 @@ const chairId2 = '46d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const newChairId = '11d4e661-1155-4494-8fdb-c4ec0ddf804d';
 
 
-
   // Seed an extra account for fetching multiple and testing switching
-  /*await Account.create({
+  /* await Account.create({
     id: accountId2,
     enterpriseId,
     name: 'Test Account 2',
-  });*/
+  }); */
 
 async function seedChairs() {
   await Chair.bulkCreate([
@@ -43,6 +42,7 @@ describe('/api/chairs', () => {
   let token = null;
   beforeEach(async () => {
     await wipeModel(Chair);
+    await wipeTestUsers();
     await seedTestUsers();
     await seedChairs();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
@@ -54,8 +54,7 @@ describe('/api/chairs', () => {
   });
 
   describe('GET /api/chairs', () => {
-    test('should fetch 2 chairs', async () => {
-      return request(app)
+    test('should fetch 2 chairs', async () => request(app)
         .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
@@ -64,11 +63,9 @@ describe('/api/chairs', () => {
           const chairs = getModelsArray('chairs', body);
           expect(chairs.length).toBe(2);
           expect(body).toMatchSnapshot();
-        });
-    });
+        }));
 
-    test('should fetch 2 chairs and be formatted in the jsonapi standard', async () => {
-      return request(app)
+    test('should fetch 2 chairs and be formatted in the jsonapi standard', async () => request(app)
         .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .set('Accept', 'application/vnd.api+json')
@@ -78,13 +75,11 @@ describe('/api/chairs', () => {
           const chairs = body.data;
           expect(chairs.length).toBe(2);
           expect(body).toMatchSnapshot();
-        });
-    });
+        }));
   });
 
   describe('GET /api/chairs/:chairId', () => {
-    test('should fetch the correct chair1', async () => {
-      return request(app)
+    test('should fetch the correct chair1', async () => request(app)
         .get(`${rootUrl}/${chairId1}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
@@ -95,11 +90,9 @@ describe('/api/chairs', () => {
           expect(chairs.length).toBe(1);
           expect(chair.name).toBe('C1');
           expect(body).toMatchSnapshot();
-        });
-    });
+        }));
 
-    test('should fetch the correct chair2', async () => {
-      return request(app)
+    test('should fetch the correct chair2', async () => request(app)
         .get(`${rootUrl}/${chairId2}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
@@ -110,17 +103,11 @@ describe('/api/chairs', () => {
           expect(chairs.length).toBe(1);
           expect(chair.name).toBe('C2');
           expect(body).toMatchSnapshot();
-        });
-    });
+        }));
   });
 
   describe('POST /api/chairs', () => {
-    afterAll(async () => {
-      await seedChairs();
-    });
-
-    test('should create an chair', async () => {
-      return request(app)
+    test('should create an chair', async () => request(app)
         .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send({
@@ -135,11 +122,9 @@ describe('/api/chairs', () => {
           expect(chairs.length).toBe(1);
           expect(chair.name).toBe('New Chair');
           expect(body).toMatchSnapshot();
-        });
-    });
+        }));
 
-    test('should create a chair and respond with json api', async () => {
-      return request(app)
+    test('should create a chair and respond with json api', async () => request(app)
         .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .set('Accept', 'application/vnd.api+json')
@@ -152,11 +137,9 @@ describe('/api/chairs', () => {
           body = omitPropertiesFromBody(body, [], true);
           expect(body.data.attributes.name).toBe('New Chair');
           expect(body).toMatchSnapshot();
-        });
-    });
+        }));
 
-    test('should fail if required info is not there', async () => {
-      return request(app)
+    test('should fail if required info is not there', async () => request(app)
         .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send({
@@ -165,15 +148,10 @@ describe('/api/chairs', () => {
           // name: 'New Chair',
         })
         .set('Authorization', `Bearer ${token}`)
-        .expect(500);
-    });
+        .expect(500));
   });
 
   describe('PUT /api/chairs/:chairId', () => {
-    afterAll(async () => {
-      await seedChairs();
-    });
-
     test('should update a chair', async () => {
       const name = 'Modified Chair Name';
       return request(app)
@@ -210,20 +188,16 @@ describe('/api/chairs', () => {
   });
 
   describe('DELETE /:chairId', () => {
-    test('should delete an chair', () => {
-      return request(app)
+    test('should delete an chair', () => request(app)
         .delete(`${rootUrl}/${chairId1}`)
         .set('Authorization', `Bearer ${token}`)
-        .expect(204);
-    });
+        .expect(204));
 
-    test('should delete an chair then undelete it', () => {
-      return request(app)
+    test('should delete an chair then undelete it', () => request(app)
         .delete(`${rootUrl}/${chairId1}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
-        .then(() => {
-          return request(app)
+        .then(() => request(app)
             .post(rootUrl)
             .set('Authorization', `Bearer ${token}`)
             .send({
@@ -239,8 +213,6 @@ describe('/api/chairs', () => {
               expect(chairs.length).toBe(1);
               expect(chair.name).toBe('C1');
               expect(body).toMatchSnapshot();
-            });
-        });
-    });
+            })));
   });
 });

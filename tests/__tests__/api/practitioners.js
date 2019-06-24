@@ -34,9 +34,7 @@ describe('/api/practitioners', () => {
   });
 
   afterAll(async () => {
-    await wipeModel(WeeklySchedule);
-    await wipeModel(Practitioner);
-    await wipeModel(Account);
+    await wipeAllModels();
   });
 
   describe('GET /', () => {

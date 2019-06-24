@@ -16,6 +16,7 @@ const newCorrespondenceId = 'e9c58071-039c-4b46-b225-899a8b70a0b9';
 const newCorrespondenceId2 = 'ef80dda5-5e23-44ff-842a-888720dbb1b9';
 
 async function seedTestCorrespondences() {
+  await wipeModel(Correspondence);
   await Correspondence.bulkCreate([
     {
       id: correspondenceId1,
@@ -91,7 +92,7 @@ describe('/api/correspondences', () => {
     afterAll(async () => {
       await seedTestCorrespondences();
     });
-
+    
     test('/connector/batch - 2 correspondences created successfully', async () =>
       request(app)
         .post(`${rootUrl}/connector/batch`)
@@ -158,7 +159,7 @@ describe('/api/correspondences', () => {
     afterAll(async () => {
       await seedTestCorrespondences();
     });
-
+    
     test('/connector/batch - 1 correspondence updated', async () =>
     request(app)
       .put(`${rootUrl}/connector/batch`)

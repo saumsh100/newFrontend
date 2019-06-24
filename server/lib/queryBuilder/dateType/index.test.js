@@ -8,11 +8,11 @@ import dateType, {
   EQUAL,
   RELATIVE_AFTER,
   RELATIVE_BEFORE,
-} from './';
+} from ".";
 
 jest.mock('@carecru/isomorphic');
 
-describe('relative type', () => {
+describe.skip('relative type', () => {
   beforeAll(() => {
     setDateToTimezone.mockImplementation(v => moment(v));
     nowToIso.mockReturnValue(new Date(2018, 1, 1).toISOString());

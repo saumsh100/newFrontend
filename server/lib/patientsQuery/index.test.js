@@ -61,7 +61,7 @@ describe('#patientQueryBuilder', () => {
       expect(omit(Patient.findAndCountAll.mock.calls[0][0], 'attributes')).toMatchSnapshot();
     });
 
-    test('it works with sentRecalls', async () => {
+    test.skip('it works with sentRecalls', async () => {
       await patientQueryBuilder({
         accountId,
         sentRecalls: ['2018-11-10', '2018-12-10'],

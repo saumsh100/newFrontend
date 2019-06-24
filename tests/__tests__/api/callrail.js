@@ -4,7 +4,7 @@ import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
 import { Call } from '../../../server/_models';
 import wipeModel from '../../util/wipeModel';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/callrail';
@@ -29,6 +29,7 @@ describe('/api/calls', () => {
 
   afterAll(async () => {
     await wipeModel(Call);
+    await wipeTestUsers();
   });
 
   describe('POST /', () => {

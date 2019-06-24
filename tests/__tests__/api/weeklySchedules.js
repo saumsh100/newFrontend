@@ -36,8 +36,8 @@ describe('/api/weeklySchedules', () => {
   });
 
   afterAll(async () => {
-    await wipeTestUsers();
     await wipeModel(WeeklySchedule);
+    await wipeTestUsers();
   });
 
   describe('POST /', async () => {

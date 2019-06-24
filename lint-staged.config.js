@@ -2,6 +2,6 @@
 module.exports = {
   linters: {
     'client/**/*.scss': ['npm run format', 'git add'],
-    'client/**/*.{js,jsx}': ['npm run format', 'jest', 'git add'],
+    'client/**/*.{js,jsx}': ['npm run format', 'prettier --write', 'eslint --fix', 'git add'],
   },
 };

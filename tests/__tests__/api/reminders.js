@@ -45,6 +45,7 @@ describe('/api/accounts/:account/reminders', () => {
     });
 
     afterAll(async () => {
+      await wipeModel(Address);
       await wipeModel(Reminder);
       await wipeTestUsers();
     });

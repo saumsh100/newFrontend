@@ -9,6 +9,7 @@ Object {
         "description": null,
         "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "isActive": true,
+        "isDeleted": false,
         "name": "C1",
         "pmsId": "12",
       },

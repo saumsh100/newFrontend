@@ -29,7 +29,7 @@ describe('#patientQueryBuilder dateTime query', () => {
       jest.spyOn(Date, 'now').mockImplementation(() => new Date(2004, 11, 29));
     });
 
-    it('between', async () => {
+    it.skip('between', async () => {
       const result = await patientQueryBuilder({
         accountId,
         birthDate: '1990-01-01',

@@ -20,9 +20,6 @@ describe('/api/services', () => {
   });
 
   afterAll(async () => {
-    await wipeModel(WeeklySchedule);
-    await wipeModel(Practitioner);
-    await wipeModel(Account);
     await wipeAllModels();
   });
 

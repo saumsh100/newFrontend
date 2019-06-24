@@ -26,6 +26,10 @@ describe('Patient Information', () => {
                 },
               ],
             },
+            preferences: {
+              sms: true,
+              emailNotifications: true,
+            },
           }),
         }, {
           get: () => ({
@@ -36,6 +40,9 @@ describe('Patient Information', () => {
               id: 2222,
               isPatientConfirmed: true,
             }],
+            preferences: {
+              sms: true,
+            },
           }),
         },
         {
@@ -46,6 +53,9 @@ describe('Patient Information', () => {
               id: 2424,
               isPatientConfirmed: true,
             }],
+            preferences: {
+              emailNotifications: true,
+            },
           }),
         },
         {
@@ -57,6 +67,7 @@ describe('Patient Information', () => {
               id: 2424,
               isPatientConfirmed: true,
             }],
+            preferences: {},
           }),
         },
       ];

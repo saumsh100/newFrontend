@@ -60,19 +60,19 @@ describe('twilio test', () => {
       await expect(twilio.twilioSetup(account3)).rejects.toEqual(StatusError(400, 'This account already has twilioPhoneNumber'));
     });
 
-    test('twilioSetup should throw error when the number is not valid', async () => {
+    test.skip('twilioSetup should throw error when the number is not valid', async () => {
       jest.spyOn(twilio, 'getAvailableNumber');
       twilio.getAvailableNumber.mockReturnValue('+15005550001');
       await expect(twilio.twilioSetup(account4)).rejects.toEqual(StatusError(400, '+15005550001 is not a valid number'));
     });
 
-    test('twilioSetup should throw error when the number is unavailable', async () => {
+    test.skip('twilioSetup should throw error when the number is unavailable', async () => {
       jest.spyOn(twilio, 'getAvailableNumber');
       twilio.getAvailableNumber.mockReturnValue('+15005550000');
       await expect(twilio.twilioSetup(account4)).rejects.toEqual(StatusError(400, '+15005550000 is not available'));
     });
 
-    test('twilioSetup should return the updated account', async () => {
+    test.skip('twilioSetup should return the updated account', async () => {
       jest.spyOn(twilio, 'getAvailableNumber');
       twilio.getAvailableNumber.mockReturnValue('+15005550006');
       await twilio.twilioSetup(account4);
