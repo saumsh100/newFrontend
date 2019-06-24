@@ -205,5 +205,16 @@ describe('Communications Utility - Response Checks', () => {
       expect(result.isConfirmation).toBe(false);
       expect(result.haveExtraMessage).toBe(true);
     });
+
+    // at this point we can assume every other behaviour works with this as well
+    test('should confirm using the cyrillic "es"', () => {
+      const result = handleResponse('\u0421'); // Uppercase "es"
+      expect(result.isConfirmation).toBe(true);
+      expect(result.haveExtraMessage).toBe(false);
+
+      const result2 = handleResponse('\u0441'); // lowercase "es"
+      expect(result2.isConfirmation).toBe(true);
+      expect(result2.haveExtraMessage).toBe(false);
+    });
   });
 });

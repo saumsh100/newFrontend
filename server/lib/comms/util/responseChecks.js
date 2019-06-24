@@ -4,6 +4,7 @@ import find from 'lodash/find';
 const THE_MAGIC_WORDS = {
   C: true,
   Y: true,
+  С: true, // Cyrillic "es"
 };
 
 /**
@@ -24,7 +25,7 @@ export function getIndicesOf(text, magicWord) {
   const regexp = new RegExp(magicWord, 'g');
 
   let match;
-  while (match = regexp.exec(text)) {
+  while ((match = regexp.exec(text))) {
     indices.push(match.index);
   }
 
@@ -66,7 +67,12 @@ export function isNotInWord(text, magicWord) {
       return true;
     }
 
-    if (beforeCharacter && !isWordy(beforeCharacter) && afterCharacter && !isWordy(afterCharacter)) {
+    if (
+      beforeCharacter &&
+      !isWordy(beforeCharacter) &&
+      afterCharacter &&
+      !isWordy(afterCharacter)
+    ) {
       return true;
     }
   }
@@ -123,8 +129,11 @@ export function isSmsConfirmationResponse(text, magicWords = THE_MAGIC_WORDS) {
  */
 export function handleResponse(message) {
   // This will remove all special characters that are not alphanumeric
+  // The сС on the regex represents the Cyrillic character "es" that looks like a C
   // The second part will replace every whitespace that occurs twice or more
-  const body = message.replace(/[^a-zA-Z0-9\s]/gi, '').replace(/\s{2,}/gi, ' ');
+  const body = message
+    .replace(/[^a-zA-Z0-9\sсС]/gi, '')
+    .replace(/\s{2,}/gi, ' ');
   const fragments = body.split(' ');
 
   return {
