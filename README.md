@@ -1,41 +1,48 @@
-# CareCru Platform
 [![CodeFactor](https://www.codefactor.io/repository/github/carecru/carecru/badge)](https://www.codefactor.io/repository/github/carecru/carecru)
 [ ![Codeship Status for CareCru/carecru](https://app.codeship.com/projects/609e8860-1974-0135-f0cd-2681b2cba166/status?branch=master)](https://app.codeship.com/projects/219293)
 
-This README is outdated, but kept here anyways.
-Please refer to this article in order to get up and running:
-Running CareCru With Docker (https://carecru.atlassian.net/wiki/spaces/DEV/pages/71434254/How+to+Run+CareCru+with+Docker)
+<!-- TOC -->
+- [Setup For Development](#setup-for-development)
+    - [Before Starting](#before-starting)
+    - [Checkout Code](#checkout-code)
+    - [Create Environment File](#create-environment-file)
+        - [carecru/carecru .env file](#carecrucarecru-env-file)
+        - [carecru/api .env file](#carecruapi-env-file)
+    - [Install Modules](#install-modules)
+    - [Run Third-Party Software](#run-third-party-software)
+    - [Seed the database](#seed-the-database)
+    - [Setup /etc/hosts](#setup-etchosts)
+    - [Run](#run)
+        - [Main Services](#main-services)
+        - [Other Services](#other-services)
+    - [Hot Reloading](#hot-reloading)
+    - [Front-end](#front-end)
+    - [Back-end](#back-end)
+- [Running Tests](#running-tests)
+<!-- /TOC -->
 
-This repository is for all code necessary to the CareCru Platform but not including the CareCru Connector.
+# Setup For Development
+Please follow the steps below in the order they are layed out.
 
-##### Backend
+## Before Starting
+- Install Docker and get more familiar with it
+  - Please get familiar with basics of Docker and main commands such as `docker-compose down`, `docker-compose stop`, `docker-compose kill`: [Docker Overview](https://docs.docker.com/compose/reference/overview/)
+- Install NVM
+    - Download nvm using this website. https://github.com/creationix/nvm. Please read through this on how to use properly and migrate existing npm packages.
+    - To download and install a certain Node version using NVM, run: `nvm install <VERSION>`.
+    - To use a specific Node version run: `nvm use "version"` (for example: `nvm use 8.11`)
+- Install Node 8.11 and Node LTS using NVM (you need to be able to switch between them)
 
-NodeJS, ExpressJS, PassportJS, PostgreSQL (Sequelize ORM)
+## Checkout Code
+To run CareCru application clone two repositories locally:
+- Clone [carecru/carecru](https://github.com/carecru/carecru) repository to `carecru/` directory: `git clone git@github.com:carecru/carecru.git`
+- Clone [carecru/api](https://github.com/carecru/api) repository to `api/` directory: `git clone git@github.com:carecru/api.git`
 
-##### Frontend
+## Create Environment File
 
-React, Redux, CSS Modules w/ SASS
-
-##### Dependencies
-
- - redis - [how to start redis as container](https://carecru.atlassian.net/wiki/spaces/EN/pages/227606543/Starting+single+redis+as+container)
- - rabbitmq - [how to start rabbitmq as container](https://carecru.atlassian.net/wiki/spaces/EN/pages/227442713/Starting+single+rabbitmq+as+container)
- - postgreSQL - [how to start postgres as container](https://carecru.atlassian.net/wiki/spaces/EN/pages/227475499/Starting+single+postgres+as+container)
- - node (same version as in package.json)
- - npm (same version as in package.json)
- - Add the following subdomains to your `/etc/hosts` file:
-
-```
-127.0.0.1           care.cru
-127.0.0.1           my.care.cru
-127.0.0.1           api.care.cru
-```
-
-## Install and Environment Variables
-
-1.  Clone the Repository: `git clone git@github.com:carecru/carecru.git`
-2.  Navigate into root directory: `cd carecru`
-3.  run the following command to creating a *.env* file:
+### carecru/carecru .env file
+- Navigate into cloned CareCru repository: `cd carecru`
+- Run the following command to create the `.env` file:
 ```
 cat << EOF > .env
 NODE_ENV=development
@@ -82,68 +89,79 @@ INTERCOM_APP_ID=enpxykhl
 LOGROCKET_APP_ID=7mbzb4/carecru-development
 EOF
 ```
-4.  Install node modules: `npm install`
 
-## PostgreSQL Setup
+### carecru/api .env file
+Please go to [carecru/api](https://github.com/carecru/api) repository README file to see how to configure it.
 
-1.  Rebuild and seed the database with development data: `npm run rebuild:seed`
-    > **Note:** > `npm run rebuild:seed` can be re-run whenever a fresh DB is needed
+## Install Modules
+Run `npm ci` in both `carecru/` and `api/` directories. Note that running `npm ci` won't install development dependencies like the testing runing. For that run `npm install`.
 
-## NVM Setup
+## Run Third-Party Software
+All third-party dependencies are incapsulated by Docker containers. There is one container per server all managed by `Docker Compose`:
 
-1. Download nvm using this website. https://github.com/creationix/nvm. Please read through this on how to use properly and migrate existing npm packages. 
+- Redis
+- Rabbitmq
+- PostgreSQL
 
-2. To download a certain node version using nvm, use the following: `nvm install version`. For the Legacy API (this repo) run: `nvm install 8.11` and for Nest API run: `nvm install 10.0`.
+To run all containers:
+- Go to the `carecru/` directory
+- Run `docker-compose up`
+  - run `docker-compose up -d` if you want to free up the terminal and not see the logs. Keep in mind that then you will need to look at the logs in using `docker logs` command.
 
-3. After downloading both node 8.11 (used by this repo) and node 10.0 (used the api repo), you can switch between them by using: `nvm use "version"`, for example: `nvm use 8.11.4`.
+## Create and Seed the database
+- From the `api/` director run `npm run migration:run` to create the database and init the tables
+- From the `carecru/` directory run: `npm run seed` to remove all existing data from the development instance (if there was any data) of the database and re-create test data from the seeds.
+
+## Setup /etc/hosts
+- This is required for the Booking Widget and patient app (patient-facing appointment confirmation and other similar functionality) development and testing.
+- This is optional for Back End and Front End developers and frequently required for Connector developers.
+
+The application runs on `care.cru` hostname that can resolve to either `127.0.0.1` or an IP that's specified in `/etc/hosts` file. For Connector development this is useful as it allows syncing Connector to the API as long as they are on the same network. For example, if the Connector is running in VirtualBox with vboxnet0 interface, then `/etc/hosts` will look like this:
+
+```
+$ cat /etc/hosts
+192.168.56.1    care.cru
+192.168.56.1    my.care.cru
+192.168.56.1    api.care.cru
+```
+
+This way the API can be reached from within the VM. There are other ways to achieve this (for example, using the main network interface on your computer; either way would work).
 
 ## Run
 
-1.  In a separate tab you can run different start commands: 
-* `npm run start:dev` - runs all CareCru services at once in development mode
-* `npm run start:web` - runs only the web service and the cron job, serving as a base to the other services 
-* `npm run start:commsJobs` - runs the communications jobs those serving to send reminders, recalls and reviews.
-* `npm run start:patientCache` - runs the patient cache jobs that updates information on the patients table for easier querying on the API. eg. first, next and last appointment dates and hygiene and recalls due dates.
-> **Note:**
+### Main Services
+It is useful to have your terminal application view split into 4 terminal panes.
+
+|Order|Execution Directory| Command  | Description |
+|---|---|---|---|
+|1|carecru/|`docker-compose up`| Starts 3rd-parth dependencies (see above) and shows their logs|
+|2|carecru/|`npm run start:dev`| Starts CareCru application |
+|3|api/|`npm run start`| Starts new Nest application |
+|-|any|-|Log tailing or anything similar|
+
+You should now have the application running at `localhost:5000` and at `care.cru:5000` if you configured that as well.
+
+### Other Services
+You can run different jobs separately.
+
+**NOTE**: This section needs more information about what is (if anything) is required to run these jobs independently.)
+
+> **IMPORTANT:**
 > Don't run `npm start:dev` or `npm run start:commsJobs` unless you know what you are doing. Those commands will enable communication jobs, as stated above. If any real patient information is loaded into the database, this will result in them being contacted.
 
-2.  Navigate to `localhost:5000` to see application running
-> **Note:**
-> For purposes of testing and effective development, please continue this README to run the build-tools, and use localhost:5100 instead of localhost:5000.
+* `npm run start:dev` - runs all CareCru services at once in development mode
+* `npm run start:web` - runs only the web service and the cron job, serving as a base to the other services
+* `npm run start:commsJobs` - runs the communications jobs those serving to send reminders, recalls and reviews.
+* `npm run start:patientCache` - runs the patient cache jobs that updates information on the patients table for easier querying on the API. eg. first, next and last appointment dates and hygiene and recalls due dates.
 
-## Running using Docker
+## Hot Reloading
 
-1. On the root project directory, run the following command: `docker-compose up` to start up the development environment.
-
-2. 
-    > **Note:**
-    > Run these commands in a different tab.
-    - To gracefully stop the environement and remove the containers run: `docker-compose down`.
-    - To just stop the environment without removing the containers run: `docker-compose stop`.
-    - To kill the environment, either `CTRL+C` or in a separate tab run: `docker-compose kill`.
-    
-> **Note:**
-> For more info on the commands available and what each one does, visit: https://docs.docker.com/compose/reference/overview/
-
-If this is the first time running the development environment, in the root project directory, run the following commands in order: 
-
-1. `npm install`.
-
-2. To start up the dev environment run: `npm run start:dev`.
-
-> **Note:**
-> Don't worry if this takes long. It usually takes about 20-30 mins to install everything.
-
-- To run server watch so that any changes to files automatically rebuild the evironment, run: `npm run server:watch`.
-
-- To run the client dev server, run: `npm run client:dev:server`.
-
-## Build Tools
-### Front-end
+## Front-end
 
 Run the following command in a separate tab, to see changes on the fly:
 
-`npm run client:dev:server`
+- server: `npm run client:dev:server`
+- booking widget `npm run client:widget:watch`
 
 Now, the application is hosted at `http://localhost:5100`. All non-static requests are transparently proxied to `http://localhost:5000`.
 
@@ -151,34 +169,16 @@ Now, the application is hosted at `http://localhost:5100`. All non-static reques
 > If you get a message like `Error occurred while trying to proxy` you need to check that the application is running. It may not yet be initialized, so just reload the page in a moment.
 > If there are no changes even after page reload - be sure that you are accessing the application from `http://localhost:5100`, and not `http://localhost:5000`.
 
-### Back-end
-
-Be sure that you start application with `npm start` command. In a new terminal do next command to start watching on changes:
+## Back-end
+Be sure that you start application with `npm start:web/dev` command. In a new terminal do next command to start watching on changes:
 
 `npm run server:watch`
 
 The Server will be restarted automatically.
 
-### Running on custom `host:port`
+# Running Tests
 
-By default `npm start` will run the Node server on `localhost:5000`. Webpack then starts a proxy server that will run on `localhost:5100`, which is the address that we ultimately connect to. However, it is possible to run both Webpack server and Node server on a different localhost:port. Changing Node's server host and port is not really needed, but if you run a VM or want to expose the Carecru application on your local network, you can use environment variables to set the host and port for Webpack. `npm` spins up Webpack in a new shell, so it does not care for `.env` file that the Node server sources. Hence, you can't put these vars in there. It has a global environment and environment vars that were part of the start command. Long story short, to set the host and port for Webpack, put the following into your `$HOME/.profile` file (or another bash file that is sourced when a login shell is created).
-
-```
-export SERVER_HOST="localhost"
-export SERVER_PORT=5000
-export WP_PROXY_PORT=8080
-export WP_PROXY_HOST="carecru.dev"
-```
-
-If you use `carecru.dev` for the proxy host in the code above, make sure that it resolves to something in `/etc/hosts`. Or just do this: `export WP_PROXY_HOST="192.168.56.1"`. Then in your browser you can access the application on `carecru.dev:8080` or `192.168.56.1:8080` respectively.
-
-If no environment variables are provided, then Node server defaults to `localhost:5000` and Webpack defaults to `localhost:5100`.
-
-### Optional
-
-If you use tmux you can run `sh scripts/run-server.sh`. This will spin up 3 panes with the Node server and two Webpack processes in those panes.
-
-### Running Tests
+**NOTE** This section may not be up to date.
 
 Run the following command to execute all backend tests: `npm run test`
 
@@ -189,8 +189,3 @@ To run lib tests: `npm run test:lib`
 To run graphql tests: `npm run test:graphql`
 
 To run all unit tests (including the existing frontend): `npm run test:jest`
-
-### Adding new model
-
-You will find inside of `server/_models/index.js` file a line `models.push((require('./Segment').default(sequelize, Sequelize)));`
-This line represent importing of a single model into the code. Just repeat that for all models.
