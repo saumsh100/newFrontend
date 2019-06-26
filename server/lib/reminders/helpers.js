@@ -206,7 +206,8 @@ export async function getAppointmentsFromReminder({
     }
   }
 
-  const defaultAppointmentsScope = { ...Appointment.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
+  const defaultAppointmentsScope =
+    { ...Appointment.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
 
   const familyGroupingEnd = moment(start)
     .add(SAME_DAY_HOURS, 'hours')
@@ -538,7 +539,7 @@ export async function getValidSmsReminders({
         ],
       },
     ],
-    order: [['createdAt', 'asc']],
+    order: [['createdAt', 'desc']],
   });
 
   // here we need to not only filter the appointment but also re order the sentReminders
@@ -547,7 +548,8 @@ export async function getValidSmsReminders({
   return sentReminders
     .filter(({ sentRemindersPatients }) => sentRemindersPatients.length > 0)
     .map((sr) => {
-      const { appointment: { startDate } } = sr.sentRemindersPatients.sort(sortByAppointmentStartDate)[0];
+      const { appointment: { startDate } } =
+        sr.sentRemindersPatients.sort(sortByAppointmentStartDate)[0];
 
       // we can't destruct sequelize model to not loose it helpers
       sr.orderDate = moment(startDate)

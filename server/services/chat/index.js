@@ -68,13 +68,13 @@ export async function receiveMessage(account, textMessageData) {
     await setChatUnread(chatClean.id, false);
   }
 
-  // Confirm first available reminder for the closest appointment
+  // Confirm most recent available reminder for the closest appointment
   const sentReminders = await confirmReminderIfExist(account.id, patient.id);
-  const firstSentReminder = sentReminders[0];
+  const lastSentReminder = sentReminders[0];
 
   if (
-    !firstSentReminder ||
-    firstSentReminder.sentRemindersPatients.length === 0
+    !lastSentReminder ||
+    lastSentReminder.sentRemindersPatients.length === 0
   ) {
     logger.debug('No reminders to confirm, exiting.');
     await updateUserViaSocket(chatClean.id);
@@ -87,13 +87,13 @@ export async function receiveMessage(account, textMessageData) {
     );
   }
 
-  const { reminder, sentRemindersPatients } = firstSentReminder;
+  const { reminder, sentRemindersPatients } = lastSentReminder;
   const pocPatient = sentRemindersPatients.find(
-    ({ appointment: a }) => a.patientId === firstSentReminder.contactedPatientId,
+    ({ appointment: a }) => a.patientId === lastSentReminder.contactedPatientId,
   );
 
-  logger.debug(`Reminder ${firstSentReminder.id} confirmed.`);
-  const sentReminderClean = firstSentReminder.get({ plain: true });
+  logger.debug(`Reminder ${lastSentReminder.id} confirmed.`);
+  const sentReminderClean = lastSentReminder.get({ plain: true });
   const normalizedReminder = normalize('sentReminder', sentReminderClean);
   publishEvent(account.id, 'create:SentReminder', normalizedReminder);
 
