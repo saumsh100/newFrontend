@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -58,6 +57,11 @@ class Reviews extends Component {
   saveAdvancedSettings(values) {
     const { activeAccount } = this.props;
     const { sendUnconfirmedReviews } = values;
+    let { lastReviewInterval, lastSentReviewInterval } = values;
+    lastReviewInterval =
+      lastReviewInterval === 'null' ? null : lastReviewInterval;
+    lastSentReviewInterval =
+      lastSentReviewInterval === 'null' ? null : lastSentReviewInterval;
     const alert = {
       success: {
         title: 'Reviews Settings Updated',
@@ -73,7 +77,11 @@ class Reviews extends Component {
     this.props
       .updateReviewsSettings(
         activeAccount.id,
-        { sendUnconfirmedReviews },
+        {
+          sendUnconfirmedReviews,
+          lastReviewInterval,
+          lastSentReviewInterval,
+        },
         alert,
       )
       .then(this.toggleAdvancedSettings);
@@ -163,7 +171,10 @@ class Reviews extends Component {
               label: 'Save',
               onClick: this.saveAdvancedSettings,
               component: RemoteSubmitButton,
-              props: { color: 'blue', form: 'reviewsAdvancedSettings' },
+              props: {
+                color: 'blue',
+                form: 'reviewsAdvancedSettings',
+              },
             },
           ]}
           title="Reviews Advanced Settings"

@@ -1,4 +1,3 @@
-
 import createModel from '../createModel';
 
 const AccountSchema = {
@@ -49,6 +48,8 @@ const AccountSchema = {
   massOnlineEmailSentDate: null,
   suggestedChairId: null,
   sendUnconfirmedReviews: null,
+  lastReviewInterval: null,
+  lastSentReviewInterval: null,
   isChairSchedulingEnabled: null,
   omitChairIds: [],
   omitPractitionerIds: [],
