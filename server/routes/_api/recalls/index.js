@@ -10,11 +10,49 @@ import { sequelizeLoader } from '../../util/loaders';
 import { Recall } from '../../../_models';
 import StatusError from '../../../util/StatusError';
 import { getRecallsOutboxList } from '../../../lib/recalls/helpers';
+import createRecallText from '../../../lib/recalls/createRecallText'
 
 const recallsRouter = new Router();
 
 recallsRouter.param('accountId', sequelizeLoader('account', 'Account'));
 recallsRouter.param('recallId', sequelizeLoader('recall', 'Recall'));
+
+/**
+ * GET /:accountId/recalls/:recallId/sms
+ */
+recallsRouter.get('/:accountId/recalls/:recallId/sms', checkPermissions('accounts:read'), async (req, res, next) => {
+  try{
+    
+    if (req.accountId !== req.account.id) {
+      return next(
+        StatusError(
+          403,
+          "Requesting user's activeAccountId does not match account.id",
+        ),
+      );
+    }
+
+    const { recall, account } = req;
+    
+    const patient = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+    };
+
+    const link = 'carecru.co/gg58h';
+
+    const recallMessage = createRecallText({
+      patient,
+      account,
+      recall,
+      link,
+    });
+  
+    res.send(recallMessage);
+  } catch (error) {
+    next(error);
+  }
+});
 
 /**
  * GET /:accountId/recalls

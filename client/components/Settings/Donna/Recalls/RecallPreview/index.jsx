@@ -1,44 +1,20 @@
 
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {
-  Header,
-  SContainer,
-  SHeader,
-  SBody,
-  SMSPreview,
-} from '../../../../library';
-import createRecallText from '../../../../../../server/lib/recalls/createRecallText';
-import EmailPreview from '../../../Shared/EmailPreview';
-import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
-// import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
-import styles from './styles.scss';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Header, SContainer, SHeader, SBody } from "../../../../library";
+import EmailPreview from "../../../Shared/EmailPreview";
+import SmsPreview from "../../../Shared/SmsPreview";
+import CommsPreview, {
+  CommsPreviewSection
+} from "../../../Shared/CommsPreview";
+import styles from "./styles.scss";
 
-const formatPhoneNumber = phone =>
-  `+1 (${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8, 4)}`;
-
-const wordMap = {
-  sms: 'SMS',
-  phone: 'Voice',
-  email: 'Email',
-};
-
-function RecallSMSPreview({ patient, account, recall }) {
-  const link = 'carecru.co/gg58h';
-  const recallMessage = createRecallText({
-    patient, account, recall, link,
-  });
-  const smsPhoneNumber =
-    account.twilioPhoneNumber ||
-    account.destinationPhoneNumber ||
-    account.phoneNumber ||
-    '+1112223333';
-
+function RecallSMSPreview({ account, recall }) {
   return (
     <div className={styles.smsPreviewWrapper}>
-      <SMSPreview
-        from={formatPhoneNumber(smsPhoneNumber)}
-        message={recallMessage}
+      <SmsPreview
+        account={account}
+        url={`/api/accounts/${account.id}/recalls/${recall.id}/sms`}
       />
     </div>
   );
@@ -58,12 +34,6 @@ class RecallPreview extends Component {
 
     const { primaryTypes } = recall;
 
-    // Fake Jane Doe Data
-    const patient = {
-      firstName: 'Jane',
-      lastName: 'Doe',
-    };
-
     // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
     const commsPreviewSections = primaryTypes
       .slice()
@@ -73,11 +43,7 @@ class RecallPreview extends Component {
         if (type === 'sms') {
           typePreview = (
             <div>
-              <RecallSMSPreview
-                recall={recall}
-                patient={patient}
-                account={account}
-              />
+              <RecallSMSPreview recall={recall} account={account} />
             </div>
           );
         } else if (type === 'email') {
