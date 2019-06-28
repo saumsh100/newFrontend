@@ -61,7 +61,7 @@
     "run:test:calls": "dotenv -- node ./server/bin/build/makeTestCall.bundle.js"
   },
   "dependencies": {
-    "@carecru/carecru": "3.3.6",
+    "@carecru/carecru": "3.4.0",
     "@carecru/isomorphic": "2.7.0",
     "@storybook/addon-actions": "^3.2.6",
     "@storybook/addon-knobs": "^3.2.8",
