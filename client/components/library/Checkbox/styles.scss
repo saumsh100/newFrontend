@@ -1,5 +1,5 @@
-
 @import '../../../ui.scss';
+@import '../../../ui-kit';
 
 .cbxContainer {
   display: flex;
@@ -12,23 +12,17 @@
   position: relative;
   width: 14px;
   height: 13px;
-  border: 2px solid $primary-dark;
+  border: 2px solid $teal;
   border-radius: 3px;
   vertical-align: middle;
   transition: background 0.1s ease;
   cursor: pointer;
 
-  input[type=checkbox] {
+  input[type='checkbox'] {
     display: none;
   }
 
-  input[type=checkbox]:checked + label::after {
-    opacity: 1;
-    transform: rotate(45deg) scale(1);
-    cursor: pointer;
-  }
-
-  label {
+  span {
     &:after {
       content: '';
       position: absolute;
@@ -44,11 +38,27 @@
       transition-delay: 0.1s;
     }
   }
+
+  input[type='checkbox']:checked + span::after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  input[type='checkbox'].cbxIndeterminate:checked + span::after {
+    opacity: 1;
+    top: 1px;
+    transform: rotate(90deg) scale(1);
+    transition: all 0.2s ease;
+    border-bottom: 0;
+    cursor: pointer;
+  }
 }
 
 .cbxChecked {
   border-color: transparent;
-  background-color: $primary-dark;
+  background-color: $teal;
 }
 
 .label {

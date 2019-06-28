@@ -1,6 +1,5 @@
 @import '../../../ui.scss';
 @import '../../../ui-kit.scss';
-@import '../ScheduleCalendar/color';
 
 .placeholder {
   color: $grey-dark;
@@ -13,11 +12,11 @@
 .input {
   border: 1px solid $grey-lighter;
   width: 100%;
-  color: $calendar-grey;
+  color: $grey-dark;
   font-weight: 500;
   border-radius: 4px;
   font-size: 14px;
-  padding: 0 8px;
+  padding: 0 8px 0 16px;
   box-sizing: border-box;
   min-height: 40px;
   background: $white;
@@ -45,21 +44,16 @@
   padding: 8px 0;
 
   .item {
-    background: $grey-lighter;
-    padding: 4px 8px;
-    border-radius: 4px;
-    margin-right: 8px;
-    font-size: 11px;
     text-align: left;
     align-items: center;
     flex: 0 0 auto;
     display: flex;
     justify-content: space-between;
 
-    .remove {
-      color: $grey-dark;
-      margin-left: 8px;
-    }
+    font-family: $inter;
+    font-size: 13px;
+    font-weight: normal;
+    color: $grey-dark;
   }
 }
 
@@ -69,14 +63,14 @@
 
   &:hover {
     background: $grey-lighter !important;
-    color: $calendar-grey !important;
+    color: $grey-dark !important;
   }
 
   .item {
-    background: $calendar-background;
+    background: $grey-lightest;
 
     &:hover {
-      background: $calendar-background;
+      background: $grey-lightest;
     }
   }
 }
@@ -175,7 +169,7 @@
 
   &:hover {
     background-color: $primary-white !important;
-    color: $calendar-grey !important;
+    color: $grey-dark !important;
     cursor: auto;
   }
 }

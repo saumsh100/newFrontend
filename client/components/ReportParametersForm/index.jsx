@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { setDateToTimezone } from '@carecru/isomorphic';
+import { setDateToTimezone, getRangeFromList } from '@carecru/isomorphic';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { accountShape } from '../library/PropTypeShapes';
@@ -16,7 +16,7 @@ import DayRangeWithHelpers from '../library/ui-kit/DayPicker/DayRangeWithHelpers
 import { setActiveReport, setReportParameters } from '../../reducers/intelligenceReports';
 import ModeReport from '../ModeReport';
 import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
-import MultiSelectAccount from '../library/MultiSelect/MultiSelectAccount';
+import MultiSelectAccount from '../library/MultiSelectAccount';
 import styles from './style.scss';
 
 const DATE_RANGE = 'dateRange';
@@ -33,10 +33,17 @@ const defaultComponents = {
   [DROPDOWN]: DropdownSelect,
 };
 
-const handleDefaultValue = (defaultValue, name) => {
+const handleDefaultValue = (defaultValue, name, component, compt) => {
   const nullIfUndefined = defaultValue === undefined ? null : defaultValue;
+  const dateKey = Object.keys(compt.name).find(key => compt.name[key] === name);
+
+  if (component === DATE_RANGE && typeof defaultValue === 'string') {
+    const [defaultRange] = getRangeFromList([defaultValue]);
+    return setDateToTimezone(defaultRange[dateKey]).format('YYYY-MM-DD');
+  }
+
   return typeof defaultValue === 'object' && !Array.isArray(defaultValue)
-    ? defaultValue[name]
+    ? defaultValue[dateKey]
     : nullIfUndefined;
 };
 
@@ -130,7 +137,9 @@ class ReportParametersForm extends Component {
    */
   setDefaultParamValues(page) {
     const defaultParams = this.reduceParams(page, (name, curr) =>
-      name.map(n => ({ [n]: handleDefaultValue(curr.defaultValue, n, curr.component) })));
+      name.map(n => ({
+        [n]: handleDefaultValue(curr.defaultValue, n, curr.component, curr),
+      })));
     this.setQueryUrl(page, Object.assign(...defaultParams));
   }
 
@@ -176,7 +185,9 @@ class ReportParametersForm extends Component {
     const query = window.location.search;
     if (!query || query === '') return;
 
-    const { page, ...params } = queryString.parse(query, { arrayFormat: 'bracket' });
+    const { page, ...params } = queryString.parse(query, {
+      arrayFormat: 'bracket',
+    });
 
     if (!page) return;
 
@@ -213,13 +224,17 @@ class ReportParametersForm extends Component {
       return null;
     }
 
-    const componentsProps = ({ name, component }) =>
+    const componentsProps = ({ name, component, helpers, defaultValue }) =>
       ({
         dateRange: {
           popover: true,
-          fromDate: params[name.fromDate],
-          toDate: params[name.toDate],
+          start: params[name.start],
+          end: params[name.end],
           timezone,
+          helpers: helpers && getRangeFromList(helpers),
+          defaultValue:
+            defaultValue &&
+            (typeof defaultValue === 'string' ? getRangeFromList([defaultValue])[0] : defaultValue),
           onChange: value => this.setDateValue(name, value),
         },
         dropdown: {
@@ -232,7 +247,7 @@ class ReportParametersForm extends Component {
           onChange: value => this.setParam(name, value),
         },
         toggle: {
-          checked: params[name],
+          checked: params[name] === 1,
           onChange: value => this.setParam(name, +value.target.checked),
         },
         selectPill: {
@@ -240,13 +255,12 @@ class ReportParametersForm extends Component {
           onChange: value => this.setParam(name, value, true),
         },
       }[component]);
-
     const activeComponents = reportsJson[active].parameters.reduce(
       (acc, curr) => ({
         ...acc,
         [curr.component]: {
-          ...componentsProps(curr),
           ...curr,
+          ...componentsProps(curr),
         },
       }),
       {},

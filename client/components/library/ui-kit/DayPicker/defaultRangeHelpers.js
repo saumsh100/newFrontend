@@ -7,23 +7,44 @@ const today = moment()
 
 export default [
   {
-    typeName: 'Yesterday',
-    toDate: today.toDate(),
-    fromDate: today.subtract(1, 'day').toDate(),
+    label: 'Yesterday',
+    end: today.clone().toDate(),
+    start: today
+      .clone()
+      .subtract(1, 'day')
+      .toDate(),
   },
   {
-    typeName: 'This Week',
-    fromDate: today.startOf('week').toDate(),
-    toDate: today.endOf('week').toDate(),
+    label: 'This Week',
+    start: today
+      .clone()
+      .startOf('week')
+      .toDate(),
+    end: today
+      .clone()
+      .endOf('week')
+      .toDate(),
   },
   {
-    typeName: 'This Month',
-    fromDate: today.startOf('month').toDate(),
-    toDate: today.endOf('month').toDate(),
+    label: 'This Month',
+    start: today
+      .clone()
+      .startOf('month')
+      .toDate(),
+    end: today
+      .clone()
+      .endOf('month')
+      .toDate(),
   },
   {
-    typeName: 'This Year',
-    fromDate: today.startOf('year').toDate(),
-    toDate: today.endOf('year').toDate(),
+    label: 'This Year',
+    start: today
+      .clone()
+      .startOf('year')
+      .toDate(),
+    end: today
+      .clone()
+      .endOf('year')
+      .toDate(),
   },
 ];

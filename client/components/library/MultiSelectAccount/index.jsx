@@ -6,10 +6,9 @@ import Downshift from 'downshift';
 import classNames from 'classnames';
 import Selector from './Selector';
 import List from './List';
-import LinkButton from '../ui-kit/Button/LinkButton';
 import styles from './styles.scss';
 
-class MultiSelectAccount extends Component {
+class Index extends Component {
   constructor(props) {
     super(props);
 
@@ -67,7 +66,9 @@ class MultiSelectAccount extends Component {
    */
   removeItem(item, callback) {
     this.setState(
-      prevState => ({ selectedItems: prevState.selectedItems.filter(i => i !== item) }),
+      prevState => ({
+        selectedItems: prevState.selectedItems.filter(i => i !== item),
+      }),
       callback,
     );
   }
@@ -122,23 +123,19 @@ class MultiSelectAccount extends Component {
         onChange={this.handleSelection}
         selectedItem={null}
       >
-        {({ getToggleButtonProps, isOpen, getItemProps, highlightedIndex }) => (
+        {({ getToggleButtonProps, isOpen }) => (
           <div className={styles.selectWrapper}>
             <div className={styles.labelSection}>
               {label && (
                 <span
-                  className={classNames(styles.fieldLabel, { [styles.error]: this.state.error })}
+                  className={classNames(styles.fieldLabel, {
+                    [styles.error]: this.state.error,
+                  })}
                 >
                   {label}
                   {this.state.error && ' - Required Field'}
                 </span>
               )}
-              <LinkButton
-                className={styles.linkButton}
-                onClick={() => this.handleHelperLink(hasAvailableItems)}
-              >
-                {hasAvailableItems ? 'Select All' : 'Clear'}
-              </LinkButton>
             </div>
             <Selector
               disabled={disabled}
@@ -149,11 +146,13 @@ class MultiSelectAccount extends Component {
               handleSelection={this.handleSelection}
             />
             <List
-              showFallback
               isOpen={isOpen}
-              options={availableItems}
-              itemProps={getItemProps}
-              highlightedIndex={highlightedIndex}
+              selectedItems={selectedItems}
+              availableItems={availableItems}
+              hasSelectedItems={selectedItems.length > 0}
+              hasAvailableItems={availableItems.length > 0}
+              handleSelection={this.handleSelection}
+              onChangeAll={() => this.handleHelperLink(hasAvailableItems)}
             />
           </div>
         )}
@@ -173,7 +172,7 @@ const mapStateToProps = ({ featureFlags, entities, auth }) => {
   };
 };
 
-MultiSelectAccount.propTypes = {
+Index.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   onChange: PropTypes.func,
   initialSelectedItem: PropTypes.arrayOf(PropTypes.string),
@@ -189,7 +188,7 @@ MultiSelectAccount.propTypes = {
   selected: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
   defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
 };
-MultiSelectAccount.defaultProps = {
+Index.defaultProps = {
   onChange: () => {},
   disabled: false,
   required: false,
@@ -199,4 +198,4 @@ MultiSelectAccount.defaultProps = {
   initialSelectedItem: [],
 };
 
-export default connect(mapStateToProps)(MultiSelectAccount);
+export default connect(mapStateToProps)(Index);

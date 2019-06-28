@@ -1,6 +1,6 @@
 
 import PropTypes from 'prop-types';
-import React, { Component, defaultProps } from 'react';
+import React from 'react';
 import classNames from 'classnames/bind';
 import withTheme from '../../../hocs/withTheme';
 import styles from './styles.scss';
@@ -16,6 +16,7 @@ function Checkbox(props) {
     labelClassNames,
     theme,
     customContainer,
+    showIndeterminate,
   } = props;
 
   const labelClasses = classNames(theme.label, {
@@ -24,6 +25,7 @@ function Checkbox(props) {
 
   const classes = classNames(theme.cbx, {
     [theme.cbxChecked]: checked,
+    [theme.cbxIndeterminate]: showIndeterminate,
   });
 
   const containerClasses = classNames(theme.cbxContainer, {
@@ -55,9 +57,16 @@ function Checkbox(props) {
           onChange={() => {}}
           className={classes}
         />
-        <label htmlFor={id} />
+        <span />
       </div>
-      <span onClick={onChange} onChange={onChange} className={labelClasses}>
+      <span
+        onClick={onChange}
+        role="button"
+        onKeyDown={onKeyDown}
+        tabIndex="0"
+        onChange={onChange}
+        className={labelClasses}
+      >
         {label}
       </span>
     </div>
@@ -68,12 +77,24 @@ Checkbox.propTypes = {
   customContainer: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.string,
-  onChange: PropTypes.func,
-  // checked: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+  showIndeterminate: PropTypes.bool,
+  theme: PropTypes.objectOf(PropTypes.string),
+  checked: PropTypes.bool.isRequired,
+  hidden: PropTypes.bool,
+  labelClassNames: PropTypes.string,
+  value: PropTypes.string,
 };
 
 Checkbox.defaultProps = {
   customContainer: null,
+  id: '',
+  label: '',
+  hidden: false,
+  showIndeterminate: false,
+  theme: {},
+  labelClassNames: '',
+  value: '',
 };
 
 export default withTheme(Checkbox, styles);
