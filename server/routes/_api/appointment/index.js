@@ -80,6 +80,7 @@ appointmentsRouter.get('/', (req, res, next) => {
         $gte: startDate,
         $lte: endDate,
       },
+      isMissed: false,
       ...filterObj,
     },
     limit: parseInt(limitted),
