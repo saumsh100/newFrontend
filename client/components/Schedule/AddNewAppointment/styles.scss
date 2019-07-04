@@ -6,6 +6,10 @@
   height: 100%;
 }
 
+.body {
+  overflow: visible;
+}
+
 .formContainer {
   position: relative;
   width: 443px;
@@ -14,6 +18,10 @@
   @media screen and (max-width: 700px) {
     @include formContainer-mixin();
   }
+}
+
+.dropDownList {
+  max-height: 190px;
 }
 
 .formContainerMobile {

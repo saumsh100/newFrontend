@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment-timezone';
@@ -64,6 +63,7 @@ export default function AppointmentForm(props) {
 
   const dropDownTheme = {
     input: styles.inputStyle,
+    dropDownList: styles.dropDownList,
   };
   return (
     <Grid className={styles.grid}>

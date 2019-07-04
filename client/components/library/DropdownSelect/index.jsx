@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RDropdownMenu from 'react-dd-menu';
@@ -30,7 +29,9 @@ class DropdownSelect extends Component {
     this.renderToggle = this.renderToggle.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.scrollComponentDidMount = this.scrollComponentDidMount.bind(this);
-    this.valueScrollComponentDidMount = this.valueScrollComponentDidMount.bind(this);
+    this.valueScrollComponentDidMount = this.valueScrollComponentDidMount.bind(
+      this,
+    );
     this.searchListener = this.searchListener.bind(this);
     this.clearSearchValue = this.clearSearchValue.bind(this);
     this.selectOption = this.selectOption.bind(this);
@@ -59,7 +60,8 @@ class DropdownSelect extends Component {
       });
 
       if (this.valueScrollComponent) {
-        this.scrollComponent.scrollTop = valueHeight * this.valueScrollComponent.scrollHeight;
+        this.scrollComponent.scrollTop =
+          valueHeight * this.valueScrollComponent.scrollHeight;
       }
     }
 
@@ -131,12 +133,12 @@ class DropdownSelect extends Component {
   }
 
   renderList() {
-    const { template, onChange, value, options } = this.props;
+    const { template, onChange, value, options, theme } = this.props;
 
     const OptionTemplate = template || DefaultOption;
 
     return (
-      <div className={styles.dropDownList} ref={this.scrollComponentDidMount}>
+      <div className={theme.dropDownList} ref={this.scrollComponentDidMount}>
         {options.map((option, i) => {
           const isSelected = value === option.value;
           let className = styles.optionListItem;
@@ -154,11 +156,13 @@ class DropdownSelect extends Component {
                 onChange(option.value);
                 this.close();
               }}
-              role="Button"
+              role="button"
               data-test-id={`option_${i}`}
               ref={isSelected && this.valueScrollComponentDidMount}
               tabIndex={0}
-              onKeyUp={e => e.keyCode === 13 && this.selectOption(e, option.value)}
+              onKeyUp={e =>
+                e.keyCode === 13 && this.selectOption(e, option.value)
+              }
             >
               <div
                 className={styles.optionDiv}
@@ -174,9 +178,19 @@ class DropdownSelect extends Component {
   }
 
   renderToggle() {
-    const { value, options, template, theme, error, disabled, label } = this.props;
+    const {
+      value,
+      options,
+      template,
+      theme,
+      error,
+      disabled,
+      label,
+    } = this.props;
 
-    const defaultTemplate = ({ option }) => <div>{option.label || option.value}</div>;
+    const defaultTemplate = ({ option }) => (
+      <div>{option.label || option.value}</div>
+    );
     const ToggleTemplate = template || defaultTemplate;
 
     let toggleDiv = null;
@@ -210,7 +224,7 @@ class DropdownSelect extends Component {
         className={disabled ? theme.toggleDivDisabled : toggleClassName}
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
-        role="Button"
+        role="button"
         tabIndex={0}
         onKeyUp={() => {}}
       >
@@ -223,7 +237,11 @@ class DropdownSelect extends Component {
           {toggleDiv}
           <span className={labelClassName}>{label}</span>
           <div className={theme.caretIconWrapper}>
-            <Icon className={caretIconClassName} icon="caret-down" type="solid" />
+            <Icon
+              className={caretIconClassName}
+              icon="caret-down"
+              type="solid"
+            />
           </div>
         </div>
         <div className={theme.error}>{error || ''}</div>
@@ -266,7 +284,10 @@ DropdownSelect.propTypes = {
   disabled: PropTypes.bool,
   align: PropTypes.string,
   search: PropTypes.string,
-  theme: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
+  theme: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.objectOf(PropTypes.string),
+  ]),
   error: PropTypes.string,
   'data-test-id': PropTypes.string,
 };
