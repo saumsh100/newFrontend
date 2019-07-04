@@ -22,7 +22,7 @@
 }
 
 .CareCruModal.CareCruActive {
-  z-index: 9999;
+  z-index: 999999;
   opacity: 1;
   transition: opacity 0.2s;
 }
