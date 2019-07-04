@@ -80,6 +80,10 @@
 .serviceDataBody {
   padding: 40px;
 }
+.serviceDataHeader {
+  padding-bottom: 0;
+  height: auto !important;
+}
 
 .servicesPractForm {
   display: inline-block;
@@ -126,6 +130,9 @@
       padding-left: 5px;
     }
   }
+}
+.content {
+  overflow: unset;
 }
 
 .serviceHeaderContainer {

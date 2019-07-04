@@ -8,7 +8,7 @@ import ServiceDataItem from './ServiceDataItem';
 import { updateEntityRequest, deleteEntityRequest } from '../../../thunks/fetchEntities';
 import ServicePractitioners from './ServicePractitioners';
 import SettingsCard from '../Shared/SettingsCard';
-import { Card, IconButton } from '../../library';
+import { Card, Header, IconButton, Tab, Tabs } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
 import ReasonWeeklyHoursWrapper from './ReasonHours/Wrapper';
 import styles from './styles.scss';
@@ -17,6 +17,9 @@ class ServiceDataContainer extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      index: 0,
+    };
     this.updateService = this.updateService.bind(this);
     this.deleteService = this.deleteService.bind(this);
   }
@@ -55,6 +58,7 @@ class ServiceDataContainer extends Component {
       component = (
         <SettingsCard
           title={selectedService.get('name')}
+          headerClass={styles.serviceDataHeader}
           bodyClass={styles.serviceDataBody}
           rightActions={
             <div
@@ -67,23 +71,36 @@ class ServiceDataContainer extends Component {
               <IconButton icon="trash" iconType="solid" />
             </div>
           }
+          subHeader={
+            <Tabs index={this.state.index} onChange={index => this.setState({ index })}>
+              <Tab label="Reason Settings" data-test-id="tab_practitionerBasicData" />
+              <Tab label="Override Availabilities" data-test-id="tab_practitionerOfficeHours" />
+            </Tabs>
+          }
         >
-          <ServiceDataItem
-            key={`${selectedService.get('id')}basicdata`}
-            service={selectedService}
-            onSubmit={this.updateService}
-          />
-          <ServicePractitioners
-            key={`${selectedService.get('id')}selectedPractitioners`}
-            service={selectedService}
-            practitionerIds={practitionerIds}
-            updateService={this.updateService}
-            practitioners={practitioners}
-          />
-          <EnabledFeature
-            predicate={({ flags }) => flags.get('reason-schedule-component')}
-            render={() => <ReasonWeeklyHoursWrapper reason={selectedService} />}
-          />
+          <Tabs index={this.state.index} noHeaders contentClass={styles.content}>
+            <Tab label=" ">
+              <ServiceDataItem
+                key={`${selectedService.get('id')}basicdata`}
+                service={selectedService}
+                onSubmit={this.updateService}
+              />
+              <ServicePractitioners
+                key={`${selectedService.get('id')}selectedPractitioners`}
+                service={selectedService}
+                practitionerIds={practitionerIds}
+                updateService={this.updateService}
+                practitioners={practitioners}
+              />
+            </Tab>
+            <Tab label=" ">
+              <Header title="Override Availabilities" contentHeader />
+              <EnabledFeature
+                predicate={({ flags }) => flags.get('reason-schedule-component')}
+                render={() => <ReasonWeeklyHoursWrapper reason={selectedService} />}
+              />
+            </Tab>
+          </Tabs>
         </SettingsCard>
       );
     }
