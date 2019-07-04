@@ -401,7 +401,6 @@ class PatientInformation extends PureComponent {
                         </div>
                       )}
                     </Element>
-                    ,
                     <Element name="insuranceMemberId" className={styles.elementWrapper}>
                       <Field
                         theme={inputTheme(styles)}
@@ -410,7 +409,6 @@ class PatientInformation extends PureComponent {
                         disabled={insuranceCarrierValue === carriers[0].value}
                       />
                     </Element>
-                    ,
                     <Element name="insuranceGroupId" className={styles.elementWrapper}>
                       <Field
                         theme={inputTheme(styles)}
