@@ -492,34 +492,25 @@ async function getOrCreateChatForPatient(
   patientPhoneNumber,
   patient,
 ) {
-  let chat = null;
-  if (patient) {
-    chat = await Chat.findOne({
-      where: {
-        accountId,
-        patientId: patient.id,
-      },
-    });
-  } else {
-    chat = await Chat.findOne({
-      where: {
-        accountId,
-        patientPhoneNumber,
-        patientId: { $eq: null },
-      },
-    });
-  }
+  const baseObj = {
+    accountId,
+    patientId: patient ? patient.id : { $eq: null },
+    patientPhoneNumber,
+  };
 
+  const chat = await Chat.findOne({ where: baseObj });
   if (!chat) {
-    chat = await Chat.create({
-      accountId,
+    const createChat = await Chat.create({
+      ...baseObj,
       patientId: patient && patient.id,
-      patientPhoneNumber,
     });
+
+    return createChat.get({ plain: true });
   }
 
   return chat.get({ plain: true });
 }
+
 
 /**
  * Update chat's last message data.

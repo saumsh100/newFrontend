@@ -176,6 +176,9 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
         },
         {
           association: 'chats',
+          where: {
+            patientPhoneNumber: { $col: 'Patient.cellPhoneNumber' },
+          },
           required: false,
           include: [{
             association: 'textMessages',
