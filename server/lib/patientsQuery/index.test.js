@@ -61,14 +61,33 @@ describe('#patientQueryBuilder', () => {
       expect(omit(Patient.findAndCountAll.mock.calls[0][0], 'attributes')).toMatchSnapshot();
     });
 
-    test.skip('it works with sentRecalls', async () => {
-      await patientQueryBuilder({
-        accountId,
-        sentRecalls: ['2018-11-10', '2018-12-10'],
+    describe('it works with sentRecalls', async () => {
+      const assertSentRecalls = async (status, automated) => {
+        await patientQueryBuilder({
+          debug: true,
+          accountId,
+          sentRecalls: [status, automated, '2018-11-10', '2018-12-10'],
+        });
+
+        expect(Patient.findAndCountAll).toHaveBeenCalled();
+        expect(omit(Patient.findAndCountAll.mock.calls[0][0], 'attributes')).toMatchSnapshot();
+      };
+
+      test('sent automated', async () => {
+        await assertSentRecalls(true, true);
       });
 
-      expect(Patient.findAndCountAll).toHaveBeenCalled();
-      expect(omit(Patient.findAndCountAll.mock.calls[0][0], 'attributes')).toMatchSnapshot();
+      test('sent manual', async () => {
+        await assertSentRecalls(true, false);
+      });
+
+      test('not sent automated', async () => {
+        await assertSentRecalls(false, true);
+      });
+
+      test('not sent manual', async () => {
+        await assertSentRecalls(false, false);
+      });
     });
 
     test('it overrides the default parameters', async () => {

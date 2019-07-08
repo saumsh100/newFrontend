@@ -3,8 +3,9 @@ import { merge } from '@carecru/isomorphic';
 import { Patient } from 'CareCruModels';
 import { patientAttrs } from './helpers';
 import segments from './segments';
-import reduceQueryParamsToObject, { defaultQueryAccumulator }
-  from './helpers/reduceQueryParamsToObject';
+import reduceQueryParamsToObject, {
+  defaultQueryAccumulator,
+} from './helpers/reduceQueryParamsToObject';
 import queryIncludeMerger from './helpers/queryIncludeMerger';
 
 export default async function patientQueryBuilder({
@@ -14,13 +15,17 @@ export default async function patientQueryBuilder({
   order = ['firstName', 'lastName'],
   accountId,
   segment = ['allPatients'],
+  status = 'Active',
   ...rest
 }) {
   if (!accountId) {
     throw new Error('accountId is required');
   }
   const defaultQuery = {
-    where: { accountId },
+    where: {
+      accountId,
+      status,
+    },
     include: [],
     limit,
     offset: limit * page,
@@ -31,8 +36,9 @@ export default async function patientQueryBuilder({
   const query = Object.entries(rest).reduce(reduceQueryParamsToObject, defaultQueryAccumulator);
 
   const [segmentName, ...segmentArgs] = segment;
-  const { attributes, having, ...segmentOpts } =
-    segmentName ? segments[segmentName](...segmentArgs) : {};
+  const { attributes, having, ...segmentOpts } = segmentName
+    ? segments[segmentName](...segmentArgs)
+    : {};
 
   const finalHavingArray = query.having.concat(having).filter(h => h);
   const queryObj = {
@@ -41,11 +47,7 @@ export default async function patientQueryBuilder({
       .concat(attributes)
       .filter(a => a),
     ...(!!finalHavingArray.length && { having: finalHavingArray }),
-    ...merge.all([
-      defaultQuery,
-      segmentOpts,
-      query.queryOpts,
-    ]),
+    ...merge.all([defaultQuery, segmentOpts, query.queryOpts]),
   };
 
   const finalQuery = {

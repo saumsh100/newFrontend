@@ -75,9 +75,16 @@ const vendasta = {
 };
 
 const twilio = {
-  accountSid: env === 'test' ? environmentVariables.TWILIO_ACCOUNT_SID_TEST : (environmentVariables.TWILIO_ACCOUNT_SID || 'ACe874663202cfbbaec4be1ba33869f421'),
-  authToken: env === 'test' ? environmentVariables.TWILIO_AUTH_TOKEN_TEST : (environmentVariables.TWILIO_AUTH_TOKEN || 'ed5dbadfe331c9bf5898f679a8831b23'),
-  phoneNumber: env === 'test' ? environmentVariables.TWILIO_NUMBER_TEST : (environmentVariables.TWILIO_NUMBER),
+  accountSid:
+    env === 'test'
+      ? environmentVariables.TWILIO_ACCOUNT_SID_TEST
+      : environmentVariables.TWILIO_ACCOUNT_SID || 'ACe874663202cfbbaec4be1ba33869f421',
+  authToken:
+    env === 'test'
+      ? environmentVariables.TWILIO_AUTH_TOKEN_TEST
+      : environmentVariables.TWILIO_AUTH_TOKEN || 'ed5dbadfe331c9bf5898f679a8831b23',
+  phoneNumber:
+    env === 'test' ? environmentVariables.TWILIO_NUMBER_TEST : environmentVariables.TWILIO_NUMBER,
 };
 
 const mandrill = { apiKey: environmentVariables.MANDRILL_API_KEY };
@@ -117,7 +124,8 @@ const postgres = {
   port: environmentVariables.POSTGRESQL_PORT || 5432,
   username: pgUser || (environmentVariables.POSTGRESQL_USER || 'admin'),
   password: pgPassword || (environmentVariables.POSTGRESQL_PASSWORD || ''),
-  database: environmentVariables.POSTGRESQL_DATABASE || defaultDBName,
+  database:
+    env === 'test' ? defaultDBName : environmentVariables.POSTGRESQL_DATABASE || defaultDBName,
   ssl: !!environmentVariables.POSTGRESQL_SSL,
   logging: !!environmentVariables.POSTGRESQL_LOGGING,
 };
@@ -127,7 +135,9 @@ const reminders = {
   sameDayWindowHours: 6,
   allowedCustomConfirmKeys: ['isPreConfirmed', 'reason'],
   get: value => reminders[value],
-  set: (key, value) => { reminders[key] = value; },
+  set: (key, value) => {
+    reminders[key] = value;
+  },
 };
 
 const reviews = {

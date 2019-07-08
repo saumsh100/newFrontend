@@ -37,9 +37,7 @@ const notSentRecalls = ([sender = null, ...dates]) => ({
   having: [
     {},
     sequelize.where(
-      sequelize.literal(
-        'count(CASE WHEN "sentRecalls"."isSent" = true then 1 else NULL END)',
-      ),
+      sequelize.literal('count(CASE WHEN "sentRecalls"."isSent" = true then 1 else NULL END)'),
       { $eq: 0 },
     ),
   ],
@@ -50,5 +48,4 @@ const notSentRecalls = ([sender = null, ...dates]) => ({
  * @param [status, sender, ...[dates]]
  * @returns object - sent or not sent recalls query depending on the first item of the params array
  */
-export default ([status = true, ...rest]) =>
-  (status ? sentRecalls(rest) : notSentRecalls(rest));
+export default ([status = true, ...rest]) => (status ? sentRecalls(rest) : notSentRecalls(rest));
