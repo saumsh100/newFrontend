@@ -2,11 +2,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
-import styles from '../styles.scss';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+import { getOrCreateChatForPatient } from '../../../../../thunks/chat';
 import { Icon, Button } from '../../../../library';
 import AppointmentPopover from '../AppointmentPopover';
 import AppointmentHours from '../AppointmentHours';
-import withHoverable from '../../../../../hocs/withHoverable';
+import styles from '../styles.scss';
 
 /**
  * ShowAppointment represents each block of appointment on the calendar view
@@ -37,6 +40,12 @@ class ShowAppointment extends Component {
     // This prevents setState to be called indefinitely
     if (this.state.nameContainerOffsetWidth !== this.nameContainer.offsetWidth) {
       this.setState({ nameContainerOffsetWidth: this.nameContainer.offsetWidth });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.patientChat === null && prevProps.patientChat !== this.props.patientChat) {
+      this.props.push(`/chat/${this.props.patientChat}`);
     }
   }
 
@@ -95,6 +104,9 @@ class ShowAppointment extends Component {
             closePopover={this.closePopover}
             editAppointment={this.editAppointment}
             scheduleView={scheduleView}
+            handleGoToChat={() => {
+              this.props.getOrCreateChatForPatient(patient.id);
+            }}
           />,
         ]}
         preferPlace={placement}
@@ -168,6 +180,9 @@ ShowAppointment.propTypes = {
   isReminderSent: PropTypes.bool,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
+  getOrCreateChatForPatient: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
+  patientChat: PropTypes.string,
 };
 
 ShowAppointment.defaultProps = {
@@ -179,6 +194,23 @@ ShowAppointment.defaultProps = {
   isReminderSent: false,
   startDate: '',
   endDate: '',
+  patientChat: null,
 };
 
-export default withHoverable(ShowAppointment);
+const mapStateToProps = ({ chat }) => ({
+  patientChat: chat.get('patientChat'),
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      push,
+      getOrCreateChatForPatient,
+    },
+    dispatch,
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ShowAppointment);

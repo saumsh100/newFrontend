@@ -1,8 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber, setDateToTimezone, dateFormatter } from '@carecru/isomorphic';
 import {
   Card,
   Avatar,
@@ -22,17 +21,25 @@ import styles from './styles.scss';
 
 export default function AppointmentPopover({ patient, appointment, scheduleView, ...props }) {
   const { startDate, endDate, practitionerData, chairData, note } = appointment;
-  const age = moment().diff(patient.get('birthDate'), 'years') || '';
-  const appointmentDate = moment(startDate).format('dddd LL');
-  const lastName = age ? `${patient.lastName},` : patient.lastName;
+  const appointmentDate = dateFormatter(startDate, '', 'dddd LL');
   const textAreaTheme = { group: styles.textAreaGroup };
+  const patientUrl = `/patients/${patient.id}`;
+  const age = patient.birthDate
+    ? setDateToTimezone(Date.now(), null).diff(patient.birthDate, 'years')
+    : null;
+
   return (
     <Card className={styles.card} noBorder>
       <SContainer>
         <SHeader className={styles.header}>
           <Avatar user={patient} size="xs" />
           <div className={styles.header_text}>
-            {patient.firstName} {lastName} {age}
+            <a href={patientUrl} className={styles.dataLink}>
+              <span className={styles.header_text}>
+                {`${patient.firstName} ${patient.lastName}`}
+              </span>
+              {age !== null && <span className={styles.header_age}>{`, ${age}`}</span>}
+            </a>
           </div>
           <IconButton className={styles.closeIcon} icon="times" onClick={props.closePopover} />
         </SHeader>
@@ -45,7 +52,7 @@ export default function AppointmentPopover({ patient, appointment, scheduleView,
           <div className={styles.container}>
             <div className={styles.subHeader}>Time</div>
             <div className={styles.data}>
-              {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
+              {dateFormatter(startDate, '', 'h:mm a')} - {dateFormatter(endDate, '', 'h:mm a')}
             </div>
           </div>
 
@@ -101,19 +108,24 @@ export default function AppointmentPopover({ patient, appointment, scheduleView,
         </SBody>
 
         <SFooter className={styles.footer}>
-          <Button border="blue" onClick={props.closePopover} dense compact>
-            Close
+          <Button dense compact onClick={props.handleGoToChat} border="blue" icon="comment-alt">
+            <span>Chat</span>
           </Button>
-          <Button
-            color="blue"
-            onClick={props.editAppointment}
-            dense
-            compact
-            className={styles.editButton}
-            data-test-id="button_editAppointment"
-          >
-            Edit
-          </Button>
+          <span>
+            <Button border="blue" onClick={props.closePopover} dense compact>
+              Close
+            </Button>
+            <Button
+              color="blue"
+              onClick={props.editAppointment}
+              dense
+              compact
+              className={styles.editButton}
+              data-test-id="button_editAppointment"
+            >
+              Edit
+            </Button>
+          </span>
         </SFooter>
       </SContainer>
     </Card>
@@ -126,6 +138,7 @@ AppointmentPopover.propTypes = {
   closePopover: PropTypes.func.isRequired,
   editAppointment: PropTypes.func.isRequired,
   scheduleView: PropTypes.string,
+  handleGoToChat: PropTypes.func.isRequired,
 };
 
 AppointmentPopover.defaultProps = { scheduleView: 'chair' };

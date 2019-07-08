@@ -130,10 +130,12 @@ export default function PatientProfile(props) {
         </SBody>
 
         <SFooter className={styles.footer}>
-          <Button dense compact onClick={props.handleGoToChat} border="blue" icon="comment-alt">
-            <span>Chat</span>
-          </Button>
-          {!isPatientUser ? (
+          {!isPatientUser && (
+            <Button dense compact onClick={props.handleGoToChat} border="blue" icon="comment-alt">
+              <span>Chat</span>
+            </Button>
+          )}
+          {!isPatientUser && (
             <Button
               color="blue"
               onClick={() => props.editPatient(patient.id)}
@@ -143,7 +145,7 @@ export default function PatientProfile(props) {
             >
               Edit Patient
             </Button>
-          ) : null}
+          )}
         </SFooter>
       </SContainer>
     </Card>

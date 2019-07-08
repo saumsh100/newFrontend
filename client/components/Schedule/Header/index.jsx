@@ -140,7 +140,7 @@ class Header extends Component {
                 <IconButton
                   onClick={this.toggleFilters}
                   icon="filter"
-                  size={1.5}
+                  size={1.2}
                   className={styles.headerLinks_icon}
                 />
               </div>
