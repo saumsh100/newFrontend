@@ -1,4 +1,3 @@
-
 @import '../../../../../ui';
 
 .list {
@@ -19,3 +18,12 @@
   color: $primary-dark-grey !important;
 }
 
+.muted {
+  font-size: 10px;
+  line-height: 20px;
+  color: $inactive-color;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}

@@ -22,7 +22,7 @@ async function main({ accountId }) {
   for (i = 0; i < length; i++) {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
-    const phoneNumber = faker.phone.phoneNumberFormat(0);
+    const phoneNumber = faker.phone.phoneNumber('+1##########');
     patientSeeds.push({
       accountId,
       firstName,

@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import Popover from 'react-popover';
 import AppointmentInfo from './AppointmentInfo';
+import { getOrCreateChatForPatient } from '../../../thunks/chat';
 import { selectAppointment, setScheduleDate } from '../../../actions/schedule';
 import { appointmentShape, patientShape, practitionerShape, chairShape } from '../PropTypeShapes';
 import Appointments from '../../../entities/models/Appointments';
@@ -29,6 +30,12 @@ class AppointmentPopover extends Component {
     }
 
     window.addEventListener('scroll', this.closeOnScroll);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.patientChat === null && prevProps.patientChat !== this.props.patientChat) {
+      this.props.push(`/chat/${this.props.patientChat}`);
+    }
   }
 
   setOpen(value) {
@@ -69,6 +76,10 @@ class AppointmentPopover extends Component {
             patient={patient}
             appointment={appointment}
             editAppointment={this.handleEditAppointment}
+            patientUrl={`/patients/${patient.id}`}
+            handleGoToChat={() => {
+              this.props.getOrCreateChatForPatient(patient.id);
+            }}
             chair={chair[0]}
             practitioner={practitioner[0]}
           />,
@@ -86,7 +97,7 @@ class AppointmentPopover extends Component {
   }
 }
 
-function mapStateToProps({ entities, dashboard }, { appointment }) {
+function mapStateToProps({ entities, dashboard, chat }, { appointment }) {
   const practitioner = entities
     .getIn(['practitioners', 'models'])
     .toArray()
@@ -100,6 +111,7 @@ function mapStateToProps({ entities, dashboard }, { appointment }) {
     chair,
     practitioner,
     dashboardDate: dashboard.get('dashboardDate'),
+    patientChat: chat.get('patientChat'),
   };
 }
 
@@ -109,6 +121,7 @@ function mapDispatchToProps(dispatch) {
       push,
       selectAppointment,
       setScheduleDate,
+      getOrCreateChatForPatient,
     },
     dispatch,
   );
@@ -129,6 +142,8 @@ AppointmentPopover.propTypes = {
   children: PropTypes.element.isRequired,
   dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
   setScheduleDate: PropTypes.func.isRequired,
+  getOrCreateChatForPatient: PropTypes.func.isRequired,
+  patientChat: PropTypes.string,
 };
 
 AppointmentPopover.defaultProps = {
@@ -136,6 +151,7 @@ AppointmentPopover.defaultProps = {
   chair: null,
   placement: 'right',
   scrollId: '',
+  patientChat: null,
 };
 
 export default connect(

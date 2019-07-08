@@ -13,6 +13,8 @@ export const SET_CHAT_MESSAGES = `${reducer}/SET_CHAT_MESSAGES`;
 export const SET_LOCKED_CHATS = `${reducer}/SET_LOCKED_CHATS`;
 export const SET_CHAT_POC = `${reducer}/SET_CHAT_POC`;
 export const SET_TOTAL_CHAT_MESSAGES = `${reducer}/SET_TOTAL_CHAT_MESSAGES`;
+export const SET_PATIENT_CHAT = `${reducer}/SET_PATIENT_CHAT`;
+export const UNSET_PATIENT_CHAT = `${reducer}/UNSET_PATIENT_CHAT`;
 
 export const setSelectedChat = createAction(SET_SELECTED_CHAT);
 export const updateChatId = createAction(UPDATE_CHAT_ID);
@@ -22,11 +24,14 @@ export const setChatMessages = createAction(SET_CHAT_MESSAGES);
 export const setLockedChats = createAction(SET_LOCKED_CHATS);
 export const setChatPoC = createAction(SET_CHAT_POC);
 export const setTotalChatMessages = createAction(SET_TOTAL_CHAT_MESSAGES);
+export const setPatientChat = createAction(SET_PATIENT_CHAT);
+export const unsetPatientChat = createAction(UNSET_PATIENT_CHAT);
 
 export const initialState = Map({
   selectedChatId: null,
   selectedChat: null,
   selectedPatientId: null,
+  patientChat: null,
   newChat: null,
   unreadChats: [],
   chatList: {},
@@ -84,6 +89,12 @@ export default handleActions(
 
     [SET_TOTAL_CHAT_MESSAGES](state, { payload }) {
       return state.set('totalChatMessages', payload);
+    },
+    [SET_PATIENT_CHAT](state, { payload }) {
+      return state.set('patientChat', payload);
+    },
+    [UNSET_PATIENT_CHAT](state) {
+      return state.set('patientChat', null);
     },
   },
   initialState,

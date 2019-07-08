@@ -487,7 +487,7 @@ async function createChatMessage(body, patient, userId, chatId) {
  * @param patient {Patient} Patient we are getting the chat for.
  * @returns {Promise<{Chat}>}
  */
-async function getOrCreateChatForPatient(
+export async function getOrCreateChatForPatient(
   accountId,
   patientPhoneNumber,
   patient,

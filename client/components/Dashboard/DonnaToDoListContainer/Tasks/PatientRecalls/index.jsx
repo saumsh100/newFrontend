@@ -1,21 +1,19 @@
 
 import React from 'react';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import { dateFormatter } from '@carecru/isomorphic';
 import orderBy from 'lodash/orderBy';
 import { List, ListItem, Avatar } from '../../../../library';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
 import styles2 from '../styles.scss';
+import PatientPopover from '../../../../library/PatientPopover';
 
 export default function PatientRecalls({ recalls, timezone }) {
   return (
     <List className={styles.list}>
-      {orderBy(recalls, 'sendDate').map((r) => {
-        const {
- patient, primaryTypes, recall, sendDate,
-} = r;
-
+      {orderBy(recalls, 'sendDate').map(({ patient, primaryTypes, recall, sendDate }) => {
         const { dueForHygieneDate, dueForRecallExamDate } = patient;
         let type = recall.interval;
         if (type[0] === '-') {
@@ -29,20 +27,32 @@ export default function PatientRecalls({ recalls, timezone }) {
             <div className={styles2.avatar}>
               <Avatar size="sm" user={patient} />
             </div>
-            <div className={styles2.mediumCol}>{type}</div>
-            <div className={styles2.smallCol}>{primaryTypes.join(' & ')}</div>
-            <div className={styles2.smallCol}>{moment.tz(sendDate, timezone).format('h:mm A')}</div>
             <div className={styles2.col}>
-              {patient.firstName} {patient.lastName}
+              <span>
+                <PatientPopover patient={patient}>
+                  <div>{`${patient.firstName} ${patient.lastName}`}</div>
+                </PatientPopover>
+                <div className={classnames(styles.muted, styles.lowercase)}>
+                  {`at ${dateFormatter(sendDate, timezone, 'h:mm a')}`}
+                </div>
+              </span>
+            </div>
+            <div className={styles2.mediumCol}>
+              <span>
+                <div>{type}</div>
+                <div className={classnames(styles.muted, styles.lowercase)}>
+                  {`${primaryTypes.join(' & ')}`}
+                </div>
+              </span>
             </div>
             <div className={styles2.col}>
               {dueForHygieneDate
-                ? moment.tz(dueForHygieneDate, timezone).format('MMM Do, YYYY')
+                ? dateFormatter(dueForHygieneDate, timezone, 'MMM Do, YYYY')
                 : 'n/a'}
             </div>
             <div className={styles2.col}>
               {dueForRecallExamDate
-                ? moment.tz(dueForRecallExamDate, timezone).format('MMM Do, YYYY')
+                ? dateFormatter(dueForRecallExamDate, timezone, 'MMM Do, YYYY')
                 : 'n/a'}
             </div>
           </ListItem>
@@ -53,12 +63,14 @@ export default function PatientRecalls({ recalls, timezone }) {
 }
 
 PatientRecalls.propTypes = {
-  recalls: PropTypes.arrayOf(PropTypes.shape({
-    patient: PropTypes.shape(patientShape),
-    primaryTypes: PropTypes.arrayOf(PropTypes.string),
-    recall: PropTypes.shape(),
-    sendDate: PropTypes.string,
-  })),
+  recalls: PropTypes.arrayOf(
+    PropTypes.shape({
+      patient: PropTypes.shape(patientShape),
+      primaryTypes: PropTypes.arrayOf(PropTypes.string),
+      recall: PropTypes.shape(),
+      sendDate: PropTypes.string,
+    }),
+  ),
   timezone: PropTypes.string.isRequired,
 };
 

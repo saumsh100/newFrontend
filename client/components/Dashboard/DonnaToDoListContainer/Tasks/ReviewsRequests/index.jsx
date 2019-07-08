@@ -1,12 +1,15 @@
 
 import React from 'react';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
-import { List, ListItem, Avatar } from '../../../../library';
+import classnames from 'classnames';
+import { dateFormatter } from '@carecru/isomorphic';
+import { List, ListItem, Avatar, Icon } from '../../../../library';
 import patientShape from '../../../../library/PropTypeShapes/patient';
 import styles from './styles.scss';
 import styles2 from '../styles.scss';
+import PatientPopover from '../../../../library/PatientPopover';
+import AppointmentPopover from '../../../../library/AppointmentPopover';
 
 export default function ReviewRequests({ reviews, timezone }) {
   return (
@@ -25,13 +28,28 @@ export default function ReviewRequests({ reviews, timezone }) {
             <div className={styles2.avatar}>
               <Avatar size="sm" user={patient} />
             </div>
-            <div className={styles2.smallCol}>{primaryTypes.join(' & ')}</div>
-            <div className={styles2.smallCol}>{moment.tz(sendDate, timezone).format('h:mm A')}</div>
             <div className={styles2.col}>
-              {patient.firstName} {patient.lastName}
+              <span>
+                <PatientPopover patient={patient}>
+                  <div>{`${patient.firstName} ${patient.lastName}`}</div>
+                </PatientPopover>
+                <div className={classnames(styles.muted, styles.lowercase)}>
+                  {`at ${dateFormatter(sendDate, timezone, 'h:mm a')}`}
+                </div>
+              </span>
             </div>
+            <div className={styles2.smallCol}>{primaryTypes.join(' & ')}</div>
             <div className={styles2.col}>
-              {moment.tz(appointment.startDate, timezone).format('MMM Do, YYYY - h:mm A')}
+              <AppointmentPopover patient={patient} appointment={appointment}>
+                <span>{dateFormatter(appointment.startDate, timezone, 'MMM Do - h:mm A')}</span>
+              </AppointmentPopover>
+              <span
+                className={classnames(styles.iconContainer, {
+                  [styles.iconActive]: appointment.isPatientConfirmed,
+                })}
+              >
+                {appointment.isPatientConfirmed && <Icon icon="check" />}
+              </span>
             </div>
           </ListItem>
         );
@@ -41,11 +59,13 @@ export default function ReviewRequests({ reviews, timezone }) {
 }
 
 ReviewRequests.propTypes = {
-  reviews: PropTypes.arrayOf(PropTypes.shape({
-    patient: PropTypes.shape(patientShape),
-    primaryTypes: PropTypes.arrayOf(PropTypes.string),
-    sendDate: PropTypes.string,
-  })),
+  reviews: PropTypes.arrayOf(
+    PropTypes.shape({
+      patient: PropTypes.shape(patientShape),
+      primaryTypes: PropTypes.arrayOf(PropTypes.string),
+      sendDate: PropTypes.string,
+    }),
+  ),
   timezone: PropTypes.string.isRequired,
 };
 

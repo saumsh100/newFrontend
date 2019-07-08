@@ -1,4 +1,5 @@
 @import '../../../ui';
+@import '../../../fonts';
 
 .appLink {
   transition: all 0.1s ease-in-out;
@@ -28,13 +29,14 @@
   color: $primary-white;
   padding-left: 15px;
   padding-right: 15px;
+  font-size: $small-size;
 
   &_text {
+    @extend .fontDefault;
     padding-top: 4px;
     padding-left: 10px;
     font-size: 15px;
     margin-right: 10px;
-    composes: fontDefault from 'sass-loader!../../../fonts.scss';
   }
 }
 
@@ -63,17 +65,46 @@
 }
 
 .subHeader {
-  composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
+  @extend .subHeaderExtraSmall;
   padding-bottom: 5px;
   text-transform: uppercase;
 }
 
+.infoArrow {
+  display: inline;
+  margin-left: 10px;
+}
+
+.dataLink {
+  @extend .fontMedium;
+  font-size: 13px;
+  padding: 0 0 2px;
+
+  @at-root button#{&},
+    a#{&} {
+    color: $primary-dark;
+    cursor: pointer;
+    text-decoration: none;
+
+    &,
+    &:active,
+    &:focus {
+      outline: none;
+      border: none;
+    }
+
+    &:hover {
+      color: $primary-blue;
+    }
+  }
+}
+
 .data {
+  @extend .fontMedium;
   display: flex;
   align-items: center;
   font-size: 13px;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
-  padding-bottom: 2px;
+  padding: 0 0 2px;
 
   &_note {
     width: 100%;

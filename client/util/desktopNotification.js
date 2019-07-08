@@ -9,7 +9,7 @@ const NotificationConfiguration = {
 
 export default class DesktopNotification {
   static requestPermission() {
-    Push.Permission.request();
+    Push.Permission.request().catch(console.error);
   }
 
   static showNotification(message, config = {}) {

@@ -10,6 +10,7 @@ const gqlQuery = patientId => gql`
         accountViewer {
             id
             patient(id: "${patientId}") {
+                id
                 firstName
                 lastName
                 isEmailPoc

@@ -296,11 +296,18 @@ module.exports = {
 
     await queryInterface.bulkInsert('DailySchedules', devDailySchedules);
 
-    await queryInterface.bulkInsert('WeeklySchedules', [weeklySchedule1, weeklySchedule2]);
+    await queryInterface.bulkInsert('WeeklySchedules', [
+      weeklySchedule1,
+      weeklySchedule2,
+    ]);
 
-    await queryInterface.sequelize.query(`UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId}' WHERE "id" = '${accountId}';`);
+    await queryInterface.sequelize.query(
+      `UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId}' WHERE "id" = '${accountId}';`,
+    );
 
-    await queryInterface.sequelize.query(`UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId2}' WHERE "id" = '${accountId2}';`);
+    await queryInterface.sequelize.query(
+      `UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId2}' WHERE "id" = '${accountId2}';`,
+    );
 
     await queryInterface.bulkInsert('Permissions', [
       managerPermission,
@@ -333,7 +340,7 @@ module.exports = {
     for (let i = 0; i < 100; i += 1) {
       const firstName = faker.name.firstName('male');
       const lastName = faker.name.lastName();
-      const phoneNumber = faker.phone.phoneNumberFormat(0);
+      const phoneNumber = faker.phone.phoneNumber('+1##########');
       const id = uuid();
       const pmsId = uuid();
       const familyPosition = i % families.length;
@@ -352,7 +359,10 @@ module.exports = {
         email: `${firstName}.${lastName}@google.ca`,
         mobilePhoneNumber: phoneNumber,
         cellPhoneNumber: phoneNumber,
-        birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+        birthDate: faker.date.between(
+          moment().subtract(100, 'years'),
+          moment(),
+        ),
         gender: 'male',
         language: 'English',
         insurance: JSON.stringify({
@@ -410,7 +420,7 @@ module.exports = {
     for (let i = 0; i < 30; i += 1) {
       const firstName = faker.name.firstName('female');
       const lastName = faker.name.lastName();
-      const phoneNumber = faker.phone.phoneNumberFormat(0);
+      const phoneNumber = faker.phone.phoneNumber('+1##########');
       const familyPosition = i % families.length;
       patients.push({
         id: uuid(),
@@ -422,7 +432,10 @@ module.exports = {
         email: `${firstName}.${lastName}@google.ca`,
         mobilePhoneNumber: phoneNumber,
         cellPhoneNumber: phoneNumber,
-        birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+        birthDate: faker.date.between(
+          moment().subtract(100, 'years'),
+          moment(),
+        ),
         gender: 'female',
         language: 'English',
         insurance: JSON.stringify({
@@ -439,7 +452,7 @@ module.exports = {
       });
     }
 
-    const mobilePhoneNumber = faker.phone.phoneNumberFormat(0);
+    const mobilePhoneNumber = faker.phone.phoneNumber('+1##########');
 
     patients.push({
       id: uuid(),
@@ -530,7 +543,7 @@ module.exports = {
     for (let i = 0; i < 80; i += 1) {
       const firstName = faker.name.firstName();
       const lastName = faker.name.lastName();
-      const phoneNumber = faker.phone.phoneNumberFormat(0);
+      const phoneNumber = faker.phone.phoneNumber('+1##########');
       patients2.push({
         id: uuid(),
         accountId: accountId2,
@@ -619,26 +632,30 @@ module.exports = {
 
     await queryInterface.bulkInsert(
       'PatientSearches',
-      patients.filter((_, index) => index < 10).map(patient => ({
-        id: uuid(),
-        userId: superAdminUser2.id,
-        accountId,
-        patientId: patient.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })),
+      patients
+        .filter((_, index) => index < 10)
+        .map(patient => ({
+          id: uuid(),
+          userId: superAdminUser2.id,
+          accountId,
+          patientId: patient.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })),
     );
 
     await queryInterface.bulkInsert(
       'PatientSearches',
-      patients2.filter((_, index) => index < 10).map(patient => ({
-        id: uuid(),
-        userId: superAdminUser2.id,
-        accountId: accountId2,
-        patientId: patient.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })),
+      patients2
+        .filter((_, index) => index < 10)
+        .map(patient => ({
+          id: uuid(),
+          userId: superAdminUser2.id,
+          accountId: accountId2,
+          patientId: patient.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })),
     );
 
     const practitioners2 = [];

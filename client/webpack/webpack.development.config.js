@@ -14,7 +14,9 @@ const developmentConfig = merge(baseConfig, {
     filename: '[name].[hash].js',
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.HotModuleReplacementPlugin({
+      multiStep: true,
+    }),
     new webpack.NamedModulesPlugin(),
     new HardSourceWebpackPlugin({
       environmentHash: {

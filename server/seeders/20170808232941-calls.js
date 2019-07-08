@@ -23,7 +23,7 @@ module.exports = {
     for (let i = 0; i < 100; i += 1) {
       const firstName = faker.name.firstName('male');
       const lastName = faker.name.lastName();
-      const phoneNumber = faker.phone.phoneNumberFormat(1);
+      const phoneNumber = faker.phone.phoneNumber('+1##########');
       const id = uuid();
       patients.push({
         id,

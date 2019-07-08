@@ -36,7 +36,7 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
         ...include,
         as: 'lastTextMessage',
         order: [['createdAt', 'DESC']],
-        required: true,
+        required: false,
         include: [
           {
             model: User,

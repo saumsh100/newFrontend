@@ -52,9 +52,15 @@ import { connect } from 'react-redux';
  *  to load always rendering the fallback first
  * @param {object} props.subject
  * @param {string} props.userRole
+ * @param {boolean} props.drillProps
  */
 function EnabledFeature({
-  predicate, subject, render, renderBeforeFlags, fallback,
+  predicate,
+  subject,
+  render,
+  renderBeforeFlags,
+  fallback,
+  drillProps = true,
 }) {
   const flagsSize = Map.isMap(subject.flags)
     ? subject.flags.size
@@ -64,7 +70,10 @@ function EnabledFeature({
     return null;
   }
 
-  return renderFunctionOrComponent(predicate(subject) ? render : fallback, subject);
+  return renderFunctionOrComponent(
+    predicate(subject) ? render : fallback,
+    drillProps ? subject : undefined,
+  );
 }
 
 /**
@@ -83,7 +92,10 @@ function renderFunctionOrComponent(functionOrComponent, newProps = {}) {
     : cloneElement(functionOrComponent, newProps);
 }
 
-function mapStateToProps({ featureFlags, auth }, { flags, adapterPermissions, userRole }) {
+function mapStateToProps(
+  { featureFlags, auth },
+  { flags, adapterPermissions, userRole },
+) {
   return {
     subject: {
       adapterPermissions: adapterPermissions || auth.get('adapterPermissions'),
@@ -99,7 +111,10 @@ const objectOrMapPropType = PropTypes.oneOfType([
   PropTypes.instanceOf(Map),
 ]);
 
-const functionOrNodePropType = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
+const functionOrNodePropType = PropTypes.oneOfType([
+  PropTypes.func,
+  PropTypes.node,
+]);
 
 EnabledFeature.propTypes = {
   adapterPermissions: objectOrMapPropType,

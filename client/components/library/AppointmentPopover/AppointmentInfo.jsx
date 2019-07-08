@@ -22,7 +22,7 @@ import styles from './styles.scss';
 const popoverDataSections = (subHeaderText, data) => (
   <div className={styles.container}>
     <div className={styles.subHeader}>{subHeaderText}</div>
-    <div className={styles.data}>{data}</div>
+    {typeof data === 'string' ? <div className={styles.data}>{data}</div> : data}
   </div>
 );
 
@@ -50,7 +50,18 @@ export default function AppointmentInfo(props) {
         </SHeader>
         <SBody className={styles.body}>
           {popoverDataSections('Date', appointmentDate)}
-          {popoverDataSections('Name', `${patient.firstName} ${lastName}`)}
+          {popoverDataSections(
+            'Name',
+            <div>
+              <a href={props.patientUrl} className={styles.dataLink}>
+                {`${patient.firstName} ${lastName}`}
+                <Icon className={styles.infoArrow} icon="external-link-alt" type="solid" />
+              </a>
+              <button onClick={props.handleGoToChat} className={styles.dataLink}>
+                <Icon className={styles.infoArrow} icon="comment-alt" type="solid" />
+              </button>
+            </div>,
+          )}
 
           {patient.cellPhoneNumber || patient.email ? (
             <div className={styles.container}>
@@ -120,6 +131,8 @@ AppointmentInfo.propTypes = {
   practitioner: PropTypes.shape(practitionerShape).isRequired,
   patient: PropTypes.shape(patientShape).isRequired,
   appointment: PropTypes.shape(appointmentShape).isRequired,
+  patientUrl: PropTypes.string.isRequired,
+  handleGoToChat: PropTypes.func.isRequired,
 };
 
 AppointmentInfo.defaultProps = { age: null };

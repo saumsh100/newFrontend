@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber, setDateToTimezone } from '@carecru/isomorphic';
 import {
   Card,
   SContainer,
@@ -19,9 +19,11 @@ import { patientShape } from '../PropTypeShapes';
 import styles from './styles.scss';
 
 export default function PatientProfile(props) {
-  const { patient, age, closePopover, isPatientUser } = props;
+  const { patient, closePopover, isPatientUser } = props;
 
-  const lastName = age ? `${patient.lastName},` : patient.lastName;
+  const age = patient.birthDate
+    ? setDateToTimezone(Date.now(), null).diff(patient.birthDate, 'years')
+    : null;
 
   const patientPhone = isPatientUser ? 'phoneNumber' : 'cellPhoneNumber';
 
@@ -39,9 +41,10 @@ export default function PatientProfile(props) {
       <SContainer>
         <SHeader className={styles.header}>
           <Avatar user={patient} size="xs" />
-          <div className={styles.header_text}>
-            {patient.firstName} {lastName} {age}
-          </div>
+          <a href={props.patientUrl} className={styles.dataLink}>
+            <span className={styles.header_text}>{`${patient.firstName} ${patient.lastName}`}</span>
+            {age !== null && <span className={styles.header_age}>{`, ${age}`}</span>}
+          </a>
           <div className={styles.closeIcon}>
             <IconButton icon="times" onClick={closePopover} />
           </div>
@@ -127,6 +130,9 @@ export default function PatientProfile(props) {
         </SBody>
 
         <SFooter className={styles.footer}>
+          <Button dense compact onClick={props.handleGoToChat} border="blue" icon="comment-alt">
+            <span>Chat</span>
+          </Button>
           {!isPatientUser ? (
             <Button
               color="blue"
@@ -149,10 +155,10 @@ PatientProfile.propTypes = {
   closePopover: PropTypes.func.isRequired,
   editPatient: PropTypes.func.isRequired,
   isPatientUser: PropTypes.bool,
-  age: PropTypes.number,
+  patientUrl: PropTypes.string.isRequired,
+  handleGoToChat: PropTypes.func.isRequired,
 };
 
 PatientProfile.defaultProps = {
   isPatientUser: false,
-  age: null,
 };

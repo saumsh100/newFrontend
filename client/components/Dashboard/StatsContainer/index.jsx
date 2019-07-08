@@ -24,9 +24,12 @@ function StatsContainer({
     },
     {
       key: 1,
-      count: appointmentsCount,
-      title: appointmentsCount === 1 ? 'Appointment Today' : 'Appointments Today',
-      src: '/images/icons/Appts-Today.png',
+      count: unConfirmedPatientsCount,
+      title:
+        unConfirmedPatientsCount === 1
+          ? 'Patient Unconfirmed'
+          : 'Patients Unconfirmed',
+      src: '/images/icons/Unconfirmed-Patients.png',
       size: 6,
       color: 'red',
     },
@@ -40,9 +43,10 @@ function StatsContainer({
     },
     {
       key: 3,
-      count: unConfirmedPatientsCount,
-      title: unConfirmedPatientsCount === 1 ? 'Patient Unconfirmed' : 'Patients Unconfirmed',
-      src: '/images/icons/Unconfirmed-Patients.png',
+      count: appointmentsCount,
+      title:
+        appointmentsCount === 1 ? 'Appointment Today' : 'Appointments Today',
+      src: '/images/icons/Appts-Today.png',
       size: 6,
       color: 'grey',
     },
@@ -88,7 +92,9 @@ function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
     requestsCount: entities
       .getIn(['requests', 'models'])
       .filter(req => !req.get('isCancelled') && !req.get('isConfirmed')).size,
-    unConfirmedPatientsCount: appointments.filter(app => !app.isPatientConfirmed).size,
+    unConfirmedPatientsCount: appointments.filter(
+      app => !app.isPatientConfirmed,
+    ).size,
   };
 }
 

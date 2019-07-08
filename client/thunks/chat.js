@@ -14,6 +14,8 @@ import {
   setNewChat,
   updateChatId,
   setTotalChatMessages,
+  setPatientChat,
+  unsetPatientChat,
 } from '../reducers/chat';
 import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
 import DesktopNotification from '../util/desktopNotification';
@@ -115,13 +117,17 @@ export function addMessage(message) {
 }
 
 function filterUnreadMessages(textMessagesList) {
-  return Object.values(textMessagesList).filter(message => !message.read);
+  return textMessagesList ? Object.values(textMessagesList).filter(message => !message.read) : [];
 }
 
 function filterReadMessages(unreadList, textMessages) {
-  textMessages = Object.values(textMessages);
+  if (!textMessages) {
+    return [];
+  }
+
+  const textMessagesArray = Object.values(textMessages);
   return unreadList.filter((unreadId) => {
-    const newList = textMessages.filter(message => message.read && unreadId === message.id);
+    const newList = textMessagesArray.filter(message => message.read && unreadId === message.id);
     return newList.length !== 0;
   });
 }
@@ -249,9 +255,9 @@ export function markAsRead(chatId) {
         values: {},
         url: `/api/chats/${chatId}/textMessages/read`,
       }),
-    ).then((response) => {
+    ).then(({ textMessages = {} }) => {
       const unreadChats = chat.get('unreadChats');
-      const listToRemove = Object.keys(response.textMessages);
+      const listToRemove = Object.keys(textMessages);
 
       pullAll(unreadChats, listToRemove);
       dispatch(setUnreadChats(unreadChats));
@@ -318,6 +324,7 @@ export function selectChat(id, createChat = null) {
       id &&
       entities.getIn(['chats', 'models', id]) &&
       entities.getIn(['chats', 'models', id]).delete('textMessages');
+
     dispatch(setNewChat(createChat));
     dispatch(setSelectedChat(chatEntity));
 
@@ -442,4 +449,14 @@ export function resendMessage(messageId, patientId, chatId) {
       );
       dispatch(setChatMessagesListForChat(chatId));
     });
+}
+
+export function getOrCreateChatForPatient(patientId) {
+  return (dispatch) => {
+    dispatch(unsetPatientChat());
+
+    return httpClient()
+      .get(`/api/patients/${patientId}/chat`)
+      .then(({ data: { chatId } }) => dispatch(setPatientChat(chatId)));
+  };
 }

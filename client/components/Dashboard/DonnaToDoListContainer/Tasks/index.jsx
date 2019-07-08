@@ -17,7 +17,7 @@ const toDoListNames = [
   'Waitlist Queue',
 ];
 
-const todosHeader = () => (
+const AppointmentRemindersHeader = () => (
   <SHeader className={styles.header}>
     <div className={styles.avatar} />
     <div className={styles.col}>Contact</div>
@@ -27,47 +27,70 @@ const todosHeader = () => (
   </SHeader>
 );
 
+const PatientRecallsHeader = () => (
+  <SHeader className={styles.header}>
+    <div className={styles.avatar} />
+    <div className={styles.col}>Contact</div>
+    <div className={styles.mediumCol}>Type</div>
+    <div className={styles.col}>Due for Hygiene</div>
+    <div className={styles.col}>Due for Recall</div>
+  </SHeader>
+);
+
+const ReviewRequestHeader = () => (
+  <SHeader className={styles.header}>
+    <div className={styles.avatar} />
+    <div className={styles.col}>Contact</div>
+    <div className={styles.smallCol}>Channel</div>
+    <div className={styles.col}>Appointment</div>
+  </SHeader>
+);
+
+const getCurrentTaskList = ({ toDoIndex, loadingToDos, reminders, reviews, recalls, timezone }) => {
+  if (toDoIndex === 0 && reminders && reminders.size) {
+    return {
+      count: reminders.size,
+      header: <AppointmentRemindersHeader />,
+      body: <AppointmentReminders reminders={reminders.toJS()} timezone={timezone} />,
+    };
+  }
+
+  if (toDoIndex === 1 && recalls && recalls.size && !loadingToDos) {
+    return {
+      count: recalls.size,
+      header: <PatientRecallsHeader />,
+      body: <PatientRecalls recalls={recalls.toJS()} timezone={timezone} />,
+    };
+  }
+
+  if (toDoIndex === 2 && reviews && reviews.size) {
+    return {
+      count: reviews.size,
+      header: <ReviewRequestHeader />,
+      body: <ReviewsRequests reviews={reviews.toJS()} timezone={timezone} />,
+    };
+  }
+
+  return {
+    count: 0,
+    header: <SHeader className={styles.header} />,
+    body: <div className={styles.noReminders}>No {toDoListNames[toDoIndex]}</div>,
+  };
+};
+
 export default function Tasks({ toDoIndex, loadingToDos, reminders, reviews, recalls, timezone }) {
   if (loadingToDos) {
     return null;
   }
 
-  let count = 0;
-  let header = <SHeader className={styles.header} />;
-  let body = <div className={styles.noReminders}>No {toDoListNames[toDoIndex]}</div>;
-
-  if (toDoIndex === 0 && reminders && reminders.size) {
-    count = reminders.size;
-    body = <AppointmentReminders reminders={reminders.toJS()} timezone={timezone} />;
-    header = todosHeader();
-  } else if (toDoIndex === 1 && recalls && recalls.size && !loadingToDos) {
-    count = recalls.size;
-    body = <PatientRecalls recalls={recalls.toJS()} timezone={timezone} />;
-    header = (
-      <SHeader className={styles.header}>
-        <div className={styles.avatar} />
-        <div className={styles.mediumCol}>Type</div>
-        <div className={styles.smallCol}>Channel</div>
-        <div className={styles.smallCol}>Scheduled</div>
-        <div className={styles.col}>Name</div>
-        <div className={styles.col}>Due for Hygiene</div>
-        <div className={styles.col}>Due for Recall</div>
-      </SHeader>
-    );
-  } else if (toDoIndex === 2 && reviews && reviews.size) {
-    count = reviews.size;
-    header = (
-      <SHeader className={styles.header}>
-        <div className={styles.avatar} />
-        <div className={styles.smallCol}>Channel</div>
-        <div className={styles.smallCol}>Scheduled</div>
-        <div className={styles.col}>Name</div>
-        <div className={styles.col}>Appointment</div>
-      </SHeader>
-    );
-
-    body = <ReviewsRequests reviews={reviews.toJS()} timezone={timezone} />;
-  }
+  const { count, header, body } = getCurrentTaskList({
+    toDoIndex,
+    loadingToDos,
+    reminders,
+    reviews,
+    recalls,
+    timezone,
+  });
 
   return (
     <SContainer className={styles.container}>

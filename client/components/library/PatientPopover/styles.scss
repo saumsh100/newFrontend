@@ -1,4 +1,5 @@
 @import '../../../ui';
+@import '../../../fonts';
 
 .patientLink {
   transition: all 0.1s ease-in-out;
@@ -20,6 +21,30 @@
   min-width: 300px;
 }
 
+.dataLink {
+  @extend .fontMedium;
+
+  @at-root button#{&},
+    a#{&} {
+    color: $primary-white;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &,
+    &:active,
+    &:focus {
+      outline: none;
+      border: none;
+    }
+
+    &:hover {
+      color: $primary-lightgray;
+      transition: color 0.3s ease;
+    }
+  }
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -28,22 +53,25 @@
   color: $primary-white;
   padding-left: 15px;
   padding-right: 15px;
+  font-size: 15px;
 
   &_text {
+    @extend .fontDefault;
     padding-left: 5px;
-    font-size: 15px;
-    margin-right: 10px;
-    composes: fontDefault from 'sass-loader!../../../fonts.scss';
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 250px;
     white-space: nowrap;
   }
+
+  &_age {
+    margin-right: 10px;
+  }
 }
 
 .closeIcon {
+  @extend .fontMediumSize;
   margin-left: auto;
-  composes: fontMediumSize from 'sass-loader!../../../fonts.scss';
   color: $primary-grey;
 
   button {
@@ -76,17 +104,17 @@
 }
 
 .subHeader {
-  composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
+  @extend .subHeaderExtraSmall;
   padding-bottom: 5px;
   text-transform: uppercase;
 }
 
 .data {
+  @extend .fontMedium;
   display: flex;
   align-items: center;
   font-size: 13px;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
-  padding-bottom: 2px;
+  padding: 0 0 2px;
 
   &_note {
     width: 100%;
@@ -118,8 +146,19 @@
   display: flex;
   padding: 15px;
   width: 100%;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+}
+
+.chatButton {
+  padding: 5px !important;
+  color: $primary-blue;
+
+  &:hover {
+    color: $primary-white;
+    background-color: $primary-blue !important;
+    transition: color 0.3s ease;
+  }
 }
 
 .editButton {
