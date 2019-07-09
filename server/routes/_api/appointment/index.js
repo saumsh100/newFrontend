@@ -58,7 +58,7 @@ appointmentsRouter.get('/', (req, res, next) => {
   } = query;
 
   const skipped = skip || 0;
-  const limitted = limit || 25;
+  const limitted = limit || 1000;
 
   let {
     startDate,
