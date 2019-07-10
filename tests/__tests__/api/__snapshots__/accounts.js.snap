@@ -851,6 +851,24 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "Time to wait before reporting the first connector down (in minutes)",
+        "name": "CONNECTOR_FIRST_DOWN_TIME",
+        "value": "90",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is connector monitoring enabled",
+        "name": "MONITORING_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -1355,6 +1373,24 @@ Object {
         "description": "The log verbosity level for the connector logger",
         "name": "LOG_VERBOSITY",
         "value": "DEBUG",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "Time to wait before reporting the first connector down (in minutes)",
+        "name": "CONNECTOR_FIRST_DOWN_TIME",
+        "value": "90",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is connector monitoring enabled",
+        "name": "MONITORING_ENABLED",
+        "value": "1",
       },
       "type": "configuration",
     },

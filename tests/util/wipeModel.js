@@ -52,6 +52,7 @@ const ORDER = [
   'DeliveredProcedure',
   'AccountTemplate',
   'Template',
+  "PatientSearches",
 ];
 
 async function wipeAllModels() {

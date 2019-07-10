@@ -51,6 +51,7 @@ import { deleteIsClosedFieldFromBody } from '../../../_models/WeeklySchedule';
 import generateDailyHoursForPractice from '../../../lib/schedule/generateDailyHoursForPractice';
 import { getMessageFromTemplates } from '../../../services/communicationTemplate';
 import sendReminder from '../../../lib/reminders/sendReminder';
+import connectorWatch from '../../../lib/connectorWatch';
 
 const accountsRouter = Router();
 
@@ -1025,6 +1026,22 @@ accountsRouter.get(
       });
 
       return res.send(practiceSchedule);
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
+
+/**
+ * GET /connectorWatch
+ * This triggers the connectorWatch.
+ */
+accountsRouter.get(
+  '/connector/connectorWatch',
+  async (req, res, next) => {
+    try {
+      await connectorWatch(global.io);
+      return res.send("Done!");
     } catch (error) {
       return next(error);
     }

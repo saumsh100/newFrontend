@@ -5,7 +5,7 @@ import { host, myHost, protocol, env } from '../config/globals';
 import { formatPhoneNumber } from '../util/formatters';
 
 export const sendConnectorDown = (config) => {
-  config.subject = `The Connector for ${config.name} is Down!`;
+  config.subject = `${config.name} down - ${config.adapterType}`;
   config.templateName = 'Connector Down';
   return exports.sendTemplate(config);
 };

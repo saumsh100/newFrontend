@@ -9,9 +9,6 @@ global.io = createSocketServer();
 jobQueue.process('correspondences', async (job, done) => {
   try {
     await computeCorrespondencesAndCreate();
-    // putting connector down email cron here as it's not intensive enough
-    // to warrant a seperate cron
-    await connectorWatch(global.io);
     done();
   } catch (err) {
     done(err);

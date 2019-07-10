@@ -35,7 +35,7 @@ describe('connectorWatch', () => {
       await Account.update({ lastSyncDate }, { where: {} });
     });
 
-    test('should return 1 as last sync was 31 mins ago', async () => {
+    test('should return 0 as last sync was 31 mins ago', async () => {
       const date = moment({
         years: 2010,
         months: 3,
@@ -45,20 +45,20 @@ describe('connectorWatch', () => {
       });
       const account = await getAccountsConnectorDown(date);
 
-      expect(account.length).toBe(1);
+      expect(account.length).toBe(0);
     });
 
-    test('should return 0 as last sync was 31 mins ago', async () => {
+    test('should return 1 as last sync was 90 mins ago', async () => {
       const date = moment({
         years: 2010,
         months: 3,
         date: 5,
-        hours: 15,
+        hours: 17,
         minutes: 40,
       });
       const account = await getAccountsConnectorDown(date);
 
-      expect(account.length).toBe(0);
+      expect(account.length).toBe(1);
     });
 
     test('should return 0 as last sync 3 hours ago', async () => {
