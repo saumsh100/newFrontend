@@ -27,8 +27,8 @@
 
 .header {
   margin-top: 35px;
-  // padding-left: 15px;
 }
+
 .badgeHeader {
   padding: 15px 30px;
 }
@@ -50,6 +50,7 @@
 .servicesListItem {
   display: -webkit-box;
   padding: 30px;
+
   &_text {
     composes: listItemHeader from 'sass-loader!../../../fonts.scss';
     overflow: hidden;
@@ -80,18 +81,19 @@
 .serviceDataBody {
   padding: 40px;
 }
+
 .serviceDataHeader {
-  padding-bottom: 0;
+  padding-bottom: 0 !important;
   height: auto !important;
 }
 
 .servicesPractForm {
   display: inline-block;
-  width: 40%;
+  width: 100%;
   height: 100%;
   padding-top: 15px;
-  // padding-left: 15px;
   margin-bottom: 15px;
+
   &_serviceList {
     padding-bottom: 15px;
   }
@@ -101,6 +103,7 @@
     align-items: center;
     width: 230px;
     margin-bottom: 10px;
+
     &_text {
       font-family: $medium-font;
       padding-bottom: 5px;
@@ -117,6 +120,7 @@
     align-items: center;
     width: 230px;
     padding-top: 5px;
+
     &_text {
       padding-bottom: 5px;
       max-width: 200px;
@@ -131,8 +135,10 @@
     }
   }
 }
+
 .content {
   overflow: unset;
+  max-height: none;
 }
 
 .serviceHeaderContainer {
@@ -150,8 +156,8 @@
 .formContainer {
   display: flex;
   padding-left: 15px;
+
   &__createForm {
-    //padding: 0px 15px 5px 15px;
     height: 100%;
   }
 }
@@ -160,6 +166,7 @@
   width: 40%;
   min-width: 100px;
   display: inline-block;
+
   &__createRow {
   }
 
@@ -169,9 +176,11 @@
     align-content: center;
     padding-bottom: 25px;
     width: 230px;
+
     &_text {
       width: 50%;
     }
+
     &_toggle {
       margin-left: auto;
     }
@@ -200,4 +209,8 @@
   border: 1px solid #efefef;
   min-height: 300px;
   border-radius: 4px;
+}
+
+.saveButton {
+  margin-top: 40px;
 }

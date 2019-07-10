@@ -1,14 +1,13 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Downshift from 'downshift';
 import classNames from 'classnames';
 import Selector from './Selector';
 import List from './List';
 import styles from './styles.scss';
 
-class MultiSelectAccounts extends Component {
+class MultiSelect extends Component {
   constructor(props) {
     super(props);
 
@@ -110,7 +109,7 @@ class MultiSelectAccounts extends Component {
   }
 
   render() {
-    const { label, options, disabled } = this.props;
+    const { label, options, disabled, placeholder } = this.props;
 
     const selectedItems = options.filter(({ value }) => this.state.selectedItems.includes(value));
     const availableItems = options.filter(({ value }) => !this.state.selectedItems.includes(value));
@@ -140,7 +139,7 @@ class MultiSelectAccounts extends Component {
             <Selector
               disabled={disabled}
               selected={selectedItems}
-              placeholder=""
+              placeholder={placeholder}
               error={this.state.error}
               selectorProps={getToggleButtonProps()}
               handleSelection={this.handleSelection}
@@ -161,18 +160,7 @@ class MultiSelectAccounts extends Component {
   }
 }
 
-const mapStateToProps = ({ featureFlags, entities, auth }) => {
-  const defaultAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  const options = featureFlags.getIn(['flags', 'multi-account-select']);
-  return {
-    options: options
-      ? options.toJS()
-      : [{ label: defaultAccount.get('name'),
-        value: defaultAccount.get('id') }],
-  };
-};
-
-MultiSelectAccounts.propTypes = {
+MultiSelect.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   onChange: PropTypes.func,
   initialSelectedItem: PropTypes.arrayOf(PropTypes.string),
@@ -185,17 +173,19 @@ MultiSelectAccounts.propTypes = {
     }),
   ).isRequired,
   label: PropTypes.string,
+  placeholder: PropTypes.string,
   selected: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
   defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
 };
-MultiSelectAccounts.defaultProps = {
+MultiSelect.defaultProps = {
   onChange: () => {},
   disabled: false,
   required: false,
   defaultValue: [],
   selected: [],
   label: '',
+  placeholder: '',
   initialSelectedItem: [],
 };
 
-export default connect(mapStateToProps)(MultiSelectAccounts);
+export default MultiSelect;

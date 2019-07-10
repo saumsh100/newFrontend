@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import ServiceDataItem from './ServiceDataItem';
 import { updateEntityRequest, deleteEntityRequest } from '../../../thunks/fetchEntities';
-import ServicePractitioners from './ServicePractitioners';
 import SettingsCard from '../Shared/SettingsCard';
 import { Card, Header, IconButton, Tab, Tabs } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
@@ -84,12 +83,7 @@ class ServiceDataContainer extends Component {
                 key={`${selectedService.get('id')}basicdata`}
                 service={selectedService}
                 onSubmit={this.updateService}
-              />
-              <ServicePractitioners
-                key={`${selectedService.get('id')}selectedPractitioners`}
-                service={selectedService}
                 practitionerIds={practitionerIds}
-                updateService={this.updateService}
                 practitioners={practitioners}
               />
             </Tab>

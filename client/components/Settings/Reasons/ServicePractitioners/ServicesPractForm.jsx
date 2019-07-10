@@ -2,81 +2,35 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List, Map } from 'immutable';
-import { change } from 'redux-form';
-import { connect } from 'react-redux';
-import { batchActions } from 'redux-batched-actions';
-import { Header, Form, Toggle } from '../../../library';
-import ServicesPractList from './ServicesPractList';
+import isEqual from 'lodash/isEqual';
+import { Header, Button } from '../../../library';
+import MultiSelect from '../../../library/ui-kit/MultiSelect';
 import styles from '../styles.scss';
-
-function checkValues(obj) {
-  return Object.keys(obj).every(key => obj[key]);
-}
-
-function createInitialValues(practitionerIds, practitioners) {
-  return practitioners.map(p => practitionerIds.indexOf(p.get('id')) > -1).toJS();
-}
 
 class ServicesPractForm extends Component {
   constructor(props) {
     super(props);
-    this.setAllPractitioners = this.setAllPractitioners.bind(this);
-    this.setCheck = this.setCheck.bind(this);
+
+    this.state = {
+      selectedItems: props.practitionerIds.toArray(),
+    };
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  setAllPractitioners(e) {
-    e.stopPropagation();
-    const { formName, values, allPractitioners } = this.props;
-
-    const actions = Object.keys(values).map(key => change(formName, key, !allPractitioners));
-
-    this.props.dispatch(batchActions(actions));
-  }
-
-  setCheck(e) {
-    e.stopPropagation();
-    this.props.allPractitioners = checkValues(this.props.values);
+  handleChange(values) {
+    const sortedValues = values.sort();
+    if (!isEqual(this.state.selectedItems, sortedValues)) {
+      this.setState({ selectedItems: sortedValues });
+    }
   }
 
   render() {
-    const { practitioners, practitionerIds, formName } = this.props;
-
-    let showComponent = null;
-    let initialValues = null;
-
-    if (practitioners && practitionerIds) {
-      initialValues = createInitialValues(practitionerIds, practitioners);
-    } else {
-      return null;
-    }
-
-    if (Object.keys(initialValues).length) {
-      showComponent = (
-        <Form
-          form={formName}
-          onSubmit={this.props.handleSubmit}
-          initialValues={initialValues}
-          enableReinitialize
-          keepDirtyOnReinitialize
-          destroyOnUnmount={false}
-          data-test-id="servicePractitionersForm"
-          alignSave="left"
-        >
-          <div className={styles.servicesPractForm_serviceList}>
-            {practitioners
-              .toArray()
-              .map((practitioner, index) => (
-                <ServicesPractList
-                  key={`${practitioner.get('id') || index}`}
-                  practitioner={practitioner}
-                  index={index}
-                />
-              ))}
-          </div>
-        </Form>
-      );
-    }
-
+    const { practitioners, practitionerIds, handleSubmit } = this.props;
+    if (practitioners.size === 0 || !practitionerIds) return null;
+    const mappedPractitioners = practitioners.toArray().map(practitioner => ({
+      value: practitioner.get('id'),
+      label: practitioner.getPrettyName(),
+    }));
     return (
       <div>
         <Header
@@ -85,17 +39,19 @@ class ServicesPractForm extends Component {
           contentHeader
         />
         <div className={styles.servicesPractForm}>
-          <div className={styles.servicesPractForm_all}>
-            <span className={styles.servicesPractForm_all_text}> All Practitioners</span>
-            <div className={styles.servicesPractForm_all_toggle}>
-              <Toggle
-                name="allPractitioners"
-                onChange={this.setAllPractitioners}
-                checked={this.props.allPractitioners}
-              />
-            </div>
-          </div>
-          {showComponent}
+          <MultiSelect
+            onChange={this.handleChange}
+            options={mappedPractitioners}
+            placeholder="Select practitioners"
+            selected={this.state.selectedItems}
+          />
+          <Button
+            className={styles.saveButton}
+            disabled={isEqual(this.state.selectedItems, this.props.practitionerIds.toArray())}
+            onClick={() => handleSubmit(this.state.selectedItems)}
+          >
+            Save
+          </Button>
         </div>
       </div>
     );
@@ -103,37 +59,17 @@ class ServicesPractForm extends Component {
 }
 
 ServicesPractForm.propTypes = {
-  allPractitioners: PropTypes.bool,
   practitioners: PropTypes.instanceOf(Map),
   practitionerIds: PropTypes.oneOfType([
     PropTypes.instanceOf(List),
     PropTypes.arrayOf(PropTypes.string),
   ]),
-  formName: PropTypes.string.isRequired,
-  values: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
-  dispatch: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 
 ServicesPractForm.defaultProps = {
-  values: {},
   practitionerIds: null,
-  allPractitioners: false,
   practitioners: null,
 };
 
-function mapStateToProps({ form }, { formName }) {
-  if (!form[formName]) {
-    return {
-      allPractitioners: null,
-      values: {},
-    };
-  }
-
-  return {
-    allPractitioners: checkValues(form[formName].values),
-    values: form[formName].values,
-  };
-}
-
-export default connect(mapStateToProps, null)(ServicesPractForm);
+export default ServicesPractForm;

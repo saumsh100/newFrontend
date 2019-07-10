@@ -1,8 +1,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { Form, Field, Header } from '../../library';
+import ServicePractitioners from './ServicePractitioners';
 import styles from './styles.scss';
 
 const parseNum = value => value && parseInt(value, 10);
@@ -44,7 +45,7 @@ class ServiceDataItem extends Component {
   }
 
   render() {
-    const { service } = this.props;
+    const { service, practitionerIds, practitioners, onSubmit } = this.props;
     if (!service) return null;
 
     const initialValuesBasic = {
@@ -80,6 +81,12 @@ class ServiceDataItem extends Component {
             validate={[notNegative, maxDuration]}
           />
         </Form>
+        <ServicePractitioners
+          service={service}
+          practitionerIds={practitionerIds}
+          updateService={onSubmit}
+          practitioners={practitioners}
+        />
         <div className={styles.servicesFormRow_widget}>
           <Header
             title="Booking Widget Settings"
@@ -126,6 +133,11 @@ ServiceDataItem.propTypes = {
     isHidden: PropTypes.bool,
     isDefault: PropTypes.bool,
   }),
+  practitioners: PropTypes.instanceOf(Map).isRequired,
+  practitionerIds: PropTypes.oneOfType([
+    PropTypes.instanceOf(List),
+    PropTypes.arrayOf(PropTypes.string),
+  ]).isRequired,
 };
 
 ServiceDataItem.defaultProps = {

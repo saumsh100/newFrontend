@@ -1,0 +1,215 @@
+@import '../../../../ui.scss';
+@import '../../../../ui-kit.scss';
+
+.placeholder {
+  color: $grey-dark;
+  font-weight: normal;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.input {
+  border: 1px solid $grey-lighter;
+  width: 100%;
+  color: $grey-dark;
+  font-weight: 500;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 0 8px 0 16px;
+  box-sizing: border-box;
+  min-height: 40px;
+  background: $white;
+  -webkit-appearance: none;
+  box-shadow: $shadow;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+
+  &:focus {
+    transition: all 0.2s ease;
+    border-color: $grey-dark;
+  }
+
+  &:focus ~ .label {
+    @extend .filled;
+  }
+}
+
+.value {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  overflow: auto;
+  padding: 8px 0;
+
+  .item {
+    text-align: left;
+    align-items: center;
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+
+    font-family: $inter;
+    font-size: 13px;
+    font-weight: normal;
+    color: $grey-dark;
+  }
+}
+
+.disabled {
+  background: $grey-lighter !important;
+  box-shadow: none;
+
+  &:hover {
+    background: $grey-lighter !important;
+    color: $grey-dark !important;
+  }
+
+  .item {
+    background: $grey-lightest;
+
+    &:hover {
+      background: $grey-lightest;
+    }
+  }
+}
+
+.error {
+  border-color: $red;
+
+  &:hover,
+  &:focus {
+    border-color: $red;
+  }
+}
+
+.fieldLabel {
+  @extend .fieldLabel;
+  width: 100%;
+}
+
+.iconWrapper {
+  color: $grey-dark;
+  min-width: 30px;
+}
+
+.filled {
+  left: 16px;
+  top: 12px;
+  font-size: 11px;
+}
+
+.list {
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid $grey-lighter;
+  border-top: 0;
+  box-shadow: $shadow;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-15px);
+  transition: all 0.2s ease;
+  position: absolute;
+  box-sizing: border-box;
+  background: $white;
+  padding: 6px 12px;
+  margin-top: 4px;
+
+  &.active {
+    transition: all 0.2s ease;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.option {
+  font-size: $small-size;
+  cursor: pointer;
+  padding-left: 12px;
+  padding-right: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  background-color: $primary-white;
+  border: 0;
+  width: 100%;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
+  text-align: center;
+  color: $grey-dark;
+  justify-content: flex-start;
+  letter-spacing: 0;
+  box-sizing: border-box;
+
+  font-family: $inter;
+  font-size: 13px;
+  color: #6e6e6e;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $primary-lightgrey !important;
+    color: $primary-dark !important;
+  }
+}
+
+.fallback {
+  @extend .option;
+  text-align: center;
+  justify-content: center;
+  font-style: italic;
+
+  &:hover {
+    background-color: $primary-white !important;
+    color: $grey-dark !important;
+    cursor: auto;
+  }
+}
+
+.labelSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectWrapper {
+  width: 100%;
+  position: relative;
+}
+
+button.linkButton {
+  text-align: right;
+  background-color: transparent;
+  margin-bottom: 8px;
+}
+
+.selectAll,
+.selectionGroup {
+  display: block;
+  width: 100%;
+}
+.selectionGroup {
+  border-top: 1px solid $grey-lighter;
+  padding-top: 6px;
+}
+.selectionTitle {
+  font-family: $inter;
+  font-size: 9px;
+  color: $grey-dark;
+  margin: 12px 0;
+}
+
+.cbLabel {
+  @extend .selectionTitle;
+  font-size: 13px;
+  margin-left: 8px;
+}
+.cbContainer {
+  margin-bottom: 16px;
+}
