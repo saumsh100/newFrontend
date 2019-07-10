@@ -13,8 +13,12 @@ import resetRouter from './reset';
 import myWidgetRenderRouter from './widgets';
 import { Invite, PasswordReset, User } from '../_models';
 import graphQLClient from '../util/graphQLClient';
+import httpClient from '../util/httpClient';
 import { sequelizeAuthMiddleware } from '../middleware/auth';
 import isFeatureFlagEnabled from '../lib/featureFlag';
+import { newApiUrl } from '../config/globals';
+
+const NEW_API_PATH = '/newapi';
 
 const rootRouter = Router();
 
@@ -43,6 +47,23 @@ rootRouter.post(
       res.send(data);
     } catch ({ data }) {
       res.status(400).send(data);
+    }
+  },
+);
+
+// New API Proxy
+rootRouter.all(
+  NEW_API_PATH,
+  sequelizeAuthMiddleware,
+  async (req, res, next) => {
+    try {
+      const processedUrl = req.originalUrl.replace(NEW_API_PATH, '');
+
+      const { data } = await httpClient(newApiUrl + processedUrl, req.method, req.body);
+
+      res.send(data);
+    } catch (err) {
+      next(err);
     }
   },
 );

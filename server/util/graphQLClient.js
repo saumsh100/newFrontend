@@ -1,6 +1,6 @@
 
-import axios from 'axios';
 import { graphQLServerUrl } from '../config/globals';
+import httpClient from './httpClient';
 
 /**
  * GraphQL Client for the server side
@@ -23,12 +23,4 @@ import { graphQLServerUrl } from '../config/globals';
  * @param data
  * @return {*}
  */
-export default data =>
-  axios({
-    url: graphQLServerUrl,
-    method: 'post',
-    data,
-  }).catch((err) => {
-    console.error('GraphQL Client Error:', err);
-    throw err;
-  });
+export default data => httpClient(graphQLServerUrl, 'post', data);

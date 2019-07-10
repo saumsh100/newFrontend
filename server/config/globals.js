@@ -20,6 +20,7 @@ const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
 const defaultDBName = env === 'test' ? 'carecru_test' : 'carecru_development';
 const fullHostUrl = `${protocol}://${host}`;
 const apiServerUrl = environmentVariables.API_SERVER_URL;
+const newApiUrl = environmentVariables.NEW_API_URL;
 
 const graphQLServerUrl = environmentVariables.GRAPHQL_SERVER_URL;
 
@@ -218,4 +219,5 @@ module.exports = {
   authService,
   apiServerUrl,
   NUM_DAYS_DEFAULT,
+  newApiUrl,
 };
