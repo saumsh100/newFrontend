@@ -24,11 +24,10 @@ const Routes = {
   reputation: LazyRoute(() => import('./Dashboard/Reputation'), true),
   settings: LazyRoute(() => import('./Dashboard/Settings'), true),
   admin: LazyRoute(() => import('./Admin/Enterprises'), true),
-  enterprise: LazyRoute(() => import('./Dashboard/Enterprise'), true),
   calls: LazyRoute(() => import('./Dashboard/Calls'), true),
 };
 
-const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
+const DashboardRouter = ({ history, isAuth, isSuperAdmin }) => {
   const getAuthorizedRoutes = () => (
     <div>
       {GrqphQlSubscriptions.subscriptionComponents()}
@@ -44,9 +43,6 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         <Route path="/reputation" component={Routes.reputation} />
         <Route path="/settings" component={Routes.settings} />
         {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
-        {withEnterprise && (
-          <Route path="/enterprise" component={Routes.enterprise} />
-        )}
         <Route component={FourZeroFour} />
       </Switch>
     </div>
@@ -72,9 +68,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
   );
 
   const signUp = /^\/signup\/.+$/i;
-  const urlTest = signUp.test(history.location.pathname)
-    ? history.location.pathname
-    : '/signup';
+  const urlTest = signUp.test(history.location.pathname) ? history.location.pathname : '/signup';
 
   const reset = /^\/resetpassword\/.+$/i;
   const resetTest = reset.test(history.location.pathname)
@@ -88,30 +82,22 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
           <Route
             exact
             path="/login"
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <Login {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)}
           />
           <Route
             exact
             path={urlTest}
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)}
           />
           <Route
             exact
             path="/forgot"
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)}
           />
           <Route
             exact
             path={resetTest}
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)}
           />
           <Route path="/" component={Dashboard} />
         </Switch>

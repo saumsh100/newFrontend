@@ -8,14 +8,7 @@ import withAuthProps from '../../hocs/withAuthProps';
 import EnabledFeature from '../library/EnabledFeature';
 import styles from './styles.scss';
 
-function NavList({
-  location,
-  isCollapsed,
-  isSuperAdmin,
-  withEnterprise,
-  unreadChats,
-  onlineRequests,
-}) {
+function NavList({ location, isCollapsed, isSuperAdmin, unreadChats, onlineRequests }) {
   const { navItem, activeItem } = styles;
 
   const inactiveClass = navItem;
@@ -130,15 +123,6 @@ function NavList({
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        <EnabledFeature
-          predicate={() => withEnterprise}
-          render={() => (
-            <MultiNavItem path="/enterprise" icon="building" label="Enterprise Dashboard">
-              <SubNavItem path="/enterprise/patients" label="Patients" />
-            </MultiNavItem>
-          )}
-        />
-
         <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
         <EnabledFeature
           predicate={({ flags }) => flags.get('feature-mode-reports-tab')}
@@ -195,7 +179,6 @@ function NavList({
 NavList.propTypes = {
   isCollapsed: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool,
-  withEnterprise: PropTypes.bool.isRequired,
   unreadChats: PropTypes.number,
   onlineRequests: PropTypes.number,
   location: PropTypes.objectOf(PropTypes.any).isRequired,
