@@ -37,29 +37,29 @@ rootRouter.use('/api', apiRouter);
 
 // Bind GraphQL endpoint
 rootRouter.use('/graphql', graphQLRouter);
-rootRouter.post(
-  '/newgraphql',
-  sequelizeAuthMiddleware,
-  async (req, res, next) => {
-    try {
-      const { data } = await graphQLClient(req.body);
+rootRouter.post('/newgraphql', sequelizeAuthMiddleware, async (req, res, next) => {
+  try {
+    const { data } = await graphQLClient(req.body);
 
-      res.send(data);
-    } catch ({ data }) {
-      res.status(400).send(data);
-    }
-  },
-);
+    res.send(data);
+  } catch ({ data }) {
+    res.status(400).send(data);
+  }
+});
 
 // New API Proxy
 rootRouter.all(
   NEW_API_PATH,
   sequelizeAuthMiddleware,
-  async (req, res, next) => {
+  async ({ originalUrl, method, body }, res, next) => {
     try {
-      const processedUrl = req.originalUrl.replace(NEW_API_PATH, '');
+      const processedUrl = originalUrl.replace(NEW_API_PATH, '');
 
-      const { data } = await httpClient(newApiUrl + processedUrl, req.method, req.body);
+      const { data } = await httpClient({
+        url: newApiUrl + processedUrl,
+        method,
+        data: body,
+      });
 
       res.send(data);
     } catch (err) {

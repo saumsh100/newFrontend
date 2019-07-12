@@ -23,4 +23,9 @@ import httpClient from './httpClient';
  * @param data
  * @return {*}
  */
-export default data => httpClient(graphQLServerUrl, 'post', data);
+export default data =>
+  httpClient({
+    url: graphQLServerUrl,
+    method: 'post',
+    data,
+  });
