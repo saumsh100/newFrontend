@@ -127,12 +127,29 @@ const reloadPage = () => {
   window.location = window.location.pathname;
 };
 
+/**
+ * Check if the current route is either a chat or a patient page,
+ * if so we need to sanitize the url and return it to the list view,
+ * that's needed because chats and patients are not shared between accounts.
+ * @param redirectTo
+ * @return {*}
+ */
+const cleanRedirect = (redirectTo) => {
+  const urlsToParse = new RegExp(/(\/(chat|patients)\/)(.*)/);
+  const result = redirectTo.match(urlsToParse);
+
+  if (Array.isArray(result)) {
+    return result[1];
+  }
+  return redirectTo;
+};
+
 export function switchActiveAccount(accountId, redirectTo = '/') {
   return dispatch =>
     httpClient()
       .post(`/api/accounts/${accountId}/switch`, {})
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
-      .then(() => dispatch(push(redirectTo)))
+      .then(() => dispatch(push(cleanRedirect(redirectTo))))
       .then(reloadPage);
 }
 

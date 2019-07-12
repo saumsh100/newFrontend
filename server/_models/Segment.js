@@ -1,11 +1,9 @@
+
 import moment from 'moment';
+import { isValidUUID } from '@carecru/isomorphic';
 
 const StatusError = require('../util/StatusError');
 
-function validateUUID(uuid) {
-  const re = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  return re.test(uuid);
-}
 export default function (sequelize, DataTypes) {
   const REFERENCE = {
     ENTERPRISE: 'enterprise',
@@ -119,7 +117,7 @@ export default function (sequelize, DataTypes) {
   };
 
   Segment.convertOrFetch = async function (item, req) {
-    if (!validateUUID(item)) {
+    if (!isValidUUID(item)) {
       if (typeof item === 'string') {
         return Segment.convertRawToSequelizeWhere(JSON.parse(item));
       }

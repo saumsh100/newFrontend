@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
-import { validateJsonString } from '@carecru/isomorphic';
+import { isValidUUID, validateJsonString } from '@carecru/isomorphic';
 import { Form, Field } from '../../../../library';
 import { reminderShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
@@ -16,11 +16,10 @@ const validateCustomConfirmJson = (val) => {
   }
 };
 
-const uuidRegExp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const validateOmitIdsArray = (val) => {
   if (!val) return;
   const array = val.split(',');
-  const predicate = v => !uuidRegExp.test(v);
+  const predicate = v => !isValidUUID(v);
   if (array.some(predicate)) {
     return "Must UUIDs separated by ',' with no spaces";
   }

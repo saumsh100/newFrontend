@@ -10,7 +10,7 @@ export default function PhonePreview({ openCallTestModal, confirmed, twilioPhone
   const message = confirmed ? (
     <p className={styles.message}>
       Hi there, this is a friendly reminder for your upcoming appointment at{' '}
-      <strong>Sunshine Smiles </strong>on <strong>June 14th</strong> at <strong>3:50pm.</strong>To
+      <strong>Sunshine Smiles </strong>on <strong>June 14th</strong> at <strong>3:50pm.</strong> To
       speak to someone at our front desk, press 0. To play back this message, press 9.
     </p>
   ) : (

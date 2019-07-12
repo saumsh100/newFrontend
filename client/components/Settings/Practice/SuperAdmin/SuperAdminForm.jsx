@@ -1,6 +1,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { isValidUUID } from '@carecru/isomorphic';
 import { Form, Field } from '../../../library';
 import { notNegative } from '../../../library/Form/validate';
 import LastSyncDisplay from '../../../LastSyncDisplay';
@@ -12,11 +13,10 @@ import styles from './styles.scss';
 
 const maxUnitSize = value => value && value > 60 && 'Must be less than or equal to 60';
 
-const uuidRegExp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const validateOmitIdsArray = (val) => {
   if (!val) return;
   const array = val.split(',');
-  const predicate = v => !uuidRegExp.test(v);
+  const predicate = v => !isValidUUID(v);
   if (array.some(predicate)) {
     return "Must UUIDs separated by ',' with no spaces";
   }

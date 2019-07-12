@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import pick from 'lodash/pick';
 import url from 'url';
+import { isValidUUID } from '@carecru/isomorphic';
 import {
   Account,
   Patient,
@@ -70,9 +71,8 @@ unsubRouter.put('/patients/:patientId/preferences', async (req, res, next) => {
 unsubRouter.get('/unsubscribe/:encodedPatientId', async (req, res, next) => {
   // TODO: this needs to be tokenized
   try {
-    const regUuidTest = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     let patientId = req.params.encodedPatientId;
-    if (!regUuidTest.test(patientId)) {
+    if (!isValidUUID(patientId)) {
       patientId = Buffer.from(patientId, 'base64').toString('utf8');
     }
 
