@@ -12,7 +12,7 @@ class ServicesPractForm extends Component {
     super(props);
 
     this.state = {
-      selectedItems: props.practitionerIds.toArray(),
+      selectedItems: props.practitionerIds,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -47,7 +47,7 @@ class ServicesPractForm extends Component {
           />
           <Button
             className={styles.saveButton}
-            disabled={isEqual(this.state.selectedItems, this.props.practitionerIds.toArray())}
+            disabled={isEqual(this.state.selectedItems, this.props.practitionerIds)}
             onClick={() => handleSubmit(this.state.selectedItems)}
           >
             Save
@@ -68,7 +68,7 @@ ServicesPractForm.propTypes = {
 };
 
 ServicesPractForm.defaultProps = {
-  practitionerIds: null,
+  practitionerIds: [],
   practitioners: null,
 };
 

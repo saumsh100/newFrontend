@@ -161,7 +161,6 @@ class MultiSelect extends Component {
 }
 
 MultiSelect.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   onChange: PropTypes.func,
   initialSelectedItem: PropTypes.arrayOf(PropTypes.string),
   disabled: PropTypes.bool,

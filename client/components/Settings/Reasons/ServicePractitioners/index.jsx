@@ -20,7 +20,7 @@ const ServicePractitioners = ({ service, updateService, practitioners }) => {
     updateService(modifiedService, alert);
   };
 
-  return service && !!service.get('practitioners') ? (
+  return service ? (
     <ServicesPractForm
       key={`${service.get('id')}PractForm`}
       service={service}

@@ -13,7 +13,7 @@ const ServiceSchema = {
   isDefault: null,
   isHidden: null,
   name: null,
-  practitioners: null,
+  practitioners: [],
   reasonWeeklyHoursId: null,
   unitCost: null,
 };
