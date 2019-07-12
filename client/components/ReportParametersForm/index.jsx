@@ -65,7 +65,7 @@ class ReportParametersForm extends Component {
       this.decodeUrlAndSetParams();
     } else {
       const [defaultPage] = Object.keys(this.props.reportsJson);
-      this.props.setActiveReport(defaultPage);
+      this.props.setActiveReport(this.props.active || defaultPage);
       this.setDefaultParamValues(defaultPage);
     }
   }
