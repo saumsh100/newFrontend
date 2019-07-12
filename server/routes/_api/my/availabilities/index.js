@@ -12,14 +12,23 @@ availabilitiesRouter.param('accountId', sequelizeLoader('account', 'Account'));
  */
 availabilitiesRouter.get('/accounts/:accountId/availabilities', async (req, res, next) => {
   try {
-    const { availabilities, nextAvailability } = await searchForAvailabilities({
+    const availabilitiesData = await searchForAvailabilities({
       ...req.query,
       accountId: req.account.id,
       maxRetryAttempts: 10,
       numDaysJump: 7,
     });
 
-    return res.send({ availabilities, nextAvailability });
+    const { availabilities, nextAvailability } = availabilitiesData;
+
+    return res.send(
+      req.query.debug
+        ? availabilitiesData
+        : {
+          availabilities,
+          nextAvailability,
+        },
+    );
   } catch (err) {
     return next(err);
   }

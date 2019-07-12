@@ -1,13 +1,14 @@
 
 import { addOffset } from '@carecru/isomorphic';
-import { httpClient } from '../../../util/httpClient';
+import { bookingWidgetHttpClient } from '../../../util/httpClient';
 
-export default ({ practitionerIds, fromDate, toDate, reasonId }) =>
-  httpClient().get('/api/dailySchedules/finalDailySchedules', {
+export default ({ accountId, reasonId: serviceId, practitionerId, startDate, endDate }) =>
+  bookingWidgetHttpClient().get(`/accounts/${accountId}/availabilities`, {
     params: {
-      fromDate,
-      toDate: toDate || addOffset(fromDate, '1 day').toISOString(),
-      reasonId,
-      practitionerIds,
+      startDate,
+      endDate: endDate || addOffset(startDate, '1 day').toISOString(),
+      serviceId,
+      practitionerId,
+      debug: true,
     },
   });

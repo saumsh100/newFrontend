@@ -2,8 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
 import { dateFormatter } from '@carecru/isomorphic';
+import classnames from 'classnames';
 import {
   Button,
   Card,
@@ -30,26 +30,13 @@ class ScheduleModal extends React.Component {
       error: '',
       isLoading: false,
     };
-    this.getPractitionerIds = this.getPractitionerIds.bind(this);
+
     this.handleChange = this.handleChange.bind(this);
     this.getSchedule = this.getSchedule.bind(this);
   }
 
   componentDidMount() {
     this.getSchedule(this.state.selectedReason);
-  }
-
-  /**
-   * Get the practitioners associated to a specific reason.
-   *
-   * @param selectedReason
-   * @returns {Array<any>}
-   */
-  getPractitionerIds(selectedReason) {
-    return this.props.practitioners
-      .filter(p => p.services.includes(selectedReason))
-      .keySeq()
-      .toArray();
   }
 
   /**
@@ -60,16 +47,16 @@ class ScheduleModal extends React.Component {
   getSchedule(value) {
     this.setState({ isLoading: true });
     getFinalDailySchedules({
-      fromDate: this.props.scheduleDate,
+      accountId: this.props.accountId,
+      startDate: this.props.scheduleDate,
       reasonId: value,
-      practitionerIds: this.getPractitionerIds(value),
     })
-      .then(({ data }) =>
+      .then(({ data: { practitionersData } }) =>
         setTimeout(
           () =>
             this.setState({
               isLoading: false,
-              practitionersData: data,
+              practitionersData,
             }),
           500,
         ))
@@ -132,8 +119,8 @@ class ScheduleModal extends React.Component {
                           )}{' '}
                           ({dateFormatter(this.props.scheduleDate, this.props.timezone, 'dddd')})
                           <span className={styles.extraInfo}>
-                            {`{ timezone: ${this.props.timezone}, isCustomSchedule: ${schedule
-                              .dailySchedule.isCustomSchedule || 'Y'} }`}
+                            {`{ timezone: ${this.props.timezone}, isCustomSchedule: `}
+                            {`${schedule.dailySchedule.isCustomSchedule || 'Y'} }`}
                           </span>
                         </div>
                         <div className={styles.schedule}>
@@ -144,18 +131,28 @@ class ScheduleModal extends React.Component {
                             <div className={styles.oneHalf}>Start Time</div>
                             <div className={styles.oneHalf}>End Time</div>
                             <div
-                              className={
-                                schedule.fillers.length > 0 ? styles.triple : styles.baseHeader
-                              }
+                              className={classnames({
+                                [styles.triple]: schedule.fillers.length,
+                                [styles.baseHeader]: !schedule.fillers.length,
+                              })}
                             >
                               Fillers
                             </div>
                             <div
-                              className={
-                                schedule.openings.length > 0 ? styles.double : styles.baseHeader
-                              }
+                              className={classnames({
+                                [styles.double]: schedule.openings.length,
+                                [styles.baseHeader]: !schedule.openings.length,
+                              })}
                             >
                               Openings
+                            </div>
+                            <div
+                              className={classnames({
+                                [styles.double]: schedule.availabilities.length,
+                                [styles.baseHeader]: !schedule.availabilities.length,
+                              })}
+                            >
+                              Availabilities
                             </div>
                           </div>
                           <div className={styles.scheduleBody}>
@@ -183,42 +180,66 @@ class ScheduleModal extends React.Component {
                               )}
                             </div>
                             <div
-                              className={
-                                schedule.fillers.length > 0 ? styles.triple : styles.baseBody
-                              }
+                              className={classnames({
+                                [styles.triple]: schedule.fillers.length,
+                                [styles.baseBody]: !schedule.fillers.length,
+                              })}
                             >
                               {schedule.fillers.length > 0
                                 ? schedule.fillers.map(({ startDate, endDate, chairId, type }) => (
-                                  <div
-                                    className={styles.block}
-                                    key={`filler_${chairId}_${startDate}_${type}`}
-                                  >
-                                    <span>
-                                      {dateFormatter(startDate, this.props.timezone, 'hh:mma')}
-                                    </span>
-                                    <span>
-                                      {dateFormatter(endDate, this.props.timezone, 'hh:mma')}
-                                    </span>
-                                    <span>{type}</span>
-                                  </div>
+                                    <div
+                                      className={styles.block}
+                                      key={`filler_${chairId}_${startDate}_${type}`}
+                                    >
+                                      <span>
+                                        {dateFormatter(startDate, this.props.timezone, 'hh:mma')}
+                                      </span>
+                                      <span>
+                                        {dateFormatter(endDate, this.props.timezone, 'hh:mma')}
+                                      </span>
+                                      <span>{type}</span>
+                                    </div>
                                   ))
                                 : 'None'}
                             </div>
                             <div
-                              className={
-                                schedule.openings.length > 0 ? styles.double : styles.baseBody
-                              }
+                              className={classnames({
+                                [styles.double]: schedule.openings.length,
+                                [styles.baseBody]: !schedule.openings.length,
+                              })}
                             >
                               {schedule.openings.length > 0
                                 ? schedule.openings.map(({ startDate, endDate }) => (
-                                  <div className={styles.block} key={`opening_${startDate}`}>
-                                    <span>
-                                      {dateFormatter(startDate, this.props.timezone, 'hh:mma')}
-                                    </span>
-                                    <span>
-                                      {dateFormatter(endDate, this.props.timezone, 'hh:mma')}
-                                    </span>
-                                  </div>
+                                    <div className={styles.block} key={`opening_${startDate}`}>
+                                      <span>
+                                        {dateFormatter(startDate, this.props.timezone, 'hh:mma')}
+                                      </span>
+                                      <span>
+                                        {dateFormatter(endDate, this.props.timezone, 'hh:mma')}
+                                      </span>
+                                    </div>
+                                  ))
+                                : 'None'}
+                            </div>
+                            <div
+                              className={classnames({
+                                [styles.double]: schedule.availabilities.length,
+                                [styles.baseBody]: !schedule.availabilities.length,
+                              })}
+                            >
+                              {schedule.availabilities.length > 0
+                                ? schedule.availabilities.map(({ startDate, endDate }) => (
+                                    <div
+                                      className={styles.block}
+                                      key={`availabilities_${startDate}`}
+                                    >
+                                      <span>
+                                        {dateFormatter(startDate, this.props.timezone, 'hh:mma')}
+                                      </span>
+                                      <span>
+                                        {dateFormatter(endDate, this.props.timezone, 'hh:mma')}
+                                      </span>
+                                    </div>
                                   ))
                                 : 'None'}
                             </div>
@@ -245,26 +266,26 @@ class ScheduleModal extends React.Component {
 }
 
 ScheduleModal.propTypes = {
+  accountId: PropTypes.string.isRequired,
   reinitializeState: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   scheduleDate: PropTypes.string.isRequired,
-  reasons: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
-    label: PropTypes.string,
-  })).isRequired,
-  practitioners: PropTypes.instanceOf(Map).isRequired,
+  reasons: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 const mapStateToProps = ({ schedule, entities, auth }) => ({
+  accountId: auth.get('accountId'),
   timezone: auth.get('timezone'),
   scheduleDate: schedule.get('scheduleDate').toISOString(),
   reasons: Object.values(entities.getIn(['services', 'models']).toJS()).map(v => ({
     value: v.id,
     label: v.name,
   })),
-  practitioners: entities
-    .getIn(['practitioners', 'models'])
-    .filter(prac => prac.get('isActive') && !prac.get('isHidden') && prac.get('services').size),
 });
 
 export default connect(mapStateToProps)(ScheduleModal);

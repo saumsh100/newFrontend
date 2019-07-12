@@ -4,12 +4,9 @@ import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
 import batchCreate, { batchUpdate } from '../../util/batch';
 import { isPMSIdViolation } from '../../util/handleSequelizeError';
-import generateDailySchedulesForPractitioners from '../../../lib/schedule/practitioners/produceFinalDailySchedulesForPractitioners';
-import StatusError from '../../../util/StatusError';
 
 const dailyScheduleRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
-
 
 dailyScheduleRouter.param('dailyScheduleId', sequelizeLoader('dailySchedule', 'DailySchedule'));
 
@@ -123,35 +120,6 @@ dailyScheduleRouter.delete('/:dailyScheduleId', checkPermissions('dailySchedules
   try {
     await req.dailySchedule.destroy();
     return res.sendStatus(204);
-  } catch (e) {
-    return next(e);
-  }
-});
-
-/**
- * GET /finalDailySchedules
- * Retrieve the final daily schedules for practitioners in the same practice for a period of time.
- * The params are:
- * practitionerIds: array of the practitioner Ids. Eg: ["uuid1", "uuid2"]
- * fromDate: the startDate of the time range. Eg: 2018-01-01
- * toDate: optional, the endDate of the time range. If not provided, the time range is just one day.
- */
-dailyScheduleRouter.get('/finalDailySchedules', async ({ query, accountId }, res, next) => {
-  const { fromDate, toDate, practitionerIds, reasonId } = query;
-  if (!practitionerIds || !fromDate || !reasonId) {
-    next(new StatusError(StatusError.BAD_REQUEST, 'Please provide at least fromDate, practitionerIds and reasonId'));
-  }
-
-  try {
-    const practitionersSchedule = await generateDailySchedulesForPractitioners({
-      accountId,
-      serviceId: reasonId,
-      practitionerId: practitionerIds,
-      startDate: fromDate,
-      endDate: toDate,
-    });
-
-    return res.send(practitionersSchedule);
   } catch (e) {
     return next(e);
   }
