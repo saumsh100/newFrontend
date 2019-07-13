@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Downshift from 'downshift';
 import classNames from 'classnames';
+import isEqual from 'lodash/isEqual';
 import Selector from './Selector';
 import List from './List';
 import styles from './styles.scss';
@@ -33,6 +34,15 @@ class MultiSelectAccounts extends Component {
     const arrayIfString = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
     return (selectedItems.length > 0 ? selectedItems : arrayIfString).map(value =>
       this.handleSelection({ value }));
+  }
+
+  /**
+   * Update the values in case the selected props is different then the current state.
+   */
+  componentDidUpdate() {
+    if (!isEqual(this.props.selected, this.state.selectedItems)) {
+      this.setState({ selectedItems: this.props.selected });
+    }
   }
 
   /**

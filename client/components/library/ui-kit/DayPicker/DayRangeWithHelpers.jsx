@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import moment from 'moment-timezone';
+import { v4 as uuid } from 'uuid';
 import { dateFormatter, setDateToTimezone } from '@carecru/isomorphic';
 import DayPicker from 'react-day-picker';
 import PropTypes from 'prop-types';
@@ -327,7 +328,7 @@ class DayRangeWithHelpers extends Component {
                 <div className={styles.helpersWrapper}>
                   {helpers.map(helper => (
                     <GhostButton
-                      key={helper.label}
+                      key={uuid()}
                       onClick={() => {
                         this.setDateValues('start', helper.start, helper.label);
                         this.setDateValues('end', helper.end, helper.label);
