@@ -548,15 +548,6 @@ Object {
     Object {
       "attributes": Object {
         "dataType": "integer",
-        "description": "The full sync interval",
-        "name": "FULL_SYNC_INTERVAL",
-        "value": "300",
-      },
-      "type": "configuration",
-    },
-    Object {
-      "attributes": Object {
-        "dataType": "integer",
         "description": "The quick sync interval",
         "name": "QUICK_SYNC_INTERVAL",
         "value": "20",
@@ -719,8 +710,35 @@ Object {
     Object {
       "attributes": Object {
         "dataType": "json",
+        "description": "A json array of \\"hygiene\\" procedure codes",
+        "name": "HYGIENE_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"recall exam\\" procedure codes",
+        "name": "RECALL_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
         "description": "A json array of \\"new patient exam\\" procedure codes",
         "name": "NP_EXAM_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"restorative\\" procedure codes",
+        "name": "RESTORATIVE_PROCEDURE_CODES",
         "value": "[]",
       },
       "type": "configuration",
@@ -776,33 +794,6 @@ Object {
         "description": "The batch size of correspondence sync",
         "name": "CORRESPONDENCE_BATCH_SIZE",
         "value": "0",
-      },
-      "type": "configuration",
-    },
-    Object {
-      "attributes": Object {
-        "dataType": "json",
-        "description": "A json array of \\"hygiene\\" procedure codes",
-        "name": "HYGIENE_PROCEDURE_CODES",
-        "value": "[\\"111%\\", \\"4342%\\"]",
-      },
-      "type": "configuration",
-    },
-    Object {
-      "attributes": Object {
-        "dataType": "json",
-        "description": "A json array of \\"restorative\\" procedure codes",
-        "name": "RESTORATIVE_PROCEDURE_CODES",
-        "value": "[\\"2____\\"]",
-      },
-      "type": "configuration",
-    },
-    Object {
-      "attributes": Object {
-        "dataType": "json",
-        "description": "A json array of \\"recall exam\\" procedure codes",
-        "name": "RECALL_PROCEDURE_CODES",
-        "value": "[\\"00121\\", \\"01202\\"]",
       },
       "type": "configuration",
     },
@@ -866,6 +857,78 @@ Object {
         "description": "Is connector monitoring enabled",
         "name": "MONITORING_ENABLED",
         "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The full sync interval (in seconds)",
+        "name": "FULL_SYNC_INTERVAL",
+        "value": "43200",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is medium sync enabled",
+        "name": "MEDIUM_SYNC_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The medium sync interval (in seconds)",
+        "name": "MEDIUM_SYNC_INTERVAL",
+        "value": "360",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The write sync interval (in seconds)",
+        "name": "WRITE_SYNC_INTERVAL",
+        "value": "300",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The number of days in the past to grab models for the quick sync",
+        "name": "QUICK_DAYS_BACK",
+        "value": "60",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The number of days in the future to grab models for the quick sync",
+        "name": "QUICK_DAYS_FORWARD",
+        "value": "180",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The number of days in the past to grab models for the medium sync",
+        "name": "MEDIUM_DAYS_BACK",
+        "value": "365",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The number of days in the future to grab models for the medium sync",
+        "name": "MEDIUM_DAYS_FORWARD",
+        "value": "730",
       },
       "type": "configuration",
     },
@@ -1073,15 +1136,6 @@ Object {
     Object {
       "attributes": Object {
         "dataType": "integer",
-        "description": "The full sync interval",
-        "name": "FULL_SYNC_INTERVAL",
-        "value": "300",
-      },
-      "type": "configuration",
-    },
-    Object {
-      "attributes": Object {
-        "dataType": "integer",
         "description": "The quick sync interval",
         "name": "QUICK_SYNC_INTERVAL",
         "value": "20",
@@ -1244,8 +1298,35 @@ Object {
     Object {
       "attributes": Object {
         "dataType": "json",
+        "description": "A json array of \\"hygiene\\" procedure codes",
+        "name": "HYGIENE_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"recall exam\\" procedure codes",
+        "name": "RECALL_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
         "description": "A json array of \\"new patient exam\\" procedure codes",
         "name": "NP_EXAM_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"restorative\\" procedure codes",
+        "name": "RESTORATIVE_PROCEDURE_CODES",
         "value": "[]",
       },
       "type": "configuration",
@@ -1301,33 +1382,6 @@ Object {
         "description": "The batch size of correspondence sync",
         "name": "CORRESPONDENCE_BATCH_SIZE",
         "value": "0",
-      },
-      "type": "configuration",
-    },
-    Object {
-      "attributes": Object {
-        "dataType": "json",
-        "description": "A json array of \\"hygiene\\" procedure codes",
-        "name": "HYGIENE_PROCEDURE_CODES",
-        "value": "[\\"111%\\", \\"4342%\\"]",
-      },
-      "type": "configuration",
-    },
-    Object {
-      "attributes": Object {
-        "dataType": "json",
-        "description": "A json array of \\"restorative\\" procedure codes",
-        "name": "RESTORATIVE_PROCEDURE_CODES",
-        "value": "[\\"2____\\"]",
-      },
-      "type": "configuration",
-    },
-    Object {
-      "attributes": Object {
-        "dataType": "json",
-        "description": "A json array of \\"recall exam\\" procedure codes",
-        "name": "RECALL_PROCEDURE_CODES",
-        "value": "[\\"00121\\", \\"01202\\"]",
       },
       "type": "configuration",
     },
@@ -1391,6 +1445,78 @@ Object {
         "description": "Is connector monitoring enabled",
         "name": "MONITORING_ENABLED",
         "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The full sync interval (in seconds)",
+        "name": "FULL_SYNC_INTERVAL",
+        "value": "43200",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is medium sync enabled",
+        "name": "MEDIUM_SYNC_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The medium sync interval (in seconds)",
+        "name": "MEDIUM_SYNC_INTERVAL",
+        "value": "360",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The write sync interval (in seconds)",
+        "name": "WRITE_SYNC_INTERVAL",
+        "value": "300",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The number of days in the past to grab models for the quick sync",
+        "name": "QUICK_DAYS_BACK",
+        "value": "60",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The number of days in the future to grab models for the quick sync",
+        "name": "QUICK_DAYS_FORWARD",
+        "value": "180",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The number of days in the past to grab models for the medium sync",
+        "name": "MEDIUM_DAYS_BACK",
+        "value": "365",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The number of days in the future to grab models for the medium sync",
+        "name": "MEDIUM_DAYS_FORWARD",
+        "value": "730",
       },
       "type": "configuration",
     },
