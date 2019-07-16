@@ -15,10 +15,10 @@ const asyncEmailValidatePatient = ({ email }) => {
 };
 
 const asyncPhoneNumberValidatePatient = ({ phoneNumber }) => {
-  if (!phoneNumber) return;
+  if (!phoneNumber) return undefined;
   return bookingWidgetHttpClient()
     .post('/patientUsers/phoneNumber', { phoneNumber })
-    .catch(({ data }) => {
+    .catch(({ response: { data } }) => {
       throw { phoneNumber: data };
     });
 };

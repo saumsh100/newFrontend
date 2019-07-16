@@ -6,8 +6,7 @@ import { readFile, replaceJavascriptFile } from '../../util/file';
 import { sequelizeLoader } from '../util/loaders';
 import { Practitioner } from '../../_models';
 import { findBuiltAsset } from '../../config/jsxTemplates';
-import httpClient from '../../util/httpClient';
-import StatusError from '../../util/StatusError';
+import myRouter from '../_api/my';
 
 const widgetsRouter = Router();
 
@@ -118,27 +117,10 @@ const myWidgetRenderRouter = Router();
 myWidgetRenderRouter.use('/widgets', widgetsRouter);
 
 /**
- * This route is needed here to proxy my.carecru requests to www.carecru
- * so we can rely only on relative paths
+ * This route is needed here to proxy my.carecru requests to the same controllers
+ * that www.carecru uses so we can rely only on relative paths on the frontend
  */
-myWidgetRenderRouter.use('/my(/*)?', async (req, res, next) => {
-  const pattern = /(http[s]?:\/\/)?(\w+\.)?(.*)$/;
-  const host = req.header('host').replace(pattern, (match, p1, p2, p3) => [p1, p3].join(''));
-  const newUrl = `${req.protocol}://${host}${req.originalUrl}`;
-
-  try {
-    const { status, data } = await httpClient({
-      url: newUrl,
-      method: req.method,
-      headers: req.headers,
-      data: req.body,
-    });
-
-    res.status(status).send(data);
-  } catch (e) {
-    next(StatusError(e.status, e.message || e.data));
-  }
-});
+myWidgetRenderRouter.use('/my', myRouter);
 
 myWidgetRenderRouter.get('(/*)?', (req, res, next) => {
   try {
