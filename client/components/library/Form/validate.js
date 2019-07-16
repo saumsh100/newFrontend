@@ -18,7 +18,7 @@ const asyncPhoneNumberValidatePatient = ({ phoneNumber }) => {
   if (!phoneNumber) return undefined;
   return bookingWidgetHttpClient()
     .post('/patientUsers/phoneNumber', { phoneNumber })
-    .catch(({ response: { data } }) => {
+    .catch(({ data }) => {
       throw { phoneNumber: data };
     });
 };
