@@ -10,7 +10,11 @@ class Socket {
   }
 
   connect() {
-    this.socket = io.connect(`${getSocketUrl()}/dash`);
+    this.socket = io.connect(`${getSocketUrl()}/dash`, { transports: ['websocket'] });
+
+    this.socket.on('reconnect_attempt', () => {
+      this.socket.io.opts.transports = ['polling', 'websocket'];
+    });
   }
 
   disconnect() {
