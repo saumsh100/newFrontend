@@ -55,6 +55,7 @@ appointmentsRouter.get('/', (req, res, next) => {
     limit,
     skip,
     filters = [],
+    isParanoid,
   } = query;
 
   const skipped = skip || 0;
@@ -74,6 +75,7 @@ appointmentsRouter.get('/', (req, res, next) => {
   }
 
   return Appointment.findAll({
+    paranoid: isParanoid !== 'false',
     where: {
       accountId,
       startDate: {

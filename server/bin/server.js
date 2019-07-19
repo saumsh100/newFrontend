@@ -42,8 +42,8 @@ server.listen(globals.port, () => {
     const { pathname } = url.parse(request.url);
 
     if (pathname === '/subscriptions') {
-      subscriptionServer['wsServer'].handleUpgrade(request, socket, head, (ws) => {
-        subscriptionServer['wsServer'].emit('connection', ws, request);
+      subscriptionServer.wsServer.handleUpgrade(request, socket, head, (ws) => {
+        subscriptionServer.wsServer.emit('connection', ws, request);
       });
     }
   });
