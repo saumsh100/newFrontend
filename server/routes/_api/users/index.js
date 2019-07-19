@@ -142,22 +142,20 @@ userRouter.put('/:userId', (req, res, next) => {
       return user
         .isValidPasswordAsync(oldPassword)
         .then(() => {
-          // TODO: this code is duplicated on frontend, refactor for isomoprohic functions
-          const result = zxcvbn(password);
-          const {
-            score,
-            feedback: { warning },
-          } = result;
+          const { score, feedback: { warning } } = zxcvbn(password);
           if (score < 2) {
-            throw StatusError(401, warning || 'New password not strong enough');
+            return next(StatusError(401, {
+              body: warning || 'New password not strong enough',
+              field: 'password',
+            }));
           }
 
-          return user.setPasswordAsync(password).then(updatedUser =>
-            // Now save and respond finally!
-            updatedUser.save().then(savedUser => res.send(normalize('user', savedUser.dataValues))));
+          return user.setPasswordAsync(password)
+            .then(updatedUser => updatedUser.save()
+              .then(savedUser => res.send(normalize('user', savedUser.dataValues))));
         })
         .catch((err) => {
-          throw StatusError(401, err.message || 'Invalid current password');
+          throw StatusError(401, { body: err.message.body || 'Invalid current password' });
         });
     })
     .catch(next);
