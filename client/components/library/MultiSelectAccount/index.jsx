@@ -39,8 +39,11 @@ class MultiSelectAccounts extends Component {
   /**
    * Update the values in case the selected props is different then the current state.
    */
-  componentDidUpdate() {
-    if (!isEqual(this.props.selected, this.state.selectedItems)) {
+  componentDidUpdate(prevProps) {
+    if (
+      !isEqual(this.props.selected, prevProps.selected) &&
+      !isEqual(this.props.selected, this.state.selectedItems)
+    ) {
       this.setState({ selectedItems: this.props.selected });
     }
   }
@@ -183,7 +186,6 @@ const mapStateToProps = ({ featureFlags, entities, auth }) => {
 };
 
 MultiSelectAccounts.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   onChange: PropTypes.func,
   initialSelectedItem: PropTypes.arrayOf(PropTypes.string),
   disabled: PropTypes.bool,

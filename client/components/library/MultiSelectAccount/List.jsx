@@ -31,6 +31,7 @@ const List = ({
           <Checkbox
             checked
             label={item.label}
+            key={item.label}
             labelClassNames={styles.cbLabel}
             containerClasses={styles.cbContainer}
             onChange={() => handleSelection(item)}
@@ -44,6 +45,7 @@ const List = ({
         {availableItems.map(item => (
           <Checkbox
             label={item.label}
+            key={item.label}
             labelClassNames={styles.cbLabel}
             containerClasses={styles.cbContainer}
             onChange={() => handleSelection(item)}

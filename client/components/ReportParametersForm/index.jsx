@@ -33,15 +33,18 @@ const defaultComponents = {
   [DROPDOWN]: DropdownSelect,
 };
 
-const handleDefaultValue = (defaultValue, name, component, compt) => {
-  const nullIfUndefined = defaultValue === undefined ? null : defaultValue;
-  const dateKey = Object.keys(compt.name).find(key => compt.name[key] === name);
+const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt }) => {
+  if (component === MULTI_SELECT_ACCOUNT) {
+    return [accountId];
+  }
 
+  const dateKey = Object.keys(compt.name).find(key => compt.name[key] === name);
   if (component === DATE_RANGE && typeof defaultValue === 'string') {
     const [defaultRange] = getRangeFromList([defaultValue]);
     return setDateToTimezone(defaultRange[dateKey]).format('YYYY-MM-DD');
   }
 
+  const nullIfUndefined = defaultValue === undefined ? null : defaultValue;
   return typeof defaultValue === 'object' && !Array.isArray(defaultValue)
     ? defaultValue[dateKey]
     : nullIfUndefined;
@@ -138,7 +141,10 @@ class ReportParametersForm extends Component {
   setDefaultParamValues(page) {
     const defaultParams = this.reduceParams(page, (name, curr) =>
       name.map(n => ({
-        [n]: handleDefaultValue(curr.defaultValue, n, curr.component, curr),
+        [n]: handleDefaultValue(n, {
+          ...curr,
+          accountId: this.props.account.get('id'),
+        }),
       })));
     this.setQueryUrl(page, Object.assign(...defaultParams));
   }
@@ -208,7 +214,6 @@ class ReportParametersForm extends Component {
    */
   changePage(page) {
     this.props.setActiveReport(page);
-
     this.props.reports.get(page) ? this.setQueryUrl(page) : this.setDefaultParamValues(page);
   }
 

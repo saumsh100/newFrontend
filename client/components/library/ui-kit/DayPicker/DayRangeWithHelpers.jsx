@@ -369,7 +369,7 @@ class DayRangeWithHelpers extends Component {
 
 DayRangeWithHelpers.propTypes = {
   start: PropTypes.string,
-  helpers: PropTypes.objectOf(
+  helpers: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
       end: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
