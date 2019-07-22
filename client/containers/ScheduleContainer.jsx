@@ -8,6 +8,7 @@ import moment from 'moment';
 import Loader from '../components/Loader';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../thunks/fetchEntities';
+import { deleteAllEntity } from '../reducers/entities';
 import { appointmentShape } from '../components/library/PropTypeShapes';
 import Account from '../entities/models/Account';
 import Appointment from '../entities/models/Appointments';
@@ -88,6 +89,8 @@ class ScheduleContainer extends Component {
           },
         ],
       };
+
+      this.props.deleteAllEntity('appointments');
       this.props.fetchEntitiesRequest({
         id: 'appSchedule',
         key: 'appointments',
@@ -174,6 +177,7 @@ function mapDispatchToProps(dispatch) {
       createEntityRequest,
       fetchEntities,
       fetchEntitiesRequest,
+      deleteAllEntity,
       setAllFilters,
       setScheduleDate,
       selectAppointment,
@@ -200,6 +204,7 @@ ScheduleContainer.propTypes = {
   setCreatingPatient: PropTypes.func.isRequired,
   setAllFilters: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
+  deleteAllEntity: PropTypes.func.isRequired,
   setScheduleDate: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
   setMergingPatient: PropTypes.func.isRequired,
