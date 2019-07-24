@@ -31,7 +31,6 @@ userRouter.get('/me', async (req, res, next) => {
     ] = await Promise.all([
       Account.findOne({
         where: { id: accountId },
-        attributes: ['timezone'],
       }),
 
       User.findOne({
@@ -69,6 +68,7 @@ userRouter.get('/me', async (req, res, next) => {
 
     return res.json({
       ...remainingSessionData,
+      account,
       enterprise: user.enterprise,
       role: user.permission.role,
       adapterType: adapterTypeConfig.value,

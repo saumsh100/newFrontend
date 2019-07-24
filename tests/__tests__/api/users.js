@@ -32,7 +32,10 @@ describe('/api/users', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body.account = omitProperties(body.account);
+          body.account.address = omitProperties(body.account.address);
           body.enterprise = omitProperties(body.enterprise);
+
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });

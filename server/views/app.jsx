@@ -38,6 +38,7 @@ const App = ({ showNewFont }) => (
       />
       <link rel="shortcut icon" href="/favicons/favicon.ico" />
       {helpers.appendFonts(showNewFont)}
+      {helpers.appendFullStoryScript()}
     </head>
     <body style={{ fontFamily: 'Gotham-Book' }} className="Dashboard">
       {/* Regions */}

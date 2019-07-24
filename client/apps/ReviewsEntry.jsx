@@ -15,6 +15,7 @@ import configure from '../store/reviewsStore';
 import connectStoreToHost from '../widget/connectStoreToHost';
 import { loadPatient } from '../thunks/patientAuth';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
+import { setOnlineBookingUserVars } from '../util/fullStory';
 
 LogRocket.init(process.env.LOGROCKET_APP_ID);
 
@@ -42,7 +43,12 @@ store.dispatch(
 connectStoreToHost(store);
 
 loadPatient()(store.dispatch).then(() => {
-  const { auth } = store.getState();
+  const { auth, availabilities } = store.getState();
+  const account = availabilities.get('account').toJS();
+  if (process.env.NODE_ENV === 'production') {
+    setOnlineBookingUserVars({ account });
+  }
+
   if (auth.get('isAuthenticated')) {
     const patientUser = auth.get('patientUser').toJS();
     LogRocket.identify(patientUser.id, {

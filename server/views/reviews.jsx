@@ -27,6 +27,7 @@ class Reviews extends React.Component {
           />
 
           {helpers.appendFonts()}
+          {helpers.appendFullStoryScript(true)}
         </head>
         <body
           style={{ fontFamily: 'Gotham-Book' }}

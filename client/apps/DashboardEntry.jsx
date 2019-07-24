@@ -20,6 +20,7 @@ import { loadOnlineRequest } from '../thunks/onlineRequests';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import DesktopNotification from '../util/desktopNotification';
 import SubscriptionManager from '../util/graphqlSubscriptions';
+import { identifyPracticeUser } from '../util/fullStory';
 
 if (process.env.NODE_ENV === 'production') {
   LogRocket.init(process.env.LOGROCKET_APP_ID);
@@ -41,13 +42,19 @@ load()(store.dispatch).then(() => {
   const { auth } = store.getState();
   if (auth.get('isAuthenticated')) {
     if (process.env.NODE_ENV === 'production') {
-      const user = auth.get('user').toJS();
+      const { account, enterprise, user } = auth.toJS();
       const userId = user.id;
       const fullName = `${user.firstName} ${user.lastName}`;
       const email = user.username;
       LogRocket.identify(userId, {
         name: fullName,
         email,
+      });
+
+      identifyPracticeUser({
+        account,
+        enterprise,
+        user,
       });
 
       window.Intercom('update', {
