@@ -22,11 +22,11 @@ export default function signUrl({ url, method = 'GET', key, secret, timestamp })
   if (typeof timestamp !== 'number') {
     throw new Error('Timestamp provided is not numeric');
   }
-
+  const encodedUrl = url.replace(/\[/g, encodeURIComponent('[')).replace(/]/g, encodeURIComponent(']'));
   const contentType = null;
   const contentBody = '';
   const contentDigest = crypto.createHash('md5').update(contentBody).digest().toString('base64');
-  const returnUrl = `${url}&timestamp=${timestamp}`;
+  const returnUrl = `${encodedUrl}&timestamp=${timestamp}`;
   const requestString = [method, contentType, contentDigest, returnUrl, timestamp].join(',');
   const signature = crypto.createHmac('sha256', secret).update(requestString).digest('hex');
 
