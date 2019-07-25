@@ -348,6 +348,7 @@ patientsRouter.get('/', checkPermissions('patients:read'), async (req, res, next
         where: {
           accountId,
           patientUserId,
+          status: 'Active',
         },
       });
     } else {
@@ -376,6 +377,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
       where: {
         accountId,
         patientUserId: { $eq: null },
+        status: { $ne: 'Inactive' },
         $or: [
           {
             firstName: { ilike: firstName },
