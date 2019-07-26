@@ -125,6 +125,7 @@ class ScheduleContainer extends Component {
       currentDate,
       {
         isDeleted: undefined,
+        isCancelled: undefined,
         updatedAt: {
           $gte: fiveMinutesAgo,
         },
