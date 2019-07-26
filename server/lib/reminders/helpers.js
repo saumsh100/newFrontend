@@ -19,16 +19,13 @@ import {
   Reminder,
   SentReminder,
   SentRemindersPatients,
-  WeeklySchedule,
 } from 'CareCruModels';
 import GLOBALS from '../../config/globals';
 import { generateOrganizedPatients } from '../comms/util';
-import countNextClosedDays, {
-  getDayOfWeek,
-  isOpen,
-} from '../schedule/countNextClosedDays';
+import { countConsecutiveClosedDays } from '../schedule/countNextClosedDays';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 import flattenFamilyAppointments, { orderAppointmentsForSamePatient } from './flattenFamilyAppointments';
+import generateDailyHoursForPractice from '../schedule/generateDailyHoursForPractice';
 
 const CRON_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
 const SAME_DAY_HOURS = GLOBALS.reminders.sameDayWindowHours;
@@ -148,24 +145,31 @@ export async function getAppointmentsFromReminder({
   if (reminder.isDaily) {
     // Now adjust end if there are consecutive closed days
     if (reminder.dontSendWhenClosed) {
-      const weeklySchedule = await WeeklySchedule.findByPk(account.weeklyScheduleId);
-      if (weeklySchedule) {
-        // Early return if the clinic is closed this day
-        if (!isOpen(weeklySchedule, getDayOfWeek(startDate, timezone))) {
-          return [];
-        }
-        const consecutiveClosedDays = countNextClosedDays({
-          weeklySchedule,
-          timezone,
-          startDate,
-        });
-        if (consecutiveClosedDays) {
-          console.log(`There are consecutive closed days, therefore bumping end 
-            date by ${consecutiveClosedDays} days`);
-          end = moment(end)
-            .add(consecutiveClosedDays, 'days')
-            .toISOString();
-        }
+      const { schedule } = await generateDailyHoursForPractice({
+        account,
+        startDate,
+        endDate: moment(startDate)
+          .add(30, 'days')
+          .toISOString(),
+      });
+
+      const [todayDate] = Object.keys(schedule);
+      const todayDailySchedule = schedule[todayDate];
+      if (!todayDailySchedule || todayDailySchedule.isClosed) return [];
+
+      // Pop out today's date so we start counting closed days from tomorrow
+      delete schedule[todayDate];
+
+      const consecutiveClosedDays = countConsecutiveClosedDays(schedule);
+      if (consecutiveClosedDays) {
+        console.log(
+          'There are consecutive closed days. ' +
+          `Bumping endDate by ${consecutiveClosedDays} days.`
+        );
+
+        end = moment(end)
+          .add(consecutiveClosedDays, 'days')
+          .toISOString();
       }
     }
 

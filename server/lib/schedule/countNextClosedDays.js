@@ -25,7 +25,7 @@ export function isOpen(weeklySchedule, dayOfWeek) {
 }
 
 /**
- * countNextClosedDays is a function that will fetch weeklySchedule
+ * countNextClosedDays is a function that use the weeklySchedule
  * and determine the number of consecutive days that a clinic is closed
  *
  * @param accountId
@@ -49,3 +49,21 @@ export default function countNextClosedDays({ weeklySchedule, startDate, maxDays
   return maxDays;
 }
 
+/**
+ * countConsecutiveClosedDays is a function that will use a map of dailySchedules
+ * by their "day" (ie. 2019-10-12) to determine the integer number of consecutively closed days
+ * from the beginning
+ *
+ * @param dailySchedulesMap
+ * @returns {number}
+ */
+export function countConsecutiveClosedDays(dailySchedulesMap) {
+  const days = Object.keys(dailySchedulesMap);
+  const length = days.length;
+
+  for (let i = 0; i < length; i += 1) {
+    if (!dailySchedulesMap[days[i]].isClosed) return i;
+  }
+
+  return length;
+}
