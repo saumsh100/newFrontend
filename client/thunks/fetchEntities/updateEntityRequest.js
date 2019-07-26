@@ -6,8 +6,9 @@ import { httpClient } from '../../util/httpClient';
 export default function updateEntityRequest({ key, model, values, url, alert, merge }) {
   url = url || model.getUrlRoot();
   values = values || model.toJSON();
+  const errorText = errorCode =>
+    (alert ? alert[errorCode] || alert.error : { body: `Update ${key} failed` });
 
-  const errorText = alert ? alert.error : { body: `Update ${key} failed` };
   return dispatch =>
     httpClient()
       .put(url, values)
@@ -35,7 +36,7 @@ export default function updateEntityRequest({ key, model, values, url, alert, me
       .catch((err) => {
         dispatch(
           showAlertTimeout({
-            alert: errorText,
+            alert: errorText(err.status),
             type: 'error',
           }),
         );
