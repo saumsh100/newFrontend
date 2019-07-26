@@ -932,6 +932,51 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of collection sync",
+        "name": "COLLECTION_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of collectionType sync",
+        "name": "COLLECTION_TYPE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of adjustment sync",
+        "name": "ADJUSTMENT_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of adjustmentType sync",
+        "name": "ADJUSTMENT_TYPE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of event sync",
+        "name": "EVENT_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -1517,6 +1562,51 @@ Object {
         "description": "The number of days in the future to grab models for the medium sync",
         "name": "MEDIUM_DAYS_FORWARD",
         "value": "730",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of collection sync",
+        "name": "COLLECTION_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of collectionType sync",
+        "name": "COLLECTION_TYPE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of adjustment sync",
+        "name": "ADJUSTMENT_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of adjustmentType sync",
+        "name": "ADJUSTMENT_TYPE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of event sync",
+        "name": "EVENT_BATCH_SIZE",
+        "value": "100",
       },
       "type": "configuration",
     },
