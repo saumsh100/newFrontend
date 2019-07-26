@@ -56,6 +56,7 @@ export default function PractitionersSlot(props) {
             return (
               <TimeSlot
                 key={`practitionerTimeSlots_${pract.id}`}
+                entityId={pract.id}
                 timeSlots={timeSlots}
                 timeSlotHeight={timeSlotHeight}
                 startHour={startHour}
@@ -85,9 +86,11 @@ PractitionersSlot.propTypes = {
   selectAppointment: PropTypes.func.isRequired,
   practitionersArray: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
   chairs: PropTypes.instanceOf(Map).isRequired,
-  timeSlots: PropTypes.arrayOf(PropTypes.shape({
-    position: PropTypes.number,
-  })).isRequired,
+  timeSlots: PropTypes.arrayOf(
+    PropTypes.shape({
+      position: PropTypes.number,
+    }),
+  ).isRequired,
   timeSlotHeight: PropTypes.shape({
     height: PropTypes.number,
   }).isRequired,

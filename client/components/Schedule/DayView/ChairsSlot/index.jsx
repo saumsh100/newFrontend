@@ -48,7 +48,9 @@ export default function ChairsSlot(props) {
                   return app;
                 }
 
-                const practitionerData = practitionersArray.find(prac => prac.id === app.get('practitionerId'));
+                const practitionerData = practitionersArray.find(
+                  prac => prac.id === app.get('practitionerId'),
+                );
 
                 return Object.assign({}, app.toJS(), {
                   appModel: app,
@@ -61,6 +63,7 @@ export default function ChairsSlot(props) {
             return (
               <TimeSlot
                 key={`timeSlotKey_${chair.id}`}
+                entityId={chair.id}
                 timeSlots={timeSlots}
                 timeSlotHeight={timeSlotHeight}
                 practIndex={i}
@@ -70,7 +73,6 @@ export default function ChairsSlot(props) {
                 filteredApps={filteredApps}
                 selectAppointment={selectAppointment}
                 scheduleView={schedule.get('scheduleView')}
-                entity={chair}
                 selectedAppointment={schedule.get('selectedAppointment')}
                 numOfColumns={chairsArray.length}
                 columnIndex={i}
@@ -93,9 +95,11 @@ ChairsSlot.propTypes = {
   selectAppointment: PropTypes.func.isRequired,
   practitionersArray: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
   chairsArray: PropTypes.arrayOf(PropTypes.instanceOf(Chair)).isRequired,
-  timeSlots: PropTypes.arrayOf(PropTypes.shape({
-    position: PropTypes.number,
-  })).isRequired,
+  timeSlots: PropTypes.arrayOf(
+    PropTypes.shape({
+      position: PropTypes.number,
+    }),
+  ).isRequired,
   timeSlotHeight: PropTypes.shape({
     height: PropTypes.number,
   }).isRequired,

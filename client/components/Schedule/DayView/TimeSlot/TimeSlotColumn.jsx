@@ -1,30 +1,32 @@
 
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import ColumnHeader from '../ColumnHeader/index';
-
+import React from 'react';
 import styles from '../styles.scss';
 
 export default function TimeSlotColumn(props) {
-  const { timeSlots, timeSlotHeight } = props;
+  const { prefixKey, timeSlots, timeSlotHeight } = props;
 
   return (
     <div>
       {timeSlots.map((slot, i) => (
         <div
-          key={i + Math.random()}
+          key={`${btoa(prefixKey + i)}`}
           className={styles.timeSlotColumnItem}
           style={timeSlotHeight}
-        >
-          {''}
-        </div>
-        ))}
+        />
+      ))}
     </div>
   );
 }
 
 TimeSlotColumn.propTypes = {
-  timeSlots: PropTypes.array,
-  timeSlotHeight: PropTypes.object,
-  index: PropTypes.number,
+  prefixKey: PropTypes.string.isRequired,
+  timeSlots: PropTypes.arrayOf(
+    PropTypes.shape({
+      position: PropTypes.number,
+    }),
+  ).isRequired,
+  timeSlotHeight: PropTypes.shape({
+    height: PropTypes.number,
+  }).isRequired,
 };

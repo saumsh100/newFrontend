@@ -48,7 +48,7 @@ export const sortAppsByStartDate = (a, b) => (a.startDate > b.startDate ? 1 : -1
  *
  * @returns {number} HeightCalculated
  */
-export const calculateHeight = (duration, timeSlotHeight) => duration / 60 * timeSlotHeight;
+export const calculateHeight = (duration, timeSlotHeight) => (duration / 60) * timeSlotHeight;
 
 export const getDuration = (startDate, endDate, customBufferTime) => {
   const end = moment(endDate);
@@ -85,7 +85,7 @@ export const setPopoverPlacement = (columnIndex, numOfColumns, minWidth) => {
  * @param {*} params
  * @returns {appoitment} a new appointment with height and top positioning properties
  */
-export const calculateAppoitmentTop = params => (appointment) => {
+export const calculateAppointmentTop = params => (appointment) => {
   const { startHour, timeSlotHeight, unit } = params;
 
   const { startDate, endDate, customBufferTime } = appointment;
@@ -119,7 +119,7 @@ export const calculateAppoitmentTop = params => (appointment) => {
  * it receives the same props as the TimeSlot component
  * @param {*} params
  */
-export const buildAppoitmentProps = (params) => {
+export const buildAppointmentProps = (params) => {
   const {
     appointment,
     rowSort,
@@ -153,7 +153,7 @@ export const buildAppoitmentProps = (params) => {
 
   // Calculating the top position and height of the appointment.
   // TODO: work on overlapping the appointments a little
-  const splitRow = rowSort.length > 1 ? 100 * appPosition / rowSort.length : 0;
+  const splitRow = rowSort.length > 1 ? (100 * appPosition) / rowSort.length : 0;
 
   const multiAppLineLeft = `calc(${splitRow}% - ${
     appPosition + 1 === rowSort.length

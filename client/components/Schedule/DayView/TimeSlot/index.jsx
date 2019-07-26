@@ -6,10 +6,10 @@ import ShowAppointment from './ShowAppointment';
 import ShowMark from './ShowMark';
 import styles from '../styles.scss';
 import {
-  calculateAppoitmentTop,
+  calculateAppointmentTop,
   intersectingAppointments,
   sortAppsByStartDate,
-  buildAppoitmentProps,
+  buildAppointmentProps,
 } from './helpers';
 
 /**
@@ -31,11 +31,7 @@ const renderDisplayComponent = params => (app, index, array) => {
     unit,
   } = params;
 
-  const intersectingApps = intersectingAppointments(
-    array,
-    app.startDate,
-    app.endDate,
-  );
+  const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate);
 
   const rowSort = intersectingApps.sort(sortAppsByStartDate);
 
@@ -50,9 +46,7 @@ const renderDisplayComponent = params => (app, index, array) => {
     minWidth,
   };
 
-  const appoitmentProps = app.mark
-    ? {}
-    : buildAppoitmentProps(appoitmentParams);
+  const appoitmentProps = app.mark ? {} : buildAppointmentProps(appoitmentParams);
 
   return app.mark ? (
     <ShowMark
@@ -77,14 +71,7 @@ const renderDisplayComponent = params => (app, index, array) => {
 };
 
 export default function TimeSlot(props) {
-  const {
-    timeSlots,
-    timeSlotHeight,
-    filteredApps,
-    minWidth,
-    startHour,
-    unit,
-  } = props;
+  const { timeSlots, timeSlotHeight, filteredApps, minWidth, startHour, unit, entityId } = props;
 
   const timeSlotContentStyle = {
     minWidth: `${minWidth}px`,
@@ -92,34 +79,35 @@ export default function TimeSlot(props) {
 
   return (
     <div style={timeSlotContentStyle} className={styles.timeSlotColumn}>
-      <TimeSlotColumn timeSlots={timeSlots} timeSlotHeight={timeSlotHeight} />
+      <TimeSlotColumn prefixKey={entityId} timeSlots={timeSlots} timeSlotHeight={timeSlotHeight} />
 
       {filteredApps &&
         filteredApps
           .sort(sortAppsByStartDate)
-          .map(calculateAppoitmentTop({ startHour, timeSlotHeight, unit }))
+          .map(
+            calculateAppointmentTop({
+              startHour,
+              timeSlotHeight,
+              unit,
+            }),
+          )
           .map(renderDisplayComponent(props))}
     </div>
   );
 }
 
 TimeSlot.propTypes = {
-  startHour: PropTypes.number,
-  endHour: PropTypes.number,
-  minWidth: PropTypes.number,
-  appointments: PropTypes.arrayOf(PropTypes.object),
-  schedule: PropTypes.object,
-  patients: PropTypes.object,
-  services: PropTypes.object,
-  chairs: PropTypes.object,
-  timeSlots: PropTypes.array,
-  timeSlotHeight: PropTypes.object,
-  practitioner: PropTypes.object,
-  scheduleView: PropTypes.string,
-  selectAppointment: PropTypes.func.isRequired,
-  selectedAppointment: PropTypes.object,
-  filteredApps: PropTypes.arrayOf(PropTypes.object),
-  numOfColumns: PropTypes.number,
-  columnIndex: PropTypes.number,
-  unit: PropTypes.number,
+  startHour: PropTypes.number.isRequired,
+  minWidth: PropTypes.number.isRequired,
+  timeSlots: PropTypes.arrayOf(
+    PropTypes.shape({
+      position: PropTypes.number,
+    }),
+  ).isRequired,
+  timeSlotHeight: PropTypes.shape({
+    height: PropTypes.number,
+  }).isRequired,
+  filteredApps: PropTypes.arrayOf(PropTypes.object).isRequired,
+  unit: PropTypes.number.isRequired,
+  entityId: PropTypes.string.isRequired,
 };

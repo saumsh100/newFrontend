@@ -1,6 +1,40 @@
 
-import { receiveEntities } from '../../reducers/entities';
+import partition from 'lodash/partition';
+import { receiveEntities, deleteEntity } from '../../reducers/entities';
 import { httpClient } from '../../util/httpClient';
+
+const isDeleted = entity => entity.deletedAt || entity.isDeleted;
+
+const handleDispatchingActions = (dispatch, key) => ({ data }) => {
+  const [deletedEntities, entities] = partition(data.entities[key], isDeleted);
+
+  deletedEntities.forEach((v) => {
+    dispatch(
+      deleteEntity({
+        key,
+        id: v.id,
+      }),
+    );
+  });
+
+  dispatch(
+    receiveEntities({
+      key,
+      entities: {
+        ...data.entities,
+        [key]: entities.reduce(
+          (acc, v) => ({
+            ...acc,
+            [v.id]: v,
+          }),
+          {},
+        ),
+      },
+    }),
+  );
+
+  return data.entities;
+};
 
 export default function fetchEntities({ key, join, params = {}, url }) {
   return (dispatch, getState) => {
@@ -15,16 +49,7 @@ export default function fetchEntities({ key, join, params = {}, url }) {
     url = url || entity.getUrlRoot();
     return httpClient()
       .get(url, { params })
-      .then((response) => {
-        const { data } = response;
-        dispatch(
-          receiveEntities({
-            key,
-            entities: data.entities,
-          }),
-        );
-        return data.entities;
-      })
+      .then(handleDispatchingActions(dispatch, key))
       .catch((err) => {
         // TODO: set didInvalidate=true of entity and dispatch alert action
         console.log(err);

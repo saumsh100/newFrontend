@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Map, List } from 'immutable';
-import { connect } from 'react-redux';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { setDateToTimezone } from '@carecru/isomorphic';
 import Loader from '../components/Loader';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../thunks/fetchEntities';
@@ -21,23 +22,23 @@ import {
 import { setAllFilters } from '../thunks/schedule';
 
 class ScheduleContainer extends Component {
-  componentDidMount() {
-    const currentDate = moment(this.props.currentDate);
+  constructor(props) {
+    super(props);
 
-    const startDate = currentDate.startOf('day').toISOString();
-    const endDate = currentDate.endOf('day').toISOString();
-
-    const query = {
-      startDate,
-      endDate,
-      filters: [
-        {
-          isPending: false,
-          isCancelled: false,
-          isDeleted: false,
-        },
-      ],
+    this.state = {
+      timeout: 20 * 1000,
+      timer: null,
     };
+
+    this.refetchRecentlyUpdatedAppointments = this.refetchRecentlyUpdatedAppointments.bind(this);
+  }
+
+  componentDidMount() {
+    const currentDate = setDateToTimezone(this.props.currentDate);
+    const query = this.buildAppointmentQuery(currentDate);
+
+    const timer = setInterval(this.refetchRecentlyUpdatedAppointments, this.state.timeout);
+    this.setState({ timer });
 
     Promise.all([
       this.props.fetchEntitiesRequest({
@@ -67,29 +68,11 @@ class ScheduleContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const currentDate = moment(this.props.currentDate);
+    const currentDate = setDateToTimezone(this.props.currentDate);
+    const nextPropsDate = setDateToTimezone(nextProps.schedule.toJS().scheduleDate);
 
-    const nextPropsDate = moment(nextProps.schedule.toJS().scheduleDate);
-
-    if (
-      !nextPropsDate.isSame(currentDate, 'month') ||
-      !nextPropsDate.isSame(currentDate, 'day') ||
-      !nextPropsDate.isSame(currentDate, 'year')
-    ) {
-      const startDate = nextPropsDate.startOf('day').toISOString();
-      const endDate = nextPropsDate.endOf('day').toISOString();
-      const query = {
-        startDate,
-        endDate,
-        filters: [
-          {
-            isPending: false,
-            isCancelled: false,
-            isDeleted: false,
-          },
-        ],
-      };
-
+    if (this.isSameDay(currentDate, nextPropsDate)) {
+      const query = this.buildAppointmentQuery(nextPropsDate);
       this.props.deleteAllEntity('appointments');
       this.props.fetchEntitiesRequest({
         id: 'appSchedule',
@@ -98,6 +81,65 @@ class ScheduleContainer extends Component {
         params: query,
       });
     }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.timer);
+  }
+
+  buildAppointmentQuery(date, filterOverride = {}, queryOverride = {}) {
+    const startDate = date.startOf('day').toISOString();
+    const endDate = date.endOf('day').toISOString();
+    const query = {
+      startDate,
+      endDate,
+      filters: [
+        {
+          isPending: false,
+          isCancelled: false,
+          isDeleted: false,
+          ...filterOverride,
+        },
+      ],
+      ...queryOverride,
+    };
+
+    return query;
+  }
+
+  isSameDay(currentDate, updateDate) {
+    return (
+      !updateDate.isSame(currentDate, 'month') ||
+      !updateDate.isSame(currentDate, 'day') ||
+      !updateDate.isSame(currentDate, 'year')
+    );
+  }
+
+  refetchRecentlyUpdatedAppointments() {
+    const currentDate = setDateToTimezone(this.props.currentDate);
+    const fiveMinutesAgo = setDateToTimezone()
+      .subtract(1, 'minutes')
+      .toISOString();
+
+    const query = this.buildAppointmentQuery(
+      currentDate,
+      {
+        isDeleted: undefined,
+        updatedAt: {
+          $gte: fiveMinutesAgo,
+        },
+      },
+      {
+        isParanoid: false,
+      },
+    );
+
+    this.props.fetchEntities({
+      id: 'appSchedule',
+      key: 'appointments',
+      join: ['patient', 'service'],
+      params: query,
+    });
   }
 
   render() {
@@ -203,6 +245,7 @@ ScheduleContainer.propTypes = {
   ]),
   setCreatingPatient: PropTypes.func.isRequired,
   setAllFilters: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   deleteAllEntity: PropTypes.func.isRequired,
   setScheduleDate: PropTypes.func.isRequired,
