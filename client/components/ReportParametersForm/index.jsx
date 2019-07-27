@@ -34,7 +34,7 @@ const defaultComponents = {
 };
 
 const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt }) => {
-  if (component === MULTI_SELECT_ACCOUNT) {
+  if (component === MULTI_SELECT_ACCOUNT && defaultValue === undefined) {
     return [accountId];
   }
 
