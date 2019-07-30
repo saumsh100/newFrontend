@@ -11,6 +11,7 @@ export default function fetchEntitiesRequest({
   params = {},
   url,
   returnData,
+  shouldCreateRequest = true,
 }) {
   return (dispatch, getState) => {
     const { entities } = getState();
@@ -22,8 +23,10 @@ export default function fetchEntitiesRequest({
 
     url = url || entity.getUrlRoot(base);
 
-    // Create record for request
-    dispatch(createRequest({ id }));
+    if (shouldCreateRequest) {
+      // Create record for request
+      dispatch(createRequest({ id }));
+    }
 
     return httpClient()
       .get(url, { params })

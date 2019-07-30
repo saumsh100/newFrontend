@@ -119,11 +119,41 @@ function renderChart(revenueData, account) {
 }
 
 class RevenueContainer extends Component {
-  componentDidMount() {
-    const { dashboardDate } = this.props;
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      timeout: 20 * 1000,
+      timer: null,
+    };
+
+    this.fetchRevenueData = this.fetchRevenueData.bind(this);
+    this.refetchRevenueData = this.refetchRevenueData.bind(this);
+  }
+
+  componentDidMount() {
+    const timer = setInterval(this.refetchRevenueData, this.state.timeout);
+
+    this.setState({ timer });
+    this.fetchRevenueData(this.props.dashboardDate);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentDate = moment(this.props.dashboardDate);
+    const nextDate = moment(nextProps.dashboardDate);
+
+    if (currentDate.toISOString() !== nextDate.toISOString()) {
+      this.fetchRevenueData(nextProps.dashboardDate);
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.timer);
+  }
+
+  fetchRevenueData(date, shouldCreateRequest = true) {
     const query = {
-      date: dashboardDate,
+      date,
       pastDaysLimit: 30,
       maxDates: 12,
     };
@@ -132,26 +162,12 @@ class RevenueContainer extends Component {
       id: 'revenueFetch',
       url: '/api/revenue/totalRevenueDays',
       params: query,
+      shouldCreateRequest,
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const currentDate = moment(this.props.dashboardDate);
-    const nextDate = moment(nextProps.dashboardDate);
-
-    if (currentDate.toISOString() !== nextDate.toISOString()) {
-      const query = {
-        date: nextProps.dashboardDate,
-        pastDaysLimit: 30,
-        maxDates: 12,
-      };
-
-      this.props.fetchEntitiesRequest({
-        id: 'revenueFetch',
-        url: '/api/revenue/totalRevenueDays',
-        params: query,
-      });
-    }
+  refetchRevenueData() {
+    return this.fetchRevenueData(this.props.dashboardDate, false);
   }
 
   render() {
