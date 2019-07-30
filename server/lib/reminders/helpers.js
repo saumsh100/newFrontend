@@ -191,14 +191,16 @@ export async function getAppointmentsFromReminder({
     // We would never have a reminder with a specific startTime that was sent isDaily
     // startTime is for rolling reminders like the 2 hour reminders
     const values = reminder.startTime.split(':');
-    const startTime = moment
-      .tz(start, timezone)
+    const startTimeMoment = setDateToTimezone(start, timezone)
       .hours(values[0])
       .minutes(values[1])
       .seconds(values[2])
       .milliseconds(0)
-      .add(intervalObject)
-      .toISOString();
+      .add(intervalObject);
+
+    const startTime = reminder.interval.includes('day')
+      ? startTimeMoment.subtract(intervalObject).toISOString()
+      : startTimeMoment.toISOString();
 
     if (start <= startTime && startTime < end) {
       // If the reminder.startTime is between the range we are searching then
@@ -588,7 +590,7 @@ const sortByAppointmentStartDate = (
  * @return {Promise.<Array.<Model>>}
  */
 export async function fetchActiveReminders({ account, startDate, endDate }) {
-  const t = d => moment.tz(d, account.timezone).format('HH:mm:ss');
+  const t = d => setDateToTimezone(d, account.timezone).format('HH:mm:ss');
   const start = t(startDate);
   const end = t(endDate);
 
