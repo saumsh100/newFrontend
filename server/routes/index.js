@@ -49,7 +49,7 @@ rootRouter.post('/newgraphql', sequelizeAuthMiddleware, async (req, res, next) =
 
 // New API Proxy
 rootRouter.all(
-  NEW_API_PATH + '/*',
+  `${NEW_API_PATH}/*`,
   sequelizeAuthMiddleware,
   async ({ originalUrl, method, body }, res, next) => {
     try {
