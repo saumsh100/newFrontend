@@ -977,6 +977,15 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "A JSON array of PMS Family ids to ignore in sync",
+        "name": "IGNORED_FAMILY_PMS_IDS",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -1607,6 +1616,15 @@ Object {
         "description": "The batch size of event sync",
         "name": "EVENT_BATCH_SIZE",
         "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "A JSON array of PMS Family ids to ignore in sync",
+        "name": "IGNORED_FAMILY_PMS_IDS",
+        "value": "[]",
       },
       "type": "configuration",
     },
