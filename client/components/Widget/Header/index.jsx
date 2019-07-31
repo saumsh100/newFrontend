@@ -9,8 +9,9 @@ import BackButton from './BackButton';
 import Button from '../../library/Button';
 import { closeBookingModal } from '../../../thunks/availabilities';
 import { historyShape, locationShape } from '../../library/PropTypeShapes/routerShapes';
-import { CloseBookingModalSVG } from '../SVGs';
+import { BackButtonSVG, CloseBookingModalSVG } from '../SVGs';
 import styles from './styles.scss';
+import EnabledFeature from '../../library/EnabledFeature';
 
 class Header extends Component {
   constructor(props) {
@@ -40,14 +41,38 @@ class Header extends Component {
     return (
       <div className={styles.topHead}>
         <div className={styles.headerContainer}>
-          <div
-            className={classNames({
-              [styles.headerLeftArea]: true,
-              [styles.hideBack]: isCompleteRoute || isFirstRoute || isReviewApp,
-            })}
-          >
-            <BackButton history={history} goBack={this.goBack} />
-          </div>
+          <EnabledFeature
+            predicate={({ flags }) =>
+              flags.get('back-button-multi-location-booking-widget') && isFirstRoute
+            }
+            render={() => (
+              <div
+                className={classNames({
+                  [styles.headerLeftArea]: true,
+                  [styles.hideBack]: isCompleteRoute || isReviewApp,
+                })}
+              >
+                <Button
+                  className={styles.backButton}
+                  onClick={() => {
+                    window.parent.postMessage('reInitializeWidget', '*');
+                  }}
+                >
+                  <BackButtonSVG />
+                </Button>
+              </div>
+            )}
+            fallback={() => (
+              <div
+                className={classNames({
+                  [styles.headerLeftArea]: true,
+                  [styles.hideBack]: isCompleteRoute || isFirstRoute || isReviewApp,
+                })}
+              >
+                <BackButton history={history} goBack={this.goBack} />
+              </div>
+            )}
+          />
           <div className={styles.headerCenterArea}>
             <h2 className={classNames(styles.pageTitle, { [styles.complete]: isCompleteRoute })}>
               {isReviewApp ? 'Review Your Visit' : 'Schedule Your Appointment'}
