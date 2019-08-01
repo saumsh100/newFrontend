@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import TimeSlot from '../TimeSlot';
 import Appointment from '../../../../entities/models/Appointments';
+import Event from '../../../../entities/models/Event';
 import { practitionerShape } from '../../../library/PropTypeShapes';
 import styles from '../styles.scss';
 
@@ -17,6 +18,7 @@ export default function PractitionersSlot(props) {
     practitionersArray,
     patients,
     appointments,
+    events,
     chairs,
     selectAppointment,
     scrollComponentDidMount,
@@ -61,7 +63,7 @@ export default function PractitionersSlot(props) {
                 timeSlotHeight={timeSlotHeight}
                 startHour={startHour}
                 endHour={endHour}
-                filteredApps={filteredApps}
+                items={filteredApps.concat(events.filter(e => e.practitionerId === pract.id))}
                 selectAppointment={selectAppointment}
                 scheduleView={schedule.get('scheduleView')}
                 minWidth={schedule.get('columnWidth')}
@@ -81,6 +83,7 @@ PractitionersSlot.propTypes = {
   startHour: PropTypes.number.isRequired,
   endHour: PropTypes.number.isRequired,
   appointments: PropTypes.arrayOf(PropTypes.instanceOf(Appointment)).isRequired,
+  events: PropTypes.arrayOf(PropTypes.instanceOf(Event)).isRequired,
   patients: PropTypes.instanceOf(Map).isRequired,
   schedule: PropTypes.instanceOf(Map).isRequired,
   selectAppointment: PropTypes.func.isRequired,

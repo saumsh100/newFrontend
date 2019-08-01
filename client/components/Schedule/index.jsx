@@ -227,6 +227,7 @@ class ScheduleComponent extends Component {
     const {
       practitioners,
       appointments,
+      events,
       schedule,
       patients,
       services,
@@ -236,6 +237,7 @@ class ScheduleComponent extends Component {
       setMergingPatient,
       unit,
       appsFetched,
+      eventsFetched,
       pracsFetched,
       chairsFetched,
       accountsFetched,
@@ -366,7 +368,8 @@ class ScheduleComponent extends Component {
       createNewPatient;
 
     this.pageTitle = displayTitle;
-    const allFetched = appsFetched && accountsFetched && chairsFetched && pracsFetched;
+    const allFetched =
+      appsFetched && eventsFetched && accountsFetched && chairsFetched && pracsFetched;
 
     return isHub() ? (
       <div className={styles.hubWrapper}>
@@ -419,6 +422,7 @@ class ScheduleComponent extends Component {
                   chairs={chairs}
                   services={services}
                   appointments={appointments}
+                  events={events}
                   schedule={schedule}
                   selectAppointment={selectAppointment}
                   leftColumnWidth={leftColumnWidth}
@@ -514,6 +518,7 @@ export const selectAppointmentPropType = PropTypes.shape({
 ScheduleComponent.propTypes = {
   accountsFetched: PropTypes.bool,
   appsFetched: PropTypes.bool,
+  eventsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
   pracsFetched: PropTypes.bool,
   unit: PropTypes.instanceOf(Account).isRequired,
@@ -526,6 +531,7 @@ ScheduleComponent.propTypes = {
   createEntityRequest: PropTypes.func.isRequired,
   practitioners: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)),
+  events: PropTypes.objectOf(PropTypes.instanceOf(List)),
   services: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   patients: PropTypes.objectOf(PropTypes.instanceOf(List)),
   chairs: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
@@ -536,7 +542,9 @@ ScheduleComponent.defaultProps = {
   chairsFetched: false,
   pracsFetched: false,
   appsFetched: false,
+  eventsFetched: false,
   appointments: null,
+  events: null,
   selectedAppointment: null,
   patients: null,
 };

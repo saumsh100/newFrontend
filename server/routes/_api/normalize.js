@@ -3,6 +3,8 @@ const normalizr = require('normalizr');
 
 const { schema } = normalizr;
 
+const noopSchema = () => new schema.Entity('noop', {});
+
 const accountSchema = () => new schema.Entity('accounts', {
   users: [userSchema()],
   practitioners: [_practitionerSchema],
@@ -190,6 +192,9 @@ const SCHEMAS = {
   reservations: [reservationSchema()],
   sentReminders: [sentReminderSchema()],
   sentRecalls: [sentRecallSchema()],
+
+  // Adding a no operation schema so that we always have a default schema to parse empty responses
+  noop: [noopSchema()],
 };
 
 module.exports = function normalize(key, data) {

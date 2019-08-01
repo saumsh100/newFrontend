@@ -1,6 +1,7 @@
 
 import { Router } from 'express';
 import subdomain from 'express-subdomain';
+import { Deserializer } from 'jsonapi-serializer';
 import graphQLRouter from 'CareCruGraphQL/server';
 import apiRouter from './_api';
 import myRouter from './_api/my';
@@ -17,6 +18,8 @@ import httpClient from '../util/httpClient';
 import { sequelizeAuthMiddleware } from '../middleware/auth';
 import isFeatureFlagEnabled from '../lib/featureFlag';
 import { newApiUrl } from '../config/globals';
+import getResponseConfig, { NORMALIZER } from '../middleware/getResponseConfig';
+import format from './util/format';
 
 const NEW_API_PATH = '/newapi';
 
@@ -51,7 +54,8 @@ rootRouter.post('/newgraphql', sequelizeAuthMiddleware, async (req, res, next) =
 rootRouter.all(
   `${NEW_API_PATH}/*`,
   sequelizeAuthMiddleware,
-  async ({ originalUrl, method, body }, res, next) => {
+  getResponseConfig,
+  async ({ originalUrl, method, body, ...req }, res, next) => {
     try {
       const processedUrl = originalUrl.replace(NEW_API_PATH, '');
 
@@ -61,6 +65,15 @@ rootRouter.all(
         data: body,
       });
 
+      if (req.responseConfig.type === NORMALIZER) {
+        const deserializeData = await new Deserializer({
+          keyForAttribute: 'camelCase',
+        }).deserialize(data);
+
+        return res.send(
+          format(req, res, (data.data[0] && data.data[0].type) || 'noop', deserializeData),
+        );
+      }
       res.send(data);
     } catch (err) {
       next(err);

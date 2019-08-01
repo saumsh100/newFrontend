@@ -90,7 +90,7 @@ export const calculateAppointmentTop = params => (appointment) => {
 
   const { startDate, endDate, customBufferTime } = appointment;
 
-  const durationTime = getDuration(startDate, endDate, customBufferTime);
+  const durationTime = getDuration(startDate, endDate, customBufferTime || 0);
   const startDateHours = moment(startDate).hours();
   const startDateMinutes = moment(startDate).minutes();
   const positionTopPadding = 0.05;
@@ -129,6 +129,7 @@ export const buildAppointmentProps = (params) => {
     columnIndex,
     numOfColumns,
     minWidth,
+    backgroundColor,
   } = params;
 
   const {
@@ -152,7 +153,6 @@ export const buildAppointmentProps = (params) => {
   });
 
   // Calculating the top position and height of the appointment.
-  // TODO: work on overlapping the appointments a little
   const splitRow = rowSort.length > 1 ? (100 * appPosition) / rowSort.length : 0;
 
   const multiAppLineLeft = `calc(${splitRow}% - ${
@@ -182,7 +182,7 @@ export const buildAppointmentProps = (params) => {
   // main app style
   const appStyle = {
     height,
-    backgroundColor: practitionerData.color,
+    backgroundColor: backgroundColor || practitionerData.color,
     zIndex: appPosition,
   };
 

@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import Appointment from '../../../entities/models/Appointments';
+import Event from '../../../entities/models/Event';
 import TimeColumn from './TimeColumn/TimeColumn';
 import PractitionersSlot from './PractitionersSlot';
 import ColumnHeader from './ColumnHeader/index';
@@ -93,17 +94,19 @@ class DayViewBody extends Component {
       practitioners,
       patients,
       appointments,
+      events,
       services,
       chairs,
       selectAppointment,
       scheduleView,
       leftColumnWidth,
       appsFetched,
+      eventsFetched,
       chairsFetched,
       pracsFetched,
     } = this.props;
 
-    const allFetched = appsFetched && chairsFetched && pracsFetched;
+    const allFetched = appsFetched && eventsFetched && chairsFetched && pracsFetched;
 
     const timeSlots = [];
     for (let i = startHour; i <= endHour; i += 1) {
@@ -142,23 +145,6 @@ class DayViewBody extends Component {
       return null;
     });
 
-    const practitionersSlot = allFetched && (
-      <PractitionersSlot
-        timeSlots={timeSlots}
-        timeSlotHeight={timeSlotHeight}
-        practitionersArray={practitionersArray}
-        startHour={startHour}
-        endHour={endHour}
-        schedule={schedule}
-        patients={patients}
-        appointments={appointments}
-        services={services}
-        chairs={chairs}
-        selectAppointment={selectAppointment}
-        scrollComponentDidMount={this.scrollComponentDidMount}
-      />
-    );
-
     // Display chairs that have been selected on the filters
     const checkedChairs = schedule.get('chairsFilter');
     const chairsArray = chairs
@@ -166,24 +152,27 @@ class DayViewBody extends Component {
       .sort(SortByName)
       .filter(chair => checkedChairs.indexOf(chair.id) > -1 && chair.isActive);
 
-    const chairsSlot = allFetched && (
-      <ChairsSlot
-        timeSlots={timeSlots}
-        timeSlotHeight={timeSlotHeight}
-        practitionersArray={practitionersArray}
-        chairsArray={chairsArray}
-        startHour={startHour}
-        endHour={endHour}
-        schedule={schedule}
-        patients={patients}
-        appointments={appointments}
-        services={services}
-        chairs={chairs}
-        practitioners={practitioners}
-        selectAppointment={selectAppointment}
-        scrollComponentDidMountChair={this.scrollComponentDidMountChair}
-      />
-    );
+    const slotProps = {
+      timeSlots,
+      timeSlotHeight,
+      startHour,
+      endHour,
+      schedule,
+      patients,
+      appointments,
+      events,
+      services,
+      chairs,
+      selectAppointment,
+      practitioners,
+      practitionersArray,
+      chairsArray,
+      scrollComponentDidMountChair: this.scrollComponentDidMountChair,
+    };
+
+    const practitionersSlot = allFetched && <PractitionersSlot {...slotProps} />;
+
+    const chairsSlot = allFetched && <ChairsSlot {...slotProps} />;
 
     return (
       <SContainer className={styles.card} id="scheduleContainer">
@@ -219,6 +208,9 @@ function mapStateToProps({ schedule, apiRequests }) {
   const appsFetched = apiRequests.get('appSchedule')
     ? apiRequests.get('appSchedule').wasFetched
     : null;
+  const eventsFetched = apiRequests.get('eventsSchedule')
+    ? apiRequests.get('eventsSchedule').wasFetched
+    : null;
   const pracsFetched = apiRequests.get('pracSchedule')
     ? apiRequests.get('pracSchedule').wasFetched
     : null;
@@ -229,6 +221,7 @@ function mapStateToProps({ schedule, apiRequests }) {
   return {
     scheduleView,
     appsFetched,
+    eventsFetched,
     pracsFetched,
     chairsFetched,
   };
@@ -238,6 +231,7 @@ DayViewBody.propTypes = {
   startHour: PropTypes.number.isRequired,
   endHour: PropTypes.number.isRequired,
   appointments: PropTypes.arrayOf(PropTypes.instanceOf(Appointment)).isRequired,
+  events: PropTypes.arrayOf(PropTypes.instanceOf(Event)).isRequired,
   patients: PropTypes.instanceOf(Map).isRequired,
   services: PropTypes.instanceOf(Map).isRequired,
   chairs: PropTypes.instanceOf(Map).isRequired,
@@ -247,14 +241,16 @@ DayViewBody.propTypes = {
   scheduleView: PropTypes.string.isRequired,
   leftColumnWidth: PropTypes.number.isRequired,
   appsFetched: PropTypes.bool,
+  eventsFetched: PropTypes.bool,
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
 };
 
 DayViewBody.defaultProps = {
   appsFetched: false,
+  eventsFetched: false,
   pracsFetched: false,
   chairsFetched: false,
 };
 
-export default connect(mapStateToProps, null)(DayViewBody);
+export default connect(mapStateToProps)(DayViewBody);

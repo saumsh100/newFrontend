@@ -26,16 +26,17 @@
   border-style: solid;
   border-color: $primary-white;
   border-width: 1px 1px 0;
-  &_mark {
-    overflow: auto;
-  }
+}
+
+.showMark {
+  cursor: default;
 }
 
 .mark {
   font-size: $extra-small-size;
   letter-spacing: 0.5px;
-  padding: 5px;
   cursor: default;
+  overflow: auto;
   &_note {
     white-space: normal;
   }

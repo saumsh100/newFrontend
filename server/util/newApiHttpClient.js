@@ -6,13 +6,15 @@ import { newApiUrl } from '../config/globals';
 /**
  * Http Client for new API, appends /api to all requests and always deserialize the response
  * @param url host to proxy to
- * @param headers (HTTP) of the request
+ * @param method
+ * @param params
  * @param data to send to another host
+ * @param baseUrl defines the base url for the requests
  * @return {Promise}
  */
-export default ({ url, method, params, data }) =>
+export default ({ url, method, params, data }, baseUrl = `${newApiUrl}/api`) =>
   httpClient({
-    url: `${newApiUrl}/api/${url}`,
+    url: baseUrl + url,
     method,
     params,
     data,

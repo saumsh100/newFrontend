@@ -11,17 +11,17 @@ import {
   sortAppsByStartDate,
   buildAppointmentProps,
 } from './helpers';
+import { hexToRgbA } from '../../../library/util/colorMap';
 
 /**
  * Function to calculate the intersection of appointments,
  * build the props and set the correct component to render
  * @param {*} params
  */
-const renderDisplayComponent = params => (app, index, array) => {
+const renderDisplayComponent = params => (item, index, array) => {
   const {
     timeSlotHeight,
     startHour,
-    endHour,
     selectAppointment,
     selectedAppointment,
     minWidth,
@@ -31,12 +31,10 @@ const renderDisplayComponent = params => (app, index, array) => {
     unit,
   } = params;
 
-  const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate);
-
+  const intersectingApps = intersectingAppointments(array, item.startDate, item.endDate);
   const rowSort = intersectingApps.sort(sortAppsByStartDate);
-
-  const appoitmentParams = {
-    appointment: app,
+  const defaultApptParams = {
+    appointment: item,
     rowSort,
     startHour,
     timeSlotHeight,
@@ -46,32 +44,30 @@ const renderDisplayComponent = params => (app, index, array) => {
     minWidth,
   };
 
-  const appoitmentProps = app.mark ? {} : buildAppointmentProps(appoitmentParams);
-
-  return app.mark ? (
+  return item.mark || item.event ? (
     <ShowMark
       key={index}
-      appointment={app}
-      startHour={startHour}
-      endHour={endHour}
-      rowSort={rowSort}
+      appointment={item}
       timeSlotHeight={timeSlotHeight}
-      {...appoitmentProps}
+      {...buildAppointmentProps({
+        ...defaultApptParams,
+        backgroundColor: hexToRgbA('#d8d8d8', 1),
+      })}
     />
   ) : (
     <ShowAppointment
       key={index}
+      appointment={item}
       selectAppointment={selectAppointment}
       selectedAppointment={selectedAppointment}
       scheduleView={scheduleView}
-      appointment={app}
-      {...appoitmentProps}
+      {...buildAppointmentProps(defaultApptParams)}
     />
   );
 };
 
 export default function TimeSlot(props) {
-  const { timeSlots, timeSlotHeight, filteredApps, minWidth, startHour, unit, entityId } = props;
+  const { timeSlots, timeSlotHeight, items, minWidth, startHour, unit, entityId } = props;
 
   const timeSlotContentStyle = {
     minWidth: `${minWidth}px`,
@@ -81,8 +77,8 @@ export default function TimeSlot(props) {
     <div style={timeSlotContentStyle} className={styles.timeSlotColumn}>
       <TimeSlotColumn prefixKey={entityId} timeSlots={timeSlots} timeSlotHeight={timeSlotHeight} />
 
-      {filteredApps &&
-        filteredApps
+      {items &&
+        items
           .sort(sortAppsByStartDate)
           .map(
             calculateAppointmentTop({
@@ -107,7 +103,7 @@ TimeSlot.propTypes = {
   timeSlotHeight: PropTypes.shape({
     height: PropTypes.number,
   }).isRequired,
-  filteredApps: PropTypes.arrayOf(PropTypes.object).isRequired,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
   unit: PropTypes.number.isRequired,
   entityId: PropTypes.string.isRequired,
 };

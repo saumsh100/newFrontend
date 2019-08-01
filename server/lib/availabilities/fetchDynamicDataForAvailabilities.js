@@ -157,7 +157,7 @@ export function fetchDailySchedules({ accountId, practitionerIds, startDate, end
 
 export function fetchEvents({ accountId, startDate, endDate }) {
   return newApiHttpClient({
-    url: 'events/',
+    url: '/events/',
     method: 'GET',
     params: {
       accountId,

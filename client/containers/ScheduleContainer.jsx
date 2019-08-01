@@ -31,11 +31,13 @@ class ScheduleContainer extends Component {
     };
 
     this.refetchRecentlyUpdatedAppointments = this.refetchRecentlyUpdatedAppointments.bind(this);
+    this.buildEventsQuery = this.buildEventsQuery.bind(this);
   }
 
   componentDidMount() {
     const currentDate = setDateToTimezone(this.props.currentDate);
-    const query = this.buildAppointmentQuery(currentDate);
+    const appointmentsQuery = this.buildAppointmentQuery(currentDate);
+    const eventsQuery = this.buildEventsQuery(currentDate);
 
     const timer = setInterval(this.refetchRecentlyUpdatedAppointments, this.state.timeout);
     this.setState({ timer });
@@ -45,7 +47,12 @@ class ScheduleContainer extends Component {
         id: 'appSchedule',
         key: 'appointments',
         join: ['patient', 'service'],
-        params: query,
+        params: appointmentsQuery,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'eventsSchedule',
+        key: 'events',
+        params: eventsQuery,
       }),
       this.props.fetchEntitiesRequest({
         id: 'pracSchedule',
@@ -72,14 +79,26 @@ class ScheduleContainer extends Component {
     const nextPropsDate = setDateToTimezone(nextProps.schedule.toJS().scheduleDate);
 
     if (this.isSameDay(currentDate, nextPropsDate)) {
-      const query = this.buildAppointmentQuery(nextPropsDate);
-      this.props.deleteAllEntity('appointments');
-      this.props.fetchEntitiesRequest({
-        id: 'appSchedule',
-        key: 'appointments',
-        join: ['patient'],
-        params: query,
-      });
+      const appointmentsQuery = this.buildAppointmentQuery(nextPropsDate);
+      const eventsQuery = this.buildEventsQuery(nextPropsDate);
+
+      Promise.all([
+        this.props.deleteAllEntity('appointments'),
+        this.props.deleteAllEntity('events'),
+      ]).then(() =>
+        Promise.all([
+          this.props.fetchEntitiesRequest({
+            id: 'appSchedule',
+            key: 'appointments',
+            join: ['patient'],
+            params: appointmentsQuery,
+          }),
+          this.props.fetchEntitiesRequest({
+            id: 'eventsSchedule',
+            key: 'events',
+            params: eventsQuery,
+          }),
+        ]));
     }
   }
 
@@ -107,6 +126,20 @@ class ScheduleContainer extends Component {
     return query;
   }
 
+  buildEventsQuery(date, queryOverride = {}) {
+    const accountId = this.props.activeAccount.get('id');
+    const startDate = date.startOf('day').toISOString();
+    const endDate = date.endOf('day').toISOString();
+    const query = {
+      accountId,
+      'startDate[between][0]': startDate,
+      'startDate[between][1]': endDate,
+      ...queryOverride,
+    };
+
+    return query;
+  }
+
   isSameDay(currentDate, updateDate) {
     return (
       !updateDate.isSame(currentDate, 'month') ||
@@ -121,7 +154,7 @@ class ScheduleContainer extends Component {
       .subtract(1, 'minutes')
       .toISOString();
 
-    const query = this.buildAppointmentQuery(
+    const apppointmentsQuery = this.buildAppointmentQuery(
       currentDate,
       {
         isDeleted: undefined,
@@ -135,12 +168,24 @@ class ScheduleContainer extends Component {
       },
     );
 
-    this.props.fetchEntities({
-      id: 'appSchedule',
-      key: 'appointments',
-      join: ['patient', 'service'],
-      params: query,
+    const eventsQuery = this.buildEventsQuery(currentDate, {
+      'updatedAt[gte]': fiveMinutesAgo,
+      paranoid: false,
     });
+
+    Promise.all([
+      this.props.fetchEntities({
+        id: 'appSchedule',
+        key: 'appointments',
+        join: ['patient', 'service'],
+        params: apppointmentsQuery,
+      }),
+      this.props.fetchEntities({
+        id: 'eventsSchedule',
+        key: 'events',
+        params: eventsQuery,
+      }),
+    ]);
   }
 
   render() {
@@ -148,6 +193,7 @@ class ScheduleContainer extends Component {
       practitioners,
       schedule,
       appointments,
+      events,
       services,
       patients,
       chairs,
@@ -160,6 +206,7 @@ class ScheduleContainer extends Component {
           practitioners={practitioners}
           schedule={schedule}
           appointments={appointments}
+          events={events}
           services={services}
           patients={patients}
           chairs={chairs}
@@ -168,6 +215,7 @@ class ScheduleContainer extends Component {
           setCreatingPatient={this.props.setCreatingPatient}
           createEntityRequest={this.props.createEntityRequest}
           appsFetched={this.props.appsFetched}
+          eventsFetched={this.props.eventsFetched}
           pracsFetched={this.props.pracsFetched}
           chairsFetched={this.props.chairsFetched}
           accountsFetched={this.props.accountsFetched}
@@ -187,6 +235,9 @@ function mapStateToProps({ apiRequests, entities, schedule, auth }) {
   const appsFetched = apiRequests.get('appSchedule')
     ? apiRequests.get('appSchedule').wasFetched
     : null;
+  const eventsFetched = apiRequests.get('eventsSchedule')
+    ? apiRequests.get('eventsSchedule').wasFetched
+    : null;
   const pracsFetched = apiRequests.get('pracSchedule')
     ? apiRequests.get('pracSchedule').wasFetched
     : null;
@@ -203,11 +254,13 @@ function mapStateToProps({ apiRequests, entities, schedule, auth }) {
     selectedAppointment: schedule.toJS().selectedAppointment,
     practitioners: entities.get('practitioners'),
     appointments: entities.get('appointments'),
+    events: entities.get('events'),
     patients: entities.get('patients'),
     services: entities.get('services'),
     chairs: entities.get('chairs'),
     activeAccount,
     appsFetched,
+    eventsFetched,
     pracsFetched,
     chairsFetched,
     accountsFetched,
@@ -236,6 +289,7 @@ ScheduleContainer.propTypes = {
   practitioners: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   currentDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(moment)]),
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  events: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   services: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   patients: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   chairs: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
@@ -254,6 +308,7 @@ ScheduleContainer.propTypes = {
   setMergingPatient: PropTypes.func.isRequired,
   selectAppointment: PropTypes.func.isRequired,
   appsFetched: PropTypes.bool,
+  eventsFetched: PropTypes.bool,
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
   accountsFetched: PropTypes.bool,
@@ -262,6 +317,7 @@ ScheduleContainer.propTypes = {
 ScheduleContainer.defaultProps = {
   currentDate: new Date(),
   appsFetched: false,
+  eventsFetched: false,
   pracsFetched: false,
   chairsFetched: false,
   accountsFetched: false,

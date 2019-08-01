@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import TimeSlot from '../TimeSlot';
 import Appointment from '../../../../entities/models/Appointments';
+import Event from '../../../../entities/models/Event';
 import { practitionerShape } from '../../../library/PropTypeShapes';
 import Chair from '../../../../entities/models/Chair';
 import styles from '../styles.scss';
@@ -16,6 +17,7 @@ export default function ChairsSlot(props) {
     endHour,
     schedule,
     practitioners,
+    events,
     practitionersArray,
     chairsArray,
     patients,
@@ -52,12 +54,13 @@ export default function ChairsSlot(props) {
                   prac => prac.id === app.get('practitionerId'),
                 );
 
-                return Object.assign({}, app.toJS(), {
+                return {
+                  ...app.toJS(),
                   appModel: app,
                   chairData: chair.name,
                   practitionerData,
                   patientData: patients.get(app.get('patientId')),
-                });
+                };
               });
 
             return (
@@ -70,7 +73,7 @@ export default function ChairsSlot(props) {
                 minWidth={schedule.get('columnWidth')}
                 startHour={startHour}
                 endHour={endHour}
-                filteredApps={filteredApps}
+                items={filteredApps.concat(events.filter(e => e.chairId === chair.id))}
                 selectAppointment={selectAppointment}
                 scheduleView={schedule.get('scheduleView')}
                 selectedAppointment={schedule.get('selectedAppointment')}
@@ -89,6 +92,7 @@ ChairsSlot.propTypes = {
   startHour: PropTypes.number.isRequired,
   endHour: PropTypes.number.isRequired,
   appointments: PropTypes.arrayOf(PropTypes.instanceOf(Appointment)).isRequired,
+  events: PropTypes.arrayOf(PropTypes.instanceOf(Event)).isRequired,
   patients: PropTypes.instanceOf(Map).isRequired,
   practitioners: PropTypes.instanceOf(Map).isRequired,
   schedule: PropTypes.instanceOf(Map).isRequired,
