@@ -38,6 +38,7 @@ class AppsRequestsContainer extends Component {
       limit: 100,
       filters: [
         {
+          isMissed: false,
           isPending: false,
           isCancelled: false,
           isDeleted: false,
@@ -86,6 +87,7 @@ class AppsRequestsContainer extends Component {
         limit: 100,
         filters: [
           {
+            isMissed: false,
             isPending: false,
             isCancelled: false,
             isDeleted: false,
@@ -226,7 +228,11 @@ function mapStateToProps({ apiRequests, entities, routing }, { dashboardDate, ..
 
   const sortedRequests = filteredRequests.sort(dateFilter);
 
-  const nextProps = { routing, sortedRequests, ...ownProps };
+  const nextProps = {
+    routing,
+    sortedRequests,
+    ...ownProps,
+  };
 
   return {
     requests,
@@ -293,4 +299,7 @@ AppsRequestsContainer.defaultProps = {
   requestId: '',
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppsRequestsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AppsRequestsContainer);

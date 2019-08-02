@@ -114,6 +114,7 @@ class ScheduleContainer extends Component {
       endDate,
       filters: [
         {
+          isMissed: false,
           isPending: false,
           isCancelled: false,
           isDeleted: false,
@@ -157,6 +158,8 @@ class ScheduleContainer extends Component {
     const apppointmentsQuery = this.buildAppointmentQuery(
       currentDate,
       {
+        isMissed: undefined,
+        isPending: undefined,
         isDeleted: undefined,
         isCancelled: undefined,
         updatedAt: {

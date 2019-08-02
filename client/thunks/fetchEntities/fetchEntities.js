@@ -3,7 +3,8 @@ import partition from 'lodash/partition';
 import { receiveEntities, deleteEntity } from '../../reducers/entities';
 import { httpClient } from '../../util/httpClient';
 
-const isDeleted = entity => entity.deletedAt || entity.isDeleted;
+const isDeleted = entity =>
+  entity.deletedAt || entity.isMissed || entity.isPending || entity.isDeleted || entity.isCancelled;
 
 const handleDispatchingActions = (dispatch, key) => ({ data }) => {
   const [deletedEntities, entities] = partition(data.entities[key], isDeleted);
