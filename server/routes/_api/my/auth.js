@@ -155,25 +155,27 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
     .catch(next);
 });
 
-authRouter.post('/signup/:patientUserId/confirm', (req, res, next) => {
-  const {
-    body: { confirmCode },
-    patientUser,
-  } = req;
-  return PinCode.findById(confirmCode)
-    .then((pc) => {
-      const { pinCode, modelId } = pc;
-      if (patientUser.id === modelId && pinCode === confirmCode) {
-        patientUser
-          .update({ isPhoneNumberConfirmed: true })
-          .then(p => res.send(p))
-          .then(() => pc.destroy());
-      }
-    })
-    .catch(() => {
+authRouter.post(
+  '/signup/:patientUserId/confirm',
+  async ({ body: { confirmCode }, patientUser }, res, next) => {
+    try {
+      const pc = await PinCode.findOne({
+        where: {
+          pinCode: confirmCode,
+          modelId: patientUser.id,
+        },
+      });
+
+      const p = await patientUser.update({ isPhoneNumberConfirmed: true });
+
+      await pc.destroy();
+
+      return res.send(p);
+    } catch (e) {
       next(StatusError(400, 'Invalid confirmation code'));
-    });
-});
+    }
+  },
+);
 
 authRouter.post('/:patientUserId/resend', (req, res, next) => {
   const { patientUser, params } = req;
