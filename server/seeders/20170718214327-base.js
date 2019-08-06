@@ -287,505 +287,509 @@ const weeklySchedule2 = {
 
 module.exports = {
   // eslint-disable-next-line
-  async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Enterprises', [enterprise]);
+  async up(queryInterface) {
+    return queryInterface.sequelize.transaction(async (transaction) => {
+      try {
+        await queryInterface.bulkInsert('Enterprises', [enterprise], { transaction });
+        await queryInterface.bulkInsert('Addresses', [address, address2], { transaction });
+        await queryInterface.bulkInsert('Accounts', [account, account2], { transaction });
+        await queryInterface.bulkInsert('DailySchedules', devDailySchedules, { transaction });
+        await queryInterface.bulkInsert('WeeklySchedules', [
+          weeklySchedule1,
+          weeklySchedule2,
+        ], { transaction });
 
-    await queryInterface.bulkInsert('Addresses', [address, address2]);
+        await queryInterface.sequelize.query(
+          `UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId}' WHERE "id" = '${accountId}';`,
+          { transaction },
+        );
 
-    await queryInterface.bulkInsert('Accounts', [account, account2]);
+        await queryInterface.sequelize.query(
+          `UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId2}' WHERE "id" = '${accountId2}';`,
+          { transaction },
+        );
 
-    await queryInterface.bulkInsert('DailySchedules', devDailySchedules);
+        await queryInterface.bulkInsert('Permissions', [
+          managerPermission,
+          ownerPermission,
+          superAdminPermission,
+        ], { transaction });
 
-    await queryInterface.bulkInsert('WeeklySchedules', [
-      weeklySchedule1,
-      weeklySchedule2,
-    ]);
+        await queryInterface.bulkInsert('Users', [
+          managerUser,
+          ownerUser,
+          superAdminUser,
+          superAdminUser2,
+        ], { transaction });
 
-    await queryInterface.sequelize.query(
-      `UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId}' WHERE "id" = '${accountId}';`,
-    );
+        const families = [];
+        const patients = [];
+        const deliveredProcedures = [];
 
-    await queryInterface.sequelize.query(
-      `UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId2}' WHERE "id" = '${accountId2}';`,
-    );
+        // Create some families
+        for (let i = 0; i < 25; i += 1) {
+          families.push({
+            id: uuid(),
+            pmsId: uuid(),
+            accountId,
+            createdAt: faker.date.past(),
+            updatedAt: new Date(),
+          });
+        }
 
-    await queryInterface.bulkInsert('Permissions', [
-      managerPermission,
-      ownerPermission,
-      superAdminPermission,
-    ]);
+        for (let i = 0; i < 100; i += 1) {
+          const firstName = faker.name.firstName('male');
+          const lastName = faker.name.lastName();
+          const phoneNumber = faker.phone.phoneNumber('+1##########');
+          const id = uuid();
+          const pmsId = uuid();
+          const familyPosition = i % families.length;
 
-    await queryInterface.bulkInsert('Users', [
-      managerUser,
-      ownerUser,
-      superAdminUser,
-      superAdminUser2,
-    ]);
+          if (!families[familyPosition].headId) {
+            families[familyPosition].headId = id;
+          }
 
-    const families = [];
-    const patients = [];
-    const deliveredProcedures = [];
+          patients.push({
+            id,
+            pmsId,
+            accountId,
+            familyId: i > 5 ? families[familyPosition].id : null,
+            firstName,
+            lastName,
+            email: `${firstName}.${lastName}@google.ca`,
+            mobilePhoneNumber: phoneNumber,
+            cellPhoneNumber: phoneNumber,
+            birthDate: faker.date.between(
+              moment().subtract(100, 'years'),
+              moment(),
+            ),
+            gender: 'male',
+            language: 'English',
+            insurance: JSON.stringify({
+              insurance: 'Lay Health Insurance',
+              memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+              contract: '4234rerwefsdfsd',
+              carrier: 'sadasadsadsads',
+              sin: 'dsasdasdasdadsasad',
+            }),
+            lastHygieneDate: faker.date.past(),
+            lastRecallDate: faker.date.past(),
+            createdAt: faker.date.past(),
+            pmsCreatedAt: faker.date.past(),
+            updatedAt: new Date(),
+          });
 
-    // Create some families
-    for (let i = 0; i < 25; i += 1) {
-      families.push({
-        id: uuid(),
-        pmsId: uuid(),
-        accountId,
-        createdAt: faker.date.past(),
-        updatedAt: new Date(),
-      });
-    }
+          const primaryInsuranceAmount = faker.finance.amount(0, 200, 2);
 
-    for (let i = 0; i < 100; i += 1) {
-      const firstName = faker.name.firstName('male');
-      const lastName = faker.name.lastName();
-      const phoneNumber = faker.phone.phoneNumber('+1##########');
-      const id = uuid();
-      const pmsId = uuid();
-      const familyPosition = i % families.length;
+          const secondaryInsuranceAmount = faker.finance.amount(0, 200, 2);
 
-      if (!families[familyPosition].headId) {
-        families[familyPosition].headId = id;
-      }
+          const patientAmount = faker.finance.amount(0, 200, 2);
 
-      patients.push({
-        id,
-        pmsId,
-        accountId,
-        familyId: i > 5 ? families[familyPosition].id : null,
-        firstName,
-        lastName,
-        email: `${firstName}.${lastName}@google.ca`,
-        mobilePhoneNumber: phoneNumber,
-        cellPhoneNumber: phoneNumber,
-        birthDate: faker.date.between(
-          moment().subtract(100, 'years'),
-          moment(),
-        ),
-        gender: 'male',
-        language: 'English',
-        insurance: JSON.stringify({
-          insurance: 'Lay Health Insurance',
-          memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-          contract: '4234rerwefsdfsd',
-          carrier: 'sadasadsadsads',
-          sin: 'dsasdasdasdadsasad',
-        }),
-        lastHygieneDate: faker.date.past(),
-        lastRecallDate: faker.date.past(),
-        createdAt: faker.date.past(),
-        pmsCreatedAt: faker.date.past(),
-        updatedAt: new Date(),
-      });
+          const discountAmount = faker.finance.amount(0, 200, 2);
 
-      const primaryInsuranceAmount = faker.finance.amount(0, 200, 2);
+          const totalAmount =
+            parseFloat(patientAmount) +
+            parseFloat(secondaryInsuranceAmount) +
+            parseFloat(primaryInsuranceAmount) -
+            parseFloat(discountAmount);
 
-      const secondaryInsuranceAmount = faker.finance.amount(0, 200, 2);
+          let code = Math.floor(Math.random() * procedures.length);
 
-      const patientAmount = faker.finance.amount(0, 200, 2);
+          while (procedures[code].code.match(/^d/i)) {
+            code = Math.floor(Math.random() * procedures.length);
+          }
 
-      const discountAmount = faker.finance.amount(0, 200, 2);
+          deliveredProcedures.push({
+            id: uuid(),
+            accountId,
+            primaryInsuranceAmount,
+            secondaryInsuranceAmount,
+            patientAmount,
+            discountAmount,
+            totalAmount,
+            units: 1.0,
+            createdAt: faker.date.past(),
+            entryDate: faker.date.past(),
+            updatedAt: new Date(),
+            patientId: id,
+            procedureCode: procedures[code].code,
+            procedureCodeId: `CDA-${procedures[code].code}`,
+          });
+        }
 
-      const totalAmount =
-        parseFloat(patientAmount) +
-        parseFloat(secondaryInsuranceAmount) +
-        parseFloat(primaryInsuranceAmount) -
-        parseFloat(discountAmount);
+        for (let i = 0; i < 30; i += 1) {
+          const firstName = faker.name.firstName('female');
+          const lastName = faker.name.lastName();
+          const phoneNumber = faker.phone.phoneNumber('+1##########');
+          const familyPosition = i % families.length;
+          patients.push({
+            id: uuid(),
+            pmsId: uuid(),
+            accountId,
+            familyId: i > 5 ? families[familyPosition].id : null,
+            firstName,
+            lastName,
+            email: `${firstName}.${lastName}@google.ca`,
+            mobilePhoneNumber: phoneNumber,
+            cellPhoneNumber: phoneNumber,
+            birthDate: faker.date.between(
+              moment().subtract(100, 'years'),
+              moment(),
+            ),
+            gender: 'female',
+            language: 'English',
+            insurance: JSON.stringify({
+              insurance: 'Lay Health Insurance',
+              memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+              contract: '4234rerwefsdfsd',
+              carrier: 'sadasadsadsads',
+              sin: 'dsasdasdasdadsasad',
+            }),
+            dueForHygieneDate: faker.date.past(),
+            dueForRecallExamDate: faker.date.past(),
+            createdAt: faker.date.past(),
+            updatedAt: new Date(),
+          });
+        }
 
-      let code = Math.floor(Math.random() * procedures.length);
+        const mobilePhoneNumber = faker.phone.phoneNumber('+1##########');
 
-      while (procedures[code].code.match(/^d/i)) {
-        code = Math.floor(Math.random() * procedures.length);
-      }
-
-      deliveredProcedures.push({
-        id: uuid(),
-        accountId,
-        primaryInsuranceAmount,
-        secondaryInsuranceAmount,
-        patientAmount,
-        discountAmount,
-        totalAmount,
-        units: 1.0,
-        createdAt: faker.date.past(),
-        entryDate: faker.date.past(),
-        updatedAt: new Date(),
-        patientId: id,
-        procedureCode: procedures[code].code,
-        procedureCodeId: `CDA-${procedures[code].code}`,
-      });
-    }
-
-    for (let i = 0; i < 30; i += 1) {
-      const firstName = faker.name.firstName('female');
-      const lastName = faker.name.lastName();
-      const phoneNumber = faker.phone.phoneNumber('+1##########');
-      const familyPosition = i % families.length;
-      patients.push({
-        id: uuid(),
-        pmsId: uuid(),
-        accountId,
-        familyId: i > 5 ? families[familyPosition].id : null,
-        firstName,
-        lastName,
-        email: `${firstName}.${lastName}@google.ca`,
-        mobilePhoneNumber: phoneNumber,
-        cellPhoneNumber: phoneNumber,
-        birthDate: faker.date.between(
-          moment().subtract(100, 'years'),
-          moment(),
-        ),
-        gender: 'female',
-        language: 'English',
-        insurance: JSON.stringify({
-          insurance: 'Lay Health Insurance',
-          memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-          contract: '4234rerwefsdfsd',
-          carrier: 'sadasadsadsads',
-          sin: 'dsasdasdasdadsasad',
-        }),
-        dueForHygieneDate: faker.date.past(),
-        dueForRecallExamDate: faker.date.past(),
-        createdAt: faker.date.past(),
-        updatedAt: new Date(),
-      });
-    }
-
-    const mobilePhoneNumber = faker.phone.phoneNumber('+1##########');
-
-    patients.push({
-      id: uuid(),
-      accountId,
-      firstName: 'Testy',
-      lastName: 'Testerson',
-      email: 'testy.testerson@google.ca',
-      mobilePhoneNumber,
-      cellPhoneNumber: mobilePhoneNumber,
-      birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
-      gender: 'female',
-      language: 'English',
-      insurance: JSON.stringify({
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      }),
-      dueForHygieneDate: moment()
-        .add(1, 'months')
-        .toISOString(),
-      dueForRecallExamDate: moment()
-        .add(1, 'months')
-        .toISOString(),
-      createdAt: faker.date.past(),
-      updatedAt: new Date(),
-    });
-
-    await queryInterface.bulkInsert('Families', families);
-
-    await queryInterface.bulkInsert('Patients', patients);
-
-    await queryInterface.bulkInsert('DeliveredProcedures', deliveredProcedures);
-
-    const practitionerIds = [
-      '19b851d4-5730-41ad-8b85-b3c5f2ee91ff',
-      '96eadc09-4c70-4259-9534-c7e112e3b2d6',
-      '4c8f5a0b-4a50-4ea1-af22-46362c14833b',
-      '714b1556-a077-4cd6-8f7b-aadf0bd163d1',
-      '6ecc3d1d-2d8c-4763-baac-f7e3c0c203d5',
-      '12594869-c80b-43bb-8e2b-eeae7aead5e0',
-      '0200e115-edbd-45f0-a907-8c40fff357e2',
-      'f334b97f-21ec-42ad-828e-599bf4c99b1d',
-      '69281845-f523-4848-8368-159fb575bd7d',
-      'f059e1cd-5593-46ec-90b6-af14dd9c974e',
-    ];
-
-    const practitioners = practitionerIds.map(id => ({
-      id,
-      accountId,
-      type: 'Hygienist',
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }));
-
-    await queryInterface.bulkInsert('Practitioners', practitioners);
-
-    const appointments = [];
-    for (let i = 0; i < patients.length; i += 2) {
-      const patient = patients[i];
-      const appointment = {
-        id: uuid(),
-        accountId,
-        practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
-        patientId: patient.id,
-        startDate: moment()
-          .add('-30', 'days')
-          .add('-5', 'minutes')
-          .toISOString(),
-        endDate: moment()
-          .add('-30', 'days')
-          .add('30', 'minutes')
-          .toISOString(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      appointments.push(appointment);
-    }
-
-    // await queryInterface.bulkInsert('Appointments', appointments);
-
-    const patients2 = [];
-
-    for (let i = 0; i < 80; i += 1) {
-      const firstName = faker.name.firstName();
-      const lastName = faker.name.lastName();
-      const phoneNumber = faker.phone.phoneNumber('+1##########');
-      patients2.push({
-        id: uuid(),
-        accountId: accountId2,
-        pmsId: uuid(),
-        firstName,
-        lastName,
-        email: `${firstName}.${lastName}@google.ca`,
-        mobilePhoneNumber: phoneNumber,
-        cellPhoneNumber: phoneNumber,
-        birthDate: faker.date.past(),
-        gender: 'male',
-        language: 'English',
-        insurance: JSON.stringify({
-          insurance: 'Lay Health Insurance',
-          memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-          contract: '4234rerwefsdfsd',
-          carrier: 'sadasadsadsads',
-          sin: 'dsasdasdasdadsasad',
-        }),
-        lastHygieneDate: faker.date.past(),
-        lastRecallDate: faker.date.past(),
-        pmsCreatedAt: faker.date.past(),
-        createdAt: faker.date.past(),
-        updatedAt: new Date(),
-      });
-    }
-
-    // Test Patient for Account 2
-    patients2.push({
-      id: 'a021cf88-1b5c-4d54-a0f4-b6629523b738',
-      accountId: accountId2,
-      firstName: 'Testy',
-      lastName: 'Testerson',
-      email: 'testy.testerson@google.ca',
-      mobilePhoneNumber: '906-594-6264',
-      cellPhoneNumber: '906-594-6264',
-      birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
-      gender: 'female',
-      language: 'English',
-      insurance: JSON.stringify({
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      }),
-      dueForHygieneDate: moment()
-        .add(1, 'months')
-        .toISOString(),
-      dueForRecallExamDate: moment()
-        .add(1, 'months')
-        .toISOString(),
-      createdAt: faker.date.past(),
-      updatedAt: new Date(),
-    });
-
-    patients2.push({
-      id: 'a021cf88-1b5c-4d54-a0f4-b6629523b739',
-      accountId: accountId2,
-      firstName: 'Testen',
-      lastName: 'Testerson',
-      email: 'testen.testerson@google.ca',
-      mobilePhoneNumber: '906-594-6265',
-      cellPhoneNumber: '906-594-6265',
-      birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
-      gender: 'male',
-      language: 'English',
-      insurance: JSON.stringify({
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      }),
-      dueForHygieneDate: moment()
-        .add(1, 'months')
-        .toISOString(),
-      dueForRecallExamDate: moment()
-        .add(1, 'months')
-        .toISOString(),
-      createdAt: faker.date.past(),
-      updatedAt: new Date(),
-    });
-
-    await queryInterface.bulkInsert('Patients', patients2);
-
-    await queryInterface.bulkInsert(
-      'PatientSearches',
-      patients
-        .filter((_, index) => index < 10)
-        .map(patient => ({
+        patients.push({
           id: uuid(),
-          userId: superAdminUser2.id,
           accountId,
-          patientId: patient.id,
+          firstName: 'Testy',
+          lastName: 'Testerson',
+          email: 'testy.testerson@google.ca',
+          mobilePhoneNumber,
+          cellPhoneNumber: mobilePhoneNumber,
+          birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+          gender: 'female',
+          language: 'English',
+          insurance: JSON.stringify({
+            insurance: 'Lay Health Insurance',
+            memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+            contract: '4234rerwefsdfsd',
+            carrier: 'sadasadsadsads',
+            sin: 'dsasdasdasdadsasad',
+          }),
+          dueForHygieneDate: moment()
+            .add(1, 'months')
+            .toISOString(),
+          dueForRecallExamDate: moment()
+            .add(1, 'months')
+            .toISOString(),
+          createdAt: faker.date.past(),
+          updatedAt: new Date(),
+        });
+
+        await queryInterface.bulkInsert('Families', families, { transaction });
+
+        await queryInterface.bulkInsert('Patients', patients, { transaction });
+
+        const createdAt = new Date();
+        const readyProcedures = procedures.map(p => ({ ...p, createdAt, updatedAt: createdAt }));
+        await queryInterface.bulkInsert('Procedures', readyProcedures, { transaction });
+
+        await queryInterface.bulkInsert('DeliveredProcedures', deliveredProcedures, { transaction });
+
+        const practitionerIds = [
+          '19b851d4-5730-41ad-8b85-b3c5f2ee91ff',
+          '96eadc09-4c70-4259-9534-c7e112e3b2d6',
+          '4c8f5a0b-4a50-4ea1-af22-46362c14833b',
+          '714b1556-a077-4cd6-8f7b-aadf0bd163d1',
+          '6ecc3d1d-2d8c-4763-baac-f7e3c0c203d5',
+          '12594869-c80b-43bb-8e2b-eeae7aead5e0',
+          '0200e115-edbd-45f0-a907-8c40fff357e2',
+          'f334b97f-21ec-42ad-828e-599bf4c99b1d',
+          '69281845-f523-4848-8368-159fb575bd7d',
+          'f059e1cd-5593-46ec-90b6-af14dd9c974e',
+        ];
+
+        const practitioners = practitionerIds.map(id => ({
+          id,
+          accountId,
+          type: 'Hygienist',
+          firstName: faker.name.firstName(),
+          lastName: faker.name.lastName(),
           createdAt: new Date(),
           updatedAt: new Date(),
-        })),
-    );
+        }));
 
-    await queryInterface.bulkInsert(
-      'PatientSearches',
-      patients2
-        .filter((_, index) => index < 10)
-        .map(patient => ({
-          id: uuid(),
-          userId: superAdminUser2.id,
+        await queryInterface.bulkInsert('Practitioners', practitioners, { transaction });
+
+        const appointments = [];
+        for (let i = 0; i < patients.length; i += 2) {
+          const patient = patients[i];
+          const appointment = {
+            id: uuid(),
+            accountId,
+            practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
+            patientId: patient.id,
+            startDate: moment()
+              .add('-30', 'days')
+              .add('-5', 'minutes')
+              .toISOString(),
+            endDate: moment()
+              .add('-30', 'days')
+              .add('30', 'minutes')
+              .toISOString(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          };
+
+          appointments.push(appointment);
+        }
+
+        // await queryInterface.bulkInsert('Appointments', appointments);
+
+        const patients2 = [];
+
+        for (let i = 0; i < 80; i += 1) {
+          const firstName = faker.name.firstName();
+          const lastName = faker.name.lastName();
+          const phoneNumber = faker.phone.phoneNumber('+1##########');
+          patients2.push({
+            id: uuid(),
+            accountId: accountId2,
+            pmsId: uuid(),
+            firstName,
+            lastName,
+            email: `${firstName}.${lastName}@google.ca`,
+            mobilePhoneNumber: phoneNumber,
+            cellPhoneNumber: phoneNumber,
+            birthDate: faker.date.past(),
+            gender: 'male',
+            language: 'English',
+            insurance: JSON.stringify({
+              insurance: 'Lay Health Insurance',
+              memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+              contract: '4234rerwefsdfsd',
+              carrier: 'sadasadsadsads',
+              sin: 'dsasdasdasdadsasad',
+            }),
+            lastHygieneDate: faker.date.past(),
+            lastRecallDate: faker.date.past(),
+            pmsCreatedAt: faker.date.past(),
+            createdAt: faker.date.past(),
+            updatedAt: new Date(),
+          });
+        }
+
+        // Test Patient for Account 2
+        patients2.push({
+          id: 'a021cf88-1b5c-4d54-a0f4-b6629523b738',
           accountId: accountId2,
-          patientId: patient.id,
+          firstName: 'Testy',
+          lastName: 'Testerson',
+          email: 'testy.testerson@google.ca',
+          mobilePhoneNumber: '906-594-6264',
+          cellPhoneNumber: '906-594-6264',
+          birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+          gender: 'female',
+          language: 'English',
+          insurance: JSON.stringify({
+            insurance: 'Lay Health Insurance',
+            memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+            contract: '4234rerwefsdfsd',
+            carrier: 'sadasadsadsads',
+            sin: 'dsasdasdasdadsasad',
+          }),
+          dueForHygieneDate: moment()
+            .add(1, 'months')
+            .toISOString(),
+          dueForRecallExamDate: moment()
+            .add(1, 'months')
+            .toISOString(),
+          createdAt: faker.date.past(),
+          updatedAt: new Date(),
+        });
+
+        patients2.push({
+          id: 'a021cf88-1b5c-4d54-a0f4-b6629523b739',
+          accountId: accountId2,
+          firstName: 'Testen',
+          lastName: 'Testerson',
+          email: 'testen.testerson@google.ca',
+          mobilePhoneNumber: '906-594-6265',
+          cellPhoneNumber: '906-594-6265',
+          birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+          gender: 'male',
+          language: 'English',
+          insurance: JSON.stringify({
+            insurance: 'Lay Health Insurance',
+            memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+            contract: '4234rerwefsdfsd',
+            carrier: 'sadasadsadsads',
+            sin: 'dsasdasdasdadsasad',
+          }),
+          dueForHygieneDate: moment()
+            .add(1, 'months')
+            .toISOString(),
+          dueForRecallExamDate: moment()
+            .add(1, 'months')
+            .toISOString(),
+          createdAt: faker.date.past(),
+          updatedAt: new Date(),
+        });
+
+        await queryInterface.bulkInsert('Patients', patients2, { transaction });
+
+        await queryInterface.bulkInsert(
+          'PatientSearches',
+          patients
+            .filter((_, index) => index < 10)
+            .map(patient => ({
+              id: uuid(),
+              userId: superAdminUser2.id,
+              accountId,
+              patientId: patient.id,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            })),
+          { transaction },
+        );
+
+        await queryInterface.bulkInsert(
+          'PatientSearches',
+          patients2
+            .filter((_, index) => index < 10)
+            .map(patient => ({
+              id: uuid(),
+              userId: superAdminUser2.id,
+              accountId: accountId2,
+              patientId: patient.id,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            })),
+          { transaction },
+        );
+
+        const practitioners2 = [];
+
+        for (let i = 0; i < 10; i += 1) {
+          practitioners2.push({
+            id: uuid(),
+            accountId: accountId2,
+            type: 'Hygienist',
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
+        }
+
+        await queryInterface.bulkInsert('Practitioners', practitioners2, { transaction });
+
+        const appointments2 = [];
+        for (let i = 0; i < patients2.length; i += 2) {
+          const patient = patients2[i];
+          const appointment = {
+            id: uuid(),
+            accountId: accountId2,
+            practitionerId: practitioners2[Math.floor(Math.random() * 10) + 0].id,
+            patientId: patient.id,
+            startDate: moment()
+              .add('-30', 'days')
+              .add('-5', 'minutes')
+              .toISOString(),
+            endDate: moment()
+              .add('-30', 'days')
+              .add('30', 'minutes')
+              .toISOString(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          };
+
+          appointments2.push(appointment);
+        }
+
+        const chair1Id = uuid();
+        const chair2Id = uuid();
+        await queryInterface.bulkInsert('Chairs', [
+          {
+            id: chair1Id,
+            accountId,
+            name: 'Chair 1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            id: chair2Id,
+            accountId,
+            name: 'Chair 2',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        ], { transaction });
+
+        const todaysApps = [];
+        for (let i = 0; i < 5; i += 2) {
+          const startDateMinutes = i * 15;
+          const patient = patients[i];
+          const appointment = {
+            id: uuid(),
+            accountId,
+            practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
+            patientId: patient.id,
+            startDate: moment()
+              .add(`${startDateMinutes}`, 'minutes')
+              .toISOString(),
+            endDate: moment()
+              .add(`${startDateMinutes + 15}`, 'minutes')
+              .toISOString(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            chairId: chair2Id,
+            isCancelled: false,
+            isPatientConfirmed: i === 0,
+          };
+
+          todaysApps.push(appointment);
+        }
+
+        const prevDay = moment().subtract(1, 'day');
+        const prevDayApp = {
+          id: uuid(),
+          accountId,
+          practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
+          patientId: patients[patients.length - 1].id,
+          startDate: prevDay.toISOString(),
+          endDate: moment(prevDay)
+            .add(15, 'minutes')
+            .toISOString(),
           createdAt: new Date(),
           updatedAt: new Date(),
-        })),
-    );
+          chairId: chair1Id,
+          isCancelled: false,
+          isPatientConfirmed: false,
+        };
 
-    const practitioners2 = [];
+        const prevDayCancelledApp = {
+          id: uuid(),
+          accountId,
+          practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
+          patientId: patients[patients.length - 2].id,
+          startDate: moment().toISOString(),
+          endDate: moment(prevDay)
+            .add(15, 'minutes')
+            .toISOString(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          chairId: chair1Id,
+          isCancelled: true,
+          isPatientConfirmed: false,
+        };
 
-    for (let i = 0; i < 10; i += 1) {
-      practitioners2.push({
-        id: uuid(),
-        accountId: accountId2,
-        type: 'Hygienist',
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-    }
+        todaysApps.push(prevDayApp);
+        todaysApps.push(prevDayCancelledApp);
 
-    await queryInterface.bulkInsert('Practitioners', practitioners2);
-
-    const appointments2 = [];
-    for (let i = 0; i < patients2.length; i += 2) {
-      const patient = patients2[i];
-      const appointment = {
-        id: uuid(),
-        accountId: accountId2,
-        practitionerId: practitioners2[Math.floor(Math.random() * 10) + 0].id,
-        patientId: patient.id,
-        startDate: moment()
-          .add('-30', 'days')
-          .add('-5', 'minutes')
-          .toISOString(),
-        endDate: moment()
-          .add('-30', 'days')
-          .add('30', 'minutes')
-          .toISOString(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      appointments2.push(appointment);
-    }
-
-    const chair1Id = uuid();
-    const chair2Id = uuid();
-    await queryInterface.bulkInsert('Chairs', [
-      {
-        id: chair1Id,
-        accountId,
-        name: 'Chair 1',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: chair2Id,
-        accountId,
-        name: 'Chair 2',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ]);
-
-    const todaysApps = [];
-    for (let i = 0; i < 5; i += 2) {
-      const startDateMinutes = i * 15;
-      const patient = patients[i];
-      const appointment = {
-        id: uuid(),
-        accountId,
-        practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
-        patientId: patient.id,
-        startDate: moment()
-          .add(`${startDateMinutes}`, 'minutes')
-          .toISOString(),
-        endDate: moment()
-          .add(`${startDateMinutes + 15}`, 'minutes')
-          .toISOString(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        chairId: chair2Id,
-        isCancelled: false,
-        isPatientConfirmed: i === 0,
-      };
-
-      todaysApps.push(appointment);
-    }
-
-    const prevDay = moment().subtract(1, 'day');
-    const prevDayApp = {
-      id: uuid(),
-      accountId,
-      practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
-      patientId: patients[patients.length - 1].id,
-      startDate: prevDay.toISOString(),
-      endDate: moment(prevDay)
-        .add(15, 'minutes')
-        .toISOString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      chairId: chair1Id,
-      isCancelled: false,
-      isPatientConfirmed: false,
-    };
-
-    const prevDayCancelledApp = {
-      id: uuid(),
-      accountId,
-      practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
-      patientId: patients[patients.length - 2].id,
-      startDate: moment().toISOString(),
-      endDate: moment(prevDay)
-        .add(15, 'minutes')
-        .toISOString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      chairId: chair1Id,
-      isCancelled: true,
-      isPatientConfirmed: false,
-    };
-
-    todaysApps.push(prevDayApp);
-    todaysApps.push(prevDayCancelledApp);
-
-    await queryInterface.bulkInsert('Appointments', todaysApps);
+        await queryInterface.bulkInsert('Appointments', todaysApps, { transaction });
+      } catch (err) {
+        console.error('Seeder Failed', err);
+        transaction.rollback();
+      }
+    });
   },
   // eslint-disable-next-line
-  down(queryInterface, Sequelize) {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-      Example:
-      return queryInterface.bulkDelete('Person', null, {});
-    */
-  },
+  down(queryInterface, Sequelize) {}
 };

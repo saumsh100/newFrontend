@@ -27,22 +27,23 @@ const Routes = {
   calls: LazyRoute(() => import('./Dashboard/Calls'), true),
 };
 
-const DashboardRouter = ({ history, isAuth, isSuperAdmin }) => {
+const DashboardRouter = ({ history, isAuth, isSuperAdmin, navigationPreferences }) => {
+  const n = page => navigationPreferences[page] === 'active';
   const getAuthorizedRoutes = () => (
     <div>
       {GrqphQlSubscriptions.subscriptionComponents()}
       <Switch>
-        <Route path="/" exact component={Routes.dashboard} />
-        <Route path="/profile" component={Routes.profile} />
-        <Route path="/intelligence" component={Routes.intelligence} />
-        <Route path="/schedule" component={Routes.schedule} />
-        <Route path="/patients" component={Routes.patients} />
-        <Route path="/chat" component={Routes.chat} />
-        <Route path="/calls" component={Routes.calls} />
-        <Route path="/typography" component={Routes.typography} />
-        <Route path="/reputation" component={Routes.reputation} />
-        <Route path="/settings" component={Routes.settings} />
+        {n('dashboard') && <Route path="/" exact component={Routes.dashboard} />}
+        {n('intelligence') && <Route path="/intelligence" component={Routes.intelligence} />}
+        {n('schedule') && <Route path="/schedule" component={Routes.schedule} />}
+        {n('patients') && <Route path="/patients" component={Routes.patients} />}
+        {n('chat') && <Route path="/chat" component={Routes.chat} />}
+        {n('calls') && <Route path="/calls" component={Routes.calls} />}
+        {n('marketing') && <Route path="/reputation" component={Routes.reputation} />}
+        {n('settings') && <Route path="/settings" component={Routes.settings} />}
         {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
+        <Route path="/profile" component={Routes.profile} />
+        <Route path="/typography" component={Routes.typography} />
         <Route component={FourZeroFour} />
       </Switch>
     </div>
@@ -139,10 +140,20 @@ DashboardRouter.propTypes = {
     toString: PropTypes.func,
     valueOf: PropTypes.func,
   }),
+  navigationPreferences: PropTypes.shape({
+    dashboard: PropTypes.string,
+    intelligence: PropTypes.string,
+    schedule: PropTypes.string,
+    patients: PropTypes.string,
+    chat: PropTypes.string,
+    marketing: PropTypes.string,
+    settings: PropTypes.string,
+  }),
 };
 
 DashboardRouter.defaultProps = {
   location: {},
+  navigationPreferences: {},
 };
 
 export default withAuthProps(DashboardRouter);

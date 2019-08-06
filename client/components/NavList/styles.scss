@@ -20,10 +20,6 @@
 
   &:active {
     color: $primary-white !important;
-
-    .label {
-      // font-size: 16px;
-    }
   }
 }
 
@@ -42,10 +38,6 @@
 
   &:active {
     color: darken($inactive-color, 25%) !important;
-
-    .label {
-      font-size: 14px;
-    }
   }
 }
 
@@ -58,10 +50,6 @@
   text-align: left;
   margin-top: 5px;
   margin-left: 20px;
-}
-
-.activeLabel {
-  //font-size: 16px;
 }
 
 .ulSubNav {

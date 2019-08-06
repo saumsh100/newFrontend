@@ -8,7 +8,14 @@ import withAuthProps from '../../hocs/withAuthProps';
 import EnabledFeature from '../library/EnabledFeature';
 import styles from './styles.scss';
 
-function NavList({ location, isCollapsed, isSuperAdmin, unreadChats, onlineRequests }) {
+function NavList({
+  location,
+  isCollapsed,
+  isSuperAdmin,
+  unreadChats,
+  onlineRequests,
+  navigationPreferences,
+}) {
   const { navItem, activeItem } = styles;
 
   const inactiveClass = navItem;
@@ -24,10 +31,12 @@ function NavList({ location, isCollapsed, isSuperAdmin, unreadChats, onlineReque
     disabled,
     iconType = 'solid',
     badge = false,
+    type,
   }) => {
     active = active || location.pathname === path;
     let classes = active ? activeClass : inactiveClass;
 
+    disabled = disabled || type === 'disabled';
     classes = classNames(classes, { [styles.disabledItem]: disabled });
 
     const labelComponent = (
@@ -54,15 +63,17 @@ function NavList({ location, isCollapsed, isSuperAdmin, unreadChats, onlineReque
     path: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
     badge: PropTypes.number,
+    type: PropTypes.string,
   };
   SingleNavItem.defaultProps = {
     disabled: false,
     badge: 0,
     iconType: 'solid',
     active: false,
+    type: 'active',
   };
 
-  const MultiNavItem = ({ path, icon, label, children, iconType }) => {
+  const MultiNavItem = ({ path, icon, label, children, iconType, type }) => {
     const active = location.pathname.indexOf(path) === 0;
     let content = null;
     if (active && !isCollapsed) {
@@ -71,8 +82,15 @@ function NavList({ location, isCollapsed, isSuperAdmin, unreadChats, onlineReque
 
     return (
       <div>
-        <SingleNavItem path={path} icon={icon} label={label} active={active} iconType={iconType} />
-        {content}
+        <SingleNavItem
+          path={path}
+          icon={icon}
+          label={label}
+          active={active}
+          iconType={iconType}
+          type={type}
+        />
+        {type === 'disabled' ? null : content}
       </div>
     );
   };
@@ -86,9 +104,11 @@ function NavList({ location, isCollapsed, isSuperAdmin, unreadChats, onlineReque
       PropTypes.arrayOf(PropTypes.element),
       PropTypes.objectOf(PropTypes.any),
     ]).isRequired,
+    type: PropTypes.string,
   };
 
-  MultiNavItem.defaultProps = { iconType: 'solid' };
+  MultiNavItem.defaultProps = { iconType: 'solid',
+    type: 'active' };
 
   const SubNavItem = ({ path, label, disabled }) => {
     const active = location.pathname.indexOf(path) === 0;
@@ -120,47 +140,51 @@ function NavList({ location, isCollapsed, isSuperAdmin, unreadChats, onlineReque
 
   SubNavItem.defaultProps = { disabled: false };
 
+  // Helper to reduce code length on for single line components
+  const n = key => navigationPreferences[key];
+
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
-        <EnabledFeature
-          predicate={({ flags }) => flags.get('feature-mode-reports-tab')}
-          render={() => (
-            <SingleNavItem path="/intelligence" label="Intelligence" icon="chart-bar" />
-          )}
+        <SingleNavItem path="/" icon="tachometer" label="Dashboard" type={n('dashboard')} />
+        <SingleNavItem
+          path="/intelligence"
+          label="Intelligence"
+          icon="chart-bar"
+          type={n('intelligence')}
         />
         <SingleNavItem
           path="/schedule"
           icon="calendar-alt"
           label="Schedule"
           badge={onlineRequests}
+          type={n('schedule')}
         />
-        <SingleNavItem path="/patients/list" icon="heart" label="Patient Management" />
+        <SingleNavItem
+          path="/patients/list"
+          icon="heart"
+          label="Patient Management"
+          type={n('patients')}
+        />
         <SingleNavItem
           path="/chat"
           icon="comment-alt"
           label="Chat"
           badge={unreadChats}
           active={location.pathname.indexOf('/chat') !== -1}
+          type={n('chat')}
         />
-
-        <EnabledFeature
-          predicate={({ flags }) => flags.get('feature-call-tracking')}
-          render={<SingleNavItem path="/calls" icon="phone" label="Call Tracking" />}
-        />
-
-        <MultiNavItem path="/reputation" icon="bullhorn" label="Marketing">
+        <SingleNavItem path="/calls" icon="phone" label="Call Tracking" type={n('calls')} />
+        <MultiNavItem path="/reputation" icon="bullhorn" label="Marketing" type={n('marketing')}>
           <SubNavItem path="/reputation/reviews" label="Reviews" />
           <SubNavItem path="/reputation/listings" label="Listings" />
         </MultiNavItem>
-        <MultiNavItem path="/settings" icon="cogs" label="Account Settings">
+        <MultiNavItem path="/settings" icon="cogs" label="Account Settings" type={n('settings')}>
           <SubNavItem path="/settings/practice" label="Practice" />
           <SubNavItem path="/settings/reasons" label="Reasons" />
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
           <SubNavItem path="/settings/donna" label="Donna" />
         </MultiNavItem>
-
         <EnabledFeature
           predicate={() => isSuperAdmin}
           render={() => (
@@ -182,12 +206,22 @@ NavList.propTypes = {
   unreadChats: PropTypes.number,
   onlineRequests: PropTypes.number,
   location: PropTypes.objectOf(PropTypes.any).isRequired,
+  navigationPreferences: PropTypes.shape({
+    dashboard: PropTypes.string,
+    intelligence: PropTypes.string,
+    schedule: PropTypes.string,
+    patients: PropTypes.string,
+    chat: PropTypes.string,
+    marketing: PropTypes.string,
+    settings: PropTypes.string,
+  }),
 };
 
 NavList.defaultProps = {
   isSuperAdmin: false,
   unreadChats: 0,
   onlineRequests: 0,
+  navigationPreferences: {},
 };
 
 function mapStateToProps({ chat, entities }) {
@@ -199,7 +233,6 @@ function mapStateToProps({ chat, entities }) {
 
   const chatsLength = unreadChats.length > 100 ? '99+' : unreadChats.length;
   const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
-
   return {
     unreadChats: chatsLength,
     onlineRequests: requestsLength,
