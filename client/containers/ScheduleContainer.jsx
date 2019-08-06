@@ -27,7 +27,6 @@ class ScheduleContainer extends Component {
 
     this.state = {
       timeout: 20 * 1000,
-      timer: null,
     };
 
     this.refetchRecentlyUpdatedAppointments = this.refetchRecentlyUpdatedAppointments.bind(this);
@@ -39,8 +38,7 @@ class ScheduleContainer extends Component {
     const appointmentsQuery = this.buildAppointmentQuery(currentDate);
     const eventsQuery = this.buildEventsQuery(currentDate);
 
-    const timer = setInterval(this.refetchRecentlyUpdatedAppointments, this.state.timeout);
-    this.setState({ timer });
+    this.timerID = setInterval(this.refetchRecentlyUpdatedAppointments, this.state.timeout);
 
     Promise.all([
       this.props.fetchEntitiesRequest({
@@ -71,7 +69,7 @@ class ScheduleContainer extends Component {
       .then(() => {
         this.props.setAllFilters(['chairs', 'practitioners', 'services']);
       })
-      .catch(e => console.log(e));
+      .catch(console.error);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -103,7 +101,7 @@ class ScheduleContainer extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.timer);
+    clearInterval(this.timerID);
   }
 
   buildAppointmentQuery(date, filterOverride = {}, queryOverride = {}) {

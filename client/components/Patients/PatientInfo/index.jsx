@@ -115,7 +115,7 @@ class PatientInfo extends Component {
 
   fetchEvents() {
     return this.props.fetchEntitiesRequest({
-      key: 'events',
+      key: 'patientTimelineEvents',
       id: 'getPatientEvents',
       url: `/api/patients/${this.props.patient.id}/events`,
       params: {

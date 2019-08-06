@@ -510,7 +510,7 @@ eventsRouter.get(
   async (req, res, next) => {
     try {
       const allEvents = await patientEventsAggregator(req.patient.id, req.accountId, req.query);
-      res.send(normalize('events', allEvents));
+      res.send(normalize('patientTimelineEvents', allEvents));
     } catch (error) {
       next(error);
     }

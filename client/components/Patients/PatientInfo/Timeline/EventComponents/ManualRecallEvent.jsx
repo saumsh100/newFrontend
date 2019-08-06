@@ -35,7 +35,7 @@ class ManualRecallEvent extends Component {
 
       await commit({ variables: { id } });
       this.props.deleteEntity({
-        key: 'events',
+        key: 'patientTimelineEvents',
         id: window.btoa(`recall-${id}`),
       });
 

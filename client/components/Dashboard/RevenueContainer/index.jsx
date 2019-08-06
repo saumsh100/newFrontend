@@ -124,7 +124,6 @@ class RevenueContainer extends Component {
 
     this.state = {
       timeout: 20 * 1000,
-      timer: null,
     };
 
     this.fetchRevenueData = this.fetchRevenueData.bind(this);
@@ -132,9 +131,7 @@ class RevenueContainer extends Component {
   }
 
   componentDidMount() {
-    const timer = setInterval(this.refetchRevenueData, this.state.timeout);
-
-    this.setState({ timer });
+    this.timerID = setInterval(this.refetchRevenueData, this.state.timeout);
     this.fetchRevenueData(this.props.dashboardDate);
   }
 
@@ -148,7 +145,7 @@ class RevenueContainer extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.timer);
+    clearInterval(this.timerID);
   }
 
   fetchRevenueData(date, shouldCreateRequest = true) {

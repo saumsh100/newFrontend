@@ -46,7 +46,7 @@ class Timeline extends Component {
     this.setState({ loaded: true }, () => {
       this.props
         .fetchEntities({
-          key: 'events',
+          key: 'patientTimelineEvents',
           id: 'getPatientEventsScroll',
           url: `/api/patients/${this.props.patientId}/events`,
           params: query,
@@ -94,7 +94,7 @@ function mapStateToProps({ entities, apiRequests }, { patientId }) {
     apiRequests.get('getPatientEvents') && apiRequests.get('getPatientEvents').get('wasFetched');
 
   const events = entities
-    .getIn(['events', 'models'])
+    .getIn(['patientTimelineEvents', 'models'])
     .filter(event => event.get('patientId') === patientId)
     .toArray();
 

@@ -17,6 +17,8 @@ import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
 import events from '../entities/collections/events';
 import Event from '../entities/models/Event';
+import patientTimelineEvents from '../entities/collections/patientTimelineEvents';
+import PatientTimelineEvent from '../entities/models/PatientTimelineEvent';
 import invites from '../entities/collections/invites';
 import Invites from '../entities/models/Invites';
 import patientUsers from '../entities/collections/patientUsers';
@@ -108,6 +110,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) =>
       sentRecalls: new sentRecalls(),
       patientUsers: new patientUsers(),
       events: new events(),
+      patientTimelineEvents: new patientTimelineEvents(),
 
       // reviews: Reviews(), MODEL
       // listings: Listings(),
@@ -128,6 +131,7 @@ const Models = {
   invites: Invites,
   practitioners: Practitioners,
   practitionerRecurringTimeOffs: PractitionerRecurringTimeOff,
+  patientTimelineEvents: PatientTimelineEvent,
   timeOffs: TimeOff,
   dialogs: Dialogs,
   patients: Patient,
@@ -155,14 +159,18 @@ export default handleActions(
 
     [RECEIVE_ENTITIES](
       state,
-      { payload: { entities, merge } },
+      {
+        payload: { entities, merge },
+      },
     ) {
       return receiveEntitiesState(state, entities, merge);
     },
 
     [DELETE_ENTITY](
       state,
-      { payload: { key, id } },
+      {
+        payload: { key, id },
+      },
     ) {
       const newState = state;
       const model = newState.getIn([key, 'models', id]);
@@ -185,7 +193,9 @@ export default handleActions(
 
     [UPDATE_ENTITY](
       state,
-      { payload: { key, entity } },
+      {
+        payload: { key, entity },
+      },
     ) {
       const [id] = Object.keys(entity.entities[key]);
       const updatedEntity = entity.entities[key][id];
@@ -210,7 +220,7 @@ function receiveEntitiesState(state, entities, hardMerge) {
           key === 'patients' ||
           key === 'chats' ||
           key === 'textMessages' ||
-          key === 'events')
+          key === 'patientTimelineEvents')
       ) {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);

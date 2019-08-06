@@ -32,6 +32,8 @@ const enterpriseSchema = () =>
 
 const eventsSchema = () => new schema.Entity('events');
 
+const patientTimelineEventsSchema = () => new schema.Entity('patientTimelineEvents');
+
 const chatSchema = () => new schema.Entity('chats', {
   assignEntity: (output, key, value) => {
     if (key === 'lastTextMessage') {
@@ -175,6 +177,7 @@ const SCHEMAS = {
   invites: [inviteSchema()],
   patients: [patientSchema()],
   patientUsers: [patientUserSchema()],
+  patientTimelineEvents: [patientTimelineEventsSchema()],
   families: [familySchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],

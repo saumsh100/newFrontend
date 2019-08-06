@@ -23,7 +23,7 @@ class PatientSubComponent extends Component {
       patient: { id },
     } = this.props;
     this.props.fetchEntitiesRequest({
-      key: 'events',
+      key: 'patientTimelineEvents',
       id: 'getPatientEvents',
       url: `/api/patients/${id}/events`,
       params: {
@@ -97,7 +97,7 @@ function mapStateToProps({ entities, apiRequests }, { patient }) {
     : null;
 
   const events = entities
-    .getIn(['events', 'models'])
+    .getIn(['patientTimelineEvents', 'models'])
     .toArray()
     .filter(event => event.get('patientId') === patient.id);
 
