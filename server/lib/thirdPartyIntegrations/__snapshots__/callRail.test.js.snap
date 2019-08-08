@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`CallRail tests CallRail get account tests CallRail get account should get account information with only active information when success 1`] = `Promise {}`;

@@ -52,11 +52,11 @@ exports.linkFrontEndModule = ({
   buildPath = 'client/build',
   frontEndPackage = '@carecru/carecru',
 } = {}) => {
-  const root = shell.pwd().toString();
+  const serverPath = process.env.SERVER_PATH || shell.pwd().toString();
 
   console.log(`\nLinking "${buildPath}" to module ${frontEndPackage}\n`);
   shell.cd(buildPath);
   shell.exec('npm link');
-  shell.cd(root);
+  shell.cd(serverPath);
   shell.exec(`npm link ${frontEndPackage}`);
 };

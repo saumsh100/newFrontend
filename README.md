@@ -87,6 +87,10 @@ API_SERVER_URL=http://localhost:5100
 REBRANDLY_SHORT_DOMAIN=
 INTERCOM_APP_ID=enpxykhl
 LOGROCKET_APP_ID=7mbzb4/carecru-development
+REGION="CA"
+NODE_OPTIONS=--max-old-space-size=8192
+NEW_API_URL=http://localhost:8001
+SERVER_PATH=
 EOF
 ```
 
@@ -157,6 +161,8 @@ You can run different jobs separately.
 ## Hot Reloading
 
 ## Front-end
+
+Before running the commands below, run `pwd` inside the server's directory to get the full path for the server. Copy that value into the `SERVER_PATH` env variable.
 
 Run the following command in a separate tab, to see changes on the fly:
 
