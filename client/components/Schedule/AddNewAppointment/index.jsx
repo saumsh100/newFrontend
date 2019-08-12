@@ -25,6 +25,8 @@ import styles from './styles.scss';
 const mergeTime = (date, time) => {
   date.setHours(time.getHours());
   date.setMinutes(time.getMinutes());
+  date.setSeconds(0);
+  date.setMilliseconds(0);
   return new Date(date);
 };
 
