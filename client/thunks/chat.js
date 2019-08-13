@@ -304,14 +304,21 @@ export async function setChatIsPoC(patient, dispatch) {
     return dispatch(setChatPoC(patient));
   }
 
-  const { data: poc } = await patient.isCellPhoneNumberPoC();
-  const { patients } = await dispatch(
-    fetchEntitiesRequest({
-      url: '/api/patients/search',
-      params: { patientId: poc.id },
-    }),
-  );
-  return dispatch(setChatPoC(patients[poc.id]));
+  try {
+    const { data: poc } = await patient.isCellPhoneNumberPoC();
+    const { patients } = await dispatch(
+      fetchEntitiesRequest({
+        url: '/api/patients/search',
+        params: { patientId: poc.id },
+      }),
+    );
+
+    return patients[poc.id]
+      ? dispatch(setChatPoC(patients[poc.id]))
+      : dispatch(setChatPoC(patient));
+  } catch (e) {
+    return dispatch(setChatPoC(patient));
+  }
 }
 
 export function selectChat(id, createChat = null) {
