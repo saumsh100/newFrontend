@@ -71,7 +71,7 @@ class PatientInfo extends Component {
         backHandler: null,
         title: null,
       },
-      defaultEvents: [],
+      defaultEvents: this.props.filters,
     };
 
     this.changePageTab = this.changePageTab.bind(this);
@@ -87,10 +87,10 @@ class PatientInfo extends Component {
   componentDidMount() {
     const { patientId } = this.props.match.params;
     const url = `/api/patients/${patientId}`;
-    this.fetchPatientData(patientId, url);
 
-    if (this.props.patient && this.props.filters) {
-      this.setState({ defaultEvents: this.props.filters }, () => this.fetchEvents());
+    this.fetchPatientData(patientId, url);
+    if (this.props.patient) {
+      this.fetchEvents();
     }
   }
 
@@ -99,8 +99,10 @@ class PatientInfo extends Component {
     if (patientId !== nextProps.match.params.patientId) {
       const url = `/api/patients/${nextProps.match.params.patientId}`;
 
-      this.fetchPatientData(nextProps.match.params.patientId, url);
-      this.fetchEvents();
+      Promise.all([
+        this.fetchPatientData(nextProps.match.params.patientId, url),
+        this.fetchEvents(),
+      ]);
     }
   }
 
@@ -127,31 +129,34 @@ class PatientInfo extends Component {
 
   fetchPatientData(patientId, url) {
     const { activeAccount } = this.props;
-    return Promise.all([
-      this.props.fetchEntitiesRequest({
-        id: 'fetchPatient',
-        key: 'patients',
-        url,
-      }),
-      this.props.fetchEntitiesRequest({
-        id: 'patientIdStats',
-        url: `/api/patients/${patientId}/stats`,
-      }),
-      this.props.fetchEntitiesRequest({
+
+    return this.props
+      .fetchEntitiesRequest({
         id: 'accountsPatientInfo',
         key: 'accounts',
-      }),
-      this.props.fetchEntitiesRequest({
-        id: 'fetchReminders',
-        key: 'reminders',
-        url: `/api/accounts/${activeAccount.id}/reminders`,
-      }),
-      this.props.fetchEntitiesRequest({
-        id: 'fetchRecalls',
-        key: 'recalls',
-        url: `/api/accounts/${activeAccount.id}/recalls`,
-      }),
-    ]);
+      })
+      .then(() =>
+        Promise.all([
+          this.props.fetchEntitiesRequest({
+            id: 'fetchPatient',
+            key: 'patients',
+            url,
+          }),
+          this.props.fetchEntitiesRequest({
+            id: 'patientIdStats',
+            url: `/api/patients/${patientId}/stats`,
+          }),
+          this.props.fetchEntitiesRequest({
+            id: 'fetchReminders',
+            key: 'reminders',
+            url: `/api/accounts/${activeAccount.id}/reminders`,
+          }),
+          this.props.fetchEntitiesRequest({
+            id: 'fetchRecalls',
+            key: 'recalls',
+            url: `/api/accounts/${activeAccount.id}/recalls`,
+          }),
+        ]));
   }
 
   openModal() {

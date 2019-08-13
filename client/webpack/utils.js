@@ -54,7 +54,12 @@ exports.linkFrontEndModule = ({
 } = {}) => {
   const serverPath = process.env.SERVER_PATH || shell.pwd().toString();
 
-  console.log(`\nLinking "${buildPath}" to module ${frontEndPackage}\n`);
+  console.log(
+    `\nLinking "${buildPath}" to module ${frontEndPackage} on ${path.resolve(
+      `${process.cwd()}${buildPath}`,
+      serverPath,
+    )}\n`,
+  );
   shell.cd(buildPath);
   shell.exec('npm link');
   shell.cd(serverPath);
