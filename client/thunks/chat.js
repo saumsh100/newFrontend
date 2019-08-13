@@ -304,6 +304,7 @@ export async function setChatIsPoC(patient, dispatch) {
     return dispatch(setChatPoC(patient));
   }
 
+  let pocPatient = patient;
   try {
     const { data: poc } = await patient.isCellPhoneNumberPoC();
     const { patients } = await dispatch(
@@ -313,12 +314,14 @@ export async function setChatIsPoC(patient, dispatch) {
       }),
     );
 
-    return patients[poc.id]
-      ? dispatch(setChatPoC(patients[poc.id]))
-      : dispatch(setChatPoC(patient));
+    if (patients[poc.id]) {
+      pocPatient = patients[poc.id];
+    }
   } catch (e) {
-    return dispatch(setChatPoC(patient));
+    console.error(e);
   }
+
+  return dispatch(setChatPoC(pocPatient));
 }
 
 export function selectChat(id, createChat = null) {
