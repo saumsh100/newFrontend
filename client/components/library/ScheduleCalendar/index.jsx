@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 import RDayPicker, { LocaleUtils } from 'react-day-picker';
 import classNames from 'classnames';
 import { capitalize, dateFormatter } from '@carecru/isomorphic';
@@ -21,6 +22,17 @@ import styles from './schedule.scss';
  */
 const formatWeekdayShort = i => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i];
 
+const selectedTimeOrClosedFallback = isClosed => time =>
+  (isClosed ? new Date(1970, 1, 0).toISOString() : time);
+
+const setTimeToOriginalDate = (originalDate, updatedTime, timezone) => {
+  const originalTimeAndDate = moment
+    .tz(originalDate, timezone)
+    .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+  const updatedDateAndTime = `${originalTimeAndDate.split('T')[0]}T${updatedTime}`;
+  return moment.tz(updatedDateAndTime, 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', timezone).toISOString();
+};
+
 class ScheduleCalendar extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +47,7 @@ class ScheduleCalendar extends Component {
     this.handleModalVisibility = this.handleModalVisibility.bind(this);
     this.handleEditSchedule = this.handleEditSchedule.bind(this);
     this.handleToggleOverrideHours = this.handleToggleOverrideHours.bind(this);
+    this.handleUpdateSchedule = this.handleUpdateSchedule.bind(this);
   }
 
   /**
@@ -111,9 +124,39 @@ class ScheduleCalendar extends Component {
       : this.props.handleCreateCustomSchedule({ date: this.props.selectedDay });
   }
 
+  handleUpdateSchedule(schedule) {
+    const { editSchedule } = this.state;
+    const { timezone, selectedDay } = this.props;
+    const timeOrClosed = selectedTimeOrClosedFallback(schedule.isClosed);
+    return this.props.handleUpdateSchedule(
+      {
+        ...schedule,
+        endTime: setTimeToOriginalDate(
+          editSchedule.endTime,
+          timeOrClosed(schedule.endTime),
+          timezone,
+        ),
+        startTime: setTimeToOriginalDate(
+          editSchedule.startTime,
+          timeOrClosed(schedule.startTime),
+          timezone,
+        ),
+        date: selectedDay,
+        breaks:
+          schedule.breaks.length > 0
+            ? schedule.breaks.map(b => ({
+              ...b,
+              endTime: setTimeToOriginalDate(editSchedule.endTime, b.endTime, timezone),
+              startTime: setTimeToOriginalDate(editSchedule.startTime, b.startTime, timezone),
+            }))
+            : [],
+      },
+      () => this.handleModalVisibility(false),
+    );
+  }
+
   render() {
     const { editSchedule, isDrawerExpanded, isModalVisible } = this.state;
-
     const { timezone, selectedDay, month } = this.props;
     return (
       <div className={styles.calendarWrapper}>
@@ -190,15 +233,7 @@ class ScheduleCalendar extends Component {
           isModalVisible={isModalVisible}
           schedule={editSchedule}
           title={this.state.editTitle}
-          handleUpdateSchedule={schedule =>
-            this.props.handleUpdateSchedule(
-              {
-                ...schedule,
-                date: selectedDay,
-              },
-              () => this.handleModalVisibility(false),
-            )
-          }
+          handleUpdateSchedule={this.handleUpdateSchedule}
           hideModal={() => this.handleModalVisibility(false)}
         />
       </div>

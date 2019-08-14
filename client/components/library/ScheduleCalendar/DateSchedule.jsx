@@ -38,13 +38,13 @@ const DateSchedule = ({ day, schedule, timezone, handleEditSchedule, shouldDispl
           <ul className={styles.breakList}>
             {schedule.breaks.length > 0
               ? schedule.breaks.map(br => (
-                <li key={uuid()}>
-                  {`${dateFormatter(br.startTime, timezone, 'LT')} to ${dateFormatter(
+                  <li key={uuid()}>
+                    {`${dateFormatter(br.startTime, timezone, 'LT')} to ${dateFormatter(
                       br.endTime,
                       timezone,
                       'LT',
                     )}`}
-                </li>
+                  </li>
                 ))
               : '--'}
           </ul>

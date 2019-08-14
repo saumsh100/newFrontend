@@ -1,24 +1,18 @@
 
 import React, { Component } from 'react';
 import { v4 as uuid } from 'uuid';
+import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setDateToTimezone, sortAsc, timeOptionsWithTimezone } from '@carecru/isomorphic';
+import { Map } from 'immutable';
+import { dateFormatter, sortAsc, timeOptions } from '@carecru/isomorphic';
 import { Modal, Button, DropdownMenu, Icon } from '../';
 import EnabledFeature from '../EnabledFeature';
 import MultiSelect from '../MultiSelect';
 import List from '../MultiSelect/List';
 import Selector from '../MultiSelect/Selector';
-import { chairShape } from '../PropTypeShapes';
 import InputGroup from './InputGroup';
 import styles from './modal.scss';
-
-const dayInMin = (m) => {
-  const minutes = m.minutes();
-  const hours = m.hours() * 60;
-
-  return minutes + hours;
-};
 
 const PMS_MAP = {
   OPENDENTAL: 'OpenDental',
@@ -38,8 +32,7 @@ const getAdapterType = (adapterType) => {
   return PMS_MAP[sanitizeAdapter];
 };
 
-const hasError = ({ startTime, endTime }, timezone) =>
-  dayInMin(setDateToTimezone(startTime, timezone)) > dayInMin(setDateToTimezone(endTime, timezone));
+const hasError = ({ startTime, endTime }) => startTime > endTime;
 
 class EditSchedule extends Component {
   constructor(props) {
@@ -66,9 +59,22 @@ class EditSchedule extends Component {
    * @param prevProps
    */
   componentDidUpdate(prevProps) {
-    if (prevProps.schedule !== this.props.schedule) {
+    const { schedule, timezone } = this.props;
+    if (!isEqual(prevProps.schedule, schedule)) {
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ ...this.props.schedule });
+      this.setState({
+        ...schedule,
+        startTime: dateFormatter(schedule.startTime, timezone, 'HH:mm:ss.SSS[Z]'),
+        endTime: dateFormatter(schedule.endTime, timezone, 'HH:mm:ss.SSS[Z]'),
+        breaks:
+          schedule.breaks.length > 0
+            ? schedule.breaks.map(b => ({
+              ...b,
+              startTime: dateFormatter(b.startTime, timezone, 'HH:mm:ss.SSS[Z]'),
+              endTime: dateFormatter(b.endTime, timezone, 'HH:mm:ss.SSS[Z]'),
+            }))
+            : [],
+      });
     }
   }
 
@@ -81,8 +87,8 @@ class EditSchedule extends Component {
         ...prevState.breaks,
         {
           id: uuid(),
-          startTime: new Date(1970, 1, 0, 8, 0).toISOString(),
-          endTime: new Date(1970, 1, 0, 14, 0).toISOString(),
+          startTime: '09:00:00.000Z',
+          endTime: '17:00:00.000Z',
         },
       ],
     }));
@@ -137,14 +143,12 @@ class EditSchedule extends Component {
         : []),
       ...this.state.breaks,
     ];
-    return (
-      toValidate.map(validate => hasError(validate, this.props.timezone)).filter(d => d).length > 0
-    );
+    return toValidate.map(validate => hasError(validate)).filter(d => d).length > 0;
   }
 
   render() {
     const { timezone, isModalVisible, handleUpdateSchedule, selectedDay, chairs } = this.props;
-    const timeOptions = timeOptionsWithTimezone(timezone, 30);
+    const times = timeOptions();
     const items = chairs.toJS();
 
     const options = Object.values(items)
@@ -270,10 +274,10 @@ class EditSchedule extends Component {
                           <p className={styles.closeMessage}>Open Office Hours to edit</p>
                         ) : (
                           <InputGroup
-                            timeOptions={timeOptions}
+                            timeOptions={times}
                             timezone={timezone}
                             isAllow={isAllow}
-                            error={hasError(this.state, timezone)}
+                            error={hasError(this.state)}
                             startTime={this.state.startTime}
                             endTime={this.state.endTime}
                             onChange={update => this.setState(update)}
@@ -296,10 +300,10 @@ class EditSchedule extends Component {
                       return (
                         <div className={styles.group} key={b.id}>
                           <InputGroup
-                            error={hasError(b, timezone)}
                             isRemovable
+                            error={hasError(b)}
                             onClick={() => this.removeBreak(index)}
-                            timeOptions={timeOptions}
+                            timeOptions={times}
                             timezone={timezone}
                             isAllow={isAllow}
                             startTime={b.startTime}
@@ -381,7 +385,7 @@ EditSchedule.propTypes = {
   isModalVisible: PropTypes.bool.isRequired,
   handleUpdateSchedule: PropTypes.func.isRequired,
   selectedDay: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
-  chairs: PropTypes.arrayOf(PropTypes.shape(chairShape)),
+  chairs: PropTypes.instanceOf(Map),
   pmsName: PropTypes.string.isRequired,
   schedule: PropTypes.shape({
     breaks: PropTypes.array,
