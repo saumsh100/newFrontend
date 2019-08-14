@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { v4 as uuid } from 'uuid';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
 import DropdownTimeSuggestion from '../DropdownTimeSuggestion';
@@ -12,12 +11,6 @@ import schedule from './schedule.scss';
 import { Button } from '../index';
 
 /**
- * Valid time formats to validate a time value.
- *
- * @type {string[]}
- */
-const validTimeFormats = ['LT', 'YYYY-MM-DDTHH:mm:ss.sssZ'];
-/**
  * The default format for the value key must be
  * ISOString ("YYYY-MM-DDTHH:mm:ss.sssZ")
  *
@@ -25,8 +18,8 @@ const validTimeFormats = ['LT', 'YYYY-MM-DDTHH:mm:ss.sssZ'];
  * @param timezone {String}
  */
 const formatTimeField = (value, timezone) => {
-  const time = moment.tz(value, validTimeFormats, true, timezone);
-  return time.isValid() && time.toISOString();
+  const time = moment.tz(value, ['LT', 'HH:mm:ss.SSS[Z]'], true, timezone);
+  return time.isValid() && time.format('HH:mm:ss.SSS[Z]');
 };
 /**
  * The default format for the label kry must be
@@ -34,18 +27,9 @@ const formatTimeField = (value, timezone) => {
  *
  */
 const renderTimeValue = (value, timezone) => {
-  const time = moment.tz(value, validTimeFormats, true, timezone);
+  const time = moment.tz(value, 'HH:mm:ss.SSS[Z]', true, timezone);
   return time.isValid() && time.format('LT');
 };
-/**
- * Validate if the given string is a valid time input
- *
- * @param value
- * @param timezone
- */
-const validateTimeField = (value, timezone) =>
-  moment.tz(value, validTimeFormats, true, timezone).isValid() &&
-  new RegExp('^((0?[0-9]|1[0-2]):[0-5][0-9] ([AP][M]))$', 'i').test(value);
 
 const InputGroup = ({
   timezone,
@@ -65,11 +49,11 @@ const InputGroup = ({
     <div className={styles.inputs}>
       <DropdownTimeSuggestion
         options={timeOptions}
+        key="startTime"
         onChange={value => onChange({ startTime: value })}
-        value={formatTimeField(startTime, timezone)}
+        value={startTime}
         renderValue={value => renderTimeValue(value, timezone)}
         formatValue={value => formatTimeField(value, timezone)}
-        validateValue={value => validateTimeField(value, timezone)}
         disabled={!isAllow}
         error={error}
         strict={false}
@@ -77,18 +61,15 @@ const InputGroup = ({
         theme={theme}
       />
       {showEndTime && [
-        <span className={styles.spacer} key={uuid()}>
-          to
-        </span>,
+        <span className={styles.spacer}>to</span>,
         <DropdownTimeSuggestion
           options={timeOptions}
-          key={uuid()}
+          key="endTime"
           renderList={renderList}
           onChange={value => onChange({ endTime: value })}
-          value={formatTimeField(endTime, timezone)}
+          value={endTime}
           renderValue={value => renderTimeValue(value, timezone)}
           formatValue={value => formatTimeField(value, timezone)}
-          validateValue={value => validateTimeField(value, timezone)}
           strict={false}
           disabled={!isAllow}
           error={error}

@@ -284,10 +284,12 @@ class DropdownTimeSuggestion extends Component {
 DropdownTimeSuggestion.propTypes = {
   renderValue: PropTypes.func,
   align: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  })).isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ).isRequired,
   renderList: PropTypes.func,
   disabled: PropTypes.bool,
   className: PropTypes.string,
@@ -323,7 +325,7 @@ const renderList = (props, currentValue, scrollIndex, close, callback) => (
       <DataSlot
         key={`options_${option.value}`}
         {...props}
-        selected={formatValue(currentValue) === option.value || props.value === option.value}
+        selected={currentValue === option.value || props.value === option.value}
         option={option}
         type="button"
         onClick={(e) => {
@@ -340,10 +342,12 @@ const renderList = (props, currentValue, scrollIndex, close, callback) => (
 renderList.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
-    labe: PropTypes.string,
-  })).isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      labe: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 DropdownTimeSuggestion.defaultProps = {

@@ -10,7 +10,6 @@ import {
   getEndOfTheMonth,
   getStartOfTheMonth,
   setDateToTimezone,
-  timeWithZone,
 } from '@carecru/isomorphic';
 import ScheduleCalendar from '../../../library/ScheduleCalendar';
 import {
@@ -219,22 +218,13 @@ class OfficeHoursCalendar extends Component {
    * @param callback {function}
    * @returns {Promise<any | never>}
    */
-  handleUpdateSchedule({ isClosed, id, date, isDailySchedule, ...schedule }, callback) {
+  handleUpdateSchedule({ id, date, isDailySchedule, ...schedule }, callback) {
     const baseBody = pick(schedule, ['startTime', 'endTime', 'breaks', 'chairIds']);
-    const baseEndTime = setDateToTimezone(baseBody.endTime, this.props.timezone).toObject();
-    const baseStartTime = setDateToTimezone(baseBody.startTime, this.props.timezone).toObject();
     return updateFinalDailyHours(id, {
       ...baseBody,
-      endTime: isClosed
-        ? new Date(1970, 1, 0).toISOString()
-        : timeWithZone(baseEndTime.hours, baseEndTime.minutes, this.props.timezone).toISOString(),
-      startTime: isClosed
-        ? new Date(1970, 1, 0).toISOString()
-        : timeWithZone(
-          baseStartTime.hours,
-          baseStartTime.minutes,
-          this.props.timezone,
-        ).toISOString(),
+      endTime: baseBody.endTime,
+      startTime: baseBody.startTime,
+      breaks: baseBody.breaks,
     })
       .then(() => {
         this.getSchedule(this.state.month);
