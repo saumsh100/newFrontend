@@ -11,12 +11,6 @@ import schedule from './schedule.scss';
 import { Button } from '../index';
 
 /**
- * Valid time formats to validate a time value.
- *
- * @type {string[]}
- */
-const validTimeFormats = ['LT', 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', 'HH:mm:ss.SSS[Z]'];
-/**
  * The default format for the value key must be
  * ISOString ("YYYY-MM-DDTHH:mm:ss.sssZ")
  *
@@ -24,7 +18,7 @@ const validTimeFormats = ['LT', 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', 'HH:mm:ss.SSS[Z]']
  * @param timezone {String}
  */
 const formatTimeField = (value, timezone) => {
-  const time = moment.tz(value, validTimeFormats, true, timezone);
+  const time = moment.tz(value, ['LT', 'HH:mm:ss.SSS[Z]'], true, timezone);
   return time.isValid() && time.format('HH:mm:ss.SSS[Z]');
 };
 /**
@@ -33,7 +27,7 @@ const formatTimeField = (value, timezone) => {
  *
  */
 const renderTimeValue = (value, timezone) => {
-  const time = moment.tz(value, validTimeFormats, true, timezone);
+  const time = moment.tz(value, 'HH:mm:ss.SSS[Z]', true, timezone);
   return time.isValid() && time.format('LT');
 };
 
@@ -53,7 +47,6 @@ const InputGroup = ({
 }) => (
   <div className={styles.inputGroup}>
     <div className={styles.inputs}>
-      {console.log(startTime, formatTimeField(startTime, timezone))}
       <DropdownTimeSuggestion
         options={timeOptions}
         key="startTime"
