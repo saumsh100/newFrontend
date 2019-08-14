@@ -61,17 +61,18 @@ class EditSchedule extends Component {
   componentDidUpdate(prevProps) {
     const { schedule, timezone } = this.props;
     if (!isEqual(prevProps.schedule, schedule)) {
+      const getFormattedTime = time => dateFormatter(time, timezone, 'HH:mm:ss.SSS[Z]');
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         ...schedule,
-        startTime: dateFormatter(schedule.startTime, timezone, 'HH:mm:ss.SSS[Z]'),
-        endTime: dateFormatter(schedule.endTime, timezone, 'HH:mm:ss.SSS[Z]'),
+        startTime: getFormattedTime(schedule.startTime),
+        endTime: getFormattedTime(schedule.endTime),
         breaks:
           schedule.breaks.length > 0
             ? schedule.breaks.map(b => ({
               ...b,
-              startTime: dateFormatter(b.startTime, timezone, 'HH:mm:ss.SSS[Z]'),
-              endTime: dateFormatter(b.endTime, timezone, 'HH:mm:ss.SSS[Z]'),
+              startTime: getFormattedTime(b.startTime),
+              endTime: getFormattedTime(b.endTime),
             }))
             : [],
       });

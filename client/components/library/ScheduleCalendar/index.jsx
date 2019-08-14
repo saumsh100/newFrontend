@@ -22,15 +22,29 @@ import styles from './schedule.scss';
  */
 const formatWeekdayShort = i => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i];
 
+/**
+ * If it's a closed schedule set always the same value, so we treat it as closed.
+ * @param isClosed
+ * @return {function(*): string}
+ */
 const selectedTimeOrClosedFallback = isClosed => time =>
   (isClosed ? new Date(1970, 1, 0).toISOString() : time);
 
+/**
+ * Get the original date (1970-01-01T00:00:00.000Z) and sets the updateTime,
+ * so a 3pm in a +3hr tz will be converted to 12pm, this way we keep the UTC value
+ * and we avoid issues with sunlight day savings.
+ *
+ * @param originalDate
+ * @param updatedTime
+ * @param timezone
+ * @return {string | * | number | null}
+ */
 const setTimeToOriginalDate = (originalDate, updatedTime, timezone) => {
-  const originalTimeAndDate = moment
-    .tz(originalDate, timezone)
-    .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+  const format = 'YYYY-MM-DDTHH:mm:ss.SSS[Z]';
+  const originalTimeAndDate = moment.tz(originalDate, timezone).format(format);
   const updatedDateAndTime = `${originalTimeAndDate.split('T')[0]}T${updatedTime}`;
-  return moment.tz(updatedDateAndTime, 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', timezone).toISOString();
+  return moment.tz(updatedDateAndTime, format, timezone).toISOString();
 };
 
 class ScheduleCalendar extends Component {
@@ -127,18 +141,18 @@ class ScheduleCalendar extends Component {
   handleUpdateSchedule(schedule) {
     const { editSchedule } = this.state;
     const { timezone, selectedDay } = this.props;
-    const timeOrClosed = selectedTimeOrClosedFallback(schedule.isClosed);
+    const closedOrTime = selectedTimeOrClosedFallback(schedule.isClosed);
     return this.props.handleUpdateSchedule(
       {
         ...schedule,
         endTime: setTimeToOriginalDate(
           editSchedule.endTime,
-          timeOrClosed(schedule.endTime),
+          closedOrTime(schedule.endTime),
           timezone,
         ),
         startTime: setTimeToOriginalDate(
           editSchedule.startTime,
-          timeOrClosed(schedule.startTime),
+          closedOrTime(schedule.startTime),
           timezone,
         ),
         date: selectedDay,
