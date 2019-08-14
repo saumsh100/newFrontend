@@ -64,7 +64,7 @@ function Complete({
             Thank You, {patientUser && `${patientUser.firstName} ${patientUser.lastName}`}!
           </h1>
           <p className={styles.description}>
-            Your request has been submitted successfully. <br />
+            Your request has been submitted. <br />
             We will be in touch soon, please wait for our confirmation.
           </p>
         </div>
