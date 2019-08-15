@@ -51,9 +51,8 @@ class Users extends Component {
     this.sendEdit = this.sendEdit.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { accountId, role } = this.props;
-
     const url = `/api/accounts/${accountId}/users`;
     const urlInvites = `/api/accounts/${accountId}/invites`;
 
@@ -224,11 +223,8 @@ class Users extends Component {
 
   render() {
     const formName = 'emailInvite';
-    const { users, permissions, accounts, invites } = this.props;
+    const { users, permissions, invites, clinicName } = this.props;
     const { active, editActive, newActive } = this.state;
-
-    const usersAccount = accounts.find(acc => acc && acc.id === this.props.accountId);
-    const clinicName = usersAccount.get('name');
 
     let usersInvited = (
       <div className={styles.userListItem}>
@@ -428,10 +424,14 @@ Users.propTypes = {
   accountId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
   role: PropTypes.string.isRequired,
+  clinicName: PropTypes.string,
   users: PropTypes.instanceOf(Map).isRequired,
   permissions: PropTypes.instanceOf(Map).isRequired,
-  accounts: PropTypes.instanceOf(Map).isRequired,
   invites: PropTypes.instanceOf(Map).isRequired,
+};
+
+Users.defaultProps = {
+  clinicName: '',
 };
 
 function mapStateToProps({ entities, auth }) {
@@ -441,7 +441,7 @@ function mapStateToProps({ entities, auth }) {
     role: auth.get('role'),
     users: entities.getIn(['users', 'models']),
     permissions: entities.getIn(['permissions', 'models']),
-    accounts: entities.getIn(['accounts', 'models']),
+    clinicName: entities.getIn(['accounts', 'models', auth.get('accountId'), 'name']),
     invites: entities.getIn(['invites', 'models']),
   };
 }
