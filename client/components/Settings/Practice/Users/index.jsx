@@ -223,7 +223,7 @@ class Users extends Component {
 
   render() {
     const formName = 'emailInvite';
-    const { users, permissions, invites, clinicName } = this.props;
+    const { users, permissions, invites, practiceName } = this.props;
     const { active, editActive, newActive } = this.state;
 
     let usersInvited = (
@@ -370,7 +370,7 @@ class Users extends Component {
           )}
         </DialogBox>
         <Row className={styles.mainHead}>
-          <Header className={styles.header} contentHeader title={`Users in ${clinicName}`} />
+          <Header className={styles.header} contentHeader title={`Users in ${practiceName}`} />
           <div className={styles.paddingRight}>
             {addUserButton}
             <Button
@@ -424,14 +424,14 @@ Users.propTypes = {
   accountId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
   role: PropTypes.string.isRequired,
-  clinicName: PropTypes.string,
+  practiceName: PropTypes.string,
   users: PropTypes.instanceOf(Map).isRequired,
   permissions: PropTypes.instanceOf(Map).isRequired,
   invites: PropTypes.instanceOf(Map).isRequired,
 };
 
 Users.defaultProps = {
-  clinicName: '',
+  practiceName: '',
 };
 
 function mapStateToProps({ entities, auth }) {
@@ -441,7 +441,7 @@ function mapStateToProps({ entities, auth }) {
     role: auth.get('role'),
     users: entities.getIn(['users', 'models']),
     permissions: entities.getIn(['permissions', 'models']),
-    clinicName: entities.getIn(['accounts', 'models', auth.get('accountId'), 'name']),
+    practiceName: entities.getIn(['accounts', 'models', auth.get('accountId'), 'name']),
     invites: entities.getIn(['invites', 'models']),
   };
 }
