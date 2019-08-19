@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`models/PinCode Data Validation should be able to save a PinCode without id provided 1`] = `
-Object {
-  "modelId": "f23151a6-091e-43db-8856-7e547c171754",
-  "pinCode": "1111",
-}
-`;

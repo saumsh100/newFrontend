@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Fetching a single patients events #patientEventsAggregator should retrieve 1 reminder event 1`] = `"sms"`;
-
-exports[`Fetching a single patients events #patientEventsAggregator should retrieve 1 review event 1`] = `3`;

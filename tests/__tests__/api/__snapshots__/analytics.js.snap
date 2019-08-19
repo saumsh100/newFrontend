@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`api/analytics GET / /signUrl - returns valid url 1`] = `
-Object {
-  "url": "https://modeanalytics.com/carecru/reports/b066e775f66a/embed?access_key=sdfsdfs&max_age=1600&param_account_name=a25cdce2-d696-43c8-bde7-fe3c1ccc945e&param_end_date=2018-12-04&param_start_date=2018-10-01&timestamp=1517472000&signature=a764e38c3a089e008030755033ec6653e7c385c012158e24acc79b3f82317bae",
-}
-`;
