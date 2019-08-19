@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`models/Enterprise Data Validation should be able to save a Enterprise without id provided 1`] = `
-Object {
-  "name": "Test Enterprise",
-  "plan": "GROWTH",
-}
-`;
