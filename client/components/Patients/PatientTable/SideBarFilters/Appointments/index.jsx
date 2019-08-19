@@ -24,13 +24,13 @@ export default function Appointments({ theme: { input, date } }) {
   return (
     <div className={styles.formContainer}>
       <div className={styles.formHeaderInput}>First Appointment</div>
-      <FormSection name="firstAppointment" className={styles.formContainer_row}>
+      <FormSection name="firstApptDate" className={styles.formContainer_row}>
         <Field component="DayPicker" name="0" theme={date} label="Date" />
         <span className={styles.formContainer_middleText}> to </span>
         <Field component="DayPicker" name="1" theme={date} label="Date" />
       </FormSection>
       <div className={styles.formHeaderInput}>Last Appointment</div>
-      <FormSection name="lastAppointment" className={styles.formContainer_row}>
+      <FormSection name="lastApptDate" className={styles.formContainer_row}>
         <Field component="DayPicker" name="0" theme={date} label="Date" />
         <span className={styles.formContainer_middleText}> to </span>
         <Field component="DayPicker" name="1" theme={date} label="Date" />

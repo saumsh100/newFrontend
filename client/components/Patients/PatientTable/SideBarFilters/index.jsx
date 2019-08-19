@@ -43,8 +43,8 @@ const forms = flags => ({
     headerTitle: 'Appointments',
     formComponent: AppointmentsForm,
     initialValues: {
-      firstAppointment: '',
-      lastAppointment: '',
+      firstApptDate: '',
+      lastApptDate: '',
       production: '',
       appointmentsCount: '',
       onlineAppointments: '',
