@@ -168,6 +168,7 @@ class DayViewBody extends Component {
       practitionersArray,
       chairsArray,
       scrollComponentDidMountChair: this.scrollComponentDidMountChair,
+      scrollComponentDidMount: this.scrollComponentDidMount,
     };
 
     const practitionersSlot = allFetched && <PractitionersSlot {...slotProps} />;
