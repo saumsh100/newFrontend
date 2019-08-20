@@ -7,8 +7,8 @@ import ManualRecallEvent from './ManualRecallEvent';
 import getEventText from './Shared/textBuilder';
 
 const contactMethodHash = {
-  email: 'SMS',
-  sms: 'Email',
+  email: 'Email',
+  sms: 'SMS',
   'sms/email': 'Email & SMS',
 };
 
