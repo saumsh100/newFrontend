@@ -51,9 +51,8 @@ function Login(props) {
     <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
         <div className={styles.container}>
-          <h1 className={styles.heading}>Access your account</h1>
+          <h1 className={styles.heading}>Sign in to your account</h1>
           <p className={styles.description}>
-            Select a date and the time that works best for you <br /> or{' '}
             <Link className={styles.subCardLink} to={b(signUpLink)}>
               Sign Up
             </Link>{' '}

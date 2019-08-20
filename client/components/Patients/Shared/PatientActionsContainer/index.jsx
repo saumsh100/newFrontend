@@ -82,7 +82,7 @@ class PatientActionsContainer extends Component {
 
       this.props.receiveEntities({
         entities: {
-          events: {
+          patientTimelineEvents: {
             [eventId]: {
               id: eventId,
               type: 'note',
@@ -155,7 +155,7 @@ class PatientActionsContainer extends Component {
 
       this.props.receiveEntities({
         entities: {
-          events: {
+          patientTimelineEvents: {
             [eventId]: {
               id: eventId,
               type: 'followUp',
@@ -223,7 +223,7 @@ class PatientActionsContainer extends Component {
 
       this.props.receiveEntities({
         entities: {
-          events: {
+          patientTimelineEvents: {
             [eventId]: {
               id: eventId,
               type: 'recall',
