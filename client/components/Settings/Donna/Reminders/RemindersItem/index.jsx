@@ -15,6 +15,8 @@ import Reminders from '../../../../../entities/models/Reminder';
 import EnabledFeature from '../../../../library/EnabledFeature';
 import styles from './styles.scss';
 
+const BUSINESS_DAYS_STRING = 'business days';
+
 const iconsMap = {
   sms: 'comment',
   phone: 'phone',
@@ -38,6 +40,14 @@ const typeOptions = [
     label: 'Days',
     value: 'days',
   },
+  {
+    label: 'Hours',
+    value: 'hours',
+  },
+  {
+    label: 'Business Days',
+    value: BUSINESS_DAYS_STRING,
+  },
 ];
 
 const primaryTypesOptions = (showVoiceTouchPoint = false) => [
@@ -56,6 +66,11 @@ const primaryTypesOptions = (showVoiceTouchPoint = false) => [
   ...(showVoiceTouchPoint ? [{ label: 'Voice',
     value: 'phone' }] : []),
 ];
+
+const getType = (reminder) => {
+  const { type } = intervalToNumType(reminder.interval);
+  return type === 'days' && reminder.isBusinessDays ? BUSINESS_DAYS_STRING : type;
+};
 
 const SmallIconCircle = ({ selected, icon }) => {
   const wrapperClass = selected
@@ -97,6 +112,7 @@ class RemindersItem extends Component {
       return;
     }
 
+    // eslint-disable-next-line react/no-will-update-set-state
     this.setState({ number: newNumType.num });
   }
 
@@ -166,8 +182,9 @@ class RemindersItem extends Component {
 
   changeDaysHours(newType) {
     const { account, reminder } = this.props;
-    const { num, type } = intervalToNumType(reminder.interval);
-    if (newType === type) {
+    const { num } = intervalToNumType(reminder.interval);
+    const currentType = getType(reminder);
+    if (newType === currentType) {
       return;
     }
 
@@ -183,9 +200,15 @@ class RemindersItem extends Component {
       },
     };
 
+    const isBusinessDays = newType === BUSINESS_DAYS_STRING;
+    const values = {
+      isBusinessDays,
+      interval: numTypeToInterval(num, isBusinessDays ? 'days' : newType),
+    };
+
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { interval: numTypeToInterval(num, newType) },
+      values,
       alert,
     });
   }
@@ -247,12 +270,13 @@ class RemindersItem extends Component {
   render() {
     const { reminder, index, isSelected, onSelectReminder, onSelectAdvancedSettings } = this.props;
 
-    const { interval, primaryTypes, isActive } = reminder;
+    const { primaryTypes, isActive } = reminder;
 
     const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
 
     const icon = iconsMap[primaryTypesKey];
-    const { type } = intervalToNumType(interval);
+    const type = getType(reminder);
+
     const { number } = this.state;
 
     const dropdownSelectClass = isSelected ? styles.dropdownSelectSelected : styles.dropdownSelect;
