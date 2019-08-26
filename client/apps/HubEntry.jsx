@@ -47,10 +47,6 @@ electron.on(RESPONSE_HOST, (event, { url }) => {
 electron.once(RESPONSE_HOST, (event, { locale }) => {
   const { socket } = socketInstance;
 
-  if (process.env.NODE_ENV === 'production') {
-    LogRocket.init(process.env.LOGROCKET_APP_ID);
-  }
-
   window.Intercom('boot', {
     app_id: process.env.INTERCOM_APP_ID,
     hide_default_launcher: true,
@@ -106,9 +102,6 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
         name: fullName,
         email,
         created_at: user.createdAt,
-        logrocketURL: `https://app.logrocket.com/${
-          process.env.LOGROCKET_APP_ID
-        }/sessions?u=${userId}`,
       });
 
       SubscriptionManager.accountId = auth.get('accountId');

@@ -17,8 +17,6 @@ import { loadPatient } from '../thunks/patientAuth';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import { setOnlineBookingUserVars } from '../util/fullStory';
 
-LogRocket.init(process.env.LOGROCKET_APP_ID);
-
 const browserHistory = createBrowserHistory();
 const store = configure({
   initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle

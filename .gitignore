@@ -55,5 +55,3 @@ yarn-error.log
 coverage
 
 client/build/*
-!client/build/
-!client/build/package.json

@@ -23,7 +23,6 @@ import SubscriptionManager from '../util/graphqlSubscriptions';
 import { identifyPracticeUser } from '../util/fullStory';
 
 if (process.env.NODE_ENV === 'production') {
-  LogRocket.init(process.env.LOGROCKET_APP_ID);
   window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
 }
 
@@ -62,9 +61,6 @@ load()(store.dispatch).then(() => {
         name: fullName,
         email,
         created_at: user.createdAt,
-        logrocketURL: `https://app.logrocket.com/${
-          process.env.LOGROCKET_APP_ID
-        }/sessions?u=${userId}`,
       });
     }
 

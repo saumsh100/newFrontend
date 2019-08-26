@@ -91,9 +91,6 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
             name: fullName,
             email,
             created_at: user.createdAt,
-            logrocketURL: `https://app.logrocket.com/${
-              process.env.LOGROCKET_APP_ID
-            }/sessions?u=${userId}`,
           });
         }
 
