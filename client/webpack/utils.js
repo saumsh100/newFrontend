@@ -4,6 +4,8 @@ const { EOL } = require('os');
 const path = require('path');
 const shell = require('shelljs');
 
+const generatePublishPackage = require('../../scripts/generatePublishPackage');
+
 /**
  * Convert list of names to wepbpack mapped entries
  * @param {Function} map
@@ -49,7 +51,7 @@ exports.readEnv = envPath =>
  * Links the build folder to node_modules using npm link
  */
 exports.linkFrontEndModule = ({
-  buildPath = 'client/build',
+  buildPath = 'client/build/',
   frontEndPackage = '@carecru/carecru',
 } = {}) => {
   const serverPath = process.env.SERVER_PATH || shell.pwd().toString();
@@ -60,6 +62,9 @@ exports.linkFrontEndModule = ({
       serverPath,
     )}\n`,
   );
+
+  generatePublishPackage(buildPath);
+
   shell.cd(buildPath);
   shell.exec('npm link');
   shell.cd(serverPath);
