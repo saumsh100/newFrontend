@@ -151,16 +151,21 @@ class PatientInformation extends PureComponent {
     /**
      * If the patientUser is new, let's create a new family member.
      */
+    const sanitizedValues = {
+      ...values,
+      email: !values.email ? null : values.email,
+    };
+
     if (selectedFamilyPatientUserId === NEW_PATIENT) {
       try {
-        this.props.addNewFamilyPatient(values);
+        this.props.addNewFamilyPatient(sanitizedValues);
         return this.props.history.push(contextualUrl);
       } catch (err) {
         console.error('Error creating patient!', err);
       }
     } else {
       try {
-        await this.props.updatePatient(values, selectedFamilyPatientUserId);
+        await this.props.updatePatient(sanitizedValues, selectedFamilyPatientUserId);
         return this.props.history.push(contextualUrl);
       } catch (err) {
         console.error('Error updating patient!', err);
@@ -230,6 +235,7 @@ class PatientInformation extends PureComponent {
      * @param {object} values
      */
     const asyncEmailValidation = values =>
+      patientIsUser &&
       patientUser &&
       patientUser.email &&
       (values.email === patientUser.email ? false : asyncEmailValidatePatient(values));
@@ -240,7 +246,8 @@ class PatientInformation extends PureComponent {
      * @param {object} values
      */
     const asyncPhoneNumberValidation = values =>
-      (patientUser &&
+      (patientIsUser &&
+      patientUser &&
       patientUser.phoneNumber &&
       (values.phoneNumber === patientUser.phoneNumber ||
         values.phoneNumber === normalizePhone(patientUser.phoneNumber))
@@ -315,7 +322,10 @@ class PatientInformation extends PureComponent {
                   name="email"
                   type="email"
                   required={patientIsUser}
-                  validate={[value => value && emailValidate(value)]}
+                  validate={[
+                    value => value && emailValidate(value),
+                    value => !value && patientIsUser && 'Email required for primary account owner',
+                  ]}
                 />
               </Element>
               <Element name="birthDate" className={styles.elementWrapper}>
