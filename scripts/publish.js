@@ -10,6 +10,7 @@ const generatePublishPackage = require('./generatePublishPackage');
 
     generatePublishPackage(buildPath);
 
+    cmd.cp('.npmrc.example', `${buildPath}.npmrc`);
     cmd.cd(buildPath);
     cmd.exec('npm publish . --access private');
   } catch (e) {
