@@ -34,6 +34,8 @@ const getAdapterType = (adapterType) => {
 
 const hasError = ({ startTime, endTime }) => startTime > endTime;
 
+const getFormattedTime = (time, timezone) => dateFormatter(time, timezone, 'HH:mm:ss.SSS[Z]');
+
 class EditSchedule extends Component {
   constructor(props) {
     super(props);
@@ -61,22 +63,32 @@ class EditSchedule extends Component {
   componentDidUpdate(prevProps) {
     const { schedule, timezone } = this.props;
     if (!isEqual(prevProps.schedule, schedule)) {
-      const getFormattedTime = time => dateFormatter(time, timezone, 'HH:mm:ss.SSS[Z]');
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        ...schedule,
-        startTime: getFormattedTime(schedule.startTime),
-        endTime: getFormattedTime(schedule.endTime),
-        breaks:
-          schedule.breaks.length > 0
-            ? schedule.breaks.map(b => ({
-              ...b,
-              startTime: getFormattedTime(b.startTime),
-              endTime: getFormattedTime(b.endTime),
-            }))
-            : [],
-      });
+      this.setState(this.sanitizeScheduleTimeValues(schedule, timezone));
     }
+  }
+
+  /**
+   * Based on a schedule, make sure that time values are converted to HH:mm:ss.SSS[Z]
+   *
+   * @param schedule
+   * @param timezone
+   * @return {{breaks: (*|[]), startTime: *, endTime: *}}
+   */
+  sanitizeScheduleTimeValues(schedule, timezone) {
+    return {
+      ...schedule,
+      startTime: getFormattedTime(schedule.startTime, timezone),
+      endTime: getFormattedTime(schedule.endTime, timezone),
+      breaks:
+        schedule.breaks.length > 0
+          ? schedule.breaks.map(b => ({
+            ...b,
+            startTime: getFormattedTime(b.startTime, timezone),
+            endTime: getFormattedTime(b.endTime, timezone),
+          }))
+          : [],
+    };
   }
 
   /**
@@ -124,7 +136,10 @@ class EditSchedule extends Component {
    * Reset the state (ingore changes) and close the modal.
    */
   hideModal() {
-    this.setState({ ...this.props.schedule }, () => this.props.hideModal());
+    this.setState(
+      { ...this.sanitizeScheduleTimeValues(this.props.schedule, this.props.timezone) },
+      () => this.props.hideModal(),
+    );
   }
 
   /**
