@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { push } from 'react-router-redux';
 import ActionsDropdownMenu from './ActionsDropdownMenu';
 import {
   setActivePatient,
@@ -11,18 +12,31 @@ import {
   setIsRecallsFormActive,
 } from '../../../../reducers/patientTable';
 import { isFeatureEnabledSelector } from '../../../../reducers/featureFlags';
+import { getOrCreateChatForPatient } from '../../../../thunks/chat';
+import { patientShape } from '../../../library/PropTypeShapes';
 
 class PatientActionsDropdown extends Component {
   constructor(props) {
     super(props);
 
     this.toggleForm = this.toggleForm.bind(this);
+    this.handleGoToChat = this.handleGoToChat.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.patientChat === null && prevProps.patientChat !== this.props.patientChat) {
+      this.props.push(`/chat/${this.props.patientChat}`);
+    }
   }
 
   toggleForm(setFormActive) {
     const { patient } = this.props;
     this.props.setActivePatient(patient);
     setFormActive(true);
+  }
+
+  handleGoToChat(patientId) {
+    return this.props.getOrCreateChatForPatient(patientId);
   }
 
   render() {
@@ -50,12 +64,18 @@ class PatientActionsDropdown extends Component {
         onClick: () => this.toggleForm(this.props.setIsRecallsFormActive),
       });
 
+    actionMenuItems.push({
+      key: 'go-to-chat',
+      children: <div>Text Patient</div>,
+      onClick: () => this.handleGoToChat(this.props.patient.id),
+    });
+
     return <ActionsDropdownMenu actionMenuItems={actionMenuItems} {...this.props} />;
   }
 }
 
 PatientActionsDropdown.propTypes = {
-  patient: PropTypes.shape({}).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
   canAddNote: PropTypes.bool,
   canAddFollowUp: PropTypes.bool,
   canLogRecall: PropTypes.bool,
@@ -63,12 +83,16 @@ PatientActionsDropdown.propTypes = {
   setIsNoteFormActive: PropTypes.func.isRequired,
   setIsFollowUpsFormActive: PropTypes.func.isRequired,
   setIsRecallsFormActive: PropTypes.func.isRequired,
+  getOrCreateChatForPatient: PropTypes.func.isRequired,
+  patientChat: PropTypes.string,
+  push: PropTypes.func.isRequired,
 };
 
 PatientActionsDropdown.defaultProps = {
   canAddNote: false,
   canAddFollowUp: false,
   canLogRecall: false,
+  patientChat: '',
 };
 
 function mapDispatchToProps(dispatch) {
@@ -78,12 +102,14 @@ function mapDispatchToProps(dispatch) {
       setIsNoteFormActive,
       setIsFollowUpsFormActive,
       setIsRecallsFormActive,
+      getOrCreateChatForPatient,
+      push,
     },
     dispatch,
   );
 }
 
-function mapStateToProps({ featureFlags }) {
+function mapStateToProps({ featureFlags, chat }) {
   const features = featureFlags.get('flags');
   const canAddNote = isFeatureEnabledSelector(features, 'patient-add-note-action');
   const canAddFollowUp = isFeatureEnabledSelector(features, 'patient-add-follow-up-action');
@@ -92,6 +118,7 @@ function mapStateToProps({ featureFlags }) {
     canAddNote,
     canAddFollowUp,
     canLogRecall,
+    patientChat: chat.get('patientChat'),
   };
 }
 

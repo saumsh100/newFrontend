@@ -132,7 +132,7 @@ export default function PatientProfile(props) {
         <SFooter className={styles.footer}>
           {!isPatientUser && (
             <Button dense compact onClick={props.handleGoToChat} border="blue" icon="comment-alt">
-              <span>Chat</span>
+              <span>Text</span>
             </Button>
           )}
           {!isPatientUser && (

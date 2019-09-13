@@ -324,17 +324,40 @@ export async function setChatIsPoC(patient, dispatch) {
   return dispatch(setChatPoC(pocPatient));
 }
 
+function getChatEntity(id) {
+  return async (dispatch, getState) => {
+    const { entities } = getState();
+    const storedEntity = entities.getIn(['chats', 'models', id]);
+
+    if (storedEntity) {
+      return storedEntity.delete('textMessages');
+    }
+
+    const { chats } = await dispatch(
+      fetchEntitiesRequest({
+        key: 'chats',
+        id: 'fetchingChats',
+        url: `/api/chats/${id}`,
+      }),
+    );
+
+    await dispatch(
+      fetchEntitiesRequest({
+        url: '/api/patients/search',
+        params: { patientId: chats[id].patientId },
+      }),
+    );
+
+    return dispatch(getChatEntity(id));
+  };
+}
+
 export function selectChat(id, createChat = null) {
   return async (dispatch, getState) => {
     const { routing, entities, chat } = getState();
     const currentChatId = chat.get('selectedChatId');
     if (id && currentChatId === id) return;
-    const chatEntity =
-      !createChat &&
-      id &&
-      entities.getIn(['chats', 'models', id]) &&
-      entities.getIn(['chats', 'models', id]).delete('textMessages');
-
+    const chatEntity = await dispatch(getChatEntity(id));
     dispatch(setNewChat(createChat));
     dispatch(setSelectedChat(chatEntity));
 
