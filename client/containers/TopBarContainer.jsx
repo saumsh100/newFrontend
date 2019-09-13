@@ -35,18 +35,30 @@ TopBarContainer.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)),
   activeAccount: PropTypes.shape(accountShape),
+  isReady: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = ({ entities, toolbar, auth }) => {
+const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const accountsFlag = featureFlags.getIn(['flags', 'multi-account-select']);
+  const allowedAccounts = accountsFlag && accountsFlag.toJS().map(a => a.value);
+  const enterpriseAccounts = Object.values(
+    entities
+      .getIn(['accounts', 'models'])
+      .filter(account => account.enterpriseId === auth.get('enterpriseId'))
+      .toJS(),
+  );
+
+  // If the feature flag is an array, we ensure we are only showing those practices
+  const accounts = allowedAccounts
+    ? enterpriseAccounts.filter(a => allowedAccounts.indexOf(a.id) > -1)
+    : enterpriseAccounts;
+
   return {
     isCollapsed: toolbar.get('isCollapsed'),
     isSearchCollapsed: toolbar.get('isSearchCollapsed'),
-    accounts: Object.values(entities
-      .getIn(['accounts', 'models'])
-      .filter(account => account.enterpriseId === auth.get('enterpriseId'))
-      .toJS()),
     activeAccount: activeAccount && activeAccount.toJS(),
+    accounts,
     user: auth.get('user'),
     enterprise: auth.get('enterprise'),
     isReady: !!auth.get('accountId') && !!activeAccount,
