@@ -326,6 +326,10 @@ export async function setChatIsPoC(patient, dispatch) {
 
 function getChatEntity(id) {
   return async (dispatch, getState) => {
+    // New chat
+    if (id === null) {
+      return id;
+    }
     const { entities } = getState();
     const storedEntity = entities.getIn(['chats', 'models', id]);
 
