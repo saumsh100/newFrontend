@@ -65,10 +65,6 @@ class ChatListItem extends Component {
   render() {
     const { chat, patient, lastTextMessage, selectedChatId, lockedChat } = this.props;
 
-    if (!patient || !lastTextMessage) {
-      return null;
-    }
-
     const mDate = moment(lastTextMessage.createdAt);
     const daysDifference = moment().diff(mDate, 'days');
     const isActive = selectedChatId === chat.id && !isHub();
@@ -114,7 +110,7 @@ ChatListItem.propTypes = {
     read: PropTypes.bool,
     body: PropTypes.string,
     createdAt: PropTypes.string,
-  }),
+  }).isRequired,
   chat: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,
@@ -135,7 +131,6 @@ ChatListItem.propTypes = {
 };
 
 ChatListItem.defaultProps = {
-  lastTextMessage: null,
   selectedChatId: null,
   onChatClick: e => e,
 };

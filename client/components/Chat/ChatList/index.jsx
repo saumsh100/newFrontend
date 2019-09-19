@@ -38,9 +38,15 @@ class ChatListContainer extends Component {
   }
 
   renderChatList() {
-    return this.sortChatList().map(chat => (
-      <ChatListItem key={`${chat.id}_listItem`} onChatClick={this.props.onChatClick} chat={chat} />
-    ));
+    return this.sortChatList()
+      .filter(chat => !chat.patient)
+      .map(chat => (
+        <ChatListItem
+          key={`${chat.id}_listItem`}
+          onChatClick={this.props.onChatClick}
+          chat={chat}
+        />
+      ));
   }
 
   renderNewChat() {
