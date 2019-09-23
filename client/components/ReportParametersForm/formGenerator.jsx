@@ -15,11 +15,14 @@ export default function FormGenerator({ page, parameters, componentProps }) {
     .map((formComponent) => {
       const Element = parameters.defaultComponents[formComponent.component];
       const elementProps = componentProps[formComponent.component];
+      const hideElement = !!elementProps.hide;
 
       return (
-        <div className={style.col} key={formComponent.name}>
-          <Element {...elementProps} />
-        </div>
+        !hideElement && (
+          <div className={style.col} key={formComponent.name}>
+            <Element {...elementProps} />
+          </div>
+        )
       );
     });
 

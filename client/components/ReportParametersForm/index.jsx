@@ -218,7 +218,7 @@ class ReportParametersForm extends Component {
   }
 
   render() {
-    const { active, account, reports, reportsJson, timezone } = this.props;
+    const { active, account, reports, reportsJson, timezone, shouldHideMultiAccount } = this.props;
     const params = reports.get(active);
     const parameters = {
       ...reportsJson,
@@ -248,6 +248,7 @@ class ReportParametersForm extends Component {
         },
         multiSelectAccount: {
           selected: params[name],
+          hide: shouldHideMultiAccount,
           defaultValue: [account.get('id')],
           onChange: value => this.setParam(name, value),
         },
@@ -303,6 +304,7 @@ ReportParametersForm.propTypes = {
   active: PropTypes.string.isRequired,
   reports: PropTypes.instanceOf(Map).isRequired,
   reportsJson: PropTypes.shape({}).isRequired,
+  shouldHideMultiAccount: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ entities, auth, intelligenceReports, featureFlags }) => {
@@ -319,12 +321,13 @@ const mapStateToProps = ({ entities, auth, intelligenceReports, featureFlags }) 
       }),
       {},
     );
-
+  const multiSelectOptions = featureFlags.getIn(['flags', 'multi-account-select']);
   return {
     active: intelligenceReports.get('active'),
     reports: intelligenceReports.get('reports'),
     account: entities.getIn(['accounts', 'models', auth.get('accountId')]),
     reportsJson,
+    shouldHideMultiAccount: !(multiSelectOptions && multiSelectOptions.size > 1),
   };
 };
 
