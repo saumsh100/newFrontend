@@ -42,13 +42,6 @@
     "function-paren-newline": ["error", "consistent"],
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
   },
-  "settings": {
-    "import/resolver": {
-      "webpack": {
-        "config": "server/webpack/webpack.config.js"
-      }
-    }
-  },
   "env": {
     "browser": true,
     "mocha": true,

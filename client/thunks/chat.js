@@ -1,5 +1,6 @@
 
 import { push } from 'react-router-redux';
+import { Map } from 'immutable';
 import pull from 'lodash/pull';
 import pullAll from 'lodash/pullAll';
 import uniq from 'lodash/uniq';
@@ -333,26 +334,19 @@ function getChatEntity(id) {
     const { entities } = getState();
     const storedEntity = entities.getIn(['chats', 'models', id]);
 
-    if (storedEntity) {
-      return storedEntity.delete('textMessages');
-    }
-
-    const { chats } = await dispatch(
-      fetchEntitiesRequest({
-        key: 'chats',
-        id: 'fetchingChats',
-        url: `/api/chats/${id}`,
-      }),
+    return (
+      storedEntity ||
+      httpClient()
+        .get(`/api/chats/${id}`)
+        .then(({ data }) =>
+          dispatch(
+            fetchEntitiesRequest({
+              url: '/api/patients/search',
+              params: { patientId: data.entities.chats[id].patientId },
+            }),
+          ))
+        .then(({ chats }) => Map(chats[id]))
     );
-
-    await dispatch(
-      fetchEntitiesRequest({
-        url: '/api/patients/search',
-        params: { patientId: chats[id].patientId },
-      }),
-    );
-
-    return dispatch(getChatEntity(id));
   };
 }
 
@@ -361,7 +355,7 @@ export function selectChat(id, createChat = null) {
     const { routing, entities, chat } = getState();
     const currentChatId = chat.get('selectedChatId');
     if (id && currentChatId === id) return;
-    const chatEntity = await dispatch(getChatEntity(id));
+    const chatEntity = (await dispatch(getChatEntity(id))).delete('textMessages');
     dispatch(setNewChat(createChat));
     dispatch(setSelectedChat(chatEntity));
 

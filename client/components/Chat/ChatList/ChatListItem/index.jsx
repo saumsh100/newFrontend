@@ -65,7 +65,7 @@ class ChatListItem extends Component {
   render() {
     const { chat, patient, lastTextMessage, selectedChatId, lockedChat } = this.props;
 
-    const mDate = moment(lastTextMessage.createdAt);
+    const mDate = moment(lastTextMessage.createdAt || chat.updatedAt);
     const daysDifference = moment().diff(mDate, 'days');
     const isActive = selectedChatId === chat.id && !isHub();
 
@@ -138,7 +138,10 @@ ChatListItem.defaultProps = {
 function mapStateToProps(state, { chat = {} }) {
   const { lastTextMessageId } = chat;
   const patients = state.entities.getIn(['patients', 'models']);
-  const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]);
+  const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]) || {
+    body: '',
+  };
+
   const selectedChatId = state.chat.get('selectedChatId');
   const lockedChat = state.chat.get('lockedChats').includes(chat.id);
 

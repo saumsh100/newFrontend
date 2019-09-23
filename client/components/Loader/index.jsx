@@ -18,12 +18,13 @@ const Loader = ({ isLoaded, inContainer, children }) => {
 };
 
 Loader.propTypes = {
-  isLoaded: PropTypes.bool.isRequired,
+  isLoaded: PropTypes.bool,
   inContainer: PropTypes.bool,
   children: PropTypes.node,
 };
 
 Loader.defaultProps = {
+  isLoaded: false,
   inContainer: false,
   children: null,
 };

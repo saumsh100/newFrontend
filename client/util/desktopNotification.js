@@ -1,5 +1,5 @@
 
-import Push from 'push.js';
+import Push from 'push.js'; // eslint-disable-line import/extensions
 
 const NotificationConfiguration = {
   body: '',
@@ -9,7 +9,7 @@ const NotificationConfiguration = {
 
 export default class DesktopNotification {
   static requestPermission() {
-    Push.Permission.request().catch(console.error);
+    Push.Permission.request().catch(err => err && console.error(err));
   }
 
   static showNotification(message, config = {}) {

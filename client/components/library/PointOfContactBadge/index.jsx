@@ -78,8 +78,12 @@ class PointOfContactBadge extends React.PureComponent {
 }
 
 PointOfContactBadge.propTypes = {
-  patientId: PropTypes.string.isRequired,
+  patientId: PropTypes.string,
   channel: PropTypes.oneOf(['phone', 'email']).isRequired,
+};
+
+PointOfContactBadge.defaultProps = {
+  patientId: null,
 };
 
 export default PointOfContactBadge;
