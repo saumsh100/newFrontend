@@ -245,14 +245,32 @@ class PatientInformation extends PureComponent {
      *
      * @param {object} values
      */
-    const asyncPhoneNumberValidation = values =>
-      (patientIsUser &&
-      patientUser &&
-      patientUser.phoneNumber &&
-      (values.phoneNumber === patientUser.phoneNumber ||
-        values.phoneNumber === normalizePhone(patientUser.phoneNumber))
+    const asyncPhoneNumberValidation = (values) => {
+      if (
+        !patientIsUser &&
+        this.props.familyPatients
+          .toJS()
+          .find(
+            ({ phoneNumber }) =>
+              phoneNumber &&
+              (phoneNumber === values.phoneNumber ||
+                values.phoneNumber === normalizePhone(phoneNumber)),
+          )
+      ) {
+        const error = {
+          phoneNumber:
+            'Phone number already used by a family member. Please use unique phone number or leave blank',
+        };
+        throw error;
+      }
+      return patientIsUser &&
+        patientUser &&
+        patientUser.phoneNumber &&
+        (values.phoneNumber === patientUser.phoneNumber ||
+          values.phoneNumber === normalizePhone(patientUser.phoneNumber))
         ? false
-        : asyncPhoneNumberValidatePatient(values));
+        : asyncPhoneNumberValidatePatient(values);
+    };
 
     const onSignOut = () => {
       if (window.confirm('Are you sure you want to log out?')) {
@@ -315,19 +333,22 @@ class PatientInformation extends PureComponent {
               <Element name="lastName" className={styles.elementWrapper}>
                 <Field theme={inputTheme(styles)} required name="lastName" label="Last Name *" />
               </Element>
-              <Element name="email" className={styles.elementWrapper}>
-                <Field
-                  theme={inputTheme(styles)}
-                  label={`Email ${patientIsUser ? '*' : ''}`}
-                  name="email"
-                  type="email"
-                  required={patientIsUser}
-                  validate={[
-                    value => value && emailValidate(value),
-                    value => !value && patientIsUser && 'Email required for primary account owner',
-                  ]}
-                />
-              </Element>
+              {patientIsUser && (
+                <Element name="email" className={styles.elementWrapper}>
+                  <Field
+                    theme={inputTheme(styles)}
+                    label={`Email ${patientIsUser ? '*' : ''}`}
+                    name="email"
+                    type="email"
+                    required={patientIsUser}
+                    validate={[
+                      value => value && emailValidate(value),
+                      value =>
+                        !value && patientIsUser && 'Email required for primary account owner',
+                    ]}
+                  />
+                </Element>
+              )}
               <Element name="birthDate" className={styles.elementWrapper}>
                 <Field
                   theme={inputTheme(styles)}
@@ -344,7 +365,11 @@ class PatientInformation extends PureComponent {
                   required={patientIsUser}
                   name="phoneNumber"
                   type="tel"
-                  label={`Phone Number ${patientIsUser ? '*' : ''}`}
+                  label={
+                    patientIsUser
+                      ? 'Phone Number *'
+                      : 'Family Member Phone Number (leave blank if none)'
+                  }
                 />
               </Element>
               <Element name="gender" className={styles.elementWrapper}>
