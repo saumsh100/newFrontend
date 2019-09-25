@@ -329,7 +329,7 @@ function getChatEntity(id) {
   return async (dispatch, getState) => {
     // New chat
     if (id === null) {
-      return id;
+      return null;
     }
     const { entities } = getState();
     const storedEntity = entities.getIn(['chats', 'models', id]);
@@ -354,8 +354,14 @@ export function selectChat(id, createChat = null) {
   return async (dispatch, getState) => {
     const { routing, entities, chat } = getState();
     const currentChatId = chat.get('selectedChatId');
-    if (id && currentChatId === id) return;
-    const chatEntity = (await dispatch(getChatEntity(id))).delete('textMessages');
+
+    if (id && currentChatId === id) {
+      return;
+    }
+
+    const chatEntity = await dispatch(getChatEntity(id)).then(data =>
+      (data === null ? data : data.delete('textMessages')));
+
     dispatch(setNewChat(createChat));
     dispatch(setSelectedChat(chatEntity));
 
