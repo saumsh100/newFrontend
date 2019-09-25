@@ -60,8 +60,8 @@ class ModeReport extends Component {
         message={`fetch ${reportActionTitle} data`}
         accountName={reportActionAccountName}
       >
+        {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
         <iframe
-          title={`Mode Report ${this.state.url}`}
           src={this.state.url}
           width="100%"
           height="100%"
