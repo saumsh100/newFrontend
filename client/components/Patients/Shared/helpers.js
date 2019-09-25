@@ -67,8 +67,9 @@ export const buildDotStyles = (dueForDate, styles) => {
     .diff(dueForDate, 'months', true);
 
   return classnames(styles.dot, {
-    [styles.dotRed]: monthsDiff > 8 && monthsDiff <= 18,
-    [styles.dotYellow]: monthsDiff > 0 && monthsDiff <= 8,
-    [styles.dotGreen]: monthsDiff >= -1 && monthsDiff <= 0,
+    [styles.dotGrey]: monthsDiff >= 18,
+    [styles.dotRed]: monthsDiff >= 8 && monthsDiff < 18,
+    [styles.dotYellow]: monthsDiff >= 0 && monthsDiff < 8,
+    [styles.dotGreen]: monthsDiff >= -2 && monthsDiff < 0,
   });
 };

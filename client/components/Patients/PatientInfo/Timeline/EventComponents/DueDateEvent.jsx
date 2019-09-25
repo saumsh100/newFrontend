@@ -10,22 +10,21 @@ import styles from './styles.scss';
 
 const calcDotStyling = (date) => {
   const hygieneDueDate = moment(date);
+  const monthsDiff = moment()
+    .startOf('day')
+    .diff(hygieneDueDate, 'months', true);
 
-  const monthsDiff = moment().diff(hygieneDueDate, 'months');
-  const weeksDiff = moment().diff(hygieneDueDate, 'weeks');
   let dotStyle = styles.dot;
   let upcomingDueDate = false;
-
-  if (monthsDiff >= 8) {
+  if (monthsDiff >= 18) {
+    dotStyle = classnames(dotStyle, styles.dotGrey);
+  } else if (monthsDiff >= 8 && monthsDiff < 18) {
     dotStyle = classnames(dotStyle, styles.dotRed);
-  } else if (monthsDiff >= 0 && monthsDiff < 8 && weeksDiff > 0) {
+  } else if (monthsDiff >= 0 && monthsDiff < 8) {
     dotStyle = classnames(dotStyle, styles.dotYellow);
-  } else if (weeksDiff === 0 || (weeksDiff <= -1 && weeksDiff >= -4)) {
+  } else if (monthsDiff >= -2 && monthsDiff < 0) {
     dotStyle = classnames(dotStyle, styles.dotGreen);
     upcomingDueDate = true;
-  } else if (weeksDiff <= -4) {
-    upcomingDueDate = true;
-    dotStyle = styles.dot;
   }
 
   return {

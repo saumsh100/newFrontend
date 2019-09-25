@@ -17,7 +17,9 @@ const FilterBodyDisplay = ({ formName, index, displayFilter, isOpen, headerTitle
         <Icon size={1.5} icon="caret-down" type="solid" />
       </span>
     </Button>
-    {isOpen && <div className={styles.collapsible}>{children}</div>}
+    <div style={{ display: isOpen ? 'block' : 'none' }} className={styles.collapsible}>
+      {children}
+    </div>
   </div>
 );
 

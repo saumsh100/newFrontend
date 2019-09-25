@@ -28,7 +28,7 @@ const Routes = {
 };
 
 const DashboardRouter = ({ history, isAuth, isSuperAdmin, navigationPreferences }) => {
-  const n = page => navigationPreferences[page] === 'active';
+  const n = page => navigationPreferences[page] !== 'disabled';
   const getAuthorizedRoutes = () => (
     <div>
       {GrqphQlSubscriptions.subscriptionComponents()}

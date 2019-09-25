@@ -35,7 +35,7 @@ const forms = flags => ({
       age: '',
       gender: '',
       city: '',
-      status: '',
+      status: 'Active',
     },
   },
   appointments: {
@@ -140,13 +140,15 @@ class SideBarFilters extends Component {
           .includes(filter);
     });
     const selectedForm = forms(flags)[form];
+    const initialValue = filter === 'status' ? '' : selectedForm.initialValues[filter];
     if (filterForms[form].values && filterForms[form].values[filter]) {
-      this.props.change(form, filter, selectedForm.initialValues[filter]);
+      this.props.change(form, filter, initialValue);
     }
+
     this.formHandler(
       {
         ...filterForms[form].values,
-        [filter]: selectedForm.initialValues[filter],
+        [filter]: initialValue,
       },
       selectedForm.validateForm,
     );
@@ -175,6 +177,7 @@ class SideBarFilters extends Component {
         }),
         { page: 0 },
       );
+    // eslint-disable-next-line no-unused-vars
     const { page, ...filtersToCompare } = parsedFilters;
     if (!isEqual(this.props.filters, filtersToCompare)) {
       Object.keys(this.props.filters).forEach((key) => {
@@ -206,7 +209,7 @@ class SideBarFilters extends Component {
             })}
             onClick={this.clearTags}
           >
-            Clear All
+            Reset
           </Button>
         </div>
 
@@ -268,8 +271,8 @@ const mapStateToProps = ({ patientTable, form, featureFlags, auth }) => {
       {},
     );
 
+  // eslint-disable-next-line no-unused-vars
   const { limit, page, order, segment, ...filters } = patientTable.get('filters').toJS();
-
   return {
     timezone: auth.get('timezone'),
     filterForms,

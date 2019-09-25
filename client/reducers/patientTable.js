@@ -61,6 +61,7 @@ export const createInitialPatientState = state =>
       page: 0,
       order: [['firstName', 'asc']],
       segment: ['allPatients'],
+      status: 'Active',
     }),
 
     isLoadingTable: false,

@@ -84,6 +84,10 @@ $event-grey: lighten($primary-dark-grey, 10%);
   display: inline-block;
 }
 
+.dotGrey {
+  background: $primary-gray;
+  @extend .dotDisplay;
+}
 .dotRed {
   background: $primary-color;
   @extend .dotDisplay;
