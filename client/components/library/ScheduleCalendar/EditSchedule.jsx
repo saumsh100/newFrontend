@@ -253,29 +253,43 @@ class EditSchedule extends Component {
                 <span className={styles.label}>
                   Office Hours{' '}
                   <div className={styles.dropdownWrapper}>
-                    <DropdownMenu
-                      align="left"
-                      labelComponent={props => (
-                        <Button {...props} compact className={styles.labelButton}>
-                          {this.state.isClosed ? 'Closed' : 'Opened'}{' '}
-                          <Icon icon="chevron-down" size={0.8} className={styles.labelIcon} />
-                        </Button>
+                    <EnabledFeature
+                      predicate={({ flags }) =>
+                        (selectedDay
+                          ? flags.get('connector-update-practitioner-dailySchedules')
+                          : flags.get('connector-update-practitioner-weeklySchedule'))
+                      }
+                      fallback={() => (
+                        <div className={styles.labelButton}>
+                          {this.state.isClosed ? 'Closed' : 'Opened'}
+                        </div>
                       )}
-                      className={styles.optionMenu}
-                    >
-                      <Button
-                        className={styles.optionButton}
-                        onClick={() => this.setState({ isClosed: false })}
-                      >
-                        Opened
-                      </Button>
-                      <Button
-                        className={styles.optionButton}
-                        onClick={() => this.setState({ isClosed: true })}
-                      >
-                        Closed
-                      </Button>
-                    </DropdownMenu>
+                      render={() => (
+                        <DropdownMenu
+                          align="left"
+                          labelComponent={props => (
+                            <Button {...props} compact className={styles.labelButton}>
+                              {this.state.isClosed ? 'Closed' : 'Opened'}{' '}
+                              <Icon icon="chevron-down" size={0.8} className={styles.labelIcon} />
+                            </Button>
+                          )}
+                          className={styles.optionMenu}
+                        >
+                          <Button
+                            className={styles.optionButton}
+                            onClick={() => this.setState({ isClosed: false })}
+                          >
+                            Opened
+                          </Button>
+                          <Button
+                            className={styles.optionButton}
+                            onClick={() => this.setState({ isClosed: true })}
+                          >
+                            Closed
+                          </Button>
+                        </DropdownMenu>
+                      )}
+                    />
                   </div>
                 </span>
                 <EnabledFeature
