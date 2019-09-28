@@ -17,6 +17,7 @@ import {
 } from '..';
 import { patientShape, appointmentShape, practitionerShape } from '../PropTypeShapes/index';
 import ChairModel from '../../../entities/models/Chair';
+import EnabledFeature from '../EnabledFeature';
 import styles from './styles.scss';
 
 const popoverDataSections = (subHeaderText, data) => (
@@ -106,18 +107,22 @@ export default function AppointmentInfo(props) {
               </div>,
             )}
         </SBody>
-
-        <SFooter className={styles.footer}>
-          <Button
-            color="blue"
-            dense
-            compact
-            className={styles.editButton}
-            onClick={() => props.editAppointment()}
-          >
-            Edit Appointment
-          </Button>
-        </SFooter>
+        <EnabledFeature
+          predicate={({ flags }) => flags.get('show-edit-appointment')}
+          render={() => (
+            <SFooter className={styles.footer}>
+              <Button
+                color="blue"
+                dense
+                compact
+                className={styles.editButton}
+                onClick={() => props.editAppointment()}
+              >
+                Edit Appointment
+              </Button>
+            </SFooter>
+          )}
+        />
       </SContainer>
     </Card>
   );

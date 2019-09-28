@@ -17,6 +17,7 @@ import {
 } from '../../../../library';
 import { appointmentShape } from '../../../../library/PropTypeShapes';
 import PatientModel from '../../../../../entities/models/Patient';
+import EnabledFeature from '../../../../library/EnabledFeature';
 import styles from './styles.scss';
 
 export default function AppointmentPopover({ patient, appointment, scheduleView, ...props }) {
@@ -109,23 +110,25 @@ export default function AppointmentPopover({ patient, appointment, scheduleView,
 
         <SFooter className={styles.footer}>
           <Button dense compact onClick={props.handleGoToChat} border="blue" icon="comment-alt">
-            <span>Chat</span>
+            <span>Text</span>
           </Button>
-          <span>
-            <Button border="blue" onClick={props.closePopover} dense compact>
-              Close
-            </Button>
-            <Button
-              color="blue"
-              onClick={props.editAppointment}
-              dense
-              compact
-              className={styles.editButton}
-              data-test-id="button_editAppointment"
-            >
-              Edit
-            </Button>
-          </span>
+          <EnabledFeature
+            predicate={({ flags }) => flags.get('show-edit-appointment')}
+            render={() => (
+              <span>
+                <Button
+                  color="blue"
+                  onClick={props.editAppointment}
+                  dense
+                  compact
+                  className={styles.editButton}
+                  data-test-id="button_editAppointment"
+                >
+                  Edit
+                </Button>
+              </span>
+            )}
+          />
         </SFooter>
       </SContainer>
     </Card>

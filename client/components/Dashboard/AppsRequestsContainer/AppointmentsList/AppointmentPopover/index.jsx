@@ -17,6 +17,7 @@ import Patient from '../../../../../entities/collections/patients';
 import Appointment from '../../../../../entities/collections/appointments';
 import Practitioner from '../../../../../entities/collections/practitioners';
 import Chair from '../../../../../entities/collections/chairs';
+import EnabledFeature from '../../../../library/EnabledFeature';
 import styles from './styles.scss';
 
 export default function AppointmentPopover({
@@ -111,23 +112,24 @@ export default function AppointmentPopover({
             </div>
           )}
         </SBody>
-
-        <SFooter className={styles.footer}>
-          <Button border="blue" onClick={closePopover} dense compact>
-            Close
-          </Button>
-          <Button
-            color="blue"
-            onClick={() => {
-              handleEditAppointment(appointment.id);
-            }}
-            dense
-            compact
-            className={styles.editButton}
-          >
-            Edit
-          </Button>
-        </SFooter>
+        <EnabledFeature
+          predicate={({ flags }) => flags.get('show-edit-appointment')}
+          render={() => (
+            <SFooter className={styles.footer}>
+              <Button
+                color="blue"
+                onClick={() => {
+                  handleEditAppointment(appointment.id);
+                }}
+                dense
+                compact
+                className={styles.editButton}
+              >
+                Edit
+              </Button>
+            </SFooter>
+          )}
+        />
       </SContainer>
     </Card>
   );
