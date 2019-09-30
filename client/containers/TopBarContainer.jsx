@@ -40,7 +40,7 @@ TopBarContainer.propTypes = {
 
 const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  const accountsFlag = featureFlags.getIn(['flags', 'multi-account-select']);
+  const accountsFlag = featureFlags.getIn(['flags', 'accounts-available-to-switch']);
   const allowedAccounts = accountsFlag && accountsFlag.toJS().map(a => a.value);
   const enterpriseAccounts = Object.values(
     entities
