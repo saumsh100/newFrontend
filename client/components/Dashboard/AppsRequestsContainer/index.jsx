@@ -114,7 +114,7 @@ class AppsRequestsContainer extends Component {
     const { appointments } = this.props;
 
     this.props.setScheduleDate({
-      scheduleDate: moment(this.props.dashboardDate),
+      scheduleDate: moment(this.props.dashboardDate).toISOString(),
     });
 
     this.props.push('/schedule');

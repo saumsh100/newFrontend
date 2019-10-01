@@ -17,7 +17,7 @@ import {
 } from '../constants';
 
 const initialState = fromJS({
-  scheduleDate: new Date(),
+  scheduleDate: localStorage.getItem('scheduleDate') || new Date().toISOString(),
   scheduleView: 'chair',
 
   appointmentMinUnit: 15,

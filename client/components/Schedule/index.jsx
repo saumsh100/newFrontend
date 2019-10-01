@@ -94,7 +94,7 @@ class ScheduleComponent extends Component {
   }
 
   setCurrentDay(day) {
-    this.props.setScheduleDate({ scheduleDate: moment(day) });
+    this.props.setScheduleDate({ scheduleDate: moment(day).toISOString() });
   }
 
   openAssignPatientToChatModal(patient) {
@@ -105,11 +105,19 @@ class ScheduleComponent extends Component {
   }
 
   nextDay(currentDay) {
-    this.props.setScheduleDate({ scheduleDate: moment(currentDay).add(1, 'days') });
+    this.props.setScheduleDate({
+      scheduleDate: moment(currentDay)
+        .add(1, 'days')
+        .toISOString(),
+    });
   }
 
   previousDay(currentDay) {
-    this.props.setScheduleDate({ scheduleDate: moment(currentDay).subtract(1, 'days') });
+    this.props.setScheduleDate({
+      scheduleDate: moment(currentDay)
+        .subtract(1, 'days')
+        .toISOString(),
+    });
   }
 
   addNewAppointment() {

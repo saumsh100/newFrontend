@@ -21,6 +21,7 @@ import { initializeFeatureFlags } from '../thunks/featureFlags';
 import DesktopNotification from '../util/desktopNotification';
 import SubscriptionManager from '../util/graphqlSubscriptions';
 import { identifyPracticeUser } from '../util/fullStory';
+import { receiveEntities } from '../reducers/entities';
 
 if (process.env.NODE_ENV === 'production') {
   window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
@@ -65,6 +66,15 @@ load()(store.dispatch).then(() => {
     }
 
     SubscriptionManager.accountId = auth.get('accountId');
+    store.dispatch(
+      receiveEntities({
+        entities: {
+          accounts: {
+            [auth.get('accountId')]: auth.get('account').toJS(),
+          },
+        },
+      }),
+    );
     store.dispatch(loadUnreadMessages());
     store.dispatch(loadOnlineRequest());
     DesktopNotification.requestPermission();

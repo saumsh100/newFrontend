@@ -142,12 +142,17 @@ const cleanRedirect = (redirectTo) => {
 };
 
 export function switchActiveAccount(accountId, redirectTo = '/') {
-  return dispatch =>
-    httpClient()
+  return (dispatch, getState) => {
+    const dashboardDate = getState().dashboard.get('dashboardDate');
+    const scheduleDate = getState().schedule.get('scheduleDate');
+    localStorage.setItem('scheduleDate', scheduleDate);
+    localStorage.setItem('dashboardDate', dashboardDate);
+    return httpClient()
       .post(`/api/accounts/${accountId}/switch`, {})
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then(() => dispatch(push(cleanRedirect(redirectTo))))
       .then(reloadPage);
+  };
 }
 
 export function switchActiveEnterprise(enterpriseId, redirectTo = '/') {

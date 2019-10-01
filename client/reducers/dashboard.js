@@ -26,19 +26,21 @@ export const setLoading = createAction(SET_LOADING);
  * Initial State
  */
 export const createInitialDashboardState = state =>
-  fromJS(Object.assign(
-    {
-      dashboardDate: new Date().toISOString(),
-      loadingInsights: false,
-      loadingToDos: false,
-      insightCount: 0,
-      insights: [],
-      reminders: [],
-      reviews: [],
-      recalls: [],
-    },
-    state,
-  ));
+  fromJS(
+    Object.assign(
+      {
+        dashboardDate: localStorage.getItem('dashboardDate') || new Date().toISOString(),
+        loadingInsights: false,
+        loadingToDos: false,
+        insightCount: 0,
+        insights: [],
+        reminders: [],
+        reviews: [],
+        recalls: [],
+      },
+      state,
+    ),
+  );
 
 export const initialState = createInitialDashboardState();
 

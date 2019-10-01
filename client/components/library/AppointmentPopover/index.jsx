@@ -49,7 +49,7 @@ class AppointmentPopover extends Component {
     const location = browserHistory.location.pathname;
 
     if (location === '/') {
-      this.props.setScheduleDate({ scheduleDate: moment(this.props.dashboardDate) });
+      this.props.setScheduleDate({ scheduleDate: moment(this.props.dashboardDate).toISOString() });
     }
     const mergeApp = {
       ...(appointment instanceof Appointments ? appointment.toJS() : appointment),
