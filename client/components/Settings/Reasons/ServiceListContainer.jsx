@@ -2,16 +2,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import { reset } from 'redux-form';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
-import {
-  Button,
-  BadgeHeader,
-  Card,
-  SContainer,
-  SHeader,
-  SBody,
-} from '../../library';
+import { Button, BadgeHeader, Card, SContainer, SHeader, SBody } from '../../library';
 import CreateServiceForm from './CreateServiceForm';
 import ServiceListItem from './ServiceListItem';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
@@ -34,25 +28,32 @@ class ServiceListContainer extends Component {
   }
 
   createService(values) {
-    values.name = values.name.trim();
-    values.customCosts = {};
+    const { submitForm, resetFormValues, setServiceId } = this.props;
+    const newReason = {
+      ...values,
+      name: values.name.trim(),
+      customCosts: {},
+    };
     const key = 'services';
     const alert = {
       success: {
-        body: `${values.name} service created.`,
+        body: `${newReason.name} service created.`,
       },
       error: {
-        body: `${values.name} service could not be created.`,
+        body: `${newReason.name} service could not be created.`,
       },
     };
 
-    this.props
-      .createEntityRequest({ key, entityData: values, alert })
-      .then((entities) => {
-        const id = Object.keys(entities[key])[0];
-        this.props.setServiceId({ id });
-      });
     this.setState({ active: false });
+    submitForm({
+      key,
+      alert,
+      entityData: newReason,
+    }).then((entities) => {
+      const [id] = Object.keys(entities[key]);
+      setServiceId({ id });
+    });
+    resetFormValues();
   }
 
   render() {
@@ -74,7 +75,10 @@ class ServiceListContainer extends Component {
         label: 'Save',
         onClick: this.createService,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: formName },
+        props: {
+          color: 'blue',
+          form: formName,
+        },
       },
     ];
 
@@ -93,11 +97,7 @@ class ServiceListContainer extends Component {
                   Add New Reason
                 </Button>
               </div>
-              <BadgeHeader
-                count={services.size}
-                title="Reasons"
-                className={styles.badgeHeader}
-              />
+              <BadgeHeader count={services.size} title="Reasons" className={styles.badgeHeader} />
               <DialogBox
                 active={this.state.active}
                 actions={actions}
@@ -105,26 +105,21 @@ class ServiceListContainer extends Component {
                 onOverlayClick={this.setActive}
                 title="Create New Reason"
               >
-                <CreateServiceForm
-                  formName={formName}
-                  onSubmit={this.createService}
-                />
+                <CreateServiceForm formName={formName} onSubmit={this.createService} />
               </DialogBox>
             </div>
           </SHeader>
           <SBody>
-            {services
-              .toArray()
-              .map(service => (
-                <ServiceListItem
-                  key={service.get('id')}
-                  id={service.get('id')}
-                  service={service.get('name')}
-                  setServiceId={this.props.setServiceId}
-                  serviceId={serviceId}
-                  duration={service.get('duration')}
-                />
-              ))}
+            {services.toArray().map(service => (
+              <ServiceListItem
+                key={service.get('id')}
+                id={service.get('id')}
+                service={service.get('name')}
+                setServiceId={this.props.setServiceId}
+                serviceId={serviceId}
+                duration={service.get('duration')}
+              />
+            ))}
           </SBody>
         </SContainer>
       </Card>
@@ -133,16 +128,18 @@ class ServiceListContainer extends Component {
 }
 
 ServiceListContainer.propTypes = {
-  createEntityRequest: PropTypes.func,
-  setServiceId: PropTypes.func,
-  services: PropTypes.instanceOf(Map),
-  serviceId: PropTypes.string,
+  submitForm: PropTypes.func.isRequired,
+  resetFormValues: PropTypes.func.isRequired,
+  setServiceId: PropTypes.func.isRequired,
+  services: PropTypes.instanceOf(Map).isRequired,
+  serviceId: PropTypes.string.isRequired,
 };
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators(
     {
-      createEntityRequest,
+      submitForm: createEntityRequest,
+      resetFormValues: () => dispatch(reset('createServiceForm')),
     },
     dispatch,
   );
