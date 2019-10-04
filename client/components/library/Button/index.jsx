@@ -51,13 +51,13 @@ function Button(props) {
   }
 
   const IconRightComponent = props.iconRightComponent || null;
-
   return (
     <props.as
       type="button"
       disabled={props.disabled}
       {...finalProps}
       className={classNames(baseClassName, {
+        disabled: props.disabled,
         [styles.hub]: isHub(),
       })}
     >
@@ -82,6 +82,7 @@ Button.propTypes = {
   iconRight: PropTypes.string,
   iconRightComponent: PropTypes.func,
   title: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -92,6 +93,7 @@ Button.defaultProps = {
   iconRight: '',
   iconRightComponent: null,
   title: '',
+  disabled: false,
 };
 
 export default Button;

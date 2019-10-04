@@ -254,7 +254,10 @@ class AddToWaitlist extends React.Component {
   render() {
     const { availabilities, active, timezone } = this.props;
     const { patientSearched, availableTimes, daysOfTheWeek } = this.state;
-
+    const disabled =
+      !patientSearched ||
+      Object.values(daysOfTheWeek).every(a => !a) ||
+      availableTimes.length === 0;
     return (
       <DialogBox
         custom
@@ -272,6 +275,7 @@ class AddToWaitlist extends React.Component {
           },
           {
             props: {
+              disabled,
               color: 'blue',
               'data-test-id': 'button_submitForm',
             },
