@@ -12,7 +12,6 @@ import styles from './styles.scss';
 class ReminderPreview extends Component {
   constructor(props) {
     super(props);
-
     this.state = { index: 0 };
   }
 
@@ -25,13 +24,11 @@ class ReminderPreview extends Component {
 
   render() {
     const { reminder, account } = this.props;
-    const { primaryTypes } = reminder;
-    const { index } = this.state;
-    const isConfirmable = index === 0;
+    const { primaryTypes, isConfirmable } = reminder;
+    const indexZeroSelected = this.state.index === 0;
     const getUrl = slug =>
       `/api/accounts/${account.id}/reminders/${reminder.id}` +
-      `/${slug}?isConfirmable=${isConfirmable}`;
-
+      `/${slug}?isConfirmable=${!indexZeroSelected}`;
     // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
     const commsPreviewSections = primaryTypes
       .slice()
@@ -54,14 +51,13 @@ class ReminderPreview extends Component {
           typePreview = (
             <div className={styles.smsPreviewWrapper}>
               <PhonePreview
-                confirmed={!!this.state.index}
+                confirmed={indexZeroSelected}
                 twilioPhone={this.props.account.get('twilioPhoneNumber')}
                 openCallTestModal={this.props.openCallTestModal}
               />
             </div>
           );
         }
-
         return (
           <CommsPreviewSection key={`${reminder.id}_${type}_${isConfirmable}`}>
             {typePreview}
@@ -76,10 +72,20 @@ class ReminderPreview extends Component {
             <Header title="Preview" />
           </div>
           <div className={styles.tabsContainer}>
-            <Tabs index={index} onChange={i => this.setState({ index: i })} noUnderLine>
-              <Tab label="Unconfirmed" className={styles.tab} activeClass={styles.activeTab} />
-              <Tab label="Confirmed" className={styles.tab} activeClass={styles.activeTab} />
-            </Tabs>
+            {isConfirmable ? (
+              <Tabs
+                index={this.state.index}
+                onChange={i => this.setState({ index: i })}
+                noUnderLine
+              >
+                <Tab label="Friendly" className={styles.tab} activeClass={styles.activeTab} />
+                <Tab label="Confirmable" className={styles.tab} activeClass={styles.activeTab} />
+              </Tabs>
+            ) : (
+              <Tabs index={this.state.index} noUnderLine>
+                <Tab label="Friendly" className={styles.tab} activeClass={styles.activeTab} />
+              </Tabs>
+            )}
           </div>
         </SHeader>
         <SBody className={styles.previewSBody}>
