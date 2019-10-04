@@ -8,6 +8,7 @@ import { Button, Avatar, Icon } from '../../library';
 import PatientSearch from '../../PatientSearch';
 import { isHub } from '../../../util/hub';
 import UnknownPatient from '../unknownPatient';
+import PatientPopover from '../../library/PatientPopover';
 import styles from './styles.scss';
 
 const toInputTheme = {
@@ -23,10 +24,12 @@ class ToHeader extends Component {
     return isUnknown ? (
       <span>{formatPhoneNumber(cellPhoneNumber)}</span>
     ) : (
-      <span>
-        <span>{firstName}</span>
-        <span>{lastName}</span>
-      </span>
+      <PatientPopover patient={this.props.selectedPatient}>
+        <span>
+          <span>{firstName}</span>
+          <span>{lastName}</span>
+        </span>
+      </PatientPopover>
     );
   }
 
