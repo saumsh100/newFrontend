@@ -8,6 +8,7 @@ import patientUserShape from './patientUserShape';
 import practitionerShape from './practitionerShape';
 import reminderShape from './reminderShape';
 import { weeklyScheduleShape, dayShape } from './weeklyScheduleShape';
+import callShape from './callShape';
 
 export {
   accountShape,
@@ -20,4 +21,5 @@ export {
   practitionerShape,
   reminderShape,
   weeklyScheduleShape,
+  callShape,
 };

@@ -30,7 +30,6 @@ export default function CallListItem(props) {
     callerName,
     duration,
     answered,
-    wasApptBooked,
     recording,
     index,
     patient,
@@ -49,7 +48,8 @@ export default function CallListItem(props) {
           type="solid"
           size={1.3}
           className={phoneClass}
-        />&emsp;<span className={styles.column_source}>{callSource}</span>
+        />
+        &emsp;<span className={styles.column_source}>{callSource}</span>
       </div>
       <div className={styles.col}>
         {patient ? (
@@ -75,14 +75,11 @@ export default function CallListItem(props) {
       <div className={styles.col}>{durationMissed}</div>
       <div className={styles.col}>{callerCity}</div>
       <div className={styles.col}>
-        <div className={styles.appBooked}>
-          {wasApptBooked ? 'YES' : 'NO'}
-          {recording && (
-            <div>
-              <Icon icon="volume-up" type="solid" />
-            </div>
-          )}
-        </div>
+        {recording && (
+          <div className={styles.volumeIcon}>
+            <Icon icon="volume-up" type="solid" />
+          </div>
+        )}
       </div>
       <div className={styles.colEmpty} />
     </div>
@@ -98,7 +95,18 @@ CallListItem.propTypes = {
   recording: PropTypes.string,
   duration: PropTypes.number,
   answered: PropTypes.bool,
-  wasApptBooked: PropTypes.bool,
   index: PropTypes.number,
-  patient: PropTypes.shape(PatientShape),
+  patient: PropTypes.shape(PatientShape).isRequired,
+};
+
+CallListItem.defaultProps = {
+  callSource: null,
+  startTime: null,
+  callerNum: null,
+  callerCity: null,
+  callerName: null,
+  recording: null,
+  duration: 0,
+  answered: false,
+  index: 0,
 };

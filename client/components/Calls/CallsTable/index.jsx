@@ -16,9 +16,7 @@ class CallsTable extends Component {
   }
 
   render() {
-    const {
-      calls, patients, callsLength, openCallModal,
-    } = this.props;
+    const { calls, patients, callsLength, openCallModal } = this.props;
 
     const sortedCalls = calls
       .toArray()
@@ -33,7 +31,7 @@ class CallsTable extends Component {
         <div className={styles.col}>Start Time</div>
         <div className={styles.col}>Duration</div>
         <div className={styles.col}>City</div>
-        <div className={styles.col}>Appointment Booked</div>
+        <div className={styles.col}>Call Details</div>
         <div className={styles.colEmpty} />
       </div>
     );
@@ -67,7 +65,6 @@ class CallsTable extends Component {
             callerName={callerName}
             duration={callJS.duration}
             answered={callJS.answered}
-            wasApptBooked={!!callJS.wasApptBooked}
             recording={callJS.recording}
             patient={patient}
           />

@@ -7,6 +7,7 @@ import { formatPhoneNumber } from '@carecru/isomorphic';
 import InfoDump from '../../Patients/Shared/InfoDump';
 import { Form, Field } from '../../library';
 import styles from './styles.scss';
+import { callShape } from '../../library/PropTypeShapes';
 
 const Marker = ({ text }) => <div className={styles.marker}>{text}</div>;
 
@@ -103,8 +104,6 @@ class CallInfo extends Component {
   renderRightPanel() {
     const { call } = this.props;
 
-    const initialValues = { wasApptBooked: call.wasApptBooked };
-
     return (
       <div className={styles.rightPanel}>
         <div className={styles.title}>Recording</div>
@@ -112,25 +111,12 @@ class CallInfo extends Component {
           <div className={styles.playerWrapper}>
             <audio controls controlsList="nodownload">
               <source src={call.recording} type="audio/ogg" />
+              <track kind="captions" />
             </audio>
           </div>
         ) : (
           <div className={styles.noData}> N/A </div>
         )}
-
-        <div className={styles.title}>Edit Call Attributes</div>
-        <div className={styles.appBooked}>
-          <InfoDump
-            label="Appointment Booked"
-            component={
-              <AppBookedForm
-                initialValues={initialValues}
-                id={call.id}
-                handleToggle={this.handleToggle}
-              />
-            }
-          />
-        </div>
       </div>
     );
   }
@@ -147,15 +133,23 @@ class CallInfo extends Component {
 
 AppBookedForm.propTypes = {
   id: PropTypes.string,
-  handleToggle: PropTypes.func,
-  initialValues: PropTypes.objectOf(PropTypes.bool),
+  handleToggle: PropTypes.func.isRequired,
+  initialValues: PropTypes.objectOf(PropTypes.bool).isRequired,
+};
+
+AppBookedForm.defaultProps = {
+  id: null,
 };
 
 Marker.propTypes = { text: PropTypes.string };
 
+Marker.defaultProps = {
+  text: null,
+};
+
 CallInfo.propTypes = {
-  call: PropTypes.objectOf(PropTypes.any),
-  handleCallUpdate: PropTypes.func,
+  call: PropTypes.shape(callShape).isRequired,
+  handleCallUpdate: PropTypes.func.isRequired,
 };
 
 export default CallInfo;
