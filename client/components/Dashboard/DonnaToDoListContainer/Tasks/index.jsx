@@ -12,8 +12,6 @@ const toDoListNames = [
   'Appointment Reminders',
   'Patient Recalls',
   'Review Requests',
-  'Referral Requests',
-  'Referral Follow Ups',
   'Waitlist Queue',
 ];
 

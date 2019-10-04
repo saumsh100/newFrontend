@@ -4,48 +4,44 @@ import PropTypes from 'prop-types';
 import { Tabs, Tab } from '../../../library';
 import styles from './styles.scss';
 
+const OFFSET_HEIGHT = 37;
+
+const INDEX_HEIGHT = 55.5875;
+const DIV_HEIGHT = 335 / 3;
 class DonnaToDoTabs extends Component {
   constructor(props) {
     super(props);
     this.state = {
       lineWidth: 23,
-      divHeight: 0,
       startingPosition: 0,
-      indexHeight: 0,
     };
   }
 
   componentDidMount() {
-    const divHeight = document.getElementById('imageWrapper').clientHeight;
-    const indexHeight = document.getElementById('toDoTab').clientHeight;
-    const addToHeight = indexHeight * (this.props.toDoIndex + 1);
-    const divideHeight = indexHeight / 2;
-    const startingPosition = addToHeight - divideHeight;
-
-    this.setState({
-      startingPosition,
-      divHeight: divHeight * 0.35,
-      indexHeight,
-    });
+    this.setToDoTabLineStartingPosition(this.props.toDoIndex);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.toDoIndex !== nextProps.toDoIndex) {
-      const indexHeight = document.getElementById('toDoTab').clientHeight + 11;
-      const addToHeight = indexHeight * (nextProps.toDoIndex + 1);
-      const divideHeight = indexHeight / 2;
-      const startingPosition = addToHeight - divideHeight;
-
-      this.setState({
-        startingPosition,
-      });
+      this.setToDoTabLineStartingPosition(nextProps.toDoIndex);
     }
+  }
+
+  setToDoTabLineStartingPosition(toDoIndex) {
+    const scaledHeight = INDEX_HEIGHT * (toDoIndex + 1);
+    const scaledOffsetHeight = toDoIndex * OFFSET_HEIGHT;
+    const addToHeight = toDoIndex ? scaledHeight + scaledOffsetHeight : INDEX_HEIGHT;
+    const divideHeight = INDEX_HEIGHT / 2;
+    const startingPosition = addToHeight - divideHeight;
+    this.setState({
+      startingPosition,
+    });
   }
 
   render() {
     let top = `${this.state.startingPosition}px`;
 
-    let height = `${this.state.divHeight - this.state.startingPosition}px`;
+    let height = `${DIV_HEIGHT - this.state.startingPosition}px`;
 
     const lineStyle = {
       top: `${this.state.startingPosition}px`,
@@ -54,9 +50,9 @@ class DonnaToDoTabs extends Component {
       height: '2px',
     };
 
-    if (this.state.startingPosition > this.state.divHeight) {
-      top = `${this.state.divHeight}px`;
-      height = `${this.state.startingPosition - this.state.divHeight + 3}px`;
+    if (this.state.startingPosition > DIV_HEIGHT) {
+      top = `${DIV_HEIGHT}px`;
+      height = `${this.state.startingPosition - DIV_HEIGHT + 2}px`;
     }
 
     const lineStyle2 = {
@@ -67,29 +63,29 @@ class DonnaToDoTabs extends Component {
     };
 
     const lineStyle3 = {
-      top: `${this.state.divHeight}px`,
+      top: `${DIV_HEIGHT}px`,
       left: `${this.state.lineWidth}%`,
       width: '15%',
       height: '2px',
     };
 
     const lineStyle4 = {
-      top: `${this.state.divHeight}px`,
+      top: `${DIV_HEIGHT}px`,
       left: '65%',
       width: '20%',
       height: '2px',
     };
 
     const lineStyle5 = {
-      top: `${this.state.divHeight}px`,
+      top: `${DIV_HEIGHT}px`,
       left: '85%',
       width: '2px',
-      height: `${this.state.indexHeight * 1.5}px`,
+      height: `${INDEX_HEIGHT * 1.5}px`,
     };
 
-    const multipleHeight = this.state.indexHeight * 1.5;
+    const multipleHeight = INDEX_HEIGHT * 1.5;
     const lineStyle6 = {
-      top: `${this.state.divHeight + multipleHeight}px`,
+      top: `${DIV_HEIGHT + multipleHeight}px`,
       left: '85%',
       width: '15%',
       height: '2px',
@@ -104,19 +100,13 @@ class DonnaToDoTabs extends Component {
               index={this.props.toDoIndex}
               onChange={i => this.props.changeTab(i)}
               className={styles.tabs}
-              noUnderLine
             >
               <Tab
                 label="Appointment Reminders"
                 className={styles.tab}
                 activeClass={styles.activeTab}
-                id="toDoTab"
               />
-              <Tab
-                label="Patient Recalls"
-                className={styles.tab}
-                activeClass={styles.activeTab}
-              />
+              <Tab label="Patient Recalls" className={styles.tab} activeClass={styles.activeTab} />
               <Tab
                 label="Review Requests"
                 className={styles.tab}
@@ -126,13 +116,8 @@ class DonnaToDoTabs extends Component {
             </Tabs>
           </div>
 
-          <div className={styles.imageWrapper} id="imageWrapper">
-            <img
-              src="/images/donna.png"
-              height="335px"
-              width="338px"
-              alt="Donna"
-            />
+          <div className={styles.imageWrapper}>
+            <img src="/images/donna.png" height="335px" width="338px" alt="Donna" />
             <div style={lineStyle} className={styles.dynamicLines}>
               {''}
             </div>

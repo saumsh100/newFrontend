@@ -53,6 +53,7 @@ const toDoFunctions = {
   0: fetchToDoReminders,
   1: fetchToDoRecalls,
   2: fetchToDoReviews,
+  3: fetchToDoWaitlist,
 };
 
 export function fetchDonnasToDos(index) {
@@ -142,4 +143,8 @@ async function fetchToDoRecalls(accountId, startDate, endDate, dispatch, recallB
     console.error('fetchToDoRecalls', err);
     throw err;
   }
+}
+
+async function fetchToDoWaitlist() {
+  console.log('fetchTodoWaitlist');
 }
