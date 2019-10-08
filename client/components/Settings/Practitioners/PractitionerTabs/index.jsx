@@ -13,6 +13,7 @@ import PractitionerRecurringTimeOff from './PractitionerRecurringTimeOff';
 import PractitionerActive from './PractitionerActive';
 import WeeklyScheduleModel from '../../../../entities/models/WeeklySchedule';
 import SettingsCard from '../../Shared/SettingsCard';
+import EnabledFeature from '../../../library/EnabledFeature';
 import styles from '../styles.scss';
 
 import {
@@ -78,12 +79,16 @@ class PractitionerTabs extends Component {
 
     let filteredTimeOffs = null;
     if (timeOffs) {
-      filteredTimeOffs = timeOffs.filter(timeOff => timeOff.practitionerId === practitioner.get('id'));
+      filteredTimeOffs = timeOffs.filter(
+        timeOff => timeOff.practitionerId === practitioner.get('id'),
+      );
     }
     let filteredRecurringTimeOffs = null;
 
     if (recurringTimeOffs) {
-      filteredRecurringTimeOffs = recurringTimeOffs.filter(recurringTimeOff => recurringTimeOff.practitionerId === practitioner.get('id'));
+      filteredRecurringTimeOffs = recurringTimeOffs.filter(
+        recurringTimeOff => recurringTimeOff.practitionerId === practitioner.get('id'),
+      );
     }
 
     const serviceIds = practitioner.get('services');
@@ -111,13 +116,25 @@ class PractitionerTabs extends Component {
           </div>
         }
         subHeader={
-          <Tabs index={this.state.index} onChange={this.handleTabChange}>
-            <Tab label="Basic" data-test-id="tab_practitionerBasicData" />
-            <Tab label="Practitioner Schedule" data-test-id="tab_practitionerOfficeHours" />
-            <Tab label="Reasons" data-test-id="tab_practitionerServices" />
-            <Tab label="Time Off" data-test-id="tab_practitionerTimeOff" />
-            <Tab label="Recurring Time Off" data-test-id="tab_practitionerRecurringTimeOff" />
-          </Tabs>
+          <EnabledFeature
+            predicate={({ userRole }) => userRole === 'SUPERADMIN'}
+            render={() => (
+              <Tabs index={this.state.index} onChange={this.handleTabChange}>
+                <Tab label="Basic" data-test-id="tab_practitionerBasicData" />
+                <Tab label="Practitioner Schedule" data-test-id="tab_practitionerOfficeHours" />
+                <Tab label="Reasons" data-test-id="tab_practitionerServices" />
+                <Tab label="Time Off" data-test-id="tab_practitionerTimeOff" />
+                <Tab label="Recurring Time Off" data-test-id="tab_practitionerRecurringTimeOff" />
+              </Tabs>
+            )}
+            fallback={() => (
+              <Tabs index={this.state.index} onChange={this.handleTabChange}>
+                <Tab label="Basic" data-test-id="tab_practitionerBasicData" />
+                <Tab label="Practitioner Schedule" data-test-id="tab_practitionerOfficeHours" />
+                <Tab label="Reasons" data-test-id="tab_practitionerServices" />
+              </Tabs>
+            )}
+          />
         }
       >
         <Tabs index={this.state.index} noHeaders contentClass={styles.content}>
