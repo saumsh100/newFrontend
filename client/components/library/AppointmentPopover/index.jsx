@@ -22,6 +22,7 @@ class AppointmentPopover extends Component {
     this.setOpen = this.setOpen.bind(this);
     this.closeOnScroll = this.closeOnScroll.bind(this);
     this.handleEditAppointment = this.handleEditAppointment.bind(this);
+    this.editPatient = this.editPatient.bind(this);
   }
 
   componentDidMount() {
@@ -59,13 +60,27 @@ class AppointmentPopover extends Component {
     this.props.push('/schedule');
   }
 
+  editPatient(id) {
+    this.props.push(`/patients/${id}`);
+  }
+
   closeOnScroll() {
     this.setState({ isOpen: false });
   }
 
   render() {
-    const { placement, patient, appointment, children, chair, practitioner } = this.props;
-
+    const {
+      placement,
+      patient,
+      appointment,
+      children,
+      chair,
+      practitioner,
+      isNoteFormActive,
+      isFollowUpsFormActive,
+      isRecallsFormActive,
+    } = this.props;
+    const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
     return (
       <Popover
         className={styles.appPopover}
@@ -76,17 +91,18 @@ class AppointmentPopover extends Component {
             patient={patient}
             appointment={appointment}
             editAppointment={this.handleEditAppointment}
+            editPatient={this.editPatient}
             patientUrl={`/patients/${patient.id}`}
             handleGoToChat={() => {
               this.props.getOrCreateChatForPatient(patient.id);
             }}
-            chair={chair[0]}
-            practitioner={practitioner[0]}
+            chair={chair}
+            practitioner={practitioner}
           />,
         ]}
         preferPlace={placement || 'right'}
         tipSize={12}
-        onOuterAction={() => this.setOpen(false)}
+        onOuterAction={() => !isAnyFormActive && this.setOpen(false)}
       >
         <div className={styles.appLink} onDoubleClick={this.handleEditAppointment}>
           {React.Children.map(children, patientLink =>
@@ -95,36 +111,6 @@ class AppointmentPopover extends Component {
       </Popover>
     );
   }
-}
-
-function mapStateToProps({ entities, dashboard, chat }, { appointment }) {
-  const practitioner = entities
-    .getIn(['practitioners', 'models'])
-    .toArray()
-    .filter(prac => prac.id === appointment.practitionerId);
-  const chair = entities
-    .getIn(['chairs', 'models'])
-    .toArray()
-    .filter(ch => ch.id === appointment.chairId);
-
-  return {
-    chair,
-    practitioner,
-    dashboardDate: dashboard.get('dashboardDate'),
-    patientChat: chat.get('patientChat'),
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      push,
-      selectAppointment,
-      setScheduleDate,
-      getOrCreateChatForPatient,
-    },
-    dispatch,
-  );
 }
 
 AppointmentPopover.propTypes = {
@@ -144,6 +130,9 @@ AppointmentPopover.propTypes = {
   setScheduleDate: PropTypes.func.isRequired,
   getOrCreateChatForPatient: PropTypes.func.isRequired,
   patientChat: PropTypes.string,
+  isNoteFormActive: PropTypes.bool.isRequired,
+  isFollowUpsFormActive: PropTypes.bool.isRequired,
+  isRecallsFormActive: PropTypes.bool.isRequired,
 };
 
 AppointmentPopover.defaultProps = {
@@ -153,6 +142,39 @@ AppointmentPopover.defaultProps = {
   scrollId: '',
   patientChat: null,
 };
+
+function mapStateToProps({ entities, dashboard, chat, patientTable }, { appointment }) {
+  const practitioner = entities
+    .getIn(['practitioners', 'models'])
+    .toArray()
+    .find(prac => prac.id === appointment.practitionerId);
+  const chair = entities
+    .getIn(['chairs', 'models'])
+    .toArray()
+    .find(ch => ch.id === appointment.chairId);
+
+  return {
+    chair,
+    practitioner,
+    isNoteFormActive: patientTable.get('isNoteFormActive'),
+    isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
+    isRecallsFormActive: patientTable.get('isRecallsFormActive'),
+    dashboardDate: dashboard.get('dashboardDate'),
+    patientChat: chat.get('patientChat'),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      push,
+      selectAppointment,
+      setScheduleDate,
+      getOrCreateChatForPatient,
+    },
+    dispatch,
+  );
+}
 
 export default connect(
   mapStateToProps,

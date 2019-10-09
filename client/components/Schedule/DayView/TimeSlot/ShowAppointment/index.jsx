@@ -7,7 +7,13 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { getOrCreateChatForPatient } from '../../../../../thunks/chat';
 import { Icon, Button } from '../../../../library';
-import AppointmentPopover from '../AppointmentPopover';
+import AppointmentInfo from '../../../../library/AppointmentPopover/AppointmentInfo';
+import {
+  appointmentShape,
+  patientShape,
+  practitionerShape,
+  chairShape,
+} from '../../../../library/PropTypeShapes';
 import AppointmentHours from '../AppointmentHours';
 import styles from '../styles.scss';
 
@@ -34,6 +40,7 @@ class ShowAppointment extends Component {
     this.togglePopover = this.togglePopover.bind(this);
     this.closePopover = this.closePopover.bind(this);
     this.editAppointment = this.editAppointment.bind(this);
+    this.editPatient = this.editPatient.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +69,10 @@ class ShowAppointment extends Component {
     this.props.selectAppointment(this.props.appointment);
   }
 
+  editPatient(id) {
+    this.props.push(`/patients/${id}`);
+  }
+
   render() {
     const {
       appointment,
@@ -77,8 +88,13 @@ class ShowAppointment extends Component {
       isReminderSent,
       startDate,
       endDate,
+      chair,
+      practitioner,
+      isNoteFormActive,
+      isFollowUpsFormActive,
+      isRecallsFormActive,
     } = this.props;
-
+    const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
     const { isOpened, nameContainerOffsetWidth, nameContainerOffset } = this.state;
 
     const applicationStyle = {
@@ -98,20 +114,23 @@ class ShowAppointment extends Component {
       <Popover
         isOpen={isOpened && !selectedAppointment}
         body={[
-          <AppointmentPopover
+          <AppointmentInfo
             appointment={appointment}
             patient={patient}
             closePopover={this.closePopover}
             editAppointment={this.editAppointment}
             scheduleView={scheduleView}
+            editPatient={this.editPatient}
             handleGoToChat={() => {
               this.props.getOrCreateChatForPatient(patient.id);
             }}
+            chair={chair}
+            practitioner={practitioner}
           />,
         ]}
         preferPlace={placement}
         tipSize={12}
-        onOuterAction={this.closePopover}
+        onOuterAction={!isAnyFormActive && this.closePopover}
         className={styles.appPopover}
       >
         <Button
@@ -158,7 +177,7 @@ class ShowAppointment extends Component {
 }
 
 ShowAppointment.propTypes = {
-  appointment: PropTypes.shape({ id: PropTypes.string }).isRequired,
+  appointment: PropTypes.shape(appointmentShape).isRequired,
   selectAppointment: PropTypes.func.isRequired,
   selectedAppointment: PropTypes.shape({ id: PropTypes.string }),
   scheduleView: PropTypes.string.isRequired,
@@ -175,7 +194,7 @@ ShowAppointment.propTypes = {
     backgroundColor: PropTypes.string,
     zIndex: PropTypes.number,
   }),
-  patient: PropTypes.shape({ id: PropTypes.string }).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
   isPatientConfirmed: PropTypes.bool,
   isReminderSent: PropTypes.bool,
   startDate: PropTypes.string,
@@ -183,6 +202,11 @@ ShowAppointment.propTypes = {
   getOrCreateChatForPatient: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   patientChat: PropTypes.string,
+  practitioner: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
+  chair: PropTypes.arrayOf(PropTypes.shape(chairShape)).isRequired,
+  isNoteFormActive: PropTypes.bool.isRequired,
+  isFollowUpsFormActive: PropTypes.bool.isRequired,
+  isRecallsFormActive: PropTypes.bool.isRequired,
 };
 
 ShowAppointment.defaultProps = {
@@ -197,9 +221,26 @@ ShowAppointment.defaultProps = {
   patientChat: null,
 };
 
-const mapStateToProps = ({ chat }) => ({
-  patientChat: chat.get('patientChat'),
-});
+const mapStateToProps = ({ chat, entities, dashboard, patientTable }, { appointment }) => {
+  const practitioner = entities
+    .getIn(['practitioners', 'models'])
+    .toArray()
+    .find(prac => prac.id === appointment.practitionerId);
+  const chair = entities
+    .getIn(['chairs', 'models'])
+    .toArray()
+    .find(ch => ch.id === appointment.chairId);
+
+  return {
+    chair,
+    practitioner,
+    isNoteFormActive: patientTable.get('isNoteFormActive'),
+    isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
+    isRecallsFormActive: patientTable.get('isRecallsFormActive'),
+    dashboardDate: dashboard.get('dashboardDate'),
+    patientChat: chat.get('patientChat'),
+  };
+};
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

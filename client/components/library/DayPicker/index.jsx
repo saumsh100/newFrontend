@@ -149,6 +149,7 @@ class DayPicker extends Component {
     const popOverWrapper = (
       <Popover
         preferPlace="below"
+        className={styles.zIndex}
         onOuterAction={this.togglePopOver}
         isOpen={this.state.isOpen}
         tipSize={tipSize}

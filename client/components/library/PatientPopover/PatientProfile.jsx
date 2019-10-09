@@ -1,8 +1,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import moment from 'moment';
 import { formatPhoneNumber, setDateToTimezone } from '@carecru/isomorphic';
+import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
 import {
   Card,
   SContainer,
@@ -19,7 +21,7 @@ import { patientShape } from '../PropTypeShapes';
 import styles from './styles.scss';
 
 export default function PatientProfile(props) {
-  const { patient, closePopover, isPatientUser } = props;
+  const { patient, closePopover, isPatientUser, editPatient } = props;
 
   const age = patient.birthDate
     ? setDateToTimezone(Date.now(), null).diff(patient.birthDate, 'years')
@@ -35,16 +37,22 @@ export default function PatientProfile(props) {
   );
 
   const showNextAppt = !isPatientUser ? emptyData('Next Appointment') : null;
-
   return (
     <Card className={styles.card} noBorder id="appPopOver">
       <SContainer>
         <SHeader className={styles.header}>
           <Avatar user={patient} size="xs" />
-          <a href={props.patientUrl} className={styles.dataLink}>
+          <div
+            role="button"
+            tabIndex={0}
+            className={classNames(styles.patientLink, styles.textWhite)}
+            onDoubleClick={() => editPatient(patient.id)}
+            onKeyDown={e => e.keyCode === 13 && editPatient(patient.id)}
+          >
             <span className={styles.header_text}>{`${patient.firstName} ${patient.lastName}`}</span>
             {age !== null && <span className={styles.header_age}>{`, ${age}`}</span>}
-          </a>
+          </div>
+          <ActionsDropdown size="sm" patient={patient} />
           <div className={styles.closeIcon}>
             <IconButton icon="times" onClick={closePopover} />
           </div>
@@ -131,11 +139,6 @@ export default function PatientProfile(props) {
 
         <SFooter className={styles.footer}>
           {!isPatientUser && (
-            <Button dense compact onClick={props.handleGoToChat} border="blue" icon="comment-alt">
-              <span>Text</span>
-            </Button>
-          )}
-          {!isPatientUser && (
             <Button
               color="blue"
               onClick={() => props.editPatient(patient.id)}
@@ -157,8 +160,6 @@ PatientProfile.propTypes = {
   closePopover: PropTypes.func.isRequired,
   editPatient: PropTypes.func.isRequired,
   isPatientUser: PropTypes.bool,
-  patientUrl: PropTypes.string.isRequired,
-  handleGoToChat: PropTypes.func.isRequired,
 };
 
 PatientProfile.defaultProps = {

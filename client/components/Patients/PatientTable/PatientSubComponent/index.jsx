@@ -48,13 +48,7 @@ class PatientSubComponent extends Component {
               <div className={styles.patientInfoHeader_title}>Patient Info</div>
               <EnabledFeature
                 predicate={({ flags }) => flags.get('patient-actions-button')}
-                render={() => (
-                  <PatientActionsDropdown
-                    patient={patient}
-                    align="right"
-                    className={styles.patientActions}
-                  />
-                )}
+                render={() => <PatientActionsDropdown patient={patient} align="right" />}
               />
             </div>
             <Card className={styles.card}>

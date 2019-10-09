@@ -223,22 +223,6 @@
   height: 2px !important;
 }
 
-.patientActions {
-  margin-left: auto;
-  margin-right: 3px;
-  > button[class*='actionsButton'] {
-    margin-top: 0;
-    font-size: 12px;
-    padding: 8px 12px;
-    width: 120px;
-  }
-
-  > div[class*='dd-menu-items'] {
-    width: 170px;
-    margin-right: 5px;
-  }
-}
-
 .lastAppointmentSection {
   padding-top: 20px;
 }

@@ -1,3 +1,12 @@
+.patientActions {
+  margin-left: auto;
+  margin-right: 3px;
+  > div[class*='dd-menu-items'] {
+    width: 150px;
+    margin-right: 5px;
+  }
+}
+
 .actionsButton {
   margin-left: 0;
   margin-top: 5px;
@@ -8,4 +17,31 @@
   > i {
     margin-left: auto;
   }
+}
+
+.actionsButtonNormal {
+  margin-top: 0;
+  font-size: 12px;
+  padding: 8px 12px;
+  width: 120px;
+}
+
+.actionsButtonSmall {
+  margin-top: 0;
+  font-size: 12px;
+  padding: 8px 12px;
+  width: 40px;
+  background: none;
+}
+
+.actionText {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.actionIcon {
+  display: flex;
+  margin: auto;
+  padding: 0px 4px;
 }

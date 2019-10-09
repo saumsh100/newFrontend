@@ -58,8 +58,17 @@ class PatientPopover extends Component {
   }
 
   render() {
-    const { placement, children, patient, closePopover, patientStyles } = this.props;
-
+    const {
+      placement,
+      children,
+      patient,
+      closePopover,
+      patientStyles,
+      isNoteFormActive,
+      isFollowUpsFormActive,
+      isRecallsFormActive,
+    } = this.props;
+    const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
     if (!patient) {
       return null;
     }
@@ -80,7 +89,7 @@ class PatientPopover extends Component {
         ]}
         preferPlace={placement || 'right'}
         tipSize={12}
-        onOuterAction={() => this.setOpen(false)}
+        onOuterAction={() => !isAnyFormActive && this.setOpen(false)}
       >
         <div
           className={classnames(styles.patientLink, patientStyles)}
@@ -111,6 +120,9 @@ PatientPopover.propTypes = {
   patientStyles: PropTypes.string,
   getOrCreateChatForPatient: PropTypes.func.isRequired,
   patientChat: PropTypes.string,
+  isNoteFormActive: PropTypes.bool.isRequired,
+  isFollowUpsFormActive: PropTypes.bool.isRequired,
+  isRecallsFormActive: PropTypes.bool.isRequired,
 };
 
 PatientPopover.defaultProps = {
@@ -123,8 +135,10 @@ PatientPopover.defaultProps = {
   patientChat: null,
 };
 
-const mapStateToProps = ({ chat }) => ({
-  patientChat: chat.get('patientChat'),
+const mapStateToProps = ({ patientTable }) => ({
+  isNoteFormActive: patientTable.get('isNoteFormActive'),
+  isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
+  isRecallsFormActive: patientTable.get('isRecallsFormActive'),
 });
 
 const mapDispatchToProps = dispatch =>

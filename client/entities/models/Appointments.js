@@ -2,6 +2,7 @@
 import createModel from '../createModel';
 
 const AppointmentsSchema = {
+  reason: null,
   startDate: null,
   endDate: null,
   id: null,
