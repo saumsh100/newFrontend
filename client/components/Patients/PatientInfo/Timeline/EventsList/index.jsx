@@ -23,16 +23,18 @@ export default function EventsList({ events, filters, patient }) {
 
   const dateObj = {};
 
-  sortedEvents.forEach((ev) => {
-    const meta = ev.get('metaData');
-    const key = moment(meta.createdAt).format('MMMM Do YYYY');
+  sortedEvents
+    .filter(ev => moment(ev.get('metaData').createdAt).diff(moment(), 'days') < 1)
+    .forEach((ev) => {
+      const meta = ev.get('metaData');
+      const key = moment(meta.createdAt).format('MMMM Do YYYY');
 
-    if (key in dateObj) {
-      dateObj[key].push(ev);
-    } else {
-      dateObj[key] = [ev];
-    }
-  });
+      if (key in dateObj) {
+        dateObj[key].push(ev);
+      } else {
+        dateObj[key] = [ev];
+      }
+    });
 
   const dateSections = Object.keys(dateObj);
 

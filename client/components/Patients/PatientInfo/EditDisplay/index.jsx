@@ -6,7 +6,6 @@ import { Tabs, Tab, Button, DialogBox } from '../../../library';
 import PatientModel from '../../../../entities/models/Patient';
 import PersonalForm from './PersonalForm';
 import AppointmentsForm from './AppointmentsForm/index';
-import InsuranceForm from './InsuranceForm';
 import FamilyForm from './FamilyForm';
 import SettingsForm from './SettingsForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
@@ -107,18 +106,6 @@ class EditDisplay extends Component {
     );
   }
 
-  renderInsuranceForm() {
-    const { patient } = this.props;
-
-    return (
-      <InsuranceForm
-        patient={patient}
-        handleSubmit={this.handleSubmit}
-        inputStyle={this.inputStyle}
-      />
-    );
-  }
-
   renderFamilyForm() {
     const { patient, role, accountViewer } = this.props;
     const { patientNode, family, familyLength } = familyDataSelector(accountViewer);
@@ -162,9 +149,6 @@ class EditDisplay extends Component {
         <Tab label="Personal" tabCard>
           {this.renderPersonalForm()}
         </Tab>
-        <Tab label="Insurance" tabCard>
-          {this.renderInsuranceForm()}
-        </Tab>
         <Tab label="Family" tabCard>
           {this.renderFamilyForm()}
         </Tab>
@@ -184,7 +168,6 @@ class EditDisplay extends Component {
       <div>
         <CollapsibleTab title="Appointments">{this.renderAppointmentsForm()}</CollapsibleTab>
         <CollapsibleTab title="Personal">{this.renderPersonalForm()}</CollapsibleTab>
-        <CollapsibleTab title="Insurance">{this.renderInsuranceForm()}</CollapsibleTab>
         <CollapsibleTab title="Family">{this.renderFamilyForm()}</CollapsibleTab>
         <CollapsibleTab title="Settings">{this.renderSettingsForm()}</CollapsibleTab>
       </div>

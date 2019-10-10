@@ -12,15 +12,12 @@ import CollapsibleTab from '../CollapsibleTab';
 import styles from './styles.scss';
 
 export default function LeftInfoDisplay(props) {
-  const {
-    patient, activeAccount, handleTabChange, tabIndex, openModal, accountViewer,
-  } = props;
+  const { patient, activeAccount, handleTabChange, tabIndex, openModal, accountViewer } = props;
 
   const { family, familyLength } = familyDataSelector(accountViewer);
 
   const appointmentsTab = patient && <AppointmentsTab patient={patient} openModal={openModal} />;
   const personalTab = patient && <PersonalTab patient={patient} openModal={openModal} />;
-  const insuranceTab = <div className={styles.noData}>No Insurance Information</div>;
   const familyTab =
     familyLength > 0 ? (
       <FamilyTab
@@ -38,7 +35,6 @@ export default function LeftInfoDisplay(props) {
       <Card className={styles.mainContainer} runAnimation loaded={!!patient}>
         <CollapsibleTab title="Appointments">{appointmentsTab}</CollapsibleTab>
         <CollapsibleTab title="Personal">{personalTab}</CollapsibleTab>
-        <CollapsibleTab title="Insurance">{insuranceTab}</CollapsibleTab>
         <CollapsibleTab title="Family">{familyTab}</CollapsibleTab>
       </Card>
     );
@@ -52,9 +48,6 @@ export default function LeftInfoDisplay(props) {
         </Tab>
         <Tab label="Personal" tabCard activeClass={styles.activeTab}>
           {personalTab}
-        </Tab>
-        <Tab label="Insurance" index={tabIndex} tabCard activeClass={styles.activeTab}>
-          {insuranceTab}
         </Tab>
         <Tab label="Family" index={tabIndex} tabCard activeClass={styles.activeTab}>
           {familyTab}

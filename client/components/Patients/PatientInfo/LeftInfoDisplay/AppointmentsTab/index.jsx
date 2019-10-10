@@ -37,13 +37,7 @@ export default function AppointmentsTab(props) {
           <InfoDump label="LAST RECALL VISIT" />
         </Col>
         <Col xs={6} className={styles.paddingCol}>
-          <InfoDump label="TOTAL RECALL VISITS" />
-        </Col>
-        <Col xs={6}>
           <InfoDump label="LAST HYGIENE VISIT" />
-        </Col>
-        <Col xs={6}>
-          <InfoDump label="TOTAL HYGIENE VISITS" />
         </Col>
       </Row>
     </Grid>

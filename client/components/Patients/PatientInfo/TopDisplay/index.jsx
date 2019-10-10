@@ -129,14 +129,6 @@ export default function TopDisplay(props) {
                   />
                 </Col>
                 <Col xs={4}>
-                  <InfoDump label="INSURANCE INTERVAL" data={patient.insuranceInterval} />
-                </Col>
-                <Col xs={4}>
-                  <InfoDump label="INSURANCE" />
-                </Col>
-              </Row>
-              <Row className={styles.rightContainer_content}>
-                <Col xs={4}>
                   <InfoDump
                     label="PATIENT DUE FOR RECALL"
                     component={RecallData({
@@ -145,9 +137,6 @@ export default function TopDisplay(props) {
                       activeAccount,
                     })}
                   />
-                </Col>
-                <Col xs={4}>
-                  <InfoDump label="UNITS LEFT FOR COVERAGE" />
                 </Col>
                 <Col xs={4}>
                   <InfoDump label="PRODUCTION IN CALENDAR YEAR" data={production} />
