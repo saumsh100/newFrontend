@@ -22,10 +22,17 @@ import '../../../../../node_modules/emoji-mart/css/emoji-mart.css';
 import Patient from '../../../../entities/models/Patient';
 import styles from './styles.scss';
 
+const EMOJI_SET = 'apple';
+const EMOJI_SIZE = 32;
+
 class MessageTextArea extends Component {
   constructor(props) {
     super(props);
 
+    const sheetUrl = Picker.defaultProps.backgroundImageFn(EMOJI_SET, EMOJI_SIZE);
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', sheetUrl); // pre-load the sprite
+    xhr.send();
     this.addEmoji = this.addEmoji.bind(this);
     this.contactPoC = this.contactPoC.bind(this);
   }
@@ -34,7 +41,9 @@ class MessageTextArea extends Component {
     const { chat, textBoxValue } = this.props;
     const messageArea = document.getElementsByName('message')[0];
     const caretPossition = messageArea.selectionStart;
-    const newMessage = `${textBoxValue.slice(0, caretPossition)}${emoji.native}${textBoxValue.slice(caretPossition)}`;
+    const newMessage = `${textBoxValue.slice(0, caretPossition)}${emoji.native}${textBoxValue.slice(
+      caretPossition,
+    )}`;
     this.props.change(`chatMessageForm_${chat.id}`, 'message', newMessage);
     this.emojiDropdown.toggle();
   }
@@ -62,33 +71,6 @@ class MessageTextArea extends Component {
     );
   }
 
-  renderEmojiDropdown() {
-    const emojiButtonLabel = props => (
-      <Button {...props}>
-        <Icon icon="smile" />
-      </Button>
-    );
-
-    return (
-      <div className={styles.smileIcon}>
-        <DropdownMenu
-          ref={(dropdown) => {
-            this.emojiDropdown = dropdown;
-          }}
-          labelComponent={emojiButtonLabel}
-          closeOnInsideClick={false}
-          className={styles.emojiDropdown}
-          align="left"
-          upwards
-        >
-          <li className={styles.emojiContainer}>
-            <Picker onClick={this.addEmoji} showPreview={false} emojiTooltip />
-          </li>
-        </DropdownMenu>
-      </div>
-    );
-  }
-
   renderHelper() {
     return (
       <div className={styles.tooltipWrapper}>
@@ -109,36 +91,35 @@ class MessageTextArea extends Component {
     const tooltipPlacement = isHub() ? 'bottomRight' : 'top';
     return (
       <SContainer className={styles.textAreaContainer}>
-        {!isPoC &&
-          hasPatient && (
-            <div className={styles.textAreaPoC}>
-              <img
-                src="/images/donna.png"
-                height="335px"
-                width="338px"
-                alt="Donna"
-                className={styles.donnaImg}
-              />
-              <div className={styles.notPoC}>
-                <p>
-                  Looks like <strong>{patient.firstName}</strong>, is not the{' '}
-                  <Tooltip
-                    trigger={['hover']}
-                    overlay={this.renderHelper}
-                    placement="top"
-                    overlayClassName="light"
-                  >
-                    <span className={styles.pocHelper}>Point of Contact</span>
-                  </Tooltip>{' '}
-                  for their cell phone number. I think you are really trying to contact{' '}
-                  <strong>{`${poc.firstName} ${poc.lastName}`}</strong> instead.
-                </p>
-                <Button className={styles.pocButton} onClick={this.contactPoC}>
-                  Contact {poc.firstName}
-                </Button>
-              </div>
+        {!isPoC && hasPatient && (
+          <div className={styles.textAreaPoC}>
+            <img
+              src="/images/donna.png"
+              height="335px"
+              width="338px"
+              alt="Donna"
+              className={styles.donnaImg}
+            />
+            <div className={styles.notPoC}>
+              <p>
+                Looks like <strong>{patient.firstName}</strong>, is not the{' '}
+                <Tooltip
+                  trigger={['hover']}
+                  overlay={this.renderHelper}
+                  placement="top"
+                  overlayClassName="light"
+                >
+                  <span className={styles.pocHelper}>Point of Contact</span>
+                </Tooltip>{' '}
+                for their cell phone number. I think you are really trying to contact{' '}
+                <strong>{`${poc.firstName} ${poc.lastName}`}</strong> instead.
+              </p>
+              <Button className={styles.pocButton} onClick={this.contactPoC}>
+                Contact {poc.firstName}
+              </Button>
             </div>
-          )}
+          </div>
+        )}
 
         <SBody className={styles.textAreaBody}>
           <Form
@@ -163,7 +144,32 @@ class MessageTextArea extends Component {
           </Form>
         </SBody>
         <SFooter className={styles.sendIconWrapper}>
-          {this.renderEmojiDropdown()}
+          <div className={styles.smileIcon}>
+            <DropdownMenu
+              ref={(dropdown) => {
+                this.emojiDropdown = dropdown;
+              }}
+              labelComponent={props => (
+                <Button {...props}>
+                  <Icon icon="smile" />
+                </Button>
+              )}
+              closeOnInsideClick={false}
+              className={styles.emojiDropdown}
+              align="left"
+              upwards
+            >
+              <li className={styles.emojiContainer}>
+                <Picker
+                  onClick={this.addEmoji}
+                  showPreview={false}
+                  emojiTooltip
+                  set={EMOJI_SET}
+                  size={EMOJI_SIZE}
+                />
+              </li>
+            </DropdownMenu>
+          </div>
           {canSend ? (
             this.renderSendButton()
           ) : (
