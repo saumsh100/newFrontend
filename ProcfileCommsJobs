@@ -1,4 +1,0 @@
-reminders: nodemon server/bin/build/reminders.bundle.js
-recalls: nodemon server/bin/build/recalls.bundle.js
-reviews: nodemon server/bin/build/reviews.bundle.js
-correspondences: nodemon server/bin/build/correspondences.bundle.js

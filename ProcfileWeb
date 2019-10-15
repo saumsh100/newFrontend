@@ -1,3 +1,0 @@
-web: nodemon --inspect server/bin/build/server.bundle.js
-cron: nodemon server/bin/build/cron.bundle.js
-events: nodemon server/bin/build/events.bundle.js

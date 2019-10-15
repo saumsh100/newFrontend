@@ -1,2 +1,0 @@
-patientCache: nodemon server/bin/build/patientCache.bundle.js
-firstNextLastApp: nodemon server/bin/build/firstNextLastApp.bundle.js

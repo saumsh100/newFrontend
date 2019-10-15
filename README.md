@@ -1,5 +1,5 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/carecru/frontend/badge)](https://www.codefactor.io/repository/github/carecru/frontend)
-[ ![Codeship Status for CareCru/carecru](https://app.codeship.com/projects/609e8860-1974-0135-f0cd-2681b2cba166/status?branch=master)](https://app.codeship.com/projects/219293)
+[![Codeship Status for CareCru/carecru](https://app.codeship.com/projects/609e8860-1974-0135-f0cd-2681b2cba166/status?branch=master)](https://app.codeship.com/projects/219293)
 
 <!-- TOC -->
 - [Setup For Development](#setup-for-development)
@@ -185,12 +185,14 @@ You can run different jobs separately.
 **NOTE**: This section needs more information about what is (if anything) is required to run these jobs independently.)
 
 > **IMPORTANT:**
-> Don't run `npm start:dev` or `npm run start:commsJobs` unless you know what you are doing. Those commands will enable communication jobs, as stated above. If any real patient information is loaded into the database, this will result in them being contacted.
+> Don't run `start:jobs` unless you know what you are doing. This command will enable communication jobs, as stated above. If any real patient information is loaded into the database, this will result in them being contacted.
 
-* `npm run start:dev` - runs all CareCru services at once in development mode
-* `npm run start:web` - runs only the web service and the cron job, serving as a base to the other services
-* `npm run start:commsJobs` - runs the communications jobs those serving to send reminders, recalls and reviews.
-* `npm run start:patientCache` - runs the patient cache jobs that updates information on the patients table for easier querying on the API. eg. first, next and last appointment dates and hygiene and recalls due dates.
+* `npm run start:dev` - runs only the web service and the cron job, serving as a base to the other services
+* `npm run start:jobs` - runs the CareCru jobs those including:
+    - send reminders
+    - send recalls
+    - send reviews 
+    - patient cache jobs - that updates information on the patients table for easier querying on the API. eg. first, next and last appointment dates and hygiene and recalls due dates.
 
 ## Hot Reloading
 
@@ -210,7 +212,7 @@ Now, the application is hosted at `http://localhost:5100`. All non-static reques
 > If there are no changes even after page reload - be sure that you are accessing the application from `http://localhost:5100`, and not `http://localhost:5000`.
 
 ## Back-end
-Be sure that you start application with `npm run start:web` command.
+Be sure that you start application with `npm run start:dev` command.
 
 In a new terminal do next command to start watching on changes:`npm run server:watch`. The Server will be restarted automatically.
 
