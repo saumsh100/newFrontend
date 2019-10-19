@@ -28,10 +28,14 @@ const toDashName = (name) => {
  * @param {Function} fn
  * @returns {object}
  */
-const listToObject = (list, fn) => list.reduce((obj, key) => ({
-  ...obj,
-  [key]: fn(key),
-}), {});
+const listToObject = (list, fn) =>
+  list.reduce(
+    (obj, key) => ({
+      ...obj,
+      [key]: fn(key),
+    }),
+    {},
+  );
 
 /**
  * Create object to manipulate with component style properties
@@ -142,7 +146,7 @@ export const findChunksAtBeginningOfWords = ({ searchWords, textToHighlight }) =
   let fromIndex = 0;
   const singleTextWordsWithPos = singleTextWords.map((s) => {
     const indexInWord = textLow.indexOf(s, fromIndex);
-    fromIndex = indexInWord;
+    fromIndex = indexInWord + s.length;
     return {
       word: s,
       index: indexInWord,
