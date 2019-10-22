@@ -106,7 +106,8 @@
       justify-content: center;
       box-sizing: border-box;
       overflow: hidden;
-      margin-left: 10px;
+      margin-top: 4px;
+      margin-bottom: 16px;
       > div {
         width: 100%;
         text-align: center;
@@ -163,6 +164,7 @@
 .displayFlex {
   display: flex;
   align-items: center;
+  padding-top: 1px;
 }
 
 .fontStyle {
@@ -171,4 +173,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.actionsButtonSmall {
+  margin-top: 0;
+  font-size: 12px;
+  padding: 8px 12px;
+  width: 40px;
+  background: none;
 }

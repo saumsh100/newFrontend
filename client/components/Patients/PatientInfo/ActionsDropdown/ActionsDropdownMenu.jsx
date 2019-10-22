@@ -3,15 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Button, DropdownMenu, Icon, MenuItem } from '../../../library';
-import ui from '../../../../ui-kit.scss';
 import styles from './styles.scss';
 
-export default function ActionsDropdown({ actionMenuItems, align, size }) {
+export default function ActionsDropdown({ actionMenuItems, align, size, render }) {
   return (
     <DropdownMenu
       align={align}
       className={styles.patientActions}
-      labelComponent={props => <ActionsButton size={size} {...props} />}
+      labelComponent={props => <ActionsButton size={size} render={render} {...props} />}
     >
       {actionMenuItems.map(({ key, ...itemProps }) => (
         <MenuItem key={key} {...itemProps} />
@@ -24,22 +23,23 @@ ActionsDropdown.propTypes = {
   actionMenuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   align: PropTypes.string,
   size: PropTypes.string,
+  render: PropTypes.func.isRequired,
 };
 
 ActionsDropdown.defaultProps = {
-  align: 'left',
+  align: 'right',
   size: 'md',
 };
 
 function ActionsButton({ size, ...props }) {
-  const actionButtonSize =
-    size === 'sm'
-      ? styles.actionsButtonSmall
-      : classNames(styles.actionsButtonNormal, ui.modal__save);
-  const extendStyles = classNames(actionButtonSize, styles.actionsButton);
-  return (
+  const actionBtnSizeColor =
+    size === 'sm' ? styles.actionsButtonSmall : styles.actionsButtonSmallBlack;
+  const extendStyles = classNames(actionBtnSizeColor, styles.actionsButton);
+
+  return props.render ? (
+    props.render(props)
+  ) : (
     <Button className={extendStyles} {...props}>
-      {size !== 'sm' && <div className={styles.actionText}>Actions</div>}
       <Icon icon="caret-down" type="solid" className={styles.actionIcon} />
     </Button>
   );
@@ -47,4 +47,5 @@ function ActionsButton({ size, ...props }) {
 
 ActionsButton.propTypes = {
   size: PropTypes.string.isRequired,
+  render: PropTypes.func.isRequired,
 };

@@ -51,10 +51,22 @@ export default function AppointmentInfo(props) {
             onDoubleClick={() => editPatient(patient.id)}
             onKeyDown={e => e.keyCode === 13 && editPatient(patient.id)}
           >
-            <span className={styles.header_text}>{`${patient.firstName} ${patient.lastName}`}</span>
-            {age !== null && <span className={styles.header_age}>{`, ${age}`}</span>}
+            <ActionsDropdown
+              patient={patient}
+              render={({ onClick }) => (
+                <div role="button" tabIndex={0} onKeyDown={this.handleKeyDown} onClick={onClick}>
+                  <span className={styles.header_text}>
+                    {`${patient.firstName} ${patient.lastName}`}
+                  </span>
+                  {age !== null && <span className={styles.header_age}>{`, ${age}`}</span>}
+                  <span className={styles.actionsButtonSmall}>
+                    <Icon icon="caret-down" type="solid" className={styles.actionIcon} />
+                  </span>
+                </div>
+              )}
+            />
           </div>
-          <ActionsDropdown size="sm" patient={patient} />
+
           <div className={styles.closeIcon}>
             <IconButton icon="times" onClick={() => props.closePopover()} />
           </div>

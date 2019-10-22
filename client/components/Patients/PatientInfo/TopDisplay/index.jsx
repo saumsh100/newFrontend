@@ -1,11 +1,11 @@
 
 import React from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import isNumber from 'lodash/isNumber';
 import { formatPhoneNumber } from '@carecru/isomorphic';
-import { Card, Avatar, Icon, Grid, Row, Col } from '../../../library';
-import EnabledFeature from '../../../library/EnabledFeature';
+import { Card, Avatar, Icon, Grid, Row, Col, Tooltip } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';
 import RecallData from '../../Shared/RecallColumn';
@@ -50,7 +50,7 @@ export default function TopDisplay(props) {
   const production =
     wasStatsFetched && patientStats.get('productionCalendarYear')
       ? `$${patientStats.get('productionCalendarYear')}`
-      : null;
+      : '$0';
 
   const bgStyle = {
     background: `url('/images/banners/${bgImgs[randomNum]}')`,
@@ -73,32 +73,49 @@ export default function TopDisplay(props) {
                 <Avatar user={patient} size={avatarSize} />
               </div>
               <div className={styles.avatarContainer_data}>
-                <div className={styles.avatarContainer_data_nameAge}>
-                  <div className={styles.avatarContainer_data_nameAge_name}>
-                    {patient.getFullName()}
-                  </div>
-                  <div className={styles.avatarContainer_data_nameAge_age}>
-                    {isNumber(age) ? `, ${age}` : null}
-                  </div>
-                  <div className={styles.avatarContainer_data_badge}>
-                    <div
-                      className={
-                        styles[`avatarContainer_data_badge_${patient.status.toLowerCase()}`]
-                      }
-                    >
-                      {patient.status}
+                <ActionsDropdown
+                  patient={patient}
+                  render={({ onClick }) => (
+                    <div className={styles.avatarContainer_data_nameAge}>
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={this.handleKeyDown}
+                        onClick={onClick}
+                      >
+                        <span className={styles.avatarContainer_data_nameAge_name}>
+                          {patient.getFullName()}
+                        </span>
+                        <span className={styles.avatarContainer_data_nameAge_age}>
+                          {isNumber(age) ? `, ${age}` : null}
+                        </span>
+                        <span className={styles.actionsButtonSmall}>
+                          <Icon icon="caret-down" type="solid" className={styles.actionIcon} />
+                        </span>
+                      </div>
                     </div>
+                  )}
+                />
+                <div className={styles.avatarContainer_data_badge}>
+                  <div
+                    className={styles[`avatarContainer_data_badge_${patient.status.toLowerCase()}`]}
+                  >
+                    {patient.status}
                   </div>
                 </div>
-                {patient.email && (
-                  <div className={styles.displayFlex}>
-                    <span className={styles.avatarContainer_data_icon}>
-                      {' '}
-                      <Icon icon="envelope" />{' '}
-                    </span>
-                    <div className={styles.avatarContainer_data_email}>{patient.email}</div>
+                <div className={styles.displayFlex}>
+                  <span className={styles.avatarContainer_data_icon}>
+                    {' '}
+                    <Icon icon="envelope" />{' '}
+                  </span>
+                  <div className={styles.avatarContainer_data_email}>
+                    {patient.email || (
+                      <Tooltip placement="right" trigger={['hover']} overlay="Edit in PMS">
+                        <div>n/a</div>
+                      </Tooltip>
+                    )}
                   </div>
-                )}
+                </div>
                 {patient.cellPhoneNumber && (
                   <div className={styles.displayFlex}>
                     <span className={styles.avatarContainer_data_icon}>
@@ -110,17 +127,34 @@ export default function TopDisplay(props) {
                     </div>
                   </div>
                 )}
-                <EnabledFeature
-                  predicate={({ flags }) => flags.get('patient-actions-button')}
-                  render={<ActionsDropdown patient={patient} />}
-                />
               </div>
             </div>
+
             <Grid className={styles.rightContainer}>
               <Row className={styles.rightContainer_content}>
-                <Col xs={4}>
+                <Col xs={3}>
                   <InfoDump
-                    label="PATIENT DUE FOR HYGIENE"
+                    label="Last Appt"
+                    data={
+                      patient.lastApptDate
+                        ? moment(patient.lastApptDate).format('MMM DD YYYY')
+                        : null
+                    }
+                  />
+                </Col>
+                <Col xs={3}>
+                  <InfoDump
+                    label="Last Hygiene"
+                    data={
+                      patient.lastHygieneDate
+                        ? moment(patient.lastHygieneDate).format('MMM DD YYYY')
+                        : null
+                    }
+                  />
+                </Col>
+                <Col xs={3}>
+                  <InfoDump
+                    label="DUE FOR HYGIENE"
                     component={HygieneData({
                       patient,
                       className: styles.fontStyle,
@@ -128,9 +162,34 @@ export default function TopDisplay(props) {
                     })}
                   />
                 </Col>
-                <Col xs={4}>
+                <Col xs={3}>
+                  <InfoDump label="Total Visits" data={patientStats.get('allApps') || 0} />
+                </Col>
+              </Row>
+              <Row className={styles.rightContainer_content}>
+                <Col xs={3}>
                   <InfoDump
-                    label="PATIENT DUE FOR RECALL"
+                    label="Next Appt"
+                    data={
+                      patient.nextApptDate
+                        ? moment(patient.nextApptDate).format('MMM DD YYYY')
+                        : null
+                    }
+                  />
+                </Col>
+                <Col xs={3}>
+                  <InfoDump
+                    label="Last Recall"
+                    data={
+                      patient.lastRecallDate
+                        ? moment(patient.lastRecallDate).format('MMM DD YYYY')
+                        : null
+                    }
+                  />
+                </Col>
+                <Col xs={3}>
+                  <InfoDump
+                    label="DUE FOR RECALL"
                     component={RecallData({
                       patient,
                       className: styles.fontStyle,
@@ -138,8 +197,8 @@ export default function TopDisplay(props) {
                     })}
                   />
                 </Col>
-                <Col xs={4}>
-                  <InfoDump label="PRODUCTION IN CALENDAR YEAR" data={production} />
+                <Col xs={3}>
+                  <InfoDump label="PRODUCTION YTD" data={production} />
                 </Col>
               </Row>
             </Grid>

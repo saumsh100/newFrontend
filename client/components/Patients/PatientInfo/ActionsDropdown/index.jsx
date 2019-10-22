@@ -70,6 +70,12 @@ class PatientActionsDropdown extends Component {
       onClick: () => this.handleGoToChat(this.props.patient.id),
     });
 
+    actionMenuItems.push({
+      key: 'go-patient-profile',
+      children: <div>Patient Profile</div>,
+      onClick: () => this.props.push(`/patients/${this.props.patient.id}`),
+    });
+
     return <ActionsDropdownMenu actionMenuItems={actionMenuItems} {...this.props} />;
   }
 }
