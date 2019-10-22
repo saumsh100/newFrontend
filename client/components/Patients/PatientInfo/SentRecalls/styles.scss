@@ -1,0 +1,233 @@
+@import '../../../../ui.scss';
+@import '../../../../ui-kit.scss';
+@import '../../../library/ScheduleCalendar/color.scss';
+
+.placeholder {
+  color: $grey-dark;
+  padding-left: 8px;
+  font-weight: normal;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.input {
+  width: 100%;
+  color: #2e3845;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0px;
+  box-sizing: border-box;
+  min-height: 30px;
+  background: $white;
+  -webkit-appearance: none;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgb(213, 213, 213);
+
+  &:focus {
+    transition: all 0.2s ease;
+    border-color: $grey-dark;
+  }
+
+  &:focus ~ .label {
+    @extend .filled;
+  }
+}
+
+.value {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  overflow: auto;
+
+  .item {
+    padding: 4px 0px;
+    border-radius: 4px;
+    margin-right: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+    align-items: center;
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+
+    .remove {
+      color: $grey-dark;
+      margin-left: 8px;
+    }
+  }
+}
+
+.disabled {
+  background: $grey-lighter !important;
+  box-shadow: none;
+
+  &:hover {
+    background: $grey-lighter !important;
+    color: $calendar-grey !important;
+  }
+
+  .item {
+    background: $calendar-background;
+
+    &:hover {
+      background: $calendar-background;
+    }
+  }
+}
+
+.error {
+  border-color: $red;
+
+  &:hover,
+  &:focus {
+    border-color: $red;
+  }
+}
+
+.fieldLabel {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 400;
+  width: 100%;
+  color: rgb(198, 198, 198);
+  transition: all 0.2s ease;
+}
+
+.iconWrapper {
+  color: rgb(149, 149, 150);
+}
+
+.fieldLabelActive {
+  color: #2e3845;
+}
+
+.filled {
+  left: 16px;
+  top: 12px;
+  font-size: 11px;
+}
+
+.list {
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 0;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.29);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-15px);
+  transition: all 0.2s ease;
+  position: absolute;
+  box-sizing: border-box;
+  background: $white;
+  padding: 0px;
+  margin-top: 4px;
+
+  &.active {
+    transition: all 0.2s ease;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.option {
+  font-size: $small-size;
+  cursor: pointer;
+  padding-left: 20px;
+  padding-right: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  background-color: $primary-white;
+  border: 0;
+  width: 100%;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
+  text-align: center;
+  color: black;
+  justify-content: flex-start;
+  letter-spacing: 0;
+  box-sizing: border-box;
+
+  font-family: $inter;
+  font-size: 13px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $primary-lightgrey !important;
+    color: $primary-dark !important;
+  }
+}
+
+.activeOption {
+  border-left: 3px solid #ff715a;
+}
+
+.fallback {
+  @extend .option;
+  text-align: center;
+  justify-content: center;
+  font-style: italic;
+
+  &:hover {
+    background-color: $primary-white !important;
+    color: $calendar-grey !important;
+    cursor: auto;
+  }
+}
+
+.labelSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectWrapper {
+  width: 100%;
+  position: relative;
+  padding: 10px 0 20px 0;
+}
+
+button.linkButton {
+  text-align: right;
+  background-color: transparent;
+  margin-bottom: 8px;
+}
+
+.selectAll,
+.selectionGroup {
+  display: block;
+  width: 100%;
+}
+.selectionGroup {
+  border-top: 1px solid $grey-lighter;
+  padding-top: 6px;
+}
+.selectionTitle {
+  font-family: $inter;
+  font-size: 9px;
+  color: $grey-dark;
+  margin: 12px 0;
+}
+
+.cbLabel {
+  @extend .selectionTitle;
+  font-size: 13px;
+  margin-left: 8px;
+}
+.cbContainer {
+  margin-bottom: 16px;
+}
+
+.errorMessage {
+  color: red;
+}

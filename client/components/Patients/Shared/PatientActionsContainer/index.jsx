@@ -191,11 +191,11 @@ class PatientActionsContainer extends Component {
   }
 
   async handleSentRecallFormSubmit(values, commit) {
+    const { patientFamily } = values;
     const { activePatient, activeAccount, userId, selectedRecall } = this.props;
     try {
       const variables = {
         ...values,
-        patientId: activePatient.id,
         accountId: activeAccount.id,
         userId,
       };
@@ -215,12 +215,31 @@ class PatientActionsContainer extends Component {
         }
       }
 
-      const { data } = await commit({ variables });
+      // make a recall for each family member
+      const dataArr = await Promise.all(
+        patientFamily.map(async (id) => {
+          const recallForm = {
+            ...variables,
+            patientId: id,
+          };
+          const res = await commit({ variables: recallForm });
+          return res;
+        }),
+      );
+
       toggleForm();
+
+      // find and update current patient from the array or update the only patient
+      const { data } =
+        dataArr.find((e) => {
+          if (selectedRecall) {
+            return e.data.updateSentRecall.patientId === activePatient.id;
+          }
+          return e.data.createManualSentRecall.patientId === activePatient.id;
+        }) || dataArr[0];
 
       const newRecall = selectedRecall ? data.updateSentRecall : data.createManualSentRecall;
       const eventId = window.btoa(`recall-${newRecall.id}`);
-
       this.props.receiveEntities({
         entities: {
           patientTimelineEvents: {
@@ -243,7 +262,6 @@ class PatientActionsContainer extends Component {
           }`,
         },
       });
-
       this.props.reset(getRecallsFormName(selectedRecall));
     } catch (err) {
       console.error('handleSentRecallFormSubmit Error:', err);
@@ -266,6 +284,7 @@ class PatientActionsContainer extends Component {
       isNoteFormActive,
       isFollowUpsFormActive,
       isRecallsFormActive,
+      activePatient,
     } = this.props;
 
     const isUpdatingNote = !!selectedNote;
@@ -343,11 +362,13 @@ class PatientActionsContainer extends Component {
             {commit =>
               (isRecallsFormActive || isUpdatingRecall) && (
                 <LogRecallForm
+                  patientId={activePatient.id}
                   isUpdate={isUpdatingRecall}
                   formName={getRecallsFormName(selectedRecall)}
                   initialValues={
                     selectedRecall || {
                       primaryType: 'phone',
+                      note: '',
                       createdAt: new Date().toISOString(),
                     }
                   }
