@@ -22,6 +22,11 @@
   composes: subHeader from 'sass-loader!../../../fonts.scss';
 }
 
+.crownIcon {
+  width: 16px;
+  color: #ffc45a;
+}
+
 .header {
   position: relative;
   display: flex;

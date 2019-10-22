@@ -9,7 +9,10 @@ export const fetchPatientTableData = () => async (dispatch, getState) => {
   try {
     dispatch(setIsLoading(true));
     const { patientTable } = getState();
-    const params = patientTable.get('filters').toJS();
+    const params = {
+      ...patientTable.get('filters').toJS(),
+      isHoH: true,
+    };
     const {
       data: { entities },
     } = await httpClient().get('/api/table/search', { params });

@@ -223,6 +223,31 @@ class PatientTable extends React.PureComponent {
       },
       {
         ...baseColumn,
+        Header: 'HoH',
+        accessor: 'isHoH',
+        maxWidth: 50,
+        Cell: ({ value }) => (
+          <div className={styles.displayFlex}>
+            {value ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 8 5"
+                className={styles.crownIcon}
+              >
+                <path
+                  fill="currentColor"
+                  fillRule="evenodd"
+                  d="M4.31 0c.236 0 .428.19.428.425a.421.421 0 01-.119.293l.92 1.218a.768.768 0 001.15.082l.566-.56A.423.423 0 017.523.7c.237 0 .43.191.43.426 0 .184-.12.342-.287.4 0 .02 0 .04-.006.06l-.45 1.781c-.013.056-.06.396-.117.647a.195.195 0 01.074.154v.486a.203.203 0 01-.204.202H1.679a.203.203 0 01-.204-.202v-.486c0-.071.037-.134.093-.17-.069-.246-.133-.564-.146-.618l-.45-1.787a.201.201 0 01-.005-.062.426.426 0 01-.3-.405C.667.892.859.7 1.095.7c.237 0 .43.191.43.426 0 .132-.062.25-.157.328l.562.561a.771.771 0 001.152-.077L4.006.725a.422.422 0 01-.126-.3C3.88.19 4.073 0 4.31 0z"
+                />
+              </svg>
+            ) : (
+              ''
+            )}
+          </div>
+        ),
+      },
+      {
+        ...baseColumn,
         Header: 'Last Appt',
         id: 'lastApptDate',
         accessor: ({ lastApptDate }) =>
