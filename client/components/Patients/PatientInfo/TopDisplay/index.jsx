@@ -163,7 +163,7 @@ export default function TopDisplay(props) {
                   />
                 </Col>
                 <Col xs={3}>
-                  <InfoDump label="Total Visits" data={patientStats.get('allApps') || 0} />
+                  <InfoDump label="Total Visits" data={patientStats.get('allApps') || '0'} />
                 </Col>
               </Row>
               <Row className={styles.rightContainer_content}>
