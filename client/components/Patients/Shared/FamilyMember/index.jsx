@@ -2,32 +2,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { bindActionCreators } from 'redux';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
 import { isResponsive } from '../../../../util/hub';
 import { Grid, Row, Col, Avatar, Badge } from '../../../library';
 import HygieneData from '../HygieneColumn';
 import RecallData from '../RecallColumn';
 import InfoDump from '../InfoDump';
+import { patientShape } from '../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
 class FamilyMember extends React.Component {
-  constructor(props) {
-    super(props);
-    this.mouseLeave = this.mouseLeave.bind(this);
-    this.mouseOver = this.mouseOver.bind(this);
-    this.state = { isHovering: false  };
-  }
-
-  mouseLeave() {
-    this.setState({ isHovering: false });
-  }
-
-  mouseOver() {
-    this.setState({ isHovering: true });
-  }
-
   renderNameAge(fullName, age) {
     return (
-      <span className={styles.familyMember_name}>{`${fullName}, ${age}`}</span>
+      <div
+        role="button"
+        tabIndex={0}
+        className={styles.patientLink}
+        onDoubleClick={() => this.props.push(`/patients/${this.props.node.ccId}`)}
+        onKeyDown={e => e.keyCode === 13 && this.props.push(`/patients/${this.props.node.ccId}`)}
+      >
+        <span className={styles.familyMember_name}>{`${fullName}, ${age}`}</span>
+      </div>
     );
   }
 
@@ -45,7 +42,9 @@ class FamilyMember extends React.Component {
     return (
       <button
         type="button"
-        className={classNames([styles.familyMember_config_button], { [styles.familyMember_config_button_remove]: remove  })}
+        className={classNames([styles.familyMember_config_button], {
+          [styles.familyMember_config_button_remove]: remove,
+        })}
         onClick={handler}
       >
         {text}
@@ -109,10 +108,7 @@ class FamilyMember extends React.Component {
               <InfoDump label="LAST APPT" data={lastApp} />
             </Col>
             <Col xs={6}>
-              <InfoDump
-                label="DUE FOR HYGIENE"
-                component={HygieneData(recallHygieneData)}
-              />
+              <InfoDump label="DUE FOR HYGIENE" component={HygieneData(recallHygieneData)} />
             </Col>
           </Row>
           <Row className={styles.familyMember_row}>
@@ -120,10 +116,7 @@ class FamilyMember extends React.Component {
               <InfoDump label="NEXT APPT" data={nextApp} />
             </Col>
             <Col xs={6}>
-              <InfoDump
-                label="DUE FOR RECALL"
-                component={RecallData(recallHygieneData)}
-              />
+              <InfoDump label="DUE FOR RECALL" component={RecallData(recallHygieneData)} />
             </Col>
           </Row>
         </Col>
@@ -132,7 +125,7 @@ class FamilyMember extends React.Component {
   }
 
   renderFamilyConfig(props) {
-    const { fullName, age, patient, isHead, avatarSize  } = props;
+    const { fullName, age, patient, isHead, avatarSize } = props;
 
     return (
       <Row middle="xs" start="xs">
@@ -143,7 +136,9 @@ class FamilyMember extends React.Component {
           <Row
             start="xs"
             middle="xs"
-            className={classNames([styles.familyMember_config_row], { [styles.familyMember_config_row_head]: isHead  })}
+            className={classNames([styles.familyMember_config_row], {
+              [styles.familyMember_config_row_head]: isHead,
+            })}
           >
             <Col>{this.renderNameAge(fullName, age)}</Col>
             <Col>{this.renderDisplayHead()}</Col>
@@ -165,22 +160,18 @@ class FamilyMember extends React.Component {
     const avatarSize = isResponsive() ? 'sm' : 'md';
 
     const finalProps = {
- ...this.props,
-      avatarSize 
-};
+      ...this.props,
+      avatarSize,
+    };
 
     return (
       <Grid
         className={classNames({
           [styles.familyMember]: !this.props.handleMakeHead,
           [styles.familyMember_config]: this.props.handleMakeHead,
-          [styles.familyMember_withBorder]:
-            !this.props.handleMakeHead && withBorder,
-          [styles.familyMember_config_withBorder]:
-            this.props.handleMakeHead && withBorder,
+          [styles.familyMember_withBorder]: !this.props.handleMakeHead && withBorder,
+          [styles.familyMember_config_withBorder]: this.props.handleMakeHead && withBorder,
         })}
-        onMouseLeave={() => this.mouseLeave()}
-        onMouseOver={() => this.mouseOver()}
       >
         {handleMakeHead
           ? this.renderFamilyConfig(finalProps)
@@ -191,21 +182,34 @@ class FamilyMember extends React.Component {
 }
 
 FamilyMember.propTypes = {
-  fullName: PropTypes.string,
-  age: PropTypes.number,
   patient: PropTypes.shape({
     avatarUrl: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
-  }),
-  lastApp: PropTypes.string,
-  nextApp: PropTypes.string,
+  }).isRequired,
   withBorder: PropTypes.bool,
   isHead: PropTypes.bool,
-  handleMakeHead: PropTypes.func,
-  handleRemoveFromFamily: PropTypes.func,
-  className: PropTypes.string,
-  activeAccount: PropTypes.bool,
+  handleMakeHead: PropTypes.func.isRequired,
+  handleRemoveFromFamily: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
+  node: PropTypes.shape(patientShape).isRequired,
 };
 
-export default FamilyMember;
+FamilyMember.defaultProps = {
+  withBorder: false,
+  isHead: false,
+};
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      push,
+    },
+    dispatch,
+  );
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(FamilyMember);

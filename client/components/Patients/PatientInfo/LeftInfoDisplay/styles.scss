@@ -4,8 +4,8 @@
   width: 100%;
   background: white;
   box-sizing: border-box;
-  min-height: 700px;
-  flex: 1;
+  height: 100%;
+  overflow: hidden;
 
   @media screen and (max-width: 576px) {
     border-top: none;
@@ -237,6 +237,7 @@
 .content {
   max-height: unset;
   height: 100%;
+  overflow: auto;
 }
 
 .sectionWrapper {

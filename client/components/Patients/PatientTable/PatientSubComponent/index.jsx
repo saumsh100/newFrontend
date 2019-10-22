@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Query } from 'react-apollo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../../../library';
@@ -9,15 +10,24 @@ import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import { deleteAllEntity } from '../../../../reducers/entities';
 import { setIsNoteFormActive } from '../../../../reducers/patientTable';
 import Event from '../../../../entities/models/Event';
-import { patientShape } from '../../../library/PropTypeShapes';
-import DataTable from './DataTable';
-import PatientInfoSection from './PatientInfoSection';
+import { patientShape, accountShape } from '../../../library/PropTypeShapes';
 import EventsTable from './EventsTable';
 import { getEventsOffsetLimitObj } from '../../Shared/helpers';
 import PatientActionsDropdown from '../../PatientInfo/ActionsDropdown';
+import patientInfoQuery from '../../../Patients/PatientInfo/PatientInfo_Query';
+import LeftInfoDisplay from '../../../Patients/PatientInfo/LeftInfoDisplay';
 import styles from './styles.scss';
 
 class PatientSubComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tabIndex: 0,
+    };
+
+    this.handleTabChange = this.handleTabChange.bind(this);
+  }
+
   componentDidMount() {
     const {
       patient: { id },
@@ -37,9 +47,12 @@ class PatientSubComponent extends Component {
     this.props.deleteAllEntity('events');
   }
 
-  render() {
-    const { patient, events, wasFetched } = this.props;
+  handleTabChange(index) {
+    this.setState({ tabIndex: index });
+  }
 
+  render() {
+    const { patient, events, wasFetched, accountViewer, activeAccount } = this.props;
     return (
       <div className={styles.patientSub}>
         <div className={styles.content}>
@@ -51,15 +64,13 @@ class PatientSubComponent extends Component {
                 render={() => <PatientActionsDropdown patient={patient} align="right" />}
               />
             </div>
-            <Card className={styles.card}>
-              {patient && (
-                <EnabledFeature
-                  predicate={({ flags }) => flags.get('patient-info-new-collapsible-view')}
-                  render={() => <PatientInfoSection patient={patient} />}
-                  fallback={() => <DataTable patient={patient} />}
-                />
-              )}
-            </Card>
+            <LeftInfoDisplay
+              accountViewer={accountViewer}
+              patient={patient}
+              tabIndex={this.state.tabIndex}
+              handleTabChange={this.handleTabChange}
+              activeAccount={activeAccount}
+            />
           </div>
           <div className={styles.timeLineTable}>
             <div className={styles.timeLineHeader}>Timeline & Activities</div>
@@ -85,7 +96,9 @@ class PatientSubComponent extends Component {
   }
 }
 
-function mapStateToProps({ entities, apiRequests }, { patient }) {
+function mapStateToProps({ entities, apiRequests, auth }, { patient }) {
+  const waitForAuth = auth.get('accountId');
+  const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
   const wasFetched = apiRequests.get('getPatientEvents')
     ? apiRequests.get('getPatientEvents').wasFetched
     : null;
@@ -96,6 +109,7 @@ function mapStateToProps({ entities, apiRequests }, { patient }) {
     .filter(event => event.get('patientId') === patient.id);
 
   return {
+    activeAccount,
     events,
     wasFetched,
   };
@@ -118,6 +132,11 @@ PatientSubComponent.propTypes = {
   wasFetched: PropTypes.bool,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   deleteAllEntity: PropTypes.func.isRequired,
+  accountViewer: PropTypes.shape({
+    id: PropTypes.string,
+    patient: patientShape,
+  }).isRequired,
+  activeAccount: PropTypes.shape(accountShape).isRequired,
 };
 
 PatientSubComponent.defaultProps = {
@@ -125,7 +144,21 @@ PatientSubComponent.defaultProps = {
   wasFetched: false,
 };
 
+const PatientSubComponentWithData = parentProps => (
+  <Query query={patientInfoQuery} variables={{ patientId: parentProps.patient.id }}>
+    {({ error, loading, data }) => {
+      if (loading) return null;
+
+      if (error) {
+        return <div>Error!</div>;
+      }
+
+      return <PatientSubComponent {...parentProps} {...data} />;
+    }}
+  </Query>
+);
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(PatientSubComponent);
+)(PatientSubComponentWithData);

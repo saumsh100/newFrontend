@@ -91,3 +91,13 @@
     color: $primary-red;
   }
 }
+
+.patientLink {
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  color: $primary-blue;
+  &:hover {
+    transform: scale(1.02);
+    color: lighten($primary-blue, 10%);
+  }
+}
