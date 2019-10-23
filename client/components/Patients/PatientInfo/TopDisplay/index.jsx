@@ -77,12 +77,7 @@ export default function TopDisplay(props) {
                   patient={patient}
                   render={({ onClick }) => (
                     <div className={styles.avatarContainer_data_nameAge}>
-                      <div
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={this.handleKeyDown}
-                        onClick={onClick}
-                      >
+                      <div role="button" tabIndex={0} onKeyDown={() => {}} onClick={onClick}>
                         <span className={styles.avatarContainer_data_nameAge_name}>
                           {patient.getFullName()}
                         </span>

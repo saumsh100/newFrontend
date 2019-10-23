@@ -54,7 +54,7 @@ export default function AppointmentInfo(props) {
             <ActionsDropdown
               patient={patient}
               render={({ onClick }) => (
-                <div role="button" tabIndex={0} onKeyDown={this.handleKeyDown} onClick={onClick}>
+                <div role="button" tabIndex={0} onKeyDown={() => {}} onClick={onClick}>
                   <span className={styles.header_text}>
                     {`${patient.firstName} ${patient.lastName}`}
                   </span>
