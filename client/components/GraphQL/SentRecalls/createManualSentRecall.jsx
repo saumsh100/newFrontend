@@ -9,6 +9,7 @@ export default gql`
     $userId: String!
     $createdAt: String
     $note: String
+    $sentRecallOutcomeId: String
   ) {
     createManualSentRecall(
       sentRecallCreateInput: {
@@ -18,6 +19,7 @@ export default gql`
         userId: $userId
         createdAt: $createdAt
         note: $note
+        sentRecallOutcomeId: $sentRecallOutcomeId
       }
     ) {
       id
@@ -28,6 +30,10 @@ export default gql`
       userId
       createdAt
       isAutomated
+      sentRecallOutcome: sentRecallOutcome {
+        id
+        name
+      }
     }
   }
 `;

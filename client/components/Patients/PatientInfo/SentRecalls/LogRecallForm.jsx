@@ -9,6 +9,7 @@ import SentRecallList from './SentRecallList';
 import SentRecallSelector from './SentRecallSelector';
 import { Form, Field } from '../../../library';
 import patientInfoQuery from '../PatientInfo_Query';
+import FetchOutcomeTypes from '../../../GraphQL/SentRecalls/fetchSentRecallOutcomesTypes';
 import styles from './styles.scss';
 
 const contactOptions = [
@@ -42,6 +43,7 @@ class LogRecallForm extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.PatientFamilyField = this.PatientFamilyField.bind(this);
+    this.OutcomeField = this.OutcomeField.bind(this);
   }
 
   handleSubmit(values) {
@@ -129,6 +131,21 @@ class LogRecallForm extends Component {
     );
   }
 
+  OutcomeField({ sentRecallOutcomes }) {
+    if (!sentRecallOutcomes) return null;
+
+    return (
+      <Field
+        required
+        name="sentRecallOutcomeId"
+        label="Recall Outcome"
+        date-test-id="sentRecallOutcomeId"
+        component="DropdownSelect"
+        options={sentRecallOutcomes}
+      />
+    );
+  }
+
   render() {
     const { initialValues, formName, className, patientId } = this.props;
     return (
@@ -160,6 +177,7 @@ class LogRecallForm extends Component {
           component="DropdownSelect"
           options={contactOptions}
         />
+        <FetchOutcomeTypes>{({ data }) => this.OutcomeField(data)}</FetchOutcomeTypes>
         <Field name="note" label="Note" data-test-id="note" component="TextArea" />
       </Form>
     );

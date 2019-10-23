@@ -291,6 +291,10 @@ class PatientActionsContainer extends Component {
     const isUpdatingFollowUp = !!selectedFollowUp;
     const isUpdatingRecall = !!selectedRecall;
 
+    if (selectedRecall && selectedRecall.sentRecallOutcome) {
+      selectedRecall.sentRecallOutcomeId = selectedRecall.sentRecallOutcome.id;
+    }
+
     if (selectedFollowUp) {
       selectedFollowUp.isCompleted = !!selectedFollowUp.completedAt;
       selectedFollowUp.patientFollowUpTypeId = selectedFollowUp.patientFollowUpType.id;
@@ -369,6 +373,7 @@ class PatientActionsContainer extends Component {
                     selectedRecall || {
                       primaryType: 'phone',
                       note: '',
+                      sentRecallOutcomeId: '',
                       createdAt: new Date().toISOString(),
                     }
                   }

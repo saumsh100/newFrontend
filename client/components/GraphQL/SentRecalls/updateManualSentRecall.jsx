@@ -7,6 +7,7 @@ export default gql`
     $primaryType: String
     $createdAt: String
     $note: String
+    $sentRecallOutcomeId: String
   ) {
     updateSentRecall(
       sentRecallUpdateInput: {
@@ -14,6 +15,7 @@ export default gql`
         primaryType: $primaryType
         createdAt: $createdAt
         note: $note
+        sentRecallOutcomeId: $sentRecallOutcomeId
       }
     ) {
       id
@@ -24,6 +26,10 @@ export default gql`
       userId
       createdAt
       isAutomated
+      sentRecallOutcome: sentRecallOutcome {
+        id
+        name
+      }
     }
   }
 `;
