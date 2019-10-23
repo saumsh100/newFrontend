@@ -81,6 +81,8 @@ class LogRecallForm extends Component {
       value: ccId,
     }));
 
+    const patientFamilyValues = patientFamily.map(({ value }) => value);
+
     return (
       <MultiSelect
         initialSelectedItem={[patientId]}
@@ -98,6 +100,7 @@ class LogRecallForm extends Component {
           selectedItems,
           getItemProps,
           highlightedIndex,
+          toggleAll,
         }) => (
           <div className={styles.selectWrapper}>
             <span
@@ -105,7 +108,7 @@ class LogRecallForm extends Component {
                 isOpen ? classNames(styles.fieldLabel, styles.fieldLabelActive) : styles.fieldLabel
               }
             >
-              Patient Family
+              Family Members
             </span>
             <SentRecallSelector
               selected={selectedItems.map(value => ({
@@ -123,6 +126,7 @@ class LogRecallForm extends Component {
               isOpen={isOpen}
               options={patientFamily}
               itemProps={getItemProps}
+              toggleAllItems={() => toggleAll(patientFamilyValues)}
               highlightedIndex={highlightedIndex}
             />
           </div>

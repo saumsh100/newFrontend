@@ -32,7 +32,11 @@ export default function LeftInfoDisplay(props) {
 
   if (isResponsive()) {
     return (
-      <Card className={styles.mainContainer} runAnimation loaded={!!patient}>
+      <Card
+        className={`${styles.mainContainer} ${props.containerClass}`}
+        runAnimation
+        loaded={!!patient}
+      >
         <CollapsibleTab title="Appointments">{appointmentsTab}</CollapsibleTab>
         <CollapsibleTab title="Personal">{personalTab}</CollapsibleTab>
         <CollapsibleTab title="Family">{familyTab}</CollapsibleTab>
@@ -41,7 +45,11 @@ export default function LeftInfoDisplay(props) {
   }
 
   return (
-    <Card className={styles.mainContainer} runAnimation loaded={!!patient}>
+    <Card
+      className={`${styles.mainContainer} ${props.containerClass}`}
+      runAnimation
+      loaded={!!patient}
+    >
       <Tabs index={tabIndex} onChange={handleTabChange} contentClass={styles.content}>
         <Tab label="Appointments" tabCard activeClass={styles.activeTab}>
           {appointmentsTab}
@@ -62,6 +70,7 @@ LeftInfoDisplay.propTypes = {
   activeAccount: PropTypes.shape(accountShape),
   handleTabChange: PropTypes.func.isRequired,
   tabIndex: PropTypes.number.isRequired,
+  containerClass: PropTypes.string,
   openModal: PropTypes.func.isRequired,
   accountViewer: PropTypes.shape({
     patient: PropTypes.shape({
@@ -74,4 +83,5 @@ LeftInfoDisplay.defaultProps = {
   accountViewer: null,
   activeAccount: null,
   patient: null,
+  containerClass: '',
 };

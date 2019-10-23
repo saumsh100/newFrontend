@@ -12,6 +12,7 @@ class MultiSelect extends Component {
     this.stateReducer = this.stateReducer.bind(this);
     this.handleSelection = this.handleSelection.bind(this);
     this.removeItem = this.removeItem.bind(this);
+    this.toggleAll = this.toggleAll.bind(this);
     this.addSelectedItem = this.addSelectedItem.bind(this);
     this.getStateAndHelpers = this.getStateAndHelpers.bind(this);
   }
@@ -29,9 +30,22 @@ class MultiSelect extends Component {
   getStateAndHelpers(downshift) {
     return {
       handleSelection: this.handleSelection,
+      toggleAll: this.toggleAll,
       selectedItems: this.state.selectedItems,
       ...downshift,
     };
+  }
+
+  toggleAll(options) {
+    const callback = () => {
+      this.props.onChange(this.state.selectedItems);
+    };
+    this.setState(
+      prevState => ({
+        selectedItems: options.length === prevState.selectedItems.length ? [] : options,
+      }),
+      callback,
+    );
   }
 
   /**

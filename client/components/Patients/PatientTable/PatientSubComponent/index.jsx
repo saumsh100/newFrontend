@@ -5,7 +5,6 @@ import { Query } from 'react-apollo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../../../library';
-import EnabledFeature from '../../../library/EnabledFeature';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import { deleteAllEntity } from '../../../../reducers/entities';
 import { setIsNoteFormActive } from '../../../../reducers/patientTable';
@@ -16,7 +15,10 @@ import { getEventsOffsetLimitObj } from '../../Shared/helpers';
 import PatientActionsDropdown from '../../PatientInfo/ActionsDropdown';
 import patientInfoQuery from '../../../Patients/PatientInfo/PatientInfo_Query';
 import LeftInfoDisplay from '../../../Patients/PatientInfo/LeftInfoDisplay';
+import Icon from '../../../library/Icon';
+import Button from '../../../library/Button';
 import styles from './styles.scss';
+import ui from '../../../../ui-kit.scss';
 
 class PatientSubComponent extends Component {
   constructor(props) {
@@ -59,14 +61,26 @@ class PatientSubComponent extends Component {
           <div className={styles.dataTable}>
             <div className={styles.patientInfoHeader}>
               <div className={styles.patientInfoHeader_title}>Patient Info</div>
-              <EnabledFeature
-                predicate={({ flags }) => flags.get('patient-actions-button')}
-                render={() => <PatientActionsDropdown patient={patient} align="right" />}
+              <PatientActionsDropdown
+                patient={patient}
+                align="right"
+                render={props => (
+                  <Button
+                    className={`${styles.actionsButtonNormal} ${styles.actionsButton} ${
+                      ui.modal__save
+                    } `}
+                    {...props}
+                  >
+                    <div className={styles.actionText}>Actions</div>
+                    <Icon className={styles.actionIcon} icon="caret-down" type="solid" />
+                  </Button>
+                )}
               />
             </div>
             <LeftInfoDisplay
               accountViewer={accountViewer}
               patient={patient}
+              containerClass={styles.containerClass}
               tabIndex={this.state.tabIndex}
               handleTabChange={this.handleTabChange}
               activeAccount={activeAccount}

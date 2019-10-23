@@ -9,14 +9,18 @@ import { fetchPatientTableData } from '../../../../../thunks/patientTable';
 import Icon from '../../../../library/Icon';
 import styles from '../../styles.scss';
 
-export const getActiveSmartFilter = ([segment, ...args], segments) => {
+const getActiveSmartFilter = ([segment, ...args], segments = []) => {
   const baseSegment = segments.filter(s => s.segment === segment);
-  return args.length === 0
-    ? baseSegment.find(s => !s.value)
-    : baseSegment.find(s => s.value && s.value.every(v => args.includes(v)));
+  const selectedSegment =
+    args.length === 0
+      ? baseSegment.find(s => !s.value)
+      : baseSegment.find(s => s.value && s.value.every(v => args.includes(v)));
+  return selectedSegment && selectedSegment.label;
 };
 
-const SmartFilters = ({ activeSegmentLabel, segments, totalPatients, ...props }) => {
+const SmartFilters = ({ selectedSegment, segments, totalPatients, ...props }) => {
+  const segmentsToJS = (segments && segments.toJS()) || [];
+  const activeSegmentLabel = getActiveSmartFilter(selectedSegment, segmentsToJS);
   const setSmartFilter = ({ segment, value = [] }) => {
     props.addFilter({
       segment: [segment, ...value],
@@ -41,7 +45,7 @@ const SmartFilters = ({ activeSegmentLabel, segments, totalPatients, ...props })
       <DropdownMenu labelComponent={filterMenu} data-test-id="dropDown_smartFilters">
         <div className={styles.filterContainer}>
           <List className={styles.smartFilter} data-test-id="smartFiltersList">
-            {segments.map(({ label, ...filter }, index) => {
+            {segmentsToJS.map(({ label, ...filter }, index) => {
               const borderStyle =
                 (label === activeSegmentLabel && { borderLeft: '3px solid #FF715A' }) || {};
               return (
@@ -72,6 +76,7 @@ SmartFilters.propTypes = {
   fetchPatientTableData: PropTypes.func.isRequired,
   segments: PropTypes.arrayOf(PropTypes.object),
   totalPatients: PropTypes.number,
+  selectedSegment: PropTypes.string.isRequired,
 };
 
 SmartFilters.defaultProps = {
@@ -79,15 +84,11 @@ SmartFilters.defaultProps = {
   segments: [],
 };
 
-const mapStateToProps = ({ patientTable, featureFlags }) => {
-  const segment = patientTable.getIn(['filters', 'segment']);
-  const segments = featureFlags.getIn(['flags', 'custom-segments']).toJS();
-  return {
-    segments,
-    activeSegmentLabel: getActiveSmartFilter(segment, segments).label,
-    totalPatients: patientTable.get('count'),
-  };
-};
+const mapStateToProps = ({ patientTable, featureFlags }) => ({
+  segments: featureFlags.getIn(['flags', 'custom-segments']),
+  selectedSegment: patientTable.getIn(['filters', 'segment']),
+  totalPatients: patientTable.get('count'),
+});
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

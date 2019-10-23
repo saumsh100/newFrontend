@@ -141,8 +141,8 @@
 .option {
   font-size: $small-size;
   cursor: pointer;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: flex;
@@ -230,4 +230,16 @@ button.linkButton {
 
 .errorMessage {
   color: red;
+}
+.selectAll {
+  display: block;
+  cursor: pointer;
+  text-align: center;
+  padding: 8px 0;
+  background-color: $grey-lighter;
+  color: $grey-dark;
+  &:hover {
+    background-color: $grey-lightest;
+    color: $teal;
+  }
 }

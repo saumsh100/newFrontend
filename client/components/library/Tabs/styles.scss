@@ -51,8 +51,8 @@
   justify-content: center;
   background-color: $primary-grey;
   height: 50px;
-  border-right: 1px solid #b4b4b5;
-  border-bottom: 1px solid #b4b4b5;
+  border-right: 1px solid $primary-light-grey;
+  border-bottom: 1px solid $primary-light-grey;
   color: $primary-dark;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
   align-items: center;
