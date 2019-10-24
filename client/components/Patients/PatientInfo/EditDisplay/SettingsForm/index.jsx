@@ -55,23 +55,20 @@ class SettingsForm extends Component {
 
   omitFormHandler(setting) {
     return toOmit =>
-      this.setState(
-        { [setting]: toOmit },
-        () => {
-          const settingFieldName = this.getSettingType(setting);
+      this.setState({ [setting]: toOmit }, () => {
+        const settingFieldName = this.getSettingType(setting);
 
-          const settingNextState = this.state[setting].length !== this.props[settingFieldName].size;
+        const settingNextState = this.state[setting].length !== this.props[settingFieldName].size;
 
-          // check if all child toggles are on/off and updates the parent accordingly
-          if (this.props[`${settingFieldName}Field`] !== settingNextState) {
-            this.props.change(
-              'Form5',
-              `preferences.${this.getSettingType(setting)}`,
-              settingNextState,
-            );
-          }
-        },
-      );
+        // check if all child toggles are on/off and updates the parent accordingly
+        if (this.props[`${settingFieldName}Field`] !== settingNextState) {
+          this.props.change(
+            'Form4',
+            `preferences.${this.getSettingType(setting)}`,
+            settingNextState,
+          );
+        }
+      });
   }
 
   render() {
@@ -81,7 +78,7 @@ class SettingsForm extends Component {
     const { preferences } = patient;
     return (
       <Form
-        form="Form5"
+        form="Form4"
         onSubmit={values =>
           handleSubmit({
             ...values,
@@ -267,18 +264,14 @@ class SettingsForm extends Component {
   }
 }
 
-const selector = formValueSelector('Form5');
+const selector = formValueSelector('Form4');
 
 const mapStateToProps = state => ({
   remindersField: selector(state, 'preferences.reminders'),
   recallsField: selector(state, 'preferences.recalls'),
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    { change },
-    dispatch,
-  );
+const mapDispatchToProps = dispatch => bindActionCreators({ change }, dispatch);
 
 SettingsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
