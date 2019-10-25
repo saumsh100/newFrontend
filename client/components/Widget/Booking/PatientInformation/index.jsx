@@ -181,6 +181,14 @@ class PatientInformation extends PureComponent {
    * @param {object} values
    */
   handleFormChanges(values) {
+    // clear insuranceMemberId, insuranceGroupId
+    // if insurance carrier is "Pay for myself"
+    const { insuranceCarrier } = values;
+    if (insuranceCarrier === 'Pay for myself') {
+      this.props.change(FORM_NAME, 'insuranceGroupId', null);
+      this.props.change(FORM_NAME, 'insuranceMemberId', null);
+    }
+
     if (values && !values.patientUser) {
       this.props.change(FORM_NAME, 'patientUser', NEW_PATIENT);
     }
