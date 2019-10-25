@@ -4,35 +4,17 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Map } from 'immutable';
 import classNames from 'classnames';
-import {
-  AppBar,
-  Avatar,
-  Button,
-  DropdownMenu,
-  Icon,
-  IconButton,
-  Link,
-  MenuItem,
-} from '../library';
+import { AppBar, Avatar, Button, DropdownMenu, Icon, IconButton, Link, MenuItem } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
 import GraphQLPatientSearch from '../GraphQLPatientSearch';
 import accountShape from '../library/PropTypeShapes/accountShape';
-import styles from './styles.scss';
 import EnabledFeature from '../library/EnabledFeature';
+import AdaptiveLogo from './AdaptiveLogo';
+import styles from './styles.scss';
 
-const UserMenu = ({
-  user,
-  activeAccount,
-  enterprise,
-  role,
-  multipleAccounts,
-  ...props
-}) => {
-  const isEnterprise =
-    multipleAccounts && (role === 'OWNER' || role === 'SUPERADMIN');
-  const businessName = isEnterprise
-    ? enterprise.get('name')
-    : activeAccount && activeAccount.name;
+const UserMenu = ({ user, activeAccount, enterprise, role, multipleAccounts, ...props }) => {
+  const isEnterprise = multipleAccounts && (role === 'OWNER' || role === 'SUPERADMIN');
+  const businessName = isEnterprise ? enterprise.get('name') : activeAccount && activeAccount.name;
 
   return (
     <Button flat {...props} className={styles.userMenuButton}>
@@ -41,12 +23,7 @@ const UserMenu = ({
           <div className={styles.greeting}>Hello, {user.get('firstName')}</div>
           <div className={styles.businessName}>{businessName}</div>
         </div>
-        <Avatar
-          className={styles.userAvatar}
-          user={user.toJS()}
-          isPatient={false}
-          size="sm"
-        />
+        <Avatar className={styles.userAvatar} user={user.toJS()} isPatient={false} size="sm" />
         <Icon icon="caret-down" type="solid" />
       </div>
     </Button>
@@ -83,6 +60,7 @@ class TopBar extends Component {
     this.sync = this.sync.bind(this);
     this.openSearch = this.openSearch.bind(this);
     this.closeSearch = this.closeSearch.bind(this);
+    this.renderLogo = this.renderLogo.bind(this);
   }
 
   onSearchSelect(patient) {
@@ -102,6 +80,21 @@ class TopBar extends Component {
 
   closeSearch() {
     this.props.setIsSearchCollapsed({ isCollapsed: true });
+  }
+
+  renderLogo({ imagePath, description }) {
+    const { isCollapsed } = this.props;
+    return (
+      <div className={!isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed}>
+        <div className={!isCollapsed ? styles.logoImage : styles.logoImageCollapsed}>
+          <img
+            className={!isCollapsed ? styles.logoImageImage : styles.logoImageImageCollapsed}
+            src={imagePath}
+            alt={description}
+          />
+        </div>
+      </div>
+    );
   }
 
   render() {
@@ -124,44 +117,7 @@ class TopBar extends Component {
 
     const topBarClassName = classNames(
       styles.topBarContainer,
-      isCollapsed
-        ? styles.topBarContainerCollapsed
-        : styles.topBarContainerUnCollapsed,
-    );
-
-    // Conditionally change the image render ifCollapsed, media queries will decide to hide or not
-    let logoImage = (
-      <img
-        className={styles.logoImageImage}
-        src="/images/carecru_logo.png"
-        alt="CareCru logo"
-      />
-    );
-
-    if (isCollapsed) {
-      logoImage = (
-        <img
-          className={styles.logoImageImageCollapsed}
-          src="/images/carecru_logo_collapsed.png"
-          alt="CareCru logo"
-        />
-      );
-    }
-
-    const logoComponent = (
-      <div
-        className={
-          !isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed
-        }
-      >
-        <div
-          className={
-            !isCollapsed ? styles.logoImage : styles.logoImageCollapsed
-          }
-        >
-          {logoImage}
-        </div>
-      </div>
+      isCollapsed ? styles.topBarContainerCollapsed : styles.topBarContainerUnCollapsed,
     );
 
     const renderAccountItem = (account) => {
@@ -207,7 +163,30 @@ class TopBar extends Component {
 
     return (
       <AppBar className={topBarClassName}>
-        {logoComponent}
+        <EnabledFeature
+          drillProps={false}
+          predicate={({ flags }) => flags.get('dcc-custom-sidebar')}
+          render={
+            <AdaptiveLogo
+              imagePath={
+                !isCollapsed
+                  ? '/images/dentalcorp_logo.png'
+                  : '/images/dentalcorp_logo_collapsed.png'
+              }
+              description="DentalCorp logo"
+              isCollapsed={isCollapsed}
+            />
+          }
+          fallback={
+            <AdaptiveLogo
+              imagePath={
+                !isCollapsed ? '/images/carecru_logo.png' : '/images/carecru_logo_collapsed.png'
+              }
+              description="CareCru logo"
+              isCollapsed={isCollapsed}
+            />
+          }
+        />
         <IconButton
           icon="bars"
           className={styles.hamburger}
@@ -245,17 +224,13 @@ class TopBar extends Component {
               predicate={({ flags, userRole }) => {
                 // I know it is kinda wet but I'd rather keep it more legible for now
                 const shouldShow = (subPredicate = true) =>
-                  subPredicate &&
-                  (accounts.length > 1 && withEnterprise && !!activeAccount);
+                  subPredicate && (accounts.length > 1 && withEnterprise && !!activeAccount);
 
                 const shouldShowOwner = shouldShow(
-                  userRole === 'OWNER' &&
-                    flags.get('show-account-switcher-to-owners'),
+                  userRole === 'OWNER' && flags.get('show-account-switcher-to-owners'),
                 );
 
-                const shouldShowSuperAdmin = shouldShow(
-                  userRole === 'SUPERADMIN',
-                );
+                const shouldShowSuperAdmin = shouldShow(userRole === 'SUPERADMIN');
 
                 return shouldShowOwner || shouldShowSuperAdmin;
               }}
@@ -282,19 +257,14 @@ class TopBar extends Component {
                         subPredicate && accounts.length > 1;
 
                       const shouldShowOwner = shouldShow(
-                        userRole === 'OWNER' &&
-                          flags.get('show-account-switcher-to-owners'),
+                        userRole === 'OWNER' && flags.get('show-account-switcher-to-owners'),
                       );
 
-                      const shouldShowSuperAdmin = shouldShow(
-                        userRole === 'SUPERADMIN',
-                      );
+                      const shouldShowSuperAdmin = shouldShow(userRole === 'SUPERADMIN');
 
                       return (
                         <UserMenu
-                          multipleAccounts={
-                            shouldShowOwner || shouldShowSuperAdmin
-                          }
+                          multipleAccounts={shouldShowOwner || shouldShowSuperAdmin}
                           {...props}
                           {...userMenuProps}
                         />

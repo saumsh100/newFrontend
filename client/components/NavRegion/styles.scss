@@ -1,4 +1,3 @@
-
 @import '../../ui';
 
 .leftSectionContainer {
@@ -9,8 +8,12 @@
   height: calc(100vh - 65px);
   background-color: $primary-dark;
   z-index: 20;
-  overflow-y: auto;
   transition: ease-out 0.3s all;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .navHidden {
@@ -25,10 +28,26 @@
   }
 }
 
-.mainRegionContainer {
-
+.footer {
+  font-size: 8px;
+  color: #959596;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 0.3;
+  margin-top: 20px;
 }
 
-.navListWrapper {
-  //padding-top: $top-nav-height + 10px;
+.logoCareCru {
+  margin-top: 11px;
+  margin-bottom: 21px;
+  width: 94px;
+}
+
+.logoCareCruCollapsed {
+  margin-top: 4px;
+  margin-bottom: 16px;
+  width: 20px;
 }
