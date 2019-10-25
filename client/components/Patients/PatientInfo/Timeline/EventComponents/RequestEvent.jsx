@@ -2,14 +2,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateFormatter } from '@carecru/isomorphic';
-import EventContainer from './Shared/EventContainer';
+import RequestEventContainer from './Shared/RequestEventContainer';
 import getEventText from './Shared/textBuilder';
 
 export default function RequestEvent({ data }) {
   const eventTextKey = data.isCancelled ? 'rejected' : 'confirmed';
   return (
-    <EventContainer
+    <RequestEventContainer
       key={data.id}
+      data={data}
       headerData={`${getEventText('english', 'requests', eventTextKey)} ${dateFormatter(
         data.startDate,
         '',

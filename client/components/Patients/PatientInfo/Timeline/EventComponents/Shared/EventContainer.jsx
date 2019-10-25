@@ -41,6 +41,7 @@ export default function EventContainer(props) {
           <Icon type="solid" icon="trash-alt" className={styles.trashIcon} />
         </button>
       )}
+
       {headerData && headerContent}
       {subHeaderData && subHeaderContent}
       {subHeaderItalicData && subHeaderItalicContent}
@@ -57,6 +58,7 @@ EventContainer.propTypes = {
   component: PropTypes.element,
   onDelete: PropTypes.func,
   onEdit: PropTypes.func,
+  data: PropTypes.shape({}),
 };
 
 EventContainer.defaultProps = {
@@ -67,4 +69,5 @@ EventContainer.defaultProps = {
   bodyStyle: null,
   onDelete: null,
   onEdit: null,
+  data: null,
 };

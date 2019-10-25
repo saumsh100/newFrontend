@@ -146,6 +146,7 @@ export default class RequestPopover extends Component {
       note,
       requestingUser,
       isMobile,
+      showButton,
     } = this.props;
 
     const { displayActions } = this.state;
@@ -273,13 +274,13 @@ export default class RequestPopover extends Component {
             </filter>
           </svg>
         )}
-        {isMobile
+        {isMobile && showButton
           ? renderMobileFooter({
               toggleActionDisplay: this.toggleActionDisplay,
               displayActions,
               ...this.props,
             })
-          : renderDesktopFooter(this.props)}
+          : showButton && renderDesktopFooter(this.props)}
       </Card>
     );
   }
@@ -296,6 +297,7 @@ RequestPopover.propTypes = {
   requestingUser: PropTypes.instanceOf(PatientUser),
   service: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
+  showButton: PropTypes.bool,
 };
 
 RequestPopover.defaultProps = {
@@ -305,4 +307,5 @@ RequestPopover.defaultProps = {
   isMobile: false,
   note: null,
   requestingUser: null,
+  showButton: true,
 };
