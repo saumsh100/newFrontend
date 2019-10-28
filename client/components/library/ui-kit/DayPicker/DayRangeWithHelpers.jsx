@@ -113,7 +113,8 @@ class DayRangeWithHelpers extends Component {
     if (!changedValue.isValid()) return;
 
     const isFromInput = field === 'start';
-    if (isInvalidRange(changedValue.toDate(), isFromInput, this.state)) {
+    const formattedDate = dateFormatter(changedValue.toDate());
+    if (isInvalidRange(formattedDate, isFromInput, this.state)) {
       const input = isFromInput ? 'fromInput' : 'toInput';
       this[input].value = dateFormatter(this.state[field], null, 'll');
       return;
@@ -133,7 +134,8 @@ class DayRangeWithHelpers extends Component {
     if (!changedValue.isValid()) return;
 
     const isFromInput = field === 'start';
-    if (isInvalidRange(changedValue.toDate(), isFromInput, this.state)) return;
+    const formattedDate = dateFormatter(changedValue.toDate());
+    if (isInvalidRange(formattedDate, isFromInput, this.state)) return;
 
     this.setState({ typeName: defaultTypeName }, () => this.setValidDate(changedValue, field));
   }
@@ -160,6 +162,7 @@ class DayRangeWithHelpers extends Component {
    * @return {*}
    */
   handleDayClick(day) {
+    day = dateFormatter(day);
     if (!this.state.activeElement) {
       const key = !this.state.start || day < this.state.start ? 'start' : 'end';
       return this.setDateValues(key, day);
