@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
@@ -66,7 +67,7 @@ class ChatListContainer extends Component {
       <ListItem
         key="new"
         selectItem={!selectedChatId}
-        className={listItemStyles.chatListItem}
+        className={classNames(listItemStyles.newChat, listItemStyles.chatListItem)}
         selectedClass={listItemStyles.selectedChatItem}
         onClick={this.selectNewChat}
       >

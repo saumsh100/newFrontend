@@ -5,10 +5,10 @@ import moment from 'moment';
 import { Grid, Row, Col } from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';
+import { patientShape } from '../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
-const prettyApptDate = date =>
-  (date ? moment(date).format('MM DD, YYYY') : 'n/a');
+const prettyApptDate = date => (date ? moment(date).format('MMM DD, YYYY') : 'n/a');
 
 export default function Appointments({ patient }) {
   return (
@@ -18,24 +18,12 @@ export default function Appointments({ patient }) {
         <Grid>
           <Row>
             <Col xs={6}>
-              <Content
-                title="Last Appt"
-                value={prettyApptDate(patient.lastApptDate)}
-              />
-              <Content
-                title="Last Hygiene"
-                value={prettyApptDate(patient.lastHygieneDate)}
-              />
-              <Content
-                title="Last Recall"
-                value={prettyApptDate(patient.lastRecallDate)}
-              />
+              <Content title="Last Appt" value={prettyApptDate(patient.lastApptDate)} />
+              <Content title="Last Hygiene" value={prettyApptDate(patient.lastHygieneDate)} />
+              <Content title="Last Recall" value={prettyApptDate(patient.lastRecallDate)} />
             </Col>
             <Col xs={6}>
-              <Content
-                title="Next Appt"
-                value={prettyApptDate(patient.nextApptDate)}
-              />
+              <Content title="Next Appt" value={prettyApptDate(patient.nextApptDate)} />
               <Content
                 title="Last Restorative"
                 value={prettyApptDate(patient.lastRestorativeDate)}
@@ -49,5 +37,5 @@ export default function Appointments({ patient }) {
 }
 
 Appointments.propTypes = {
-  patient: PropTypes.object.isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
 };
