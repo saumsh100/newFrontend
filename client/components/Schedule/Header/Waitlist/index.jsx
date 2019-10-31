@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WaitListItem from './WaitListItem';
-import { List, Button } from '../../../library';
+import { List, Button, SHeader } from '../../../library';
 import { SortByCreatedAtDesc } from '../../../library/util/SortEntities';
 import { isHub } from '../../../../util/hub';
 import {
@@ -12,7 +12,9 @@ import {
   RemoveWaitSpotSubscription,
 } from '../../../GraphQLWaitlist';
 import graphqlRefetcher from '../../../../util/graphqlRefetcher';
+import waitSpotShape from '../../../library/PropTypeShapes/waitSpotShape';
 import styles from './styles.scss';
+import todoStyles from '../../../Dashboard/DonnaToDoListContainer/Tasks/styles.scss';
 
 const Waitlist = ({ removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots, waitSpots }) => (
   <div
@@ -33,6 +35,16 @@ const Waitlist = ({ removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots
         </div>
       </div>
     )}
+
+    <SHeader className={styles.tableHeader}>
+      <div className={styles.colAvater} />
+      <div className={todoStyles.col}>Patient</div>
+      <div className={todoStyles.col}>Days</div>
+      <div className={todoStyles.col}>Times</div>
+      <div className={todoStyles.col}>Next Appt</div>
+      <div className={styles.colDel} />
+    </SHeader>
+
     <List className={styles.list}>
       {waitSpots.sort(SortByCreatedAtDesc).map((waitSpot, index, arr) => {
         if (!waitSpot.patientUserId && !waitSpot.patientId) return null;
@@ -67,7 +79,7 @@ Waitlist.defaultProps = {
 };
 
 Waitlist.propTypes = {
-  waitSpots: PropTypes.array,
+  waitSpots: PropTypes.arrayOf(PropTypes.shape(waitSpotShape)).isRequired,
   removeWaitSpot: PropTypes.func.isRequired,
   openAddTo: PropTypes.func.isRequired,
   selectWaitSpot: PropTypes.func,

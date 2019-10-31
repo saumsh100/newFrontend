@@ -81,7 +81,7 @@
 
 .waitList {
   min-height: 267px;
-  width: 600px;
+  width: 700px;
   composes: fontDefault from 'sass-loader!../../../../fonts.scss';
 }
 
@@ -177,9 +177,6 @@
   padding: 3px 0;
 }
 
-.subHeader {
-}
-
 .dataText {
   font-style: italic;
   margin-right: 3px;
@@ -234,4 +231,48 @@
 
 .removeBorder {
   border-bottom: 0;
+}
+
+.patientPopover {
+  z-index: 9999;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  min-height: 3.5rem;
+  height: auto;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: $primary-white;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
+
+  &:hover {
+    cursor: pointer;
+    background-color: lighten($primary-grey, 5%);
+  }
+}
+
+.tableHeader {
+  background-color: $primary-grey;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 0 20px;
+  box-sizing: border-box;
+  width: 100%;
+  border: 0;
+  color: $primary-blue !important;
+  text-transform: uppercase;
+}
+
+.colAvater {
+  margin-right: 60px;
+}
+.colDel {
+  width: 50px;
 }

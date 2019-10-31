@@ -3,10 +3,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { week, dateFormatter, formatPhoneNumber } from '@carecru/isomorphic';
-import { Avatar, Icon, PatientPopover, IconButton, Checkbox, Collapsible } from '../../../library';
+import {
+  Avatar,
+  Icon,
+  PatientPopover,
+  IconButton,
+  Checkbox,
+  Collapsible,
+  ListItem,
+} from '../../../library';
 import { isHub } from '../../../../util/hub';
+import { waitSpotShape, patientShape } from '../../../library/PropTypeShapes/waitSpotShape';
 import styles from './styles.scss';
+import todoStyles from '../../../Dashboard/DonnaToDoListContainer/Tasks/styles.scss';
 
 const WaitListItem = ({
   waitSpot,
@@ -41,106 +52,6 @@ const WaitListItem = ({
         </div>
       </PatientPopover>
     ));
-
-  const renderContent = () => {
-    if (!patient) return null;
-    const { daysOfTheWeek, endDate, availableTimes } = waitSpot;
-    const checkIfAnyTrue = Object.keys(daysOfTheWeek).every(k => !daysOfTheWeek[k]);
-    const patientPhone = isPatientUser ? 'phoneNumber' : 'cellPhoneNumber';
-
-    const nextAppt =
-      (isPatientUser
-        ? dateFormatter(endDate, timezone, 'MMM Do YYYY')
-        : patient.nextApptDate && dateFormatter(patient.nextApptDate, timezone, 'MMM Do YYYY')) ||
-      'n/a';
-    const filteredPreferencesList =
-      availableTimes &&
-      availableTimes
-        .map(time => dateFormatter(new Date(time).toISOString(), timezone, 'LT'))
-        .join(', ');
-
-    return (
-      <div className={styles.waitListItem} data-test-id="list_waitListItem">
-        {isHub() && (
-          <Checkbox
-            customContainer={classNames(styles.checkBox, { [styles.checked]: selected })}
-            onChange={(e) => {
-              e.stopPropagation();
-              onSelectCallback();
-            }}
-            checked={selected}
-          />
-        )}
-        <div
-          className={classNames({
-            [styles.wrapper]: !isHub(),
-            [styles.listItemWrapperHub]: isHub(),
-            [styles.removeBorder]: removeBorder,
-          })}
-        >
-          {isHub() && (
-            <div className={styles.heading}>
-              <Avatar user={patient} size="xs" />
-              {renderPatientHeading()}
-            </div>
-          )}
-          {!isHub() && (
-            <div className={styles.avatar}>
-              <Avatar user={patient} size="sm" />
-            </div>
-          )}
-          <div className={styles.patientPrefInfo}>
-            {!isHub() && renderPatientHeading()}
-            <div className={styles.info}>
-              <span className={styles.subHeader}> Next Appt: </span>
-              <span className={styles.dataText}>{nextAppt}</span>
-            </div>
-            <div className={styles.info}>
-              <span className={styles.subHeader}>Preferences: </span>
-              <span className={styles.dataText}>{filteredPreferencesList}</span>
-            </div>
-            {!checkIfAnyTrue && (
-              <div className={styles.info}>
-                <span className={styles.subHeader}>Preferred Days: </span>
-                <span className={styles.dataText}>
-                  {week.all.filter(day => daysOfTheWeek[day]).join(', ')}
-                </span>
-              </div>
-            )}
-            <div className={styles.info}>
-              <span className={styles.subHeader}> Requested on: </span>
-              <span className={classNames([styles.dataText, styles.createdAt])}>
-                {dateFormatter(waitSpot.createdAt, timezone, 'MMM DD, YYYY h:mm A')}
-              </span>
-            </div>
-          </div>
-          {!isHub() && (
-            <div className={styles.patientGeneralInfo}>
-              {patient[patientPhone] && (
-                <div className={styles.infoContainer}>
-                  <Icon icon="phone" className={styles.icon} />
-                  <span className={styles.infoData}>
-                    {formatPhoneNumber(patient[patientPhone])}
-                  </span>
-                </div>
-              )}
-              {patient.email && (
-                <div className={styles.infoContainer}>
-                  <Icon icon="envelope" className={styles.icon} />
-                  <span className={styles.infoData}>{patient.email}</span>
-                </div>
-              )}
-            </div>
-          )}
-          {!isHub() && (
-            <div className={styles.remove}>
-              <IconButton icon="times" onClick={removeWaitSpot} />
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
 
   const renderPatientProfile = () => {
     const patientPhone = isPatientUser ? 'phoneNumber' : 'mobilePhoneNumber';
@@ -201,12 +112,194 @@ const WaitListItem = ({
     );
   };
 
+  const renderContentHub = () => {
+    if (!patient) return null;
+    const { daysOfTheWeek, endDate, availableTimes } = waitSpot;
+    const checkIfAnyTrue = Object.keys(daysOfTheWeek).every(k => !daysOfTheWeek[k]);
+    const patientPhone = isPatientUser ? 'phoneNumber' : 'cellPhoneNumber';
+
+    const nextAppt =
+      (isPatientUser
+        ? dateFormatter(endDate, timezone, 'MMM Do YYYY')
+        : patient.nextApptDate && dateFormatter(patient.nextApptDate, timezone, 'MMM Do YYYY')) ||
+      'n/a';
+    const filteredPreferencesList =
+      availableTimes &&
+      availableTimes
+        .map(time => dateFormatter(new Date(time).toISOString(), timezone, 'LT'))
+        .join(', ');
+
+    return (
+      <div className={styles.waitListItem} data-test-id="list_waitListItem">
+        <Checkbox
+          customContainer={classNames(styles.checkBox, { [styles.checked]: selected })}
+          onChange={(e) => {
+            e.stopPropagation();
+            onSelectCallback();
+          }}
+          checked={selected}
+        />
+        <div
+          className={classNames({
+            [styles.wrapper]: !isHub(),
+            [styles.listItemWrapperHub]: isHub(),
+            [styles.removeBorder]: removeBorder,
+          })}
+        >
+          <div className={styles.heading}>
+            <Avatar user={patient} size="xs" />
+            {renderPatientHeading()}
+          </div>
+          <div className={styles.avatar}>
+            <Avatar user={patient} size="sm" />
+          </div>
+          <div className={styles.patientPrefInfo}>
+            {renderPatientHeading()}
+            <div className={styles.info}>
+              <span className={styles.subHeader}> Next Appt: </span>
+              <span className={styles.dataText}>{nextAppt}</span>
+            </div>
+            <div className={styles.info}>
+              <span className={styles.subHeader}>Preferences: </span>
+              <span className={styles.dataText}>{filteredPreferencesList}</span>
+            </div>
+            {!checkIfAnyTrue && (
+              <div className={styles.info}>
+                <span className={styles.subHeader}>Preferred Days: </span>
+                <span className={styles.dataText}>
+                  {week.all.filter(day => daysOfTheWeek[day]).join(', ')}
+                </span>
+              </div>
+            )}
+            <div className={styles.info}>
+              <span className={styles.subHeader}> Requested on: </span>
+              <span className={classNames([styles.dataText, styles.createdAt])}>
+                {dateFormatter(waitSpot.createdAt, timezone, 'MMM DD, YYYY h:mm A')}
+              </span>
+            </div>
+          </div>
+          <div className={styles.patientGeneralInfo}>
+            {patient[patientPhone] && (
+              <div className={styles.infoContainer}>
+                <Icon icon="phone" className={styles.icon} />
+                <span className={styles.infoData}>{formatPhoneNumber(patient[patientPhone])}</span>
+              </div>
+            )}
+            {patient.email && (
+              <div className={styles.infoContainer}>
+                <Icon icon="envelope" className={styles.icon} />
+                <span className={styles.infoData}>{patient.email}</span>
+              </div>
+            )}
+          </div>
+          <div className={styles.remove}>
+            <IconButton icon="times" onClick={removeWaitSpot} />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const diffHour = (time1, time2) => {
+    if (!time1 || !time2) {
+      return 0;
+    }
+    return moment(time2).diff(moment(time1), 'hour');
+  };
+
+  const timeLT = time => (time ? dateFormatter(new Date(time).toISOString(), timezone, 'LT') : '');
+
+  const handleWaitListTimes = (arrTimes) => {
+    if (arrTimes.length === 1) {
+      return timeLT(arrTimes[0]);
+    }
+
+    return arrTimes.reduce((acc, cur, idx, arr) => {
+      // first element
+      idx === 1 && (acc = timeLT(acc));
+
+      // last element
+      if (idx === arr.length - 1) {
+        if (diffHour(arr[idx - 1], cur) === 1) {
+          return `${acc} - ${timeLT(cur)}`;
+        }
+        return `${acc}, ${timeLT(cur)}`;
+      }
+
+      // middle elements
+      if (diffHour(arr[idx - 1], cur) === 1) {
+        if (diffHour(cur, arr[idx + 1]) === 1) {
+          return acc; // continue
+        }
+        return `${acc} - ${timeLT(cur)}`; // range last
+      }
+      return `${acc}, ${timeLT(cur)}`; // range first
+    });
+  };
+
+  const renderContentWeb = () => {
+    if (!patient) return null;
+    const { daysOfTheWeek, endDate, availableTimes } = waitSpot;
+    const checkIfAnyTrue = Object.keys(daysOfTheWeek).every(k => !daysOfTheWeek[k]);
+
+    const nextAppt =
+      (isPatientUser
+        ? dateFormatter(endDate, timezone, 'MMM Do YYYY')
+        : patient.nextApptDate && dateFormatter(patient.nextApptDate, timezone, 'MMM Do YYYY')) ||
+      'n/a';
+
+    // preference days
+    const weekDays = {
+      sunday: 'Sun',
+      monday: 'Mon',
+      tuesday: 'Tue',
+      wednesday: 'Wed',
+      thursday: 'Thur',
+      friday: 'Fri',
+      saturday: 'Sat',
+    };
+    const filteredDays = week.all.filter(day => daysOfTheWeek[day]);
+    const preferenceDays = filteredDays.map(day => weekDays[day]).join(', ');
+
+    // preference times
+    const preferenceTimes = handleWaitListTimes(availableTimes.sort());
+
+    return (
+      <ListItem className={styles.listItem}>
+        <div className={todoStyles.avatar}>
+          <Avatar size="sm" user={patient} />
+        </div>
+        <div className={todoStyles.col}>
+          <span>
+            <PatientPopover className={styles.patientPopover} patient={patient}>
+              <div>{`${patient.firstName} ${patient.lastName}`}</div>
+            </PatientPopover>
+          </span>
+        </div>
+        {!checkIfAnyTrue && (
+          <div className={todoStyles.waitlistCol}>
+            <span className={styles.dataText}>{preferenceDays}</span>
+          </div>
+        )}
+        <div className={todoStyles.waitlistCol}>
+          <span className={styles.dataText}>{preferenceTimes}</span>
+        </div>
+        <div className={todoStyles.waitlistCol}>
+          <span className={styles.dataText}>{nextAppt}</span>
+        </div>
+        <div className={styles.remove}>
+          <IconButton icon="times" onClick={removeWaitSpot} />
+        </div>
+      </ListItem>
+    );
+  };
+
   return isHub() ? (
-    <Collapsible hasIcon={false} title={renderContent()}>
+    <Collapsible hasIcon={false} title={renderContentHub()}>
       {renderPatientProfile()}
     </Collapsible>
   ) : (
-    renderContent()
+    renderContentWeb()
   );
 };
 
@@ -220,45 +313,8 @@ WaitListItem.defaultProps = {
 WaitListItem.propTypes = {
   removeWaitSpot: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
-  patient: PropTypes.shape({
-    address: PropTypes.shape({
-      city: PropTypes.string,
-      street: PropTypes.string,
-      state: PropTypes.string,
-      country: PropTypes.string,
-    }),
-    birthDate: PropTypes.string,
-    ccId: PropTypes.string,
-    clientId: PropTypes.string,
-    email: PropTypes.string,
-    endDate: PropTypes.string,
-    firstName: PropTypes.string,
-    gender: PropTypes.string,
-    id: PropTypes.string,
-    lastApptDate: PropTypes.string,
-    lastName: PropTypes.string,
-    mobilePhoneNumber: PropTypes.string,
-    nextApptDate: PropTypes.string,
-    phoneNumber: PropTypes.string,
-  }),
-  waitSpot: PropTypes.shape({
-    endDate: PropTypes.string,
-    createdAt: PropTypes.string,
-    preferences: PropTypes.shape({
-      evenings: PropTypes.bool,
-      mornings: PropTypes.bool,
-      afternoons: PropTypes.bool,
-    }),
-    daysOfTheWeek: PropTypes.shape({
-      friday: PropTypes.bool,
-      monday: PropTypes.bool,
-      sunday: PropTypes.bool,
-      tuesday: PropTypes.bool,
-      saturday: PropTypes.bool,
-      thursday: PropTypes.bool,
-      wednesday: PropTypes.bool,
-    }),
-  }).isRequired,
+  patient: PropTypes.shape(patientShape),
+  waitSpot: PropTypes.shape(waitSpotShape).isRequired,
   isPatientUser: PropTypes.bool,
   removeBorder: PropTypes.bool,
   onSelect: PropTypes.func.isRequired,

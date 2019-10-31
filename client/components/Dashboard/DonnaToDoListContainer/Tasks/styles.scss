@@ -64,6 +64,18 @@
   }
 }
 
+.waitlistCol {
+  flex: 1;
+  @extend .colStyling;
+  @media screen and (max-width: 1000px) {
+    font-size: 8px;
+    box-sizing: border-box;
+    flex: 1;
+    padding-right: 5px;
+  }
+  color: black;
+}
+
 .smallCol {
   @extend .colStyling;
   width: 90px;
