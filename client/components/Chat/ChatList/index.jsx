@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import PatientModel from '../../../entities/models/Patient';
-import { ListItem, IconButton } from '../../library';
+import { ListItem, Avatar, Icon } from '../../library';
 import ChatListItem from './ChatListItem';
 import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
 import { filterChatsByTab } from '../../../reducers/chat';
@@ -56,24 +56,41 @@ class ChatListContainer extends Component {
     if (!newChat) {
       return null;
     }
-
-    let title = 'New message';
-
-    if (newChat.patientId && newChatPatient) {
-      title += ` to ${newChatPatient.firstName} ${newChatPatient.lastName}`;
-    }
+    const isNewPatientChat = newChat.patientId && newChatPatient;
+    const title = isNewPatientChat
+      ? `${newChatPatient.getFullName()}, ${newChatPatient.getAge()}`
+      : 'New message';
+    const patient = isNewPatientChat ? newChatPatient : { isUnknown: true };
 
     return (
       <ListItem
         key="new"
         selectItem={!selectedChatId}
-        className={classNames(listItemStyles.newChat, listItemStyles.chatListItem)}
+        className={classNames(listItemStyles.chatListItem)}
         selectedClass={listItemStyles.selectedChatItem}
         onClick={this.selectNewChat}
       >
-        <div className={listItemStyles.fullName}>{title}</div>
-        <div className={listItemStyles.hoverSection}>
-          <IconButton icon="times" onClick={this.removeNewChat} />
+        <div className={listItemStyles.timesIcon}>
+          <Icon
+            icon="times"
+            onClick={this.removeNewChat}
+            onKeyDown={({ keyCode }) => keyCode === 13 && this.removeNewChat}
+            role="button"
+            tabIndex={0}
+          />
+        </div>
+        <div className={listItemStyles.avatar}>
+          <Avatar size="sm" user={patient} />
+        </div>
+        <div className={listItemStyles.flexSection}>
+          <div className={listItemStyles.topSection}>
+            <div className={listItemStyles.fullName}>{title}</div>
+          </div>
+          {isNewPatientChat && (
+            <div data-test-id="chat_lastMessage" className={listItemStyles.bottomSection}>
+              New Message
+            </div>
+          )}
         </div>
       </ListItem>
     );

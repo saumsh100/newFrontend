@@ -281,7 +281,7 @@ ScheduleModal.propTypes = {
 const mapStateToProps = ({ schedule, entities, auth }) => ({
   accountId: auth.get('accountId'),
   timezone: auth.get('timezone'),
-  scheduleDate: schedule.get('scheduleDate').toISOString(),
+  scheduleDate: schedule.get('scheduleDate'),
   reasons: Object.values(entities.getIn(['services', 'models']).toJS()).map(v => ({
     value: v.id,
     label: v.name,

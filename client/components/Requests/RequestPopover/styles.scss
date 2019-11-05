@@ -33,7 +33,6 @@
   &_text {
     padding-left: 5px;
     font-size: 15px;
-    margin-right: 10px;
     composes: fontDefault from 'sass-loader!../../../fonts.scss';
   }
 }

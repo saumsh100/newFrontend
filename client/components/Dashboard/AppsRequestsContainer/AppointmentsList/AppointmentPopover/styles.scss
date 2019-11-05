@@ -2,7 +2,7 @@
 
 .card {
   width: auto;
-  box-shadow: 0 5px 25px 2px rgba(209,209,209,0.6);
+  box-shadow: 0 5px 25px 2px rgba(209, 209, 209, 0.6);
   min-width: 300px;
 }
 
@@ -18,7 +18,6 @@
   &_text {
     padding-left: 5px;
     font-size: 15px;
-    margin-right: 10px;
     composes: fontDefault from 'sass-loader!../../../../../fonts.scss';
   }
 }

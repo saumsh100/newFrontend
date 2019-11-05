@@ -5,6 +5,7 @@
   transition: all 0.1s ease-in-out;
   cursor: pointer;
   color: $primary-blue;
+
   &:hover {
     transform: scale(1.02);
     color: lighten($primary-blue, 10%);
@@ -29,14 +30,12 @@
   color: $primary-white;
   padding-left: 15px;
   padding-right: 15px;
-  font-size: $small-size;
-
+  font-size: 15px;
   &_text {
     @extend .fontDefault;
     padding-top: 4px;
     padding-left: 10px;
     font-size: 15px;
-    margin-right: 10px;
   }
 }
 
@@ -148,6 +147,7 @@
   transition: all 0.1s ease-in-out;
   cursor: pointer;
   color: $primary-blue;
+
   &:hover {
     transform: scale(1.02);
     color: lighten($primary-blue, 10%);
@@ -156,6 +156,7 @@
 
 .textWhite {
   color: white;
+
   &:hover {
     transform: scale(1.02);
     color: lighten(white, 10%);
@@ -168,4 +169,10 @@
   padding: 8px 12px;
   width: 40px;
   background: none;
+}
+
+.appointmentPopover {
+  &:focus {
+    outline: none;
+  }
 }

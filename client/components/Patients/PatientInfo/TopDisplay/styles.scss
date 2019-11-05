@@ -41,6 +41,11 @@
   }
 }
 
+.badgeWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .avatarContainer {
   width: 30%;
   border-right: 1px solid $primary-grey;
@@ -54,14 +59,13 @@
 
   &_data {
     line-height: 1.8em;
-    padding-top: 60px;
+    padding-top: 27px;
     padding-left: 40px;
     padding-right: 40px;
     &_nameAge {
       color: #505c68;
       font-size: $extra-medium-size;
       composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-      margin-bottom: 2px;
       white-space: nowrap;
       height: 25px;
       display: flex;
@@ -78,43 +82,57 @@
     }
 
     &_email {
-      font-size: $extra-small-size;
+      font-size: 11px;
+      line-height: 11px;
       font-style: italic;
+      margin-top: 8px;
       composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
     }
 
     &_phone {
-      font-size: $extra-small-size;
+      font-size: 11px;
+      line-height: 11px;
       font-style: italic;
+      margin-top: 8px;
       composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
     }
 
     &_icon {
       padding-right: 10px;
+      line-height: 11px;
+      margin-top: 8px;
       composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
     }
 
     &_badge {
       composes: subHeaderExtraSmall from 'sass-loader!../../../../fonts.scss';
       color: #fff;
-      background: #a7a7a5;
       height: 18px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       border-radius: 20px;
-      width: 60px;
       justify-content: center;
       box-sizing: border-box;
       overflow: hidden;
-      margin-top: 4px;
-      margin-bottom: 16px;
+      margin: 16px 16px 0 auto;
+      border: 1px solid transparent;
       > div {
         width: 100%;
         text-align: center;
+        font-size: 11px;
+        padding: 0 8px;
+      }
+
+      &_inactive {
+        background-color: rgba($primary-darkgrey, 0.1);
+        border-color: $primary-darkgrey;
+        color: $primary-darkgrey;
       }
 
       &_active {
-        background: $primary-blue;
+        background-color: rgba($primary-blue, 0.15);
+        border-color: $primary-blue;
+        color: $primary-blue;
       }
 
       &_inactive {
@@ -181,4 +199,25 @@
   padding: 8px 12px;
   width: 40px;
   background: none;
+}
+
+.actionsButton {
+  margin-left: 0;
+  margin-top: 5px;
+  width: 170px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+
+  > i {
+    margin-left: auto;
+  }
+}
+
+.actionsButtonNormal {
+  font-size: 12px !important;
+  padding: 7px 12px !important;
+  width: 105px;
+  margin-top: 12px;
+  margin-left: 0;
 }

@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import isNumber from 'lodash/isNumber';
 import { formatPhoneNumber } from '@carecru/isomorphic';
-import { Card, Avatar, Icon, Grid, Row, Col, Tooltip } from '../../../library';
+import classNames from 'classnames';
+import { Card, Avatar, Icon, Grid, Row, Col, Button } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';
 import RecallData from '../../Shared/RecallColumn';
@@ -13,6 +14,7 @@ import { isResponsive } from '../../../../util/hub';
 import { accountShape } from '../../../library/PropTypeShapes';
 import PatientModel from '../../../../entities/models/Patient';
 import ActionsDropdown from '../ActionsDropdown';
+import ui from '../../../../ui-kit.scss';
 import styles from './styles.scss';
 
 const bgImgs = [
@@ -72,59 +74,59 @@ export default function TopDisplay(props) {
               <div className={styles.avatarContainer_avatar}>
                 <Avatar user={patient} size={avatarSize} />
               </div>
-              <div className={styles.avatarContainer_data}>
-                <ActionsDropdown
-                  patient={patient}
-                  render={({ onClick }) => (
-                    <div className={styles.avatarContainer_data_nameAge}>
-                      <div role="button" tabIndex={0} onKeyDown={() => {}} onClick={onClick}>
-                        <span className={styles.avatarContainer_data_nameAge_name}>
-                          {patient.getFullName()}
-                        </span>
-                        <span className={styles.avatarContainer_data_nameAge_age}>
-                          {isNumber(age) ? `, ${age}` : null}
-                        </span>
-                        <span className={styles.actionsButtonSmall}>
-                          <Icon icon="caret-down" type="solid" className={styles.actionIcon} />
-                        </span>
-                      </div>
-                    </div>
+              <div className={styles.badgeWrapper}>
+                <div
+                  className={classNames(
+                    styles.avatarContainer_data_badge,
+                    styles[`avatarContainer_data_badge_${patient.status.toLowerCase()}`],
                   )}
-                />
-                <div className={styles.avatarContainer_data_badge}>
-                  <div
-                    className={styles[`avatarContainer_data_badge_${patient.status.toLowerCase()}`]}
-                  >
-                    {patient.status}
-                  </div>
+                >
+                  <div>{patient.status}</div>
+                </div>
+              </div>
+              <div className={styles.avatarContainer_data}>
+                <div className={styles.avatarContainer_data_nameAge}>
+                  <span className={styles.avatarContainer_data_nameAge_name}>
+                    {patient.getFullName()}
+                  </span>
+                  <span className={styles.avatarContainer_data_nameAge_age}>
+                    {isNumber(age) ? `, ${age}` : null}
+                  </span>
                 </div>
                 <div className={styles.displayFlex}>
                   <span className={styles.avatarContainer_data_icon}>
                     {' '}
                     <Icon icon="envelope" />{' '}
                   </span>
-                  <div className={styles.avatarContainer_data_email}>
-                    {patient.email || (
-                      <Tooltip placement="right" trigger={['hover']} overlay="Edit in PMS">
-                        <div>n/a</div>
-                      </Tooltip>
-                    )}
+                  <div className={styles.avatarContainer_data_email}>{patient.email || 'N/A'}</div>
+                </div>
+                <div className={styles.displayFlex}>
+                  <span className={styles.avatarContainer_data_icon}>
+                    {' '}
+                    <Icon icon="phone" />{' '}
+                  </span>
+                  <div className={styles.avatarContainer_data_phone}>
+                    {(patient.cellPhoneNumber && formatPhoneNumber(patient.cellPhoneNumber)) ||
+                      'N/A'}
                   </div>
                 </div>
-                {patient.cellPhoneNumber && (
-                  <div className={styles.displayFlex}>
-                    <span className={styles.avatarContainer_data_icon}>
-                      {' '}
-                      <Icon icon="phone" />{' '}
-                    </span>
-                    <div className={styles.avatarContainer_data_phone}>
-                      {formatPhoneNumber(patient.cellPhoneNumber)}
-                    </div>
-                  </div>
-                )}
+                <ActionsDropdown
+                  patient={patient}
+                  align="left"
+                  render={({ onClick }) => (
+                    <Button
+                      className={`${styles.actionsButtonNormal} ${styles.actionsButton} ${
+                        ui.modal__save
+                      } `}
+                      onClick={onClick}
+                    >
+                      <div className={styles.actionText}>Actions</div>
+                      <Icon className={styles.actionIcon} icon="caret-down" type="solid" />
+                    </Button>
+                  )}
+                />
               </div>
             </div>
-
             <Grid className={styles.rightContainer}>
               <Row className={styles.rightContainer_content}>
                 <Col xs={3}>

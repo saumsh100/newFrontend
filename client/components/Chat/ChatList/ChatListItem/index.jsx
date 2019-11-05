@@ -35,8 +35,8 @@ class ChatListItem extends Component {
   renderStar(isFlagged, onClickListener) {
     return (
       <Icon
-        onClick={onClickListener}
         icon="star"
+        onClick={onClickListener}
         className={isFlagged ? styles.filled : styles.hallow}
         type={isFlagged ? 'solid' : 'light'}
       />

@@ -6,25 +6,36 @@ import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { isResponsive } from '../../../../util/hub';
-import { Grid, Row, Col, Avatar, Badge } from '../../../library';
+import { Grid, Row, Col, Avatar, Badge, Icon } from '../../../library';
 import HygieneData from '../HygieneColumn';
 import RecallData from '../RecallColumn';
 import InfoDump from '../InfoDump';
 import { patientShape } from '../../../library/PropTypeShapes';
+import ActionsDropdown from '../../PatientInfo/ActionsDropdown';
 import styles from './styles.scss';
 
 class FamilyMember extends React.Component {
   renderNameAge(fullName, age) {
     return (
-      <div
-        role="button"
-        tabIndex={0}
-        className={styles.patientLink}
-        onDoubleClick={() => this.props.push(`/patients/${this.props.node.ccId}`)}
-        onKeyDown={e => e.keyCode === 13 && this.props.push(`/patients/${this.props.node.ccId}`)}
-      >
-        <span className={styles.familyMember_name}>{`${fullName}, ${age}`}</span>
-      </div>
+      <ActionsDropdown
+        patient={{ ...this.props.patient,
+id: this.props.node.ccId }}
+        render={({ onClick }) => (
+          <div
+            role="button"
+            tabIndex={0}
+            className={styles.patientLink}
+            onDoubleClick={() => this.props.push(`/patients/${this.props.node.ccId}`)}
+            onClick={onClick}
+            onKeyDown={e => e.keyCode === 13 && onClick()}
+          >
+            <span className={styles.familyMember_name}>{`${fullName}, ${age}`}</span>
+            <span className={styles.actionsButtonSmall}>
+              <Icon icon="caret-down" type="solid" className={styles.actionIcon} />
+            </span>
+          </div>
+        )}
+      />
     );
   }
 
@@ -209,6 +220,7 @@ const mapDispatchToProps = dispatch =>
     },
     dispatch,
   );
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

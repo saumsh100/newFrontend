@@ -42,17 +42,25 @@ export default function PatientProfile(props) {
       <SContainer>
         <SHeader className={styles.header}>
           <Avatar user={patient} size="xs" />
-          <div
-            role="button"
-            tabIndex={0}
-            className={classNames(styles.patientLink, styles.textWhite)}
-            onDoubleClick={() => editPatient(patient.id)}
-            onKeyDown={e => e.keyCode === 13 && editPatient(patient.id)}
-          >
-            <span className={styles.header_text}>{`${patient.firstName} ${patient.lastName}`}</span>
-            {age !== null && <span className={styles.header_age}>{`, ${age}`}</span>}
-          </div>
-          <ActionsDropdown size="sm" patient={patient} />
+          <ActionsDropdown
+            patient={patient}
+            render={({ onClick }) => (
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={onClick}
+                className={classNames(styles.patientLink, styles.textWhite)}
+                onDoubleClick={() => editPatient(patient.id)}
+                onKeyDown={e => e.keyCode === 13 && onClick()}
+              >
+                <span className={styles.header_text}>
+                  {`${patient.firstName} ${patient.lastName}`}
+                </span>
+                {age !== null && <span className={styles.header_age}>{`, ${age}`}</span>}
+                <Icon icon="caret-down" type="solid" className={styles.actionIcon} />
+              </div>
+            )}
+          />
           <div className={styles.closeIcon}>
             <IconButton icon="times" onClick={closePopover} />
           </div>

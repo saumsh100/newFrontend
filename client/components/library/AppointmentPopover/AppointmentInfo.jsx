@@ -43,7 +43,7 @@ export default function AppointmentInfo(props) {
     <Card className={styles.card} noBorder>
       <SContainer>
         <SHeader className={styles.header}>
-          <Icon icon="calendar" size={1.5} />
+          <Icon icon="calendar" size={1.25} />
           <div
             role="button"
             tabIndex={0}
@@ -54,7 +54,13 @@ export default function AppointmentInfo(props) {
             <ActionsDropdown
               patient={patient}
               render={({ onClick }) => (
-                <div role="button" tabIndex={0} onKeyDown={() => {}} onClick={onClick}>
+                <div
+                  role="button"
+                  className={styles.appointmentPopover}
+                  tabIndex={0}
+                  onKeyDown={() => {}}
+                  onClick={onClick}
+                >
                   <span className={styles.header_text}>
                     {`${patient.firstName} ${patient.lastName}`}
                   </span>

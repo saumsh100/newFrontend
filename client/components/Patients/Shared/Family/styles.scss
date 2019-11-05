@@ -6,7 +6,7 @@
 
 .familyMemberContainer {
   padding: 50px 25px 0;
-  overflow: auto;
+  overflow: visible;
   box-sizing: border-box;
 
   @media screen and (max-width: 576px) {

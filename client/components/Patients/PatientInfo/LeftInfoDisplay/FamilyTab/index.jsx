@@ -15,21 +15,23 @@ const FamilyTab = ({ family }) => (
 FamilyTab.propTypes = {
   family: PropTypes.shape({
     id: PropTypes.string,
-    head: PropTypes.shape({ accountId: PropTypes.string  }),
+    head: PropTypes.shape({ accountId: PropTypes.string }),
     members: PropTypes.shape({
-      edges: PropTypes.arrayOf(PropTypes.shape({
-        fullName: PropTypes.string,
-        age: PropTypes.number,
-        patient: PropTypes.shape(patientUserShape),
-        lastApp: PropTypes.string,
-        nextApp: PropTypes.string,
-      })),
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          fullName: PropTypes.string,
+          age: PropTypes.number,
+          patient: PropTypes.shape(patientUserShape),
+          lastApp: PropTypes.string,
+          nextApp: PropTypes.string,
+        }),
+      ),
     }),
   }),
 };
 
 FamilyTab.defaultProps = {
-  family: {members: { edges: []  },},
+  family: { members: { edges: [] } },
 };
 
 export default FamilyTab;
