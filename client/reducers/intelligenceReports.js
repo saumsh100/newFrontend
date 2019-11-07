@@ -11,7 +11,7 @@ export const setActiveReport = createAction(SET_ACTIVE_REPORT);
 
 export const initialState = fromJS({
   reports: {},
-  active: 'onlineBooking',
+  active: '',
 });
 
 export default handleActions(
