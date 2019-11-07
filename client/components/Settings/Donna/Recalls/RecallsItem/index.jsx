@@ -3,17 +3,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { intervalToNumType } from '@carecru/isomorphic';
 import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
 import { Toggle, DropdownSelect } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
-import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
 import styles from './styles.scss';
 
 const iconsMap = {
   sms: 'comment',
+  smart_follow_up: 'comment',
   phone: 'phone',
   email: 'envelope',
   email_sms: 'envelope_comment',
@@ -21,6 +22,7 @@ const iconsMap = {
 
 const wordMap = {
   sms: 'SMS',
+  smart_follow_up: 'Smart Follow Up',
   phone: 'Voice',
   email: 'Email',
   email_sms: 'Email & SMS',
@@ -109,7 +111,9 @@ class RecallsItem extends Component {
     const { recall, account, selected, selectRecall } = this.props;
     const { num, type } = intervalToNumType(recall.interval);
     const subType = num >= 0 ? 'before' : 'after';
-    const sure = confirm(`Are you sure you want to delete the ${num} ${type} ${subType} due date recall?`);
+    const sure = confirm(
+      `Are you sure you want to delete the ${num} ${type} ${subType} due date recall?`,
+    );
     if (!sure) {
       return;
     }
@@ -180,9 +184,9 @@ class RecallsItem extends Component {
       color = 'red';
     }
 
-    const dropdownSelectClass = selected
-      ? styles[`dropdownSelectSelected_${color}`]
-      : styles.dropdownSelect;
+    const primaryTypeClass = classNames(styles.primaryType, {
+      [styles[`primaryType_${color}`]]: selected,
+    });
 
     return (
       <TouchPointItem
@@ -209,34 +213,10 @@ class RecallsItem extends Component {
           <div>
             <div className={styles.reminderIconContainer}>
               <IconCircle icon={icon} selected={selected} color={color} />
+              <div className={styles.typeWrapper}>
+                <div className={primaryTypeClass}>{wordMap[primaryTypesKey]}</div>
+              </div>
             </div>
-            <div className={styles.dropdownWrapper}>
-              <DropdownSelect
-                onChange={this.changePrimaryType}
-                className={dropdownSelectClass}
-                value={primaryTypesKey}
-                options={[
-                  {
- label: 'Email',
-value: 'email',
-},
-                  {
- label: 'SMS',
-value: 'sms',
-},
-                  // { label: 'Voice', value: 'phone' },
-                  {
- label: 'Email & SMS',
-value: 'email_sms',
-},
-                ]}
-              />
-            </div>
-          </div>
-        }
-        rightComponent={
-          <div className={styles.deleteButtonWrapper} onClick={this.deleteRecall}>
-            <TinyDeleteButton />
           </div>
         }
       />
@@ -247,10 +227,7 @@ value: 'email_sms',
 RecallsItem.propTypes = { selectRecall: PropTypes.func.isRequired };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    { updateEntityRequest },
-    dispatch,
-  );
+  return bindActionCreators({ updateEntityRequest }, dispatch);
 }
 
 const enhance = connect(

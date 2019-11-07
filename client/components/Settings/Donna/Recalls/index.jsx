@@ -308,13 +308,6 @@ class Recalls extends Component {
               <Button border="blue" onClick={this.toggleAdvancedSettings}>
                 Advanced Settings
               </Button>
-              <Button
-                onClick={this.toggleAdding}
-                data-test-id="button_createNewRecall"
-                color="blue"
-              >
-                Add
-              </Button>
             </div>
           ) : null
         }

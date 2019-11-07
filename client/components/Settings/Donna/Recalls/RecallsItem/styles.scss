@@ -9,6 +9,38 @@
   }
 }
 
+.typeWrapper {
+  position: absolute;
+  top: 0;
+  right: -19px;
+  display: flex;
+  width: 100%;
+  padding-left: 74px;
+  box-sizing: border-box;
+  .primaryType {
+    padding: 10px;
+    background: white;
+    width: 100%;
+    border: 1px solid $primary-gray;
+    color: $primary-darkgrey;
+    text-align: center;
+    &_green {
+      border-color: $primary-green;
+      color: $primary-darker;
+    }
+
+    &_yellow {
+      border-color: $primary-yellow;
+      color: $primary-darker;
+    }
+
+    &_red {
+      border-color: $primary-red;
+      color: $primary-darker;
+    }
+  }
+}
+
 .deleteButtonWrapper {
   display: none;
   position: relative;
@@ -88,21 +120,6 @@ $dheight: 30px;
   > div:not(:last-child) {
     @extend .inputFontSelected;
   }
-}
-
-.dropdownSelectSelected_green {
-  @extend .dropdownSelectSelected;
-  border: 1px solid $primary-green;
-}
-
-.dropdownSelectSelected_yellow {
-  @extend .dropdownSelectSelected;
-  border: 1px solid $primary-yellow;
-}
-
-.dropdownSelectSelected_red {
-  @extend .dropdownSelectSelected;
-  border: 1px solid $primary-red;
 }
 
 .topRow {
