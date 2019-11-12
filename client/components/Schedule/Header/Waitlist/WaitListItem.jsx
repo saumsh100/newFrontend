@@ -262,7 +262,8 @@ const WaitListItem = ({
     const preferenceDays = filteredDays.map(day => weekDays[day]).join(', ');
 
     // preference times
-    const preferenceTimes = handleWaitListTimes(availableTimes.sort());
+    const preferenceTimes =
+      availableTimes.length > 0 ? handleWaitListTimes(availableTimes.sort()) : 'N/A';
 
     return (
       <ListItem className={styles.listItem}>
