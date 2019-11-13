@@ -73,6 +73,9 @@ export default class EmailPreview extends Component {
       const anchors = Array.from(iHtml.getElementsByTagName('a'));
       anchors.forEach(a => (a.onclick = e => e.preventDefault()));
 
+      // Customize iframe
+      this.props.customizeIframe(this.iframe.contentWindow, html);
+
       // Set container with proper html so that the iframe is not scrollable
       // We want the overall container to be scrollable
       const height = iHtml.offsetHeight * EMAIL_SCALE + AVERAGE_IMAGE_HEIGHT;
