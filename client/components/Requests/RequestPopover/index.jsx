@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { formatPhoneNumber } from '@carecru/isomorphic';
 import { isHub } from '../../../util/hub';
 import PatientUser from '../../../entities/models/PatientUser';
+import Practitioner from '../../../entities/models/Practitioners';
 import Request from '../../../entities/models/Request';
 import { Card, Avatar, Icon, SContainer, SHeader, SBody, SFooter, Button } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
@@ -137,6 +138,7 @@ export default class RequestPopover extends Component {
   render() {
     const {
       patient,
+      practitioner,
       request,
       time,
       service,
@@ -150,11 +152,10 @@ export default class RequestPopover extends Component {
     } = this.props;
 
     const { displayActions } = this.state;
-
     const appointmentDate = moment(request.startDate).format('dddd LL');
     const requestedAt = moment(request.createdAt).format('MMM D, hh:mm A');
-
     const age = patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : '';
+    const practitionerName = practitioner.getPrettyName();
 
     return (
       <Card className={isMobile ? styles.cardMobile : styles.card} noBorder>
@@ -191,6 +192,13 @@ export default class RequestPopover extends Component {
             <div className={styles.container}>
               <div className={styles.subHeader}>Appointment Type</div>
               <div className={styles.data}>{service}</div>
+            </div>
+
+            <div className={styles.container}>
+              <div className={styles.subHeader}>Practitioner</div>
+              <div className={styles.data}>
+                {practitionerName !== 'Unknown Provider' ? practitionerName : 'No Preference'}
+              </div>
             </div>
 
             {patient.phoneNumber || patient.email || insuranceCarrier || patient.birthDate ? (
@@ -293,6 +301,7 @@ RequestPopover.propTypes = {
   isMobile: PropTypes.bool,
   note: PropTypes.string,
   patient: PropTypes.instanceOf(PatientUser).isRequired,
+  practitioner: PropTypes.instanceOf(Practitioner).isRequired,
   request: PropTypes.instanceOf(Request).isRequired,
   requestingUser: PropTypes.instanceOf(PatientUser),
   service: PropTypes.string.isRequired,
