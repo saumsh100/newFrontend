@@ -1,0 +1,18 @@
+@import '../../ui';
+
+.tooltip {
+  cursor: pointer;
+}
+
+.tooltip_PopoverBody {
+  color: white;
+  background-color: rgb(123, 123, 123);
+  padding: 8px;
+  border-radius: 4px;
+  max-width: 300px;
+  box-sizing: border-box;
+}
+
+.tooltip_Popover > :global(svg.Popover-tip) {
+  fill: rgb(123, 123, 123);
+}

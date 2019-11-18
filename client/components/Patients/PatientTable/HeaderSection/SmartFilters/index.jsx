@@ -6,6 +6,8 @@ import { bindActionCreators } from 'redux';
 import { DropdownMenu, List, ListItem } from '../../../../library';
 import { addFilter } from '../../../../../reducers/patientTable';
 import { fetchPatientTableData } from '../../../../../thunks/patientTable';
+import HelpText from './HelpText';
+import Tooltip from '../../../../Tooltip';
 import Icon from '../../../../library/Icon';
 import styles from '../../styles.scss';
 
@@ -55,6 +57,7 @@ class SmartFilters extends Component {
         </div>
       </div>
     );
+
     return (
       <div>
         <DropdownMenu labelComponent={filterMenu} data-test-id="dropDown_smartFilters">
@@ -78,8 +81,15 @@ class SmartFilters extends Component {
             </List>
           </div>
         </DropdownMenu>
-        <div className={styles.header_subHeader} data-test-id="text_totalPatientsCount">
-          {`Showing ${totalPatients} Patient${totalPatients > 1 ? 's' : ''}`}
+        <div className={styles.header_subHeader}>
+          <div data-test-id="text_totalPatientsCount">
+            {`Showing ${totalPatients} Patient${totalPatients > 1 ? 's' : ''}`}
+          </div>
+          <div className={styles.tooltip_wrapper}>
+            <Tooltip body={<HelpText activeSegmentLabel={activeSegmentLabel} />}>
+              <Icon icon="question-circle" size={0.9} />
+            </Tooltip>
+          </div>
         </div>
       </div>
     );

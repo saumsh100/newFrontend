@@ -387,3 +387,53 @@ $height: 6px;
     }
   }
 }
+
+.header_subHeader {
+  display: flex;
+}
+
+.tooltip_wrapper {
+  padding: 0 4px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:last-child > .data {
+    padding-bottom: 0;
+  }
+}
+
+.helptext_container {
+  padding: 6px 4px;
+}
+
+.helptext_subHeader {
+  font-size: 12px;
+  padding-bottom: 4px;
+  color: $primary-light-grey;
+}
+
+.data {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  padding-bottom: 6px;
+
+  &_note {
+    max-height: 40px;
+    overflow: auto;
+  }
+
+  &_text {
+    padding-left: 5px;
+    padding-top: 1px;
+  }
+}
