@@ -155,7 +155,6 @@ export default class RequestPopover extends Component {
     const appointmentDate = moment(request.startDate).format('dddd LL');
     const requestedAt = moment(request.createdAt).format('MMM D, hh:mm A');
     const age = patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : '';
-    const practitionerName = practitioner.getPrettyName();
 
     return (
       <Card className={isMobile ? styles.cardMobile : styles.card} noBorder>
@@ -197,7 +196,7 @@ export default class RequestPopover extends Component {
             <div className={styles.container}>
               <div className={styles.subHeader}>Practitioner</div>
               <div className={styles.data}>
-                {practitionerName !== 'Unknown Provider' ? practitionerName : 'No Preference'}
+                {practitioner ? practitioner.getPrettyName() : 'No Preference'}
               </div>
             </div>
 
