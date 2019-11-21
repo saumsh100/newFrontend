@@ -76,6 +76,8 @@
   padding-top: 20px;
   padding-left: 0px;
   padding-bottom: 10px;
+  padding-right: 0px;
+  justify-content: space-between;
 
   &_title {
     @extend .headerText;
@@ -236,6 +238,7 @@
 .actionsButton {
   margin-left: 0;
   margin-top: 5px;
+  margin-right: 0;
   width: 170px;
   padding: 12px 18px;
   display: flex;

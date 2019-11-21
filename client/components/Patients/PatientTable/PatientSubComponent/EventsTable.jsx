@@ -1,7 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Event from '../../PatientInfo/Timeline/EventComponents';
+import moment from 'moment';
+import EventDateSections from '../../PatientInfo/Timeline/EventDateSections';
 import EventModel from '../../../../entities/models/Event';
 import { sortEvents } from '../../Shared/helpers';
 import styles from './styles.scss';
@@ -17,17 +18,37 @@ export default function EventsTable({ events, patient }) {
     );
   }
 
+  const eventsUpToToday = events.filter(
+    ev => moment(ev.get('metaData').createdAt).diff(moment(), 'days') < 1,
+  );
   // Only displaying the latest five events
-  const sortedEvents = sortEvents(events).slice(0, 5);
+  const sortedEvents = sortEvents(eventsUpToToday).slice(0, 5);
+  const dateObj = {};
+
+  sortedEvents.forEach((ev) => {
+    const meta = ev.get('metaData');
+    const key = moment(meta.timelineDate).format('MMMM Do YYYY');
+
+    if (key in dateObj) {
+      dateObj[key].push(ev);
+    } else {
+      dateObj[key] = [ev];
+    }
+  });
+
+  const dateSections = Object.keys(dateObj);
 
   return (
     <div className={styles.eventsList}>
-      {sortedEvents.map(event => (
-        <div className={styles.lineEventContainer} key={`eventsTable_${event.id}`}>
-          <div className={styles.verticalLine}>&nbsp;</div>
-          <Event data={event.get('metaData')} type={event.get('type')} patient={patient} />
-        </div>
-      ))}
+      {dateSections.length > 0 &&
+        dateSections.map(date => (
+          <EventDateSections
+            key={`eventSection_${date}`}
+            dateHeader={date}
+            events={dateObj[date]}
+            patient={patient}
+          />
+        ))}
     </div>
   );
 }

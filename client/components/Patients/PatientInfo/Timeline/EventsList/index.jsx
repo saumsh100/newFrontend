@@ -16,7 +16,6 @@ export default function EventsList({ events, filters, patient }) {
       </div>
     );
   }
-
   const filteredEvents = events.filter(event => filters.indexOf(event.get('type')) > -1);
 
   const sortedEvents = sortEvents(filteredEvents);
@@ -27,7 +26,7 @@ export default function EventsList({ events, filters, patient }) {
     .filter(ev => moment(ev.get('metaData').createdAt).diff(moment(), 'days') < 1)
     .forEach((ev) => {
       const meta = ev.get('metaData');
-      const key = moment(meta.createdAt).format('MMMM Do YYYY');
+      const key = moment(meta.timelineDate).format('MMMM Do YYYY');
 
       if (key in dateObj) {
         dateObj[key].push(ev);
