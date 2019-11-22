@@ -3,6 +3,11 @@
 .previewHeader {
 }
 
+.flex {
+  display: flex;
+  align-items: center;
+}
+
 $background: #eeeeee;
 
 .topHeader {
@@ -59,4 +64,57 @@ $background: #eeeeee;
 
 .commsPreviewSection {
   padding: 40px 0;
+}
+
+.headerSection {
+  @extend .flex;
+  font-size: 13px;
+  color: lighten(black, 30%);
+  max-width: 440px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  background: white;
+  box-shadow: 0 1px 4px 0 rgba(128, 128, 128, 0.11);
+  text-align: left;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  position: relative;
+}
+
+.leftSection {
+  @extend .flex;
+}
+
+.rightSection {
+  @extend .flex;
+  margin-left: auto;
+}
+
+.emailIcon {
+  @extend .flex;
+  justify-content: center;
+  background: -webkit-linear-gradient(-180deg, #1d64f0 0%, #1ad5fd 100%);
+  background: -moz-linear-gradient(-180deg, #1d64f0 0%, #1ad5fd 100%);
+  background: -ms-linear-gradient(-180deg, #1d64f0 0%, #1ad5fd 100%);
+  background: -o-linear-gradient(-180deg, #1d64f0 0%, #1ad5fd 100%);
+  background: linear-gradient(-180deg, #1d64f0 0%, #1ad5fd 100%);
+  box-shadow: 0 0 0 1px rgba(134, 254, 101, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05) inset;
+  color: white;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.titleText {
+  margin-top: 5px;
+}
+
+.title {
+  @extend .titleText;
+  margin-left: 10px;
+}
+
+.tooltipContainer {
+  margin-left: 2px;
 }

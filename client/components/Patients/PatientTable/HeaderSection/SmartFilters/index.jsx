@@ -85,11 +85,9 @@ class SmartFilters extends Component {
           <div data-test-id="text_totalPatientsCount">
             {`Showing ${totalPatients} Patient${totalPatients > 1 ? 's' : ''}`}
           </div>
-          <div className={styles.tooltip_wrapper}>
-            <Tooltip body={<HelpText activeSegmentLabel={activeSegmentLabel} />}>
-              <Icon icon="question-circle" size={0.9} />
-            </Tooltip>
-          </div>
+          <Tooltip body={<HelpText activeSegmentLabel={activeSegmentLabel} />}>
+            <Icon icon="question-circle" size={0.9} />
+          </Tooltip>
         </div>
       </div>
     );
