@@ -35,7 +35,11 @@ export default function EventsList({ events, filters, patient }) {
       }
     });
 
-  const dateSections = Object.keys(dateObj);
+  // sort date sections by date descending
+  const dateSections = Object.keys(dateObj)
+    .map(date => moment(date, 'MMMM Do YYYY'))
+    .sort((a, b) => b.diff(a))
+    .map(date => moment(date).format('MMMM Do YYYY'));
 
   return (
     <div className={styles.eventsList}>
