@@ -10,10 +10,18 @@ import styles from './styles.scss';
 import styles2 from '../styles.scss';
 import PatientPopover from '../../../../library/PatientPopover';
 
+const contactMethodHash = {
+  email: 'Email',
+  sms: 'SMS',
+  'sms/email': 'Email & SMS',
+  smart_follow_up: 'Smart Follow Up',
+};
+
 export default function PatientRecalls({ recalls, timezone }) {
   return (
     <List className={styles.list}>
       {orderBy(recalls, 'sendDate').map(({ patient, primaryTypes, recall, sendDate }) => {
+        const hashedTypes = primaryTypes.map(e => contactMethodHash[e]);
         const { dueForHygieneDate, dueForRecallExamDate } = patient;
         let type = recall.interval;
         if (type[0] === '-') {
@@ -41,7 +49,7 @@ export default function PatientRecalls({ recalls, timezone }) {
               <span>
                 <div>{type}</div>
                 <div className={classnames(styles.muted, styles.lowercase)}>
-                  {`${primaryTypes.join(' & ')}`}
+                  {`${hashedTypes.join(' & ')}`}
                 </div>
               </span>
             </div>

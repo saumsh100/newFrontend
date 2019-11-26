@@ -11,6 +11,7 @@ export default function ReminderEvent({ data }) {
     email: 'Email',
     sms: 'SMS',
     'sms/email': 'Email & SMS',
+    smart_follow_up: 'Smart Follow Up',
   };
   const contactMethod = contactMethodHash[data.primaryType];
   const intervalText = <span className={styles.reminder_interval}>{data.reminder.interval}</span>;

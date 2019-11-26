@@ -10,6 +10,7 @@ const contactMethodHash = {
   email: 'Email',
   sms: 'SMS',
   'sms/email': 'Email & SMS',
+  smart_follow_up: 'Smart Follow Up',
 };
 
 const recallIntervalHash = {
