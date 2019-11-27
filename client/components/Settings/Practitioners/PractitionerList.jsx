@@ -12,6 +12,8 @@ import PractitionerItem from './PractitionerItem';
 import CreatePractitionerForm from './CreatePractitionerForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import DialogBox from '../../library/DialogBox';
+import { practitionerShape } from '../../library/PropTypeShapes';
+import Service from '../../../entities/models/Service';
 import styles from './styles.scss';
 
 class PractitionerList extends Component {
@@ -80,8 +82,9 @@ class PractitionerList extends Component {
 
   render() {
     const { practitioners, services, selectedPractitioner } = this.props;
+    const activePractitioner = selectedPractitioner || practitioners[0];
 
-    if (!selectedPractitioner) {
+    if (!activePractitioner) {
       return null;
     }
 
@@ -139,7 +142,7 @@ class PractitionerList extends Component {
                 <PractitionerItem
                   key={practitioner.get('id')}
                   id={practitioner.get('id')}
-                  practitionerId={selectedPractitioner.get('id')}
+                  practitionerId={activePractitioner.get('id')}
                   practitioner={practitioner}
                   fullName={practitioner.getFullName()}
                   setPractitionerId={this.props.setPractitionerId}
@@ -151,8 +154,8 @@ class PractitionerList extends Component {
         </Card>
         <Card className={styles.practDataContainer} noBorder>
           <PractitionerTabs
-            key={selectedPractitioner.get('id')}
-            practitioner={selectedPractitioner}
+            key={activePractitioner.get('id')}
+            practitioner={activePractitioner}
             setPractitionerId={this.props.setPractitionerId}
             services={services}
           />
@@ -163,11 +166,12 @@ class PractitionerList extends Component {
 }
 
 PractitionerList.propTypes = {
-  setPractitionerId: PropTypes.func,
-  services: PropTypes.object,
-  createEntityRequest: PropTypes.func,
-  updateEntityRequest: PropTypes.func,
-  practitioners: PropTypes.object,
+  createEntityRequest: PropTypes.func.isRequired,
+  practitioners: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
+  selectedPractitioner: PropTypes.instanceOf(practitionerShape).isRequired,
+  setPractitionerId: PropTypes.func.isRequired,
+  services: PropTypes.instanceOf(Service).isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ accountSettings }, { practitioners }) {

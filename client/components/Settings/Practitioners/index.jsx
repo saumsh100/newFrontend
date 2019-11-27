@@ -5,6 +5,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../thunks/fetchEntities';
 import PractitionerList from './PractitionerList';
+import { practitionerShape } from '../../library/PropTypeShapes';
+import PractitionerRecurringTimeOff from '../../../entities/models/PractitionerRecurringTimeOff';
+import Service from '../../../entities/models/Service';
 import styles from './styles.scss';
 
 const sortPractitionersAlphabetical = (a, b) => {
@@ -23,10 +26,11 @@ class Practitioners extends Component {
 
   render() {
     const { practitioners, services, recurringTimeOffs } = this.props;
-
     let showComponent = null;
     if (practitioners) {
-      const filteredPractitioners = practitioners.sort(sortPractitionersAlphabetical);
+      const filteredPractitioners = practitioners
+        .sort(sortPractitionersAlphabetical)
+        .filter(practitioner => practitioner.isActive);
       showComponent = (
         <PractitionerList
           recurringTimeOffs={recurringTimeOffs}
@@ -41,19 +45,16 @@ class Practitioners extends Component {
 }
 
 Practitioners.propTypes = {
-  practitioners: PropTypes.shape({}),
-  weeklySchedules: PropTypes.shape({}),
-  fetchEntities: PropTypes.func,
-  timeOffs: PropTypes.shape({}),
-  recurringTimeOffs: PropTypes.shape({}),
-  services: PropTypes.shape({}),
+  practitioners: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  recurringTimeOffs: PropTypes.arrayOf(PropTypes.instanceOf(PractitionerRecurringTimeOff))
+    .isRequired,
+  services: PropTypes.instanceOf(Service).isRequired,
 };
 
 function mapStateToProps({ entities }) {
-  const practitioners = entities.getIn(['practitioners', 'models']);
-
   return {
-    practitioners,
+    practitioners: entities.getIn(['practitioners', 'models']),
     services: entities.getIn(['services', 'models']),
   };
 }
