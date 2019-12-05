@@ -47,7 +47,18 @@ function CareCru({ iframeSrc }) {
       event_label: null,
     };
 
-    if (window.gtag) {
+    /**
+     * We check if gtm or google tag, or google analytics is ready,
+     * use the most immediately available one
+     */
+
+    // Assuming data layer is in place, google tag manager should've been properly loaded.
+    if (Array.isArray(window.dataLayer)) {
+      // using dataLayer to fire events to google tag manager
+      window.dataLayer.push({
+        event: 'New Appointment Request',
+      });
+    } else if (window.gtag) {
       window.gtag('event', eventAction, analyticsEvent);
     } else if (window.ga) {
       window.ga(
