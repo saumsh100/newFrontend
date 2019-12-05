@@ -93,6 +93,7 @@ class PatientInformation extends PureComponent {
     this.handleFormChanges = this.handleFormChanges.bind(this);
     this.updateUserProfile = this.updateUserProfile.bind(this);
     this.handlePatientChanges = this.handlePatientChanges.bind(this);
+    this.verifyEmailIfPatientIsNotTheUser = this.verifyEmailIfPatientIsNotTheUser.bind(this);
   }
 
   componentDidMount() {
@@ -202,6 +203,10 @@ class PatientInformation extends PureComponent {
       smooth: 'easeInOutQuart',
       containerId: 'contentWrapperToScroll',
     });
+  }
+
+  verifyEmailIfPatientIsNotTheUser(value) {
+    return !value && this.props.patientIsUser && 'Email required for primary account owner';
   }
 
   render() {
@@ -349,11 +354,7 @@ class PatientInformation extends PureComponent {
                     name="email"
                     type="email"
                     required={patientIsUser}
-                    validate={[
-                      value => value && emailValidate(value),
-                      value =>
-                        !value && patientIsUser && 'Email required for primary account owner',
-                    ]}
+                    validate={[emailValidate, this.verifyEmailIfPatientIsNotTheUser]}
                   />
                 </Element>
               )}
@@ -471,8 +472,8 @@ class PatientInformation extends PureComponent {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
     {
       addNewFamilyPatient,
       change,
@@ -490,9 +491,8 @@ function mapDispatchToProps(dispatch) {
     },
     dispatch,
   );
-}
 
-function mapStateToProps({ auth, availabilities, widgetNavigation, ...state }) {
+const mapStateToProps = ({ auth, availabilities, widgetNavigation, ...state }) => {
   const selector = formValueSelector(FORM_NAME);
   const patientInfoForm = state.form[FORM_NAME];
   const familyPatients = auth.get('familyPatients');
@@ -527,7 +527,7 @@ function mapStateToProps({ auth, availabilities, widgetNavigation, ...state }) {
     userName: auth.get('patientUser').getFullName(),
     floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
   };
-}
+};
 
 PatientInformation.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,

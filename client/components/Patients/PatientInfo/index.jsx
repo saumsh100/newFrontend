@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { Query } from 'react-apollo';
 import classNames from 'classnames';
 import { Map } from 'immutable';
-import { convertIntervalToMs } from '@carecru/isomorphic';
 import { Button, Col, Grid, Icon, Row, Tab, Tabs } from '../../library';
 import PatientModel from '../../../entities/models/Patient';
 import AccountModel from '../../../entities/models/Account';
@@ -71,7 +70,6 @@ class PatientInfo extends Component {
         backHandler: null,
         title: null,
       },
-      defaultEvents: this.props.filters,
     };
 
     this.changePageTab = this.changePageTab.bind(this);
@@ -87,22 +85,18 @@ class PatientInfo extends Component {
   componentDidMount() {
     const { patientId } = this.props.match.params;
     const url = `/api/patients/${patientId}`;
-
     this.fetchPatientData(patientId, url);
     if (this.props.patient) {
       this.fetchEvents();
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
+    const prevPatientId = prevProps.match.params.patientId;
     const { patientId } = this.props.match.params;
-    if (patientId !== nextProps.match.params.patientId) {
-      const url = `/api/patients/${nextProps.match.params.patientId}`;
-
-      Promise.all([
-        this.fetchPatientData(nextProps.match.params.patientId, url),
-        this.fetchEvents(),
-      ]);
+    if (patientId !== prevPatientId) {
+      const url = `/api/patients/${patientId}`;
+      Promise.all([this.fetchPatientData(patientId, url), this.fetchEvents()]);
     }
   }
 
@@ -130,33 +124,27 @@ class PatientInfo extends Component {
   fetchPatientData(patientId, url) {
     const { activeAccount } = this.props;
 
-    return this.props
-      .fetchEntitiesRequest({
-        id: 'accountsPatientInfo',
-        key: 'accounts',
-      })
-      .then(() =>
-        Promise.all([
-          this.props.fetchEntitiesRequest({
-            id: 'fetchPatient',
-            key: 'patients',
-            url,
-          }),
-          this.props.fetchEntitiesRequest({
-            id: 'patientIdStats',
-            url: `/api/patients/${patientId}/stats`,
-          }),
-          this.props.fetchEntitiesRequest({
-            id: 'fetchReminders',
-            key: 'reminders',
-            url: `/api/accounts/${activeAccount.id}/reminders`,
-          }),
-          this.props.fetchEntitiesRequest({
-            id: 'fetchRecalls',
-            key: 'recalls',
-            url: `/api/accounts/${activeAccount.id}/recalls`,
-          }),
-        ]));
+    return Promise.all([
+      this.props.fetchEntitiesRequest({
+        id: 'fetchPatient',
+        key: 'patients',
+        url,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'patientIdStats',
+        url: `/api/patients/${patientId}/stats`,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'fetchReminders',
+        key: 'reminders',
+        url: `/api/accounts/${activeAccount.id}/reminders`,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'fetchRecalls',
+        key: 'recalls',
+        url: `/api/accounts/${activeAccount.id}/recalls`,
+      }),
+    ]);
   }
 
   openModal() {
@@ -213,7 +201,6 @@ class PatientInfo extends Component {
       patient,
       patientStats,
       wasStatsFetched,
-      accountsFetched,
       activeAccount,
       role,
       wasPatientFetched,
@@ -222,7 +209,7 @@ class PatientInfo extends Component {
       recalls,
     } = this.props;
 
-    const wasAllFetched = accountsFetched && wasPatientFetched;
+    const wasAllFetched = wasPatientFetched;
 
     const shouldDisplayInfoPage = !isResponsive() || this.state.pageTab === 0;
     const shouldDisplayTimelinePage = !isResponsive() || this.state.pageTab === 1;
@@ -234,7 +221,6 @@ class PatientInfo extends Component {
               patient={patient}
               patientStats={patientStats}
               wasStatsFetched={wasStatsFetched}
-              accountsFetched={accountsFetched}
               wasPatientFetched={wasPatientFetched}
               activeAccount={activeAccount}
             />
@@ -364,50 +350,24 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }, { match }) {
-  const patients = entities.getIn(['patients', 'models']);
-  const reminders = entities
-    .getIn(['reminders', 'models'])
-    .filter(v => v.isActive)
-    .sortBy(r => -convertIntervalToMs(r.interval));
-  const recalls = entities
-    .getIn(['recalls', 'models'])
-    .filter(v => v.isActive)
-    .sortBy(r => -convertIntervalToMs(r.interval));
-  const patientStats = apiRequests.get('patientIdStats')
-    ? apiRequests.get('patientIdStats').data
-    : null;
-  const wasStatsFetched = apiRequests.get('patientIdStats')
-    ? apiRequests.get('patientIdStats').wasFetched
-    : null;
-  const wasPatientFetched = apiRequests.get('fetchPatient')
-    ? apiRequests.get('fetchPatient').wasFetched
-    : null;
-  const wasRemindersFetched = apiRequests.get('fetchReminders')
-    ? apiRequests.get('fetchReminders').wasFetched
-    : null;
-  const wasRecallsFetched = apiRequests.get('fetchRecalls')
-    ? apiRequests.get('fetchRecalls').wasFetched
-    : null;
-
-  const waitForAuth = auth.get('accountId');
-  const role = auth.get('role');
-  const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
-
-  const accountsFetched = apiRequests.get('accountsPatientInfo')
-    ? apiRequests.get('accountsPatientInfo').wasFetched
-    : null;
+  const patientStats = apiRequests.getIn(['patientIdStats', 'data']) || null;
+  const wasStatsFetched = apiRequests.getIn(['patientIdStats', 'wasFetched']) || false;
+  const wasPatientFetched = apiRequests.getIn(['fetchPatient', 'wasFetched']) || false;
+  const wasRemindersFetched = apiRequests.getIn(['fetchReminders', 'wasFetched']) || false;
+  const wasRecallsFetched = apiRequests.getIn(['fetchRecalls', 'wasFetched']) || false;
+  const accountId = auth.get('accountId');
+  const activeAccount = entities.getIn(['accounts', 'models', accountId]);
 
   return {
-    patient: patients.get(match.params.patientId),
+    patient: entities.getIn(['patients', 'models', match.params.patientId]),
     patientStats,
     wasStatsFetched,
-    filters: patientTable.get('timelineFilters').toJS(),
+    filters: patientTable.get('timelineFilters'),
     activeAccount,
-    accountsFetched,
-    role,
+    role: auth.get('role'),
     wasPatientFetched,
-    reminders,
-    recalls,
+    reminders: entities.getIn(['reminders', 'models']),
+    recalls: entities.getIn(['recalls', 'models']),
     wasRemindersFetched,
     wasRecallsFetched,
     currentBackHandler: electron.get('backHandler'),
@@ -416,7 +376,6 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }
 }
 
 PatientInfo.propTypes = {
-  accountsFetched: PropTypes.bool,
   wasPatientFetched: PropTypes.bool,
   wasStatsFetched: PropTypes.bool,
   currentTitle: PropTypes.string,
@@ -447,7 +406,6 @@ PatientInfo.propTypes = {
 };
 
 PatientInfo.defaultProps = {
-  accountsFetched: false,
   accountViewer: null,
   currentBackHandler: e => e,
   currentTitle: '',
@@ -468,15 +426,26 @@ const PatientInfoRenderer = parentProps => ({ error, loading, data }) => {
   return <PatientInfo {...parentProps} {...data} />;
 };
 
-const PatientInfoWithData = (parentProps) => {
-  if (!parentProps.patient || parentProps.patient === null) {
-    return <PatientInfo {...parentProps} />;
+const PatientInfoWithData = (props) => {
+  if (!props.patient) {
+    return <PatientInfo {...props} />;
   }
   return (
-    <Query query={patientInfoQuery} variables={{ patientId: parentProps.patient.id }}>
-      {PatientInfoRenderer(parentProps)}
+    <Query query={patientInfoQuery} variables={{ patientId: props.patient.id }}>
+      {PatientInfoRenderer(props)}
     </Query>
   );
+};
+
+PatientInfoWithData.propTypes = {
+  patient: PropTypes.shape({
+    ccId: PropTypes.string,
+    id: PropTypes.string,
+  }),
+};
+
+PatientInfoWithData.defaultProps = {
+  patient: null,
 };
 
 export default connect(

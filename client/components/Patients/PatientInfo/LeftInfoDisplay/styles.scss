@@ -20,7 +20,7 @@
 }
 
 .subHeader {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   font-size: 15px !important;
   color: $primary-dark;
   padding-top: 20px;
@@ -80,7 +80,7 @@
 }
 
 .text {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
 }
 .grid {
   box-sizing: border-box;
@@ -138,7 +138,7 @@
   height: 50px;
   border-right: 1px solid #e3e3e3;
   color: $primary-dark;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
 
   &:last-child {
     border-right: 0;
@@ -198,7 +198,7 @@
   padding-top: 10px;
   display: flex;
   align-items: center;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-darkgrey;
 
   &:hover {
@@ -219,7 +219,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-dark-grey;
   font-size: $extra-small-size;
   height: 652px;

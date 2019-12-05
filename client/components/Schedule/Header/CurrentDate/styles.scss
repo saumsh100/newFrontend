@@ -3,7 +3,7 @@
 .container {
   display: flex;
   align-items: center;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
 }
 
 .dayOfWeek {

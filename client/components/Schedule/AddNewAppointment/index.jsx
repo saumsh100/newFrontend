@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { change, reset } from 'redux-form';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { isHub } from '../../../util/hub';
 import Requests from '../../../entities/models/Request';
 import { setTime, getDuration } from '../../library/util/TimeOptions';
@@ -44,13 +44,12 @@ class AddNewAppointment extends Component {
     this.getSuggestions = this.getSuggestions.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
+    const previousDate = moment(prevProps.currentDate);
     const currentDate = moment(this.props.currentDate);
 
-    const nextPropsDate = moment(nextProps.currentDate);
-
-    if (!nextPropsDate.isSame(currentDate)) {
-      this.props.changeForm(this.props.formName, 'date', nextPropsDate);
+    if (!currentDate.isSame(previousDate)) {
+      this.props.changeForm(this.props.formName, 'date', currentDate);
     }
   }
 
@@ -275,7 +274,7 @@ class AddNewAppointment extends Component {
         });
     }
 
-    const appModel = selectedAppointment.appModel;
+    const { appModel } = selectedAppointment;
     const appModelSynced = appModel.set('isSyncedWithPms', false);
     const valuesMap = Map(newAppointment);
     const modifiedAppointment = appModelSynced.merge(valuesMap);
@@ -301,7 +300,7 @@ class AddNewAppointment extends Component {
         isDeleted: true,
         isSyncedWithPms: false,
       });
-      const appModel = selectedAppointment.appModel;
+      const { appModel } = selectedAppointment;
       const deletedModel = appModel.merge(delModel);
       this.props.updateEntityRequest({
         key: 'appointments',

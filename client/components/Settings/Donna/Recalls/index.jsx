@@ -90,7 +90,7 @@ class Recalls extends Component {
     this.changeHygieneDate = this.changeHygieneDate.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchEntities({ url: `/api/accounts/${this.props.activeAccount.id}/recalls` });
   }
 

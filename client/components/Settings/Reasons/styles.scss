@@ -52,7 +52,7 @@
   padding: 30px;
 
   &_text {
-    composes: listItemHeader from 'sass-loader!../../../fonts.scss';
+    composes: listItemHeader from '../../../fonts.scss';
     overflow: hidden;
     white-space: normal;
     text-overflow: ellipsis;
@@ -60,7 +60,7 @@
 
   &_duration {
     padding-top: 10px;
-    composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
+    composes: subHeaderExtraSmall from '../../../fonts.scss';
 
     &_text {
       color: $primary-dark;

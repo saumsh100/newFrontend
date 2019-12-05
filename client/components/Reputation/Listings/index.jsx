@@ -48,41 +48,37 @@ function generateSearchData(entityList, statuses) {
 class Listings extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       hasAccount: false,
       activationText: '',
     };
   }
 
-  componentWillMount() {
-    const { activeAccount } = this.props;
-
-    let hasAccount = false;
-
-    if (activeAccount.get('vendataId') || activeAccount.get('vendastaId') !== '') {
-      hasAccount = true;
-    }
-
-    this.setState({
-      hasAccount,
-    });
-  }
-
   componentDidMount() {
-    if (this.state.hasAccount) {
-      Promise.all([
-        this.props.fetchEntitiesRequest({
-          id: 'listings',
-          url: '/api/reputation/listings',
-        }),
-      ]).catch(() => {
-        this.setState({
-          hasAccount: false,
-          activationText:
-            'Activate Listings/Reputation Management package or contact your CareCru account manager for further assistance.',
-        });
-      });
-    }
+    const { activeAccount } = this.props;
+    const hasAccount = !!(activeAccount.get('vendataId') || activeAccount.get('vendastaId') !== '');
+    this.setState(
+      {
+        hasAccount,
+      },
+      () => {
+        if (this.state.hasAccount) {
+          Promise.all([
+            this.props.fetchEntitiesRequest({
+              id: 'listings',
+              url: '/api/reputation/listings',
+            }),
+          ]).catch(() => {
+            this.setState({
+              hasAccount: false,
+              activationText:
+                'Activate Listings/Reputation Management package or contact your CareCru account manager for further assistance.',
+            });
+          });
+        }
+      },
+    );
   }
 
   render() {
@@ -112,23 +108,34 @@ class Listings extends Component {
     ];
 
     const totalData = [
-      { icon: 'check', title: 'Accurate', count: listingsData.sourcesFound },
+      { icon: 'check',
+        title: 'Accurate',
+        count: listingsData.sourcesFound },
       {
         icon: 'exclamation',
         title: 'Found with Possible Errors',
         count: listingsData.sourcesFoundWithErrors,
       },
-      { icon: 'times', title: 'Not Found', count: listingsData.sourcesNotFound },
+      { icon: 'times',
+        title: 'Not Found',
+        count: listingsData.sourcesNotFound },
     ];
 
     const informationData = [
-      { title: 'Business Name', data: listingsAcctInfo.companyName },
-      { title: 'Street Address', data: listingsAcctInfo.address },
-      { title: 'City', data: listingsAcctInfo.city },
-      { title: 'State / Prov / Region ', data: listingsAcctInfo.state },
-      { title: 'Zip / Postal Code', data: listingsAcctInfo.zip },
-      { title: 'Phone', data: listingsAcctInfo.workNumber },
-      { title: 'Website', data: listingsAcctInfo.website },
+      { title: 'Business Name',
+        data: listingsAcctInfo.companyName },
+      { title: 'Street Address',
+        data: listingsAcctInfo.address },
+      { title: 'City',
+        data: listingsAcctInfo.city },
+      { title: 'State / Prov / Region ',
+        data: listingsAcctInfo.state },
+      { title: 'Zip / Postal Code',
+        data: listingsAcctInfo.zip },
+      { title: 'Phone',
+        data: listingsAcctInfo.workNumber },
+      { title: 'Website',
+        data: listingsAcctInfo.website },
     ];
 
     const listingsSearchData = listings.get('searchData').toJS();
@@ -169,18 +176,25 @@ class Listings extends Component {
       {
         title: 'Source Type',
         items: [
-          { type: 'checkbox', value: 'Search Engines' },
-          { type: 'checkbox', value: 'Review Sites' },
-          { type: 'checkbox', value: 'Directories' },
-          { type: 'checkbox', value: 'Social Sites' },
+          { type: 'checkbox',
+            value: 'Search Engines' },
+          { type: 'checkbox',
+            value: 'Review Sites' },
+          { type: 'checkbox',
+            value: 'Directories' },
+          { type: 'checkbox',
+            value: 'Social Sites' },
         ],
       },
       {
         title: 'Listing Status',
         items: [
-          { type: 'checkbox', value: 'Accurate' },
-          { type: 'checkbox', value: 'Found with Possible Errors' },
-          { type: 'checkbox', value: 'Not Found' },
+          { type: 'checkbox',
+            value: 'Accurate' },
+          { type: 'checkbox',
+            value: 'Found with Possible Errors' },
+          { type: 'checkbox',
+            value: 'Not Found' },
         ],
       },
     ];
@@ -236,9 +250,7 @@ class Listings extends Component {
   }
 }
 
-function mapStateToProps({
-  apiRequests, entities, auth, reputation,
-}) {
+function mapStateToProps({ apiRequests, entities, auth, reputation }) {
   const listings = apiRequests.get('listings') && apiRequests.get('listings').data;
   const listingsFilter = apiRequests.get('listings') && reputation.get('listingsFilter');
 
@@ -276,4 +288,7 @@ Listings.defaultProps = {
   listingsFilter: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Listings);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Listings);

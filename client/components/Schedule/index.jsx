@@ -3,12 +3,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import moment from 'moment';
 import { Map, List } from 'immutable';
 import { isHub, isResponsive } from '../../util/hub';
 import { setBackHandler, setTitle } from '../../reducers/electron';
-import Requests from '../../entities/models/Request';
 import Account from '../../entities/models/Account';
 import {
   Card,
@@ -30,6 +29,7 @@ import Header from './Header';
 import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 import AssignPatientToChatDialog from '../Patients/AssignPatientToChatDialog';
+import { selectAppointmentShape } from '../library/PropTypeShapes';
 import styles from './styles.scss';
 
 class ScheduleComponent extends Component {
@@ -130,7 +130,7 @@ class ScheduleComponent extends Component {
 
   updateHubData(props) {
     const {
-      routing: { location },
+      router: { location },
       pageTitle,
     } = props;
 
@@ -171,7 +171,7 @@ class ScheduleComponent extends Component {
   handlePatientUserSubmit(values) {
     const { schedule, selectAppointment, createEntityRequest } = this.props;
 
-    const mergingPatientData = schedule.toJS().mergingPatientData;
+    const mergingPatientData = schedule.get('mergingPatientData');
 
     const { requestData, patientUser } = mergingPatientData;
 
@@ -260,10 +260,10 @@ class ScheduleComponent extends Component {
       formName = `editAppointment_${selectedAppointment.serviceId}`;
     }
 
-    const mergingPatientData = schedule.toJS().mergingPatientData;
-    const createNewPatient = schedule.toJS().createNewPatient;
-    const leftColumnWidth = schedule.toJS().leftColumnWidth;
-    const currentDate = moment(schedule.toJS().scheduleDate);
+    const mergingPatientData = schedule.get('mergingPatientData');
+    const createNewPatient = schedule.get('createNewPatient');
+    const leftColumnWidth = schedule.get('leftColumnWidth');
+    const currentDate = moment(schedule.get('scheduleDate'));
 
     const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
     const filterChairs = chairs.get('models').filter(chair => chair.get('isActive'));
@@ -508,21 +508,6 @@ class ScheduleComponent extends Component {
   }
 }
 
-export const selectAppointmentPropType = PropTypes.shape({
-  createdAt: PropTypes.string,
-  customBufferTime: PropTypes.number,
-  endDate: PropTypes.string,
-  isSyncedWithPms: PropTypes.bool,
-  note: PropTypes.string,
-  patientId: PropTypes.string,
-  practitionerId: PropTypes.string,
-  request: PropTypes.bool,
-  requestId: PropTypes.string,
-  requestModel: PropTypes.instanceOf(Requests),
-  serviceId: PropTypes.string,
-  startDate: PropTypes.string,
-});
-
 ScheduleComponent.propTypes = {
   accountsFetched: PropTypes.bool,
   appsFetched: PropTypes.bool,
@@ -531,7 +516,7 @@ ScheduleComponent.propTypes = {
   pracsFetched: PropTypes.bool,
   unit: PropTypes.instanceOf(Account).isRequired,
   schedule: PropTypes.instanceOf(Map).isRequired,
-  selectedAppointment: selectAppointmentPropType,
+  selectedAppointment: PropTypes.shape(selectAppointmentShape),
   selectAppointment: PropTypes.func.isRequired,
   setCreatingPatient: PropTypes.func.isRequired,
   setMergingPatient: PropTypes.func.isRequired,
@@ -557,7 +542,7 @@ ScheduleComponent.defaultProps = {
   patients: null,
 };
 
-const mapStateToProps = ({ routing }) => ({ routing });
+const mapStateToProps = ({ router }) => ({ router });
 
 const mapActionsToProps = dispatch =>
   bindActionCreators(

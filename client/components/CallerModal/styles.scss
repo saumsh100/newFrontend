@@ -92,14 +92,14 @@
   display: flex;
   justify-content: center;
   text-transform: capitalize;
-  composes: header from 'sass-loader!../../fonts.scss';
+  composes: header from '../../fonts.scss';
   padding-bottom: 10px;
 }
 
 .patientBirthday {
   display: flex;
   justify-content: center;
-  composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+  composes: subHeaderMedium from '../../fonts.scss';
 }
 
 .iconContainer {
@@ -117,7 +117,7 @@
 }
 
 .appointmentInfoContainer {
-  composes: subHeaderMediumSmall from 'sass-loader!../../fonts.scss';
+  composes: subHeaderMediumSmall from '../../fonts.scss';
   display: flex;
   padding-left: 10px;
   padding-right: 10px;
@@ -133,7 +133,7 @@
   }
 
   &_date {
-    composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+    composes: subHeaderMedium from '../../fonts.scss';
     padding-top: 5px;
     &_hover {
       &:hover {
@@ -143,7 +143,7 @@
     }
   }
   &_dateLast {
-    composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+    composes: subHeaderMedium from '../../fonts.scss';
     padding-top: 5px;
     &_hover {
       &:hover {
@@ -158,7 +158,7 @@
   padding-bottom: 15px;
   display: flex;
   &_header {
-    composes: header from 'sass-loader!../../fonts.scss';
+    composes: header from '../../fonts.scss';
     border-top: 1px solid #efefef;
     margin-bottom: 10px;
     font-size: 18px;
@@ -183,12 +183,12 @@
   }
 
   &_desc {
-    composes: subHeader from 'sass-loader!../../fonts.scss';
+    composes: subHeader from '../../fonts.scss';
     width: 90px;
   }
 
   &_data {
-    composes: subHeaderSmall from 'sass-loader!../../fonts.scss';
+    composes: subHeaderSmall from '../../fonts.scss';
   }
 }
 
@@ -203,7 +203,7 @@
   &_text {
     margin-left: auto;
     padding-right: 5px;
-    composes: font-medium from 'sass-loader!../../fonts.scss';
+    composes: font-medium from '../../fonts.scss';
   }
 }
 

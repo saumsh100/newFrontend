@@ -17,11 +17,11 @@
     flex-direction: column;
   }
   &__count {
-    composes: font-jumbo from 'sass-loader!../../../fonts.scss';
+    composes: font-jumbo from '../../../fonts.scss';
   }
 
   &__title {
-    composes: font-header-title-white from 'sass-loader!../../../fonts.scss';
+    composes: font-header-title-white from '../../../fonts.scss';
     @media screen and (max-width: 1660px) {
       max-width: 120px;
       text-align: center;

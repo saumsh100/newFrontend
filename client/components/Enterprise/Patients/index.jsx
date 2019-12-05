@@ -33,14 +33,13 @@ const fetchEnterpriseDashboard = (segmentId, rawWhere) => {
 };
 
 class PatientsPage extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchEnterpriseDashboard();
   }
 
-  componentWillReceiveProps(props) {
-    if (
-      JSON.stringify(this.props.rawWhere) !== JSON.stringify(props.rawWhere)
-    ) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(props) {
+    if (JSON.stringify(this.props.rawWhere) !== JSON.stringify(props.rawWhere)) {
       this.props.fetchEnterpriseDashboard(null, props.rawWhere);
     }
   }
@@ -74,28 +73,21 @@ class PatientsPage extends Component {
 
 PatientsPage.propTypes = {
   fetchEnterpriseDashboard: PropTypes.func.isRequired,
-  enterprises: PropTypes.arrayOf(PropTypes.object),
   enterpriseDashboardPatients: PropTypes.shape({
     isFetching: PropTypes.bool,
     clinics: PropTypes.shape({}),
     totals: PropTypes.shape({}),
-  }),
-  enterpriseId: PropTypes.string,
+  }).isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
-  }),
+  }).isRequired,
   rawWhere: PropTypes.shape({}).isRequired,
-  applied: PropTypes.bool.isRequired,
 };
 
 const stateToProps = (state, { isSuperAdmin }) =>
   (isSuperAdmin
     ? {
-      enterpriseDashboardPatients: getModel(
-        state,
-        'enterpriseDashboard',
-        'patients',
-      ),
+      enterpriseDashboardPatients: getModel(state, 'enterpriseDashboard', 'patients'),
       applied: state.segments.applied,
       rawWhere: state.segments.rawWhere,
     }
@@ -109,7 +101,9 @@ const actionsToProps = dispatch =>
     dispatch,
   );
 
-export default withAuthProps(connect(
-  stateToProps,
-  actionsToProps,
-)(PatientsPage));
+export default withAuthProps(
+  connect(
+    stateToProps,
+    actionsToProps,
+  )(PatientsPage),
+);

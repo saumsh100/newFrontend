@@ -1,8 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import { ConnectedRouter as Router } from 'react-router-redux';
+import { Redirect, Route, Switch, BrowserRouter } from 'react-router-dom';
+import { ConnectedRouter as Router } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Widget from '../components/Widget';
@@ -170,16 +170,18 @@ const EmbedRouter = ({ match, isAuth, patientUser }) => {
 const WidgetRouter = ({ history, isAuth, patientUser }) => (
   <Router history={history}>
     <div>
-      {/* TODO: Booking widget will soon become part of app */}
-      {/* <Route exact path={base('/book')} component={PatientApp} /> */}
-      <Widget>
-        <Switch>
-          <Route
-            path={base()}
-            render={props => <EmbedRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
-          />
-        </Switch>
-      </Widget>
+      <BrowserRouter>
+        {/* TODO: Booking widget will soon become part of app */}
+        {/* <Route exact path={base('/book')} component={PatientApp} /> */}
+        <Widget>
+          <Switch>
+            <Route
+              path={base()}
+              render={props => <EmbedRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
+            />
+          </Switch>
+        </Widget>
+      </BrowserRouter>
     </div>
   </Router>
 );

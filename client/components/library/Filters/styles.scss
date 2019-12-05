@@ -1,8 +1,7 @@
-@import "../../../ui";
-@import "../../../fonts";
+@import '../../../ui';
+@import '../../../fonts';
 
 .filters {
-
   &__checkFilter {
     display: flex;
     flex-direction: column;
@@ -10,7 +9,7 @@
     align-items: center;
     padding: 12px 50px;
     color: lighten($primary-darkgrey, 20%);
-    composes: subHeader from 'sass-loader!../../../fonts.scss';
+    composes: subHeader from '../../../fonts.scss';
     @media screen and (max-width: 1000px) {
       padding: 12px 20px;
     }
@@ -25,7 +24,6 @@
       }
     }
   }
-
 
   &__header {
     display: flex;
@@ -113,22 +111,21 @@
     font-size: $medium-size;
     margin: 5px 0 5px -8px;
     color: $primary-darkgrey;
-		select {
-			margin-left: -4px;
+    select {
+      margin-left: -4px;
       color: $primary-darkgrey;
       font-family: $dashboard-font;
       font-size: $medium-size;
-			border: 0;
-	  	background: none;
-	    width: 100%;
-	    margin: 0 auto;
-	    padding-left: 0;
+      border: 0;
+      background: none;
+      width: 100%;
+      margin: 0 auto;
+      padding-left: 0;
       border: none;
-		}
-		select:focus {
-			outline: none;
-			border: 0;
-		}
-	}
-
+    }
+    select:focus {
+      outline: none;
+      border: 0;
+    }
+  }
 }

@@ -1,5 +1,4 @@
 
-import 'babel-polyfill';
 import 'raf/polyfill';
 import 'normalize.css';
 import 'rc-tooltip/assets/bootstrap.css';

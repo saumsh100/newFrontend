@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter as Router } from 'react-router-redux';
+import { ConnectedRouter as Router } from 'connected-react-router';
 import PatientPage from '../components/My/PatientPage';
 import FourZeroFour from '../components/FourZeroFour';
 import ResetPassword from '../components/My/PatientPage/ResetPassword';

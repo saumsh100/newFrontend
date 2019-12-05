@@ -74,7 +74,7 @@
   align-items: center;
   justify-content: center;
   &_text {
-    composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
+    composes: subHeaderExtraSmall from '../../../fonts.scss';
     padding: 0;
     color: $primary-darkgrey;
     background: none;

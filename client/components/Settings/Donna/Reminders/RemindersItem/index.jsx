@@ -63,8 +63,14 @@ const primaryTypesOptions = (showVoiceTouchPoint = false) => [
     label: 'Email & SMS',
     value: 'email_sms',
   },
-  ...(showVoiceTouchPoint ? [{ label: 'Voice',
-    value: 'phone' }] : []),
+  ...(showVoiceTouchPoint
+    ? [
+      {
+        label: 'Voice',
+        value: 'phone',
+      },
+    ]
+    : []),
 ];
 
 const getType = (reminder) => {
@@ -103,17 +109,6 @@ class RemindersItem extends Component {
     }
 
     this.setState({ number: num });
-  }
-
-  componentWillUpdate(nextProps) {
-    const oldNumType = intervalToNumType(this.props.reminder.interval);
-    const newNumType = intervalToNumType(nextProps.reminder.interval);
-    if (oldNumType.num === newNumType.num) {
-      return;
-    }
-
-    // eslint-disable-next-line react/no-will-update-set-state
-    this.setState({ number: newNumType.num });
   }
 
   onChangeNumberInput(e) {

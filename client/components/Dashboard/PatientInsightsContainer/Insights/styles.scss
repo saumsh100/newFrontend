@@ -16,7 +16,7 @@
 
 .header {
   border-bottom: 0;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   padding: 20px 20px 15px 40px;
   font-size: 23px;
   display: flex;
@@ -24,7 +24,7 @@
 
   &_count {
     background-color: $primary-yellow;
-    composes: fontDefault from 'sass-loader!../../../../fonts.scss';
+    composes: fontDefault from '../../../../fonts.scss';
     color: $primary-white;
     border-radius: 50%;
     display: flex;
@@ -150,12 +150,12 @@
 }
 
 .insightHeader {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   font-size: $small-size;
 }
 
 .insightSubHeader {
-  composes: fontDefault from 'sass-loader!../../../../fonts.scss';
+  composes: fontDefault from '../../../../fonts.scss';
   color: $light-grey;
   font-size: $small-size;
   box-sizing: border-box;
@@ -167,7 +167,7 @@
 }
 
 .insightSubHeaderList {
-  composes: fontDefault from 'sass-loader!../../../../fonts.scss';
+  composes: fontDefault from '../../../../fonts.scss';
   color: $primary-dark-grey;
   font-size: 11px;
   box-sizing: border-box;
@@ -185,7 +185,7 @@
 
 .patientInfo {
   &_name {
-    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    composes: fontMedium from '../../../../fonts.scss';
     font-size: 15px;
     line-height: 1.2em;
     margin-left: 15px;
@@ -218,7 +218,7 @@
   }
 
   &_otherInfo {
-    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    composes: fontMedium from '../../../../fonts.scss';
     max-width: 160px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -268,7 +268,7 @@
   align-items: center;
   text-align: center;
   padding: 5px;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
 }
 
 .appBody {
@@ -288,7 +288,7 @@
 .apptData {
   display: flex;
   flex-direction: column;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   justify-content: flex-start;
   text-align: left;
 

@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import RDropdownMenu from 'react-dd-menu';
 import classNames from 'classnames';
@@ -14,10 +14,11 @@ class DropdownSuggestion extends Component {
 
     this.state = {
       isOpen: false,
+      currentValue: props.value,
+      scrollIndex: this.getIndex(props.value),
     };
-    this.currentValue = props.value;
-    this.scrollIndex = this.getIndex(props.value);
 
+    this.suggestionsNode = createRef();
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.toggle = this.toggle.bind(this);
@@ -32,25 +33,20 @@ class DropdownSuggestion extends Component {
 
   /**
    * Update currentValue and scrollIndex,
-   * based on the data from the nextProps.
+   * based on the data from the prevProps.
    *
-   * @param {object} nextProps
+   * @param {object} prevProps
    */
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      this.currentValue = nextProps.value;
-      this.scrollIndex = this.getIndex(this.currentValue);
+  componentDidUpdate(prevProps) {
+    if (prevProps.value !== this.props.value) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        currentValue: this.props.value,
+        scrollIndex: this.getIndex(this.props.value),
+      });
     }
-  }
-
-  /**
-   * If the dropdown is open,
-   * and there's a prop's value
-   * let's scroll the dropdown to the specific index.
-   */
-  componentDidUpdate() {
-    if (this.props.value && this.state.isOpen) {
-      this.scrollTo(this.scrollIndex);
+    if (prevProps.value && this.state.isOpen) {
+      this.scrollTo(this.state.scrollIndex);
     }
   }
 
@@ -64,6 +60,7 @@ class DropdownSuggestion extends Component {
     if (!validateValue(val)) {
       return false;
     }
+
     return this.props.options.findIndex(opt => opt.value === val) || false;
   }
 
@@ -98,7 +95,7 @@ class DropdownSuggestion extends Component {
       if (!this.state.isOpen) {
         this.open();
       }
-      this.suggestionsNode.scrollTop = index * 40;
+      this.suggestionsNode.current.scrollTop = index * 40;
     }
   }
 
@@ -115,9 +112,11 @@ class DropdownSuggestion extends Component {
     }
     const index = this.getIndex(value);
     if (index > -1) {
-      this.scrollIndex = index;
-      this.currentValue = value;
-      this.scrollTo(this.scrollIndex);
+      this.setState({
+        scrollIndex: index,
+        currentValue: value,
+      });
+      this.scrollTo(index);
       this.props.onChange(value);
     }
   }
@@ -158,10 +157,12 @@ class DropdownSuggestion extends Component {
    */
   selectBeforeClose() {
     const { onChange } = this.props;
-    const selected = this.props.options[this.scrollIndex];
-    if (selected && selected.value !== this.currentValue) {
-      this.currentValue = selected.value;
-      onChange(this.currentValue);
+    const selected = this.props.options[this.state.scrollIndex];
+    if (selected && selected.value !== this.state.currentValue) {
+      this.setState({
+        currentValue: selected.value,
+      });
+      onChange(selected.value);
     }
   }
 
@@ -177,18 +178,18 @@ class DropdownSuggestion extends Component {
     if (direction === 'ArrowDown' && !isOpen) {
       this.setState({ isOpen: true });
     }
-    let nextIndex = this.scrollIndex > -1 ? this.scrollIndex : -1;
+    let nextIndex = this.state.scrollIndex > -1 ? this.state.scrollIndex : -1;
 
     if (direction === 'ArrowDown') {
-      nextIndex =
-        this.scrollIndex >= options.length - 1 ? 0 : this.scrollIndex + 1;
+      nextIndex = this.state.scrollIndex >= options.length - 1 ? 0 : this.state.scrollIndex + 1;
     }
 
     if (direction === 'ArrowUp') {
-      nextIndex =
-        this.scrollIndex <= 0 ? options.length - 1 : this.scrollIndex - 1;
+      nextIndex = this.state.scrollIndex <= 0 ? options.length - 1 : this.state.scrollIndex - 1;
     }
-    this.scrollIndex = nextIndex;
+    this.setState({
+      scrollIndex: nextIndex,
+    });
     onChange(options[nextIndex].value);
   }
 
@@ -202,8 +203,8 @@ class DropdownSuggestion extends Component {
         handleChange={this.handleChange}
         handleKeydown={this.handleKeydown}
         selected={{
-          value: this.currentValue,
-          label: this.props.renderValue(this.currentValue),
+          value: this.state.currentValue,
+          label: this.props.renderValue(this.state.currentValue),
         }}
       />
     );
@@ -212,12 +213,10 @@ class DropdownSuggestion extends Component {
   renderList() {
     return this.props.renderList(
       this.props,
-      this.currentValue,
-      this.scrollIndex,
+      this.state.currentValue,
+      this.state.scrollIndex,
       this.close,
-      (node) => {
-        this.suggestionsNode = node;
-      },
+      this.suggestionsNode,
     );
   }
 
@@ -241,24 +240,6 @@ class DropdownSuggestion extends Component {
     return <RDropdownMenu {...menuOptions} />;
   }
 }
-
-DropdownSuggestion.propTypes = {
-  align: PropTypes.string,
-  className: PropTypes.string,
-  'data-test-id': PropTypes.string,
-  defaultValue: PropTypes.string,
-  formatValue: PropTypes.func,
-  onChange: PropTypes.func.isRequired,
-  options: PropTypes.array,
-  renderList: PropTypes.func,
-  renderValue: PropTypes.func,
-  strict: PropTypes.bool,
-  theme: PropTypes.object,
-  validateValue: PropTypes.func,
-  value: PropTypes.string,
-};
-
-export default withTheme(DropdownSuggestion, styles);
 
 /**
  * Default format props
@@ -285,11 +266,13 @@ const validateValue = val => val.length;
  * @param callback
  * @returns {*}
  */
+export default withTheme(DropdownSuggestion, styles);
+
 const renderList = (props, currentValue, scrollIndex, close, callback) => (
   <div tabIndex="-1" className={styles.dropDownList} ref={callback}>
     {props.options.map((option, i) => (
       <DataSlot
-        key={i}
+        key={option.value}
         {...props}
         selected={currentValue === option.value}
         option={option}
@@ -305,8 +288,38 @@ const renderList = (props, currentValue, scrollIndex, close, callback) => (
 );
 
 renderList.propTypes = {
-  onChange: PropTypes.func,
-  options: PropTypes.array,
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.number,
+    }),
+  ),
+};
+
+renderList.defaultProps = {
+  options: [],
+};
+
+DropdownSuggestion.propTypes = {
+  align: PropTypes.string,
+  className: PropTypes.string,
+  'data-test-id': PropTypes.string,
+  defaultValue: PropTypes.string,
+  formatValue: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.number,
+    }),
+  ),
+  renderList: PropTypes.func,
+  renderValue: PropTypes.func,
+  strict: PropTypes.bool,
+  theme: PropTypes.shape(PropTypes.object),
+  validateValue: PropTypes.func,
+  value: PropTypes.string,
 };
 
 DropdownSuggestion.defaultProps = {
@@ -315,4 +328,11 @@ DropdownSuggestion.defaultProps = {
   renderValue,
   strict: true,
   validateValue,
+  align: null,
+  className: null,
+  'data-test-id': null,
+  defaultValue: null,
+  options: [],
+  theme: {},
+  value: null,
 };

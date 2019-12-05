@@ -14,7 +14,7 @@
   width: 100%;
   padding: 15px;
   box-sizing: border-box;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   font-size: 13px;
 }
 
@@ -55,7 +55,7 @@
 }
 
 .subHeader {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   font-size: 10px;
   color: $primary-dark-grey;
   margin-bottom: 15px;
@@ -96,7 +96,7 @@
 }
 
 .textEvent {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   font-size: 10px;
   text-transform: capitalize;
   margin-top: 10px;

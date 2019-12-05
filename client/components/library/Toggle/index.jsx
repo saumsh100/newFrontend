@@ -6,10 +6,9 @@ import RCToggle from 'react-toggle';
 import { isHub } from '../../../util/hub';
 import styles from './styles.scss';
 
-export default function Toggle(props) {
-  const {
-    className, icons, color, theme, label, name,
-  } = props;
+const Toggle = ({
+                  className, icons, color, theme, label, name,checked, ...props
+                }) => {
 
   const classes = theme
     ? classNames(styles[`theme_${theme}Background`])
@@ -22,10 +21,11 @@ export default function Toggle(props) {
           {label}
         </label>
       )}
-      <RCToggle {...props} icons={icons} className={classes} />
+      <RCToggle {...props} checked={!!checked} icons={icons} className={classes} />
     </div>
   );
-}
+};
+export default Toggle
 
 Toggle.propTypes = {
   className: PropTypes.string,
@@ -33,10 +33,16 @@ Toggle.propTypes = {
   icons: PropTypes.bool,
   theme: PropTypes.string,
   label: PropTypes.string,
+  checked: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   name: PropTypes.string,
 };
 
 Toggle.defaultProps = {
   color: isHub() ? 'electron' : 'red',
   icons: false,
+  checked: '',
+  label: '',
+  theme: '',
+  name: '',
+  className: '',
 };

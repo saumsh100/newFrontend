@@ -1,5 +1,5 @@
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { updateEntity, deleteEntity, receiveEntities } from '../reducers/entities';
 import { setSyncingWithPMS } from '../actions/schedule';
 import { addMessage, createListOfUnreadedChats, socketLock } from '../thunks/chat';
@@ -34,7 +34,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           onClick: () => {
             if (isHub()) {
               import('../thunks/electron').then((electronThunk) => {
-                store.getState().routing.location.pathname.indexOf('/requests') === -1 &&
+                store.getState().router.location.pathname.indexOf('/requests') === -1 &&
                   dispatch(push('/requests'));
                 dispatch(electronThunk.displayContent());
               });

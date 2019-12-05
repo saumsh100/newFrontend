@@ -3,10 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  fetchEntitiesRequest,
-  updateEntityRequest,
-} from '../../../../thunks/fetchEntities';
+import { fetchEntitiesRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
 import Section from '../Shared/Section';
 import PatientPreferencesForm from './PatientPreferencesForm';
 import styles from './styles.scss';
@@ -14,11 +11,10 @@ import styles from './styles.scss';
 class Unsubscribe extends Component {
   constructor(props) {
     super(props);
-
     this.updatePreferences = this.updatePreferences.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const patientId = this.props.params.patient.id;
     this.props.fetchEntitiesRequest({
       id: 'fetchPatientPreferences',
@@ -39,18 +35,13 @@ class Unsubscribe extends Component {
 
   render() {
     // If patient is pulled, display the form
-    const initialValues =
-      this.props.patient && this.props.patient.toJS().preferences;
-
-    console.log(initialValues);
+    const initialValues = this.props.patient && this.props.patient.toJS().preferences;
 
     return (
       <div>
         <Section>
           <div className={styles.header}>Unsubscribe</div>
-          <div className={styles.text}>
-            Manage your communication preferences below.
-          </div>
+          <div className={styles.text}>Manage your communication preferences below.</div>
         </Section>
         {initialValues ? (
           <Section className={styles.formSection}>

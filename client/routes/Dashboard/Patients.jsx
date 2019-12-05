@@ -1,15 +1,14 @@
 
-import React from 'react';
+import React, { lazy } from 'react';
 import DocumentTitle from 'react-document-title';
 import { Switch, Redirect, Route } from 'react-router-dom';
-import LazyRoute from '../LazyRoute';
 
 const base = (path = '') => `/patients${path}`;
 
 const Routes = {
-  list: LazyRoute(() => import('../../components/Patients/PatientTable')),
-  patient: LazyRoute(() => import('../../components/Patients/PatientInfo')),
-  search: LazyRoute(() => import('../../components/Patients/PatientSearch')),
+  list: lazy(() => import('../../components/Patients/PatientTable')),
+  patient: lazy(() => import('../../components/Patients/PatientInfo')),
+  search: lazy(() => import('../../components/Patients/PatientSearch')),
 };
 
 const Patients = () => (

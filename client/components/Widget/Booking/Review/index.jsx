@@ -11,7 +11,7 @@ import { historyShape, locationShape } from '../../../library/PropTypeShapes/rou
 import Practitioner from '../../../../entities/models/Practitioners';
 import Service from '../../../../entities/models/Service';
 import { createRequest, createWaitSpot } from '../../../../thunks/availabilities';
-import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
+import officeHoursShape from '../../../library/PropTypeShapes/officeHoursShape';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import { SummaryItemFactory } from './SummaryItem';
 import { availabilitiesGroupedByPeriod, waitlistDates, waitlistTimes } from './helpers';

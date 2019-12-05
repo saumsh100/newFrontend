@@ -15,7 +15,7 @@ import {
   ListItem,
 } from '../../../library';
 import { isHub } from '../../../../util/hub';
-import { waitSpotShape, patientShape } from '../../../library/PropTypeShapes/waitSpotShape';
+import { waitSpotShape, patientShape } from '../../../library/PropTypeShapes';
 import styles from './styles.scss';
 import todoStyles from '../../../Dashboard/DonnaToDoListContainer/Tasks/styles.scss';
 

@@ -27,15 +27,15 @@
   color: $primary-color;
 }
 .listItemHeader {
-  composes: listItemHeader from 'sass-loader!../../../fonts.scss';
+  composes: listItemHeader from '../../../fonts.scss';
 }
 
 .subHeaderSmall {
-  composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
+  composes: subHeaderSmall from '../../../fonts.scss';
 }
 
 .fontBold {
-  composes: fontBold from 'sass-loader!../../../fonts.scss';
+  composes: fontBold from '../../../fonts.scss';
 }
 
 .container {
@@ -147,5 +147,5 @@
 .bold {
   text-transform: capitalize;
   color: $primary-blue;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
 }

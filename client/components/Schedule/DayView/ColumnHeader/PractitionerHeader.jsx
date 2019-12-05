@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import PractitionerAvatar from '../../../library/PractitionerAvatar';
-import { practitionerShape } from '../../../library/PropTypeShapes/practitionerShape';
+import { practitionerShape } from '../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
 const PractitionerHeader = ({ practitioner }) => (

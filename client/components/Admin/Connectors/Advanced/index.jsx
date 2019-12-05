@@ -36,7 +36,7 @@ export default class Advanced extends Component {
     this.toggleDonnaTODOList = this.toggleDonnaTODOList.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({ isLoading: true });
 
     const { account } = this.props;

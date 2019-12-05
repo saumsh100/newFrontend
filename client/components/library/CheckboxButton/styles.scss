@@ -1,7 +1,7 @@
 @import '../../../ui';
 
 .buttonLabel {
-  composes: fontDefault from 'sass-loader!../../../fonts.scss';
+  composes: fontDefault from '../../../fonts.scss';
   display: inline-block;
   cursor: pointer;
   color: $primary-dark-grey;

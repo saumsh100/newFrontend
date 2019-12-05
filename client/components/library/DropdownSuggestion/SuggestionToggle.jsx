@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../Icon';
@@ -16,23 +16,13 @@ class SuggestionToggle extends Component {
     super(props);
 
     this.state = {
-      displayValue: '',
+      displayValue: props.selected ? props.selected.label : '',
     };
+
+    this[`suggestion_toggle_${props.name}`] = createRef();
     this.handleSearch = this.handleSearch.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
     this.displaySuggestions = this.displaySuggestions.bind(this);
-  }
-
-  /**
-   * Check if there a value on mounting,
-   *  if so let's set the state of the component.
-   */
-  componentWillMount() {
-    if (this.props.selected) {
-      this.setState({
-        displayValue: this.props.selected.label,
-      });
-    }
   }
 
   /**
@@ -40,22 +30,22 @@ class SuggestionToggle extends Component {
    * let's focus on it
    */
   componentDidMount() {
-    this[`suggestion_toggle_${this.props.name}`].focus();
+    this[`suggestion_toggle_${this.props.name}`].current.focus();
   }
 
   /**
    * Check if the value of the update is
    * different from the actual value, if so
    * let's update the state of the component.
-   *
-   * @param nextProps
    */
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selected) {
-      this.setState({
-        displayValue: nextProps.selected.label,
-      });
+  static getDerivedStateFromProps(props, state) {
+    const newDisplayValue = props.selected.label;
+    if (newDisplayValue !== state.displayValue) {
+      return {
+        displayValue: newDisplayValue,
+      };
     }
+    return null;
   }
 
   /**
@@ -83,21 +73,17 @@ class SuggestionToggle extends Component {
    * and select the input field.
    */
   displaySuggestions() {
-    const {
-      toggleView, disabled, isOpen, name,
-    } = this.props;
+    const { toggleView, disabled, isOpen, name } = this.props;
     if (disabled) return;
 
     if (!isOpen) {
-      this[`suggestion_toggle_${name}`].focus();
+      this[`suggestion_toggle_${name}`].current.focus();
     }
     return toggleView();
   }
 
   render() {
-    const {
-      name, handleBlur, label, theme, error, disabled, isOpen,
-    } = this.props;
+    const { name, handleBlur, label, theme, error, disabled, isOpen } = this.props;
 
     const labelClassName = classNames(theme.label, {
       [theme.filled]: this.state.displayValue,
@@ -135,9 +121,7 @@ class SuggestionToggle extends Component {
               className={styles.hiddenSelect}
               id={`suggestion_toggle_${name}`}
               tabIndex={-1}
-              ref={(input) => {
-                this[`suggestion_toggle_${name}`] = input;
-              }}
+              ref={this[`suggestion_toggle_${name}`]}
             >
               {this.props.options.map(opt => (
                 <option key={opt.value} value={opt.value}>
@@ -164,8 +148,12 @@ SuggestionToggle.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
   }).isRequired,
-  options: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.string, value: PropTypes.string }))
-    .isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ).isRequired,
   handleKeydown: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,

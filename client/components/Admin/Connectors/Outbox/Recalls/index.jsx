@@ -87,7 +87,7 @@ export default class OutboxRecalls extends Component {
     this.handleTabChange = this.handleTabChange.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // this.setState({ isLoading: true });
 
     const { account } = this.props;

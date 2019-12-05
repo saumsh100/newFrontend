@@ -1,13 +1,12 @@
 
-import React from 'react';
+import React, { lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import LazyRoute from '../LazyRoute';
 import DocumentTitle from 'react-document-title';
 
 const base = (path = '') => `/chat${path}`;
 
 const Routes = {
-  chat: LazyRoute(() => import('../../components/Chat')),
+  chat: lazy(() => import('../../components/Chat')),
 };
 
 const Patients = () => (

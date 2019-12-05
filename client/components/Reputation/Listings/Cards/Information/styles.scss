@@ -48,7 +48,7 @@
     }
     &_text {
       color: $primary-dark;
-      composes: subHeaderMedium from 'sass-loader!../../../../../fonts.scss';
+      composes: subHeaderMedium from '../../../../../fonts.scss';
     }
     &_data {
       color: lighten($primary-darkgrey, 20%);

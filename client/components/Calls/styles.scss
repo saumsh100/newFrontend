@@ -40,7 +40,7 @@
 .headerGraph_title {
   font-size: 25px;
   color: $primary-dark;
-  composes: fontMedium from 'sass-loader!../../fonts.scss';
+  composes: fontMedium from '../../fonts.scss';
 }
 
 .headerGraph_calendar {

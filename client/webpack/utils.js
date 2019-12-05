@@ -24,7 +24,7 @@ exports.appEntries = appEntries;
 exports.entries = (isDevMode = false) =>
   appEntries(
     isDevMode
-      ? name => ['babel-polyfill', 'react-hot-loader/patch', `./entries/${name}.js`]
+      ? name => ['core-js/stable', 'regenerator-runtime/runtime', 'react-hot-loader/patch', `./entries/${name}.js`]
       : name => `./entries/${name}.js`,
   );
 

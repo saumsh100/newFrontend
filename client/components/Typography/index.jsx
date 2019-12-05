@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styles from './styles.scss';
 import classNames from 'classnames';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { Card, CodeSnippet, Header } from '../library';
 
 function Typography(props) {

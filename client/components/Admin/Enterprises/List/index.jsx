@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { deleteEntityRequest, fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import { Button, DialogBox, Card } from '../../../library/index';
 import CreateAccount from '../CreateAccount';

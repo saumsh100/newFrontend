@@ -45,10 +45,10 @@
   justify-content: center;
   &_header {
     margin-bottom: 10px;
-    composes: font-header-title from 'sass-loader!../../../fonts.scss';
+    composes: font-header-title from '../../../fonts.scss';
   }
   &_subHeader {
-    composes: subHeader from 'sass-loader!../../../fonts.scss';
+    composes: subHeader from '../../../fonts.scss';
   }
 }
 
@@ -65,7 +65,7 @@
   position: relative;
 
   &__count {
-    composes: fontExtraMediumLarge from 'sass-loader!../../../fonts.scss';
+    composes: fontExtraMediumLarge from '../../../fonts.scss';
   }
 
   &__title {
@@ -87,7 +87,7 @@
     border-top: 2px solid $primary-grey;
     color: lighten($primary-darkgrey, 20%);
     font-size: $medium-size;
-    composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
+    composes: subHeaderSmall from '../../../fonts.scss';
   }
 
   &_noReviews {
@@ -147,7 +147,7 @@
       margin-top: 10px;
       color: lighten($primary-darkgrey, 20%);
       font-size: $medium-size;
-      composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
+      composes: subHeaderSmall from '../../../fonts.scss';
     }
   }
 }

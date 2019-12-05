@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
 import styles from '../../styles/default.scss';
 
 const Loader = ({ isLoaded, inContainer, children }) => {
@@ -27,6 +26,7 @@ Loader.defaultProps = {
   isLoaded: false,
   inContainer: false,
   children: null,
+  isLoaded: false,
 };
 
 export default Loader;

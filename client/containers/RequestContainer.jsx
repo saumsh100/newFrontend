@@ -19,8 +19,8 @@ class RequestContainer extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { filteredRequests, selectedRequest } = nextProps;
+  componentDidUpdate() {
+    const { filteredRequests, selectedRequest } = this.props;
 
     if (isHub() && !selectedRequest) {
       this.props.setTitle(`${filteredRequests.length} Online Requests`);
@@ -51,8 +51,8 @@ class RequestContainer extends Component {
 }
 
 RequestContainer.propTypes = {
-  loadOnlineRequest: PropTypes.func,
-  setTitle: PropTypes.func,
+  loadOnlineRequest: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
   scheduleRequestsFetched: PropTypes.bool,
   redirect: PropTypes.shape({
     pathname: PropTypes.string,
@@ -68,7 +68,23 @@ RequestContainer.propTypes = {
   patientUsers: PropTypes.instanceOf(Map),
 };
 
-function mapStateToProps({ entities, apiRequests, routing }, ownProps) {
+RequestContainer.defaultProps = {
+  scheduleRequestsFetched: false,
+  redirect: {
+    pathname: '',
+    search: '',
+  },
+  requests: Map({}),
+  filteredRequests: [],
+  sortedRequests: [],
+  requestId: '',
+  selectedRequest: null,
+  services: Map({}),
+  practitioners: Map({}),
+  patientUsers: Map({}),
+};
+
+function mapStateToProps({ entities, apiRequests, router }, ownProps) {
   const scheduleRequestsFetched = apiRequests.get('scheduleRequests')
     ? apiRequests.get('scheduleRequests').wasFetched
     : null;
@@ -82,8 +98,14 @@ function mapStateToProps({ entities, apiRequests, routing }, ownProps) {
     .toArray()
     .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
-  const sortedRequests = filteredRequests.sort((a, b) => Date.parse(b.startDate) - Date.parse(a.startDate));
-  const nextProps = { routing, sortedRequests, ...ownProps };
+  const sortedRequests = filteredRequests.sort(
+    (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate),
+  );
+  const nextProps = {
+    router,
+    sortedRequests,
+    ...ownProps,
+  };
   return {
     requests,
     filteredRequests,

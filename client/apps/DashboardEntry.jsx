@@ -1,8 +1,6 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
-import { createBrowserHistory } from 'history';
+import { render } from 'react-dom';
 import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
 import _ from 'lodash';
@@ -14,6 +12,7 @@ import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import socket from '../socket';
 import App from './Dashboard';
 import configure from '../store';
+import { browserHistory } from '../store/factory';
 import { load } from '../thunks/auth';
 import { loadUnreadMessages } from '../thunks/chat';
 import { loadOnlineRequest } from '../thunks/onlineRequests';
@@ -22,13 +21,13 @@ import DesktopNotification from '../util/desktopNotification';
 import SubscriptionManager from '../util/graphqlSubscriptions';
 import { identifyPracticeUser } from '../util/fullStory';
 import { receiveEntities } from '../reducers/entities';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 if (process.env.NODE_ENV === 'production') {
   window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
 }
 
-const browserHistory = createBrowserHistory();
-const store = configure({ browserHistory });
+const store = configure();
 
 store.dispatch(
   initializeFeatureFlags({
@@ -63,6 +62,7 @@ load()(store.dispatch).then(() => {
         email,
         created_at: user.createdAt,
       });
+      DesktopNotification.requestPermission();
     }
 
     SubscriptionManager.accountId = auth.get('accountId');
@@ -75,15 +75,13 @@ load()(store.dispatch).then(() => {
         },
       }),
     );
+
     store.dispatch(loadUnreadMessages());
     store.dispatch(loadOnlineRequest());
-    DesktopNotification.requestPermission();
     connectSocketToStoreLogin(store, socket);
   }
-
   // TODO: define globals with webpack ProvidePlugin
   window.store = store;
-  window.browserHistory = browserHistory;
   window.socket = socket;
   window.moment = extendMoment(moment);
   window.time = time;
@@ -98,22 +96,19 @@ load()(store.dispatch).then(() => {
     store,
   };
 
-  const render = (Component) => {
-    ReactDOM.render(
-      <AppContainer>
-        <Component {...appProps} />
-      </AppContainer>,
+  const renderApp = () =>
+    render(
+      <React.StrictMode>
+        <ErrorBoundary>
+          <App {...appProps} />
+        </ErrorBoundary>
+      </React.StrictMode>,
       document.getElementById('root'),
     );
-  };
 
-  render(App);
+  renderApp();
 
   if (module.hot) {
-    module.hot.accept('./Dashboard', () => {
-      const NextApp = require('./Dashboard').default; // eslint-disable-line global-require
-
-      return render(NextApp);
-    });
+    module.hot.accept('./Dashboard', () => renderApp());
   }
 });

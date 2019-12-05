@@ -22,7 +22,7 @@
 }
 
 .tagText {
-  composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+  composes: fontMedium from '../../../../../fonts.scss';
   color: $primary-white;
   padding-right: 10px;
 }

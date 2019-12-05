@@ -38,7 +38,7 @@ class AddSegment extends Component {
     this.props.previewSegment({});
   }
 
-  componentWillReceiveProps(props) {
+  componentDidUpdate(props) {
     if (JSON.stringify(this.props.formData) !== JSON.stringify(props.formData)) {
       this.props.previewSegment(props.formData);
       this.closeNameinput = this.closeNameinput.bind(this);
@@ -224,14 +224,12 @@ function mapStateToProps(state) {
 
 AddSegment.propTypes = {
   formName: PropTypes.string.isRequired,
-  fetchEntities: PropTypes.func,
   updateEntityRequest: PropTypes.func,
   reset: PropTypes.func,
   reinitializeState: PropTypes.func,
   change: PropTypes.func,
   applySegment: PropTypes.func,
   previewSegment: PropTypes.func,
-  addSegmentName: PropTypes.func,
   createEntityRequest: PropTypes.func,
   edit: PropTypes.bool,
   segmentId: PropTypes.string,
@@ -241,6 +239,19 @@ AddSegment.propTypes = {
     gender: PropTypes.string,
     city: PropTypes.string,
   }).isRequired,
+};
+
+AddSegment.defaultProps = {
+  updateEntityRequest: PropTypes.func,
+  reset: PropTypes.func,
+  reinitializeState: PropTypes.func,
+  change: PropTypes.func,
+  applySegment: PropTypes.func,
+  previewSegment: PropTypes.func,
+  createEntityRequest: PropTypes.func,
+  edit: PropTypes.bool,
+  segmentId: PropTypes.string,
+  segmentName: PropTypes.string,
 };
 
 const enhance = connect(

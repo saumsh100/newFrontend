@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classnames from 'classnames';
@@ -29,6 +29,10 @@ function isSameAsInitialDates(initFrom, initTo, startDate, endDate) {
 class DayPickerRange extends Component {
   constructor(props) {
     super(props);
+
+    this.fromInput = createRef();
+    this.toInput = createRef();
+
     this.handleDayClick = this.handleDayClick.bind(this);
     this.handleDayMouseEnter = this.handleDayMouseEnter.bind(this);
     this.handleResetClick = this.handleResetClick.bind(this);
@@ -59,14 +63,14 @@ class DayPickerRange extends Component {
   }
 
   openPopOver() {
-    if (this.fromInput === document.activeElement) {
+    if (this.fromInput.current === document.activeElement) {
       this.setState({
         fromInputFocused: true,
         toInputFocused: false,
       });
     }
 
-    if (this.toInput === document.activeElement) {
+    if (this.toInput.current === document.activeElement) {
       this.setState({
         fromInputFocused: false,
         toInputFocused: true,
@@ -107,7 +111,7 @@ class DayPickerRange extends Component {
           toInputFocused: true,
         },
         () => {
-          this.toInput.focus();
+          this.toInput.current.focus();
           this.props.onChange({
             from,
             to: '',
@@ -186,7 +190,7 @@ class DayPickerRange extends Component {
           toInputFocused: false,
         },
         () => {
-          this.toInput.focus();
+          this.toInput.current.focus();
           !this.props.popover && this.applyDateRange();
         },
       );
@@ -323,19 +327,13 @@ class DayPickerRange extends Component {
       from: {
         fromReadOnly: readOnly,
         fromValue: fromFormatted,
-        fromRef: (el) => {
-          this.fromInput = el;
-          return this.fromInput;
-        },
+        fromRef: this.fromInput,
         fromOnClick: this.openPopOver,
       },
       to: {
         toReadOnly: readOnly,
         toValue: toFormatted,
-        toRef: (el) => {
-          this.toInput = el;
-          return this.toInput;
-        },
+        toRef: this.toInput,
         toOnClick: this.openPopOver,
       },
     });

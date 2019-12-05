@@ -5,25 +5,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Loading } from '../../library';
 import { loadSentReview } from '../../../thunks/reviews';
-import Header from '../Header';
 import styles from './styles.scss';
 
 class WidgetContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentWillMount() {
-    // Host app will trigger a dispatch to set sentReviewId
-    // but we can't be sure that it's set by the time we load.
+  componentDidMount() {
     if (this.props.sentReviewId) {
       this.props.loadSentReview();
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    // If it was not defined before, set it now
-    if (!this.props.sentReviewId && nextProps.sentReviewId) {
+  componentDidUpdate(prevProps) {
+    if (!prevProps.sentReviewId && this.props.sentReviewId) {
       this.props.loadSentReview();
     }
   }
@@ -38,17 +30,23 @@ class WidgetContainer extends Component {
 
     return (
       <div className={styles.container}>
-        {!sentReviewId || isLoadingSentReview ? (
-          <LoadingView />
-        ) : (
-          this.props.children
-        )}
+        {!sentReviewId || isLoadingSentReview ? <LoadingView /> : this.props.children}
       </div>
     );
   }
 }
 
-WidgetContainer.propTypes = {};
+WidgetContainer.propTypes = {
+  children: PropTypes.elementType.isRequired,
+  sentReviewId: PropTypes.string,
+  isLoadingSentReview: PropTypes.bool,
+  loadSentReview: PropTypes.func.isRequired,
+};
+
+WidgetContainer.defaultProps = {
+  sentReviewId: '',
+  isLoadingSentReview: false,
+};
 
 function mapStateToProps({ reviews }) {
   return {
@@ -65,6 +63,13 @@ function mapDispatchToProps(dispatch) {
     dispatch,
   );
 }
+
+WidgetContainer.propTypes = {
+  sentReviewId: PropTypes.string.isRequired,
+  isLoadingSentReview: PropTypes.bool.isRequired,
+  loadSentReview: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+};
 
 export default connect(
   mapStateToProps,

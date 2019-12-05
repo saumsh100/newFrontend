@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-darkgrey;
 
   &_edit {
@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   padding-left: 15px;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
 
   &_closeIcon {
     font-size: 1rem;
@@ -123,7 +123,7 @@
 }
 
 .formHeader {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-dark;
   font-size: 15px;
   @media screen and (max-width: 800px) {
@@ -164,7 +164,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-dark-grey;
   font-size: $extra-small-size;
   opacity: 0.6;
@@ -182,7 +182,7 @@
   align-items: center;
   justify-content: space-between;
   &_label {
-    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    composes: fontMedium from '../../../../fonts.scss';
     color: $primary-dark-grey;
   }
 }

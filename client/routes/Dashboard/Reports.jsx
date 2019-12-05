@@ -1,13 +1,12 @@
 
-import React from 'react';
+import React, { lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
-import LazyRoute from '../LazyRoute';
 
 const base = (path = '') => `/intelligence${path}`;
 
 const Routes = {
-  Intelligence: LazyRoute(() => import('../../components/Reports/')),
+  Intelligence: lazy(() => import('../../components/Reports/')),
 };
 
 const Reports = () => (

@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import RDayPicker, { LocaleUtils } from 'react-day-picker';
@@ -57,6 +57,7 @@ class ScheduleCalendar extends Component {
       editSchedule: {},
     };
 
+    this.daypicker = createRef();
     this.getSelectedSchedule = this.getSelectedSchedule.bind(this);
     this.handleModalVisibility = this.handleModalVisibility.bind(this);
     this.handleEditSchedule = this.handleEditSchedule.bind(this);
@@ -83,9 +84,9 @@ class ScheduleCalendar extends Component {
    * @param iterator
    */
   changeMonth(iterator) {
-    const month = this.daypicker.state.currentMonth;
+    const month = this.daypicker.current.state.currentMonth;
     month.setMonth(month.getMonth() + iterator);
-    this.daypicker.showMonth(month);
+    this.daypicker.current.showMonth(month);
     this.props.onChangeMonth(month);
   }
 
@@ -193,9 +194,7 @@ class ScheduleCalendar extends Component {
                 ...LocaleUtils,
                 formatWeekdayShort,
               }}
-              ref={(el) => {
-                this.daypicker = el;
-              }}
+              ref={this.daypicker}
               navbarElement={() => null}
               captionElement={() => null}
               month={month}

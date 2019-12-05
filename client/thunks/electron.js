@@ -1,5 +1,5 @@
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { electron } from '../util/ipc';
 import { hideContent } from '../reducers/electron';
 import { RESIZE_WINDOW } from '../constants';
@@ -12,8 +12,8 @@ export function displayContent(isExpensive = false) {
 
 export function collapseContent() {
   return (dispatch, getState) => {
-    const { routing } = getState();
-    if (routing.location.pathname.indexOf('/intercom') > -1) {
+    const { router } = getState();
+    if (router.location.pathname.indexOf('/intercom') > -1) {
       window.Intercom('hide');
     }
 

@@ -33,7 +33,8 @@
   &_text {
     padding-left: 5px;
     font-size: 15px;
-    composes: fontDefault from 'sass-loader!../../../fonts.scss';
+    margin-right: 10px;
+    composes: fontDefault from '../../../fonts.scss';
   }
 }
 
@@ -44,7 +45,7 @@
 
 .closeIcon {
   margin-left: auto;
-  composes: fontMediumSize from 'sass-loader!../../../fonts.scss';
+  composes: fontMediumSize from '../../../fonts.scss';
   color: $primary-grey;
   background: none;
   font-size: 14px;
@@ -91,7 +92,7 @@
 }
 
 .subHeader {
-  composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
+  composes: subHeaderExtraSmall from '../../../fonts.scss';
   padding-bottom: 5px;
   text-transform: uppercase;
 }
@@ -113,7 +114,7 @@
   display: flex;
   align-items: center;
   font-size: 13px;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
   padding-bottom: 8px;
 
   &_note {
@@ -135,7 +136,7 @@
 }
 
 .subData {
-  composes: fontExtraSmall from 'sass-loader!../../../fonts.scss';
+  composes: fontExtraSmall from '../../../fonts.scss';
   color: $primary-dark-grey;
 }
 
@@ -176,7 +177,7 @@
   height: auto;
   font-size: 20px;
   padding: 12px 13px;
-  composes: fontDefault from 'sass-loader!../../../fonts.scss';
+  composes: fontDefault from '../../../fonts.scss';
 }
 
 .actionsOverlay {
@@ -216,7 +217,7 @@
 
 .requestedAt {
   font-size: $extra-small-size;
-  composes: fontDefault from 'sass-loader!../../../fonts.scss';
+  composes: fontDefault from '../../../fonts.scss';
   color: #808081;
 
   &_diffUserContainer {
@@ -224,7 +225,7 @@
   }
 
   &_byDiffUser {
-    composes: fontDefault from 'sass-loader!../../../fonts.scss';
+    composes: fontDefault from '../../../fonts.scss';
     opacity: 1;
     font-size: $extra-small-size;
     color: $primary-dark;

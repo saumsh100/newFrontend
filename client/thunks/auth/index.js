@@ -1,6 +1,6 @@
 
 import jwt from 'jwt-decode';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
 import { loginSuccess, authLogout } from '../../reducers/auth';

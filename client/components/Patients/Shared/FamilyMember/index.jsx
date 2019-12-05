@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { isResponsive } from '../../../../util/hub';
 import { Grid, Row, Col, Avatar, Badge, Icon } from '../../../library';

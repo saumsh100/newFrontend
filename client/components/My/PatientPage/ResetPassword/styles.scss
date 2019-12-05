@@ -1,7 +1,7 @@
 @import '../../../../ui';
 
 .header {
-  composes: header from 'sass-loader!../../../../fonts.scss';
+  composes: header from '../../../../fonts.scss';
   text-align: center;
   color: $primary-dark;
 }

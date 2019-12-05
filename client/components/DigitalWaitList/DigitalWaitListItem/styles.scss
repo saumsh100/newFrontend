@@ -1,5 +1,4 @@
-
-@import "../../../ui";
+@import '../../../ui';
 
 .fa-envelope {
   color: $primary-blue;
@@ -23,13 +22,12 @@
 }
 
 .listItemHeader {
-  composes: listItemHeader from "sass-loader!../../../fonts.scss";
+  composes: listItemHeader from '../../../fonts.scss';
 }
 
 .subHeader {
-  composes: subHeader from "sass-loader!../../../fonts.scss";
+  composes: subHeader from '../../../fonts.scss';
 }
-
 
 .reminders {
   border-top: $card-border-size $primary-darkgrey;
@@ -105,7 +103,7 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-     // font-size: $small-size;
+      // font-size: $small-size;
       @extend .subHeader;
     }
 
@@ -140,7 +138,6 @@
         align-items: center;
       }
     }
-
 
     &_pencilBorder {
       position: relative;

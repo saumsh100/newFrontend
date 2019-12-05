@@ -7,7 +7,7 @@ import { change } from 'redux-form';
 import { Map } from 'immutable';
 import { Form, Field, Toggle, Grid, Row, Col } from '../../../../library/index';
 import { updateEntityRequest, createEntityRequest } from '../../../../../thunks/fetchEntities';
-import { accountShape } from '../../../../library/PropTypeShapes/accountShape';
+import accountShape from '../../../../library/PropTypeShapes/accountShape';
 import wordsForTime from './selectConstants';
 import { onlyNumber } from '../../../../../components/library/Form/validate';
 

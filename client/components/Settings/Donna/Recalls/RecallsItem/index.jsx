@@ -6,10 +6,12 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { intervalToNumType } from '@carecru/isomorphic';
 import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
-import { Toggle, DropdownSelect } from '../../../../library';
+import { Toggle } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
+import Account from '../../../../../entities/models/Account';
+import Recall from '../../../../../entities/models/Recall';
 import styles from './styles.scss';
 
 const iconsMap = {
@@ -69,17 +71,6 @@ class RecallsItem extends Component {
     this.setState({ number: num });
   }
 
-  componentWillUpdate(nextProps) {
-    // Need function to abstract
-    const oldNumType = intervalToNumType(this.props.recall.interval);
-    const newNumType = intervalToNumType(nextProps.recall.interval);
-    if (oldNumType.num === newNumType.num) {
-      return;
-    }
-
-    this.setState({ number: newNumType.num });
-  }
-
   changeIsActive(e) {
     const isActive = e.target.checked;
     const { recall, account } = this.props;
@@ -111,7 +102,7 @@ class RecallsItem extends Component {
     const { recall, account, selected, selectRecall } = this.props;
     const { num, type } = intervalToNumType(recall.interval);
     const subType = num >= 0 ? 'before' : 'after';
-    const sure = confirm(
+    const sure = window.confirm(
       `Are you sure you want to delete the ${num} ${type} ${subType} due date recall?`,
     );
     if (!sure) {
@@ -224,7 +215,20 @@ class RecallsItem extends Component {
   }
 }
 
-RecallsItem.propTypes = { selectRecall: PropTypes.func.isRequired };
+RecallsItem.propTypes = {
+  selectRecall: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  recall: PropTypes.instanceOf(Recall).isRequired,
+  account: PropTypes.instanceOf(Account).isRequired,
+  selected: PropTypes.bool,
+  index: PropTypes.number.isRequired,
+  lastRecall: PropTypes.bool,
+};
+
+RecallsItem.defaultProps = {
+  selected: false,
+  lastRecall: false,
+};
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ updateEntityRequest }, dispatch);

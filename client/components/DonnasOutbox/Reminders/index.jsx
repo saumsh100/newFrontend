@@ -35,7 +35,7 @@ export default class OutboxReminders extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { account } = this.props;
     return Promise.all([httpClient().get(`/api/accounts/${account.id}/reminders/outbox`)])
       .then(([remindersData]) => {

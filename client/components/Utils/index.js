@@ -201,7 +201,7 @@ export const checkIfUsersEqual = (patientUser, requestingUser) => {
  * @param props.sortedRequests sorted request from component props
  */
 export const selectedRequestBuilder = (props) => {
-  const parsedSearch = parse(props.routing.location.search);
+  const parsedSearch = parse(props.router.location.search);
   return {
     requestId: parsedSearch.selectedRequest || null,
     selectedRequest: parsedSearch.selectedRequest

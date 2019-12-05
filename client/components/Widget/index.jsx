@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -30,17 +30,15 @@ const b = ({ pathname }, path, size = 5) =>
 class Widget extends Component {
   constructor() {
     super();
+    this.containerNode = createRef();
     this.handleCleaningFirstStep = this.handleCleaningFirstStep.bind(this);
   }
 
-  componentWillMount() {
-    // Without this, none of our themed styles would work
+  componentDidMount() {
     const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
     document.documentElement.style.setProperty('--primaryColor', color);
     document.documentElement.style.setProperty('--primaryButtonColor', color);
-  }
 
-  componentDidMount() {
     const queryVars = parse(this.props.location.search);
     if (!queryVars.sentRecallId) {
       this.props.setSelectedServiceId(null);
@@ -50,7 +48,7 @@ class Widget extends Component {
   componentDidUpdate(prevProps) {
     // Scroll to top of view when route changes
     if (this.props.location.pathname !== prevProps.location.pathname) {
-      this.containerNode.scrollTop = 0;
+      this.containerNode.current.scrollTop = 0;
     }
   }
 
@@ -95,14 +93,7 @@ class Widget extends Component {
       <div className={styles.reviewsWidgetContainer}>
         <div className={styles.reviewsWidgetCenter}>
           <Header routesState={routesState} isReviewApp={isReviewApp} />
-          <Element
-            id="widgetContainer"
-            className={styles.widgetContainer}
-            ref={(node) => {
-              this.containerNode = node;
-              return this.containerNode;
-            }}
-          >
+          <Element id="widgetContainer" className={styles.widgetContainer} ref={this.containerNode}>
             {!isCompleteRoute && !isReviewApp && (
               <div className={styles.stepsWrapper}>
                 <div className={styles.steps}>

@@ -27,7 +27,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid $primary-grey;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   min-height: 80px;
 
   &_title {
@@ -38,7 +38,7 @@
 .link {
   color: $primary-dark;
   font-size: 14px;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   text-decoration: none;
   width: 100px;
 

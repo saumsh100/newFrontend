@@ -1,62 +1,32 @@
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
-import LazyRoute from '../LazyRoute';
 
 import Container from '../../containers/SettingsContainer';
 import Practice from '../../components/Settings/Practice';
 import Donna from '../../components/Settings/Donna';
+import Loader from '../../components/Loader';
 
 const base = (path = '') => `/settings${path}`;
 const practiceBase = (path = '') => base(`/practice${path}`);
 const donnaBase = (path = '') => base(`/donna${path}`);
 
 const Routes = {
-  clinicGeneral: LazyRoute(
-    () => import('../../components/Settings/Practice/General'),
-    true,
-  ),
-  clinicUsers: LazyRoute(
-    () => import('../../components/Settings/Practice/Users'),
-    true,
-  ),
+  clinicGeneral: lazy(() => import('../../components/Settings/Practice/General')),
+  clinicUsers: lazy(() => import('../../components/Settings/Practice/Users')),
 
-  scheduleOfficeHours: LazyRoute(
-    () => import('../../components/Settings/Practice/OfficeHours'),
-    true,
-  ),
-  scheduleOnlineBooking: LazyRoute(
-    () => import('../../components/Settings/Practice/OnlineBooking'),
-    true,
-  ),
-  chairs: LazyRoute(
-    () => import('../../components/Settings/Practice/Chairs'),
-    true,
-  ),
-  superAdmin: LazyRoute(
-    () => import('../../components/Settings/Practice/SuperAdmin'),
-    true,
-  ),
+  scheduleOfficeHours: lazy(() => import('../../components/Settings/Practice/OfficeHours')),
+  scheduleOnlineBooking: lazy(() => import('../../components/Settings/Practice/OnlineBooking')),
+  chairs: lazy(() => import('../../components/Settings/Practice/Chairs')),
+  superAdmin: lazy(() => import('../../components/Settings/Practice/SuperAdmin')),
 
-  reminders: LazyRoute(
-    () => import('../../components/Settings/Donna/Reminders'),
-    true,
-  ),
-  recalls: LazyRoute(
-    () => import('../../components/Settings/Donna/Recalls'),
-    true,
-  ),
-  reviews: LazyRoute(
-    () => import('../../components/Settings/Donna/Reviews'),
-    true,
-  ),
+  reminders: lazy(() => import('../../components/Settings/Donna/Reminders')),
+  recalls: lazy(() => import('../../components/Settings/Donna/Recalls')),
+  reviews: lazy(() => import('../../components/Settings/Donna/Reviews')),
 
-  reasons: LazyRoute(() => import('../../components/Settings/Reasons'), true),
-  practitioners: LazyRoute(
-    () => import('../../components/Settings/Practitioners'),
-    true,
-  ),
+  reasons: lazy(() => import('../../components/Settings/Reasons')),
+  practitioners: lazy(() => import('../../components/Settings/Practitioners')),
 };
 
 const PracticeContainer = props => (
@@ -65,14 +35,8 @@ const PracticeContainer = props => (
       <Redirect exact from={practiceBase()} to={practiceBase('/general')} />
       <Route path={practiceBase('/general')} component={Routes.clinicGeneral} />
       <Route path={practiceBase('/users')} component={Routes.clinicUsers} />
-      <Route
-        path={practiceBase('/hours')}
-        component={Routes.scheduleOfficeHours}
-      />
-      <Route
-        path={practiceBase('/onlinebooking')}
-        component={Routes.scheduleOnlineBooking}
-      />
+      <Route path={practiceBase('/hours')} component={Routes.scheduleOfficeHours} />
+      <Route path={practiceBase('/onlinebooking')} component={Routes.scheduleOnlineBooking} />
       <Route path={practiceBase('/chairs')} component={Routes.chairs} />
       <Route path={practiceBase('/superadmin')} component={Routes.superAdmin} />
     </Switch>
@@ -93,13 +57,15 @@ const DonnaContainer = props => (
 const Settings = props => (
   <Container {...props}>
     <DocumentTitle title="CareCru | Settings">
-      <Switch>
-        <Redirect exact from={base()} to={base('/practice')} />
-        <Route path={practiceBase()} component={PracticeContainer} />
-        <Route path={donnaBase()} component={DonnaContainer} />
-        <Route path={base('/reasons')} component={Routes.reasons} />
-        <Route path={base('/practitioners')} component={Routes.practitioners} />
-      </Switch>
+      <Suspense fallback={<Loader />}>
+        <Switch>
+          <Redirect exact from={base()} to={base('/practice')} />
+          <Route path={practiceBase()} component={PracticeContainer} />
+          <Route path={donnaBase()} component={DonnaContainer} />
+          <Route path={base('/reasons')} component={Routes.reasons} />
+          <Route path={base('/practitioners')} component={Routes.practitioners} />
+        </Switch>
+      </Suspense>
     </DocumentTitle>
   </Container>
 );

@@ -1,12 +1,11 @@
 
-import React from 'react';
+import React, { lazy } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
-import LazyRoute from '../LazyRoute';
 import DocumentTitle from 'react-document-title';
 import ScheduleContainer from '../../containers/ScheduleContainer';
 
 const Routes = {
-  calendar: LazyRoute(() => import('../../components/Schedule/DayView')),
+  calendar: lazy(() => import('../../components/Schedule/DayView')),
 };
 
 const Schedule = () => (

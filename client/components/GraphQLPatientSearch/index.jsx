@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import classNames from 'classnames';
@@ -32,6 +32,8 @@ class PatientSearch extends Component {
     super(props);
     this.state = defaultState;
 
+    this.suggestionsNode = createRef();
+    this.inputComponent = createRef();
     this.updateStateWithData = this.updateStateWithData.bind(this);
     this.handleLoadMore = this.handleLoadMore.bind(this);
     this.clearPatientsState = this.clearPatientsState.bind(this);
@@ -46,7 +48,7 @@ class PatientSearch extends Component {
    */
   componentDidMount() {
     if (this.props.focusInputOnMount) {
-      this.inputComponent.focus();
+      this.inputComponent.current.focus();
     }
   }
 
@@ -75,7 +77,7 @@ class PatientSearch extends Component {
    */
   scrollTo(index) {
     if (this.suggestionsNode) {
-      this.suggestionsNode.scrollTop = index * (isHub() ? 70 : 50);
+      this.suggestionsNode.current.scrollTop = index * (isHub() ? 70 : 50);
     }
   }
 
@@ -119,10 +121,9 @@ class PatientSearch extends Component {
   updateStateWithData(inputValue) {
     return ({ data }) =>
       this.setState((prevState) => {
+        if (inputValue !== currValue || !data) return null;
         const { currValue } = prevState;
         const results = data.accountViewer.patients.edges.map(v => v.node);
-
-        if (inputValue !== currValue) return null;
 
         return {
           isLoading: false,
@@ -194,12 +195,7 @@ class PatientSearch extends Component {
     return (
       <div>
         {totalCount > 0 && (
-          <div
-            className={newTheme.suggestionsContainerOpen}
-            ref={(node) => {
-              this.suggestionsNode = node;
-            }}
-          >
+          <div className={newTheme.suggestionsContainerOpen} ref={this.suggestionsNode}>
             <InfiniteScroll
               className={newTheme.suggestionsList}
               loadMore={this.handleLoadMore}
@@ -312,9 +308,7 @@ class PatientSearch extends Component {
                   ...finalInputProps,
                   onKeyDown: this.handleListKeyDown(highlightedIndex),
                 })}
-                refCallBack={(node) => {
-                  this.inputComponent = node;
-                }}
+                refCallBack={this.inputComponent}
               />
               <div className={newTheme.suggestionsWrapper}>
                 {this.renderSuggestionList({
@@ -357,16 +351,18 @@ PatientSearch.propTypes = {
     onBlur: PropTypes.func,
   }),
   theme: PropTypes.shape({ container: PropTypes.string }),
-  searchedPatients: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    ccId: PropTypes.string,
-    pmsId: PropTypes.string,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    birthDate: PropTypes.string,
-    avatarUrl: PropTypes.string,
-    lastApptDate: PropTypes.string,
-  })),
+  searchedPatients: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      ccId: PropTypes.string,
+      pmsId: PropTypes.string,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+      birthDate: PropTypes.string,
+      avatarUrl: PropTypes.string,
+      lastApptDate: PropTypes.string,
+    }),
+  ),
   setPatientSearched: PropTypes.func,
   fetchPatients: PropTypes.func.isRequired,
   context: PropTypes.string,

@@ -1,72 +1,70 @@
 
+import React, { Suspense, lazy } from 'react';
 import PropTypes from 'prop-types';
-import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { ConnectedRouter as Router } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import Login from '../components/Login';
 import DashboardApp from '../containers/DashboardApp';
 import FourZeroFour from '../components/FourZeroFour';
-import LazyRoute from './LazyRoute';
 import SignUp from '../components/SignUpInvite';
 import ForgotPassword from '../components/ForgotPassword';
 import ResetPassword from '../components/ForgotPassword/ResetPassword';
 import withAuthProps from '../hocs/withAuthProps';
-import GrqphQlSubscriptions from '../util/graphqlSubscriptions';
+import GraphQlSubscriptions from '../util/graphqlSubscriptions';
+import Loader from '../components/Loader';
+import { browserHistory as history } from '../store/factory';
 
 const Routes = {
-  dashboard: LazyRoute(() => import('../components/Dashboard/index'), true),
-  profile: LazyRoute(() => import('../components/Profile'), true),
-  intelligence: LazyRoute(() => import('./Dashboard/Reports'), true),
-  schedule: LazyRoute(() => import('./Dashboard/Schedule'), true),
-  patients: LazyRoute(() => import('./Dashboard/Patients'), true),
-  chat: LazyRoute(() => import('./Dashboard/Chat'), true),
-  typography: LazyRoute(() => import('./Dashboard/Typography'), true),
-  reputation: LazyRoute(() => import('./Dashboard/Reputation'), true),
-  settings: LazyRoute(() => import('./Dashboard/Settings'), true),
-  admin: LazyRoute(() => import('./Admin/Enterprises'), true),
-  calls: LazyRoute(() => import('./Dashboard/Calls'), true),
+  dashboard: lazy(() => import('../components/Dashboard/index')),
+  profile: lazy(() => import('../components/Profile')),
+  intelligence: lazy(() => import('./Dashboard/Reports')),
+  schedule: lazy(() => import('./Dashboard/Schedule')),
+  patients: lazy(() => import('./Dashboard/Patients')),
+  chat: lazy(() => import('./Dashboard/Chat')),
+  typography: lazy(() => import('./Dashboard/Typography')),
+  reputation: lazy(() => import('./Dashboard/Reputation')),
+  settings: lazy(() => import('./Dashboard/Settings')),
+  admin: lazy(() => import('./Admin/Enterprises')),
+  calls: lazy(() => import('./Dashboard/Calls')),
 };
 
-const DashboardRouter = ({ history, isAuth, isSuperAdmin, navigationPreferences }) => {
+const DashboardRouter = ({ isAuth, isSuperAdmin, navigationPreferences }) => {
   const n = page => navigationPreferences[page] !== 'disabled';
   const getAuthorizedRoutes = () => (
     <div>
-      {GrqphQlSubscriptions.subscriptionComponents()}
-      <Switch>
-        {n('dashboard') && <Route path="/" exact component={Routes.dashboard} />}
-        {n('intelligence') && <Route path="/intelligence" component={Routes.intelligence} />}
-        {n('schedule') && <Route path="/schedule" component={Routes.schedule} />}
-        {n('patients') && <Route path="/patients" component={Routes.patients} />}
-        {n('chat') && <Route path="/chat" component={Routes.chat} />}
-        {n('calls') && <Route path="/calls" component={Routes.calls} />}
-        {n('marketing') && <Route path="/reputation" component={Routes.reputation} />}
-        {n('settings') && <Route path="/settings" component={Routes.settings} />}
-        {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
-        <Route path="/profile" component={Routes.profile} />
-        <Route path="/typography" component={Routes.typography} />
-        <Route component={FourZeroFour} />
-      </Switch>
+      {GraphQlSubscriptions.subscriptionComponents()}
+      <Suspense fallback={<Loader />}>
+        <Switch>
+          {n('dashboard') && <Route path="/" exact component={Routes.dashboard} />}
+          {n('intelligence') && <Route path="/intelligence" component={Routes.intelligence} />}
+          {n('schedule') && <Route path="/schedule" component={Routes.schedule} />}
+          {n('patients') && <Route path="/patients" component={Routes.patients} />}
+          {n('chat') && <Route path="/chat" component={Routes.chat} />}
+          {n('calls') && <Route path="/calls" component={Routes.calls} />}
+          {n('marketing') && <Route path="/reputation" component={Routes.reputation} />}
+          {n('settings') && <Route path="/settings" component={Routes.settings} />}
+          {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
+          <Route path="/profile" component={Routes.profile} />
+          <Route path="/typography" component={Routes.typography} />
+          <Route component={FourZeroFour} />
+        </Switch>
+      </Suspense>
     </div>
   );
 
-  const Dashboard = props => (
-    <DashboardApp {...props}>
-      <Route
-        render={() =>
-          (isAuth ? (
-            getAuthorizedRoutes()
-          ) : (
-            <Redirect
-              to={{
-                pathname: '/login',
-                state: { from: props.location },
-              }}
-            />
-          ))
-        }
+  const Dashboard = props =>
+    (isAuth ? (
+      <DashboardApp {...props}>
+        <Route render={getAuthorizedRoutes} />
+      </DashboardApp>
+    ) : (
+      <Redirect
+        to={{
+          pathname: '/login',
+          state: { from: props.location },
+        }}
       />
-    </DashboardApp>
-  );
+    ));
 
   const signUp = /^\/signup\/.+$/i;
   const urlTest = signUp.test(history.location.pathname) ? history.location.pathname : '/signup';
@@ -77,7 +75,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, navigationPreferences 
     : '/resetpassword';
 
   return (
-    <Router history={history}>
+    <ConnectedRouter history={history}>
       <div>
         <Switch>
           <Route
@@ -103,7 +101,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, navigationPreferences 
           <Route path="/" component={Dashboard} />
         </Switch>
       </div>
-    </Router>
+    </ConnectedRouter>
   );
 };
 

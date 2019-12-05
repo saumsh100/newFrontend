@@ -1,6 +1,6 @@
 
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, submit, change } from 'redux-form';
@@ -33,6 +33,8 @@ class MessageTextArea extends Component {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', sheetUrl); // pre-load the sprite
     xhr.send();
+
+    this.emojiDropdown = createRef();
     this.addEmoji = this.addEmoji.bind(this);
     this.contactPoC = this.contactPoC.bind(this);
   }
@@ -45,7 +47,7 @@ class MessageTextArea extends Component {
       caretPossition,
     )}`;
     this.props.change(`chatMessageForm_${chat.id}`, 'message', newMessage);
-    this.emojiDropdown.toggle();
+    this.emojiDropdown.current.toggle();
   }
 
   contactPoC() {

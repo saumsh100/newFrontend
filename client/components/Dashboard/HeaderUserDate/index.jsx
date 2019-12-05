@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Form, Field, IconButton } from '../../library';
@@ -8,12 +8,13 @@ import styles from '../styles.scss';
 class HeaderUserDate extends Component {
   constructor(props) {
     super(props);
+    this.inputNode = createRef();
     this.handleChange = this.handleChange.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
   }
 
   handleFocus() {
-    this.inputNode.focus();
+    this.inputNode.current.focus();
   }
 
   handleChange(value) {
@@ -46,10 +47,7 @@ class HeaderUserDate extends Component {
               label="Date"
               tipSize={0.01}
               theme={dateTheme}
-              refCallBack={(input) => {
-                this.inputNode = input;
-                return null;
-              }}
+              refCallBack={this.inputNode}
               onChange={(event, newValue) => {
                 this.handleChange(newValue);
               }}

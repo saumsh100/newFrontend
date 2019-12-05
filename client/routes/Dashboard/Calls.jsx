@@ -1,12 +1,11 @@
 
-import React from 'react';
+import React, { lazy } from 'react';
 import DocumentTitle from 'react-document-title';
 import { Switch, Route } from 'react-router-dom';
-import LazyRoute from '../LazyRoute';
 import EnabledFeature from '../../components/library/EnabledFeature';
 
 const Routes = {
-  calls: LazyRoute(() => import('../../components/Calls')),
+  calls: lazy(() => import('../../components/Calls')),
 };
 
 const Calls = () => (

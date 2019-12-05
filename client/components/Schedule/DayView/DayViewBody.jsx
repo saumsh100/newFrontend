@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Map } from 'immutable';
@@ -12,33 +12,44 @@ import ColumnHeader from './ColumnHeader/index';
 import ChairsSlot from './ChairsSlot';
 import styles from './styles.scss';
 import { SortByFirstName, SortByName } from '../../library/util/SortEntities';
-import { SContainer, SBody, SHeader } from '../../library';
+import { SBody, SContainer, SHeader } from '../../library';
 
 class DayViewBody extends Component {
   constructor(props) {
     super(props);
-    this.scrollComponentDidMount = this.scrollComponentDidMount.bind(this);
-    this.scrollComponentDidMountChair = this.scrollComponentDidMountChair.bind(this);
-    this.headerComponentDidMount = this.headerComponentDidMount.bind(this);
-    this.timeComponentDidMount = this.timeComponentDidMount.bind(this);
+
+    this.scrollComponentChair = null;
+    this.setScrollComponentChair = (element) => {
+      this.scrollComponentChair = element;
+      if (this.scrollComponentChair) {
+        this.scrollComponentChair.addEventListener('scroll', this.onScrollChair);
+      }
+    };
+    this.scrollComponent = null;
+    this.setScrollComponent = (element) => {
+      this.scrollComponent = element;
+      if (this.scrollComponent) {
+        this.scrollComponent.addEventListener('scroll', this.onScroll);
+      }
+    };
+    this.headerComponent = createRef();
+    this.timeComponent = createRef();
+
     this.onScroll = this.onScroll.bind(this);
     this.onScrollChair = this.onScrollChair.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { appsFetched, chairsFetched, pracsFetched } = this.props;
-
+  componentDidUpdate(prevProps) {
+    const { appsFetched, chairsFetched, pracsFetched } = prevProps;
     const allFetched = appsFetched && chairsFetched && pracsFetched;
-
-    const currentDate = moment(this.props.schedule.get('scheduleDate'));
-    const nextDate = moment(nextProps.schedule.get('scheduleDate'));
+    const previousDate = moment(prevProps.schedule.get('scheduleDate')).toISOString();
+    const currentDate = moment(this.props.schedule.get('scheduleDate')).toISOString();
 
     if (
-      (nextProps.scheduleView !== this.props.scheduleView ||
-        currentDate.toISOString() !== nextDate.toISOString()) &&
+      (this.props.scheduleView !== prevProps.scheduleView || currentDate !== previousDate) &&
       allFetched
     ) {
-      this.headerComponent.scrollLeft = 0;
+      this.headerComponent.current.scrollLeft = 0;
     }
   }
 
@@ -51,39 +62,15 @@ class DayViewBody extends Component {
   }
 
   onScroll() {
-    const scrollTop = this.scrollComponent.scrollTop;
-    const scrollLeft = this.scrollComponent.scrollLeft;
-    this.headerComponent.scrollLeft = scrollLeft;
-    this.timeComponent.scrollTop = scrollTop;
+    const { scrollTop, scrollLeft } = this.scrollComponent;
+    this.headerComponent.current.scrollLeft = scrollLeft;
+    this.timeComponent.current.scrollTop = scrollTop;
   }
 
   onScrollChair() {
-    const scrollTop = this.scrollComponentChair.scrollTop;
-    const scrollLeft = this.scrollComponentChair.scrollLeft;
-    this.headerComponent.scrollLeft = scrollLeft;
-    this.timeComponent.scrollTop = scrollTop;
-  }
-
-  scrollComponentDidMount(node) {
-    if (this.props.scheduleView === 'practitioner' && node) {
-      this.scrollComponent = node;
-      this.scrollComponent.addEventListener('scroll', this.onScroll);
-    }
-  }
-
-  scrollComponentDidMountChair(node) {
-    if (this.props.scheduleView === 'chair' && node) {
-      this.scrollComponentChair = node;
-      this.scrollComponentChair.addEventListener('scroll', this.onScrollChair);
-    }
-  }
-
-  headerComponentDidMount(node) {
-    this.headerComponent = node;
-  }
-
-  timeComponentDidMount(node) {
-    this.timeComponent = node;
+    const { scrollTop, scrollLeft } = this.scrollComponentChair;
+    this.headerComponent.current.scrollLeft = scrollLeft;
+    this.timeComponent.current.scrollTop = scrollTop;
   }
 
   render() {
@@ -167,8 +154,8 @@ class DayViewBody extends Component {
       practitioners,
       practitionersArray,
       chairsArray,
-      scrollComponentDidMountChair: this.scrollComponentDidMountChair,
-      scrollComponentDidMount: this.scrollComponentDidMount,
+      scrollComponentDidMountChair: this.setScrollComponentChair,
+      scrollComponentDidMount: this.setScrollComponent,
     };
 
     const practitionersSlot = allFetched && <PractitionersSlot {...slotProps} />;
@@ -181,10 +168,9 @@ class DayViewBody extends Component {
           <ColumnHeader
             scheduleView={scheduleView}
             entities={scheduleView === 'chair' ? chairsArray : practitionersArray}
-            headerComponentDidMount={this.headerComponentDidMount}
+            headerComponentDidMount={this.headerComponent}
             leftColumnWidth={leftColumnWidth}
             minWidth={schedule.get('columnWidth')}
-            headerComponent={this.headerComponent}
             schedule={schedule}
             allFetched={allFetched}
           />
@@ -194,7 +180,7 @@ class DayViewBody extends Component {
             timeSlots={timeSlots}
             timeSlotHeight={timeSlotHeight}
             leftColumnWidth={leftColumnWidth}
-            timeComponentDidMount={this.timeComponentDidMount}
+            timeComponentDidMount={this.timeComponent}
           />
           {scheduleView === 'chair' ? chairsSlot : practitionersSlot}
         </SBody>

@@ -9,7 +9,7 @@
   justify-content: flex-start;
 }
 .name {
-  composes: subHeader from 'sass-loader!../../../../fonts.scss';
+  composes: subHeader from '../../../../fonts.scss';
   color: lighten($primary-blue, 10%);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -22,5 +22,5 @@
 .avatarContainer {
   display: flex;
   align-items: center;
-  justify-content: flex-start ;
+  justify-content: flex-start;
 }

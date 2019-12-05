@@ -25,7 +25,7 @@ export default function Event(props) {
           </div>
         </div>
         {component.map(EventComponent => (
-          <EventComponent data={data} patient={patient} />
+          <EventComponent data={data} key={data.id} patient={patient} />
         ))}
       </div>
       {type !== 'appointment' && type !== 'dueDate' && (

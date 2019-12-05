@@ -1,5 +1,5 @@
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { updateEntity } from '../reducers/entities';
 import { setIsSyncing, setProgress, setIsDone } from '../reducers/connect';
 

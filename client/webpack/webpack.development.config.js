@@ -13,6 +13,11 @@ const developmentConfig = merge(baseConfig, {
   output: {
     filename: '[name].[hash].js',
   },
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin({
       multiStep: true,

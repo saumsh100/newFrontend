@@ -1,7 +1,7 @@
 
 import PropTypes from 'prop-types';
 
-export const practitionerShape = {
+const practitionerShape = {
   id: PropTypes.string,
   accountId: PropTypes.string,
   pmsId: PropTypes.string,
@@ -15,3 +15,5 @@ export const practitionerShape = {
   fullAvatarUrl: PropTypes.string,
   weeklyScheduleId: PropTypes.string,
 };
+
+export default practitionerShape;

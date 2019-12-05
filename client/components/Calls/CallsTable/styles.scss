@@ -11,7 +11,7 @@
 
 .title {
   font-size: 25px;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
   color: $primary-dark;
   padding: 30px;
 }
@@ -64,7 +64,7 @@
   align-items: center;
   justify-content: flex-start;
   text-align: left;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
   text-transform: capitalize;
 }
 

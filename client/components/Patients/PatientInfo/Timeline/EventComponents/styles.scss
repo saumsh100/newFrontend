@@ -120,7 +120,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   line-height: 1.5em;
 
   &_header {
-    composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+    composes: fontMedium from '../../../../../fonts.scss';
     line-height: 1.5em;
   }
 
@@ -164,7 +164,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   &_subHeaderItalic {
     color: $primary-darkgrey;
     font-style: italic;
-    composes: fontSmall from 'sass-loader!../../../../../fonts.scss';
+    composes: fontSmall from '../../../../../fonts.scss';
   }
 
   @media screen and (max-width: 576px) {
@@ -190,7 +190,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   position: absolute;
   z-index: 2;
   &_text {
-    composes: fontExtraSmall from 'sass-loader!../../../../../fonts.scss';
+    composes: fontExtraSmall from '../../../../../fonts.scss';
     font-size: 9px;
     margin-left: auto;
     color: $event-grey;
@@ -202,7 +202,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   line-height: 1.5em;
 
   &_header {
-    composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+    composes: fontMedium from '../../../../../fonts.scss';
   }
 
   &_subHeader {
@@ -212,7 +212,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   &_subHeaderItalic {
     color: $primary-darkgrey;
     font-style: italic;
-    composes: fontSmall from 'sass-loader!../../../../../fonts.scss';
+    composes: fontSmall from '../../../../../fonts.scss';
   }
 
   audio {

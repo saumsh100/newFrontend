@@ -36,7 +36,7 @@
   height: auto;
   font-size: 20px;
   padding: 12px 13px;
-  composes: fontDefault from 'sass-loader!../../fonts.scss';
+  composes: fontDefault from '../../fonts.scss';
   position: fixed;
   bottom: 15px;
   left: 15px;

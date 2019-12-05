@@ -1,8 +1,9 @@
 .scheduleContainer {
-    padding: 20px;
+  padding: 20px;
 }
 
-.cardContainer {}
+.cardContainer {
+}
 
 /*body {
     margin: 0;
@@ -17,16 +18,16 @@
 }*/
 
 .subHeaderMediumSmall {
-  composes: subHeaderMediumSmall from "sass-loader!../../fonts.scss";
+  composes: subHeaderMediumSmall from '../../fonts.scss';
 }
 
 .subHeaderSmall {
-  composes: subHeaderSmall from "sass-loader!../../fonts.scss";
+  composes: subHeaderSmall from '../../fonts.scss';
 }
 
 .users {
   &_name {
-    composes: listItemHeader from "sass-loader!../../fonts.scss";
+    composes: listItemHeader from '../../fonts.scss';
   }
   &_text {
     display: flex;
@@ -41,7 +42,7 @@
 }
 
 .displayName {
-  composes: header from "sass-loader!../../fonts.scss";
+  composes: header from '../../fonts.scss';
 }
 
 .info {
@@ -54,158 +55,156 @@
 }
 
 .contact {
-  composes: subHeaderMedium from "sass-loader!../../fonts.scss";
+  composes: subHeaderMedium from '../../fonts.scss';
 }
-
 
 .dialogs {
-    max-width: 30%;
-    background: #f7f7f7;
+  max-width: 30%;
+  background: #f7f7f7;
 
-    &::before {
-        display: block;
-        width: 100%;
-        height: 5px;
-        content: '';
-        background: #8cbcd6;
-    }
+  &::before {
+    display: block;
+    width: 100%;
+    height: 5px;
+    content: '';
+    background: #8cbcd6;
+  }
 
-    &__search {
-        display: flex;
-        height: 70px;
-        padding: 20px;
-        border-bottom: 1px solid #e6e6e6;
-        justify-content: center;
-        align-items: center;
+  &__search {
+    display: flex;
+    height: 70px;
+    padding: 20px;
+    border-bottom: 1px solid #e6e6e6;
+    justify-content: center;
+    align-items: center;
 
-        .search {
-            &__label {
-                position: relative;
-                left: 15px;
-                cursor: pointer;
-                color: #b3b2b1;
-            }
-
-            &__input {
-                width: 90%;
-                height: 30px;
-                padding: 0 40px;
-                border: none;
-                border-bottom: 2px solid #8cbcd6;
-                background: #f7f7f7;
-            }
-
-            &__edit {
-                margin-left: auto;
-                cursor: pointer;
-                color: #b3b2b1;
-            }
-        }
-    }
-
-    .dialogs__messages {
-        overflow-y: auto;
-        height: 100%;
-        max-height: 500px;
-    }
-
-    .messages {
+    .search {
+      &__label {
         position: relative;
-        display: flex;
-        padding: 20px;
-        border-bottom: 1px solid #e6e6e6;
+        left: 15px;
+        cursor: pointer;
+        color: #b3b2b1;
+      }
 
-        &__photo {
-            width: 100%;
-            max-width: 50px;
-            height: auto;
-            max-height: 50px;
-            margin-right: 10px;
-            border-radius: 50%;
-        }
+      &__input {
+        width: 90%;
+        height: 30px;
+        padding: 0 40px;
+        border: none;
+        border-bottom: 2px solid #8cbcd6;
+        background: #f7f7f7;
+      }
 
-        &__header {
-            display: flex;
-            align-items: center;
-        }
-
-        &__name {
-            color: #2e3845;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        &__date {
-            margin-left: auto;
-            color: #969696;
-            font-size: 12px;
-        }
-
-        &__text {
-            padding-top: 10px;
-            padding-right: 40px;
-            padding-bottom: 10px;
-            color: #969696;
-            font-size: 12px;
-        }
-
-        &__unread {
-            position: absolute;
-            right: 20px;
-            display: flex;
-            width: 18px;
-            height: 18px;
-            margin-top: 10px;
-            color: white;
-            border-radius: 4px;
-            background: #8cbcd6;
-            font-size: 12px;
-        }
-
-        span {
-            margin: auto;
-        }
-        &__item {
-            background: #8cbcd6;
-        }
+      &__edit {
+        margin-left: auto;
+        cursor: pointer;
+        color: #b3b2b1;
+      }
     }
+  }
+
+  .dialogs__messages {
+    overflow-y: auto;
+    height: 100%;
+    max-height: 500px;
+  }
+
+  .messages {
+    position: relative;
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #e6e6e6;
+
+    &__photo {
+      width: 100%;
+      max-width: 50px;
+      height: auto;
+      max-height: 50px;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+
+    &__header {
+      display: flex;
+      align-items: center;
+    }
+
+    &__name {
+      color: #2e3845;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    &__date {
+      margin-left: auto;
+      color: #969696;
+      font-size: 12px;
+    }
+
+    &__text {
+      padding-top: 10px;
+      padding-right: 40px;
+      padding-bottom: 10px;
+      color: #969696;
+      font-size: 12px;
+    }
+
+    &__unread {
+      position: absolute;
+      right: 20px;
+      display: flex;
+      width: 18px;
+      height: 18px;
+      margin-top: 10px;
+      color: white;
+      border-radius: 4px;
+      background: #8cbcd6;
+      font-size: 12px;
+    }
+
+    span {
+      margin: auto;
+    }
+    &__item {
+      background: #8cbcd6;
+    }
+  }
 }
 
-
 .header {
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    left: 0;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  background-color: #efefef;
+  justify-content: space-between;
+  align-items: center;
+  &__router {
     display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    background-color: #efefef;
-    justify-content: space-between;
-    align-items: center;
-    &__router {
-        display: flex;
-    }
+  }
 
-    .router {
-        &__item {
-            padding: 5px;
-            text-decoration: none;
-            color: #acacac;
+  .router {
+    &__item {
+      padding: 5px;
+      text-decoration: none;
+      color: #acacac;
 
-            &_active {
-                color: #2e3845;
+      &_active {
+        color: #2e3845;
 
-                &::after {
-                    display: block;
-                    width: 100%;
-                    height: 3px;
-                    content: '';
-                    background: #ff715a;
-                }
-            }
+        &::after {
+          display: block;
+          width: 100%;
+          height: 3px;
+          content: '';
+          background: #ff715a;
         }
+      }
     }
+  }
 }

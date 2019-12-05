@@ -34,14 +34,7 @@ function getRandomIntInclusive(min, max) {
 const randomNum = getRandomIntInclusive(0, 4);
 
 export default function TopDisplay(props) {
-  const {
-    patient,
-    wasStatsFetched,
-    patientStats,
-    accountsFetched,
-    activeAccount,
-    wasPatientFetched,
-  } = props;
+  const { patient, wasStatsFetched, patientStats, activeAccount, wasPatientFetched } = props;
 
   if (!patient) {
     return null;
@@ -59,7 +52,7 @@ export default function TopDisplay(props) {
     backgroundSize: '70%',
   };
 
-  const wasAllFetched = wasStatsFetched && patient && accountsFetched && wasPatientFetched;
+  const wasAllFetched = wasStatsFetched && patient && wasPatientFetched;
   const avatarSize = isResponsive() ? 'md' : 'xl';
 
   return (
@@ -209,7 +202,6 @@ export default function TopDisplay(props) {
 TopDisplay.propTypes = {
   wasStatsFetched: PropTypes.bool,
   wasPatientFetched: PropTypes.bool,
-  accountsFetched: PropTypes.bool,
   patientStats: PropTypes.instanceOf(Map),
   activeAccount: PropTypes.oneOfType([PropTypes.shape(accountShape), PropTypes.func]),
   patient: PropTypes.oneOfType([PropTypes.instanceOf(PatientModel), PropTypes.func]),
@@ -217,7 +209,6 @@ TopDisplay.propTypes = {
 
 TopDisplay.defaultProps = {
   wasStatsFetched: false,
-  accountsFetched: false,
   wasPatientFetched: false,
   patientStats: null,
   activeAccount: null,

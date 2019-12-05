@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { change, formValueSelector } from 'redux-form';
 import { Map } from 'immutable';
 import classNames from 'classnames';
-import { intervalToNumType } from '@carecru/isomorphic';
+import { convertIntervalToMs, intervalToNumType } from '@carecru/isomorphic';
 import OmitForm from '../OmitForm';
 import { Grid, Row, Col, Form, Field, FormSection } from '../../../../library';
 import { capitalizeText } from '../../../../../components/Utils';
@@ -14,6 +14,9 @@ import { isResponsive } from '../../../../../util/hub';
 import styles from '../styles.scss';
 
 const getId = v => v.get('id');
+
+const sanitizeList = list =>
+  list.filter(v => v.isActive).sortBy(r => -convertIntervalToMs(r.interval));
 
 const singularType = {
   weeks: 'week',
@@ -58,7 +61,8 @@ class SettingsForm extends Component {
       this.setState({ [setting]: toOmit }, () => {
         const settingFieldName = this.getSettingType(setting);
 
-        const settingNextState = this.state[setting].length !== this.props[settingFieldName].size;
+        const settingNextState =
+          this.state[setting].length !== sanitizeList(this.props[settingFieldName]).size;
 
         // check if all child toggles are on/off and updates the parent accordingly
         if (this.props[`${settingFieldName}Field`] !== settingNextState) {
@@ -95,7 +99,9 @@ class SettingsForm extends Component {
                 if (!values.preferences[settingFieldName]) {
                   acc = {
                     ...acc,
-                    [setting]: this.props[settingFieldName].toArray().map(getId),
+                    [setting]: sanitizeList(this.props[settingFieldName])
+                      .toArray()
+                      .map(getId),
                   };
                   // if the user enables all reminders/recalls
                 } else if (values.preferences[settingFieldName]) {
@@ -104,7 +110,7 @@ class SettingsForm extends Component {
                     [setting]:
                       // check if some omit toggle was already on
                       prev[setting].length > 0 &&
-                      prev[setting].length < this.props[settingFieldName].size
+                      prev[setting].length < sanitizeList(this.props[settingFieldName]).size
                         ? prev[setting]
                         : [],
                   };
@@ -115,7 +121,7 @@ class SettingsForm extends Component {
               Object.keys(this.state).map((setting) => {
                 const settingFieldName = this.getSettingType(setting);
                 // dispatch updates to the child form inputs
-                return this.props[settingFieldName]
+                return sanitizeList(this.props[settingFieldName])
                   .toArray()
                   .map(r =>
                     this.props.change(
@@ -167,7 +173,7 @@ class SettingsForm extends Component {
                 <OmitForm
                   formName={`omitReminderIds_${patient.id}`}
                   value={omitReminderIds}
-                  toggles={reminders.toArray()}
+                  toggles={sanitizeList(reminders).toArray()}
                   onChange={this.omitFormHandler('omitReminderIds')}
                   renderToggles={({ toggleComponent, toggleProps }) => {
                     const text = `${toggleProps.interval} reminder`;
@@ -194,7 +200,7 @@ class SettingsForm extends Component {
                 <OmitForm
                   formName={`omitRecallIds_${patient.id}`}
                   value={omitRecallIds}
-                  toggles={recalls.toArray()}
+                  toggles={sanitizeList(recalls).toArray()}
                   onChange={this.omitFormHandler('omitRecallIds')}
                   renderToggles={({ toggleComponent, toggleProps }) => {
                     const { num, type } = intervalToNumType(toggleProps.interval);

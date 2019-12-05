@@ -72,11 +72,11 @@ class ScheduleContainer extends Component {
       .catch(console.error);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const currentDate = setDateToTimezone(this.props.currentDate);
-    const nextPropsDate = setDateToTimezone(nextProps.schedule.toJS().scheduleDate);
+  componentDidUpdate(prevProps) {
+    const previousDate = setDateToTimezone(prevProps.currentDate);
+    const nextPropsDate = setDateToTimezone(this.props.schedule.toJS().scheduleDate);
 
-    if (this.isSameDay(currentDate, nextPropsDate)) {
+    if (this.isSameDay(previousDate, nextPropsDate)) {
       const appointmentsQuery = this.buildAppointmentQuery(nextPropsDate);
       const eventsQuery = this.buildEventsQuery(nextPropsDate);
 

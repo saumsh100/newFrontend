@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DialogBox, Modal, Icon } from '../library';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { unsetSelectedCallId } from '../../actions/caller';
 import CallerDisplay from './CallerDisplay/';
 import CallerDisplayUnknown from './CallerDisplayUnknown/';

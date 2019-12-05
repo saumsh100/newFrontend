@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { Card, Button } from '../../library';
 import ResetPasswordForm from './ResetPasswordForm';
 import { resetUserPassword } from '../../../thunks/auth';

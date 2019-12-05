@@ -43,7 +43,7 @@ export default function FilterTimeline({
         <div className={styles.subHeader}>Events</div>
         <div className={styles.eventWrapper}>
           {defaultEvents.map((event) => {
-            const checked = filters.indexOf(event) > -1;
+            const checked = filters.toJS().indexOf(event) > -1;
             return (
               <SingleEvent
                 key={`SingleEvent_${event}`}

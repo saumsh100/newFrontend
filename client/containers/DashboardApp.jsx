@@ -1,8 +1,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useSelector } from 'react-redux';
 import TopBarContainer from '../containers/TopBarContainer';
 import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
@@ -12,34 +11,30 @@ import SubTabs from '../components/SubTabs';
 import CallerModal from '../components/CallerModal';
 import AlertContainer from '../containers/AlertContainer';
 import PatientActionsContainer from '../components/Patients/Shared/PatientActionsContainer';
+import { locationShape } from '../components/library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
-function DashboardApp(props) {
-  const { location, children, isCollapsed, isSearchCollapsed } = props;
+const DashboardApp = ({ location, children }) => {
+  if (location.pathname.includes('login')) return <div>{children}</div>;
 
-  let overlay = null;
-  if (!isCollapsed) {
-    /* eslint-disable */
-    overlay = (
-      <div className={styles.overlay} onClick={() => this.props.setIsCollapsed(!isCollapsed)} />
-    );
-    /* eslint-enable */
-  }
-
-  let AppContainer = (
+  const isCollapsed = useSelector(({ toolbar }) => toolbar.get('isCollapsed'));
+  const isSearchCollapsed = useSelector(({ toolbar }) => toolbar.get('isSearchCollapsed'));
+  return (
     <div>
       <CallerModal />
       <TopBarContainer />
-      {overlay}
+      {!isCollapsed && (
+        <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />
+      )}
       <NavRegionContainer>
         <NavList location={location} isCollapsed={isCollapsed} />
       </NavRegionContainer>
       <MainRegionContainer>
-        {isSearchCollapsed ? (
+        {isSearchCollapsed && (
           <div className={styles.subTabs}>
             <SubTabs location={location} />
           </div>
-        ) : null}
+        )}
         <div className={styles.mainRegionChildren}>
           {children}
           <AlertContainer />
@@ -48,45 +43,10 @@ function DashboardApp(props) {
       </MainRegionContainer>
     </div>
   );
-
-  const isLoginPage = location.pathname.includes('login');
-
-  if (isLoginPage) {
-    AppContainer = <div>{children}</div>;
-  }
-
-  return AppContainer;
-}
-
-DashboardApp.propTypes = {
-  children: PropTypes.node,
-  activeAccount: PropTypes.shape({}),
-  location: PropTypes.shape({}),
-  isCollapsed: PropTypes.bool.isRequired,
-  isSearchCollapsed: PropTypes.bool.isRequired,
-  setIsCollapsed: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ toolbar, entities, auth }) {
-  return {
-    isCollapsed: toolbar.get('isCollapsed'),
-    isSearchCollapsed: toolbar.get('isSearchCollapsed'),
-    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
-  };
-}
-
-function mapActionsToProps(dispatch) {
-  return bindActionCreators(
-    {
-      setIsCollapsed,
-    },
-    dispatch,
-  );
-}
-
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
-
-export default enhance(DashboardApp);
+DashboardApp.propTypes = {
+  children: PropTypes.node.isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
+};
+export default DashboardApp;

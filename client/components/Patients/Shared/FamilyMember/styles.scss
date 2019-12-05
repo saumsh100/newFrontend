@@ -27,7 +27,7 @@
   }
 
   &_fontStyle {
-    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    composes: fontMedium from '../../../../fonts.scss';
     color: $primary-dark !important;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -73,7 +73,7 @@
   }
 
   &_button {
-    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    composes: fontMedium from '../../../../fonts.scss';
     color: $primary-blue-green;
     font-size: $extra-small-size;
     border: none;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import DocumentTitle from 'react-document-title';
 import { SubmissionError } from 'redux-form';
 import { Card } from '../library';
@@ -35,17 +35,18 @@ class Login extends Component {
   }
 
   handleLogin(values) {
-    const { location: { state } } = this.props;
+    const {
+      location: { state },
+    } = this.props;
     return this.props
       .login({
         values,
         redirectedFrom: state && state.from,
       })
-      .catch((err) => {
-        const { data } = err;
+      .catch(({ response }) => {
         throw new SubmissionError({
-          email: data,
-          password: data,
+          email: response.data,
+          password: response.data,
         });
       });
   }

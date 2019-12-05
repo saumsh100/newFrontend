@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import {
   fetchEntities,
   createEntityRequest,

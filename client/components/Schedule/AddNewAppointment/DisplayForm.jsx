@@ -1,6 +1,6 @@
 
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import moment from 'moment';
 import { Map } from 'immutable';
 import { sortAsc, dateFormatter } from '@carecru/isomorphic';
@@ -112,6 +112,7 @@ const defaultStartTime = () => {
 class DisplayForm extends Component {
   constructor(props) {
     super(props);
+    this.autoSuggest = createRef();
     this.focusAutoSuggest = this.focusAutoSuggest.bind(this);
   }
 
@@ -122,8 +123,8 @@ class DisplayForm extends Component {
   }
 
   focusAutoSuggest() {
-    if (this.autoSuggest && this.autoSuggest.inputComponent) {
-      this.autoSuggest.inputComponent.focus();
+    if (this.autoSuggest.current && this.autoSuggest.current.inputComponent) {
+      this.autoSuggest.current.inputComponent.focus();
     }
   }
 
@@ -277,9 +278,7 @@ class DisplayForm extends Component {
             theme={autoCompleteStyle}
             renderSuggestionsContainer={addNewPatientComponent}
             icon="search"
-            ref={(el) => {
-              this.autoSuggest = el;
-            }}
+            ref={this.autoSuggest}
             validate={[validatePatient]}
             onBlurFunction={() => this.props.setShowInput(false)}
             data-test-id="patientSelected"

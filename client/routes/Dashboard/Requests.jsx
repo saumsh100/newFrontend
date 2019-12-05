@@ -1,14 +1,13 @@
 
-import React from 'react';
+import React, { lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
-import LazyRoute from '../LazyRoute';
 
 const base = (path = '') => `/requests${path}`;
 
 const Routes = {
-  requests: LazyRoute(() => import('../../components/Requests/Electron')),
-  schedule: LazyRoute(() => import('../../containers/ScheduleContainer')),
+  requests: lazy(() => import('../../components/Requests/Electron')),
+  schedule: lazy(() => import('../../containers/ScheduleContainer')),
 };
 
 const Requests = () => (

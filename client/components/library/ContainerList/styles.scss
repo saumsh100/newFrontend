@@ -1,54 +1,54 @@
-@import "../../../ui.scss";
+@import '../../../ui.scss';
 
 .listItemHeader {
-  composes: listItemHeader from "sass-loader!../../../fonts.scss";
+  composes: listItemHeader from '../../../fonts.scss';
 }
 
 .containerList {
   border-top: 5px solid $inactive-color;
   margin: 0 5px 20px;
-    min-width: 250px;
-    height: 450px;
-    &__header {
-        display: flex;
-        align-items: center;
-        height: 40px;
-        margin-left: 12px;
-    }
+  min-width: 250px;
+  height: 450px;
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    margin-left: 12px;
+  }
 }
 .data {
-    //border-top: 1px solid $primary-grey;
-    padding: 0;
-    margin: 0;
-    color: $primary-dark;
-    max-height: 400px;
-    overflow-y: auto;
+  //border-top: 1px solid $primary-grey;
+  padding: 0;
+  margin: 0;
+  color: $primary-dark;
+  max-height: 400px;
+  overflow-y: auto;
   &__item {
-        min-width: 250px;
-        padding: 0 40px 0 15px;
-        display: flex;
-        align-items: center;
-        position: relative;
-        height: 80px;
-        list-style: none;
-        margin: 0;
-        font-size: $medium-size;
+    min-width: 250px;
+    padding: 0 40px 0 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 80px;
+    list-style: none;
+    margin: 0;
+    font-size: $medium-size;
 
-        border-bottom: 1px solid $primary-lightgrey;
-        &_wrapper {
-            display: flex;
-            width: 100%;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-        &_left {
-            text-align: left;
-            @extend .listItemHeader;
-        }
-        &_right {
-            margin-left: auto;
-            text-align: right;
-            @extend .listItemHeader;
-        }
+    border-bottom: 1px solid $primary-lightgrey;
+    &_wrapper {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
     }
+    &_left {
+      text-align: left;
+      @extend .listItemHeader;
+    }
+    &_right {
+      margin-left: auto;
+      text-align: right;
+      @extend .listItemHeader;
+    }
+  }
 }

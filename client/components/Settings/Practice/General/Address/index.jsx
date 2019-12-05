@@ -7,7 +7,7 @@ import { change } from 'redux-form';
 import { Map } from 'immutable';
 import AddressForm from './AddressForm';
 import { updateEntityRequest, createEntityRequest } from '../../../../../thunks/fetchEntities';
-import { accountShape } from '../../../../library/PropTypeShapes/accountShape';
+import accountShape from '../../../../library/PropTypeShapes/accountShape';
 
 class Address extends Component {
   constructor(props) {

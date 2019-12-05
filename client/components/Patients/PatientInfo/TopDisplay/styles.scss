@@ -65,7 +65,8 @@
     &_nameAge {
       color: #505c68;
       font-size: $extra-medium-size;
-      composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+      composes: fontMedium from '../../../../fonts.scss';
+      margin-bottom: 2px;
       white-space: nowrap;
       height: 25px;
       display: flex;
@@ -86,26 +87,26 @@
       line-height: 11px;
       font-style: italic;
       margin-top: 8px;
-      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
+      composes: subHeaderSmall from '../../../../fonts.scss';
     }
 
     &_phone {
       font-size: 11px;
       line-height: 11px;
       font-style: italic;
+      composes: subHeaderSmall from '../../../../fonts.scss';
       margin-top: 8px;
-      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
     }
 
     &_icon {
       padding-right: 10px;
       line-height: 11px;
       margin-top: 8px;
-      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
+      composes: subHeaderSmall from '../../../../fonts.scss';
     }
 
     &_badge {
-      composes: subHeaderExtraSmall from 'sass-loader!../../../../fonts.scss';
+      composes: subHeaderExtraSmall from '../../../../fonts.scss';
       color: #fff;
       height: 18px;
       display: inline-flex;
@@ -187,7 +188,7 @@
 
 .fontStyle {
   color: $primary-dark !important;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

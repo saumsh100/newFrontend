@@ -81,8 +81,8 @@
 
 .waitList {
   min-height: 267px;
-  width: 700px;
-  composes: fontDefault from 'sass-loader!../../../../fonts.scss';
+  width: 600px;
+  composes: fontDefault from '../../../../fonts.scss';
 }
 
 .hubWrapper {

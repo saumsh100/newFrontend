@@ -80,22 +80,6 @@ class ReviewItem extends Component {
     this.updateNumberInput = this.updateNumberInput.bind(this);
   }
 
-  componentWillUpdate(nextProps) {
-    /* eslint-disable */
-    // Need function to abstract
-    const oldNumType = intervalToNumType(this.props.reviewSettings.interval);
-    const newNumType = intervalToNumType(nextProps.reviewSettings.interval);
-    if (oldNumType.num === newNumType.num) {
-      return;
-    }
-
-    this.setState({
-      number: newNumType.num,
-      intervalType: newNumType.type,
-    });
-    /* eslint-enable */
-  }
-
   onChangeInterval(newType) {
     const { reviewSettings } = this.props;
     const { type } = intervalToNumType(reviewSettings.interval);
@@ -103,12 +87,9 @@ class ReviewItem extends Component {
       return;
     }
 
-    this.setState(
-      { intervalType: newType },
-      () => {
-        this.updateInterval();
-      },
-    );
+    this.setState({ intervalType: newType }, () => {
+      this.updateInterval();
+    });
   }
 
   onIntervalNumberBlur() {

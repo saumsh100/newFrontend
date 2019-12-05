@@ -11,9 +11,8 @@ import styles from './styles.scss';
  * ex.// Unsubscribe page, Confirmed Appointment page, Confirmed Email page, Reset-Password
  */
 class PatientPage extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { bookingWidgetPrimaryColor } = this.props.params.account;
-    console.log(bookingWidgetPrimaryColor);
     document.documentElement.style.setProperty(
       '--primaryColor',
       bookingWidgetPrimaryColor || '#ff715a',

@@ -1,17 +1,17 @@
-@import "../../../ui.scss";
+@import '../../../ui.scss';
 
 .tagsContainer {
-	position: relative;
-	width: 90%;
-	padding: 5px 0 5px 5px;
-	margin: 2px 0;
-	border-top: 1px solid $primary-darkgrey;
-	border-bottom: 1px solid $primary-darkgrey;
-	border-right: 1px solid $primary-darkgrey;
-  composes: listItemHeader from 'sass-loader!../../../fonts.scss';
+  position: relative;
+  width: 90%;
+  padding: 5px 0 5px 5px;
+  margin: 2px 0;
+  border-top: 1px solid $primary-darkgrey;
+  border-bottom: 1px solid $primary-darkgrey;
+  border-right: 1px solid $primary-darkgrey;
+  composes: listItemHeader from '../../../fonts.scss';
 }
 
 .close {
-	position: absolute;
-	right: 10px;
+  position: absolute;
+  right: 10px;
 }

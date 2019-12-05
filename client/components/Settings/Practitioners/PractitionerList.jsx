@@ -25,7 +25,7 @@ class PractitionerList extends Component {
     this.createPractitioner = this.createPractitioner.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.setPractitionerId({ id: null });
   }
 

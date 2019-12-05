@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import Slider from 'rc-slider';
 import omit from 'lodash/omit';
 import 'rc-slider/assets/index.css';
-import Input from '../Input';
-import styles from './styles.scss';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -13,13 +11,11 @@ const Range = createSliderWithTooltip(Slider.Range);
 class RangeSlider extends Component {
   constructor(props) {
     super(props);
-    this.state = { value: [] };
     this.onRangeChange = this.onRangeChange.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { setRangeState } = this.props;
-
     if (setRangeState) {
       this.setState({ value: setRangeState });
     }
@@ -44,13 +40,7 @@ class RangeSlider extends Component {
   }
 
   render() {
-    const {
-      label,
-
-      max,
-      min,
-      labels,
-    } = this.props;
+    const { max, min } = this.props;
 
     const maximumTrackStyle = {
       backgroundColor: '#ff715a',
@@ -75,9 +65,12 @@ class RangeSlider extends Component {
 }
 
 RangeSlider.propTypes = {
-  onChange: PropTypes.func,
-  defaultValues: PropTypes.array,
-  setRangeState: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  defaultValues: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setRangeState: PropTypes.func.isRequired,
+  value: PropTypes.arrayOf(PropTypes.string).isRequired,
+  max: PropTypes.number.isRequired,
+  min: PropTypes.number.isRequired,
 };
 
 export default RangeSlider;

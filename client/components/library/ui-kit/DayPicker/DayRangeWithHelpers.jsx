@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import moment from 'moment-timezone';
 import { v4 as uuid } from 'uuid';
 import { dateFormatter, setDateToTimezone } from '@carecru/isomorphic';
@@ -35,6 +35,9 @@ class DayRangeWithHelpers extends Component {
       visibleMonth: new Date(),
     };
 
+    this.fromInput = createRef();
+    this.toInput = createRef();
+    this.containerEl = createRef();
     this.handleOutsideClick = this.handleOutsideClick.bind(this);
     this.handleClickWrapper = this.handleClickWrapper.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
@@ -59,6 +62,7 @@ class DayRangeWithHelpers extends Component {
         setDateToTimezone(end).isSame(this.props.end, 'day'),
     );
     if (prevProps !== this.props) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ visibleMonth: valueToDate(this.props.start) });
       this.setDateValues('start', this.props.start, defaultOption && defaultOption.label);
       this.setDateValues('end', this.props.end, defaultOption && defaultOption.label);
@@ -91,7 +95,7 @@ class DayRangeWithHelpers extends Component {
    * @param typeName
    */
   setDateValues(key, value, typeName = defaultTypeName) {
-    const input = key === 'start' ? this.fromInput : this.toInput;
+    const input = key === 'start' ? this.fromInput.current : this.toInput.current;
     if (input) {
       input.value = dateFormatter(value, null, 'll');
     }
@@ -183,7 +187,11 @@ class DayRangeWithHelpers extends Component {
    * @param target
    */
   handleOutsideClick({ target }) {
-    if (this.containerEl && !this.containerEl.contains(target) && this.state.isOpen) {
+    if (
+      this.containerEl.current &&
+      !this.containerEl.current.contains(target) &&
+      this.state.isOpen
+    ) {
       this.confirmRangeChanges();
     }
   }
@@ -215,7 +223,11 @@ class DayRangeWithHelpers extends Component {
    * @return {*}
    */
   handleClickWrapper({ target }) {
-    if (!this.state.isOpen || target === this.fromInput || target === this.toInput) {
+    if (
+      !this.state.isOpen ||
+      target === this.fromInput.current ||
+      target === this.toInput.current
+    ) {
       return this.showDayRange();
     }
 
@@ -257,11 +269,7 @@ class DayRangeWithHelpers extends Component {
 
     return (
       <div>
-        <div
-          ref={(div) => {
-            this.containerEl = div;
-          }}
-        >
+        <div ref={this.containerEl}>
           {label && <p className={ui.fieldLabel}>{label}</p>}
           <div className={styles.wrapper}>
             <div
@@ -292,11 +300,11 @@ class DayRangeWithHelpers extends Component {
                       defaultValue={dateFormatter(this.state.start, null, 'll')}
                       onBlur={e => this.handleInputBlur(e, 'start')}
                       onChange={e => this.handleInputChange(e, 'start')}
-                      onClick={() => this.handleClickInputElement(this.fromInput, this.state.start)}
+                      onClick={() =>
+                        this.handleClickInputElement(this.fromInput.current, this.state.start)
+                      }
                       onFocus={this.showDayRange}
-                      refCallback={(div) => {
-                        this.fromInput = div;
-                      }}
+                      refCallback={this.fromInput}
                     />
                   </div>
                   -
@@ -309,11 +317,11 @@ class DayRangeWithHelpers extends Component {
                       defaultValue={dateFormatter(this.state.end, null, 'll')}
                       onBlur={e => this.handleInputBlur(e, 'end')}
                       onChange={e => this.handleInputChange(e, 'end')}
-                      onClick={() => this.handleClickInputElement(this.toInput, this.state.end)}
+                      onClick={() =>
+                        this.handleClickInputElement(this.toInput.current, this.state.end)
+                      }
                       onFocus={this.showDayRange}
-                      refCallback={(div) => {
-                        this.toInput = div;
-                      }}
+                      refCallback={this.toInput}
                     />
                   </div>
                   <Calendar />

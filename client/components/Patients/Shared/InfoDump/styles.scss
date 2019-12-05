@@ -11,14 +11,14 @@
   opacity: 1;
   font-size: $extra-small-size;
   padding-bottom: 10px;
-  composes: fontExtraSmall from 'sass-loader!../../../../fonts.scss';
+  composes: fontExtraSmall from '../../../../fonts.scss';
   font-family: $medium-font;
   text-transform: uppercase;
 }
 
 .data {
   color: $primary-dark;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   word-wrap: break-word;
   margin-right: 15px;
   text-transform: capitalize;

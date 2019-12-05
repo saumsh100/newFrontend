@@ -1,22 +1,18 @@
 
-import { isHub } from './hub';
+import { ipcRenderer, webFrame } from 'electron';
 
-if (isHub()) {
-  const { ipcRenderer, webFrame } = window.require('electron');
+export { webFrame };
 
-  module.exports.webFrame = webFrame;
+export const electron = {
+  on: (channel, handler) => {
+    ipcRenderer.on(channel, handler);
+  },
 
-  module.exports.electron = {
-    on: (channel, handler) => {
-      ipcRenderer.on(channel, handler);
-    },
+  once: (channel, handler) => {
+    ipcRenderer.once(channel, handler);
+  },
 
-    once: (channel, handler) => {
-      ipcRenderer.once(channel, handler);
-    },
-
-    send: (channel, message) => {
-      ipcRenderer.send(channel, message);
-    },
-  };
-}
+  send: (channel, message) => {
+    ipcRenderer.send(channel, message);
+  },
+};

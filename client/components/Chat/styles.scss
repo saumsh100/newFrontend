@@ -231,7 +231,7 @@
   &__name {
     color: #2e3845;
     font-size: 14px;
-    composes: listItemHeader from 'sass-loader!../../fonts.scss';
+    composes: listItemHeader from '../../fonts.scss';
     max-width: 90%;
     display: flex;
 
@@ -256,7 +256,7 @@
     //padding-top: 10px;
     padding-right: 40px;
     padding-bottom: 10px;
-    composes: subHeaderSmall from 'sass-loader!../../fonts.scss';
+    composes: subHeaderSmall from '../../fonts.scss';
     word-break: break-all;
   }
 
@@ -451,7 +451,7 @@
   //font-size: 18px;
   margin: 10px 0;
   //font-weight: 900;
-  composes: header from 'sass-loader!../../fonts.scss';
+  composes: header from '../../fonts.scss';
 }
 
 .fullName2 {
@@ -475,7 +475,7 @@
 }
 
 .fonts {
-  composes: subHeaderSmall from 'sass-loader!../../fonts.scss';
+  composes: subHeaderSmall from '../../fonts.scss';
   color: #bfbfbf;
   font-weight: bold;
 }

@@ -17,7 +17,7 @@
 }
 
 .header {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-dark;
   font-size: 23px;
   padding: 20px 0 10px 20px;

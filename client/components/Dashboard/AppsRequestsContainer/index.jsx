@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
@@ -69,18 +69,16 @@ class AppsRequestsContainer extends Component {
     ]);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const currentDate = moment(this.props.dashboardDate);
-
-    const nextPropsDate = moment(nextProps.dashboardDate);
-
+    const previousDate = moment(prevProps.dashboardDate);
     if (
-      !nextPropsDate.isSame(currentDate, 'month') ||
-      !nextPropsDate.isSame(currentDate, 'day') ||
-      !nextPropsDate.isSame(currentDate, 'year')
+      !previousDate.isSame(currentDate, 'month') ||
+      !previousDate.isSame(currentDate, 'day') ||
+      !previousDate.isSame(currentDate, 'year')
     ) {
-      const startDate = nextPropsDate.startOf('day').toISOString();
-      const endDate = nextPropsDate.endOf('day').toISOString();
+      const startDate = currentDate.startOf('day').toISOString();
+      const endDate = currentDate.endOf('day').toISOString();
       const query = {
         startDate,
         endDate,
@@ -198,7 +196,7 @@ class AppsRequestsContainer extends Component {
 
 const dateFilter = (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate);
 
-function mapStateToProps({ apiRequests, entities, routing }, { dashboardDate, ...ownProps }) {
+function mapStateToProps({ apiRequests, entities, router }, { dashboardDate, ...ownProps }) {
   const dashAppointments =
     apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
 
@@ -229,7 +227,7 @@ function mapStateToProps({ apiRequests, entities, routing }, { dashboardDate, ..
   const sortedRequests = filteredRequests.sort(dateFilter);
 
   const nextProps = {
-    routing,
+    router,
     sortedRequests,
     ...ownProps,
   };

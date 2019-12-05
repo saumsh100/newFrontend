@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import RDropdownMenu from 'react-dd-menu';
 import classNames from 'classnames';
@@ -23,15 +24,14 @@ class DropdownSelect extends Component {
     super(props);
     this.state = this.getInitialState();
 
+    this.scrollComponent = createRef();
+    this.valueScrollComponent = createRef();
+
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
     this.renderList = this.renderList.bind(this);
     this.renderToggle = this.renderToggle.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
-    this.scrollComponentDidMount = this.scrollComponentDidMount.bind(this);
-    this.valueScrollComponentDidMount = this.valueScrollComponentDidMount.bind(
-      this,
-    );
     this.searchListener = this.searchListener.bind(this);
     this.clearSearchValue = this.clearSearchValue.bind(this);
     this.selectOption = this.selectOption.bind(this);
@@ -60,8 +60,8 @@ class DropdownSelect extends Component {
       });
 
       if (this.valueScrollComponent) {
-        this.scrollComponent.scrollTop =
-          valueHeight * this.valueScrollComponent.scrollHeight;
+        this.scrollComponent.current.scrollTop =
+          valueHeight * this.valueScrollComponent.current.scrollHeight;
       }
     }
 
@@ -89,14 +89,6 @@ class DropdownSelect extends Component {
     }
   }
 
-  scrollComponentDidMount(node) {
-    this.scrollComponent = node;
-  }
-
-  valueScrollComponentDidMount(node) {
-    this.valueScrollComponent = node;
-  }
-
   toggle() {
     this.clearSearchValue();
     this.setState(prevState => ({ isOpen: !prevState.isOpen }));
@@ -119,7 +111,7 @@ class DropdownSelect extends Component {
         const option = options[i];
         const whichToSearch = option.label ? 'label' : 'value';
         if (new RegExp(value, 'i').test(option[whichToSearch])) {
-          this.scrollComponent.scrollTop = i * height;
+          this.scrollComponent.current.scrollTop = i * height;
           break;
         }
       }
@@ -138,7 +130,7 @@ class DropdownSelect extends Component {
     const OptionTemplate = template || DefaultOption;
 
     return (
-      <div className={theme.dropDownList} ref={this.scrollComponentDidMount}>
+      <div className={theme.dropDownList} ref={this.scrollComponent}>
         {options.map((option, i) => {
           const isSelected = value === option.value;
           let className = styles.optionListItem;
@@ -158,11 +150,9 @@ class DropdownSelect extends Component {
               }}
               role="button"
               data-test-id={`option_${i}`}
-              ref={isSelected && this.valueScrollComponentDidMount}
+              ref={isSelected && this.valueScrollComponent}
               tabIndex={0}
-              onKeyUp={e =>
-                e.keyCode === 13 && this.selectOption(e, option.value)
-              }
+              onKeyUp={e => e.keyCode === 13 && this.selectOption(e, option.value)}
             >
               <div
                 className={styles.optionDiv}
@@ -178,19 +168,9 @@ class DropdownSelect extends Component {
   }
 
   renderToggle() {
-    const {
-      value,
-      options,
-      template,
-      theme,
-      error,
-      disabled,
-      label,
-    } = this.props;
+    const { value, options, template, theme, error, disabled, label } = this.props;
 
-    const defaultTemplate = ({ option }) => (
-      <div>{option.label || option.value}</div>
-    );
+    const defaultTemplate = ({ option }) => <div>{option.label || option.value}</div>;
     const ToggleTemplate = template || defaultTemplate;
 
     let toggleDiv = null;
@@ -237,11 +217,7 @@ class DropdownSelect extends Component {
           {toggleDiv}
           <span className={labelClassName}>{label}</span>
           <div className={theme.caretIconWrapper}>
-            <Icon
-              className={caretIconClassName}
-              icon="caret-down"
-              type="solid"
-            />
+            <Icon className={caretIconClassName} icon="caret-down" type="solid" />
           </div>
         </div>
         <div className={theme.error}>{error || ''}</div>
@@ -284,10 +260,7 @@ DropdownSelect.propTypes = {
   disabled: PropTypes.bool,
   align: PropTypes.string,
   search: PropTypes.string,
-  theme: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.objectOf(PropTypes.string),
-  ]),
+  theme: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
   error: PropTypes.string,
   'data-test-id': PropTypes.string,
 };

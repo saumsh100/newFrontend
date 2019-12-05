@@ -86,7 +86,7 @@ export default class OutboxReviews extends Component {
     this.handleTabChange = this.handleTabChange.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { account } = this.props;
     return Promise.all([httpClient().get(`/api/accounts/${account.id}/reviews/list`)])
       .then(([reviewsData]) => {

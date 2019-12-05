@@ -29,7 +29,7 @@
 
 .header {
   font-size: 23px;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   padding-bottom: 20px;
 }
 
@@ -115,7 +115,7 @@
 }
 
 .tab {
-  composes: fontDefault from 'sass-loader!../../../../fonts.scss';
+  composes: fontDefault from '../../../../fonts.scss';
   box-sizing: border-box;
   font-size: 13px;
   color: $primary-dark-grey;

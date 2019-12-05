@@ -58,7 +58,7 @@
 }
 
 .headerText {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-dark;
   font-size: 16px;
 }
@@ -115,13 +115,13 @@
 }
 
 .subHeader {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-darkgrey;
   padding-top: 20px;
 }
 
 .subHeaderSmall {
-  composes: fontExtraSmall from 'sass-loader!../../../../fonts.scss';
+  composes: fontExtraSmall from '../../../../fonts.scss';
   color: $primary-darkgrey;
   font-style: italic;
   padding-top: 10px;

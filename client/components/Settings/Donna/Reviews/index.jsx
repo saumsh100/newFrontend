@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -32,20 +33,19 @@ class Reviews extends Component {
     this.selectReview = this.selectReview.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    const { activeAccount } = newProps;
+  static getDerivedStateFromProps(props, state) {
+    const { activeAccount } = props;
     const interval = activeAccount.get('reviewsInterval');
 
-    if (interval === this.state.reviewSettings.interval) {
-      return;
+    if (interval !== state.interval) {
+      return {
+        reviewSettings: {
+          ...state.reviewSettings,
+          interval,
+        },
+      };
     }
-
-    this.setState({
-      reviewSettings: {
-        ...this.state.reviewSettings,
-        interval,
-      },
-    });
+    return null;
   }
 
   toggleAdvancedSettings() {
@@ -58,10 +58,8 @@ class Reviews extends Component {
     const { activeAccount } = this.props;
     const { sendUnconfirmedReviews } = values;
     let { lastReviewInterval, lastSentReviewInterval } = values;
-    lastReviewInterval =
-      lastReviewInterval === 'null' ? null : lastReviewInterval;
-    lastSentReviewInterval =
-      lastSentReviewInterval === 'null' ? null : lastSentReviewInterval;
+    lastReviewInterval = lastReviewInterval === 'null' ? null : lastReviewInterval;
+    lastSentReviewInterval = lastSentReviewInterval === 'null' ? null : lastSentReviewInterval;
     const alert = {
       success: {
         title: 'Reviews Settings Updated',
@@ -126,12 +124,7 @@ class Reviews extends Component {
       return null;
     }
 
-    return (
-      <ReviewPreview
-        review={this.state.reviewSettings}
-        account={this.props.activeAccount}
-      />
-    );
+    return <ReviewPreview review={this.state.reviewSettings} account={this.props.activeAccount} />;
   }
 
   renderReviewItem() {

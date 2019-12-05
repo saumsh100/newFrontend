@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import classnames from 'classnames';
 import Event from '../EventComponents';
-import EventModel from '../../../../../entities/models/Event';
+import PatientTimelineEvent from '../../../../../entities/models/PatientTimelineEvent';
 import styles from '../styles.scss';
 
 export default function EventDateSections(props) {
@@ -36,7 +36,7 @@ export default function EventDateSections(props) {
 }
 
 EventDateSections.propTypes = {
-  events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)).isRequired,
+  events: PropTypes.arrayOf(PropTypes.instanceOf(PatientTimelineEvent)).isRequired,
   dateHeader: PropTypes.string.isRequired,
   patient: PropTypes.shape({}).isRequired,
 };

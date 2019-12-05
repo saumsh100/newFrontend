@@ -1,5 +1,5 @@
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { SubmissionError } from 'redux-form';
 import { httpClient } from '../util/httpClient';
 

@@ -48,4 +48,7 @@ const dispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(stateToProps, dispatchToProps)(AccountsSubComponent);
+export default connect(
+  stateToProps,
+  dispatchToProps,
+)(AccountsSubComponent);

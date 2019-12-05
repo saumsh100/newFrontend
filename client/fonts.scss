@@ -4,7 +4,6 @@
   letter-spacing: 0.5px;
 }
 
-//font-headers
 .font-header-title {
   font-family: $medium-font;
   font-size: $title-size;
@@ -28,7 +27,6 @@
   @extend .letterSpacing;
 }
 
-//Font-sizes-weights
 .font-jumbo {
   font-family: $medium-font;
   font-size: $jumbo-size;
@@ -58,7 +56,6 @@
   @extend .letterSpacing;
 }
 
-//Font-sizes-weights-colors
 .font-jumbo-dark {
   @extend .font-jumbo;
   color: $primary-dark;
@@ -100,8 +97,6 @@
   color: $inactive-color;
   @extend .letterSpacing;
 }
-
-//New Camel Case Class Structure
 
 .fontDefault {
   font-family: Gotham-Book;
@@ -195,7 +190,6 @@
 
 .listItemHeader {
   color: $primary-dark;
-  //font-weight: $jumbo-weight;
   @extend .letterSpacing;
   @extend .fontMedium;
 }
@@ -240,7 +234,6 @@
 }
 
 .tab {
-  //font-family: $medium-font;
   color: $primary-darkgrey;
   @extend .letterSpacing;
 }

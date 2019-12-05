@@ -21,7 +21,7 @@
   }
 
   &_count {
-    composes: fontBold from 'sass-loader!../../../../fonts.scss';
+    composes: fontBold from '../../../../fonts.scss';
   }
 }
 
@@ -44,7 +44,7 @@
 }
 
 .colStyling {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   font-size: 10px;
   display: flex;
   align-items: center;

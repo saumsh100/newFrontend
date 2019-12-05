@@ -2,7 +2,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import { createMemoryHistory } from 'history';
 import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
 import _ from 'lodash';
@@ -36,6 +35,7 @@ import { electron, webFrame } from '../util/ipc';
 import { setApiUrl } from '../util/hub';
 import SubscriptionManager from '../util/graphqlSubscriptions';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
+import { browserHistory } from '../store/factory';
 
 electron.send(REQUEST_HOST);
 
@@ -52,8 +52,7 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
     hide_default_launcher: true,
   });
 
-  const browserHistory = createMemoryHistory();
-  const store = configure({ browserHistory });
+  const store = configure();
 
   store.dispatch(setLocale(locale));
 
@@ -74,7 +73,7 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
   electron.send(REQUEST_ZOOM_FACTOR, { window: 'toolbar' });
 
   electron.on(SHOW_CONTENT, () => {
-    const location = store.getState().routing.location.pathname;
+    const location = store.getState().router.location.pathname;
     if (location.indexOf('/intercom') > -1) {
       return;
     }
@@ -176,7 +175,6 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
 
     // TODO: define globals with webpack ProvidePlugin
     window.store = store;
-    window.browserHistory = browserHistory;
     window.socket = socket;
     window.moment = extendMoment(moment);
     window.time = time;

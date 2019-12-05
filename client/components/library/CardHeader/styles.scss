@@ -1,6 +1,5 @@
-
-@import "../../../ui.scss";
-@import "../../../fonts.scss";
+@import '../../../ui.scss';
+@import '../../../fonts.scss';
 
 .cardHeader {
   box-sizing: border-box;
@@ -13,7 +12,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   height: 55px;
-  @media(max-width: 496px) {
+  @media (max-width: 496px) {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -28,13 +27,12 @@
 
 .cardCount {
   display: inline-block;
-  composes: cardHeaderCount from "sass-loader!../../../fonts.scss";
+  composes: cardHeaderCount from '../../../fonts.scss';
   padding-right: 5px;
   color: $primary-dark;
 }
 
 .title {
   display: inline-block;
-  composes: cardHeaderTitle from "sass-loader!../../../fonts.scss";
-
+  composes: cardHeaderTitle from '../../../fonts.scss';
 }

@@ -14,6 +14,7 @@ import PractitionerActive from './PractitionerActive';
 import WeeklyScheduleModel from '../../../../entities/models/WeeklySchedule';
 import SettingsCard from '../../Shared/SettingsCard';
 import EnabledFeature from '../../../library/EnabledFeature';
+import Practitioner from '../../../../entities/collections/practitioners';
 import styles from '../styles.scss';
 
 import {
@@ -32,16 +33,13 @@ class PractitionerTabs extends Component {
     this.deletePractitioner = this.deletePractitioner.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { practitioner } = this.props;
-
     this.props.fetchEntities({
       key: 'practitioners',
       url: `/api/practitioners/${practitioner.get('id')}`,
       join: ['weeklySchedule', 'services', 'recurringTimeOffs'],
     });
-
-    this.setState({ index: 0 });
   }
 
   updatePractitioner(modifiedPractitioner, alert) {
@@ -92,7 +90,6 @@ class PractitionerTabs extends Component {
     }
 
     const serviceIds = practitioner.get('services');
-
     return (
       <SettingsCard
         title={practitioner.getFullName()}
@@ -212,7 +209,7 @@ function mapActionsToProps(dispatch) {
 }
 
 PractitionerTabs.propTypes = {
-  practitioner: PropTypes.shape().isRequired,
+  practitioner: PropTypes.instanceOf(Practitioner).isRequired,
   fetchEntities: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,

@@ -52,7 +52,7 @@ function Checkbox(props) {
         <input
           id={id}
           type="checkbox"
-          checked={checked}
+          checked={!!checked}
           value={value}
           onChange={() => {}}
           className={classes}

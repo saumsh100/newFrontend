@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -64,7 +65,7 @@ class Dashboard extends React.Component {
 function mapStateToProps({ entities, dashboard }) {
   return {
     users: entities.getIn(['users', 'models']),
-    dashboardDate: dashboard.toJS().dashboardDate,
+    dashboardDate: dashboard.get('dashboardDate'),
     dashboard,
   };
 }
@@ -97,4 +98,7 @@ Dashboard.propTypes = {
     recalls: PropTypes.arrayOf(PropTypes.any),
   }).isRequired,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Dashboard);

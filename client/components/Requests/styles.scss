@@ -2,15 +2,15 @@
 @import '../../ui.scss';
 
 .mediumFont {
-  composes: fontMedium from 'sass-loader!../../fonts.scss';
+  composes: fontMedium from '../../fonts.scss';
 }
 
 .defaultFont {
-  composes: fontDefault from 'sass-loader!../../fonts.scss';
+  composes: fontDefault from '../../fonts.scss';
 }
 
 .boldFont {
-  composes: fontBold from 'sass-loader!../../fonts.scss';
+  composes: fontBold from '../../fonts.scss';
 }
 .requestPopover {
   z-index: 299;

@@ -34,7 +34,7 @@
 }
 
 .title {
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
 }
 .cardHeader {
   padding-top: 0 !important;

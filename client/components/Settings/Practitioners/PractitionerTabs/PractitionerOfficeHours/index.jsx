@@ -16,13 +16,12 @@ import {
   RemoteSubmitButton,
   Button,
 } from '../../../../library';
-import { weeklyScheduleShape } from '../../../../library/PropTypeShapes/weeklyScheduleShape';
-import { chairShape } from '../../../../library/PropTypeShapes/chairShape';
 import EnabledFeature from '../../../../library/EnabledFeature';
-import { practitionerShape } from '../../../../library/PropTypeShapes/practitionerShape';
 import { SortByName } from '../../../../library/util/SortEntities';
-import styles from '../../styles.scss';
 import PractitionerHoursCalendar from './PractitionerHoursCalendar';
+import Practitioner from '../../../../../entities/collections/practitioners';
+import WeeklyScheduleModel from '../../../../../entities/models/WeeklySchedule';
+import styles from '../../styles.scss';
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
@@ -34,7 +33,7 @@ class PractitionerOfficeHours extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
+      value: 'off',
       active: false,
       activeChair: false,
       modalChairDay: 'monday',
@@ -53,7 +52,7 @@ class PractitionerOfficeHours extends Component {
     this.setAllChairs = this.setAllChairs.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { practitioner } = this.props;
     const customScheduleValue = practitioner ? practitioner.get('isCustomSchedule') : null;
     const value = customScheduleValue ? 'on' : 'off';
@@ -92,7 +91,9 @@ class PractitionerOfficeHours extends Component {
     const { weeklySchedule } = this.props;
     const newWeeklySchedule = weeklySchedule.toJS();
 
-    newWeeklySchedule[day].chairIds = Object.keys(values).filter(key => values[key] && key !== 'day');
+    newWeeklySchedule[day].chairIds = Object.keys(values).filter(
+      key => values[key] && key !== 'day',
+    );
 
     const sendWeeklySchedule = weeklySchedule.merge(newWeeklySchedule);
 
@@ -158,7 +159,6 @@ class PractitionerOfficeHours extends Component {
     delete weeklyScheduleNew.id;
 
     weeklySchedule.weeklySchedules.push(weeklyScheduleNew);
-    // weeklySchedule.startDate = values.startDate;
     weeklySchedule.isAdvanced = true;
 
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
@@ -286,7 +286,6 @@ class PractitionerOfficeHours extends Component {
 
   render() {
     const { weeklySchedule, practitioner, chairs, allChairs } = this.props;
-
     let schedules = null;
     const initialValuesChairs = {};
     let dialogShow = null;
@@ -513,12 +512,12 @@ class PractitionerOfficeHours extends Component {
 }
 
 PractitionerOfficeHours.propTypes = {
-  weeklySchedule: PropTypes.shape(weeklyScheduleShape),
-  practitioner: PropTypes.shape(practitionerShape).isRequired,
   allChairs: PropTypes.bool,
   updateEntityRequest: PropTypes.func.isRequired,
   batchActions: PropTypes.func.isRequired,
-  chairs: PropTypes.shape(chairShape),
+  chairs: PropTypes.instanceOf(Map),
+  weeklySchedule: PropTypes.instanceOf(WeeklyScheduleModel),
+  practitioner: PropTypes.instanceOf(Practitioner).isRequired,
 };
 
 PractitionerOfficeHours.defaultProps = {

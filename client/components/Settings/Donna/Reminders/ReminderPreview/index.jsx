@@ -15,9 +15,10 @@ class ReminderPreview extends Component {
     this.state = { index: 0 };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     // If new reminder is selected, go to Unconfirmed Tab
-    if (nextProps.reminder.id !== this.props.reminder.id && this.state.index !== 0) {
+    if (this.props.reminder.id !== prevProps.reminder.id && this.state.index !== 0) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ index: 0 });
     }
   }

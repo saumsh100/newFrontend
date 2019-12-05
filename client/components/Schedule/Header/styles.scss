@@ -88,7 +88,7 @@
     padding-left: 10px;
     display: flex;
     flex-direction: column;
-    composes: fontDefault from 'sass-loader!../../../fonts.scss';
+    composes: fontDefault from '../../../fonts.scss';
     color: #a7a9ac;
     line-height: 1.3;
     text-align: left;

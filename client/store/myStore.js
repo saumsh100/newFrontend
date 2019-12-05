@@ -1,26 +1,16 @@
 
-import { createStore, applyMiddleware } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
-import { enableBatching } from 'redux-batched-actions';
-import thunkMiddleware from 'redux-thunk';
+import storeFactory from './factory';
 import rootReducer, { createInitialState } from '../reducers/myReducer';
 
-export default function configure({ initialState, browserHistory }) {
-  const create = window.devToolsExtension ? window.devToolsExtension()(createStore) : createStore;
-
-  const createStoreWithMiddleware = applyMiddleware(
-    thunkMiddleware,
-    routerMiddleware(browserHistory),
-  )(create);
-
-  const store = createStoreWithMiddleware(
-    enableBatching(rootReducer),
-    createInitialState(initialState),
-  );
+export default function configure({ initialState } = {}) {
+  const store = storeFactory({
+    initialState: createInitialState(initialState),
+    rootReducer,
+  });
 
   if (module.hot) {
-    module.hot.accept('../reducers', () => {
-      const nextReducer = require('../reducers').default; // eslint-disable-line global-require
+    module.hot.accept('../reducers/myReducer', () => {
+      const nextReducer = require('../reducers/myReducer').default; // eslint-disable-line global-require
       store.replaceReducer(nextReducer);
     });
   }

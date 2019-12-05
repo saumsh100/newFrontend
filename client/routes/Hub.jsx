@@ -1,14 +1,13 @@
 
-import React from 'react';
+import React, { lazy } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Switch, Redirect } from 'react-router';
-import { ConnectedRouter } from 'react-router-redux';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Login from '../components/Login/Electron';
 import HubApp from '../containers/HubApp';
 import FourZeroFour from '../components/FourZeroFour';
-import LazyRoute from './LazyRoute';
 import SignUp from '../components/SignUpInvite';
 import ForgotPassword from '../components/ForgotPassword/Electron';
 import ResetPassword from '../components/ForgotPassword/ResetPassword';
@@ -18,18 +17,16 @@ import { setTitle, setBackHandler } from '../reducers/electron';
 import { collapseContent, collapseWithoutResizing } from '../thunks/electron';
 
 const Routes = {
-  patients: LazyRoute(() => import('./Dashboard/Patients'), true),
-  chat: LazyRoute(() => import('./Dashboard/Chat'), true),
-  requests: LazyRoute(() => import('./Dashboard/Requests'), true),
-  shortcuts: LazyRoute(() => import('../components/Shortcuts'), true),
-  intercom: LazyRoute(() => import('../components/EmbeddedIntercom'), true),
-  waitList: LazyRoute(() => import('../components/Waitlist'), true),
+  patients: lazy(() => import('./Dashboard/Patients'), true),
+  chat: lazy(() => import('./Dashboard/Chat'), true),
+  requests: lazy(() => import('./Dashboard/Requests'), true),
+  shortcuts: lazy(() => import('../components/Shortcuts'), true),
+  intercom: lazy(() => import('../components/EmbeddedIntercom'), true),
+  waitList: lazy(() => import('../components/Waitlist'), true),
 };
 
 const HubRouter = (properties) => {
-  const {
-    history, isAuth, isSuperAdmin, withEnterprise,
-  } = properties;
+  const { history, isAuth, isSuperAdmin, withEnterprise } = properties;
 
   history.listen((route) => {
     const { pathname } = route;
@@ -75,7 +72,8 @@ const HubRouter = (properties) => {
           (isAuth ? (
             getAuthorizedRoutes()
           ) : (
-            <Redirect to={{ pathname: '/login', state: { from: ownProps.location } }} />
+            <Redirect to={{ pathname: '/login',
+state: { from: ownProps.location } }} />
           ))
         }
       />
@@ -147,4 +145,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(null, mapDispatchToProps)(withAuthProps(HubRouter));
+export default connect(
+  null,
+  mapDispatchToProps,
+)(withAuthProps(HubRouter));

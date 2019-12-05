@@ -11,6 +11,8 @@ const isNumberAndGtZero = (val) => {
 };
 
 const isValidTime = (val) => {
+  if (!val || typeof val !== 'string') return true;
+
   const array = val.split(':');
   if (array.length !== 3 || val.length !== 8) {
     return 'HH:MM:SS';
@@ -37,10 +39,9 @@ const isValidTime = (val) => {
   }
 };
 
-const options = [
-  { value: 'days', label: 'Days' },
-  { value: 'weeks', label: 'Weeks' },
-];
+const options = [{ value: 'days',
+  label: 'Days' }, { value: 'weeks',
+  label: 'Weeks' }];
 
 class AdvancedSettingsForm extends Component {
   render() {

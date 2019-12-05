@@ -19,7 +19,7 @@
   height: 50px;
   border-right: 1px solid #e3e3e3;
   color: $primary-dark;
-  composes: fontMedium from 'sass-loader!../../fonts.scss';
+  composes: fontMedium from '../../fonts.scss';
 
   &:last-child {
     border-right: 0;

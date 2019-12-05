@@ -1,10 +1,10 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { getOrCreateChatForPatient } from '../../../../../thunks/chat';
 import { Icon, Button } from '../../../../library';
 import AppointmentInfo from '../../../../library/AppointmentPopover/AppointmentInfo';
@@ -36,7 +36,7 @@ class ShowAppointment extends Component {
       nameContainerOffsetWidth: 100,
       nameContainerOffset: 100,
     };
-
+    this.nameContainer = createRef();
     this.togglePopover = this.togglePopover.bind(this);
     this.closePopover = this.closePopover.bind(this);
     this.editAppointment = this.editAppointment.bind(this);
@@ -45,8 +45,8 @@ class ShowAppointment extends Component {
 
   componentDidMount() {
     // This prevents setState to be called indefinitely
-    if (this.state.nameContainerOffsetWidth !== this.nameContainer.offsetWidth) {
-      this.setState({ nameContainerOffsetWidth: this.nameContainer.offsetWidth });
+    if (this.state.nameContainerOffsetWidth !== this.nameContainer.current.offsetWidth) {
+      this.setState({ nameContainerOffsetWidth: this.nameContainer.current.offsetWidth });
     }
   }
 
@@ -151,12 +151,7 @@ class ShowAppointment extends Component {
               </div>
             ) : null}
 
-            <div
-              className={styles.nameContainer}
-              ref={(div) => {
-                this.nameContainer = div;
-              }}
-            >
+            <div className={styles.nameContainer} ref={this.nameContainer}>
               <div className={styles.nameContainer_name}>
                 {`${patient.get('firstName')} ${patient.get('lastName')}`}
               </div>

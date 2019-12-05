@@ -1,6 +1,6 @@
 
 import Client from 'ifrau/client';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { mergeReviewValues, mergeSentReviewValues } from '../reducers/reviewsWidget';
 import { setSentRecallId, setDueDate } from '../actions/availabilities';
 import { setSelectedServiceId } from '../reducers/availabilities';

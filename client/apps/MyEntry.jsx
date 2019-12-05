@@ -2,7 +2,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import { createBrowserHistory } from 'history';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
@@ -13,11 +12,10 @@ import App from './My';
 import configure from '../store/myStore';
 import { loadPatient } from '../thunks/patientAuth';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
+import { browserHistory } from '../store/factory';
 
-const browserHistory = createBrowserHistory();
 const store = configure({
   initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle
-  browserHistory,
 });
 
 // initialize feature flag client and get initial flags
@@ -37,7 +35,6 @@ loadPatient()(store.dispatch).then(() => {
 
   // TODO: define globals with webpack ProvidePlugin
   window.store = store;
-  window.browserHistory = browserHistory;
   window.moment = extendMoment(moment);
   window.time = time;
   window._ = _;

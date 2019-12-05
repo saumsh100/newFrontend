@@ -5,7 +5,7 @@ import moment from 'moment';
 import { formatPhoneNumber } from '@carecru/isomorphic';
 import { Icon } from '../../../library';
 import PatientPopover from '../../../library/PatientPopover';
-import { PatientShape } from '../../../library/PropTypeShapes/index';
+import { patientShape } from '../../../library/PropTypeShapes';
 import styles from '../styles.scss';
 
 /**
@@ -96,7 +96,7 @@ CallListItem.propTypes = {
   duration: PropTypes.number,
   answered: PropTypes.bool,
   index: PropTypes.number,
-  patient: PropTypes.shape(PatientShape).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
 };
 
 CallListItem.defaultProps = {

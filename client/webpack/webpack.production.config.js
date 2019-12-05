@@ -1,19 +1,13 @@
 
+const TerserPlugin = require('terser-webpack-plugin');
 const merge = require('webpack-merge');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const baseConfig = require('./webpack.base.config');
 
 const developmentConfig = merge(baseConfig, {
   mode: 'production',
   optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        sourceMap: false,
-        parallel: true,
-        exclude: /node_modules/,
-        cache: './.uglify_cache/',
-      }),
-    ],
+    minimize: true,
+    minimizer: [new TerserPlugin({ exclude: /node_modules/ })],
     splitChunks: {
       chunks: 'all',
       name: 'common',

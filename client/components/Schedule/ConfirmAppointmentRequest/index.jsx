@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { Map } from 'immutable';
 import { formatPhoneNumber } from '@carecru/isomorphic';
-import { selectAppointmentPropType } from '../index';
+import { selectAppointmentShape } from '../../library/PropTypeShapes';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
 import { Icon, Button, Avatar, SHeader } from '../../library';
 import SameAppointment from './SameAppointment';
@@ -207,7 +207,7 @@ ConfirmAppointmentRequest.propTypes = {
   redirect: PropTypes.shape({ pathname: PropTypes.string }),
   reinitializeState: PropTypes.func.isRequired,
   selectAppointment: PropTypes.func.isRequired,
-  selectedAppointment: selectAppointmentPropType,
+  selectedAppointment: PropTypes.shape(selectAppointmentShape),
   sendEmail: PropTypes.bool.isRequired,
   setCurrentDay: PropTypes.func.isRequired,
   setLocation: PropTypes.func.isRequired,

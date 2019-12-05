@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import RDropdownMenu from 'react-dd-menu';
@@ -18,6 +18,8 @@ class DropdownTimeSuggestion extends Component {
     };
     this.currentValue = props.value;
     this.scrollIndex = 0;
+
+    this.suggestionsNode = createRef();
     this.close = this.close.bind(this);
     this.toggle = this.toggle.bind(this);
     this.renderList = this.renderList.bind(this);
@@ -40,24 +42,15 @@ class DropdownTimeSuggestion extends Component {
   }
 
   /**
-   * Update currentValue and scrollIndex,
-   * based on the data from the nextProps.
-   *
-   * @param {object} nextProps
+   * update currentValue and scrollIndex, based on data from prevProps
+   * @param {object} prevProps
    */
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      this.currentValue = nextProps.value;
-      this.scrollIndex = this.getIndex(this.props.renderValue(nextProps.value));
+  componentDidUpdate(prevProps) {
+    if (prevProps.value !== this.props.value) {
+      this.currentValue = prevProps.value;
+      this.scrollIndex = this.getIndex(this.props.renderValue(prevProps.value));
     }
-  }
-
-  /**
-   * If the dropdown is open,
-   * and there's a prop's value
-   * let's scroll the dropdown to the specific index.
-   */
-  componentDidUpdate() {
+    // if dropdown is open and there's a prop value, scroll the dropdown to specific index
     if (this.props.value && this.state.isOpen) {
       this.scrollTo(this.scrollIndex);
     }
@@ -128,7 +121,7 @@ class DropdownTimeSuggestion extends Component {
       if (!this.state.isOpen) {
         this.toggle();
       }
-      this.suggestionsNode.scrollTop = index * 40;
+      this.suggestionsNode.current.scrollTop = index * 40;
     }
   }
 
@@ -252,9 +245,7 @@ class DropdownTimeSuggestion extends Component {
       this.currentValue,
       this.scrollIndex,
       this.close,
-      (node) => {
-        this.suggestionsNode = node;
-      },
+      this.suggestionsNode,
     );
   }
 

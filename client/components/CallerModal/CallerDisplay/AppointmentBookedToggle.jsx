@@ -14,7 +14,7 @@ class AppointmentBookedToggle extends Component {
     this.handleToggle = this.handleToggle.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { call } = this.props;
     const wasApptBooked = call ? call.wasApptBooked : null;
     const wasApptBookedValue = wasApptBooked ? 'yes' : 'no';
@@ -40,7 +40,9 @@ class AppointmentBookedToggle extends Component {
       },
     };
 
-    updateEntityRequest({ key: 'calls', model: modifiedCall, alert });
+    updateEntityRequest({ key: 'calls',
+      model: modifiedCall,
+      alert });
 
     const newValue = wasApptBookedValue === 'no' ? 'yes' : 'no';
     this.setState({ wasApptBookedValue: newValue });
@@ -51,10 +53,7 @@ class AppointmentBookedToggle extends Component {
 
     return (
       <div className={styles.toggleContainer}>
-        <span className={styles.toggleContainer_text}>
-          {' '}
-          Was Appointment Booked?{' '}
-        </span>
+        <span className={styles.toggleContainer_text}> Was Appointment Booked? </span>
         <div className={styles.toggleContainer_toggle}>
           <Toggle
             defaultChecked={call.wasApptBooked}

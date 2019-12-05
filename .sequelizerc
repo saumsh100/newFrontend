@@ -1,9 +1,0 @@
-const path = require('path');
-const postgres = require('./server/config/globals').postgres;
-
-module.exports = {
-  'config': path.resolve('server/config/sequelizerc.js'),
-	'models-path': 'server/_models',
-	'seeders-path': 'server/seeders',
-  'migrations-path': 'server/migrations',
-}

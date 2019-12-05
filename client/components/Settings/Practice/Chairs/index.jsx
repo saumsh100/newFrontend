@@ -9,7 +9,7 @@ import { fetchEntities, updateEntityRequest } from '../../../../thunks/fetchEnti
 import { showAlertTimeout } from '../../../../thunks/alerts';
 import { Toggle } from '../../../library/index';
 import { SortByName } from '../../../library/util/SortEntities';
-import { chairShape } from '../../../library/PropTypeShapes/chairShape';
+import { chairShape } from '../../../library/PropTypeShapes';
 import SettingsCard from '../../Shared/SettingsCard';
 import ChairsForm from './ChairsForm';
 import styles from './styles.scss';
@@ -36,7 +36,7 @@ class Chairs extends Component {
     this.setAllChairs = this.setAllChairs.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchEntities({
       key: 'chairs',
     });
@@ -70,7 +70,9 @@ class Chairs extends Component {
         };
 
         return this.props
-          .updateEntityRequest({ key: 'chairs', model: modifiedService, alert })
+          .updateEntityRequest({ key: 'chairs',
+            model: modifiedService,
+            alert })
           .then(() => {
             this.setState({
               previousValues,
@@ -78,7 +80,8 @@ class Chairs extends Component {
           });
       }
 
-      return this.props.updateEntityRequest({ key: 'chairs', model: modifiedService }).then(() => {
+      return this.props.updateEntityRequest({ key: 'chairs',
+        model: modifiedService }).then(() => {
         this.setState({
           previousValues,
         });
@@ -166,4 +169,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chairs);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Chairs);

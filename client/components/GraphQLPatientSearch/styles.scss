@@ -1,7 +1,7 @@
 @import '../../ui';
 
 .bold {
-  composes: fontBold from 'sass-loader!../../fonts.scss';
+  composes: fontBold from '../../fonts.scss';
 }
 
 .footerText {

@@ -83,7 +83,7 @@
   width: 100%;
 
   &_text {
-    composes: subHeaderExtraSmall from 'sass-loader!../../fonts.scss';
+    composes: subHeaderExtraSmall from '../../fonts.scss';
     margin: 0 auto;
 
     &:hover {

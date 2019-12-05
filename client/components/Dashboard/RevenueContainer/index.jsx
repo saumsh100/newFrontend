@@ -135,12 +135,12 @@ class RevenueContainer extends Component {
     this.fetchRevenueData(this.props.dashboardDate);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const currentDate = moment(this.props.dashboardDate);
-    const nextDate = moment(nextProps.dashboardDate);
+  componentDidUpdate(prevProps) {
+    const currentDate = moment(this.props.dashboardDate).toISOString();
+    const previousDate = moment(prevProps.dashboardDate).toISOString();
 
-    if (currentDate.toISOString() !== nextDate.toISOString()) {
-      this.fetchRevenueData(nextProps.dashboardDate);
+    if (currentDate !== previousDate) {
+      this.fetchRevenueData(this.props.dashboardDate);
     }
   }
 

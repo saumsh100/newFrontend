@@ -8,34 +8,40 @@ const OFFSET_HEIGHT = 37;
 
 const INDEX_HEIGHT = 55.5875;
 const DIV_HEIGHT = 335 / 3;
+
+const setToDoTabLineStartingPosition = (toDoIndex) => {
+  const scaledHeight = INDEX_HEIGHT * (toDoIndex + 1);
+  const scaledOffsetHeight = toDoIndex * OFFSET_HEIGHT;
+  const addToHeight = toDoIndex ? scaledHeight + scaledOffsetHeight : INDEX_HEIGHT;
+  const divideHeight = INDEX_HEIGHT / 2;
+  const startingPosition = addToHeight - divideHeight;
+
+  return {
+    startingPosition,
+    toDoIndex,
+  };
+};
+
 class DonnaToDoTabs extends Component {
   constructor(props) {
     super(props);
     this.state = {
       lineWidth: 23,
       startingPosition: 0,
+      toDoIndex: 0,
     };
   }
 
   componentDidMount() {
-    this.setToDoTabLineStartingPosition(this.props.toDoIndex);
+    this.setState(setToDoTabLineStartingPosition(this.props.toDoIndex));
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.toDoIndex !== nextProps.toDoIndex) {
-      this.setToDoTabLineStartingPosition(nextProps.toDoIndex);
+  static getDerivedStateFromProps(props, state) {
+    if (state.toDoIndex !== props.toDoIndex) {
+      return setToDoTabLineStartingPosition(props.toDoIndex);
     }
-  }
 
-  setToDoTabLineStartingPosition(toDoIndex) {
-    const scaledHeight = INDEX_HEIGHT * (toDoIndex + 1);
-    const scaledOffsetHeight = toDoIndex * OFFSET_HEIGHT;
-    const addToHeight = toDoIndex ? scaledHeight + scaledOffsetHeight : INDEX_HEIGHT;
-    const divideHeight = INDEX_HEIGHT / 2;
-    const startingPosition = addToHeight - divideHeight;
-    this.setState({
-      startingPosition,
-    });
+    return null;
   }
 
   render() {

@@ -1,5 +1,5 @@
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { Map } from 'immutable';
 import pull from 'lodash/pull';
 import pullAll from 'lodash/pullAll';
@@ -72,10 +72,10 @@ export function loadUnreadMessages() {
 
 export function addMessage(message) {
   return (dispatch, getState) => {
-    const { chat, electron, routing } = getState();
+    const { chat, electron, router } = getState();
     const selectedChatId = chat.get('selectedChatId');
     const chatPageActive =
-      isOnChatPage(routing.location.pathname) && (!isHub() || electron.get('showContent'));
+      isOnChatPage(router.location.pathname) && (!isHub() || electron.get('showContent'));
     dispatch(createListOfUnreadedChats(message.entities.textMessages));
 
     if (selectedChatId === message.result) {
@@ -135,11 +135,11 @@ function filterReadMessages(unreadList, textMessages) {
 
 export function createListOfUnreadedChats(result) {
   return (dispatch, getState) => {
-    const { chat, auth, routing } = getState();
+    const { chat, auth, router } = getState();
     const unreadMessages = chat.get('unreadChats');
     const selectedChatId = chat.get('selectedChatId');
     const currentUser = auth.getIn(['user', 'id']);
-    const currentLocation = routing.location.pathname;
+    const currentLocation = router.location.pathname;
 
     if (result === {}) {
       return;
@@ -352,7 +352,7 @@ function getChatEntity(id) {
 
 export function selectChat(id, createChat = null) {
   return async (dispatch, getState) => {
-    const { routing, entities, chat } = getState();
+    const { router, entities, chat } = getState();
     const currentChatId = chat.get('selectedChatId');
 
     if (id && currentChatId === id) {
@@ -374,7 +374,7 @@ export function selectChat(id, createChat = null) {
       await setChatIsPoC(patientId, dispatch);
     }
     dispatch(updateChatId());
-    if (isOnChatPage(routing.location.pathname) && !isHub()) {
+    if (isOnChatPage(router.location.pathname) && !isHub()) {
       dispatch(push(`/chat/${id || ''}`));
     }
 

@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": ["prettier", "airbnb"],
-  "plugins": ["react"],
+  "plugins": ["react", "react-hooks"],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true,
@@ -16,6 +16,8 @@
     "eqeqeq": ["error", "always", { "null": "ignore" }],
     "strict": "off",
     "no-console": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "new-cap": "off",
     "linebreak-style": "off",
     "no-mixed-operators": ["error", { "allowSamePrecedence": true }],

@@ -38,16 +38,14 @@ export default class SmsPreview extends Component {
     this.fetchText = this.fetchText.bind(this);
   }
 
-  componentWillMount() {
-    const { url } = this.props;
-    return this.fetchText(url);
+  componentDidMount() {
+    return this.fetchText(this.props.url);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const oldProps = this.props;
-    const { url } = nextProps;
-    if (oldProps.url !== url) {
-      return this.fetchText(url);
+  componentDidUpdate(prevProps) {
+    const newUrl = this.props.url;
+    if (newUrl !== prevProps.url) {
+      this.fetchText(newUrl);
     }
   }
 

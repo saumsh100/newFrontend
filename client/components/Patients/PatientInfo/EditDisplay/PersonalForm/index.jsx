@@ -31,7 +31,9 @@ const validateBirthdate = (value) => {
 const validateZipcodePostal = (value, country) => {
   if (!value) return undefined;
 
-  const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+  const regex = new RegExp(
+    /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i,
+  );
 
   if (country === 'US') {
     return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'This is not a valid zip code.';
@@ -186,9 +188,9 @@ class PersonalForm extends PureComponent {
                 label={isResponsive() ? 'Zip Code' : 'Postal Code / Zip Code'}
                 maxLength="6"
                 theme={inputStyle}
-                validate={(value, { country: countryForm }) =>
-                  validateZipcodePostal(value, countryForm)
-                }
+                validate={[
+                  (value, { country: countryForm }) => validateZipcodePostal(value, countryForm),
+                ]}
               />
             </Col>
             <Col xs={6}>
@@ -222,7 +224,7 @@ class PersonalForm extends PureComponent {
             </Col>
             <Col xs={12}>
               <Field
-                validate={validateEmail}
+                validate={[validateEmail]}
                 type="email"
                 name="email"
                 label="Email"

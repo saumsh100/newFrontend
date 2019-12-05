@@ -50,7 +50,6 @@ electron/build
 **/__generated__
 .python-version
 yarn-error.log
-.uglify_cache
 .npmrc
 coverage
 

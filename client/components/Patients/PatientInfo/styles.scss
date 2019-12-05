@@ -113,7 +113,7 @@
   &_header {
     padding-top: 25px;
     padding-bottom: 10px;
-    composes: fontMedium from 'sass-loader!../../../fonts.scss';
+    composes: fontMedium from '../../../fonts.scss';
     color: $primary-darkgrey;
   }
 }
@@ -137,7 +137,7 @@
 
 .cardTitle {
   font-size: 15px;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
 }
 
 .textHeader {
@@ -145,7 +145,7 @@
   display: flex;
   padding-bottom: 2px;
   align-items: center;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
   color: $primary-darkgrey;
   background: none;
 

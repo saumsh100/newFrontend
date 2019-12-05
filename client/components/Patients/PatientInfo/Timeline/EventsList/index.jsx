@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { List } from 'immutable';
-import Event from '../../../../../entities/models/Event';
+import PatientTimelineEvent from '../../../../../entities/models/PatientTimelineEvent';
 import EventDateSections from '../EventDateSections';
 import { sortEvents } from '../../../Shared/helpers';
 import styles from '../styles.scss';
@@ -57,7 +57,7 @@ export default function EventsList({ events, filters, patient }) {
 }
 
 EventsList.propTypes = {
-  events: PropTypes.arrayOf(PropTypes.instanceOf(Event)),
+  events: PropTypes.arrayOf(PropTypes.instanceOf(PatientTimelineEvent)),
   filters: PropTypes.instanceOf(List),
   patient: PropTypes.shape({}).isRequired,
 };

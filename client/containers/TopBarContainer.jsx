@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import TopBar from '../components/TopBar';
 import { setIsCollapsed } from '../actions/toolbar';
 import { setIsSearchCollapsed } from '../reducers/toolbar';
@@ -28,6 +28,7 @@ class TopBarContainer extends Component {
 }
 
 TopBarContainer.propTypes = {
+  isReady: PropTypes.bool,
   isCollapsed: PropTypes.bool.isRequired,
   isSearchCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
@@ -81,6 +82,7 @@ const mapActionsToProps = dispatch =>
 
 TopBarContainer.defaultProps = {
   accounts: [],
+  isReady: false,
   activeAccount: null,
 };
 

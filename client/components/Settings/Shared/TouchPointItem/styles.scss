@@ -1,4 +1,3 @@
-
 @import '../../../../ui';
 
 .listItem {
@@ -84,7 +83,7 @@
 
 .reminderLabel {
   text-align: center;
-  composes: cardHeaderTitle from 'sass-loader!../../../../fonts.scss';
+  composes: cardHeaderTitle from '../../../../fonts.scss';
   font-size: 14px;
   color: black;
   text-transform: capitalize;
@@ -120,5 +119,3 @@
   @extend .connectionLine;
   border-top: 1px solid $primary-red;
 }
-
-

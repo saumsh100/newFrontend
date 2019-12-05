@@ -19,19 +19,17 @@ class PatientInsightsContainer extends Component {
     this.props.fetchInsights();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const currentDate = moment(this.props.dashboardDate).toISOString();
-    const nextPropsDate = moment(nextProps.dashboardDate).toISOString();
+    const previousDate = moment(prevProps.dashboardDate).toISOString();
 
-    if (nextPropsDate !== currentDate) {
+    if (currentDate !== previousDate) {
       this.props.fetchInsights();
     }
   }
 
   render() {
-    const {
-      insights, appointments, patients, wasAccountFetched, account,
-    } = this.props;
+    const { insights, appointments, patients, wasAccountFetched, account } = this.props;
 
     const allFetched =
       !this.props.loadingInsights && this.props.dashAppointmentsFetched && wasAccountFetched;
@@ -57,9 +55,7 @@ class PatientInsightsContainer extends Component {
   }
 }
 
-function mapStateToProps({
-  apiRequests, dashboard, entities, auth,
-}) {
+function mapStateToProps({ apiRequests, dashboard, entities, auth }) {
   const dash = dashboard.toJS();
   const dashboardDate = dash.dashboardDate;
 
@@ -128,4 +124,7 @@ PatientInsightsContainer.defaultProps = {
   account: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientInsightsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientInsightsContainer);

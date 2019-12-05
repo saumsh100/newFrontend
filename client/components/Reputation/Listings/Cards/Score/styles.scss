@@ -14,18 +14,18 @@
     padding-bottom: 10px;
     &_count {
       color: $primary-blue;
-      composes: fontExtraLarge from 'sass-loader!../../../../../fonts.scss';
+      composes: fontExtraLarge from '../../../../../fonts.scss';
     }
     &_title {
       color: $primary-dark;
-      composes: fontMediumLarge from 'sass-loader!../../../../../fonts.scss';
+      composes: fontMediumLarge from '../../../../../fonts.scss';
     }
   }
   &__body {
     width: 80%;
     padding-top: 10px;
     &_listing {
-      composes: subHeaderSmall from 'sass-loader!../../../../../fonts.scss';
+      composes: subHeaderSmall from '../../../../../fonts.scss';
       color: lighten($primary-darkgrey, 20%);
       display: flex;
       justify-content: space-between;

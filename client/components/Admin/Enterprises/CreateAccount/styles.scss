@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   color: $primary-dark;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   font-size: 19px;
 
   &_text {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import EventModel from '../../../../entities/models/Event';
+import PatientTimelineEvent from '../../../../entities/models/PatientTimelineEvent';
 import { Card, InfiniteScroll } from '../../../library';
 import { fetchEntities } from '../../../../thunks/fetchEntities';
 import { getEventsOffsetLimitObj } from '../../Shared/helpers';
@@ -110,7 +110,7 @@ function mapDispatchToProps(dispatch) {
 
 Timeline.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
-  events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)),
+  events: PropTypes.arrayOf(PropTypes.instanceOf(PatientTimelineEvent)),
   wasEventsFetched: PropTypes.bool,
   wasPatientFetched: PropTypes.bool,
   patient: PropTypes.shape({}),

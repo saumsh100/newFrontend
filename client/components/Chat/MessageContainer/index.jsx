@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { OrderedMap } from 'immutable';
 import { connect } from 'react-redux';
@@ -47,34 +47,45 @@ class MessageContainer extends Component {
       loadedMessages: 0,
     };
 
-    this.scrollContainer = null;
+    this.scrollContainer = createRef();
+    this.optionsWrapper = createRef();
+    this.failedMessageWrapper = createRef();
     this.sendMessageHandler = this.sendMessageHandler.bind(this);
     this.loadMoreMessages = this.loadMoreMessages.bind(this);
-    this.resetPaginationToDefault = this.resetPaginationToDefault.bind(this);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const { selectedChat, textMessages } = props;
+    const { loadedMessages, currentlySelectedChat } = state;
+
+    // Different chatId
+    if (selectedChat && selectedChat.id && currentlySelectedChat !== selectedChat.id) {
+      return {
+        loadedMessages: 0, // reset pagination to default
+        offset: DEFAULT_OFFSET, // reset pagination to default
+        currentlySelectedChat: selectedChat.id,
+      };
+    }
+
+    // Different amount of loaded messages
+    if (textMessages.size && textMessages.size !== loadedMessages) {
+      return {
+        loadedMessages: textMessages.size,
+        loadingMessages: false,
+      };
+    }
+
+    return null;
   }
 
   componentDidMount() {
-    this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
+    this.scrollContainer.current.scrollTop = this.scrollContainer.current.scrollHeight;
   }
 
-  componentWillReceiveProps({ selectedChat, textMessages }) {
-    const { loadedMessages, currentlySelectedChat } = this.state;
-
-    if (selectedChat && selectedChat.id && currentlySelectedChat !== selectedChat.id) {
-      this.setState({ currentlySelectedChat: selectedChat.id });
-      return this.resetPaginationToDefault();
-    }
-
-    if (textMessages.size !== loadedMessages) {
-      return this.setState({
-        loadedMessages: textMessages.size,
-        loadingMessages: false,
-      });
-    }
-
+  componentDidUpdate() {
     // Scroll down on component
-    const node = document.getElementById('careCruChatScrollIntoView');
-    if (node) {
+    const node = this.scrollContainer.current;
+    if (node && node.scrollTop !== node.scrollHeight) {
       node.scrollTop = node.scrollHeight;
     }
   }
@@ -87,13 +98,6 @@ class MessageContainer extends Component {
       lastDay: '[Yesterday], h:mm a',
       lastWeek: '[Last] dddd h:mm a',
       sameElse: 'YYYY/MM/DD, h:mm a',
-    });
-  }
-
-  resetPaginationToDefault() {
-    this.setState({
-      loadedMessages: 0,
-      offset: DEFAULT_OFFSET,
     });
   }
 
@@ -265,21 +269,13 @@ class MessageContainer extends Component {
         <Avatar size="xs" className={avatarStyles} user={avatarUser} isPatient={isFromPatient} />
       );
 
-      let optionsWrapper = null;
-      let failedMessageWrapper = null;
-
       const failedMessage = message.get('smsStatus') === 'failed' && (
-        <div
-          className={styles.failedMessage}
-          ref={(reference) => {
-            failedMessageWrapper = reference;
-          }}
-        >
+        <div className={styles.failedMessage} ref={this.failedMessageWrapper}>
           <Tooltip
             trigger={['hover']}
             overlay={resendMessageButton}
             placement="left"
-            getTooltipContainer={() => failedMessageWrapper}
+            getTooltipContainer={() => this.failedMessageWrapper.current}
           >
             <div>
               <Icon className={styles.failedMessageWarning} icon="exclamation-circle" size={2} />
@@ -292,15 +288,13 @@ class MessageContainer extends Component {
         <div
           className={styles.dotsWrapper}
           data-test-id="chat_unreadDots"
-          ref={(reference) => {
-            optionsWrapper = reference;
-          }}
+          ref={this.optionsWrapper}
         >
           <Tooltip
             trigger={['hover']}
             overlay={markUnreadText}
             placement="right"
-            getTooltipContainer={() => optionsWrapper}
+            getTooltipContainer={() => this.optionsWrapper.current}
           >
             <div className={styles.dotsIconWrapper}>{dotsIcon}</div>
           </Tooltip>
@@ -352,9 +346,7 @@ class MessageContainer extends Component {
         <SBody
           id="careCruChatScrollIntoView"
           className={styles.allMessages}
-          refCallback={(node) => {
-            this.scrollContainer = node;
-          }}
+          refCallback={this.scrollContainer}
         >
           <InfiniteScroll
             isReverse

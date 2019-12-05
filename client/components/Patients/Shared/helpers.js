@@ -17,7 +17,7 @@ export const familyDataSelector = (accountViewer) => {
   }
 
   const patientNode = accountViewer.patient;
-  const family = accountViewer.patient.family;
+  const { family } = accountViewer.patient;
   const familyLength = family ? family.members.edges.length : 0;
 
   return {

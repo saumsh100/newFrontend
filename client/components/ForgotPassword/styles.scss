@@ -12,13 +12,13 @@
 
 .loginForm {
   width: 300px;
-  padding: 30px;
-  padding-left: 50px;
-  padding-right: 50px;
-  margin: 0 auto;
-  margin-top: 100px;
+  padding: 30px 50px;
+  margin: 100px auto 0;
   z-index: 200;
   border-top: $card-border-size $primary-color;
+  @media screen and (min-height: 720px) {
+    transform: translateY(-150px);
+  }
   @media screen and (max-width: $medium-screen-width) {
     width: 60%;
   }
@@ -50,7 +50,7 @@
 .textLogin {
   padding-top: 15px;
   text-align: center;
-  composes: subHeaderExtraSmall from 'sass-loader!../../fonts.scss';
+  composes: subHeaderExtraSmall from '../../fonts.scss';
   cursor: pointer;
   &:hover {
     color: $primary-color;
@@ -68,7 +68,7 @@
 }
 
 .textSuccess2 {
-  composes: fontMedium from 'sass-loader!../../fonts.scss';
+  composes: fontMedium from '../../fonts.scss';
   text-align: center;
   padding: 10px;
 }

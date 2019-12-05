@@ -1,14 +1,13 @@
 
-import React from 'react';
+import React, { lazy } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
-import LazyRoute from '../LazyRoute';
 import Container from '../../containers/EnterpriseContainer';
 
 const base = (path = '') => `/enterprise${path}`;
 
 const Routes = {
-  patients: LazyRoute(() => import('../../components/Enterprise/Patients')),
+  patients: lazy(() => import('../../components/Enterprise/Patients')),
 };
 
 const EnterpriseRouter = () => (

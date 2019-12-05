@@ -23,10 +23,10 @@ class DonnaToDoListContainer extends Component {
     this.props.fetchDonnasToDos(this.state.toDoIndex);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const currentDate = moment(this.props.dashboardDate);
-    const nextDate = moment(nextProps.dashboardDate);
-    if (currentDate.toISOString() !== nextDate.toISOString()) {
+  componentDidUpdate(prevProps) {
+    const currentDate = moment(this.props.dashboardDate).toISOString();
+    const previousDate = moment(prevProps.dashboardDate).toISOString();
+    if (currentDate !== previousDate) {
       this.props.fetchDonnasToDos(this.state.toDoIndex);
     }
   }
@@ -41,9 +41,7 @@ class DonnaToDoListContainer extends Component {
   }
 
   render() {
-    const {
-      account, loadingToDos, reminders, recalls, reviews, wasAccountFetched,
-    } = this.props;
+    const { account, loadingToDos, reminders, recalls, reviews, wasAccountFetched } = this.props;
 
     return (
       <Card className={styles.card} runAnimation loaded={!loadingToDos && wasAccountFetched}>
@@ -65,11 +63,9 @@ class DonnaToDoListContainer extends Component {
   }
 }
 
-function mapStateToProps({
-  entities, auth, apiRequests, dashboard,
-}) {
+function mapStateToProps({ entities, auth, apiRequests, dashboard }) {
   const wasAccountFetched =
-    apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
+    apiRequests.get('dashAccount') && apiRequests.getIn(['dashAccount', 'wasFetched']);
 
   const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   return {
@@ -103,4 +99,7 @@ DonnaToDoListContainer.defaultProps = {
   account: null,
 };
 
-export default connect(mapStateToProps, null)(DonnaToDoListContainer);
+export default connect(
+  mapStateToProps,
+  null,
+)(DonnaToDoListContainer);

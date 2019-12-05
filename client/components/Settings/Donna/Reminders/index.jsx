@@ -44,7 +44,7 @@ class Reminders extends Component {
     this.saveAdvancedSettingsReminder = this.saveAdvancedSettingsReminder.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchEntities({ url: `/api/accounts/${this.props.activeAccount.id}/reminders` });
   }
 

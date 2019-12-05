@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../../../thunks/fetchEntities';
 import PractServicesForm from './PractServicesForm';
+import Practitioner from '../../../../../entities/collections/practitioners';
 
 const sortServicesAlphabetical = (a, b) => {
   if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
@@ -22,7 +23,7 @@ class PractitionerServices extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchEntities({ key: 'services' });
   }
 
@@ -30,11 +31,13 @@ class PractitionerServices extends Component {
     const { practitioner, updatePractitioner } = this.props;
     const storeServiceIds = [];
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const id in values) {
       if (values[id]) {
         storeServiceIds.push(id);
       }
     }
+
     const modifiedPractitioner = practitioner.set('services', storeServiceIds);
 
     const alert = {
@@ -95,6 +98,17 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+PractitionerServices.propTypes = {
+  serviceIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  services: PropTypes.instanceOf(Map).isRequired,
+  practitioner: PropTypes.instanceOf(Practitioner).isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  updatePractitioner: PropTypes.func.isRequired,
+};
 
 export default enhance(PractitionerServices);

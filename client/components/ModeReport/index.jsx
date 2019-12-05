@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import signModeUrl from './signModeUrl';
@@ -9,6 +9,7 @@ import styles from './styles.scss';
 class ModeReport extends Component {
   constructor(props) {
     super(props);
+    this.iframeRef = createRef();
     this.state = {
       loading: true,
       url: null,
@@ -18,7 +19,7 @@ class ModeReport extends Component {
   componentDidMount() {
     this.signUrl(this.props);
 
-    this.iframeRef.addEventListener(
+    this.iframeRef.current.addEventListener(
       'load',
       () => {
         setTimeout(() => {
@@ -66,9 +67,7 @@ class ModeReport extends Component {
           width="100%"
           height="100%"
           frameBorder="0"
-          ref={(ref) => {
-            this.iframeRef = ref;
-          }}
+          ref={this.iframeRef}
         />
       </Card>
     );

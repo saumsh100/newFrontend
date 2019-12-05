@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { destroy } from 'redux-form';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
@@ -148,7 +148,7 @@ class PatientTable extends React.PureComponent {
   }
 
   render() {
-    const { patientTable } = this.props;
+    const patientTable = this.props.patientTable.toJS();
     const { patientIds } = this.state;
     const columns = [
       {
@@ -405,7 +405,7 @@ PatientTable.propTypes = {
 
 const mapStateToProps = ({ entities, patientTable }) => ({
   practitioners: entities.getIn(['practitioners', 'models']),
-  patientTable: patientTable.toJS(),
+  patientTable,
 });
 
 const mapDispatchToProps = dispatch =>

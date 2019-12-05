@@ -40,7 +40,7 @@ const List = ({
     <li
       className={styles.selectAll}
       onClick={toggleAllItems}
-      role="button"
+      role="button" // eslint-disable-line jsx-a11y/no-noninteractive-element-to-interactive-role
       tabIndex={0}
       onKeyDown={e => e.keyCode === 13 && toggleAllItems}
     >

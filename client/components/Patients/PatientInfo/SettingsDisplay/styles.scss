@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-darkgrey;
 
   &_edit {
@@ -38,7 +38,7 @@
   padding-left: 15px;
   padding-bottom: 15px;
   padding-right: 15px;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
 
   &_closeIcon {
     font-size: 1rem;
@@ -82,7 +82,7 @@
 }
 
 .formHeader {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-darkgrey;
 }
 
@@ -92,13 +92,13 @@
 
 .formContainer {
   padding: 15px 25px 5px;
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
 .remoteSubmit {
   display: flex;
   justify-content: flex-end;
-  background: #FFFFFF;
+  background: #ffffff;
   padding-bottom: 23px;
   padding-right: 33px;
 
@@ -111,7 +111,7 @@
   height: 200px;
   position: relative;
   overflow: hidden;
-  background: #FFFFFF;
+  background: #ffffff;
   &_text {
     font-size: 16px;
     line-height: 1.5em;
@@ -122,7 +122,6 @@
     top: 50%;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
 }
-

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PractitionerAvatar, Form, Field, Dropzone, Header, Button } from '../../../../library';
 import { uploadAvatar, deleteAvatar } from '../../../../../thunks/practitioners';
-import { practitionerShape } from '../../../../library/PropTypeShapes/practitionerShape';
+import { practitionerShape } from '../../../../library/PropTypeShapes';
 import styles from '../../styles.scss';
 
 const maxLength = max => value =>
@@ -24,8 +24,9 @@ class PractitionerBasicData extends Component {
     };
   }
 
-  componentWillReceiveProps(props) {
-    if (this.props.practitioner.avatarUrl !== props.practitioner.avatarUrl) {
+  componentDidUpdate(prevProps) {
+    if (this.props.practitioner.avatarUrl !== prevProps.practitioner.avatarUrl) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         uploading: false,
       });

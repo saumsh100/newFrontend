@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import { stringify } from 'query-string';
 import { Map } from 'immutable';
@@ -36,9 +36,9 @@ class RequestList extends Component {
     this.handleTitleChange(props.selectedRequest);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { selectedRequest: nextSelectedRequest } = nextProps;
-    const { selectedRequest } = this.props;
+  componentDidUpdate(prevProps) {
+    const { selectedRequest: nextSelectedRequest } = this.props;
+    const { selectedRequest } = prevProps;
 
     this.handleTitleChange(nextSelectedRequest, selectedRequest);
   }
@@ -47,19 +47,18 @@ class RequestList extends Component {
     if (isHub()) {
       if (nextSelected && !selected) {
         this.props.setBackHandler(this.backHandler);
-        this.props.setTitle(<p>
-          <Icon icon="calendar" type="regular" size={0.9} className={styles.calendarIcon} />
-          {nextSelected.getFormattedTime()}
-                            </p>);
+        this.props.setTitle(
+          <p>
+            <Icon icon="calendar" type="regular" size={0.9} className={styles.calendarIcon} />
+            {nextSelected.getFormattedTime()}
+          </p>,
+        );
       }
     }
   }
 
   confirmAppointment(request, patientUser) {
-    const {
-      location,
-      redirect,
-    } = this.props;
+    const { location, redirect } = this.props;
 
     const modifiedRequest = request.set('isConfirmed', true);
     const requestData = {
@@ -85,7 +84,7 @@ class RequestList extends Component {
   }
 
   removeRequest(request) {
-    const confirmRemove = confirm('Are you sure you want to reject this request?'); // eslint-disable-line no-alert
+    const confirmRemove = window.confirm('Are you sure you want to reject this request?');
     if (confirmRemove) {
       this.openRequest(null);
       this.props.updateEntityRequest({
@@ -106,8 +105,8 @@ class RequestList extends Component {
     });
   }
 
-  renderSelectedRequest(props) {
-    const { services, patientUsers, practitioners, selectedRequest } = props;
+  renderSelectedRequest() {
+    const { services, patientUsers, practitioners, selectedRequest } = this.props;
 
     const patientUser = patientUsers.get(selectedRequest.get('patientUserId'));
     const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
@@ -152,8 +151,8 @@ class RequestList extends Component {
     );
   }
 
-  renderRequestList(props) {
-    const { sortedRequests, services, patientUsers, practitioners, popoverRight } = props;
+  renderRequestList() {
+    const { sortedRequests, services, patientUsers, practitioners, popoverRight } = this.props;
     return (
       <List className={styles.requestList}>
         {sortedRequests.map((request) => {
@@ -188,8 +187,8 @@ class RequestList extends Component {
       <Media query="(max-width: 700px)">
         {matches =>
           (this.props.selectedRequest && (matches || isHub())
-            ? this.renderSelectedRequest(this.props)
-            : this.renderRequestList(this.props))
+            ? this.renderSelectedRequest()
+            : this.renderRequestList())
         }
       </Media>
     );
@@ -202,28 +201,32 @@ const locationShape = {
 };
 
 RequestList.propTypes = {
-  checkPatientUser: PropTypes.func,
-  createEntityRequest: PropTypes.func,
-  deleteEntityRequest: PropTypes.func,
+  checkPatientUser: PropTypes.func.isRequired,
   patientUsers: PropTypes.instanceOf(Map).isRequired,
   popoverRight: PropTypes.string,
   practitioners: PropTypes.instanceOf(Map),
-  push: PropTypes.func,
+  push: PropTypes.func.isRequired,
   requestId: PropTypes.string,
-  location: PropTypes.shape(locationShape),
-  redirect: PropTypes.shape(locationShape),
-  selectAppointment: PropTypes.func,
+  location: PropTypes.shape(locationShape).isRequired,
+  redirect: PropTypes.shape(locationShape).isRequired,
   selectedRequest: PropTypes.instanceOf(Requests),
   services: PropTypes.instanceOf(Map).isRequired,
-  setHoverRequestId: PropTypes.func,
-  setUndoRequest: PropTypes.func,
+  setHoverRequestId: PropTypes.func.isRequired,
   sortedRequests: PropTypes.arrayOf(PropTypes.instanceOf(Requests)),
-  updateEntityRequest: PropTypes.func,
-  setBackHandler: PropTypes.func,
-  setTitle: PropTypes.func,
+  updateEntityRequest: PropTypes.func.isRequired,
+  setBackHandler: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ routing: { location } }) => ({ location });
+RequestList.defaultProps = {
+  popoverRight: '',
+  practitioners: Map({}),
+  requestId: '',
+  selectedRequest: null,
+  sortedRequests: [],
+};
+
+const mapStateToProps = ({ router: { location } }) => ({ location });
 
 const mapActionsToProps = dispatch =>
   bindActionCreators(

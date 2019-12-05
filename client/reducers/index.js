@@ -1,6 +1,6 @@
 
 import { combineReducers } from 'redux';
-import { routerReducer as routing } from 'react-router-redux';
+import { connectRouter } from 'connected-react-router';
 import { reducer as form } from 'redux-form';
 import accountSettings from './accountSettings';
 import alerts from './alerts';
@@ -25,7 +25,7 @@ import segments from './segments';
 import toolbar from './toolbar';
 import intelligenceReports from './intelligenceReports';
 
-const appReducer = combineReducers({
+const rootReducer = history => combineReducers({
   accountSettings,
   alerts,
   apiRequests,
@@ -46,18 +46,10 @@ const appReducer = combineReducers({
   reputation,
   requests,
   reviews,
-  routing,
+  router: connectRouter(history),
   schedule,
   segments,
   toolbar,
 });
-
-const rootReducer = (state, action) => {
-  if (action.type === 'LOGOUT') {
-    state = undefined;
-  }
-
-  return appReducer(state, action);
-};
 
 export default rootReducer;

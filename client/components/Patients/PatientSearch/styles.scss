@@ -24,7 +24,7 @@
 }
 
 .group {
-  composes: fontDefault from 'sass-loader!../../../fonts.scss';
+  composes: fontDefault from '../../../fonts.scss';
   height: 50px;
   background-color: $search-bg;
   padding: 0;

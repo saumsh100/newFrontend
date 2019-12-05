@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../Icon';
@@ -12,25 +12,11 @@ class SuggestionInput extends Component {
 
     this.state = {
       displayValue: props.selected.label,
-      option: props.selected,
     };
+
+    this[`suggestion_time_toggle_${props.name}`] = createRef();
     this.handleChange = this.handleChange.bind(this);
     this.displaySuggestions = this.displaySuggestions.bind(this);
-  }
-
-  /**
-   * Check if we receive a new selected object,
-   * if so let's update the state of the component.
-   *
-   * @param nextProps
-   */
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selected) {
-      this.setState({
-        displayValue: nextProps.selected.label,
-        option: nextProps.selected,
-      });
-    }
   }
 
   /**
@@ -61,8 +47,8 @@ class SuggestionInput extends Component {
       toggleView();
     }
     if (this[`suggestion_time_toggle_${name}`]) {
-      this[`suggestion_time_toggle_${name}`].focus();
-      this[`suggestion_time_toggle_${name}`].select();
+      this[`suggestion_time_toggle_${name}`].current.focus();
+      this[`suggestion_time_toggle_${name}`].current.select();
     }
   }
 
@@ -84,11 +70,14 @@ class SuggestionInput extends Component {
       [theme.activeIcon]: isOpen,
       [theme.errorIcon]: error,
     });
-
+    /* eslint-disable jsx-a11y/label-has-for */
     return (
       <div
-        className={disabled ? theme.toggleDivDisabled : toggleClassName}
+        role="button"
+        tabIndex={0}
         onClick={this.displaySuggestions}
+        onKeyDown={e => e.keyCode === 13 && this.displaySuggestions()}
+        className={disabled ? theme.toggleDivDisabled : toggleClassName}
         data-test-id={this.props['data-test-id']}
       >
         <div className={theme.toggleValueDiv}>
@@ -108,9 +97,7 @@ class SuggestionInput extends Component {
             })}
             theme={{ group: styles.groupFull }}
             id={`suggestion_time_toggle_${name}`}
-            refCallBack={(input) => {
-              this[`suggestion_time_toggle_${name}`] = input;
-            }}
+            refCallBack={this[`suggestion_time_toggle_${name}`]}
           />
           <label htmlFor={`suggestion_time_toggle_${name}`} className={labelClassName}>
             {label}
@@ -128,18 +115,29 @@ class SuggestionInput extends Component {
 export default SuggestionInput;
 
 SuggestionInput.propTypes = {
+  handleKeydown: PropTypes.func.isRequired,
+  handleBlur: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  toggleView: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  theme: PropTypes.shape(PropTypes.instanceOf(Object)).isRequired,
   'data-test-id': PropTypes.string,
-  selected: PropTypes.object,
-  toggleAsInput: PropTypes.func,
-  handleKeydown: PropTypes.func,
-  handleBlur: PropTypes.func,
-  handleChange: PropTypes.func,
-  toggleView: PropTypes.func,
-  disabled: PropTypes.bool,
-  isOpen: PropTypes.bool,
-  label: PropTypes.string,
-  name: PropTypes.string,
-  placeholder: PropTypes.string,
+  selected: PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.string,
+  }),
   error: PropTypes.string,
-  theme: PropTypes.object,
+};
+
+SuggestionInput.defaultProps = {
+  'data-test-id': '',
+  selected: {
+    label: '',
+    value: '',
+  },
+  error: '',
 };

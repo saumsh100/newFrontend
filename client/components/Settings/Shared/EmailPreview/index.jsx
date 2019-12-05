@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { Cache } from '@carecru/isomorphic';
 import styles from './styles.scss';
@@ -35,52 +35,52 @@ export default class EmailPreview extends Component {
     super(props);
 
     this.state = {
-      loading: false,
       height: 500,
     };
-
+    this.iframe = createRef();
     this.fetchPreview = this.fetchPreview.bind(this);
   }
 
-  componentWillMount() {
-    const { url } = this.props;
-    return this.fetchPreview(url);
+  componentDidMount() {
+    return this.fetchPreview(this.props.url);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const oldProps = this.props;
-    const { url } = nextProps;
-    if (oldProps.url !== url) {
-      return this.fetchPreview(url);
+  componentDidUpdate(prevProps) {
+    const newUrl = this.props.url;
+    if (newUrl !== prevProps.url) {
+      this.fetchPreview(newUrl);
     }
   }
 
   fetchPreview(url) {
-    this.setState({ loading: true });
     return getPreview(url).then((html) => {
       // document.write was best way to ensure accessibility of html tag
       // therefore we need to wipe it when it switches
-      this.iframe.contentWindow.document.getElementsByTagName('head')[0].innerHTML = '';
-      this.iframe.contentWindow.document.getElementsByTagName('body')[0].innerHTML = '';
-      this.iframe.contentWindow.document.write(html);
-
+      const { document } = this.iframe.current.contentWindow;
+      document.getElementsByTagName('head')[0].innerHTML = '';
+      document.getElementsByTagName('body')[0].innerHTML = '';
+      document.write(html);
       // Now insert the custom scaling css into the html style
       // Without this, the emails look huge
-      const iHtml = this.iframe.contentWindow.document.getElementsByTagName('center')[0];
+      const iHtml = document.getElementsByTagName('center')[0];
       iHtml.style.transform = `scale(${EMAIL_SCALE})`;
       iHtml.style.transformOrigin = 'top center';
 
       const anchors = Array.from(iHtml.getElementsByTagName('a'));
-      anchors.forEach(a => (a.onclick = e => e.preventDefault()));
+      anchors.forEach((a) => {
+        a.onclick = (e) => {
+          e.preventDefault();
+        };
+      });
 
       // Customize iframe
       this.props.customizeIframe(this.iframe.contentWindow, html);
 
       // Set container with proper html so that the iframe is not scrollable
       // We want the overall container to be scrollable
-      const height = iHtml.offsetHeight * EMAIL_SCALE + AVERAGE_IMAGE_HEIGHT;
+      const scaledHtmlHeight = iHtml.offsetHeight * EMAIL_SCALE;
+      const height = scaledHtmlHeight + AVERAGE_IMAGE_HEIGHT;
       this.setState({
-        loading: false,
         height,
       });
     });
@@ -90,10 +90,13 @@ export default class EmailPreview extends Component {
     const { height } = this.state;
     return (
       <div style={{ height: `${height}px` }} className={styles.iframeWrapper}>
-        <iframe ref={node => (this.iframe = node)} className={styles.iframe} />
+        <iframe title="email template" ref={this.iframe} className={styles.iframe} />
       </div>
     );
   }
 }
 
-EmailPreview.propTypes = { url: PropTypes.string.isRequired };
+EmailPreview.propTypes = {
+  url: PropTypes.string.isRequired,
+  customizeIframe: PropTypes.func.isRequired,
+};

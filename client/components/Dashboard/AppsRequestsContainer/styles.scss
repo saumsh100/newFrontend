@@ -1,11 +1,11 @@
 @import '../../../ui';
 
 .fontMedium {
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
 }
 
 .fontDefault {
-  composes: fontDefault from 'sass-loader!../../../fonts.scss';
+  composes: fontDefault from '../../../fonts.scss';
 }
 
 .appPopover > :global(svg.Popover-tip) {
@@ -33,7 +33,7 @@
   height: 50px;
   border-right: 1px solid #e3e3e3;
   color: $primary-dark;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
 
   &:last-child {
     border-right: 0;
@@ -116,7 +116,7 @@
 
 .patientName {
   font-size: 13px;
-  composes: fontBold from 'sass-loader!../../../fonts.scss';
+  composes: fontBold from '../../../fonts.scss';
   padding-bottom: 3px;
 }
 

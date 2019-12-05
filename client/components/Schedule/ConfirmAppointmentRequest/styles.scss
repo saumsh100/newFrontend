@@ -9,14 +9,14 @@
 }
 
 .subHeader {
-  composes: subHeaderExtraSmall from from 'sass-loader!../../../fonts.scss';
+  composes: subHeaderExtraSmall from from '../../../fonts.scss';
 }
 .listItemHeader {
-  composes: listItemHeader from 'sass-loader!../../../fonts.scss';
+  composes: listItemHeader from '../../../fonts.scss';
 }
 
 .boldTitle {
-  composes: fontBold from 'sass-loader!../../../fonts.scss';
+  composes: fontBold from '../../../fonts.scss';
 }
 
 .text {
@@ -26,7 +26,7 @@
 
 .bold {
   color: $primary-blue;
-  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  composes: fontMedium from '../../../fonts.scss';
 }
 
 .dataContainer {

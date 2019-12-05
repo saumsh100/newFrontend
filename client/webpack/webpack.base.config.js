@@ -70,7 +70,8 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true,
+            babelrc: true,
+            configFile: path.join(process.cwd(), './.babelrc'),
           },
         },
       },
@@ -81,10 +82,11 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
+              modules: {
+                localIdentName,
+              },
+              importLoaders: 2,
               sourceMap: isDevMode,
-              minimize: true,
-              localIdentName,
             },
           },
           {
@@ -128,10 +130,10 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
               sourceMap: isDevMode,
-              minimize: true,
-              localIdentName,
+              modules: {
+                localIdentName,
+              },
             },
           },
         ],

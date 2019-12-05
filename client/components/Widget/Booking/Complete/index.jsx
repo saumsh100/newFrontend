@@ -14,7 +14,7 @@ import {
   refreshAvailabilitiesState,
   getSelectedDaysOfTheWeek,
 } from '../../../../reducers/availabilities';
-import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
+import officeHoursShape from '../../../library/PropTypeShapes/officeHoursShape';
 import { BookingConfirmedSVG } from '../../SVGs';
 import { availabilitiesGroupedByPeriod, waitlistDates, waitlistTimes } from '../Review/helpers';
 import SummaryItem from '../Review/SummaryItem';

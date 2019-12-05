@@ -4,21 +4,11 @@ import PropTypes from 'prop-types';
 import { Form, Field } from '../../../../library';
 import Icon from '../../../../library/Icon/index';
 import { Grid, Row, Col } from '../../../../library/Grid/index';
-import { accountShape } from '../../../../library/PropTypeShapes';
+import Account from '../../../../../entities/models/Account';
 import styles from './styles.scss';
 
-export default function AddAccounts({
-  onSubmit,
-  index,
-  formName,
-  activeAccount,
-}) {
-  const {
-    callrailId,
-    twilioPhoneNumber,
-    vendastaMsId,
-    vendastaSrId,
-  } = activeAccount;
+export default function AddAccounts({ onSubmit, index, formName, activeAccount }) {
+  const { callrailId, twilioPhoneNumber, vendastaMsId, vendastaSrId } = activeAccount;
 
   const initialValues = {
     reputationManagement: !!vendastaSrId,
@@ -37,20 +27,12 @@ export default function AddAccounts({
     >
       <Grid className={styles.accountOptions}>
         <Row className={styles.accountOptions_row}>
-          <Col
-            xs={12}
-            sm={12}
-            md={12}
-            lg={6}
-            className={styles.accountOptions_column}
-          >
+          <Col xs={12} sm={12} md={12} lg={6} className={styles.accountOptions_column}>
             <div className={styles.displayFlex}>
               <span className={styles.icon}>
                 <Icon icon="star" />
               </span>
-              <span className={styles.accountOptions_text}>
-                Reputation Management
-              </span>
+              <span className={styles.accountOptions_text}>Reputation Management</span>
               <div>
                 <Field component="Toggle" name="reputationManagement" />
               </div>
@@ -59,9 +41,7 @@ export default function AddAccounts({
               <span className={styles.icon}>
                 <Icon icon="star" />
               </span>
-              <span className={styles.accountOptions_text}>
-                Directory Listings
-              </span>
+              <span className={styles.accountOptions_text}>Directory Listings</span>
               <div>
                 <Field component="Toggle" name="listings" />
               </div>
@@ -92,8 +72,8 @@ export default function AddAccounts({
 }
 
 AddAccounts.propTypes = {
-  onSubmit: PropTypes.func,
-  index: PropTypes.number,
-  formName: PropTypes.string,
-  activeAccount: PropTypes.shape(accountShape),
+  onSubmit: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  formName: PropTypes.string.isRequired,
+  activeAccount: PropTypes.instanceOf(Account).isRequired,
 };

@@ -1,9 +1,7 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
-import { createBrowserHistory } from 'history';
-import { push } from 'react-router-redux';
+import { render } from 'react-dom';
+import { push } from 'connected-react-router';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
@@ -16,11 +14,11 @@ import connectStoreToHost from '../widget/connectStoreToHost';
 import { loadPatient } from '../thunks/patientAuth';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import { setOnlineBookingUserVars } from '../util/fullStory';
+import ErrorBoundary from '../components/ErrorBoundary';
+import { browserHistory } from '../store/factory';
 
-const browserHistory = createBrowserHistory();
 const store = configure({
   initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle
-  browserHistory,
 });
 
 // initialize feature flag client and get initial flags
@@ -60,7 +58,6 @@ loadPatient()(store.dispatch).then(() => {
   // TODO: define globals with webpack ProvidePlugin
   window.store = store;
   window.push = push;
-  window.browserHistory = browserHistory;
   window.moment = extendMoment(moment);
   window.time = time;
   window._ = _;
@@ -72,22 +69,19 @@ loadPatient()(store.dispatch).then(() => {
     browserHistory,
     store,
   };
-  const render = (Component) => {
-    ReactDOM.render(
-      <AppContainer>
-        <Component {...appProps} />
-      </AppContainer>,
+  const renderApp = () =>
+    render(
+      <React.StrictMode>
+        <ErrorBoundary>
+          <App {...appProps} />
+        </ErrorBoundary>
+      </React.StrictMode>,
       document.getElementById('root'),
     );
-  };
 
-  render(App);
+  renderApp();
 
   if (module.hot) {
-    module.hot.accept('./Reviews', () => {
-      const NextApp = require('./Reviews').default; // eslint-disable-line global-require
-
-      return render(NextApp);
-    });
+    module.hot.accept('./Reviews', () => renderApp());
   }
 });

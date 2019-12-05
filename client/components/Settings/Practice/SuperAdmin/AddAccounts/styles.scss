@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   color: $primary-dark;
-  composes: fontMediumLarge from 'sass-loader!../../../../../fonts.scss';
+  composes: fontMediumLarge from '../../../../../fonts.scss';
   &_text {
     padding-left: 10px;
   }
