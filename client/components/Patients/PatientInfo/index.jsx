@@ -70,6 +70,7 @@ class PatientInfo extends Component {
         backHandler: null,
         title: null,
       },
+      defaultEvents: props.filters,
     };
 
     this.changePageTab = this.changePageTab.bind(this);
