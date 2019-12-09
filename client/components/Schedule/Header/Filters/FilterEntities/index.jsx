@@ -27,10 +27,7 @@ export default function FilterEntities(props) {
   if (entities.length) {
     showAllCheck = (
       <div className={styles.filter_options__checkLabel}>
-        <Checkbox
-          checked={allChecked}
-          onChange={() => handleAllCheck(filterKey)}
-        />
+        <Checkbox checked={allChecked} onChange={() => handleAllCheck(filterKey)} />
         <span className={styles.filter_options__checkLabel__all}>All</span>
       </div>
     );
@@ -43,29 +40,22 @@ export default function FilterEntities(props) {
       <div className={styles.filter_options__title}>{label}</div>
       <div className={styles.filter_options__item}>
         {showAllCheck}
-        {sortedEntities.map((entity, index) => {
+        {sortedEntities.toArray().map((entity, index) => {
           if (!entity) {
             return null;
           }
 
           const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
           return (
-            <div
-              key={index}
-              className={styles.filter_options__checkLabelContainer}
-            >
+            <div key={index} className={styles.filter_options__checkLabelContainer}>
               <Checkbox
                 key={entity.get(display)}
                 checked={checked}
-                onChange={() =>
-                  handleEntityCheck(checked, entity.get('id'), filterKey)
-                }
+                onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
               />
               <div
                 className={styles.filter_options__label}
-                onClick={() =>
-                  handleEntityCheck(checked, entity.get('id'), filterKey)
-                }
+                onClick={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
               >
                 {entity.get(display)}
               </div>
