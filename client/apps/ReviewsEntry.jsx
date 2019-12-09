@@ -71,11 +71,9 @@ loadPatient()(store.dispatch).then(() => {
   };
   const renderApp = () =>
     render(
-      <React.StrictMode>
-        <ErrorBoundary>
-          <App {...appProps} />
-        </ErrorBoundary>
-      </React.StrictMode>,
+      <ErrorBoundary>
+        <App {...appProps} />
+      </ErrorBoundary>,
       document.getElementById('root'),
     );
 

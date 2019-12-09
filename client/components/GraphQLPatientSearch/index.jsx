@@ -121,8 +121,8 @@ class PatientSearch extends Component {
   updateStateWithData(inputValue) {
     return ({ data }) =>
       this.setState((prevState) => {
-        if (inputValue !== currValue || !data) return null;
         const { currValue } = prevState;
+        if (inputValue !== currValue || !data) return null;
         const results = data.accountViewer.patients.edges.map(v => v.node);
 
         return {
