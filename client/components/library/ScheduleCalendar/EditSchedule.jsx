@@ -76,8 +76,12 @@ class EditSchedule extends Component {
    * @return {{breaks: (*|[]), startTime: *, endTime: *}}
    */
   sanitizeScheduleTimeValues(schedule, timezone) {
+    const activeChairIDs = this.props.chairs.toArray().map(({ id }) => id);
+    // only show chairs that are active
+    const selectedChairIds = schedule.chairIds.filter(id => activeChairIDs.includes(id));
     return {
       ...schedule,
+      chairIds: selectedChairIds,
       startTime: getFormattedTime(schedule.startTime, timezone),
       endTime: getFormattedTime(schedule.endTime, timezone),
       breaks:
@@ -166,7 +170,6 @@ class EditSchedule extends Component {
     const { timezone, isModalVisible, handleUpdateSchedule, selectedDay, chairs } = this.props;
     const times = timeOptions();
     const items = chairs.toJS();
-
     const options = Object.values(items)
       .filter(e => e.isActive)
       .map(({ id, name }) => ({
