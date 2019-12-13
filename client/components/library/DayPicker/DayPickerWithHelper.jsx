@@ -175,7 +175,7 @@ container: styles.calendarContainer },
             theme={theme}
             value={displayValue}
             label={this.props.label}
-            onChange={this.handleInputChange}
+            onChange={e => e.preventDefault()}
             onKeyDown={e => this.handleClose(e)}
             onFocus={this.togglePopOver}
           />

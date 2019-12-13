@@ -74,7 +74,6 @@ class DayPicker extends Component {
 
   handleInputChange(e) {
     const { value } = e.target;
-
     const momentDay = moment(value, 'L', true);
 
     if (momentDay.isValid() && this.props.handleThisInput) {
@@ -93,7 +92,6 @@ class DayPicker extends Component {
 
   render() {
     const { target, TargetComponent, tipSize, iconClassName, value, noTarget, theme } = this.props;
-
     // If value is defined, format to 10/8/2017 style
     const displayValue = value ? moment(value).format('l') : value;
 
@@ -109,7 +107,7 @@ class DayPicker extends Component {
       <Input
         {...newPickerProps}
         value={displayValue}
-        onChange={this.handleInputChange}
+        onChange={e => e.preventDefault()}
         onKeyDown={e => this.handleClose(e)}
         onFocus={this.togglePopOver}
         data-test-id={this.props['data-test-id']}
