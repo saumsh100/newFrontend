@@ -96,7 +96,11 @@ export default class EmailPreview extends Component {
   }
 }
 
+EmailPreview.defaultProps = {
+  customizeIframe: () => null,
+};
+
 EmailPreview.propTypes = {
   url: PropTypes.string.isRequired,
-  customizeIframe: PropTypes.func.isRequired,
+  customizeIframe: PropTypes.func,
 };
