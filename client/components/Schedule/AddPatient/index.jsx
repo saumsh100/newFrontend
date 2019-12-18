@@ -50,8 +50,8 @@ export default function AddPatient({ onSubmit, formName, mergingPatientData }) {
       ignoreSaveButton
       key={`Patient Creation Form Name_${formName}`}
     >
-      <Field required name="firstName" validate={[maxLength(15)]} label="First Name" />
-      <Field required name="lastName" validate={[maxLength(15)]} label="Last Name" />
+      <Field required name="firstName" validate={[maxLength(255)]} label="First Name" />
+      <Field required name="lastName" validate={[maxLength(255)]} label="Last Name" />
       <Field name="gender" label="Gender" component="DropdownSelect" options={options} />
       <Field name="mobilePhoneNumber" label="Mobile Phone Number" type="tel" />
       <Field type="email" name="email" validate={[emailValidate]} label="Email" />
