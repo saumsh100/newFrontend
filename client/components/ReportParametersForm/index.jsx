@@ -138,13 +138,15 @@ class ReportParametersForm extends Component {
    * After page is selected for the first time, take default values out of forms.json
    * for each field, and set it in state.
    */
-  setDefaultParamValues(page) {
+  setDefaultParamValues(page, obj = {}) {
     const defaultParams = this.reduceParams(page, (name, curr) =>
       name.map(n => ({
-        [n]: handleDefaultValue(n, {
-          ...curr,
-          accountId: this.props.account.get('id'),
-        }),
+        [n]:
+          obj[n] ||
+          handleDefaultValue(n, {
+            ...curr,
+            accountId: this.props.account.get('id'),
+          }),
       })));
     this.setQueryUrl(page, Object.assign(...defaultParams));
   }
@@ -213,8 +215,20 @@ class ReportParametersForm extends Component {
    * @param page
    */
   changePage(page) {
+    const currentOptions = this.props.reports.get(this.props.active);
+    const nextOptions = this.props.reports.get(page);
     this.props.setActiveReport(page);
-    this.props.reports.get(page) ? this.setQueryUrl(page) : this.setDefaultParamValues(page);
+
+    const merge =
+      nextOptions &&
+      Object.entries(nextOptions).reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [key]: currentOptions[key] || value,
+        }),
+        {},
+      );
+    nextOptions ? this.setQueryUrl(page, merge) : this.setDefaultParamValues(page, currentOptions);
   }
 
   render() {
