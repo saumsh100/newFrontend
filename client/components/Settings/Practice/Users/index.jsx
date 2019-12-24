@@ -93,19 +93,22 @@ class Users extends Component {
       error: { body: 'User Could Not Be Created' },
     };
 
-    this.props.createEntityRequest({
-      key: 'user',
-      entityData,
-      url,
-      alert,
-    });
-
-    // resetting inputs to empty
-    entityData.firstName = '';
-    entityData.lastName = '';
-    entityData.username = '';
-    entityData.password = '';
-    entityData.confirmPassword = '';
+    this.props.createEntityRequest(
+      {
+        key: 'user',
+        entityData,
+        url,
+        alert,
+      },
+      () => {
+        // resetting inputs to empty
+        entityData.firstName = '';
+        entityData.lastName = '';
+        entityData.username = '';
+        entityData.password = '';
+        entityData.confirmPassword = '';
+      },
+    );
   }
 
   sendInvite(entityData) {
