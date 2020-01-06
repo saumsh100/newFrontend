@@ -52,5 +52,6 @@ electron/build
 yarn-error.log
 .npmrc
 coverage
+.uglify_cache/
 
 client/build/*
