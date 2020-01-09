@@ -2,7 +2,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 /* eslint-disable import/no-extraneous-dependencies */
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const baseConfig = require('./webpack.base.config');
 const devServer = require('./dev-server.config');
@@ -23,13 +22,6 @@ const developmentConfig = merge(baseConfig, {
       multiStep: true,
     }),
     new webpack.NamedModulesPlugin(),
-    new HardSourceWebpackPlugin({
-      environmentHash: {
-        root: process.cwd(),
-        directories: [],
-        files: ['package-lock.json', '.env'],
-      },
-    }),
 
     new BrowserSyncPlugin(
       // BrowserSync options
