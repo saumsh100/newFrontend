@@ -38,7 +38,7 @@ export default function PhonePreview({ openCallTestModal, confirmed, twilioPhone
         <div className={styles.body}>
           <div className={styles.subHeader}>
             <span className={styles.caller}>Call from</span>
-            <div className={styles.phoneNumber}>{normalizePhone(twilioPhone)}</div>
+            <div className={styles.phoneNumber}>{normalizePhone(twilioPhone || '')}</div>
             <div className={styles.location}>Vancouver, BC</div>
           </div>
           <div className={styles.footer}>
