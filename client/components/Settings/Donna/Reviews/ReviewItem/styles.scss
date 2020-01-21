@@ -19,7 +19,7 @@
 .secondaryLinesBox {
   margin-left: auto;
   width: 85%;
-  height: 44px;
+  height: 51px;
   border-top: 1px solid $primary-gray;
   border-left: 1px solid $primary-gray;
   border-bottom: 1px solid $primary-gray;
@@ -106,8 +106,18 @@ $dheight: 30px;
 }
 
 .bottomRow {
+  display: flex;
   position: relative;
   bottom: 14px;
+}
+
+.bottomRowLeft {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.bottomRowRight {
+  flex: 3;
 }
 
 .rightDropdown {
@@ -126,8 +136,8 @@ $wrapper-thickness: 6px;
 
 .smallIconContainer {
   position: relative;
-  top: 35px;
-  left: -12px;
+  top: 41px;
+  left: -11px;
 }
 
 $small-icon-width: 20px;

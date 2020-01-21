@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
@@ -12,15 +13,7 @@ import {
   createEntityRequest,
   deleteEntityRequest,
 } from '../../../../thunks/fetchEntities';
-import {
-  Grid,
-  Row,
-  Col,
-  Button,
-  RemoteSubmitButton,
-  DialogBox,
-  DropdownSelect,
-} from '../../../library';
+import { Button, RemoteSubmitButton, DialogBox, DropdownSelect } from '../../../library';
 import { accountShape } from '../../../library/PropTypeShapes';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RecallsItem from './RecallsItem';
@@ -340,34 +333,26 @@ class Recalls extends Component {
                     <IconCircle icon="calendar" color="blue" />
                   </div>
                   <div className={styles.bottomLabel}>
-                    <Grid>
-                      <Row className={styles.bottomRow}>
-                        <Col xs={6} className={styles.leftCol}>
-                          <div className={styles.dropdownWrapper}>
-                            <DropdownSelect
-                              label="Hygiene"
-                              className={styles.dueDateDropdown}
-                              value={numHygieneMonths}
-                              options={dueDateOptions}
-                              onChange={this.changeHygieneDate}
-                              theme={dropDownTheme}
-                            />
-                          </div>
-                        </Col>
-                        <Col xs={6} className={styles.rightCol}>
-                          <div className={styles.dropdownWrapper}>
-                            <DropdownSelect
-                              label="Recall"
-                              className={styles.dueDateDropdown}
-                              value={numRecareMonths}
-                              options={dueDateOptions}
-                              onChange={this.changeRecareDate}
-                              theme={dropDownTheme}
-                            />
-                          </div>
-                        </Col>
-                      </Row>
-                    </Grid>
+                    <div className={classNames(styles.dropdownWrapper, styles.leftCol)}>
+                      <DropdownSelect
+                        label="Hygiene"
+                        className={styles.dueDateDropdown}
+                        value={numHygieneMonths}
+                        options={dueDateOptions}
+                        onChange={this.changeHygieneDate}
+                        theme={dropDownTheme}
+                      />
+                    </div>
+                    <div className={classNames(styles.dropdownWrapper, styles.rightCol)}>
+                      <DropdownSelect
+                        label="Recall"
+                        className={styles.dueDateDropdown}
+                        value={numRecareMonths}
+                        options={dueDateOptions}
+                        onChange={this.changeRecareDate}
+                        theme={dropDownTheme}
+                      />
+                    </div>
                   </div>
                 </div>
               }

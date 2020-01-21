@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { intervalToNumType, numTypeToInterval } from '@carecru/isomorphic';
 import { updateReviewsSettings } from '../../../../../thunks/accounts';
-import { Icon, Grid, Row, Col, Input, DropdownSelect } from '../../../../library';
+import { Icon, Input, DropdownSelect } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
@@ -173,26 +173,22 @@ class ReviewItem extends Component {
               />
             </div>
             <div className={styles.bottomRow}>
-              <Grid>
-                <Row>
-                  <Col xs={3}>
-                    <Input
-                      classStyles={dropdownSelectClass}
-                      value={number}
-                      onChange={this.updateNumberInput}
-                      onBlur={this.onIntervalNumberBlur}
-                    />
-                  </Col>
-                  <Col xs={9} className={styles.rightDropdown}>
-                    <DropdownSelect
-                      onChange={this.onChangeInterval}
-                      className={dropdownSelectClass}
-                      value={type}
-                      options={typeOptions}
-                    />
-                  </Col>
-                </Row>
-              </Grid>
+              <div className={styles.bottomRowLeft}>
+                <Input
+                  classStyles={dropdownSelectClass}
+                  value={number}
+                  onChange={this.updateNumberInput}
+                  onBlur={this.onIntervalNumberBlur}
+                />
+              </div>
+              <div className={styles.bottomRowRight}>
+                <DropdownSelect
+                  onChange={this.onChangeInterval}
+                  className={dropdownSelectClass}
+                  value={type}
+                  options={typeOptions}
+                />
+              </div>
             </div>
           </div>
         </div>

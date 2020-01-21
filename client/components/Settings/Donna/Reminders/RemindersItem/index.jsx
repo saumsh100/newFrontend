@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { intervalToNumType, numTypeToInterval, ordinalSuffix } from '@carecru/isomorphic';
 import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
-import { Col, DropdownSelect, Grid, Icon, Input, Row, Toggle } from '../../../../library';
+import { DropdownSelect, Icon, Input, Toggle } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
@@ -314,26 +314,22 @@ class RemindersItem extends Component {
                   />
                 </div>
                 <div className={styles.bottomRow}>
-                  <Grid>
-                    <Row>
-                      <Col xs={3}>
-                        <Input
-                          classStyles={dropdownSelectClass}
-                          value={number}
-                          onChange={this.onChangeNumberInput}
-                          onBlur={e => this.changeNumber(e.target.value)}
-                        />
-                      </Col>
-                      <Col xs={9} className={styles.rightDropdown}>
-                        <DropdownSelect
-                          onChange={this.changeDaysHours}
-                          className={dropdownSelectClass}
-                          value={type}
-                          options={typeOptions}
-                        />
-                      </Col>
-                    </Row>
-                  </Grid>
+                  <div className={styles.bottomRowLeft}>
+                    <Input
+                      classStyles={dropdownSelectClass}
+                      value={number}
+                      onChange={this.onChangeNumberInput}
+                      onBlur={e => this.changeNumber(e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.bottomRowRight}>
+                    <DropdownSelect
+                      onChange={this.changeDaysHours}
+                      className={dropdownSelectClass}
+                      value={type}
+                      options={typeOptions}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
