@@ -17,7 +17,7 @@ import {
 } from '../constants';
 
 const initialState = fromJS({
-  scheduleDate: localStorage.getItem('scheduleDate') || new Date().toISOString(),
+  scheduleDate: sessionStorage.getItem('scheduleDate') || new Date().toISOString(),
   scheduleView: 'chair',
 
   appointmentMinUnit: 15,
@@ -47,6 +47,7 @@ export default handleActions(
     },
 
     [SET_SCHEDULE_DATE](state, action) {
+      sessionStorage.setItem('scheduleDate', action.payload.scheduleDate);
       return state.merge({ scheduleDate: action.payload.scheduleDate });
     },
 

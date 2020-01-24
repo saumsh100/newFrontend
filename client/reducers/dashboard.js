@@ -29,7 +29,7 @@ export const createInitialDashboardState = state =>
   fromJS(
     Object.assign(
       {
-        dashboardDate: localStorage.getItem('dashboardDate') || new Date().toISOString(),
+        dashboardDate: sessionStorage.getItem('dashboardDate') || new Date().toISOString(),
         loadingInsights: false,
         loadingToDos: false,
         insightCount: 0,
@@ -50,6 +50,7 @@ export const initialState = createInitialDashboardState();
 export default handleActions(
   {
     [SET_DASHBOARD_DATE](state, { payload }) {
+      sessionStorage.setItem('dashboardDate', payload);
       return state.set('dashboardDate', payload);
     },
 

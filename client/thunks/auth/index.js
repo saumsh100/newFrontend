@@ -4,6 +4,8 @@ import { push } from 'connected-react-router';
 import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
 import { loginSuccess, authLogout } from '../../reducers/auth';
+import { setDashboardDate } from '../../reducers/dashboard';
+import { setScheduleDate } from '../../actions/schedule';
 import { updateFeatureFlagsContext, resetFeatureFlagsState } from '../featureFlags';
 import connectSocketToStoreLogin from '../../socket/connectSocketToStoreLogin';
 import connectSocketToConnectStore from '../../socket/connectSocketToConnectStore';
@@ -113,6 +115,9 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
             socket,
           );
         }
+        // set dates
+        dispatch(setDashboardDate(new Date().toISOString()));
+        dispatch(setScheduleDate({ scheduleDate: new Date().toISOString() }));
 
         // dispatch(loginSuccess(decodedToken));
         dispatch(push(redirectedFrom));
@@ -142,17 +147,12 @@ const cleanRedirect = (redirectTo) => {
 };
 
 export function switchActiveAccount(accountId, redirectTo = '/') {
-  return (dispatch, getState) => {
-    const dashboardDate = getState().dashboard.get('dashboardDate');
-    const scheduleDate = getState().schedule.get('scheduleDate');
-    localStorage.setItem('scheduleDate', scheduleDate);
-    localStorage.setItem('dashboardDate', dashboardDate);
-    return httpClient()
+  return dispatch =>
+    httpClient()
       .post(`/api/accounts/${accountId}/switch`, {})
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then(() => dispatch(push(cleanRedirect(redirectTo))))
       .then(reloadPage);
-  };
 }
 
 export function switchActiveEnterprise(enterpriseId, redirectTo = '/') {
@@ -168,6 +168,9 @@ export function logout() {
   return (dispatch, getState) => {
     localStorage.removeItem('token');
     localStorage.removeItem('session');
+    sessionStorage.removeItem('scheduleDate');
+    sessionStorage.removeItem('dashboardDate');
+
     const { auth } = getState();
 
     return httpClient()

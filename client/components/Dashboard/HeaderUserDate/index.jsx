@@ -18,7 +18,8 @@ class HeaderUserDate extends Component {
   }
 
   handleChange(value) {
-    this.props.setDashboardDate(moment(value).toISOString());
+    const newDate = moment(value).toISOString();
+    this.props.setDashboardDate(newDate);
   }
 
   render() {

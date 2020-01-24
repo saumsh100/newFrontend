@@ -66,7 +66,10 @@ Form.defaultProps = {
 };
 
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
-const withReduxForm = BaseComponent => reduxForm({})(BaseComponent);
+const withReduxForm = BaseComponent =>
+  reduxForm({
+    enableReinitialize: true,
+  })(BaseComponent);
 
 const enhance = compose(withReduxForm);
 
