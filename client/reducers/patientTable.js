@@ -60,7 +60,7 @@ export const createInitialPatientState = state =>
       limit: 15,
       page: 0,
       order: [['firstName', 'asc']],
-      segment: ['allPatients'],
+      segment: null,
       status: 'Active',
     }),
 

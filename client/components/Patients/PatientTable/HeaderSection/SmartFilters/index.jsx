@@ -18,11 +18,16 @@ class SmartFilters extends Component {
   }
 
   componentDidMount() {
+    // DCC practices has a customized initial state
     const isDCC =
       this.props.segments.toJS().findIndex(({ segment }) => segment === 'dccRecalls') !== -1;
-    // DCC practices has a customized initial state
-    if (isDCC) {
-      this.setSmartFilter({ segment: 'dccRecalls' });
+
+    if (this.props.selectedSegment === null) {
+      if (isDCC) {
+        this.setSmartFilter({ segment: 'dccRecalls' });
+      } else {
+        this.setSmartFilter({ segment: 'allPatients' });
+      }
     }
   }
 
@@ -45,6 +50,9 @@ class SmartFilters extends Component {
 
   render() {
     const { segments, selectedSegment, totalPatients } = this.props;
+
+    if (!selectedSegment) return null;
+
     const segmentsToJS = (segments && segments.toJS()) || [];
     const activeSegmentLabel = this.getActiveSmartFilter(selectedSegment, segmentsToJS);
     const filterMenu = p => (
