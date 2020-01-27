@@ -86,30 +86,17 @@ function buildFamilyData(insightObj, patient, gender, timezone) {
  * @returns {XML}
  */
 function buildConfirmData(insightObj, patient, gender) {
-  const phoneNumber = insightObj.value.phoneNumber;
-  let header = null;
+  const { confirmAttempts, cellPhoneNumber } = insightObj.value;
+  const header = (
+    <div>
+      Call <span className={styles.patientName}>{patient.firstName}</span> at{' '}
+      {formatPhoneNumber(cellPhoneNumber)} to confirm {gender} appointment.
+    </div>
+  );
 
-  if (phoneNumber) {
-    header = (
-      <div>
-        Call <span className={styles.patientName}>{patient.firstName}</span> at{' '}
-        {formatPhoneNumber(phoneNumber)} to confirm {gender} appointment.
-      </div>
-    );
-  } else if (!phoneNumber && patient.email) {
-    header = (
-      <div>
-        Email <span className={styles.patientName}>{patient.firstName}</span> at {patient.email} to
-        confirm {gender} appointment.
-      </div>
-    );
-  } else {
-    return null;
-  }
-
-  const emailCount = insightObj.value.email;
-  const phoneCount = insightObj.value.phone;
-  const smsCount = insightObj.value.sms;
+  const emailCount = confirmAttempts.email;
+  const phoneCount = confirmAttempts.phone;
+  const smsCount = confirmAttempts.sms;
   const total = emailCount + smsCount + phoneCount;
 
   const subHeaderDiv = total > 0 && (
@@ -139,12 +126,14 @@ function buildAttemptData(countObj) {
   const keys = Object.keys(countObj);
 
   let sentence = '';
-  keys.filter(k => countObj[k] > 0).forEach((k, index, arr) => {
-    const addTo = index < arr.length - 1 ? `${countObj[k]} ${k} and ` : `${countObj[k]} ${k}`;
-    if (addTo) {
-      sentence += addTo;
-    }
-  });
+  keys
+    .filter(k => countObj[k] > 0)
+    .forEach((k, index, arr) => {
+      const addTo = index < arr.length - 1 ? `${countObj[k]} ${k} and ` : `${countObj[k]} ${k}`;
+      if (addTo) {
+        sentence += addTo;
+      }
+    });
 
   return sentence;
 }
@@ -263,10 +252,12 @@ InsightList.propTypes = {
   insightData: PropTypes.shape({
     appointmentId: PropTypes.string,
     patientId: PropTypes.string,
-    insights: PropTypes.arrayOf(PropTypes.shape({
-      type: PropTypes.string,
-      value: PropTypes.any,
-    })),
+    insights: PropTypes.arrayOf(
+      PropTypes.shape({
+        type: PropTypes.string,
+        value: PropTypes.any,
+      }),
+    ),
   }).isRequired,
   scrollId: PropTypes.string,
   appointment: PropTypes.shape(appointmentShape).isRequired,
