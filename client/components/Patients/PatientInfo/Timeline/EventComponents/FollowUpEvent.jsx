@@ -8,6 +8,7 @@ import EventContainer from './Shared/EventContainer';
 import { showAlertTimeout } from '../../../../../thunks/alerts';
 import { deleteEntity } from '../../../../../reducers/entities';
 import { setSelectedFollowUp, setActivePatient } from '../../../../../reducers/patientTable';
+import UserModel from '../../../../../entities/models/User';
 import DeletePatientFollowUpMutation from '../../FollowUps/DeletePatientFollowUpMutation';
 import styles from './styles.scss';
 
@@ -48,13 +49,14 @@ class FollowUpEvent extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, assignedUser } = this.props;
     const {
       note,
       dueAt,
       completedAt,
       patientFollowUpType: { name },
     } = data;
+
     const headerComponent = (
       <div className={styles.followUpHeaderWrapper}>
         {`${name} on ${moment(dueAt).format('MMMM Do, YYYY')}`}
@@ -64,6 +66,10 @@ class FollowUpEvent extends Component {
     const subHeaderComponent = (
       <div>
         <div>Status: {completedAt ? 'Completed' : 'Not Completed'}</div>
+        <div>
+          Assigned to:{' '}
+          {assignedUser ? `${assignedUser.firstName || ''} ${assignedUser.lastName || ''}` : 'n/a'}
+        </div>
         {note && <div>Note: {note}</div>}
       </div>
     );
@@ -84,6 +90,18 @@ class FollowUpEvent extends Component {
   }
 }
 
+function mapStateToProps({ entities }, { data }) {
+  const { assignedUserId } = data;
+  const assignedUser = entities
+    .getIn(['users', 'models'])
+    .toArray()
+    .find(({ id }) => id === assignedUserId);
+
+  return {
+    assignedUser,
+  };
+}
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
@@ -96,11 +114,12 @@ const mapDispatchToProps = dispatch =>
   );
 
 const enhance = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 );
 
 FollowUpEvent.propTypes = {
+  assignedUser: PropTypes.instanceOf(UserModel).isRequired,
   data: PropTypes.shape({
     id: PropTypes.string,
     note: PropTypes.string,

@@ -120,7 +120,7 @@ class PatientActionsContainer extends Component {
         patientId: activePatient.id,
         accountId: activeAccount.id,
         userId,
-        assignedUserId: userId,
+        assignedUserId: values.assignedUserId,
         dueAt: values.dueAt,
         patientFollowUpTypeId: values.patientFollowUpTypeId,
         note: values.note,
@@ -138,6 +138,7 @@ class PatientActionsContainer extends Component {
       }
 
       const { data } = await commit({ variables });
+
       this.toggleForm(
         selectedFollowUp,
         this.props.setSelectedFollowUp,
@@ -161,6 +162,7 @@ class PatientActionsContainer extends Component {
               type: 'followUp',
               accountId: newFollowUp.accountId,
               patientId: newFollowUp.patientId,
+              assignedUserId: newFollowUp.assignedUserId,
               metaData: newFollowUp,
             },
           },
@@ -278,6 +280,7 @@ class PatientActionsContainer extends Component {
 
   render() {
     const {
+      accountUsers,
       selectedNote,
       selectedFollowUp,
       selectedRecall,
@@ -341,6 +344,7 @@ class PatientActionsContainer extends Component {
             {commit =>
               (isFollowUpsFormActive || isUpdatingFollowUp) && (
                 <FollowUpsForm
+                  accountUsers={accountUsers}
                   isUpdate={isUpdatingFollowUp}
                   formName={getFollowUpsFormName(selectedFollowUp)}
                   initialValues={selectedFollowUp}
@@ -390,6 +394,12 @@ class PatientActionsContainer extends Component {
 }
 
 PatientActionsContainer.propTypes = {
+  accountUsers: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   userId: PropTypes.string,
   activePatient: PropTypes.instanceOf(PatientModel),
   activeAccount: PropTypes.instanceOf(AccountModel),
@@ -435,10 +445,19 @@ function mapStateToProps({ entities, patientTable, auth }) {
   const waitForAuth = auth.get('accountId');
   const userId = auth.get('userId');
   const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
+  const accountUsers = entities
+    .getIn(['users', 'models'])
+    .toArray()
+    .filter(({ username }) => !username.includes('sync+'))
+    .map(({ id, firstName, lastName }) => ({
+      value: id,
+      label: `${firstName} ${lastName}`,
+    }));
 
   return {
     activeAccount,
     userId,
+    accountUsers,
     activePatient: patientTable.get('activePatient'),
     selectedNote: patientTable.get('selectedNote'),
     selectedFollowUp: patientTable.get('selectedFollowUp'),

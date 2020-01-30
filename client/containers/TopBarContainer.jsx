@@ -14,10 +14,16 @@ import { accountShape } from '../components/library/PropTypeShapes';
 
 class TopBarContainer extends Component {
   componentDidMount() {
-    this.props.fetchEntities({
-      key: 'accounts',
-      url: '/api/accounts',
-    });
+    Promise.all([
+      this.props.fetchEntities({ url: `/api/accounts/${this.props.activeAccount.id}/users` }),
+      this.props.fetchEntities({ key: 'accounts',
+        join: ['weeklySchedule'] }),
+      this.props.fetchEntities({
+        key: 'accounts',
+        url: '/api/accounts',
+      }),
+    ]);
+
     this.preloadLogoImage = new Image();
     this.preloadLogoImage.src = '/images/carecru_logo.png';
   }
@@ -36,7 +42,6 @@ TopBarContainer.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)),
   activeAccount: PropTypes.shape(accountShape),
-  isReady: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {

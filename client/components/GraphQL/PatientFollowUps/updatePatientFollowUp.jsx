@@ -5,6 +5,7 @@ export default gql`
   mutation updatePatientFollowUp_NEST(
     $id: ID!
     $userId: String!
+    $assignedUserId: String
     $note: String
     $dueAt: String!
     $completedAt: String
@@ -14,6 +15,7 @@ export default gql`
       patientFollowUpUpdateInput: {
         id: $id
         userId: $userId
+        assignedUserId: $assignedUserId
         note: $note
         dueAt: $dueAt
         completedAt: $completedAt
@@ -24,6 +26,7 @@ export default gql`
       patientId
       accountId
       userId
+      assignedUserId
       note
       date
       dueAt

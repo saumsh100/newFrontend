@@ -53,10 +53,8 @@ class Users extends Component {
 
   componentDidMount() {
     const { accountId, role } = this.props;
-    const url = `/api/accounts/${accountId}/users`;
     const urlInvites = `/api/accounts/${accountId}/invites`;
 
-    this.props.fetchEntities({ url });
     this.props.fetchEntities({ url: urlInvites });
 
     this.setState({ role });

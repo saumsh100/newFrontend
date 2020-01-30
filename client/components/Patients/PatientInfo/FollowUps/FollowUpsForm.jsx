@@ -43,7 +43,14 @@ const helpersList = [
   },
 ];
 
-export default function FollowUpsForm({ onSubmit, initialValues, formName, className, isUpdate }) {
+export default function FollowUpsForm({
+  accountUsers,
+  onSubmit,
+  initialValues,
+  formName,
+  className,
+  isUpdate,
+}) {
   return (
     <Form
       key={formName}
@@ -85,12 +92,26 @@ export default function FollowUpsForm({ onSubmit, initialValues, formName, class
           );
         }}
       </FetchFollowUpTypes>
+      <Field
+        required
+        name="assignedUserId"
+        label="User"
+        data-test-id="user-field-followup-form"
+        component="DropdownSelect"
+        options={accountUsers}
+      />
       <Field name="note" label="Note" data-test-id="note" component="TextArea" />
     </Form>
   );
 }
 
 FollowUpsForm.propTypes = {
+  accountUsers: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   onSubmit: PropTypes.func.isRequired,
   formName: PropTypes.string.isRequired,
   className: PropTypes.string,

@@ -26,6 +26,7 @@ export default gql`
       patientId
       accountId
       userId
+      assignedUserId
       note
       date
       dueAt
