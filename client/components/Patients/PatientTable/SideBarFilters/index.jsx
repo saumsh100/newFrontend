@@ -98,12 +98,12 @@ const forms = flags => ({
     },
   },
   followUps: {
-    validateForm: ({ patientFollowUps }) => patientFollowUps.filter(value => !!value).length === 3,
+    validateForm: ({ patientFollowUps }) => patientFollowUps.filter(value => !!value).length >= 2,
     headerTitle: 'Follow-ups',
     formComponent: flags['communication-settings-filter-form'] && FollowUpsSettingsForm,
     props: {},
     initialValues: {
-      patientFollowUps: ['false', '', ''],
+      patientFollowUps: ['', '', '', '', '', 'false'],
     },
   },
 });
