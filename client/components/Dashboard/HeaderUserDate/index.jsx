@@ -41,6 +41,7 @@ class HeaderUserDate extends Component {
             initialValues={{
               date: this.props.dashboardDate,
             }}
+            enableReinitialize
           >
             <Field
               component="DayPicker"
