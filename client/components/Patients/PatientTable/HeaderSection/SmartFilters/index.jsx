@@ -31,6 +31,19 @@ class SmartFilters extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const isDCC =
+      this.props.segments.toJS().findIndex(({ segment }) => segment === 'dccRecalls') !== -1;
+
+    if (this.props.selectedSegment === null) {
+      if (isDCC) {
+        this.setSmartFilter({ segment: 'dccRecalls' });
+      } else {
+        this.setSmartFilter({ segment: 'allPatients' });
+      }
+    }
+  }
+
   getActiveSmartFilter([segment, ...args], segments = []) {
     const baseSegment = segments.filter(s => s.segment === segment);
     const selectedSegment =
