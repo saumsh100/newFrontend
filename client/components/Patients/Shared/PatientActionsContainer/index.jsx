@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import jwt from 'jwt-decode';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
@@ -43,6 +44,14 @@ class PatientActionsContainer extends Component {
     this.handleNotesFormSubmit = this.handleNotesFormSubmit.bind(this);
     this.handleFollowUpsFormSubmit = this.handleFollowUpsFormSubmit.bind(this);
     this.handleSentRecallFormSubmit = this.handleSentRecallFormSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+    const url = `/api/users/${decodedToken.userId}`;
+
+    this.props.fetchEntities({ url });
   }
 
   toggleForm(selectedData, setSelectedData, setFormActive) {
@@ -347,7 +356,11 @@ class PatientActionsContainer extends Component {
                   accountUsers={accountUsers}
                   isUpdate={isUpdatingFollowUp}
                   formName={getFollowUpsFormName(selectedFollowUp)}
-                  initialValues={selectedFollowUp}
+                  initialValues={
+                    selectedFollowUp || {
+                      assignedUserId: this.props.userId,
+                    }
+                  }
                   onSubmit={values => this.handleFollowUpsFormSubmit(values, commit)}
                   className={styles.notesForm}
                 />
@@ -427,6 +440,7 @@ PatientActionsContainer.propTypes = {
   setIsNoteFormActive: PropTypes.func.isRequired,
   setIsFollowUpsFormActive: PropTypes.func.isRequired,
   setIsRecallsFormActive: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
 };
 
 PatientActionsContainer.defaultProps = {
