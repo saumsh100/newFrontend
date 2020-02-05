@@ -55,20 +55,22 @@ const FollowUps = ({ theme, timezone, accountUsers }) => (
       </div>
 
       <div className={styles.formHeader}>Reason</div>
-      <FetchFollowUpTypes>
-        {({ loading, error, data: { patientFollowUpTypes } }) => {
-          if (loading) return <Loader isLoaded={loading} />;
-          if (error) return `Error!: ${error}`;
-          return (
-            <Field
-              component="DropdownSelect"
-              name="4"
-              options={patientFollowUpTypes}
-              theme={theme}
-            />
-          );
-        }}
-      </FetchFollowUpTypes>
+      <div className={styles.formContainer_row}>
+        <FetchFollowUpTypes>
+          {({ loading, error, data: { patientFollowUpTypes } }) => {
+            if (loading) return <Loader isLoaded={loading} />;
+            if (error) return `Error!: ${error}`;
+            return (
+              <Field
+                component="DropdownSelect"
+                name="4"
+                options={patientFollowUpTypes}
+                theme={theme}
+              />
+            );
+          }}
+        </FetchFollowUpTypes>
+      </div>
       <div className={styles.formHeader}>Status</div>
       <div className={styles.formContainer_row}>
         <Field component="DropdownSelect" name="5" options={booleanOptions} theme={theme} />

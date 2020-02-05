@@ -85,8 +85,21 @@ const HelpTextLookupTable = {
   'Smart Recare': {
     status: 'Active',
     description: 'Active Patients who are overdue for hygiene and not scheduled.',
-    communication: 'No logged conversations within 30 days',
+    communication: 'No logged conversations within 30 days before or after today',
     followUp: 'No follow ups scheduled after today',
+  },
+  'Follow-Ups': {
+    status: 'Active',
+    description: 'Active Patients who have an incomplete follow up',
+    communication: null,
+    followUp: 'Follow up scheduled',
+  },
+  'Follow-Ups(past 30 days)': {
+    status: 'Active',
+    description:
+      'Active Patients who have an incomplete follow ups assigned to me who are overdue for the past 30 days',
+    communication: null,
+    followUp: 'Follow up scheduled',
   },
 };
 

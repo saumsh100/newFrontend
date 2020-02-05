@@ -54,9 +54,17 @@ class SmartFilters extends Component {
   }
 
   setSmartFilter({ segment, value = [] }) {
+    const params = {};
+
+    if (segment === 'followUps') {
+      // this sorts the PatientTable column
+      params.order = [['patientFollowUps.dueAt', 'asc']];
+    }
+
     this.props.addFilter({
       segment: [segment, ...value],
       page: 0,
+      ...params,
     });
     this.props.fetchPatientTableData();
   }

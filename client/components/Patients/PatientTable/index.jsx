@@ -21,7 +21,8 @@ import PatientNameColumn from './PatientNameColumn';
 import SideBarFilters from './SideBarFilters';
 import HeaderSection from './HeaderSection';
 import HygieneColumn from '../Shared/HygieneColumn';
-import RecallColumn from '../Shared/RecallColumn';
+import FollowUpsColumn from '../Shared/FollowUpsColumn';
+import ReasonColumn from '../Shared/ReasonColumn';
 import {
   arrowStyle,
   backgroundWhite,
@@ -51,10 +52,6 @@ class PatientTable extends React.PureComponent {
     this.handleRowClick = this.handleRowClick.bind(this);
     this.removeFilter = this.removeFilter.bind(this);
     this.handlePatientSelection = this.handlePatientSelection.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.fetchPatientTableData();
   }
 
   /**
@@ -248,18 +245,6 @@ class PatientTable extends React.PureComponent {
       },
       {
         ...baseColumn,
-        Header: 'Last Appt',
-        id: 'lastApptDate',
-        accessor: ({ lastApptDate }) =>
-          (lastApptDate ? moment(lastApptDate).format('MMM DD YYYY') : '-'),
-        Cell: ({ value }) => (
-          <div className={styles.displayFlex}>
-            <div className={styles.cellText_lastAppt}>{value}</div>
-          </div>
-        ),
-      },
-      {
-        ...baseColumn,
         Header: 'Last Hygiene Appt',
         id: 'lastHygieneDate',
         accessor: ({ lastHygieneDate }) =>
@@ -302,9 +287,15 @@ class PatientTable extends React.PureComponent {
       },
       {
         ...baseColumn,
-        Header: 'Due for Recall',
-        id: 'dueForRecallExamDate',
-        Cell: ({ original }) => <RecallColumn showTable patient={original} />,
+        Header: 'Due for Follow-ups',
+        id: 'patientFollowUps.dueAt',
+        Cell: ({ original }) => <FollowUpsColumn showTable patient={original} />,
+      },
+      {
+        ...baseColumn,
+        Header: 'Follow-ups Reason',
+        id: 'patientFollowUps->patientFollowUpTypes.name',
+        Cell: ({ original }) => <ReasonColumn showTable patient={original} />,
       },
     ];
 

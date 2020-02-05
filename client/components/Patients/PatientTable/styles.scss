@@ -433,3 +433,9 @@ $height: 6px;
     padding-top: 1px;
   }
 }
+
+.reason_text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
