@@ -88,13 +88,13 @@ const HelpTextLookupTable = {
     communication: 'No logged conversations within 30 days before or after today',
     followUp: 'No follow ups scheduled after today',
   },
-  'Follow-Ups': {
+  'Follow Ups': {
     status: 'Active',
     description: 'Active Patients who have an incomplete follow up',
     communication: null,
     followUp: 'Follow up scheduled',
   },
-  'Follow-Ups(past 30 days)': {
+  'My Follow Ups (past 30 days)': {
     status: 'Active',
     description:
       'Active Patients who have an incomplete follow ups assigned to me who are overdue for the past 30 days',

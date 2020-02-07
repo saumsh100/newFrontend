@@ -98,12 +98,12 @@ const forms = flags => ({
     },
   },
   followUps: {
-    validateForm: ({ patientFollowUps }) => patientFollowUps.filter(value => !!value).length >= 2,
-    headerTitle: 'Follow-ups',
+    validateForm: ({ patientFollowUps }) => patientFollowUps.filter(value => !!value).length >= 1,
+    headerTitle: 'Follow Ups',
     formComponent: flags['communication-settings-filter-form'] && FollowUpsSettingsForm,
     props: {},
     initialValues: {
-      patientFollowUps: ['', '', '', '', '', 'false'],
+      patientFollowUps: ['', '', '', '', '', ''],
     },
   },
 });
@@ -166,7 +166,7 @@ class SideBarFilters extends Component {
     const parsedFilters = Object.entries(values)
       .filter(([, value]) => {
         if (Array.isArray(value)) {
-          return value.filter(v => !!v).length > 1 && validateForm(values);
+          return value.filter(v => !!v).length >= 1 && validateForm(values);
         }
         return value.trim() !== '';
       })

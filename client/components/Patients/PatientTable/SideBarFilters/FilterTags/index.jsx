@@ -13,6 +13,7 @@ const filterNameMap = {
   emailCommunicationPreference: 'Email',
   smsCommunicationPreference: 'SMS',
   phoneCommunicationPreference: 'Phone',
+  patientFollowUps: 'Follow Ups',
 };
 
 function FilterTags({ filters, removeTag }) {
@@ -51,6 +52,7 @@ FilterTags.propTypes = {
 FilterTags.defaultProps = { filters: {} };
 
 function mapStateToProps({ patientTable }) {
+  /* eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
   const { limit, page, order, segment, ...filters } = patientTable.get('filters').toJS();
   return { filters };
 }

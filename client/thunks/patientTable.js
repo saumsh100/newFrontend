@@ -8,10 +8,11 @@ import { httpClient } from '../util/httpClient';
 export const fetchPatientTableData = () => async (dispatch, getState) => {
   try {
     dispatch(setIsLoading(true));
-    const { patientTable } = getState();
+    const { patientTable, auth } = getState();
     const params = {
       ...patientTable.get('filters').toJS(),
       isHoH: true,
+      authUserId: auth.get('userId'),
     };
     const {
       data: { entities },
