@@ -287,13 +287,13 @@ class PatientTable extends React.PureComponent {
       },
       {
         ...baseColumn,
-        Header: 'Due for Follow-ups',
+        Header: 'Due for Follow Up',
         id: 'patientFollowUps.dueAt',
         Cell: ({ original }) => <FollowUpsColumn showTable patient={original} />,
       },
       {
         ...baseColumn,
-        Header: 'Follow-ups Reason',
+        Header: 'Follow Up Reason',
         id: 'patientFollowUps->patientFollowUpTypes.name',
         Cell: ({ original }) => <ReasonColumn showTable patient={original} />,
       },
