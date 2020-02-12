@@ -57,7 +57,7 @@ const FollowUps = ({ theme, timezone, accountUsers }) => (
       <div className={styles.formHeader}>Reason</div>
       <div className={styles.formContainer_row}>
         <FetchFollowUpTypes>
-          {({ loading, error, data: { patientFollowUpTypes } }) => {
+          {({ loading, error, data: { patientFollowUpTypes } = {} }) => {
             if (loading) return <Loader isLoaded={loading} />;
             if (error) return `Error!: ${error}`;
             return (
