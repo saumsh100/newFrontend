@@ -123,6 +123,8 @@ $padding-size-border: 10px;
 .userDropdownMenu > div {
   width: auto;
   margin: -5px 0 0 0 !important;
+  display: flex;
+  align-items: center;
 }
 
 .accountsDropdownMenu > div {
@@ -137,6 +139,9 @@ $padding-size-border: 10px;
 .userMenuButton {
   display: flex;
   align-items: center;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-right: 1px solid lighten($primary-dark-grey, 25%);
 
   &:hover {
     color: $primary-blue !important;
@@ -190,10 +195,10 @@ $padding-size-border: 10px;
 .activeAccountButton {
   color: $primary-dark-grey;
   padding: 0 1em;
-  border-right: 1px solid $primary-dark-grey;
+  border-right: 1px solid lighten($primary-dark-grey, 25%);
   background: none;
   cursor: pointer;
-  line-height: 47px;
+  line-height: 42px;
   white-space: nowrap;
 
   &:hover {

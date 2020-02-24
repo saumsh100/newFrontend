@@ -9,6 +9,7 @@ export default function CreateOrUpdateFollowUpMutation(props) {
   return (
     <Mutation
       mutation={props.isUpdate ? updatePatientFollowUp : createPatientFollowUp}
+      refetchQueries={['fetchMyFollowUps_NEST']}
       {...props}
     />
   );

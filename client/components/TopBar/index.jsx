@@ -10,6 +10,7 @@ import GraphQLPatientSearch from '../GraphQLPatientSearch';
 import accountShape from '../library/PropTypeShapes/accountShape';
 import EnabledFeature from '../library/EnabledFeature';
 import AdaptiveLogo from './AdaptiveLogo';
+import MyFollowUpsButton from './MyFollowUpsButton';
 import styles from './styles.scss';
 
 const UserMenu = ({ user, activeAccount, enterprise, role, multipleAccounts, ...props }) => {
@@ -292,6 +293,14 @@ class TopBar extends Component {
                 </MenuItem>
               </DropdownMenu>
             </li>
+            <EnabledFeature
+              predicate={({ flags }) => flags.get('follow-ups-shortcut-icon')}
+              render={() => (
+                <li>
+                  <MyFollowUpsButton />
+                </li>
+              )}
+            />
           </ul>
         </div>
       </AppBar>

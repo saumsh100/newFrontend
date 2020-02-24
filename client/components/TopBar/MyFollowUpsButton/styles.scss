@@ -1,0 +1,40 @@
+@import '../../../ui';
+
+.myFollowUpsButtonWrapper {
+  margin-left: 10px !important;
+  margin-right: 15px !important;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  border: 1px solid darken(#f4f4f4, 10%);
+  border-radius: 15% !important;
+  background-color: darken(#f4f4f4, 5%) !important;
+  font-size: 12px;
+  height: 35px !important;
+  width: 28px !important;
+
+  &:hover {
+    cursor: pointer;
+    border-color: $primary-blue;
+    > div > div {
+      border: 1px solid $primary-blue;
+    }
+  }
+
+  > div > div {
+    height: 1.2em;
+    border-radius: 1.2em;
+    min-width: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: -18px;
+    right: -16px;
+  }
+}
+
+.myFollowUpsIcon {
+  font-size: 1.2em !important;
+  color: $primary-dark;
+  margin-left: 1px;
+}

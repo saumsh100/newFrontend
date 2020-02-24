@@ -1,6 +1,8 @@
 
 import each from 'lodash/each';
-import { setTableData, setIsLoading } from '../reducers/patientTable';
+import { push } from 'connected-react-router';
+import { reset } from 'redux-form';
+import { addFilter, setTableData, setIsLoading, removeAllFilters } from '../reducers/patientTable';
 import { httpClient } from '../util/httpClient';
 
 // disabling to keep thunks consistent with named exports
@@ -36,6 +38,37 @@ export const fetchPatientTableData = () => async (dispatch, getState) => {
       throw err;
     }
   }
+};
+
+const patientTableFilterForms = [
+  'demographics',
+  'appointments',
+  'practitioners',
+  'communication',
+  'reminders',
+  'recalls',
+  'followUps',
+];
+
+/**
+ * jumpToMyFollowUps will clear all existing Patient Management filters/forms
+ * and direct users to the "My Follow-ups (past 30 days)" list with that list's
+ * data fetched
+ *
+ * @returns {Function}
+ */
+export const jumpToMyFollowUps = () => (dispatch) => {
+  dispatch(removeAllFilters());
+  patientTableFilterForms.map(form => dispatch(reset(form)));
+  dispatch(
+    addFilter({
+      page: 0,
+      segment: ['myFollowUps', 30, true],
+      order: [['patientFollowUps.dueAt', 'asc']],
+    }),
+  );
+  dispatch(fetchPatientTableData());
+  dispatch(push('/patients/list'));
 };
 
 function getEntities(entities) {
