@@ -1,14 +1,17 @@
 {
   "parser": "babel-eslint",
-  "extends": ["prettier", "airbnb"],
+  "extends": ["prettier", "airbnb", "prettier/react", "prettier/standard"],
   "plugins": ["react", "react-hooks"],
   "parserOptions": {
+    "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true,
       "modules": true
     }
   },
   "rules": {
+    "arrow-parens": ["error", "as-needed"],
+    "implicit-arrow-linebreak": ["warn", "below"],
     "no-use-before-define": "off",
     "func-names": "off",
     "no-param-reassign": "off",
@@ -32,6 +35,7 @@
     ],
     "object-curly-newline": ["error", { "consistent": true }],
     "react/no-did-mount-set-state": "off",
+    "react/destructuring-assignment": ["warn", "always"],
     "jsx-a11y/anchor-is-valid": [
       "error",
       {
