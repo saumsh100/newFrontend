@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { sortDesc } from '@carecru/isomorphic';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import Map from 'immutable';
 import {
   fetchEntities,
@@ -91,22 +92,14 @@ class Users extends Component {
       error: { body: 'User Could Not Be Created' },
     };
 
-    this.props.createEntityRequest(
-      {
+    this.props
+      .createEntityRequest({
         key: 'user',
         entityData,
         url,
         alert,
-      },
-      () => {
-        // resetting inputs to empty
-        entityData.firstName = '';
-        entityData.lastName = '';
-        entityData.username = '';
-        entityData.password = '';
-        entityData.confirmPassword = '';
-      },
-    );
+      })
+      .then(() => this.props.reset('newUser'));
   }
 
   sendInvite(entityData) {
@@ -123,13 +116,14 @@ class Users extends Component {
       error: { body: 'Invite Could Not Be Sent' },
     };
 
-    this.props.createEntityRequest({
-      key: 'invites',
-      entityData,
-      url,
-      alert,
-    });
-    entityData.email = '';
+    this.props
+      .createEntityRequest({
+        key: 'invites',
+        entityData,
+        url,
+        alert,
+      })
+      .then(() => this.props.reset('emailInvite'));
   }
 
   sendEdit({ role, sendBookingRequestEmail }) {
@@ -419,6 +413,7 @@ class Users extends Component {
 
 Users.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
@@ -453,6 +448,7 @@ function mapDispatchToProps(dispatch) {
       fetchEntities,
       deleteEntityRequest,
       createEntityRequest,
+      reset,
       updateEntityRequest,
     },
     dispatch,
