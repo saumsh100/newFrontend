@@ -15,7 +15,7 @@ import { accountShape } from '../components/library/PropTypeShapes';
 class TopBarContainer extends Component {
   componentDidMount() {
     Promise.all([
-      this.props.fetchEntities({ url: `/api/accounts/${this.props.activeAccount.id}/users` }),
+      this.props.fetchEntities({ url: `/api/accounts/${this.props.authAccountId}/users` }),
       this.props.fetchEntities({ key: 'accounts',
         join: ['weeklySchedule'] }),
       this.props.fetchEntities({
@@ -42,10 +42,12 @@ TopBarContainer.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)),
   activeAccount: PropTypes.shape(accountShape),
+  authAccountId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const authAccountId = auth.get('accountId');
+  const activeAccount = entities.getIn(['accounts', 'models', authAccountId]);
   const accountsFlag = featureFlags.getIn(['flags', 'accounts-available-to-switch']);
   const allowedAccounts = accountsFlag && accountsFlag.toJS().map(a => a.value);
   const enterpriseAccounts = Object.values(
@@ -61,10 +63,11 @@ const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {
     : enterpriseAccounts;
 
   return {
+    accounts,
+    authAccountId,
     isCollapsed: toolbar.get('isCollapsed'),
     isSearchCollapsed: toolbar.get('isSearchCollapsed'),
     activeAccount: activeAccount && activeAccount.toJS(),
-    accounts,
     user: auth.get('user'),
     enterprise: auth.get('enterprise'),
     isReady: !!auth.get('accountId') && !!activeAccount,
