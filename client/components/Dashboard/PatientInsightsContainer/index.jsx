@@ -57,11 +57,11 @@ class PatientInsightsContainer extends Component {
 
 function mapStateToProps({ apiRequests, dashboard, entities, auth }) {
   const dash = dashboard.toJS();
-  const dashboardDate = dash.dashboardDate;
+  const { dashboardDate } = dash;
 
-  const loadingInsights = dash.loadingInsights;
-  const insights = dash.insights;
-  const insightCount = dash.insightCount;
+  const { loadingInsights } = dash;
+  const { insights } = dash;
+  const { insightCount } = dash;
 
   const wasAccountFetched =
     apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
@@ -70,7 +70,12 @@ function mapStateToProps({ apiRequests, dashboard, entities, auth }) {
     apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
 
   const appointments = entities.getIn(['appointments', 'models']);
-  const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
+  const practitioners = entities.getIn(['practitioners', 'models']);
+  const filteredAppointments = FilterAppointments(
+    appointments,
+    practitioners,
+    moment(dashboardDate),
+  );
 
   const appPatientIds = filteredAppointments.map(app => app.get('patientId')).toArray();
   const patients = FilterPatients(entities.getIn(['patients', 'models']), appPatientIds);

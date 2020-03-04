@@ -214,7 +214,11 @@ function mapStateToProps({ apiRequests, entities, router }, { dashboardDate, ...
   const chairs = entities.getIn(['chairs', 'models']);
   const appointments = entities.getIn(['appointments', 'models']);
 
-  const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
+  const filteredAppointments = FilterAppointments(
+    appointments,
+    practitioners,
+    moment(dashboardDate),
+  );
 
   const appPatientIds = filteredAppointments.map(app => app.get('patientId')).toArray();
 
