@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import Popover from 'react-popover';
 import PropTypes from 'prop-types';
+import Practitioner from '../../../entities/models/Practitioners';
 import RequestPopover from '../../Requests/RequestPopover';
 import styles from '../PatientPopover/styles.scss';
 
@@ -41,6 +42,7 @@ class RequestPopoverLoader extends Component {
       isNoteFormActive,
       isFollowUpsFormActive,
       isRecallsFormActive,
+      practitioners,
       data,
     } = this.props;
 
@@ -49,6 +51,7 @@ class RequestPopoverLoader extends Component {
     }
     const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
     const time = `${moment(data.startDate).format('LT')} - ${moment(data.endDate).format('LT')}`;
+    const practitionerEntity = data.practitioner && practitioners.get(data.practitioner.id);
 
     return (
       <Popover
@@ -63,20 +66,23 @@ class RequestPopoverLoader extends Component {
             insuranceMemberId={data.insuranceMemberId}
             insuranceGroupId={data.insuranceGroupId}
             patient={data.patientUser}
+            practitioner={practitionerEntity}
             request={data}
-            closePopover={() => this.setOpen(false)}
+            closePopover={() =>
+this.setOpen(false)}
             requestingUser={data.requestingUser}
             showButton={false}
           />,
         ]}
         preferPlace={placement || 'right'}
         tipSize={12}
-        onOuterAction={() => !isAnyFormActive && this.setOpen(false)}
+        onOuterAction={() =>
+!isAnyFormActive && this.setOpen(false)}
       >
         <div className={classnames(styles.requestLink, patientStyles)}>
           {React.Children.map(children, patientLink =>
             React.cloneElement(patientLink, {
-              onClick: (e) => {
+              onClick: e => {
                 e.stopPropagation();
                 this.setOpen(true);
               },
@@ -101,6 +107,7 @@ RequestPopoverLoader.propTypes = {
   isNoteFormActive: PropTypes.bool.isRequired,
   isFollowUpsFormActive: PropTypes.bool.isRequired,
   isRecallsFormActive: PropTypes.bool.isRequired,
+  practitioners: PropTypes.arrayOf(Practitioner).isRequired,
   data: PropTypes.shape({}),
 };
 
@@ -115,10 +122,12 @@ RequestPopoverLoader.defaultProps = {
   data: null,
 };
 
-const mapStateToProps = ({ patientTable }) => ({
-  isNoteFormActive: patientTable.get('isNoteFormActive'),
-  isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
-  isRecallsFormActive: patientTable.get('isRecallsFormActive'),
-});
+const mapStateToProps = ({ patientTable, entities }) =>
+  ({
+    practitioners: entities.getIn(['practitioners', 'models']),
+    isNoteFormActive: patientTable.get('isNoteFormActive'),
+    isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
+    isRecallsFormActive: patientTable.get('isRecallsFormActive'),
+  });
 
 export default connect(mapStateToProps)(RequestPopoverLoader);
