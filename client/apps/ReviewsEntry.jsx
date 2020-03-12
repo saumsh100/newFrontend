@@ -8,6 +8,7 @@ import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
+import './logrocketSetup';
 import App from './Reviews';
 import configure from '../store/reviewsStore';
 import connectStoreToHost from '../widget/connectStoreToHost';
@@ -41,16 +42,19 @@ connectStoreToHost(store);
 loadPatient()(store.dispatch).then(() => {
   const { auth, availabilities } = store.getState();
   const account = availabilities.get('account').toJS();
+
   if (process.env.NODE_ENV === 'production') {
     setOnlineBookingUserVars({ account });
-  }
+    if (auth.get('isAuthenticated')) {
+      const patientUser = auth.get('patientUser').toJS();
 
-  if (auth.get('isAuthenticated')) {
-    const patientUser = auth.get('patientUser').toJS();
-    LogRocket.identify(patientUser.id, {
-      name: `${patientUser.firstName} ${patientUser.lastName}`,
-      email: patientUser.email,
-    });
+      LogRocket.identify(patientUser.id, {
+        app: 'CCRU_BOOKING',
+        name: `${patientUser.firstName} ${patientUser.lastName}`,
+        email: patientUser.email,
+        env: process.env.NODE_ENV,
+      });
+    }
   }
 
   console.log('loadPatient completed successfully');

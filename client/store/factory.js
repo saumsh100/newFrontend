@@ -5,6 +5,7 @@ import { createBrowserHistory, createMemoryHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import { enableBatching } from 'redux-batched-actions';
 import thunkMiddleware from 'redux-thunk';
+import LogRocket from 'logrocket';
 import { isHub } from '../util/hub';
 
 /**
@@ -29,5 +30,11 @@ export default ({ initialState = {}, rootReducer, enableBatchingMode = true }) =
   createStore(
     enableBatchingMode ? enableBatching(rootReducer(browserHistory)) : rootReducer(browserHistory),
     initialState,
-    composeWithDevTools(applyMiddleware(routerMiddleware(browserHistory), thunkMiddleware)),
+    composeWithDevTools(
+      applyMiddleware(
+        routerMiddleware(browserHistory),
+        thunkMiddleware,
+        LogRocket.reduxMiddleware(),
+      ),
+    ),
   );

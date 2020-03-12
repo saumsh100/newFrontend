@@ -11,6 +11,7 @@
   "plugins": [
     "react-hot-loader/babel",
     "@babel/plugin-syntax-dynamic-import",
+    "add-react-displayname",
     ["@babel/plugin-proposal-class-properties",
       {
         "loose": true

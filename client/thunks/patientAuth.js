@@ -1,5 +1,4 @@
 
-import LogRocket from 'logrocket';
 import { patientLoginSuccess, patientAuthLogout, setResetEmail } from '../reducers/patientAuth';
 import PatientUser from '../entities/models/PatientUser';
 import { bookingWidgetHttpClient } from '../util/httpClient';
@@ -46,12 +45,6 @@ export function login(credentials) {
       .then(({ data: { token } }) => {
         dispatch(setResetEmail(null));
         return updateSessionByToken(token, dispatch);
-      })
-      .then((patientUser) => {
-        LogRocket.identify(patientUser.id, {
-          name: `${patientUser.firstName} ${patientUser.lastName}`,
-          email: patientUser.email,
-        });
       });
   };
 }

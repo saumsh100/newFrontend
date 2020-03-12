@@ -8,6 +8,7 @@ import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
+import './logrocketSetup';
 import App from './My';
 import configure from '../store/myStore';
 import { loadPatient } from '../thunks/patientAuth';
@@ -23,12 +24,18 @@ store.dispatch(initializeFeatureFlags());
 
 loadPatient()(store.dispatch).then(() => {
   const { auth } = store.getState();
-  if (auth.get('isAuthenticated')) {
-    const patientUser = auth.get('patientUser').toJS();
-    LogRocket.identify(patientUser.id, {
-      name: `${patientUser.firstName} ${patientUser.lastName}`,
-      email: patientUser.email,
-    });
+
+  if (process.env.NODE_ENV === 'production') {
+    if (auth.get('isAuthenticated')) {
+      const patientUser = auth.get('patientUser').toJS();
+
+      LogRocket.identify(patientUser.id, {
+        app: 'CCRU_MY',
+        name: `${patientUser.firstName} ${patientUser.lastName}`,
+        email: patientUser.email,
+        env: process.env.NODE_ENV,
+      });
+    }
   }
 
   console.log('loadPatient completed successfully');

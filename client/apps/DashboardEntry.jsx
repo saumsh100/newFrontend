@@ -8,6 +8,7 @@ import LogRocket from 'logrocket';
 import Immutable from 'immutable';
 import nlp from 'compromise';
 import * as time from '@carecru/isomorphic';
+import './logrocketSetup';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import socket from '../socket';
 import App from './Dashboard';
@@ -40,20 +41,23 @@ store.dispatch(
 load()(store.dispatch).then(() => {
   const { auth } = store.getState();
   if (auth.get('isAuthenticated')) {
-    if (process.env.NODE_ENV === 'production') {
-      const { account, enterprise, user } = auth.toJS();
-      const userId = user.id;
-      const fullName = `${user.firstName} ${user.lastName}`;
-      const email = user.username;
-      LogRocket.identify(userId, {
-        name: fullName,
-        email,
-      });
+    const { account, enterprise, user } = auth.toJS();
+    const userId = user.id;
+    const fullName = `${user.firstName} ${user.lastName}`;
+    const email = user.username;
 
+    if (process.env.NODE_ENV === 'production') {
       identifyPracticeUser({
         account,
         enterprise,
         user,
+      });
+
+      LogRocket.identify(userId, {
+        app: 'CCRU_DASHBOARD',
+        name: fullName,
+        email,
+        env: process.env.NODE_ENV,
       });
 
       window.Intercom('update', {

@@ -2,7 +2,6 @@
 import jwt from 'jwt-decode';
 import { push } from 'connected-react-router';
 import { SubmissionError } from 'redux-form';
-import LogRocket from 'logrocket';
 import { loginSuccess, authLogout } from '../../reducers/auth';
 import { setDashboardDate } from '../../reducers/dashboard';
 import { setScheduleDate } from '../../actions/schedule';
@@ -82,12 +81,8 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
         const userId = user.id;
         const fullName = `${user.firstName} ${user.lastName}`;
         const email = user.username;
-        if (connect && process.env.NODE_ENV === 'production') {
-          LogRocket.identify(userId, {
-            name: fullName,
-            email,
-          });
 
+        if (connect && process.env.NODE_ENV === 'production') {
           window.Intercom('update', {
             user_id: userId,
             name: fullName,

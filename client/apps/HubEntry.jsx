@@ -8,6 +8,7 @@ import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
+import './logrocketSetup';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import { socketInstance } from '../socket';
 import App from './Hub';
@@ -46,7 +47,6 @@ electron.on(RESPONSE_HOST, (event, { url }) => {
 
 electron.once(RESPONSE_HOST, (event, { locale }) => {
   const { socket } = socketInstance;
-
   window.Intercom('boot', {
     app_id: process.env.INTERCOM_APP_ID,
     hide_default_launcher: true,
@@ -91,8 +91,10 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
 
       if (process.env.NODE_ENV === 'production') {
         LogRocket.identify(userId, {
+          app: 'CCRU_HUB',
           name: fullName,
           email,
+          env: process.env.NODE_ENV,
         });
       }
 

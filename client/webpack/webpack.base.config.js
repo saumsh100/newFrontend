@@ -11,6 +11,7 @@ const {
   FEATURE_FLAG_KEY,
   MODE_ANALYTICS_ACCESS_KEY,
   GOOGLE_API_KEY,
+  LOGROCKET_APP_ID,
 } = process.env;
 
 const localIdentName = '[name]__[local]___[hash:base64:5]';
@@ -41,6 +42,7 @@ module.exports = {
         FEATURE_FLAG_KEY: JSON.stringify(FEATURE_FLAG_KEY),
         MODE_ANALYTICS_ACCESS_KEY: JSON.stringify(MODE_ANALYTICS_ACCESS_KEY),
         GOOGLE_API_KEY: JSON.stringify(GOOGLE_API_KEY),
+        LOGROCKET_APP_ID: JSON.stringify(LOGROCKET_APP_ID),
       },
     }),
 
@@ -92,13 +94,14 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: () => [
-                postcssPresetEnv({
-                  features: {
-                    customProperties: false,
-                  },
-                }),
-              ],
+              plugins: () =>
+                [
+                  postcssPresetEnv({
+                    features: {
+                      customProperties: false,
+                    },
+                  }),
+                ],
             },
           },
           {

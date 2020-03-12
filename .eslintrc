@@ -10,8 +10,6 @@
     }
   },
   "rules": {
-    "arrow-parens": ["error", "as-needed"],
-    "implicit-arrow-linebreak": ["warn", "below"],
     "no-use-before-define": "off",
     "func-names": "off",
     "no-param-reassign": "off",
