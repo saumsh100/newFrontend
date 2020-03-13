@@ -386,11 +386,10 @@ const GraphQLPatientSearch = ({ context, ...props }) => {
 
   return (
     <FetchPatientSearches context={context}>
-      {({ data: searchHistory }) => {
-        const recentSearches = searchHistory.accountViewer
-          ? searchHistory.accountViewer.patientSearches.edges
-              .map(v => v.node.patient)
-              .filter(p => !!p)
+      {({ data }) => {
+        if (!data) return null;
+        const recentSearches = data.accountViewer
+          ? data.accountViewer.patientSearches.edges.map(v => v.node.patient).filter(p => !!p)
           : [];
         return (
           <FetchPatients>
