@@ -7,22 +7,20 @@ import { Grid, Row, Col } from '../../../../library/Grid/index';
 import Account from '../../../../../entities/models/Account';
 import styles from './styles.scss';
 
-export default function AddAccounts({ onSubmit, index, formName, activeAccount }) {
-  const { callrailId, twilioPhoneNumber, vendastaMsId, vendastaSrId } = activeAccount;
-
+export default function AddAccounts({ onSubmit, activeAccount }) {
   const initialValues = {
-    reputationManagement: !!vendastaSrId,
-    listings: !!vendastaMsId,
-    canSendReminders: !!twilioPhoneNumber,
-    callTracking: !!callrailId,
+    reputationManagement: !!activeAccount.get('vendastaSrId'),
+    listings: !!activeAccount.get('vendastaMsId'),
+    canSendReminders: !!activeAccount.get('twilioPhoneNumber'),
+    callTracking: !!activeAccount.get('callrailId'),
   };
 
   return (
     <Form
-      form={formName}
-      onSubmit={values => onSubmit(values, index, formName)}
+      enableReinitialize
+      form="apis"
+      onSubmit={onSubmit}
       initialValues={initialValues}
-      destroyOnUnmount={false}
       alignSave="left"
     >
       <Grid className={styles.accountOptions}>
@@ -73,7 +71,7 @@ export default function AddAccounts({ onSubmit, index, formName, activeAccount }
 
 AddAccounts.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired,
-  formName: PropTypes.string.isRequired,
-  activeAccount: PropTypes.instanceOf(Account).isRequired,
+  activeAccount: PropTypes.instanceOf(Account),
 };
+
+AddAccounts.defaultProps = { activeAccount: null };

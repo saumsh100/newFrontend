@@ -6,6 +6,7 @@ import moment from 'moment';
 import { Map } from 'immutable';
 import jwt from 'jwt-decode';
 import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import { Header, Button, DialogBox } from '../../../library';
 import {
   fetchEntities,
@@ -88,14 +89,6 @@ class SuperAdmin extends Component {
 
   async updateApis(values) {
     const { activeAccount, address } = this.props;
-    const { reputationManagement, listings, callTracking, canSendReminders } = values;
-
-    const sendingValuesCreate = {};
-    sendingValuesCreate.integrations = [];
-
-    const sendingValuesDelete = {};
-    sendingValuesDelete.integrations = [];
-
     const {
       callrailId,
       twilioPhoneNumber,
@@ -104,8 +97,11 @@ class SuperAdmin extends Component {
       vendastaSrId,
       website,
     } = activeAccount;
-
     const { city, state, country, zipCode, street, timezone } = address;
+    const { reputationManagement, listings, callTracking, canSendReminders } = values;
+
+    const sendingValuesCreate = { integrations: [] };
+    const sendingValuesDelete = { integrations: [] };
 
     if (!city || !state || !country || !street || !zipCode || !timezone || !website) {
       return window.alert('Please enter Address and/or Clinic Website Info First');
@@ -177,19 +173,33 @@ class SuperAdmin extends Component {
     }
 
     if (sendingValuesCreate.integrations[0]) {
-      await this.props.createEntityRequest({
-        key: 'accounts',
-        url: `/api/accounts/${activeAccount.id}/integrations`,
-        entityData: sendingValuesCreate,
-      });
+      await this.props
+        .createEntityRequest({
+          key: 'accounts',
+          url: `/api/accounts/${activeAccount.id}/integrations`,
+          entityData: sendingValuesCreate,
+          alert: {
+            success: {
+              title: 'Service integration requested',
+              body: 'Integration in progress, check back in a minute.',
+            },
+            error: {
+              title: 'Service integration failed',
+              body: 'Integrations may failed due to downtime or missing data.',
+            },
+          },
+        })
+        .then(() => this.props.reset('apis'));
     }
 
     if (sendingValuesDelete.integrations[0]) {
-      await this.props.deleteEntityRequest({
-        key: 'accounts',
-        url: `/api/accounts/${activeAccount.id}/integrations`,
-        values: sendingValuesDelete,
-      });
+      await this.props
+        .deleteEntityRequest({
+          key: 'accounts',
+          url: `/api/accounts/${activeAccount.id}/integrations`,
+          values: sendingValuesDelete,
+        })
+        .then(() => this.props.reset('apis'));
     }
     return null;
   }
@@ -212,13 +222,6 @@ class SuperAdmin extends Component {
       }
       return null;
     });
-
-    const addAccounts = [
-      <Header title="API Accounts" contentHeader key="API Accounts" />,
-      <div className={styles.formContainer} key="API Accounts Form">
-        <AddAccounts onSubmit={this.updateApis} formName="apis" activeAccount={activeAccount} />
-      </div>,
-    ];
 
     const massOnlineDate = activeAccount.massOnlineEmailSentDate
       ? moment(activeAccount.massOnlineEmailSentDate).format('MMM DD, YYYY hh:mm A')
@@ -254,7 +257,11 @@ class SuperAdmin extends Component {
             <CellPhoneFallback />
           </div>
 
-          {addAccounts}
+          <><Header title="API Accounts" contentHeader key="API Accounts" />
+            <div className={styles.formContainer} key="API Accounts Form">
+              <AddAccounts onSubmit={this.updateApis} activeAccount={activeAccount} />
+            </div>
+         </>
 
           <MassEmailDisplay
             massOnlineDate={massOnlineDate}
@@ -319,6 +326,7 @@ const mapDispatchToProps = dispatch =>
       sendEmailBlast,
       getEmailBlastCount,
       createEntityRequest,
+      reset,
       deleteEntityRequest,
       updateEntityRequest,
     },
