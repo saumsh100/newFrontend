@@ -10,29 +10,8 @@ class SuggestionInput extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      displayValue: props.selected.label,
-    };
-
     this[`suggestion_time_toggle_${props.name}`] = createRef();
-    this.handleChange = this.handleChange.bind(this);
     this.displaySuggestions = this.displaySuggestions.bind(this);
-  }
-
-  /**
-   * Before firing the prop,
-   * let's assign the displayValue.
-   *
-   * @param e
-   */
-  handleChange(e) {
-    const { handleChange } = this.props;
-
-    const displayValue = e.target.value;
-
-    this.setState({ displayValue }, () => {
-      handleChange(displayValue);
-    });
   }
 
   /**
@@ -53,10 +32,22 @@ class SuggestionInput extends Component {
   }
 
   render() {
-    const { name, label, handleKeydown, handleBlur, theme, error, disabled, isOpen } = this.props;
+    const {
+      name,
+      label,
+      handleKeydown,
+      handleBlur,
+      theme,
+      error,
+      disabled,
+      isOpen,
+      placeholder,
+      value,
+      handleChange,
+    } = this.props;
 
     const labelClassName = classNames(theme.label, {
-      [theme.filled]: this.state.displayValue,
+      [theme.filled]: value,
       [theme.activeLabel]: isOpen,
       [theme.errorLabel]: error,
     });
@@ -78,17 +69,16 @@ class SuggestionInput extends Component {
         onClick={this.displaySuggestions}
         onKeyDown={e => e.keyCode === 13 && this.displaySuggestions()}
         className={disabled ? theme.toggleDivDisabled : toggleClassName}
-        data-test-id={this.props['data-test-id']}
       >
         <div className={theme.toggleValueDiv}>
           <Input
             type="text"
             disabled={disabled}
-            placeholder={this.props.placeholder}
-            value={this.state.displayValue}
+            placeholder={placeholder}
+            value={value}
             onClick={this.displaySuggestions}
             onFocus={this.displaySuggestions}
-            onChange={this.handleChange}
+            onChange={e => handleChange(e.target.value)}
             onBlur={handleBlur}
             onKeyDown={handleKeydown}
             className={classNames(styles.inputToggler, theme.inputToggler, {
@@ -125,19 +115,11 @@ SuggestionInput.propTypes = {
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   theme: PropTypes.shape(PropTypes.instanceOf(Object)).isRequired,
-  'data-test-id': PropTypes.string,
-  selected: PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  }),
   error: PropTypes.string,
+  value: PropTypes.string,
 };
 
 SuggestionInput.defaultProps = {
-  'data-test-id': '',
-  selected: {
-    label: '',
-    value: '',
-  },
   error: '',
+  value: '',
 };

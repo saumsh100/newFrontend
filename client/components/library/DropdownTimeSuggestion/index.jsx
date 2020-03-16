@@ -3,9 +3,9 @@ import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import RDropdownMenu from 'react-dd-menu';
-import DataSlot from '../DataSlot';
 import withTheme from '../../../hocs/withTheme';
 import SuggestionInput from './SuggestionInput';
+import TimeList from './TimeList';
 import styles from './styles.scss';
 
 class DropdownTimeSuggestion extends Component {
@@ -15,15 +15,14 @@ class DropdownTimeSuggestion extends Component {
     this.state = {
       isOpen: false,
       sortedOptions: this.sortOptions(),
+      currentValue: props.value,
     };
-    this.currentValue = props.value;
+
     this.scrollIndex = 0;
 
     this.suggestionsNode = createRef();
     this.close = this.close.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.renderList = this.renderList.bind(this);
-    this.renderToggle = this.renderToggle.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.sortOptions = this.sortOptions.bind(this);
@@ -37,8 +36,8 @@ class DropdownTimeSuggestion extends Component {
    * set the scrollIndex of the item.
    */
   componentDidMount() {
-    const { value } = this.props;
-    this.scrollIndex = this.getIndex(this.props.renderValue(value));
+    const { value, renderValue } = this.props;
+    this.scrollIndex = this.getIndex(renderValue(value));
   }
 
   /**
@@ -46,12 +45,17 @@ class DropdownTimeSuggestion extends Component {
    * @param {object} prevProps
    */
   componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value) {
-      this.currentValue = prevProps.value;
-      this.scrollIndex = this.getIndex(this.props.renderValue(prevProps.value));
+    const { value, renderValue } = this.props;
+    const { isOpen } = this.state;
+    if (prevProps.value !== value) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        currentValue: renderValue(value),
+      });
+      this.scrollIndex = this.getIndex(renderValue(value));
     }
     // if dropdown is open and there's a prop value, scroll the dropdown to specific index
-    if (this.props.value && this.state.isOpen) {
+    if (value && isOpen) {
       this.scrollTo(this.scrollIndex);
     }
   }
@@ -75,11 +79,11 @@ class DropdownTimeSuggestion extends Component {
    */
   getItem(val) {
     const { sortedOptions } = this.state;
-    const { validateValue } = this.props;
+    const { validateValue, formatValue } = this.props;
     if (!validateValue(val)) {
       return false;
     }
-    const formatedValue = this.props.formatValue(val);
+    const formatedValue = formatValue(val);
     const item = sortedOptions.reduce((prev, curr) => (curr.value > formatedValue ? prev : curr));
     return item || false;
   }
@@ -95,7 +99,9 @@ class DropdownTimeSuggestion extends Component {
    * Toggle the dropdown
    */
   toggle() {
-    this.setState({ isOpen: !this.state.isOpen });
+    this.setState(prevState => ({
+      isOpen: !prevState.isOpen,
+    }));
   }
 
   /**
@@ -103,7 +109,8 @@ class DropdownTimeSuggestion extends Component {
    * sorts the list in an ascending way.
    */
   sortOptions() {
-    return this.props.options
+    const { options } = this.props;
+    return options
       .map((opt, index) => ({
         ...opt,
         index,
@@ -117,13 +124,29 @@ class DropdownTimeSuggestion extends Component {
    * @param {string} index
    */
   scrollTo(index) {
+    const { isOpen } = this.state;
     if (this.suggestionsNode) {
-      if (!this.state.isOpen) {
+      if (!isOpen) {
         this.toggle();
       }
       this.suggestionsNode.current.scrollTop = index * 40;
     }
   }
+
+  /**
+   * handle dropdown select
+   */
+  handleDropDownSelect = (e, value, index) => {
+    const { onChange } = this.props;
+    e.preventDefault();
+
+    onChange(value);
+    this.setState({
+      currentValue: value,
+    });
+    this.scrollIndex = index;
+    this.close();
+  };
 
   /**
    * Handle the changes,
@@ -133,14 +156,25 @@ class DropdownTimeSuggestion extends Component {
    * @param {string} value
    */
   handleChange(value) {
-    if (!this.state.isOpen) {
+    const { strict } = this.props;
+    const { isOpen } = this.state;
+    const item = this.getItem(value);
+
+    if (!isOpen) {
       this.toggle();
     }
-    const item = this.getItem(value);
+
     if (item) {
       this.scrollIndex = item.index;
-      this.currentValue = this.props.strict ? item.value : value;
+
+      this.setState({
+        currentValue: strict ? item.value : value,
+      });
       this.scrollTo(this.scrollIndex);
+    } else {
+      this.setState({
+        currentValue: value,
+      });
     }
   }
 
@@ -151,7 +185,9 @@ class DropdownTimeSuggestion extends Component {
    * @param {object} e
    */
   handleKeydown(e) {
-    if (this.props.disabled) return;
+    const { disabled } = this.props;
+
+    if (disabled) return;
     const key = e.keyCode;
     switch (key) {
       case 9:
@@ -181,7 +217,9 @@ class DropdownTimeSuggestion extends Component {
    */
   selectBeforeClose() {
     const { value, onChange, formatValue } = this.props;
-    const formatedValue = formatValue(this.currentValue);
+    const { currentValue } = this.state;
+    const formatedValue = formatValue(currentValue);
+
     if (formatedValue !== value) {
       onChange(formatedValue);
     }
@@ -212,56 +250,38 @@ class DropdownTimeSuggestion extends Component {
     onChange(options[nextIndex].value);
   }
 
-  /**
-   * Renders the input that
-   * the user is able to type
-   */
-  renderToggle() {
-    return (
-      <SuggestionInput
-        {...this.props}
-        options={this.props.options}
-        onClose={this.close}
-        isOpen={this.state.isOpen}
-        toggleView={this.toggle}
-        handleBlur={this.selectBeforeClose}
-        handleChange={this.handleChange}
-        handleKeydown={this.handleKeydown}
-        selected={{
-          value: this.props.value,
-          label: this.props.renderValue(this.props.value, this.currentValue),
-        }}
-      />
-    );
-  }
-
-  /**
-   * Renders the dropdown list,
-   * containing the DataSlots.
-   */
-  renderList() {
-    return this.props.renderList(
-      this.props,
-      this.currentValue,
-      this.scrollIndex,
-      this.close,
-      this.suggestionsNode,
-    );
-  }
-
   render() {
-    const { theme } = this.props;
+    const { theme, className, align, options, formatValue } = this.props;
+    const { currentValue, isOpen } = this.state;
+    const matchingOption = options.find(({ value }) => value === currentValue);
+    const matchingValue = matchingOption && matchingOption.label;
 
-    const children = this.renderList();
-    const toggle = this.renderToggle();
     const menuOptions = {
-      children,
-      toggle,
-      align: this.props.align,
-      isOpen: this.state.isOpen,
+      align,
+      isOpen,
+      children: (
+        <TimeList
+          options={options}
+          selectedValue={formatValue(currentValue)}
+          handleSelect={this.handleDropDownSelect}
+          callback={this.suggestionsNode}
+        />
+      ),
+      toggle: (
+        <SuggestionInput
+          {...this.props}
+          onClose={this.close}
+          isOpen={isOpen}
+          toggleView={this.toggle}
+          handleBlur={this.selectBeforeClose}
+          handleChange={this.handleChange}
+          handleKeydown={this.handleKeydown}
+          value={matchingValue || currentValue}
+        />
+      ),
       close: this.close,
       animAlign: 'right',
-      className: classNames(this.props.className, theme.wrapper),
+      className: classNames(className, theme.wrapper),
       closeOnInsideClick: false,
       closeOnOutsideClick: true,
       enterTimeout: 70,
@@ -281,7 +301,6 @@ DropdownTimeSuggestion.propTypes = {
       value: PropTypes.string,
     }),
   ).isRequired,
-  renderList: PropTypes.func,
   disabled: PropTypes.bool,
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
@@ -310,40 +329,8 @@ const renderValue = value => value;
  */
 const validateValue = val => val.length;
 
-const renderList = (props, currentValue, scrollIndex, close, callback) => (
-  <div tabIndex="-1" className={styles.dropDownList} ref={callback}>
-    {props.options.map((option, i) => (
-      <DataSlot
-        key={`options_${option.value}`}
-        {...props}
-        selected={currentValue === option.value || props.value === option.value}
-        option={option}
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          props.onChange(option.value);
-          scrollIndex = i;
-          close();
-        }}
-      />
-    ))}
-  </div>
-);
-
-renderList.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string,
-      labe: PropTypes.string,
-    }),
-  ).isRequired,
-};
-
 DropdownTimeSuggestion.defaultProps = {
   formatValue,
-  renderList,
   validateValue,
   renderValue,
   theme: null,
