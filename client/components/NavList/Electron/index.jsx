@@ -20,18 +20,14 @@ function isExpensiveRoute(routePath) {
 }
 
 function NavList(props) {
-  const {
-    location, unreadChats, newRequests, showContent, toolbarPosition,
-  } = props;
+  const { location, unreadChats, newRequests, showContent, toolbarPosition } = props;
 
   const { navItem, activeItem } = styles;
 
   const onClickToggle = (active, expensive) =>
     (active ? props.collapseContent() : props.displayContent(expensive));
 
-  const SingleNavItem = ({
-    path, icon, active, disabled, iconType, badge, iconImage,
-  }) => {
+  const SingleNavItem = ({ path, icon, active, disabled, iconType, badge, iconImage }) => {
     active = active || location.pathname === path;
 
     return (
@@ -163,13 +159,13 @@ NavList.defaultProps = {
 };
 
 const mapStateToProps = ({ chat, electron, entities }) => {
-  const unreadChats = chat.get('unreadChats');
+  const unreadChatsCount = chat.get('unreadChatsCount');
   const requests = entities.getIn(['requests', 'models']);
   const filteredRequests = requests
     .toArray()
     .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
-  const chatsLength = unreadChats.length > 100 ? '99+' : unreadChats.length;
+  const chatsLength = unreadChatsCount > 100 ? '99+' : unreadChatsCount;
   const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
 
   return {
@@ -189,6 +185,9 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(withAuthProps(NavList));

@@ -225,13 +225,13 @@ NavList.defaultProps = {
 };
 
 function mapStateToProps({ chat, entities }) {
-  const unreadChats = chat.get('unreadChats');
+  const unreadChatsCount = chat.get('unreadChatsCount');
   const requests = entities.getIn(['requests', 'models']);
   const filteredRequests = requests
     .toArray()
     .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
-  const chatsLength = unreadChats.length > 100 ? '99+' : unreadChats.length;
+  const chatsLength = unreadChatsCount > 100 ? '99+' : unreadChatsCount;
   const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
   return {
     unreadChats: chatsLength,

@@ -26,6 +26,7 @@ import {
   markAsUnread,
   resendMessage,
   loadChatMessages,
+  getChatCategoryCounts,
 } from '../../../thunks/chat';
 import ChatTextMessage from '../../../entities/models/TextMessage';
 import chatTabs from '../consts';
@@ -150,7 +151,7 @@ class MessageContainer extends Component {
 
     if (!requestObject.chatId) {
       this.createNewChat(requestObject)
-        .then((chat) => {
+        .then(chat => {
           requestObject.chatId = Object.keys(chat.chats)[0];
           return this.sendMessage(requestObject);
         })
@@ -167,12 +168,15 @@ class MessageContainer extends Component {
     }
 
     this.sendMessage(requestObject)
-      .then(() => this.props.reset(`chatMessageForm_${selectedChat.id}`))
-      .then(() => this.setState({ sendingMessage: false }))
+      .then(() =>
+        this.props.reset(`chatMessageForm_${selectedChat.id}`))
+      .then(() =>
+        this.setState({ sendingMessage: false }))
       .then(() => {
         this.props.selectChat(selectedChat.id);
       })
-      .catch(() => this.setState({ sendingMessage: false }));
+      .catch(() =>
+        this.setState({ sendingMessage: false }));
   }
 
   sendMessage(request) {
@@ -193,7 +197,7 @@ class MessageContainer extends Component {
     const group = [];
     let currentGroup = { messages: [] };
 
-    textMessages.forEach((message) => {
+    textMessages.forEach(message => {
       if (!currentGroup.time) {
         currentGroup.time = message.createdAt;
       }
@@ -227,7 +231,7 @@ class MessageContainer extends Component {
       bot: true,
     };
 
-    return messages.map((message) => {
+    return messages.map(message => {
       const isFromPatient = message.get('from') !== accountTwilio;
       const patientId = selectedPatient && selectedPatient.get('id');
 
@@ -239,7 +243,10 @@ class MessageContainer extends Component {
         <Button
           className={styles.markUnreadButton}
           data-test-id="chat_markUnreadBtn"
-          onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt'))}
+          onClick={() => {
+            this.props.markAsUnread(message.get('chatId'), message.get('createdAt'));
+            this.props.getChatCategoryCounts();
+          }}
         >
           Mark unread
         </Button>
@@ -275,7 +282,8 @@ class MessageContainer extends Component {
             trigger={['hover']}
             overlay={resendMessageButton}
             placement="left"
-            getTooltipContainer={() => this.failedMessageWrapper.current}
+            getTooltipContainer={() =>
+this.failedMessageWrapper.current}
           >
             <div>
               <Icon className={styles.failedMessageWarning} icon="exclamation-circle" size={2} />
@@ -294,7 +302,8 @@ class MessageContainer extends Component {
             trigger={['hover']}
             overlay={markUnreadText}
             placement="right"
-            getTooltipContainer={() => this.optionsWrapper.current}
+            getTooltipContainer={() =>
+this.optionsWrapper.current}
           >
             <div className={styles.dotsIconWrapper}>{dotsIcon}</div>
           </Tooltip>
@@ -342,7 +351,7 @@ class MessageContainer extends Component {
     const chat = selectedChat || Object.assign({}, newChat, { id: 'newChat' });
 
     return (
-      <SContainer className={styles.container}>
+      <SContainer className={styles.messageContainer}>
         <SBody
           id="careCruChatScrollIntoView"
           className={styles.allMessages}
@@ -405,6 +414,7 @@ function mapDispatchToProps(dispatch) {
       markAsUnread,
       resendMessage,
       loadChatMessages,
+      getChatCategoryCounts,
     },
     dispatch,
   );
@@ -434,6 +444,7 @@ MessageContainer.propTypes = {
   resendMessage: PropTypes.func.isRequired,
   setTab: PropTypes.func.isRequired,
   loadChatMessages: PropTypes.func.isRequired,
+  getChatCategoryCounts: PropTypes.func.isRequired,
 };
 
 MessageContainer.defaultProps = {

@@ -40,14 +40,16 @@ class ChatListContainer extends Component {
 
   renderChatList() {
     return this.sortChatList()
-      .filter(chat => !chat.patient)
-      .map(chat => (
+      .filter(chat =>
+        !chat.patient)
+      .map(chat =>
+        (
         <ChatListItem
           key={`${chat.id}_listItem`}
           onChatClick={this.props.onChatClick}
           chat={chat}
         />
-      ));
+        ));
   }
 
   renderNewChat() {
@@ -74,7 +76,8 @@ class ChatListContainer extends Component {
           <Icon
             icon="times"
             onClick={this.removeNewChat}
-            onKeyDown={({ keyCode }) => keyCode === 13 && this.removeNewChat}
+            onKeyDown={({ keyCode }) =>
+keyCode === 13 && this.removeNewChat}
             role="button"
             tabIndex={0}
           />
@@ -121,19 +124,19 @@ ChatListContainer.defaultProps = {
   newChat: null,
   newChatPatient: null,
   selectedChatId: null,
-  onChatClick: e => e,
+  onChatClick: e =>
+    e,
 };
 
 function mapStateToProps({ entities, chat }, { tabIndex }) {
   const newChat = chat.get('newChat');
   const selectedChat = chat.get('selectedChatId');
   const patientId = newChat && newChat.patientId;
-  const textMessages = entities.getIn(['textMessages', 'models']);
   const chats = entities.getIn(['chats', 'models']);
 
   return {
     newChat,
-    chats: filterChatsByTab(chats, textMessages, selectedChat, tabIndex),
+    chats: filterChatsByTab(chats, selectedChat, tabIndex),
     selectedChatId: chat.get('selectedChatId'),
     newChatPatient: entities.getIn(['patients', 'models', patientId]),
   };

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { formatPhoneNumber } from '@carecru/isomorphic';
 import { Icon, ListItem, Avatar } from '../../../library';
-import { toggleFlagged, selectChat } from '../../../../thunks/chat';
+import { toggleFlagged, selectChat, getChatCategoryCounts } from '../../../../thunks/chat';
 import { isHub } from '../../../../util/hub';
 import UnknownPatient from '../../unknownPatient';
 import styles from './styles.scss';
@@ -24,6 +24,7 @@ class ChatListItem extends Component {
     e.stopPropagation();
     const { id, isFlagged } = this.props.chat;
     this.props.toggleFlagged(id, isFlagged);
+    this.props.getChatCategoryCounts();
   }
 
   selectChat() {
@@ -63,7 +64,7 @@ class ChatListItem extends Component {
   }
 
   render() {
-    const { chat, patient, lastTextMessage, selectedChatId, lockedChat } = this.props;
+    const { chat, patient, lastTextMessage, selectedChatId } = this.props;
 
     const mDate = moment(lastTextMessage.createdAt || chat.updatedAt);
     const daysDifference = moment().diff(mDate, 'days');
@@ -71,7 +72,7 @@ class ChatListItem extends Component {
 
     const messageDate = daysDifference ? mDate.format('YY/MM/DD') : mDate.format('h:mma');
 
-    const isUnread = (!isActive && chat.hasUnread) || lockedChat;
+    const isUnread = !isActive && chat.hasUnread;
 
     const listItemClass = isHub() ? styles.hubListItem : styles.chatListItem;
 
@@ -127,12 +128,13 @@ ChatListItem.propTypes = {
   selectChat: PropTypes.func.isRequired,
   selectedChatId: PropTypes.string,
   onChatClick: PropTypes.func,
-  lockedChat: PropTypes.bool.isRequired,
+  getChatCategoryCounts: PropTypes.func.isRequired,
 };
 
 ChatListItem.defaultProps = {
   selectedChatId: null,
-  onChatClick: e => e,
+  onChatClick: e =>
+    e,
 };
 
 function mapStateToProps(state, { chat = {} }) {
@@ -143,11 +145,9 @@ function mapStateToProps(state, { chat = {} }) {
   };
 
   const selectedChatId = state.chat.get('selectedChatId');
-  const lockedChat = state.chat.get('lockedChats').includes(chat.id);
 
   return {
     selectedChatId,
-    lockedChat,
     patient: patients.get(chat.patientId) || UnknownPatient(chat.patientPhoneNumber),
     lastTextMessage,
   };
@@ -158,6 +158,7 @@ function mapDispatchToProps(dispatch) {
     {
       toggleFlagged,
       selectChat,
+      getChatCategoryCounts,
     },
     dispatch,
   );

@@ -10,24 +10,17 @@ import MessageContainer from './MessageContainer';
 import PatientInfo from './PatientInfo';
 import PatientInfoPage from '../Patients/PatientInfo/Electron';
 import ToHeader from './ToHeader';
+import { Button, SContainer, SHeader, SBody, Card, List, InfiniteScroll } from '../library';
 import {
-  Button,
-  SContainer,
-  SHeader,
-  SBody,
-  Card,
-  List,
-  InfiniteScroll,
-  Tabs,
-  Tab,
-} from '../library';
-import {
-  defaultSelectedChatId,
   loadChatList,
   selectChat,
   loadUnreadChatList,
   loadFlaggedChatList,
+  loadOpenChatList,
+  loadClosedChatList,
   cleanChatList,
+  getChatEntity,
+  getChatCategoryCounts,
 } from '../../thunks/chat';
 import Loader from '../Loader';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
@@ -36,6 +29,7 @@ import PatientSearch from '../PatientSearch';
 import { isHub, TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../util/hub';
 import { CHAT_PAGE } from '../../constants/PageTitle';
 import tabsConstants from './consts';
+import ChatMenu from './ChatMenu';
 import styles from './styles.scss';
 
 const patientSearchTheme = {
@@ -55,7 +49,7 @@ class ChatMessage extends Component {
     super(props);
 
     this.state = {
-      tabIndex: tabsConstants.ALL_TAB,
+      tabIndex: null,
       chats: 0,
       moreData: true,
       showPatientsList: true,
@@ -72,21 +66,44 @@ class ChatMessage extends Component {
     this.toggleShowMessageContainer = this.toggleShowMessageContainer.bind(this);
     this.selectChatOrCreate = this.selectChatOrCreate.bind(this);
     this.hubChatPage = this.hubChatPage.bind(this);
+    this.selectChatIfIdIsProvided = this.selectChatIfIdIsProvided.bind(this);
   }
 
   componentDidMount() {
+    this.props.getChatCategoryCounts();
     this.props.fetchEntitiesRequest({
       id: 'dashAccount',
       key: 'accounts',
     });
-    const { params: { chatId } } = this.props.match;
+    this.selectChatIfIdIsProvided(this.props.match.params.chatId);
+  }
 
-    this.loadChatList(!chatId).then(() => {
-      if (chatId) {
-        this.props.selectChat(chatId);
-        this.toggleShowMessageContainer();
-      }
-    });
+  componentWillUnmount() {
+    this.props.selectChat(null);
+  }
+
+  selectChatIfIdIsProvided(chatId = null) {
+    if (chatId) {
+      // find chat information from chatId, and go to the tab according to isOpen state
+      Promise.resolve(this.props.getChatEntity(chatId)).then(selectedChat => {
+        if (selectedChat) {
+          const { isOpen, id } = selectedChat.toJS();
+          const newTabIndex = isOpen ? tabsConstants.OPEN_TAB : tabsConstants.CLOSED_TAB;
+          this.changeTab(newTabIndex, () =>
+            this.props.selectChat(id));
+          this.toggleShowMessageContainer();
+        }
+        return selectedChat;
+      });
+    } else {
+      this.setState(
+        {
+          tabIndex: tabsConstants.OPEN_TAB,
+        },
+        () =>
+          this.loadChatList(),
+      );
+    }
   }
 
   addNewChat() {
@@ -178,25 +195,28 @@ class ChatMessage extends Component {
       return this.props.loadFlaggedChatList;
     }
 
+    if (tabIndex === tabsConstants.OPEN_TAB) {
+      return this.props.loadOpenChatList;
+    }
+
+    if (tabIndex === tabsConstants.CLOSED_TAB) {
+      return this.props.loadClosedChatList;
+    }
+
     return this.props.loadChatList;
   }
 
-  loadChatList(initial = false) {
-    return this.chatListLoader()(CHAT_LIST_LIMIT, this.state.chats)
-      .then(result => this.receivedChatsPostUpdate(result))
-      .then(() => {
-        if (initial) {
-          this.props.defaultSelectedChatId();
-        }
-      });
+  loadChatList() {
+    return this.chatListLoader()(CHAT_LIST_LIMIT, this.state.chats).then(result =>
+      this.receivedChatsPostUpdate(result));
   }
 
   changeTab(newIndex, callback = () => {}) {
-    if (this.state.tabIndex === newIndex || !this.props.wasChatsFetched) {
-      callback();
+    if (this.state.tabIndex === newIndex) {
       return;
     }
     this.props.selectChat(null);
+    this.props.getChatCategoryCounts();
 
     this.setState(
       {
@@ -206,7 +226,6 @@ class ChatMessage extends Component {
       () => {
         this.props.cleanChatList();
         this.loadChatList().then(() => {
-          this.props.defaultSelectedChatId();
           callback();
         });
       },
@@ -268,6 +287,13 @@ class ChatMessage extends Component {
       <SBody>
         <div className={styles.splitWrapper}>
           <div className={container}>
+            <SHeader className={styles.messageHeader}>
+              <ToHeader
+                onPatientInfoClick={this.togglePatientsInfo}
+                onPatientListClick={this.togglePatientsList}
+                onSearch={this.selectChatOrCreate}
+              />
+            </SHeader>
             <MessageContainer
               setTab={this.changeTab}
               selectChatOrCreate={this.selectChatOrCreate}
@@ -302,28 +328,6 @@ class ChatMessage extends Component {
             data-test-id="button_addNewChat"
           />
         </div>
-        <div className={styles.tabsSection}>
-          <Tabs fluid index={this.state.tabIndex} onChange={this.changeTab} noUnderLine>
-            <Tab
-              data-test-id="all_chatTab"
-              label="All"
-              inactiveClass={styles.inactiveTab}
-              activeClass={styles.activeTab}
-            />
-            <Tab
-              data-test-id="unread_chatTab"
-              label="Unread"
-              inactiveClass={styles.inactiveTab}
-              activeClass={styles.activeTab}
-            />
-            <Tab
-              data-test-id="flagged_chatTab"
-              label="Flagged"
-              inactiveClass={styles.inactiveTab}
-              activeClass={styles.activeTab}
-            />
-          </Tabs>
-        </div>
       </SHeader>
     );
   }
@@ -346,21 +350,13 @@ class ChatMessage extends Component {
               {this.renderChatList()}
             </SContainer>
           </Card>
+          <ChatMenu changeTab={this.changeTab} index={this.state.tabIndex} />
         </div>
         <Card
           noBorder
           className={classnames(styles.rightCard, { [styles.slideIn]: shouldSlideIn })}
         >
-          <SContainer>
-            <SHeader className={styles.messageHeader}>
-              <ToHeader
-                onPatientInfoClick={this.togglePatientsInfo}
-                onPatientListClick={this.togglePatientsList}
-                onSearch={this.selectChatOrCreate}
-              />
-            </SHeader>
-            {this.renderMessageContainer()}
-          </SContainer>
+          <SContainer>{this.renderMessageContainer()}</SContainer>
         </Card>
       </div>
     );
@@ -369,26 +365,27 @@ class ChatMessage extends Component {
 
 ChatMessage.defaultProps = {
   match: { params: { chatId: null } },
-  wasChatsFetched: false,
   chatsFetching: false,
   toolbarPosition: TOOLBAR_LEFT,
 };
 
 ChatMessage.propTypes = {
   match: PropTypes.shape({ params: PropTypes.shape({ chatId: PropTypes.string }) }),
-  defaultSelectedChatId: PropTypes.func.isRequired,
   selectChat: PropTypes.func.isRequired,
   loadChatList: PropTypes.func.isRequired,
   loadUnreadChatList: PropTypes.func.isRequired,
   loadFlaggedChatList: PropTypes.func.isRequired,
+  loadOpenChatList: PropTypes.func.isRequired,
+  loadClosedChatList: PropTypes.func.isRequired,
   cleanChatList: PropTypes.func.isRequired,
   setLocation: PropTypes.func.isRequired,
   setBackHandler: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
-  wasChatsFetched: PropTypes.bool,
   chatsFetching: PropTypes.bool,
   toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
+  getChatEntity: PropTypes.func.isRequired,
+  getChatCategoryCounts: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ apiRequests, electron }) {
@@ -407,16 +404,19 @@ function mapStateToProps({ apiRequests, electron }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      defaultSelectedChatId,
       selectChat,
       loadChatList,
       loadUnreadChatList,
       loadFlaggedChatList,
+      loadOpenChatList,
+      loadClosedChatList,
       cleanChatList,
       setBackHandler,
       setLocation: push,
       setTitle,
       fetchEntitiesRequest,
+      getChatEntity,
+      getChatCategoryCounts,
     },
     dispatch,
   );

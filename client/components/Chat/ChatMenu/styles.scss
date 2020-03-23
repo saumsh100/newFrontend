@@ -1,0 +1,27 @@
+.chatMenuWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 0;
+  width: 350px;
+  height: 74px;
+  background: rgb(244, 244, 244);
+  cursor: pointer;
+}
+
+.chatDropDown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(32, 100, 119);
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  height: 34px;
+  width: 310px;
+}
+
+.chatLabel {
+  margin: 0 4px;
+}

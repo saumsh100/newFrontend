@@ -13,6 +13,7 @@ const ChatSchema = {
   hasUnread: null,
   createdAt: null,
   updatedAt: null,
+  isOpen: false,
 };
 
 export default class Chat extends createModel(ChatSchema) {

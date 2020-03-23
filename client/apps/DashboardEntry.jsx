@@ -15,7 +15,7 @@ import App from './Dashboard';
 import configure from '../store';
 import { browserHistory } from '../store/factory';
 import { load } from '../thunks/auth';
-import { loadUnreadMessages } from '../thunks/chat';
+import { loadUnreadMessages, loadUnreadChatCount } from '../thunks/chat';
 import { loadOnlineRequest } from '../thunks/onlineRequests';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import DesktopNotification from '../util/desktopNotification';
@@ -81,6 +81,7 @@ load()(store.dispatch).then(() => {
     );
 
     store.dispatch(loadUnreadMessages());
+    store.dispatch(loadUnreadChatCount());
     store.dispatch(loadOnlineRequest());
     connectSocketToStoreLogin(store, socket);
   }

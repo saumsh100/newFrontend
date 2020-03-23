@@ -328,6 +328,8 @@
 
 .leftSplit {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .rightSplit {
@@ -593,6 +595,7 @@
 
 .leftCard {
   height: 100%;
+  overflow-y: auto;
 }
 
 .leftCardHeader {
@@ -676,4 +679,5 @@ $size: 32px;
 .messageHeader {
   height: 50px;
   box-sizing: border-box;
+  border-bottom: 1px solid #f4f4f4;
 }

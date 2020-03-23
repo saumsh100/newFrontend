@@ -29,10 +29,10 @@ class PatientInfo extends Component {
         onChange={i => this.setState({ tabIndex: i })}
       >
         <Tab label="Personal" activeClass={styles.activeTab} inactiveClass={styles.inactiveTab}>
-          <About patient={patient} />
+          <About patient={patient.toJS()} />
         </Tab>
         <Tab label="Appointments" activeClass={styles.activeTab} inactiveClass={styles.inactiveTab}>
-          <Appointments patient={patient} />
+          <Appointments patient={patient.toJS()} />
         </Tab>
       </Tabs>
     );
