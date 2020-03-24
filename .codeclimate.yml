@@ -1,0 +1,19 @@
+exclude_patterns:
+  - "**.plop/"
+  - ".idea/"
+  - "dist/"
+  - "build/"
+  - "server/bin/build"
+  - "**/node_modules/"
+  - "**/*.d.ts"
+plugins:
+  eslint:
+    enabled: true
+    channel: "eslint-6"
+    config:
+      extensions:
+        - .es6
+        - .js
+        - .jsx
+  scss-lint:
+    enabled: true
