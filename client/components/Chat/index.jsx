@@ -85,12 +85,11 @@ class ChatMessage extends Component {
   selectChatIfIdIsProvided(chatId = null) {
     if (chatId) {
       // find chat information from chatId, and go to the tab according to isOpen state
-      Promise.resolve(this.props.getChatEntity(chatId)).then(selectedChat => {
+      Promise.resolve(this.props.getChatEntity(chatId)).then((selectedChat) => {
         if (selectedChat) {
           const { isOpen, id } = selectedChat.toJS();
           const newTabIndex = isOpen ? tabsConstants.OPEN_TAB : tabsConstants.CLOSED_TAB;
-          this.changeTab(newTabIndex, () =>
-            this.props.selectChat(id));
+          this.changeTab(newTabIndex, () => this.props.selectChat(id));
           this.toggleShowMessageContainer();
         }
         return selectedChat;
@@ -100,8 +99,7 @@ class ChatMessage extends Component {
         {
           tabIndex: tabsConstants.OPEN_TAB,
         },
-        () =>
-          this.loadChatList(),
+        () => this.loadChatList(),
       );
     }
   }
@@ -211,6 +209,11 @@ class ChatMessage extends Component {
       this.receivedChatsPostUpdate(result));
   }
 
+  loadChatByCount = async (count) => {
+    await this.chatListLoader()(count, CHAT_LIST_LIMIT).then(() =>
+      this.receivedChatsPostUpdate({}));
+  };
+
   changeTab(newIndex, callback = () => {}) {
     if (this.state.tabIndex === newIndex) {
       return;
@@ -292,6 +295,8 @@ class ChatMessage extends Component {
                 onPatientInfoClick={this.togglePatientsInfo}
                 onPatientListClick={this.togglePatientsList}
                 onSearch={this.selectChatOrCreate}
+                loadChatByCount={this.loadChatByCount}
+                tabIndex={this.state.tabIndex}
               />
             </SHeader>
             <MessageContainer

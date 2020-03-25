@@ -11,7 +11,13 @@ import DesktopHeader from './Desktop';
 import HubHeader from './Hub';
 
 const ToHeader = (props) => {
-  const toggleChat = () => {
+  const toggleChat = async () => {
+    const chatState = props.isChatOpen ? 0 : 1;
+    // only execute when chat is in current tab
+    if (chatState === props.tabIndex) {
+      await props.loadChatByCount(1);
+    }
+    // toggle the current chat to either open/close state
     props.toggleVisibility(props.selectedChatId, !props.isChatOpen);
   };
   return window.innerWidth > 576 ? (
@@ -63,6 +69,8 @@ ToHeader.propTypes = {
   isChatOpen: PropTypes.bool,
   selectedChatId: PropTypes.string,
   toggleVisibility: PropTypes.func.isRequired,
+  loadChatByCount: PropTypes.func.isRequired,
+  tabIndex: PropTypes.number.isRequired,
 };
 
 ToHeader.defaultProps = {
