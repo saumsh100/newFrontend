@@ -9,10 +9,7 @@ import styles from './styles.scss';
 const chatOptions = ['Open', 'Closed', 'Unread', 'Flagged', 'All'];
 
 function ChatMenu({ changeTab, index, chatCategoriesCount }) {
-  const count = (key) => {
-    key = key.toLowerCase();
-    return chatCategoriesCount[key] ? `(${chatCategoriesCount[key]})` : null;
-  };
+  const count = key => (chatCategoriesCount[key] ? `(${chatCategoriesCount[key]})` : null);
   return (
     <div className={styles.chatMenuWrapper}>
       <DropdownMenu
@@ -23,7 +20,7 @@ function ChatMenu({ changeTab, index, chatCategoriesCount }) {
       >
         {chatOptions.map((option, i) => (
           <MenuItem key={option} onClick={() => changeTab(i)}>
-            {option} {count(option)}
+            {option} {count(option.toLowerCase())}
           </MenuItem>
         ))}
       </DropdownMenu>
@@ -33,26 +30,25 @@ function ChatMenu({ changeTab, index, chatCategoriesCount }) {
 
 ChatMenu.propTypes = {
   changeTab: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired,
   chatCategoriesCount: PropTypes.shape({
-    flagged: PropTypes.number.isRequired,
-    open: PropTypes.number.isRequired,
-    closed: PropTypes.number.isRequired,
-    unread: PropTypes.number.isRequired,
-  }).isRequired,
+    flagged: PropTypes.number,
+    open: PropTypes.number,
+    unread: PropTypes.number,
+  }),
+  index: PropTypes.number,
 };
 
-function mapStateToProps({ chat }) {
-  const chatCategoriesCount = chat.get('chatCategoriesCount');
+ChatMenu.defaultProps = {
+  chatCategoriesCount: {
+    flagged: 0,
+    open: 0,
+    unread: 0,
+  },
+  index: 0,
+};
 
-  return {
-    chatCategoriesCount,
-  };
-}
+const mapStateToProps = ({ chat }) => ({
+  chatCategoriesCount: chat.get('chatCategoriesCount'),
+});
 
-const enhance = connect(
-  mapStateToProps,
-  () => {},
-);
-
-export default enhance(ChatMenu);
+export default connect(mapStateToProps)(ChatMenu);

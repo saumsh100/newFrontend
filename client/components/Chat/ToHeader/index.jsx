@@ -70,10 +70,11 @@ ToHeader.propTypes = {
   selectedChatId: PropTypes.string,
   toggleVisibility: PropTypes.func.isRequired,
   loadChatByCount: PropTypes.func.isRequired,
-  tabIndex: PropTypes.number.isRequired,
+  tabIndex: PropTypes.number,
 };
 
 ToHeader.defaultProps = {
   isChatOpen: false,
   selectedChatId: null,
+  tabIndex: 0,
 };

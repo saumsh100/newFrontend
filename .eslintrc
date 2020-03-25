@@ -33,7 +33,19 @@
     ],
     "object-curly-newline": ["error", { "consistent": true }],
     "react/no-did-mount-set-state": "off",
-    "react/destructuring-assignment": ["warn", "always"],
+    "react/destructuring-assignment": ["off"],
+    "jsx-a11y/no-noninteractive-element-to-interactive-role": [
+      "error",
+      {
+        "label": ["button"]
+      }
+    ],
+    "jsx-a11y/label-has-for": [ 2, {
+      "required": {
+        "every": [ "id" ]
+      },
+      "allowChildren": true
+    }],
     "jsx-a11y/anchor-is-valid": [
       "error",
       {

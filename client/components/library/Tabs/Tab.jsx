@@ -47,13 +47,14 @@ export default function Tab(props) {
   }
 
   return (
-    // Order is important, classNames={classes} needs to override props.className
-    // eslint-disable-next-line jsx-a11y/label-has-for
     <label
       className={classes}
+      onKeyDown={e => e.keyCode === 13 && onClick(e, index)}
+      role="button"
+      tabIndex={0}
       onClick={e => onClick(e, index)}
-      data-test-id={props['data-test-id']}
       id={id}
+      htmlFor={id}
     >
       {label}
       {tooltipBody && (
@@ -68,7 +69,7 @@ export default function Tab(props) {
 Tab.propTypes = {
   className: PropTypes.string,
   index: PropTypes.number,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   active: PropTypes.bool,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
@@ -79,7 +80,6 @@ Tab.propTypes = {
   id: PropTypes.string,
   tabCard: PropTypes.bool,
   tooltipBody: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  'data-test-id': PropTypes.string,
 };
 
 Tab.defaultProps = {
@@ -93,7 +93,7 @@ Tab.defaultProps = {
   tabCard: false,
   tooltipBody: undefined,
   index: null,
+  label: null,
   active: false,
   onClick: undefined,
-  'data-test-id': null,
 };

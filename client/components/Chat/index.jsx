@@ -216,6 +216,7 @@ class ChatMessage extends Component {
 
   changeTab(newIndex, callback = () => {}) {
     if (this.state.tabIndex === newIndex) {
+      callback();
       return;
     }
     this.props.selectChat(null);
