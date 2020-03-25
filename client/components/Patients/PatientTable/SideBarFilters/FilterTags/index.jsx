@@ -30,7 +30,7 @@ function FilterTags({ filters, removeTag }) {
             className={styles.closeIcon}
             role="button"
             tabIndex="-1"
-            onKeyDown={({ keyCode }) => keyCode === '13' && removeTag(filter)}
+            onKeyDown={({ keyCode }) => keyCode === 13 && removeTag(filter)}
             onClick={(e) => {
               e.stopPropagation();
               removeTag(filter);

@@ -75,7 +75,7 @@ export const getClassMapper = (scheme, styles) => {
     const mapKeys = (key, value) =>
       (index[key] === true ? toDashName(key) : mapKeysWithValues(key, value));
 
-    const classes = keys
+    return keys
       .filter(key => props[key]) // can't be falsey
       .map(key => mapKeys(key, props[key]))
       .filter(i => i)
@@ -83,8 +83,6 @@ export const getClassMapper = (scheme, styles) => {
       .concat(rest)
       .filter(i => i && i.length)
       .join(' ');
-
-    return classes;
   };
 
   const omit = (props, ...other) => lOmit(props, indexKeys.concat(other));

@@ -40,8 +40,8 @@ $border-radius: 4px;
 
 @keyframes loading {
   from {
-    left: 0%;
-    width: 0%;
+    left: 0;
+    width: 0;
   }
   33.3333% {
     left: 33.3333%;
@@ -49,6 +49,6 @@ $border-radius: 4px;
   }
   to {
     left: 100%;
-    width: 0%;
+    width: 0;
   }
 }

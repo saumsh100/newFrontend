@@ -52,7 +52,7 @@ class CallsTable extends Component {
           key={`callContainer_${callJS.id}`}
           role="button"
           tabIndex={index}
-          onKeyDown={e => e.keyCode === '13' && openCallModal(callJS)}
+          onKeyDown={e => e.keyCode === 13 && openCallModal(callJS)}
         >
           <CallListItem
             key={callJS.id}

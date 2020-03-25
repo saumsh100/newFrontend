@@ -24,5 +24,4 @@ export const addAllScheduleFilter = createAction(ADD_ALL_SCHEDULE_FILTER);
 export const clearScheduleFilter = createAction(CLEAR_SCHEDULE_FILTER);
 export const setSyncingWithPMS = createAction(SET_SYNCING);
 export const setScheduleView = createAction(SET_SCHEDULE_VIEW);
-export const setCreatingPatient = createAction(CREATE_NEW_PATIENT)
-
+export const setCreatingPatient = createAction(CREATE_NEW_PATIENT);

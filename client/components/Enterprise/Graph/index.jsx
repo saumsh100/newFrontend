@@ -18,7 +18,7 @@ class Graph extends Component {
     const values = [];
     Object.keys(this.props.clinics).forEach((clinicKey) => {
       this.props.clinics[clinicKey][this.state.selected].month.forEach((month) => {
-        data[month.date] = data[month.date] || 0 + parseInt(month.number, 10);
+        data[month.date] = data[month.date] || parseInt(month.number, 10);
       });
     });
 
@@ -33,9 +33,12 @@ class Graph extends Component {
           className={styles.dropdown}
           align="left"
           options={[
-            { label: 'Total Active Patients', value: 'activePatients' },
-            { label: 'Total Hygiene Patients', value: 'hygienePatients' },
-            { label: 'Total New Patients', value: 'newPatients' },
+            { label: 'Total Active Patients',
+value: 'activePatients' },
+            { label: 'Total Hygiene Patients',
+value: 'hygienePatients' },
+            { label: 'Total New Patients',
+value: 'newPatients' },
           ]}
           name="city"
           value={this.state.selected}

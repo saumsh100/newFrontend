@@ -9,14 +9,15 @@ export const initialState = Map({
   callerId: null,
 });
 
-export default handleActions({
-  [SET_SELECTED_CALL_ID](state, { payload }) {
-    const id = payload;
-    return state.set('callerId', id);
-  },
+export default handleActions(
+  {
+    [SET_SELECTED_CALL_ID](state, { payload }) {
+      return state.set('callerId', payload);
+    },
 
-  [UNSET_SELECTED_CALL_ID](state) {
-    return state.set('callerId', null);
+    [UNSET_SELECTED_CALL_ID](state) {
+      return state.set('callerId', null);
+    },
   },
-
-}, initialState);
+  initialState,
+);

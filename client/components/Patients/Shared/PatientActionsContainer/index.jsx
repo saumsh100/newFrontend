@@ -6,12 +6,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import {
-  setSelectedNote,
-  setSelectedFollowUp,
-  setSelectedRecall,
-  setIsNoteFormActive,
   setIsFollowUpsFormActive,
+  setIsNoteFormActive,
   setIsRecallsFormActive,
+  setSelectedFollowUp,
+  setSelectedNote,
+  setSelectedRecall,
 } from '../../../../reducers/patientTable';
 import FormModal from '../../PatientInfo/FormModal';
 import NotesForm from '../../PatientInfo/Notes/NotesForm';
@@ -233,8 +233,7 @@ class PatientActionsContainer extends Component {
             ...variables,
             patientId: id,
           };
-          const res = await commit({ variables: recallForm });
-          return res;
+          return commit({ variables: recallForm });
         }),
       );
 

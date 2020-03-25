@@ -15,7 +15,7 @@ export default function PatientNameColumn({ patient, redirect, text, isAvatar })
         className={styles.name}
         role="button"
         tabIndex="-1"
-        onKeyDown={({ keyCode }) => keyCode === '13' && redirect()}
+        onKeyDown={({ keyCode }) => keyCode === 13 && redirect()}
         onClick={(e) => {
           e.stopPropagation();
           redirect();

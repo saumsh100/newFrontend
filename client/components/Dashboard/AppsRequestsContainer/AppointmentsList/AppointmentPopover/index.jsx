@@ -45,7 +45,7 @@ export default function AppointmentPopover({
             className={styles.closeIcon}
             role="button"
             tabIndex={0}
-            onKeyDown={e => e.keyCode === '13' && closePopover}
+            onKeyDown={e => e.keyCode === 13 && closePopover}
             onClick={closePopover}
           >
             <Icon icon="times" />

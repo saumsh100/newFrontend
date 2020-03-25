@@ -64,7 +64,7 @@ class ForgotPassword extends Component {
                 <div
                   className={styles.textLogin}
                   tabIndex={0}
-                  onKeyDown={e => e.keyCode === '13' && this.props.push('/login')}
+                  onKeyDown={e => e.keyCode === 13 && this.props.push('/login')}
                   role="button"
                   onClick={() => {
                     this.props.push('/login');

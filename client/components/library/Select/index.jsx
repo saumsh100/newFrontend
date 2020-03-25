@@ -5,9 +5,7 @@ import classNames from 'classnames';
 import styles from './styles.scss';
 
 export default function Select(props) {
-  const {
-    children, value, error, icon, min,
-  } = props;
+  const { children, value, error, icon, min } = props;
 
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat Select)
@@ -29,16 +27,13 @@ export default function Select(props) {
     selectClassName = classNames(styles.erroredSelect, selectClassName);
   }
 
-  const errorComponent = error ? (
-    <span className={styles.error}>{error}</span>
-  ) : null;
+  const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
 
-  const content = min ? (
+  return min ? (
     <select className={selectClassName} {...props}>
       {children}
     </select>
   ) : null;
-  return content;
 }
 Select.propTypes = {
   label: PropTypes.string,

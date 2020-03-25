@@ -54,7 +54,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.3);
 }
 
 .greenBorder {
@@ -271,7 +271,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
     flex-direction: column;
     margin-bottom: 15px;
     &:last-child {
-      margin-bottom: 0px;
+      margin-bottom: 0;
     }
   }
 

@@ -10,15 +10,29 @@ const subComponent = enterprise => (
   <AccountsSubComponent enterpriseId={enterprise.original.id} enterprise={enterprise} />
 );
 
-export default function GroupTable(props) {
-  const { data, loaded, expanded, handleRowClick, selectEnterprise } = props;
-
+export default function GroupTable({ data, loaded, expanded, handleRowClick, selectEnterprise }) {
   const columns = [
     {
       Header: 'Group Name',
       id: 'name',
-      accessor: d => d.name,
+      width: 500,
+      accessor: d => `${d.name} (${d.id})`,
+      Cell: ({ original, viewIndex }) => (
+        <div style={{ display: 'flex' }}>
+          <span
+            tabIndex={0}
+            role="button"
+            onKeyDown={e => e.keyCode === 13 && handleRowClick({ viewIndex })}
+          >
+            {original.name}
+          </span>
+          <span style={{ marginLeft: '5px' }}>-</span>
+          <input value={original.id} className={styles.fakeInput} tabIndex={0} />
+        </div>
+      ),
       filterable: true,
+      filterMethod: ({ id, value }, row) =>
+        (row[id] ? String(row[id].toLowerCase()).includes(value.toLowerCase()) : true),
     },
     {
       Header: 'Plan',
@@ -79,14 +93,16 @@ GroupTable.propTypes = {
   handleRowClick: PropTypes.func.isRequired,
   original: PropTypes.shape({ id: PropTypes.string }),
   selectEnterprise: PropTypes.func.isRequired,
-  data: PropTypes.arrayOf(PropTypes.shape({
-    createdAt: PropTypes.string,
-    deletedAt: PropTypes.string,
-    id: PropTypes.string,
-    name: PropTypes.string,
-    plan: PropTypes.string,
-    updatedAt: PropTypes.string,
-  })),
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      createdAt: PropTypes.string,
+      deletedAt: PropTypes.string,
+      id: PropTypes.string,
+      name: PropTypes.string,
+      plan: PropTypes.string,
+      updatedAt: PropTypes.string,
+    }),
+  ),
 };
 
 GroupTable.defaultProps = {

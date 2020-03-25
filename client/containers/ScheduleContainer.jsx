@@ -2,22 +2,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import { Map, List } from 'immutable';
+import { List, Map } from 'immutable';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { setDateToTimezone } from '@carecru/isomorphic';
 import Loader from '../components/Loader';
 import ScheduleComponent from '../components/Schedule';
-import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../thunks/fetchEntities';
+import { createEntityRequest, fetchEntities, fetchEntitiesRequest } from '../thunks/fetchEntities';
 import { deleteAllEntity } from '../reducers/entities';
 import { appointmentShape } from '../components/library/PropTypeShapes';
 import Account from '../entities/models/Account';
 import Appointment from '../entities/models/Appointments';
 import {
-  setScheduleDate,
   selectAppointment,
-  setMergingPatient,
   setCreatingPatient,
+  setMergingPatient,
+  setScheduleDate,
 } from '../actions/schedule';
 import { setAllFilters } from '../thunks/schedule';
 
@@ -107,7 +107,7 @@ class ScheduleContainer extends Component {
   buildAppointmentQuery(date, filterOverride = {}, queryOverride = {}) {
     const startDate = date.startOf('day').toISOString();
     const endDate = date.endOf('day').toISOString();
-    const query = {
+    return {
       startDate,
       endDate,
       filters: [
@@ -121,22 +121,18 @@ class ScheduleContainer extends Component {
       ],
       ...queryOverride,
     };
-
-    return query;
   }
 
   buildEventsQuery(date, queryOverride = {}) {
     const accountId = this.props.activeAccount.get('id');
     const startDate = date.startOf('day').toISOString();
     const endDate = date.endOf('day').toISOString();
-    const query = {
+    return {
       accountId,
       'startDate[between][0]': startDate,
       'startDate[between][1]': endDate,
       ...queryOverride,
     };
-
-    return query;
   }
 
   isSameDay(currentDate, updateDate) {

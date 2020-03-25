@@ -14,9 +14,7 @@ const shortenTime = (date, addAtoFormat = true) => {
   date = moment(date);
   const aFormat = addAtoFormat ? 'a' : '';
 
-  return date.get('minutes') === 0
-    ? date.format(`h${aFormat}`)
-    : date.format(`h:mm${aFormat}`);
+  return date.get('minutes') === 0 ? date.format(`h${aFormat}`) : date.format(`h:mm${aFormat}`);
 };
 
 /**
@@ -46,13 +44,8 @@ const buildHoursFormat = (startDate, endDate = null) => {
  * @param {string | moment} endDate
  * @param {bool} inline
  */
-const buildHoursString = (startDate, endDate, inline = false) => {
-  const timeString = inline
-    ? buildHoursFormat(startDate)
-    : buildHoursFormat(startDate, endDate);
-
-  return timeString;
-};
+const buildHoursString = (startDate, endDate, inline = false) =>
+  (inline ? buildHoursFormat(startDate) : buildHoursFormat(startDate, endDate));
 
 /**
  * Hours presenter component

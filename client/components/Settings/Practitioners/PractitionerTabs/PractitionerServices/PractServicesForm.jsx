@@ -1,16 +1,14 @@
 
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import PractServicesList from './PractServicesList';
-import { Form, Field, Toggle } from '../../../../library';
+import { Form, Toggle } from '../../../../library';
 import { change } from 'redux-form';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
 
 function checkValues(obj) {
-  const allTrue = Object.keys(obj).every(key => obj[key]);
-  return allTrue;
+  return Object.keys(obj).every(key => obj[key]);
 }
 
 class PractServicesForm extends Component {
@@ -29,9 +27,7 @@ class PractServicesForm extends Component {
   }
 
   render() {
-    const {
-      services, practitioner, initialValues, formName, values,
-    } = this.props;
+    const { services, practitioner, initialValues, formName, values } = this.props;
 
     let showComponent = null;
 
@@ -59,15 +55,13 @@ class PractServicesForm extends Component {
             alignSave="left"
           >
             <div className={styles.formContainer_content}>
-              {services
-                .toArray()
-                .map((service, index) => (
-                  <PractServicesList
-                    key={`${practitioner.get('id')}${index}`}
-                    service={service}
-                    index={index}
-                  />
-                ))}
+              {services.toArray().map((service, index) => (
+                <PractServicesList
+                  key={`${practitioner.get('id')}${index}`}
+                  service={service}
+                  index={index}
+                />
+              ))}
             </div>
           </Form>
         </div>
@@ -93,4 +87,7 @@ function mapStateToProps({ form }, { formName }) {
   };
 }
 
-export default connect(mapStateToProps, null)(PractServicesForm);
+export default connect(
+  mapStateToProps,
+  null,
+)(PractServicesForm);

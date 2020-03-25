@@ -6,7 +6,7 @@ import { Element, scroller } from 'react-scroll';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { submit, touch, change, formValueSelector } from 'redux-form';
+import { change, formValueSelector, submit, touch } from 'redux-form';
 import classNames from 'classnames';
 import { logout } from '../../../../thunks/patientAuth';
 import carriers from './insurance_carriers';
@@ -17,12 +17,12 @@ import {
   updatePatient,
 } from '../../../../thunks/familyPatients';
 import {
-  emailValidate,
+  asyncEmailValidatePatient,
+  asyncPhoneNumberValidatePatient,
   composeAsyncValidators,
+  emailValidate,
   normalizeBirthdate,
   validateBirthdate,
-  asyncPhoneNumberValidatePatient,
-  asyncEmailValidatePatient,
 } from '../../../library/Form/validate';
 import { normalizePhone } from '../../../library/Form/normalize';
 import EnabledFeature from '../../../library/EnabledFeature';
@@ -32,10 +32,10 @@ import SuggestionSelect from '../../../library/DropdownSuggestion/SuggestionSele
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import {
-  showButton,
   hideButton,
   setIsClicked,
   setText,
+  showButton,
 } from '../../../../reducers/widgetNavigation';
 import { dropdownTheme, inputTheme } from '../../theme';
 import Button from '../../../library/Button';

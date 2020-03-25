@@ -45,7 +45,7 @@ const SelectedPatient = ({ handleAutoSuggest, patientSearched }) => (
     className={styles.patientContainer}
     onClick={() => handleAutoSuggest(null)}
     role="button"
-    onKeyDown={({ keyCode }) => keyCode === '13' && handleAutoSuggest(null)}
+    onKeyDown={({ keyCode }) => keyCode === 13 && handleAutoSuggest(null)}
     tabIndex="0"
   >
     <Avatar user={patientSearched} size="sm" />

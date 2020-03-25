@@ -39,7 +39,13 @@ const columns = [
   {
     Header: 'Account ID',
     id: 'id',
+    width: 400,
     accessor: d => d.id,
+    Cell: ({ original }) => (
+      <div style={{ display: 'flex' }}>
+        <input value={original.id} className={styles.fakeInput} tabIndex={0} />
+      </div>
+    ),
   },
 ];
 
@@ -52,8 +58,9 @@ export default function AccountsTable(props) {
         key="Accounts Table"
         data={accounts}
         columns={columns}
-        defaultPageSize={10}
+        defaultPageSize={30}
         loading={loaded}
+        handleRowClick={() => null}
         showPagination={false}
         rowStyling={styles.rowStyling}
       />

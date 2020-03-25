@@ -56,7 +56,7 @@ export default function Avatar({
         onClick={onClick}
         role="button"
         tabIndex={0}
-        onKeyDown={e => e.keyCode === '13' && onClick}
+        onKeyDown={e => e.keyCode === 13 && onClick}
       >
         {centerContent}
       </div>

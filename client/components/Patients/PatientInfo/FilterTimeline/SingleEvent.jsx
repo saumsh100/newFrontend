@@ -71,7 +71,7 @@ export default function SingleEvent({ type, onClick, checked }) {
       className={styles.singleEvent}
       role="button"
       tabIndex={0}
-      onKeyDown={e => e.keyCode === '13' && onClick}
+      onKeyDown={e => e.keyCode === 13 && onClick}
       onClick={onClick}
     >
       <div className={iconStyle}>

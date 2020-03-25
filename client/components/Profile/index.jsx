@@ -6,8 +6,6 @@ import { bindActionCreators } from 'redux';
 import DocumentTitle from 'react-document-title';
 import { Card } from '../library';
 import ChangePasswordForm from './ChangePasswordForm';
-import TestForm from '../demo/TestForm';
-import TooltipsTest from '../demo/TooltipsTest';
 import { changePassword } from '../../thunks/user';
 import styles from './styles.scss';
 
@@ -18,20 +16,14 @@ function Profile(props) {
         <div className={styles.passwordFormContainer}>
           <ChangePasswordForm onSubmit={props.changePassword} />
         </div>
-        {/* <TestForm patient={{ firstName: 'Justin', middleName: 'Daniel', lastName: 'Sharp' }} /> */}
-        {/* <TooltipsTest /> */}
       </Card>
     </DocumentTitle>
   );
 }
 
 Profile.propTypes = {
-  changePassword: PropTypes.func,
+  changePassword: PropTypes.func.isRequired,
 };
-
-function mapStateToProps() {
-  return {};
-}
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators(
@@ -43,7 +35,7 @@ function mapActionsToProps(dispatch) {
 }
 
 const enhance = connect(
-  mapStateToProps,
+  null,
   mapActionsToProps,
 );
 

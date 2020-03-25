@@ -18,7 +18,7 @@ const DateSchedule = ({ day, schedule, timezone, handleEditSchedule, shouldDispl
       role="button"
       tabIndex={0}
       key={schedule.id}
-      onKeyDown={e => e.keyCode === '13' && handleEditSchedule(day)}
+      onKeyDown={e => e.keyCode === 13 && handleEditSchedule(day)}
     >
       <div className={styles.info}>
         <div className={styles.schedule}>
