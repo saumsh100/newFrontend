@@ -10,7 +10,7 @@ import FetchMyFollowUps from '../../GraphQL/PatientFollowUps/fetchMyFollowUps';
 import { jumpToMyFollowUps } from '../../../thunks/patientTable';
 
 /**
- * Wraps the shortcut IconButton in order to fetch the count of patients with follow-ups
+ * Wraps the shortcut IconButton in order to fetch the count of patients with follow ups
  * to display in the badge
  *
  * @param accountId
@@ -31,7 +31,7 @@ function MyFollowUpsButtonContainer({ accountId, assignedUserId, timezone, ...pr
       {({ error, data: { patientFollowUps } = {} }) => {
         const count = error
           ? 'x'
-          : // Turn it into the number of total patients with these follow-ups outstanding
+          : // Turn it into the number of total patients with these follow ups outstanding
             patientFollowUps && keys(groupBy(patientFollowUps, 'patientId')).length;
 
         return <MyFollowUpsButton count={count} onClick={props.jumpToMyFollowUps} />;

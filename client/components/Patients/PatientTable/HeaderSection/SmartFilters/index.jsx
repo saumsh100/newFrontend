@@ -15,33 +15,23 @@ class SmartFilters extends Component {
   constructor(props) {
     super(props);
     this.setSmartFilter = this.setSmartFilter.bind(this);
+    this.setDefaultSmartList = this.setDefaultSmartList.bind(this);
   }
 
   componentDidMount() {
-    // DCC practices has a customized initial state
-    const isDCC =
-      this.props.segments.toJS().findIndex(({ segment }) => segment === 'dccRecalls') !== -1;
-
-    if (this.props.selectedSegment === null) {
-      if (isDCC) {
-        this.setSmartFilter({ segment: 'dccRecalls' });
-      } else {
-        this.setSmartFilter({ segment: 'allPatients' });
-      }
-    }
+    this.setDefaultSmartList();
   }
 
   componentDidUpdate() {
-    const isDCC =
-      this.props.segments.toJS().findIndex(({ segment }) => segment === 'dccRecalls') !== -1;
+    this.setDefaultSmartList();
+  }
 
-    if (this.props.selectedSegment === null) {
-      if (isDCC) {
-        this.setSmartFilter({ segment: 'dccRecalls' });
-      } else {
-        this.setSmartFilter({ segment: 'allPatients' });
-      }
-    }
+  setDefaultSmartList() {
+    if (this.props.selectedSegment !== null) return;
+    const defaultSegment = this.props.segments.toJS().find(({ isDefault }) => isDefault);
+    this.setSmartFilter({
+      segment: !defaultSegment ? 'allPatients' : defaultSegment.segment,
+    });
   }
 
   getActiveSmartFilter([segment, ...args], segments = []) {
@@ -55,10 +45,12 @@ class SmartFilters extends Component {
 
   setSmartFilter({ segment, value = [] }) {
     const params = {};
-
     if (segment === 'followUps') {
-      // this sorts the PatientTable column
       params.order = [['patientFollowUps.dueAt', 'asc']];
+    }
+
+    if (segment === 'smartRecare') {
+      params.order = [['dueForHygieneDate', 'desc']];
     }
 
     this.props.addFilter({
@@ -139,7 +131,6 @@ SmartFilters.defaultProps = {
 
 const mapStateToProps = ({ patientTable, featureFlags }) => {
   const segments = featureFlags.getIn(['flags', 'custom-segments']);
-  // check if there's dccRecalls flag
   const selectedSegment = patientTable.getIn(['filters', 'segment']);
   return {
     segments,

@@ -53,7 +53,7 @@ class PatientActionsDropdown extends Component {
     canAddFollowUp &&
       actionMenuItems.push({
         key: 'add-follow-up',
-        children: <div>Add Follow-up</div>,
+        children: <div>Add Follow Up</div>,
         onClick: () => this.toggleForm(this.props.setIsFollowUpsFormActive),
       });
 

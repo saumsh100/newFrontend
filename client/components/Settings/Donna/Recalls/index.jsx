@@ -13,8 +13,10 @@ import {
   createEntityRequest,
   deleteEntityRequest,
 } from '../../../../thunks/fetchEntities';
+import revertRecallsTouchpoints from '../../../../thunks/defaultSettings/recalls';
 import { Button, RemoteSubmitButton, DialogBox, DropdownSelect } from '../../../library';
 import { accountShape } from '../../../library/PropTypeShapes';
+import EnabledFeature from '../../../library/EnabledFeature';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RecallsItem from './RecallsItem';
 import AdvancedSettingsForm from './AdvancedSettingsForm';
@@ -74,6 +76,7 @@ class Recalls extends Component {
     };
 
     this.saveAdvancedSettings = this.saveAdvancedSettings.bind(this);
+    this.revertToDefaultSettings = this.revertToDefaultSettings.bind(this);
     this.newRecall = this.newRecall.bind(this);
     this.openModal = this.openModal.bind(this);
     this.selectRecall = this.selectRecall.bind(this);
@@ -133,6 +136,32 @@ class Recalls extends Component {
         alert,
       })
       .then(this.toggleAdvancedSettings);
+  }
+
+  revertToDefaultSettings() {
+    if (
+      !window.confirm(
+        'Are you sure you want to revert to the default recalls settings? ' +
+          'There is no way to undo this after you proceed.',
+      )
+    ) {
+      return;
+    }
+
+    return this.props.revertRecallsTouchpoints({
+      account: this.props.activeAccount,
+      alert: {
+        success: {
+          title: 'Default Recalls Settings Enabled',
+          body: 'Successfully reverted to the default recalls settings',
+        },
+
+        error: {
+          title: 'Error Reverting to Default Settings',
+          body: 'Failed to revert to the default recalls settings',
+        },
+      },
+    });
   }
 
   newRecall(values) {
@@ -294,15 +323,26 @@ class Recalls extends Component {
     return (
       <CommunicationSettingsCard
         title="Recalls Settings"
-        // TODO: we have removed add button for now
         rightActions={
-          role === 'SUPERADMIN' ? (
-            <div>
+          <div>
+            <EnabledFeature
+              predicate={({ flags }) => flags.get('revert-to-default-recalls-settings-button')}
+              render={() => (
+                <Button
+                  color="blue"
+                  onClick={this.revertToDefaultSettings}
+                  className={styles.revertButton}
+                >
+                  Revert to Default Settings
+                </Button>
+              )}
+            />
+            {role === 'SUPERADMIN' ? (
               <Button border="blue" onClick={this.toggleAdvancedSettings}>
                 Advanced Settings
               </Button>
-            </div>
-          ) : null
+            ) : null}
+          </div>
         }
         leftColumn={
           <div>
@@ -410,6 +450,7 @@ Recalls.propTypes = {
   updateEntityRequest: PropTypes.func.isRequired,
   fetchEntities: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
+  revertRecallsTouchpoints: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
 };
 
@@ -440,6 +481,7 @@ function mapDispatchToProps(dispatch) {
       createEntityRequest,
       deleteEntityRequest,
       updateEntityRequest,
+      revertRecallsTouchpoints,
       reset,
     },
     dispatch,

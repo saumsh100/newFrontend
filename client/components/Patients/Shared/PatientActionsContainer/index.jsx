@@ -181,7 +181,7 @@ class PatientActionsContainer extends Component {
       this.props.showAlertTimeout({
         type: 'success',
         alert: {
-          body: `${selectedFollowUp ? 'Updated' : 'Added'} follow-up for ${
+          body: `${selectedFollowUp ? 'Updated' : 'Added'} follow up for ${
             activePatient.firstName
           }`,
         },
@@ -195,7 +195,7 @@ class PatientActionsContainer extends Component {
         alert: {
           body:
             `Failed to ${selectedFollowUp ? 'update' : 'add'} ` +
-            `follow-up for ${activePatient.firstName}`,
+            `follow up for ${activePatient.firstName}`,
         },
       });
     }
@@ -339,7 +339,7 @@ class PatientActionsContainer extends Component {
         </FormModal>
         <FormModal
           isUpdate={isUpdatingFollowUp}
-          title={isUpdatingFollowUp ? 'Edit Follow-up' : 'Add Follow-up'}
+          title={isUpdatingFollowUp ? 'Edit Follow Up' : 'Add Follow Up'}
           formName={getFollowUpsFormName(selectedFollowUp)}
           active={isFollowUpsFormActive || isUpdatingFollowUp}
           onToggle={this.toggleForm(

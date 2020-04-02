@@ -95,7 +95,7 @@ export default function FollowUpsForm({
       <Field
         required
         name="assignedUserId"
-        label="User"
+        label="Assigned To"
         data-test-id="user-field-followup-form"
         component="DropdownSelect"
         options={accountUsers}

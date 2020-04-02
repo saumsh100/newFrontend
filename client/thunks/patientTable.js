@@ -52,8 +52,7 @@ const patientTableFilterForms = [
 
 /**
  * jumpToMyFollowUps will clear all existing Patient Management filters/forms
- * and direct users to the "My Follow-ups (past 30 days)" list with that list's
- * data fetched
+ * and direct users to the myFollowUps list with that list's data fetched
  *
  * @returns {Function}
  */

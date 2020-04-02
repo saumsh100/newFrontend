@@ -27,7 +27,7 @@ class FollowUpEvent extends Component {
 
   async handleFollowUpDelete({ id }, commit) {
     try {
-      if (!window.confirm('Are you sure you want to delete this follow-up?')) return;
+      if (!window.confirm('Are you sure you want to delete this follow up?')) return;
 
       await commit({ variables: { id } });
       this.props.deleteEntity({
@@ -37,13 +37,13 @@ class FollowUpEvent extends Component {
 
       this.props.showAlertTimeout({
         type: 'success',
-        alert: { body: 'Deleted follow-up' },
+        alert: { body: 'Deleted follow up' },
       });
     } catch (err) {
       console.error('handleFollowUpDelete error:', err);
       this.props.showAlertTimeout({
         type: 'error',
-        alert: { body: 'Failed to delete follow-up' },
+        alert: { body: 'Failed to delete follow up' },
       });
     }
   }

@@ -6,29 +6,24 @@ import InfoDump from '../../../Shared/InfoDump';
 import { validDateValue } from '../../../Shared/helpers';
 import styles from '../styles.scss';
 
-export default function LastAppointmentSection(props) {
+export default function ContinuingCareSection(props) {
   const { patient, className } = props;
   return (
     <div className={className}>
-      <div className={styles.lastAppointmentHeader}>Last Appointment</div>
-      <Row className={styles.appointmentsRow}>
+      <div className={styles.lastAppointmentHeader}>Continuing Care</div>
+      <Row className={styles.row}>
         <Col xs={6}>
-          <InfoDump label="HYGIENE" data={validDateValue(patient.lastHygieneDate)} />
+          <InfoDump label="HYGIENE" data={validDateValue(patient.dueForRecallExamDate)} />
         </Col>
         <Col xs={6}>
-          <InfoDump label="RECALL" data={validDateValue(patient.lastRecallDate)} />
-        </Col>
-      </Row>
-      <Row className={styles.appointmentsRow}>
-        <Col xs={6}>
-          <InfoDump label="RESTORATIVE" data={validDateValue(patient.lastRestorativeDate)} />
+          <InfoDump label="RECALL" data={validDateValue(patient.dueForHygieneDate)} />
         </Col>
       </Row>
     </div>
   );
 }
 
-LastAppointmentSection.propTypes = {
+ContinuingCareSection.propTypes = {
   patient: PropTypes.shape({
     lastRestorativeDate: PropTypes.string,
     lastRecallDate: PropTypes.string,
@@ -37,6 +32,6 @@ LastAppointmentSection.propTypes = {
   className: PropTypes.string,
 };
 
-LastAppointmentSection.defaultProps = {
+ContinuingCareSection.defaultProps = {
   className: null,
 };

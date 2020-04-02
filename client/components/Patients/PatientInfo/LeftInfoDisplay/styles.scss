@@ -53,6 +53,11 @@
   }
 }
 
+.continuingCareSection {
+  margin-bottom: 20px;
+  border-bottom: 1px solid $primary-grey;
+}
+
 .infoRow {
   @media screen and (max-width: 576px) {
     width: 100%;
@@ -97,6 +102,11 @@
 }
 .row:last-child {
   border-bottom: 0;
+}
+
+.appointmentsRow {
+  padding-top: 15px;
+  padding-bottom: 20px;
 }
 
 .remindersRow,

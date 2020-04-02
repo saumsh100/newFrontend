@@ -2,102 +2,100 @@
 const HelpTextLookupTable = {
   'All Patients': {
     status: 'Active',
-    description: 'All Active Patients',
+    description: 'All active patients',
     communication: null,
     followUp: null,
   },
-  'Due within 60 Days': {
+  'Due Within 60 Days': {
     status: 'Active',
     description:
-      'Active Patients who are due in the next 60 days for a Hygiene Appt and not scheduled',
+      'Active patients who are due in the next 60 days for hygiene/recall and not scheduled',
     communication: null,
     followUp: null,
   },
   '0-3 Months Late': {
     status: 'Active',
-    description:
-      'Active Patients who are 0-3 Months overdue for their Hygiene Appt and not scheduled',
+    description: 'Active patients who are 0-3 months overdue for hygiene/recall and not scheduled',
     communication: null,
     followUp: null,
   },
   '4-6 Months Late': {
     status: 'Active',
-    description:
-      'Active Patients who are 4-6 Months overdue for their Hygiene Appt and not scheduled',
+    description: 'Active patients who are 4-6 months overdue for hygiene/recall and not scheduled',
     communication: null,
     followUp: null,
   },
   '7-12 Months Late': {
     status: 'Active',
-    description:
-      'Active Patients who are 7-12 Months overdue for their Hygiene Appt and not scheduled',
+    description: 'Active patients who are 7-12 months overdue for hygiene/recall and not scheduled',
     communication: null,
     followUp: null,
   },
   '13-18 Months Late': {
     status: 'Active',
     description:
-      'Active Patients who are 13-18 Months overdue for their Hygiene Appt and not scheduled',
+      'Active patients who are 13-18 months overdue for hygiene/recall and not scheduled',
     communication: null,
     followUp: null,
   },
   '19-24 Months Late': {
     status: 'Active',
     description:
-      'Active Patients who are 19-24 Months overdue for their Hygiene Appt and not scheduled',
+      'Active patients who are 19-24 months overdue for hygiene/recall and not scheduled',
     communication: null,
     followUp: null,
   },
   '25-36 Months Late': {
     status: 'Active',
     description:
-      'Active Patients who are 25-36 Months overdue for their Hygiene Appt and not scheduled',
+      'Active patients who are 25-36 months overdue for hygiene/recall and not scheduled',
     communication: null,
     followUp: null,
   },
   'Missed/Cancelled': {
     status: 'Active',
-    description: 'Patients who have missed or cancelled their appointment within the last 30 days',
+    description:
+      'Patients who missed (no-showed) or cancelled an appt within the last 3 months, and did not reschedule',
     communication: null,
     followUp: null,
   },
-  'Missed Pre-Appointed': {
+  'Missed Pre-appointed': {
     status: 'Active',
-    description:
-      'Patients who completed a hygiene appt in the past 30 days, but did not schedule their next appointment',
+    description: 'Patients who completed an appt in the past 30 days, and did not reschedule',
     communication: null,
     followUp: null,
   },
-  'Unconfirmed Patients 2 weeks': {
+  'Unconfirmed Patients (2 Weeks)': {
     status: 'Active',
     description:
-      'Patients who have upcoming appointments in the next 2 weeks, but have not confirmed their appointment',
+      'Patients who have upcoming appts in the next 2 weeks, but have not confirmed their appt',
     communication: null,
     followUp: null,
   },
-  'Unconfirmed Patients 1 week': {
+  'Unconfirmed Patients (1 Week)': {
     status: 'Active',
     description:
-      'Patients who have upcoming appointments in the next 7 days, but have not confirmed their appointment',
+      'Patients who have upcoming appts in the next 7 days, but have not confirmed their appt',
     communication: null,
     followUp: null,
   },
   'Smart Recare': {
     status: 'Active',
-    description: 'Active Patients who are overdue for hygiene and not scheduled.',
+    description:
+      'Active patients who are overdue for hygiene/recall 0-1, 2-3, 6-7, 12-13, 17-18 months, and not scheduled.',
     communication: 'No logged conversations within 30 days before or after today',
     followUp: 'No follow ups scheduled after today',
   },
   'Follow Ups': {
     status: 'Active',
-    description: 'Active Patients who have an incomplete follow up',
+    description: 'Active patients who have an incomplete follow up',
     communication: null,
     followUp: 'Follow up scheduled',
   },
-  'My Follow Ups (past 30 days)': {
+  'My Follow Ups (Past 30 Days)': {
     status: 'Active',
     description:
-      'Active Patients who have an incomplete follow ups assigned to me who are overdue for the past 30 days',
+      'Active patients who have an incomplete follow up that was due to be completed in the last 30 days and is assigned to me',
     communication: null,
     followUp: 'Follow up scheduled',
   },
