@@ -4,7 +4,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import PropTypes from 'prop-types';
-import { query } from './fetchWaitSpot';
+import { legacyQuery } from './fetchWaitSpot';
 
 const mutation = gql`
   mutation addWaitSpot_Mutation($input: addWaitSpotInput!) {
@@ -26,7 +26,7 @@ const AddWaitSpot = ({ children }) => (
     mutation={mutation}
     refetchQueries={() => [
       {
-        query,
+        query: legacyQuery,
         variables: {},
       },
     ]}

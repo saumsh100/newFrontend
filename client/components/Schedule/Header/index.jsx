@@ -27,43 +27,34 @@ class Header extends Component {
 
     this.setView = this.setView.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
-    this.openWaitlist = this.openWaitlist.bind(this);
+    this.toggleWaitlist = this.toggleWaitlist.bind(this);
     this.removeWaitSpot = this.removeWaitSpot.bind(this);
     this.openAddToWaitlist = this.openAddToWaitlist.bind(this);
-    this.handleAddToWaitlist = this.handleAddToWaitlist.bind(this);
   }
 
   componentDidMount() {
     const localStorageView = JSON.parse(localStorage.getItem('scheduleView'));
 
     if (localStorageView && localStorageView.view !== this.props.scheduleView) {
-      const { view } = localStorageView;
-      this.props.setScheduleView({ view });
+      this.props.setScheduleView({ ...localStorageView });
     }
   }
 
   setView() {
-    if (this.props.scheduleView === 'chair') {
-      const viewObj = { view: 'practitioner' };
-      localStorage.setItem('scheduleView', JSON.stringify(viewObj));
-      this.props.setScheduleView({ view: 'practitioner' });
-    } else {
-      const viewObj = { view: 'chair' };
-      localStorage.setItem('scheduleView', JSON.stringify(viewObj));
-      this.props.setScheduleView({ view: 'chair' });
-    }
+    const view = this.props.scheduleView === 'chair' ? 'practitioner' : 'chair';
+    localStorage.setItem('scheduleView', JSON.stringify({ view }));
+    this.props.setScheduleView({ view });
   }
 
-  openWaitlist() {
-    this.setState({ showWaitlist: !this.state.showWaitlist });
+  toggleWaitlist() {
+    this.setState(prevState => ({
+      showWaitlist: !prevState.showWaitlist,
+      showAddToWaitlist: prevState.showWaitlist ? false : prevState.showAddToWaitlist,
+    }));
   }
 
   openAddToWaitlist() {
     this.setState({ showAddToWaitlist: !this.state.showAddToWaitlist });
-  }
-
-  handleAddToWaitlist() {
-    this.openAddToWaitlist();
   }
 
   removeWaitSpot(deleteMutation) {
@@ -91,6 +82,7 @@ class Header extends Component {
       pracsFetched,
       chairsFetched,
       appointments,
+      newWaitlist,
     } = this.props;
 
     const leftColumnWidth = schedule.get('leftColumnWidth');
@@ -98,7 +90,7 @@ class Header extends Component {
     const currentDate = moment(scheduleDate);
     return (
       <SHeader className={styles.headerContainer}>
-        <CurrentDate currentDate={currentDate} leftColumnWidth={leftColumnWidth}>
+        <CurrentDate currentDate={scheduleDate} leftColumnWidth={leftColumnWidth}>
           <div className={styles.changeDay}>
             <IconButton
               icon="angle-left"
@@ -166,7 +158,7 @@ class Header extends Component {
               compact
               border="blue"
               className={styles.headerLinks_waitlist}
-              onClick={this.openWaitlist}
+              onClick={this.toggleWaitlist}
               data-test-id="button_headerWaitlist"
             >
               Waitlist
@@ -186,26 +178,18 @@ class Header extends Component {
             >
               Quick Add
             </Button>
-
             <DialogBox
-              custom
               title="Waitlist"
               active={this.state.showWaitlist}
-              onEscKeyDown={this.openWaitlist}
-              onOverlayClick={this.openWaitlist}
               bodyStyles={styles.dialogBodyList}
-              actions={[
-                {
-                  props: { border: 'blue' },
-                  component: Button,
-                  onClick: this.openWaitlist,
-                  label: 'Cancel',
-                },
-              ]}
+              onEscKeyDown={this.toggleWaitlist}
+              onOverlayClick={this.toggleWaitlist}
+              type={newWaitlist ? 'large' : 'medium'}
             >
               <DeleteWaitSpot>
                 {removeCallback => (
                   <Waitlist
+                    newWaitlist={newWaitlist}
                     removeWaitSpot={this.removeWaitSpot(removeCallback)}
                     openAddTo={this.openAddToWaitlist}
                     accountId={this.props.accountId}
@@ -225,16 +209,14 @@ class Header extends Component {
 }
 
 Header.defaultProps = {
-  pracsFetched: false,
-  chairsFetched: false,
   appointments: List,
 };
 
 Header.propTypes = {
   accountId: PropTypes.string.isRequired,
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)),
-  pracsFetched: PropTypes.bool,
-  chairsFetched: PropTypes.bool,
+  pracsFetched: PropTypes.bool.isRequired,
+  chairsFetched: PropTypes.bool.isRequired,
   addNewAppointment: PropTypes.func.isRequired,
   showSchedule: PropTypes.func.isRequired,
   scheduleView: PropTypes.string.isRequired,
@@ -245,29 +227,18 @@ Header.propTypes = {
   previousDay: PropTypes.func.isRequired,
   nextDay: PropTypes.func.isRequired,
   setCurrentDay: PropTypes.func.isRequired,
+  newWaitlist: PropTypes.bool.isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ setScheduleView }, dispatch);
-}
+const mapDispatchToProps = dispatch => bindActionCreators({ setScheduleView }, dispatch);
 
-const mapStateToProps = ({ auth, schedule, apiRequests }) => {
-  const scheduleView = schedule.get('scheduleView');
-
-  const pracsFetched = apiRequests.get('pracSchedule')
-    ? apiRequests.get('pracSchedule').wasFetched
-    : null;
-  const chairsFetched = apiRequests.get('chairsSchedule')
-    ? apiRequests.get('chairsSchedule').wasFetched
-    : null;
-
-  return {
-    accountId: auth.get('accountId'),
-    scheduleView,
-    pracsFetched,
-    chairsFetched,
-  };
-};
+const mapStateToProps = ({ auth, schedule, apiRequests, featureFlags }) => ({
+  accountId: auth.get('accountId'),
+  scheduleView: schedule.get('scheduleView'),
+  pracsFetched: apiRequests.getIn(['pracSchedule', 'wasFetched'], false),
+  chairsFetched: apiRequests.getIn(['chairsSchedule', 'wasFetched'], false),
+  newWaitlist: featureFlags.getIn(['flags', 'waitlist-2-0']),
+});
 
 export default connect(
   mapStateToProps,
