@@ -15,6 +15,7 @@ const WaitlistTableWithActions = ({
   selectedWaitlistIds,
   toggleAllWaitlistSelection,
   isEveryWaitlistSelected,
+  isAnyWaitlistSelected,
   toggleSingleWaitlistSelection,
   setSelectedWaitlistIds,
 }) => (
@@ -28,7 +29,13 @@ const WaitlistTableWithActions = ({
       <div className={styles.addTo}>
         <DropdownMenu
           labelComponent={props => (
-            <Button {...props} color="white" border="blue" className={styles.headerButtons}>
+            <Button
+              {...props}
+              color="white"
+              border="blue"
+              disabled={!isAnyWaitlistSelected}
+              className={styles.headerButtons}
+            >
               Actions <Icon icon="caret-down" size={0.8} type="solid" />
             </Button>
           )}
@@ -92,6 +99,7 @@ WaitlistTableWithActions.propTypes = {
   timezone: PropTypes.string.isRequired,
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
   isEveryWaitlistSelected: PropTypes.bool.isRequired,
+  isAnyWaitlistSelected: PropTypes.bool.isRequired,
   selectedWaitlistIds: PropTypes.objectOf(PropTypes.bool).isRequired,
   toggleAllWaitlistSelection: PropTypes.func.isRequired,
   toggleSingleWaitlistSelection: PropTypes.func.isRequired,
