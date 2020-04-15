@@ -7,8 +7,9 @@ import { batchUpdateFactory } from './helpers';
 const NextWaitlist = (props) => {
   const batchUpdate = batchUpdateFactory(props.waitlist);
   const [selectedWaitlistIds, setSelectedWaitlistIds] = useState(batchUpdate);
-  const isEveryWaitlistSelected = Object.values(selectedWaitlistIds).every(v => v);
-
+  const waitlistLength = props.waitlist.length;
+  const selectedWaitlistLength = Object.values(selectedWaitlistIds).filter(v => v).length;
+  const isEveryWaitlistSelected = waitlistLength === selectedWaitlistLength;
   const toggleAllWaitlistSelection = () => {
     setSelectedWaitlistIds(batchUpdate(!isEveryWaitlistSelected));
   };
@@ -24,6 +25,7 @@ const NextWaitlist = (props) => {
     <WaitlistTableWithActions
       {...props}
       selectedWaitlistIds={selectedWaitlistIds}
+      isAnyWaitlistSelected={selectedWaitlistLength > 0}
       isEveryWaitlistSelected={isEveryWaitlistSelected}
       toggleAllWaitlistSelection={toggleAllWaitlistSelection}
       toggleSingleWaitlistSelection={toggleSingleWaitlistSelection}
