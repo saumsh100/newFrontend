@@ -8,7 +8,16 @@ import WaitlistRow from './WaitlistRow';
 import { propsGenerator } from './helpers';
 import styles from './tableStyles.scss';
 
-const WaitlistTableWithActions = ({ waitlist, openAddTo, timezone }) => (
+const WaitlistTableWithActions = ({
+  waitlist,
+  openAddTo,
+  timezone,
+  selectedWaitlistIds,
+  toggleAllWaitlistSelection,
+  isEveryWaitlistSelected,
+  toggleSingleWaitlistSelection,
+  setSelectedWaitlistIds,
+}) => (
   <div className={styles.waitList}>
     <div className={styles.headerTable}>
       <h3>
@@ -25,7 +34,7 @@ const WaitlistTableWithActions = ({ waitlist, openAddTo, timezone }) => (
           )}
           className={styles.headerButtons}
         >
-          <Button className={styles.actionItem} onClick={() => this.toggleAction('isTesting')}>
+          <Button className={styles.actionItem} onClick={() => console.log}>
             Send Mass Text
           </Button>
         </DropdownMenu>
@@ -43,9 +52,8 @@ const WaitlistTableWithActions = ({ waitlist, openAddTo, timezone }) => (
       <thead>
         <tr>
           <th width={20} />
-
           <th data-width="sm">
-            <Checkbox checked={false} onChange={console.log} />
+            <Checkbox checked={isEveryWaitlistSelected} onChange={toggleAllWaitlistSelection} />
           </th>
           <th>Date Added</th>
           <th>Patient</th>
@@ -56,13 +64,19 @@ const WaitlistTableWithActions = ({ waitlist, openAddTo, timezone }) => (
           <th>Notes</th>
           <th>Next Appt</th>
           <th data-width="sm">Manage</th>
-
           <th width={20} />
         </tr>
       </thead>
       <tbody>
         {waitlist.sort(SortByCreatedAtDesc).map(props => (
-          <WaitlistRow {...propsGenerator(props, timezone)} />
+          <WaitlistRow
+            {...propsGenerator(props, {
+              timezone,
+              selectedWaitlistIds,
+              toggleSingleWaitlistSelection,
+              setSelectedWaitlistIds,
+            })}
+          />
         ))}
       </tbody>
     </table>
@@ -77,6 +91,11 @@ WaitlistTableWithActions.propTypes = {
   openAddTo: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+  isEveryWaitlistSelected: PropTypes.bool.isRequired,
+  selectedWaitlistIds: PropTypes.objectOf(PropTypes.bool).isRequired,
+  toggleAllWaitlistSelection: PropTypes.func.isRequired,
+  toggleSingleWaitlistSelection: PropTypes.func.isRequired,
+  setSelectedWaitlistIds: PropTypes.func.isRequired,
 };
 
 WaitlistTableWithActions.defaultProps = {

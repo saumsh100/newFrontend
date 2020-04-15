@@ -14,6 +14,8 @@ const WaitlistRow = ({
   note,
   patient,
   PopOverComponent,
+  checked,
+  onChange,
   reasonText,
   times,
 }) => (
@@ -21,7 +23,7 @@ const WaitlistRow = ({
     <td width={20} />
 
     <td className={tableStyles.col} data-width="sm">
-      <Checkbox checked onChange={console.log} />
+      <Checkbox checked={checked} onChange={onChange} />
     </td>
     <td className={tableStyles.col}>{addedDate}</td>
     <td className={tableStyles.col}>
@@ -59,6 +61,8 @@ WaitlistRow.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,
   reasonText: PropTypes.string,
   times: PropTypes.string.isRequired,
+  checked: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 WaitlistRow.defaultProps = {

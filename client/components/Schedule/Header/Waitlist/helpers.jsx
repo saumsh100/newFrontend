@@ -149,6 +149,22 @@ export const waitlistDatesFormatter = (days) => {
 };
 
 /**
+ * Converts an array of waitlists into an key-value object,
+ * by default the value is false.
+ *
+ * @return {object}
+ * @param waitlist
+ */
+export const batchUpdateFactory = waitlist => (state = false) =>
+  waitlist.reduce(
+    (acc, curr) => ({
+      ...acc,
+      [curr.id]: state,
+    }),
+    {},
+  );
+
+/**
  * Standardize props regardless if the input is a PatientUser or a Patient.
  *
  * @param patient
@@ -160,6 +176,9 @@ export const waitlistDatesFormatter = (days) => {
  * @param daysOfTheWeek
  * @param props
  * @param timezone
+ * @param selectedWaitlistIds
+ * @param toggleSingleWaitlistSelection
+ * @param parentProps
  * @return {{
  * times: string,
  * addedDate: string,
@@ -171,15 +190,18 @@ export const waitlistDatesFormatter = (days) => {
  * }}
  */
 export const propsGenerator = (
-  { patient, id, createdAt, patientUser, endDate, availableTimes, daysOfTheWeek, ...props },
-  timezone,
+  { patient, ccId, createdAt, patientUser, endDate, availableTimes, daysOfTheWeek, ...props },
+  { timezone, selectedWaitlistIds, toggleSingleWaitlistSelection, ...parentProps },
 ) => {
   const hasTimes = availableTimes.length > 0;
   const isPatientUser = !!patientUser;
   const nextAppt = isPatientUser ? endDate : patient?.nextApptDate;
   return {
     ...props,
-    key: id,
+    ...parentProps,
+    key: ccId,
+    checked: selectedWaitlistIds[ccId],
+    onChange: () => toggleSingleWaitlistSelection(ccId),
     addedDate: dateFormatter(createdAt, '', 'YYYY/MM/DD'),
     dates: waitlistDatesFormatter(daysOfTheWeek),
     nextApptDate: nextAppt ? dateFormatter(nextAppt, '', 'YYYY/MM/DD') : null,

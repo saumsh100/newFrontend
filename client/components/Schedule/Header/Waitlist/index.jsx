@@ -7,8 +7,8 @@ import {
   RemoveWaitSpotSubscription,
 } from '../../../GraphQLWaitlist';
 import graphqlRefetcher from '../../../../util/graphqlRefetcher';
-import WaitlistTableWithActions from './WaitlistTableWithActions';
 import WaitlistTable from './WaitlistTable';
+import NextWaitlist from './NextWaitlist';
 
 const WaitlistGQLEnhanced = ({ newWaitlist, accountId, ...props }) => (
   <FetchWaitlist newWaitlist={newWaitlist}>
@@ -43,7 +43,7 @@ const WaitlistGQLEnhanced = ({ newWaitlist, accountId, ...props }) => (
         };
       });
       return newWaitlist ? (
-        <WaitlistTableWithActions waitlist={waitSpots} {...props} />
+        <NextWaitlist waitlist={waitSpots} {...props} />
       ) : (
         <WaitlistTable waitlist={waitSpots} {...props} />
       );
