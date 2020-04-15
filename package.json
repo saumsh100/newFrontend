@@ -37,7 +37,7 @@
     "electron:publish:dev": "npm run electron:publish:win:dev && npm run electron:publish:mac:dev",
     "electron:publish:prod": "npm run electron:publish:win:prod && npm run electron:publish:mac:prod",
     "electron:build:publish": "npm run client:build:prod && npm run electron:publish:prod",
-    "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write"
+    "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write && stylelint --fix"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.0.1",
@@ -186,6 +186,9 @@
     "react-test-renderer": "^16.9.0",
     "react-testing-library": "^5.1.0",
     "redux-mock-store": "^1.5.3",
+    "stylelint": "^13.3.2",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-order": "^4.0.0",
     "supertest": "^3.3.0",
     "twilio-run": "^1.0.1"
   }

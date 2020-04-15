@@ -1,120 +1,85 @@
 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import RDropdownMenu, { NestedDropdownMenu as RNestedDropdownMenu } from 'react-dd-menu';
-import Button from '../Button';
 import Icon from '../Icon';
 import { ListItem } from '../List';
 import styles from './styles.scss';
 
-export class DropdownMenu extends Component {
-  constructor(props) {
-    super(props);
+export const DropdownMenu = ({
+  children,
+  className,
+  labelProps,
+  closeOnInsideClick,
+  align,
+  upwards,
+  ...props
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-    this.state = {
-      isOpen: false,
-    };
+  const toggle = () => setIsOpen(!isOpen);
 
-    this.toggle = this.toggle.bind(this);
-    this.close = this.close.bind(this);
-  }
-
-  toggle() {
-    this.setState({ isOpen: !this.state.isOpen });
-  }
-
-  close(e) {
-    const className = e.target.className;
-
+  const close = ({ target }) => {
     const regTest = /daypicker/i;
 
-    if (!regTest.test(className)) {
-      this.setState({ isOpen: false });
+    if (!regTest.test(target.className)) {
+      setIsOpen(false);
     }
-  }
+  };
 
-  render() {
-    const {
-      children,
-      className,
-      labelProps,
-      closeOnInsideClick,
-      align,
-      upwards,
-    } = this.props;
-    const classes = classNames(className, styles.dropdownContainer);
+  const menuOptions = {
+    children,
+    isOpen,
+    close,
+    toggle: <props.labelComponent {...labelProps} onClick={toggle} />,
+    closeOnInsideClick,
+    className: classNames(className, styles.dropdownContainer),
+    align: align || 'right',
+    upwards,
+  };
 
-    const menuOptions = {
-      // Required
-      children,
-      isOpen: this.state.isOpen,
-      close: this.close,
-      toggle: (
-        <this.props.labelComponent
-          {...labelProps}
-          onClick={this.toggle}
-          data-test-id={this.props['data-test-id']}
-        />
-      ),
-
-      // Default
-      closeOnInsideClick,
-      className: classes,
-      align: align || 'right',
-      upwards,
-    };
-
-    return <RDropdownMenu {...menuOptions} />;
-  }
-}
+  return <RDropdownMenu {...menuOptions} />;
+};
 
 DropdownMenu.defaultProps = {
   labelProps: {},
+  upwards: false,
+  className: '',
+  closeOnInsideClick: true,
+  align: '',
 };
 
 DropdownMenu.propTypes = {
-  labelProps: PropTypes.object,
+  labelProps: PropTypes.objectOf(PropTypes.any),
   closeOnInsideClick: PropTypes.bool,
   align: PropTypes.string,
   upwards: PropTypes.bool,
+  className: PropTypes.string,
+  children: PropTypes.node.isRequired,
 };
 
-export function MenuItem(props) {
-  let icon = null;
-  if (props.icon) {
-    icon = <Icon icon={props.icon} className={styles.menuIcon} />;
-  }
-
-  const classes = classNames(props.className, styles.menuItemLi);
-  return (
-    <ListItem
-      className={classes}
-      onClick={props.onClick}
-      data-test-id={props['data-test-id']}
-    >
-      <div className={`dd-item-ignore ${styles.menuItemContent}`}>
-        {icon}
-        {props.children}
-      </div>
-    </ListItem>
-  );
-}
-
-export function MenuSeparator() {
-  return <li role="separator" className="separator" />;
-}
-
-export function NestedDropdownMenu(props) {
-  return <RNestedDropdownMenu {...props} />;
-}
-
-DropdownMenu.propTypes = {};
+export const MenuItem = ({ icon, children, className, onClick }) => (
+  <ListItem className={classNames(className, styles.menuItemLi)} onClick={onClick}>
+    <div className={`dd-item-ignore ${styles.menuItemContent}`}>
+      {icon ? <Icon icon={icon} className={styles.menuIcon} /> : null}
+      {children}
+    </div>
+  </ListItem>
+);
 
 MenuItem.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
   icon: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
 };
 
-MenuSeparator.propTypes = {};
+MenuItem.defaultProps = {
+  icon: '',
+  className: '',
+};
 
-NestedDropdownMenu.propTypes = {};
+export const MenuSeparator = () => <li role="separator" className="separator" />;
+
+export const NestedDropdownMenu = props => <RNestedDropdownMenu {...props} />;

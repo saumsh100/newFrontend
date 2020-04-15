@@ -1,15 +1,17 @@
 
 import React, { Component } from 'react';
-import moment from 'moment';
 import classnames from 'classnames';
+import { bindActionCreators } from 'redux';
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import Popover from 'react-popover';
 import PropTypes from 'prop-types';
-import Practitioner from '../../../entities/models/Practitioners';
-import RequestPopover from '../../Requests/RequestPopover';
-import styles from '../PatientPopover/styles.scss';
+import { patientShape } from '../PropTypeShapes';
+import { getOrCreateChatForPatient } from '../../../thunks/chat';
+import styles from './styles.scss';
+import PatientUserProfile from './PatientUserProfile';
 
-class RequestPopoverLoader extends Component {
+class PatientUserPopover extends Component {
   constructor(props) {
     super(props);
     this.state = { isOpen: false };
@@ -37,47 +39,34 @@ class RequestPopoverLoader extends Component {
     const {
       placement,
       children,
+      patient,
       closePopover,
       patientStyles,
       isNoteFormActive,
       isFollowUpsFormActive,
       isRecallsFormActive,
-      practitioners,
-      data,
     } = this.props;
-
-    if (!data) {
+    const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
+    if (!patient) {
       return null;
     }
-    const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
-    const time = `${moment(data.startDate).format('LT')} - ${moment(data.endDate).format('LT')}`;
-    const practitionerEntity = data.practitioner && practitioners.get(data.practitioner.id);
 
     return (
       <Popover
         {...this.props}
         isOpen={this.state.isOpen && !closePopover}
         body={[
-          <RequestPopover
-            time={time}
-            service={data.service.name}
-            note={data.note}
-            insuranceCarrier={data.insuranceCarrier}
-            insuranceMemberId={data.insuranceMemberId}
-            insuranceGroupId={data.insuranceGroupId}
-            patient={data.patientUser}
-            practitioner={practitionerEntity}
-            request={data}
+          <PatientUserProfile
+            isPatientUser
             closePopover={() => this.setOpen(false)}
-            requestingUser={data.requestingUser}
-            showButton={false}
+            patient={patient}
           />,
         ]}
         preferPlace={placement || 'right'}
         tipSize={12}
         onOuterAction={() => !isAnyFormActive && this.setOpen(false)}
       >
-        <div className={classnames(styles.requestLink, patientStyles)}>
+        <div className={classnames(styles.patientLink, patientStyles)}>
           {React.Children.map(children, patientLink =>
             React.cloneElement(patientLink, {
               onClick: (e) => {
@@ -91,10 +80,12 @@ class RequestPopoverLoader extends Component {
   }
 }
 
-RequestPopoverLoader.propTypes = {
+PatientUserPopover.propTypes = {
   children: PropTypes.element.isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
   className: PropTypes.string,
   placement: PropTypes.string,
+  isPatientUser: PropTypes.bool,
   closePopover: PropTypes.bool,
   push: PropTypes.func.isRequired,
   scrollId: PropTypes.string,
@@ -104,25 +95,34 @@ RequestPopoverLoader.propTypes = {
   isNoteFormActive: PropTypes.bool.isRequired,
   isFollowUpsFormActive: PropTypes.bool.isRequired,
   isRecallsFormActive: PropTypes.bool.isRequired,
-  practitioners: PropTypes.arrayOf(Practitioner).isRequired,
-  data: PropTypes.shape({}),
 };
 
-RequestPopoverLoader.defaultProps = {
+PatientUserPopover.defaultProps = {
+  isPatientUser: false,
   closePopover: false,
   scrollId: '',
   placement: 'right',
   className: styles.patientPopover,
-  patientStyles: '',
+  patientStyles: styles.patientPopoverTitle,
   patientChat: null,
-  data: null,
 };
 
-const mapStateToProps = ({ patientTable, entities }) => ({
-  practitioners: entities.getIn(['practitioners', 'models']),
+const mapStateToProps = ({ patientTable }) => ({
   isNoteFormActive: patientTable.get('isNoteFormActive'),
   isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
   isRecallsFormActive: patientTable.get('isRecallsFormActive'),
 });
 
-export default connect(mapStateToProps)(RequestPopoverLoader);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      push,
+      getOrCreateChatForPatient,
+    },
+    dispatch,
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientUserPopover);

@@ -14,6 +14,7 @@ import { availabilitiesGroupedByPeriod } from '../../../../Widget/Booking/Review
 import PatientSearch from '../../../../PatientSearch';
 import { loadWeeklySchedule } from '../../../../../thunks/waitlist';
 import Loading from '../../../../library/Loading';
+import EnabledFeature from '../../../../library/EnabledFeature';
 import styles from './styles.scss';
 
 const timeFrameOptions = ['morning', 'afternoon', 'evening'];
@@ -426,7 +427,6 @@ const mapStateToProps = ({ auth, availabilities, entities }) => {
   return {
     accountId: auth.get('accountId'),
     availabilities: availabilitiesGrouped,
-    officeHours: weeklySchedule && weeklySchedule.toJS(),
     timezone: activeAccount.get('timezone'),
     waitSpot: availabilities.get('waitSpot'),
   };
@@ -485,10 +485,23 @@ SelectedPatient.propTypes = {
   }).isRequired,
 };
 
-export default props => (
-  <CreateWaitSpot>
-    {createWaitSpotHandler => (
-      <AddToWaitlistEnhanced createWaitSpotHandler={createWaitSpotHandler} {...props} />
-    )}
-  </CreateWaitSpot>
-);
+export default props =>
+  props.active && (
+    <EnabledFeature
+      predicate={({ flags }) => flags.get('waitlist-2-0')}
+      render={() => (
+        <CreateWaitSpot>
+          {createWaitSpotHandler => (
+            <AddToWaitlistEnhanced createWaitSpotHandler={createWaitSpotHandler} {...props} />
+          )}
+        </CreateWaitSpot>
+      )}
+      fallback={() => (
+        <CreateWaitSpot>
+          {createWaitSpotHandler => (
+            <AddToWaitlistEnhanced createWaitSpotHandler={createWaitSpotHandler} {...props} />
+          )}
+        </CreateWaitSpot>
+      )}
+    />
+  );

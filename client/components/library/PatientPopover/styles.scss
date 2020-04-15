@@ -22,9 +22,15 @@
     color: lighten($primary-blue, 10%);
   }
 }
+.patientPopover {
+  z-index: 9999;
+  & > :global(svg.Popover-tip) {
+    fill: white;
+  }
+}
 
-.patientPopover > :global(svg.Popover-tip) {
-  fill: white;
+.patientPopoverTitle {
+  font-family: $medium-font;
 }
 
 .card {

@@ -244,11 +244,10 @@ function mapStateToProps({ apiRequests, entities, schedule, auth }) {
   const accountsFetched = apiRequests.get('accountsSchedule')
     ? apiRequests.get('accountsSchedule').wasFetched
     : null;
-
   return {
     schedule,
-    currentDate: schedule.toJS().scheduleDate,
-    selectedAppointment: schedule.toJS().selectedAppointment,
+    currentDate: schedule.get('scheduleDate'),
+    selectedAppointment: schedule.get('selectedAppointment'),
     practitioners: entities.get('practitioners'),
     appointments: entities.get('appointments'),
     events: entities.get('events'),
@@ -283,8 +282,12 @@ function mapDispatchToProps(dispatch) {
 
 ScheduleContainer.propTypes = {
   schedule: PropTypes.instanceOf(Map).isRequired,
-  practitioners: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
-  currentDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(moment)]),
+  practitioners: PropTypes.instanceOf(Map).isRequired,
+  currentDate: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Date),
+    PropTypes.instanceOf(moment),
+  ]),
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   events: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   services: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
@@ -312,7 +315,7 @@ ScheduleContainer.propTypes = {
 };
 
 ScheduleContainer.defaultProps = {
-  currentDate: new Date(),
+  currentDate: new Date().toISOString(),
   appsFetched: false,
   eventsFetched: false,
   pracsFetched: false,

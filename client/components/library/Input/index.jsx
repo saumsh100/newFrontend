@@ -79,7 +79,7 @@ Input.propTypes = {
   label: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   theme: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  refCallBack: PropTypes.func,
+  refCallBack: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   type: PropTypes.string,
   icon: PropTypes.string,
   iconType: PropTypes.string,

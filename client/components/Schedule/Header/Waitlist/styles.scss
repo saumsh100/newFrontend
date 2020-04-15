@@ -1,4 +1,5 @@
-@import '../../../../ui.scss';
+@import '../../../../ui';
+@import '../../../../ui-kit';
 
 .waitListItem:hover .checkBox {
   opacity: 1;
@@ -81,7 +82,7 @@
 
 .waitList {
   min-height: 267px;
-  width: 600px;
+  width: 100%;
   composes: fontDefault from '../../../../fonts.scss';
 }
 
@@ -231,10 +232,6 @@
 
 .removeBorder {
   border-bottom: 0;
-}
-
-.patientPopover {
-  z-index: 9999;
 }
 
 .listItem {

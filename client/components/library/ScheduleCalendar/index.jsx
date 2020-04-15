@@ -211,6 +211,7 @@ class ScheduleCalendar extends Component {
                 disabled: calendar.closedDay,
                 selected: calendar.selectedDay,
                 today: calendar.day,
+                navButtonInteractionDisabled: calendar.navButtonInteractionDisabled,
               }}
             />
             {isDrawerExpanded && (

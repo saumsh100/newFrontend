@@ -1,0 +1,7 @@
+@import '../PatientPopover/styles';
+
+.body {
+  @extend .body;
+  min-height: 150px;
+  padding: 15px;
+}

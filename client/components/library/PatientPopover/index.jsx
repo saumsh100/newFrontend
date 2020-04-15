@@ -131,7 +131,7 @@ PatientPopover.defaultProps = {
   scrollId: '',
   placement: 'right',
   className: styles.patientPopover,
-  patientStyles: '',
+  patientStyles: styles.patientPopoverTitle,
   patientChat: null,
 };
 

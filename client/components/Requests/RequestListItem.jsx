@@ -32,11 +32,7 @@ class RequestListItem extends Component {
 
   renderListItem({ patientUser, data, request, requestingUser, requestType, openRequest }) {
     return (
-      <ListItem
-        className={styles.requestListItem}
-        data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}AppointmentRequest`}
-        onClick={() => openRequest(request.id)}
-      >
+      <ListItem className={styles.requestListItem} onClick={() => openRequest(request.id)}>
         <MonthDay month={data.month} day={data.day} type={requestType} />
         <RequestData
           time={data.time}
@@ -131,7 +127,7 @@ RequestListItem.propTypes = {
   request: PropTypes.instanceOf(Request).isRequired,
   service: PropTypes.instanceOf(Service).isRequired,
   patientUser: PropTypes.instanceOf(PatientUser).isRequired,
-  practitioner: PropTypes.instanceOf(Practitioner).isRequired,
+  practitioner: PropTypes.instanceOf(Practitioner),
   requestId: PropTypes.string,
   popoverRight: PropTypes.string,
   requestingUser: PropTypes.instanceOf(PatientUser),
@@ -142,6 +138,7 @@ RequestListItem.propTypes = {
 
 RequestListItem.defaultProps = {
   popoverRight: '',
+  practitioner: null,
   requestingUser: null,
   requestId: '',
 };

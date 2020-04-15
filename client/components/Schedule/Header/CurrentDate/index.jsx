@@ -1,38 +1,39 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import styles from './styles.scss';
 
-const CurrentDate = (props) => {
-  const { currentDate, leftColumnWidth, children } = props;
+const getDateValues = (value, mDate = moment(value)) => ({
+  weekday: mDate.format('dddd'),
+  date: mDate.format('DD'),
+  month: mDate.format('MMM'),
+});
 
-  const dayOfTheWeek = moment(currentDate).format('dddd');
-  const dayOftheMonth = currentDate.date();
-  const currentMonth = currentDate.format('MMM');
-
-  const monthDayStyle = {
-    width: leftColumnWidth,
-    minWidth: leftColumnWidth,
-  };
-
+const CurrentDate = ({ currentDate, leftColumnWidth, children }) => {
+  const { date, month, weekday } = getDateValues(currentDate);
   return (
     <div className={styles.container}>
-      <div className={styles.monthDay} style={monthDayStyle}>
-        <div className={styles.number}>
-          {dayOftheMonth > 9 ? dayOftheMonth : `0${dayOftheMonth}`}
-        </div>
-        <div className={styles.month}>{currentMonth}</div>
+      <div
+        className={styles.monthDay}
+        style={{
+          width: leftColumnWidth,
+          minWidth: leftColumnWidth,
+        }}
+      >
+        <div className={styles.number}>{date}</div>
+        <div className={styles.month}>{month}</div>
       </div>
-      <div className={styles.dayOfWeek}>{dayOfTheWeek}</div>
+      <div className={styles.dayOfWeek}>{weekday}</div>
       {children}
     </div>
   );
 };
 
 CurrentDate.propTypes = {
-  currentDate: PropTypes.object,
-  leftColumnWidth: PropTypes.number,
+  currentDate: PropTypes.string.isRequired,
+  leftColumnWidth: PropTypes.number.isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 };
 
-export default CurrentDate;
+export default React.memo(CurrentDate);

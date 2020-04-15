@@ -113,7 +113,6 @@ class TopBar extends Component {
       isSearchCollapsed,
     } = this.props;
 
-    // TODO: for some reason the DashbaordApp Container renders even if not logged in...
     if (!isAuth) return null;
 
     const topBarClassName = classNames(
@@ -121,20 +120,20 @@ class TopBar extends Component {
       isCollapsed ? styles.topBarContainerCollapsed : styles.topBarContainerUnCollapsed,
     );
 
-    const renderAccountItem = (account) => {
-      const isActive = account.id === activeAccount.id;
+    const renderAccountItem = ({ name, id }) => {
+      const isActive = id === activeAccount.id;
       const setActive = () => {
-        this.props.switchActiveAccount(account.id, location.pathname);
+        isActive && this.props.switchActiveAccount(id, location.pathname);
       };
 
       return (
         <MenuItem
-          key={account.id}
+          key={id}
           className={isActive ? styles.menuItemSelected : null}
-          onClick={isActive ? false : setActive}
-          data-test-id={`option_${account.name}`}
+          onClick={setActive}
+          data-test-id={`option_${name}`}
         >
-          {account.name}
+          {name}
         </MenuItem>
       );
     };
