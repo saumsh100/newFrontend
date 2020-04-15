@@ -12,9 +12,14 @@ import Waitlist from './Waitlist';
 import CurrentDate from './CurrentDate';
 import { setScheduleView } from '../../../actions/schedule';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
-import { Delete as DeleteWaitSpot } from '../../GraphQLWaitlist';
+import { Delete as DeleteWaitSpot, MassDelete } from '../../GraphQLWaitlist';
 import EnabledFeature from '../../library/EnabledFeature';
 import styles from './styles.scss';
+
+const confirmDelete = ids =>
+  window.confirm(
+    `Are you sure you want to remove ${ids.length > 1 ? 'these wait spots' : 'this wait spot'} ?`,
+  );
 
 class Header extends Component {
   constructor(props) {
@@ -57,11 +62,17 @@ class Header extends Component {
     this.setState({ showAddToWaitlist: !this.state.showAddToWaitlist });
   }
 
+  removeMultipleWaitSpots(deleteMutation) {
+    return ({ ids }) => {
+      if (confirmDelete(ids)) {
+        deleteMutation({ variables: { input: { ids } } });
+      }
+    };
+  }
+
   removeWaitSpot(deleteMutation) {
     return ({ id }) => {
-      const confirmDelete = window.confirm('Are you sure you want to remove this wait spot?');
-
-      if (confirmDelete) {
+      if (confirmDelete([id])) {
         deleteMutation({ variables: { input: { id } } });
       }
     };
@@ -186,16 +197,21 @@ class Header extends Component {
               onOverlayClick={this.toggleWaitlist}
               type={newWaitlist ? 'large' : 'medium'}
             >
-              <DeleteWaitSpot>
-                {removeCallback => (
-                  <Waitlist
-                    newWaitlist={newWaitlist}
-                    removeWaitSpot={this.removeWaitSpot(removeCallback)}
-                    openAddTo={this.openAddToWaitlist}
-                    accountId={this.props.accountId}
-                  />
+              <MassDelete>
+                {massRemoveCallback => (
+                  <DeleteWaitSpot>
+                    {removeCallback => (
+                      <Waitlist
+                        newWaitlist={newWaitlist}
+                        removeWaitSpot={this.removeWaitSpot(removeCallback)}
+                        removeMultipleWaitSpots={this.removeMultipleWaitSpots(massRemoveCallback)}
+                        openAddTo={this.openAddToWaitlist}
+                        accountId={this.props.accountId}
+                      />
+                    )}
+                  </DeleteWaitSpot>
                 )}
-              </DeleteWaitSpot>
+              </MassDelete>
             </DialogBox>
             <AddToWaitlist
               toggleModal={this.openAddToWaitlist}

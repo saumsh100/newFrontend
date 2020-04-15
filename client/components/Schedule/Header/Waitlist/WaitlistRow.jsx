@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Button } from '../../../library';
+import { Checkbox, Button, DropdownMenu } from '../../../library';
 import EllipsisIcon from './EllipsisIcon';
 import { patientShape } from '../../../library/PropTypeShapes';
 import tableStyles from './tableStyles.scss';
@@ -17,6 +17,7 @@ const WaitlistRow = ({
   checked,
   onChange,
   reasonText,
+  onRemove,
   times,
 }) => (
   <tr>
@@ -40,9 +41,20 @@ const WaitlistRow = ({
     <td className={tableStyles.col}>{note}</td>
     <td className={tableStyles.col}>{nextApptDate}</td>
     <td className={tableStyles.col} data-width="sm">
-      <Button className={tableStyles.ellipsisButton}>
-        <EllipsisIcon />
-      </Button>
+      <DropdownMenu
+        labelComponent={props => (
+          <Button {...props} className={tableStyles.ellipsisButton}>
+            <EllipsisIcon />
+          </Button>
+        )}
+      >
+        <Button className={tableStyles.actionItem} onClick={() => console.log}>
+          Edit
+        </Button>
+        <Button className={tableStyles.actionItem} onClick={onRemove}>
+          Delete
+        </Button>
+      </DropdownMenu>
     </td>
 
     <td width={20} />
@@ -61,6 +73,7 @@ WaitlistRow.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,
   reasonText: PropTypes.string,
   times: PropTypes.string.isRequired,
+  onRemove: PropTypes.func.isRequired,
   checked: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
 };

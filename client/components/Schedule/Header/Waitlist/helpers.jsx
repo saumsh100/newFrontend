@@ -176,9 +176,8 @@ export const batchUpdateFactory = waitlist => (state = false) =>
  * @param daysOfTheWeek
  * @param props
  * @param timezone
- * @param selectedWaitlistIds
+ * @param removeWaitSpot
  * @param toggleSingleWaitlistSelection
- * @param parentProps
  * @return {{
  * times: string,
  * addedDate: string,
@@ -189,19 +188,29 @@ export const batchUpdateFactory = waitlist => (state = false) =>
  * key: string
  * }}
  */
-export const propsGenerator = (
-  { patient, ccId, createdAt, patientUser, endDate, availableTimes, daysOfTheWeek, ...props },
-  { timezone, selectedWaitlistIds, toggleSingleWaitlistSelection, ...parentProps },
-) => {
+export const propsGenerator = ({
+  patient,
+  ccId,
+  createdAt,
+  patientUser,
+  endDate,
+  availableTimes,
+  daysOfTheWeek,
+  timezone,
+  selectedWaitlist,
+  removeWaitSpot,
+  toggleSingleWaitlistSelection,
+  ...props
+}) => {
   const hasTimes = availableTimes.length > 0;
   const isPatientUser = !!patientUser;
   const nextAppt = isPatientUser ? endDate : patient?.nextApptDate;
   return {
     ...props,
-    ...parentProps,
     key: ccId,
-    checked: selectedWaitlistIds[ccId],
+    checked: selectedWaitlist[ccId],
     onChange: () => toggleSingleWaitlistSelection(ccId),
+    onRemove: () => removeWaitSpot({ id: ccId }),
     addedDate: dateFormatter(createdAt, '', 'YYYY/MM/DD'),
     dates: waitlistDatesFormatter(daysOfTheWeek),
     nextApptDate: nextAppt ? dateFormatter(nextAppt, '', 'YYYY/MM/DD') : null,

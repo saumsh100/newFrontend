@@ -22,7 +22,6 @@ const Routes = {
   requests: lazy(() => import('./Dashboard/Requests'), true),
   shortcuts: lazy(() => import('../components/Shortcuts'), true),
   intercom: lazy(() => import('../components/EmbeddedIntercom'), true),
-  waitList: lazy(() => import('../components/Waitlist'), true),
 };
 
 const HubRouter = (properties) => {

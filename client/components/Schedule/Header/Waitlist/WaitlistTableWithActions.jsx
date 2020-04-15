@@ -11,13 +11,11 @@ import styles from './tableStyles.scss';
 const WaitlistTableWithActions = ({
   waitlist,
   openAddTo,
-  timezone,
-  selectedWaitlistIds,
   toggleAllWaitlistSelection,
   isEveryWaitlistSelected,
   isAnyWaitlistSelected,
-  toggleSingleWaitlistSelection,
-  setSelectedWaitlistIds,
+  removeMultipleWaitSpots,
+  ...parentProps
 }) => (
   <div className={styles.waitList}>
     <div className={styles.headerTable}>
@@ -43,6 +41,9 @@ const WaitlistTableWithActions = ({
         >
           <Button className={styles.actionItem} onClick={() => console.log}>
             Send Mass Text
+          </Button>
+          <Button className={styles.actionItem} onClick={removeMultipleWaitSpots}>
+            Delete
           </Button>
         </DropdownMenu>
         <Button
@@ -77,11 +78,9 @@ const WaitlistTableWithActions = ({
       <tbody>
         {waitlist.sort(SortByCreatedAtDesc).map(props => (
           <WaitlistRow
-            {...propsGenerator(props, {
-              timezone,
-              selectedWaitlistIds,
-              toggleSingleWaitlistSelection,
-              setSelectedWaitlistIds,
+            {...propsGenerator({
+              ...props,
+              ...parentProps,
             })}
           />
         ))}
@@ -96,14 +95,11 @@ export default connect(mapStateToProps)(WaitlistTableWithActions);
 
 WaitlistTableWithActions.propTypes = {
   openAddTo: PropTypes.func.isRequired,
-  timezone: PropTypes.string.isRequired,
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
   isEveryWaitlistSelected: PropTypes.bool.isRequired,
   isAnyWaitlistSelected: PropTypes.bool.isRequired,
-  selectedWaitlistIds: PropTypes.objectOf(PropTypes.bool).isRequired,
   toggleAllWaitlistSelection: PropTypes.func.isRequired,
-  toggleSingleWaitlistSelection: PropTypes.func.isRequired,
-  setSelectedWaitlistIds: PropTypes.func.isRequired,
+  removeMultipleWaitSpots: PropTypes.func.isRequired,
 };
 
 WaitlistTableWithActions.defaultProps = {
