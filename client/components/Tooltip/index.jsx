@@ -19,7 +19,7 @@ class Tooltip extends Component {
   }
 
   render() {
-    const { children, body, placement } = this.props;
+    const { children, body, placement, tipSize } = this.props;
     return (
       <Popover
         className={styles.tooltip_Popover}
@@ -30,7 +30,7 @@ class Tooltip extends Component {
           </Card>,
         ]}
         preferPlace={placement || 'right'}
-        tipSize={5}
+        tipSize={tipSize}
         onOuterAction={() => this.setOpen(false)}
       >
         <div
@@ -49,10 +49,12 @@ Tooltip.propTypes = {
   children: PropTypes.node.isRequired,
   body: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   placement: PropTypes.string,
+  tipSize: PropTypes.number,
 };
 
 Tooltip.defaultProps = {
   placement: '',
+  tipSize: 5,
 };
 
 export default Tooltip;

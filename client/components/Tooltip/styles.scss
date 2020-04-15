@@ -3,6 +3,9 @@
 .tooltip {
   cursor: pointer;
   margin: 0 4px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tooltip_PopoverBody {
@@ -12,6 +15,10 @@
   border-radius: 4px;
   max-width: 300px;
   box-sizing: border-box;
+}
+
+.tooltip_Popover {
+  z-index: 999999;
 }
 
 .tooltip_Popover > :global(svg.Popover-tip) {

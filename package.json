@@ -37,7 +37,8 @@
     "electron:publish:dev": "npm run electron:publish:win:dev && npm run electron:publish:mac:dev",
     "electron:publish:prod": "npm run electron:publish:win:prod && npm run electron:publish:mac:prod",
     "electron:build:publish": "npm run client:build:prod && npm run electron:publish:prod",
-    "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write && stylelint --fix"
+    "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write",
+    "format:css": "stylelint --fix"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.0.1",

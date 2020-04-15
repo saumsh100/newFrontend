@@ -1,0 +1,118 @@
+.draftMessageContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  text-align: left;
+}
+
+.responseMessageContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  text-align: left;
+}
+
+.responsePreviewWrapper {
+  margin: 0 40px;
+}
+
+.draftMessageWrapper {
+  display: flex;
+  width: 100%;
+  padding: 0 40px;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+.columnLabel {
+  align-self: flex-start;
+  color: rgb(149, 149, 149);
+  font-size: 13px;
+  font-weight: 500;
+  height: 16px;
+  margin-bottom: 7px;
+}
+
+.columnBody {
+  background: rgb(244, 244, 244);
+  height: 263px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.textArea {
+  resize: none;
+  border: none;
+  color: rgb(46, 56, 69);
+  outline: none;
+  background: rgb(244, 244, 244);
+  width: 90%;
+  height: 80%;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.footer {
+  border-top: 1px solid rgb(244, 244, 244);
+  margin-top: auto;
+  height: 73px;
+  display: flex;
+  padding: 0 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.buttonWrapper {
+  margin: 0 10px;
+}
+
+.redirect {
+  margin-top: 24px;
+  margin-left: 18px;
+  color: rgb(32, 100, 119);
+  font-family: Gotham-Medium;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+}
+
+.heading {
+  color: #2e3845;
+  font-family: Gotham-Medium;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 15px 0 20px 40px;
+}
+
+.patientName {
+  margin: 5px 16px 10px 8px;
+  &:last-child {
+    margin-bottom: 5px;
+  }
+}
+
+.patientTooltip {
+  color: rgb(32, 100, 119);
+}
+
+.legend {
+  color: rgb(149, 149, 149);
+  font-family: Gotham-Book;
+  font-size: 11px;
+  font-weight: 300;
+  margin: 8px 0;
+}
+
+.iconWrapper {
+  margin-right: 8px;
+}

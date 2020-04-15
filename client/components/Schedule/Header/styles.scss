@@ -10,6 +10,10 @@
 .dialogBodyList {
   padding: 0;
   overflow: unset;
+  min-height: 629px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .headerContainer {
@@ -26,7 +30,6 @@
   color: $primary-darkgrey;
   justify-content: space-between;
   margin-right: 10px;
-
   &_text {
     padding-right: 35px;
   }
