@@ -1,41 +1,51 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import Popover from 'react-popover';
 import PropTypes from 'prop-types';
-import Tooltip from '../../../../Tooltip';
 import Patient from '../../../../../entities/models/Patient';
+import { Button } from '../../../../library';
 import styles from './styles.scss';
 
-const PatientTooltip = ({ patients }) => {
-  const len = patients.length;
+const PatientTooltip = ({ patients, suffix }) => {
+  const { length } = patients;
+  const [isOpen, setIsOpen] = useState(false);
 
-  if (len === 0) return null;
+  const toggleIsOpen = () => setIsOpen(prevState => !prevState);
   return (
-    <Tooltip
-      body={
-        <>
-          {patients.map(entity => (
-            <div className={styles.patientName} key={entity.id}>
-              {entity.getFullName()}
-            </div>
-          ))}
-        </>
-      }
-      placement="below"
-      tipSize={0.01}
-    >
-      <span className={styles.patientTooltip}>
-        {len} patient{len > 1 ? 's' : null}
-      </span>
-    </Tooltip>
+    <div className={styles.patientWrapper}>
+      <Popover
+        isOpen={isOpen}
+        body={
+          <div className={styles.tooltipWrapper}>
+            {patients.map(({ patientData }) => (
+              <div className={styles.patientName} key={patientData.id}>
+                {`${patientData.firstName} ${patientData.lastName}`}
+              </div>
+            ))}
+          </div>
+        }
+        preferPlace="below"
+        tipSize={0.01}
+        className={styles.tooltip_Popover}
+        onOuterAction={toggleIsOpen}
+      >
+        <Button className={styles.patientTooltip} onClick={() => setIsOpen(true)}>
+          {length} patient{length > 1 ? 's' : null}
+        </Button>
+      </Popover>
+      {suffix}
+    </div>
   );
 };
 
 PatientTooltip.propTypes = {
   patients: PropTypes.arrayOf(PropTypes.instanceOf(Patient)),
+  suffix: PropTypes.string,
 };
 
 PatientTooltip.defaultProps = {
   patients: [],
+  suffix: '',
 };
 
 export default PatientTooltip;

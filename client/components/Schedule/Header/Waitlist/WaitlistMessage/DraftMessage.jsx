@@ -1,48 +1,28 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import groupBy from 'lodash/groupBy';
+import classNames from 'classnames';
 import PatientTooltip from './PatientTooltip';
 import PreviewMessage from './PreviewMessage';
-import mockedWaitSpots from './mockedData';
 import { Button, Icon } from '../../../../library';
-import Patient from '../../../../../entities/models/Patient';
-import { WAITLIST_STATE } from '../index';
 import styles from './styles.scss';
 
+const MAX_CHARACTERS = 160;
+
 const DraftMessage = ({
-  waitSpots,
-  toggleWaitlist,
-  setWaitListState,
+  conversionAnalyzer,
   textMessage,
   setTextMessage,
+  handleSendMessage,
+  goToWaitlistTable,
 }) => {
-  const patients = waitSpots.map(({ patient }) => patient);
-  const patientsWithPhone = patients.filter(({ cellPhoneNumber }) => cellPhoneNumber);
-  const patientsWithoutPhone = patients.filter(({ cellPhoneNumber }) => !cellPhoneNumber);
+  const { success, errors } = conversionAnalyzer;
+  const { 1200: noPhoneNumber = [], 2200: smsDisabled = [] } = groupBy(errors, 'errorCode');
+  const isMessageToLong = textMessage.length > MAX_CHARACTERS;
 
   const handleChange = (e) => {
     setTextMessage(e.target.value);
-  };
-
-  const handleSubmit = async () => {
-    const accountId = 'acount_id';
-    const waitspotIds = waitSpots.map(({ id }) => id);
-    const reqBody = {
-      accountId,
-      waitspotIds,
-      message: textMessage,
-    };
-    console.log('send request: ', reqBody);
-    new Promise((resolve) => {
-      setTimeout(resolve, 1000);
-    }).then(() => {
-      console.log('done');
-      setWaitListState(WAITLIST_STATE.sent);
-    });
-  };
-
-  const handleRedirect = () => {
-    setWaitListState(WAITLIST_STATE.initial);
   };
 
   return (
@@ -50,10 +30,10 @@ const DraftMessage = ({
       <div>
         <div
           className={styles.redirect}
-          onClick={handleRedirect}
+          onClick={goToWaitlistTable}
           role="button"
           tabIndex={0}
-          onKeyUp={e => e.keyCode === 13 && handleRedirect}
+          onKeyUp={e => e.keyCode === 13 && goToWaitlistTable}
         >
           <div className={styles.iconWrapper}>
             <Icon size={1} icon="chevron-left" />
@@ -62,18 +42,32 @@ const DraftMessage = ({
         </div>
       </div>
       <div className={styles.heading}>
-        <PatientTooltip patients={patientsWithPhone} />
-        {!!patientsWithPhone.length && 'will receive this message.'}
-        <PatientTooltip patients={patientsWithoutPhone} />
-        {!!patientsWithoutPhone.length && 'with no phone number.'}
+        {success.length > 0 && (
+          <PatientTooltip patients={success} suffix="will receive this message." />
+        )}
+        {noPhoneNumber.length > 0 && (
+          <PatientTooltip patients={noPhoneNumber} suffix="with no phone number." />
+        )}
+        {smsDisabled.length > 0 && (
+          <PatientTooltip
+            patients={smsDisabled}
+            suffix="with communication preferences disabled."
+          />
+        )}
       </div>
       <div className={styles.draftMessageWrapper}>
         <div className={styles.column}>
-          <label className={styles.columnLabel}>Message(Max 160 characters)</label>
+          <label htmlFor="textarea" className={styles.columnLabel}>
+            Message (Max{' '}
+            <span className={classNames({ [styles.error]: isMessageToLong })}>
+              {textMessage.length}
+            </span>
+            /{MAX_CHARACTERS} characters)
+          </label>
           <div className={styles.columnBody}>
             <textarea
+              id="textarea"
               className={styles.textArea}
-              maxLength={160}
               value={textMessage}
               onChange={handleChange}
             />
@@ -86,12 +80,16 @@ const DraftMessage = ({
       </div>
       <div className={styles.footer}>
         <div className={styles.buttonWrapper}>
-          <Button onClick={toggleWaitlist} border="blue">
+          <Button onClick={goToWaitlistTable} border="blue">
             Cancel
           </Button>
         </div>
         <div className={styles.buttonWrapper}>
-          <Button onClick={handleSubmit} color="blue">
+          <Button
+            onClick={handleSendMessage}
+            disabled={success.length === 0 || isMessageToLong}
+            color="blue"
+          >
             Send
           </Button>
         </div>
@@ -101,22 +99,14 @@ const DraftMessage = ({
 };
 
 DraftMessage.propTypes = {
-  waitSpots: PropTypes.arrayOf(
-    PropTypes.shape({
-      clientId: PropTypes.string,
-      id: PropTypes.string,
-      accountViewerClientId: PropTypes.string,
-      patient: PropTypes.instanceOf(Patient),
-    }),
-  ),
-  toggleWaitlist: PropTypes.func.isRequired,
-  setWaitListState: PropTypes.func.isRequired,
   textMessage: PropTypes.string.isRequired,
+  conversionAnalyzer: PropTypes.shape({
+    success: PropTypes.arrayOf(PropTypes.object),
+    errors: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
   setTextMessage: PropTypes.func.isRequired,
-};
-
-DraftMessage.defaultProps = {
-  waitSpots: mockedWaitSpots,
+  handleSendMessage: PropTypes.func.isRequired,
+  goToWaitlistTable: PropTypes.func.isRequired,
 };
 
 export default DraftMessage;

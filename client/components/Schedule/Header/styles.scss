@@ -1,18 +1,17 @@
 @import '../../../ui.scss';
 
 .dialogBodyAdd {
+  overflow: unset;
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
-  overflow: unset;
 }
 
 .dialogBodyList {
-  padding: 0;
-  overflow: unset;
-  min-height: 629px;
   align-items: center;
   justify-content: center;
+  overflow: unset;
+  padding: 0;
   position: relative;
 }
 
@@ -21,38 +20,38 @@
 }
 
 .header {
-  display: flex;
-  margin-left: auto;
-  align-items: center;
   align-content: center;
-  text-align: center;
-  font-size: $small-size;
+  align-items: center;
   color: $primary-darkgrey;
+  display: flex;
+  font-size: $small-size;
   justify-content: space-between;
+  margin-left: auto;
   margin-right: 10px;
+  text-align: center;
   &_text {
     padding-right: 35px;
   }
 }
 
 .headerLinks {
-  display: flex;
-  align-items: center;
   align-content: center;
-  font-weight: 600;
-  color: $primary-dark;
-  margin-right: 20px;
+  align-items: center;
   box-sizing: border-box;
+  color: $primary-dark;
+  display: flex;
+  font-weight: 600;
+  margin-right: 20px;
   outline: none;
 
   &:hover {
-    cursor: pointer;
     color: $primary-color-hover;
+    cursor: pointer;
   }
 
   &_icon {
-    padding-left: 10px;
     margin-right: 0;
+    padding-left: 10px;
   }
 
   &_add {
@@ -65,12 +64,12 @@
 }
 
 .changeDay {
-  display: flex;
   align-items: center;
-  width: 35px;
+  color: $primary-dark;
+  display: flex;
   justify-content: space-between;
   padding-right: 10px;
-  color: $primary-dark;
+  width: 35px;
 
   &_left {
     color: inherit;
@@ -82,24 +81,24 @@
 }
 
 .suggestionContainer {
-  display: flex;
   align-items: center;
   color: $primary-dark;
+  display: flex;
   padding: 10px;
 
   &_details {
-    padding-left: 10px;
+    color: #a7a9ac;
+    composes: fontDefault from '../../../fonts.scss';
     display: flex;
     flex-direction: column;
-    composes: fontDefault from '../../../fonts.scss';
-    color: #a7a9ac;
     line-height: 1.3;
+    padding-left: 10px;
     text-align: left;
   }
 
   &_fullName {
-    font-size: 12px;
     color: $primary-dark;
+    font-size: 12px;
   }
 
   &_date {

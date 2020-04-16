@@ -1,17 +1,19 @@
+@import '../../../../../ui';
+
 .draftMessageContainer {
   display: flex;
-  width: 100%;
-  height: 100%;
   flex-direction: column;
+  height: 100%;
   text-align: left;
+  width: 100%;
 }
 
 .responseMessageContainer {
   display: flex;
-  width: 100%;
-  height: 100%;
   flex-direction: column;
+  height: 100%;
   text-align: left;
+  width: 100%;
 }
 
 .responsePreviewWrapper {
@@ -19,11 +21,11 @@
 }
 
 .draftMessageWrapper {
-  display: flex;
-  width: 100%;
-  padding: 0 40px;
   box-sizing: border-box;
+  display: flex;
   justify-content: space-between;
+  padding: 0 40px;
+  width: 100%;
 }
 
 .column {
@@ -34,41 +36,75 @@
 
 .columnLabel {
   align-self: flex-start;
-  color: rgb(149, 149, 149);
+  color: #959595;
   font-size: 13px;
   font-weight: 500;
   height: 16px;
   margin-bottom: 7px;
 }
 
-.columnBody {
-  background: rgb(244, 244, 244);
-  height: 263px;
+.error {
+  color: $primary-red;
+}
+
+.patientWrapper {
+  display: inline;
+  margin-right: 4px;
+}
+
+.tooltip_Popover {
+  transform: translateY(5px) translateX(60px) !important;
+  z-index: 999999;
+
+  > :global(svg.Popover-tip) {
+    fill: #7b7b7b;
+  }
+}
+
+.tooltipWrapper {
+  background: $primary-white;
+  border: 1px solid $primary-grey;
+  border-radius: 4px;
+  box-shadow: 2px 2px 8px 0 rgba(128, 128, 128, 0.16);
+  color: $primary-dark;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  font-family: $medium-font;
+  font-size: 12px;
+  min-width: 200px;
+  padding-top: 6px;
+}
+
+.columnBody {
   align-items: center;
+  background: $chat-lightgrey;
+  display: flex;
+  height: 263px;
+  justify-content: center;
 }
 
 .textArea {
-  resize: none;
+  background: $chat-lightgrey;
   border: none;
-  color: rgb(46, 56, 69);
-  outline: none;
-  background: rgb(244, 244, 244);
-  width: 90%;
-  height: 80%;
+  color: $primary-dark;
+  font-family: $book-font;
   font-size: 14px;
+  -webkit-font-smoothing: antialiased;
   font-weight: 300;
+  height: 80%;
+  outline: none;
+  resize: none;
+  width: 90%;
 }
 
 .footer {
-  border-top: 1px solid rgb(244, 244, 244);
-  margin-top: auto;
-  height: 73px;
-  display: flex;
-  padding: 0 10px;
-  justify-content: flex-end;
   align-items: center;
+  border-top: 1px solid $chat-lightgrey;
+  display: flex;
+  height: 73px;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding: 0 10px;
 }
 
 .buttonWrapper {
@@ -76,38 +112,47 @@
 }
 
 .redirect {
-  margin-top: 24px;
-  margin-left: 18px;
-  color: rgb(32, 100, 119);
-  font-family: Gotham-Medium;
-  font-size: 12px;
-  font-weight: 500;
+  color: $primary-blue;
   cursor: pointer;
   display: inline-flex;
+  font-family: $medium-font;
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 18px;
+  margin-top: 24px;
 }
 
 .heading {
   color: #2e3845;
-  font-family: Gotham-Medium;
+  font-family: $medium-font;
   font-size: 16px;
+  -webkit-font-smoothing: antialiased;
   font-weight: 500;
-  margin: 15px 0 20px 40px;
+  margin: 20px 0 20px 40px;
 }
 
 .patientName {
-  margin: 5px 16px 10px 8px;
-  &:last-child {
-    margin-bottom: 5px;
-  }
+  padding: 5px 16px 10px;
 }
 
 .patientTooltip {
-  color: rgb(32, 100, 119);
+  background-color: transparent;
+  color: $primary-blue;
+  font-family: $medium-font;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 500;
+  margin: 0 4px 0 0;
+  padding: 0;
+
+  &:last-child {
+    margin: 0 4px 0 0;
+  }
 }
 
 .legend {
-  color: rgb(149, 149, 149);
-  font-family: Gotham-Book;
+  color: #959595;
+  font-family: $book-font;
   font-size: 11px;
   font-weight: 300;
   margin: 8px 0;

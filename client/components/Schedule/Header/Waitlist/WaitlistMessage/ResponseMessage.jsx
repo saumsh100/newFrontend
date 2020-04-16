@@ -2,29 +2,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import PreviewMessage from './PreviewMessage';
-import Patient from '../../../../../entities/models/Patient';
 import PatientTooltip from './PatientTooltip';
-import { mockResponse } from './mockedData';
 import { Button, Icon } from '../../../../library';
-import { WAITLIST_STATE } from '../index';
 import styles from './styles.scss';
 
-const ResponseMessage = ({ response, setWaitListState, textMessage }) => {
-  const { success, errors } = response;
-
-  const handleRedirect = () => {
-    setWaitListState(WAITLIST_STATE.initial);
-  };
+const ResponseMessage = ({ sentMessages, goToWaitlistTable, textMessage }) => {
+  const { success, errors } = sentMessages;
 
   return (
     <div className={styles.responseMessageContainer}>
       <div>
         <div
           className={styles.redirect}
-          onClick={handleRedirect}
+          onClick={goToWaitlistTable}
           role="button"
           tabIndex={0}
-          onKeyUp={e => e.keyCode === 13 && handleRedirect}
+          onKeyUp={e => e.keyCode === 13 && goToWaitlistTable}
         >
           <div className={styles.iconWrapper}>
             <Icon size={1} icon="chevron-left" />
@@ -33,17 +26,24 @@ const ResponseMessage = ({ response, setWaitListState, textMessage }) => {
         </div>
       </div>
       <div className={styles.heading}>
-        {!!success.length && 'Message successfully sent to '}
-        <PatientTooltip patients={success} />
-        {!!success.length && '.'} {!!errors.length && 'Failed to send for '}
-        <PatientTooltip patients={errors} /> {!!errors.length && '(missing phone number).'}
+        {success.length > 0 && (
+          <span>
+            Message successfully sent to <PatientTooltip patients={success} suffix="." />
+          </span>
+        )}
+        {errors.length > 0 && (
+          <span>
+            Failed to send for
+            <PatientTooltip patients={errors} suffix="with no phone number." />.
+          </span>
+        )}
       </div>
       <div className={styles.responsePreviewWrapper}>
         <PreviewMessage message={textMessage} phoneNumber="123456789000" />
       </div>
       <div className={styles.footer}>
         <div className={styles.buttonWrapper}>
-          <Button onClick={handleRedirect} color="blue">
+          <Button onClick={goToWaitlistTable} color="blue">
             Return to Waitlist
           </Button>
         </div>
@@ -53,16 +53,12 @@ const ResponseMessage = ({ response, setWaitListState, textMessage }) => {
 };
 
 ResponseMessage.propTypes = {
-  response: {
-    success: PropTypes.arrayOf(PropTypes.instanceOf(Patient)),
-    errors: PropTypes.arrayOf(PropTypes.instanceOf(Patient)),
-  },
-  setWaitListState: PropTypes.func.isRequired,
+  sentMessages: PropTypes.shape({
+    success: PropTypes.arrayOf(PropTypes.object),
+    errors: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
+  goToWaitlistTable: PropTypes.func.isRequired,
   textMessage: PropTypes.string.isRequired,
-};
-
-ResponseMessage.defaultProps = {
-  response: mockResponse,
 };
 
 export default ResponseMessage;

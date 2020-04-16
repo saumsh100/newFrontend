@@ -18,7 +18,7 @@ import styles from './styles.scss';
 
 const confirmDelete = ids =>
   window.confirm(
-    `Are you sure you want to remove ${ids.length > 1 ? 'these wait spots' : 'this wait spot'} ?`,
+    `Are you sure you want to remove ${ids.length > 1 ? 'these wait spots' : 'this wait spot'}?`,
   );
 
 class Header extends Component {

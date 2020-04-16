@@ -20,11 +20,16 @@ const WaitlistRow = ({
   onRemove,
   times,
 }) => (
-  <tr>
+  <tr
+    onClick={onChange}
+    role="button"
+    tabIndex={0}
+    onKeyUp={e => e.keyCode === 13 && onChange}
+    className={tableStyles.row}
+  >
     <td width={20} />
-
     <td className={tableStyles.col} data-width="sm">
-      <Checkbox checked={checked} onChange={onChange} />
+      <Checkbox checked={checked} />
     </td>
     <td className={tableStyles.col}>{addedDate}</td>
     <td className={tableStyles.col}>
@@ -56,7 +61,6 @@ const WaitlistRow = ({
         </Button>
       </DropdownMenu>
     </td>
-
     <td width={20} />
   </tr>
 );
@@ -64,22 +68,24 @@ const WaitlistRow = ({
 export default React.memo(WaitlistRow);
 
 WaitlistRow.propTypes = {
-  PopOverComponent: PropTypes.element.isRequired,
+  PopOverComponent: PropTypes.objectOf(PropTypes.any).isRequired,
   addedDate: PropTypes.string.isRequired,
   dates: PropTypes.string.isRequired,
-  duration: PropTypes.string.isRequired,
+  duration: PropTypes.string,
   nextApptDate: PropTypes.string,
   note: PropTypes.string,
   patient: PropTypes.shape(patientShape).isRequired,
   reasonText: PropTypes.string,
   times: PropTypes.string.isRequired,
   onRemove: PropTypes.func.isRequired,
-  checked: PropTypes.bool.isRequired,
+  checked: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
 };
 
 WaitlistRow.defaultProps = {
+  checked: false,
   note: '',
+  duration: '',
   reasonText: '',
   nextApptDate: '',
 };

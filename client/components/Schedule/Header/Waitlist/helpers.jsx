@@ -197,7 +197,7 @@ export const propsGenerator = ({
   availableTimes,
   daysOfTheWeek,
   timezone,
-  selectedWaitlist,
+  selectedWaitlistMap,
   removeWaitSpot,
   toggleSingleWaitlistSelection,
   ...props
@@ -208,7 +208,7 @@ export const propsGenerator = ({
   return {
     ...props,
     key: ccId,
-    checked: selectedWaitlist[ccId],
+    checked: selectedWaitlistMap[ccId],
     onChange: () => toggleSingleWaitlistSelection(ccId),
     onRemove: () => removeWaitSpot({ id: ccId }),
     addedDate: dateFormatter(createdAt, '', 'YYYY/MM/DD'),
