@@ -43,10 +43,6 @@
   margin-bottom: 7px;
 }
 
-.error {
-  color: $primary-red;
-}
-
 .patientWrapper {
   display: inline;
   margin-right: 4px;
@@ -142,6 +138,7 @@
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   font-weight: 500;
+  line-height: 19px;
   margin: 0 4px 0 0;
   padding: 0;
 

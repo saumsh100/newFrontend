@@ -2,13 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import groupBy from 'lodash/groupBy';
-import classNames from 'classnames';
 import PatientTooltip from './PatientTooltip';
 import PreviewMessage from './PreviewMessage';
 import { Button, Icon } from '../../../../library';
 import styles from './styles.scss';
-
-const MAX_CHARACTERS = 160;
 
 const DraftMessage = ({
   conversionAnalyzer,
@@ -19,7 +16,6 @@ const DraftMessage = ({
 }) => {
   const { success, errors } = conversionAnalyzer;
   const { 1200: noPhoneNumber = [], 2200: smsDisabled = [] } = groupBy(errors, 'errorCode');
-  const isMessageToLong = textMessage.length > MAX_CHARACTERS;
 
   const handleChange = (e) => {
     setTextMessage(e.target.value);
@@ -49,20 +45,13 @@ const DraftMessage = ({
           <PatientTooltip patients={noPhoneNumber} suffix="with no phone number." />
         )}
         {smsDisabled.length > 0 && (
-          <PatientTooltip
-            patients={smsDisabled}
-            suffix="with communication preferences disabled."
-          />
+          <PatientTooltip patients={smsDisabled} suffix="has unsubscribed." />
         )}
       </div>
       <div className={styles.draftMessageWrapper}>
         <div className={styles.column}>
           <label htmlFor="textarea" className={styles.columnLabel}>
-            Message (Max{' '}
-            <span className={classNames({ [styles.error]: isMessageToLong })}>
-              {textMessage.length}
-            </span>
-            /{MAX_CHARACTERS} characters)
+            Message
           </label>
           <div className={styles.columnBody}>
             <textarea
@@ -85,11 +74,7 @@ const DraftMessage = ({
           </Button>
         </div>
         <div className={styles.buttonWrapper}>
-          <Button
-            onClick={handleSendMessage}
-            disabled={success.length === 0 || isMessageToLong}
-            color="blue"
-          >
+          <Button onClick={handleSendMessage} color="blue">
             Send
           </Button>
         </div>

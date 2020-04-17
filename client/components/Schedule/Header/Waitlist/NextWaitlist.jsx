@@ -1,10 +1,11 @@
 
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import groupBy from 'lodash/groupBy';
 import { connect } from 'react-redux';
 import WaitlistTableWithActions from './WaitlistTableWithActions';
 import Account from '../../../../entities/models/Account';
-import { batchUpdateFactory } from './helpers';
+import { batchUpdateFactory, mergeData } from './helpers';
 import DraftMessage from './WaitlistMessage/DraftMessage';
 import ResponseMessage from './WaitlistMessage/ResponseMessage';
 import {
@@ -50,13 +51,17 @@ const NextWaitlist = ({ toggleWaitlist, account, ...props }) => {
   );
 
   const handleSendMessage = useCallback(() => {
-    const ids = conversionAnalyzer.success.reduce((acc, { id }) => [...acc, id], []);
-    sendMassMessage(account.get('id'), ids, textMessage).then(({ data }) => {
-      setSentMessages(data);
+    const dataset = groupBy([...conversionAnalyzer.success, ...conversionAnalyzer.errors], 'id');
+    sendMassMessage(account.get('id'), Object.keys(dataset), textMessage).then(({ data }) => {
+      const sentData = {
+        errors: mergeData(data.errors, dataset),
+        success: mergeData(data.success, dataset),
+      };
+
+      setSentMessages(sentData);
       setWaitListState(WAITLIST_STATE.sent);
     });
-  }, [account, conversionAnalyzer.success, textMessage]);
-
+  }, [account, conversionAnalyzer, textMessage]);
   switch (waitlistState) {
     default:
     case WAITLIST_STATE.initial:

@@ -123,7 +123,7 @@ class TopBar extends Component {
     const renderAccountItem = ({ name, id }) => {
       const isActive = id === activeAccount.id;
       const setActive = () => {
-        isActive && this.props.switchActiveAccount(id, location.pathname);
+        !isActive && this.props.switchActiveAccount(id, location.pathname);
       };
 
       return (

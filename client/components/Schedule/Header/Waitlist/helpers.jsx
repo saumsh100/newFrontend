@@ -164,6 +164,12 @@ export const batchUpdateFactory = waitlist => (state = false) =>
     {},
   );
 
+export const mergeData = (data, dataset) =>
+  data.map(v => ({
+    ...v,
+    patientData: dataset[v.waitSpotId][0].patientData,
+  }));
+
 /**
  * Standardize props regardless if the input is a PatientUser or a Patient.
  *

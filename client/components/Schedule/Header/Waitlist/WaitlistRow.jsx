@@ -20,16 +20,10 @@ const WaitlistRow = ({
   onRemove,
   times,
 }) => (
-  <tr
-    onClick={onChange}
-    role="button"
-    tabIndex={0}
-    onKeyUp={e => e.keyCode === 13 && onChange}
-    className={tableStyles.row}
-  >
+  <tr className={tableStyles.row}>
     <td width={20} />
     <td className={tableStyles.col} data-width="sm">
-      <Checkbox checked={checked} />
+      <Checkbox checked={checked} onChange={onChange} />
     </td>
     <td className={tableStyles.col}>{addedDate}</td>
     <td className={tableStyles.col}>

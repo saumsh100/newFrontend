@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import groupBy from 'lodash/groupBy';
 import PreviewMessage from './PreviewMessage';
 import PatientTooltip from './PatientTooltip';
 import { Button, Icon } from '../../../../library';
@@ -8,6 +9,7 @@ import styles from './styles.scss';
 
 const ResponseMessage = ({ sentMessages, goToWaitlistTable, textMessage }) => {
   const { success, errors } = sentMessages;
+  const { 1200: noPhoneNumber = [], 2200: smsDisabled = [] } = groupBy(errors, 'errorCode');
 
   return (
     <div className={styles.responseMessageContainer}>
@@ -31,10 +33,15 @@ const ResponseMessage = ({ sentMessages, goToWaitlistTable, textMessage }) => {
             Message successfully sent to <PatientTooltip patients={success} suffix="." />
           </span>
         )}
-        {errors.length > 0 && (
+        {noPhoneNumber.length > 0 && (
           <span>
-            Failed to send for
-            <PatientTooltip patients={errors} suffix="with no phone number." />.
+            Did not send to{' '}
+            <PatientTooltip patients={noPhoneNumber} suffix="(missing phone number)." />
+          </span>
+        )}
+        {smsDisabled.length > 0 && (
+          <span>
+            Did not send to <PatientTooltip patients={smsDisabled} suffix="(has unsubscribed)." />
           </span>
         )}
       </div>
