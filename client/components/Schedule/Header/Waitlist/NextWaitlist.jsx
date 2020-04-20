@@ -8,19 +8,22 @@ import Account from '../../../../entities/models/Account';
 import { batchUpdateFactory, mergeData } from './helpers';
 import DraftMessage from './WaitlistMessage/DraftMessage';
 import ResponseMessage from './WaitlistMessage/ResponseMessage';
+import WaitlistForm from './WaitlistForm';
 import {
   loadMassTextTemplate,
   sendMassMessage,
   waitlistRecipientsAnalyzer,
 } from '../../../../thunks/waitlist';
+import { Create as CreateWaitSpot } from '../../../GraphQLWaitlist';
 
 export const WAITLIST_STATE = {
   initial: 0,
   draft: 1,
   sent: 2,
+  form: 3,
 };
 
-const NextWaitlist = ({ toggleWaitlist, account, ...props }) => {
+const NextWaitlist = ({ account, ...props }) => {
   const batchUpdate = useCallback((state = false) => batchUpdateFactory(props.waitlist)(state), [
     props.waitlist,
   ]);
@@ -62,6 +65,37 @@ const NextWaitlist = ({ toggleWaitlist, account, ...props }) => {
       setWaitListState(WAITLIST_STATE.sent);
     });
   }, [account, conversionAnalyzer, textMessage]);
+
+  const handleSubmit = callback => ({ patient, ...values }) => {
+    const daysOfTheWeek = values.daysOfTheWeek.reduce(
+      (acc, curr) => ({
+        ...acc,
+        [curr]: true,
+      }),
+      {
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+      },
+    );
+
+    callback({
+      variables: {
+        input: {
+          ...values,
+          accountId: account.get('id'),
+          patientId: patient.id,
+          daysOfTheWeek,
+        },
+      },
+    });
+
+    setWaitListState(WAITLIST_STATE.initial);
+  };
   switch (waitlistState) {
     default:
     case WAITLIST_STATE.initial:
@@ -69,6 +103,7 @@ const NextWaitlist = ({ toggleWaitlist, account, ...props }) => {
         <WaitlistTableWithActions
           {...props}
           batchUpdate={batchUpdate}
+          goToAddWaitListForm={() => setWaitListState(WAITLIST_STATE.form)}
           goToSendMassMessage={goToSendMassMessage}
           setSelectedWaitlistIds={setSelectedWaitlistIds}
           selectedWaitlistMap={selectedWaitlistMap}
@@ -82,7 +117,6 @@ const NextWaitlist = ({ toggleWaitlist, account, ...props }) => {
           conversionAnalyzer={conversionAnalyzer}
           goToWaitlistTable={() => setWaitListState(WAITLIST_STATE.initial)}
           handleSendMessage={handleSendMessage}
-          toggleWaitlist={toggleWaitlist}
           textMessage={textMessage}
           selectedWaitlistMap={selectedWaitlistMap}
           setTextMessage={setTextMessage}
@@ -94,11 +128,22 @@ const NextWaitlist = ({ toggleWaitlist, account, ...props }) => {
         <ResponseMessage
           {...props}
           sentMessages={sentMessages}
-          toggleWaitlist={toggleWaitlist}
           goToWaitlistTable={() => setWaitListState(WAITLIST_STATE.initial)}
           textMessage={textMessage}
           selectedWaitlistMap={selectedWaitlistMap}
         />
+      );
+    case WAITLIST_STATE.form:
+      return (
+        <CreateWaitSpot>
+          {createWaitSpotHandler => (
+            <WaitlistForm
+              timezone={account.get('timezone')}
+              handleSubmit={handleSubmit(createWaitSpotHandler)}
+              goToWaitlistTable={() => setWaitListState(WAITLIST_STATE.initial)}
+            />
+          )}
+        </CreateWaitSpot>
       );
   }
 };
@@ -112,7 +157,6 @@ export default memo(connect(mapStateToProps)(NextWaitlist));
 NextWaitlist.propTypes = {
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
   account: PropTypes.instanceOf(Account).isRequired,
-  toggleWaitlist: PropTypes.func.isRequired,
 };
 
 NextWaitlist.defaultProps = {

@@ -109,7 +109,7 @@ class MultiSelect extends Component {
   }
 
   render() {
-    const { label, options, disabled, placeholder } = this.props;
+    const { label, options, disabled, placeholder, selector, theme } = this.props;
 
     const selectedItems = options.filter(({ value }) => this.state.selectedItems.includes(value));
     const availableItems = options.filter(({ value }) => !this.state.selectedItems.includes(value));
@@ -123,7 +123,7 @@ class MultiSelect extends Component {
         selectedItem={null}
       >
         {({ getToggleButtonProps, isOpen }) => (
-          <div className={styles.selectWrapper}>
+          <div className={classNames(styles.selectWrapper, theme.selectWrapper)}>
             <div className={styles.labelSection}>
               {label && (
                 <span
@@ -136,14 +136,14 @@ class MultiSelect extends Component {
                 </span>
               )}
             </div>
-            <Selector
-              disabled={disabled}
-              selected={selectedItems}
-              placeholder={placeholder}
-              error={this.state.error}
-              selectorProps={getToggleButtonProps()}
-              handleSelection={this.handleSelection}
-            />
+            {selector(
+              disabled,
+              selectedItems,
+              this.state.error,
+              getToggleButtonProps,
+              this.handleSelection,
+              placeholder,
+            )}
             <List
               isOpen={isOpen}
               selectedItems={selectedItems}
@@ -173,6 +173,8 @@ MultiSelect.propTypes = {
   ).isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  selector: PropTypes.node,
+  theme: PropTypes.objectOf(PropTypes.string),
   selected: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
   defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
 };
@@ -183,8 +185,26 @@ MultiSelect.defaultProps = {
   defaultValue: [],
   selected: [],
   label: '',
+  theme: {},
   placeholder: '',
   initialSelectedItem: [],
+  selector: (
+    disabled,
+    selectedItems,
+    error,
+    getToggleButtonProps,
+    handleSelection,
+    placeholder,
+  ) => (
+    <Selector
+      disabled={disabled}
+      selected={selectedItems}
+      placeholder={placeholder}
+      error={error}
+      selectorProps={getToggleButtonProps()}
+      handleSelection={handleSelection}
+    />
+  ),
 };
 
 export default MultiSelect;

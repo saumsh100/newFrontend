@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { capitalize } from '@carecru/isomorphic';
 import { Checkbox, Button, DropdownMenu } from '../../../library';
 import EllipsisIcon from './EllipsisIcon';
 import { patientShape } from '../../../library/PropTypeShapes';
@@ -31,7 +32,7 @@ const WaitlistRow = ({
         <div>{`${patient.firstName} ${patient.lastName}`}</div>
       </PopOverComponent>
     </td>
-    <td className={tableStyles.col}>{reasonText}</td>
+    <td className={tableStyles.col}>{capitalize(reasonText || '')}</td>
     <td className={tableStyles.col} data-width="sm">
       {duration}
     </td>

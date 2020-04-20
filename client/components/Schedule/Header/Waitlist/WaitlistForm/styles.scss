@@ -1,0 +1,238 @@
+@import '../../../../../ui';
+@import '../../../../../ui-kit';
+
+.waitlistFormContainer {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  height: 629px;
+  text-align: left;
+  width: 100%;
+}
+
+.waitlistFormWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.waitlistForm {
+  display: grid;
+  grid-template-columns: 1fr 20px 1fr;
+  padding: 0 40px;
+  row-gap: 10px;
+}
+
+.waitlistFormColumnLeft {
+  grid-column-end: 2;
+  grid-column-start: 1;
+}
+
+.waitlistFormColumnRight {
+  grid-column-end: 4;
+  grid-column-start: 3;
+}
+
+.waitlistFormColumnFull {
+  grid-column-end: 4;
+  grid-column-start: 1;
+}
+
+.heading {
+  color: #2e3845;
+  font-family: $medium-font;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 500;
+  margin: 20px 0 10px 40px;
+}
+
+.redirect {
+  color: $primary-blue;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: $medium-font;
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 18px;
+  margin-top: 24px;
+}
+
+.iconWrapper {
+  color: $primary-darkgrey;
+  font-size: 14px;
+  margin-right: 0;
+  text-align: right;
+}
+
+.footer {
+  align-items: center;
+  border-top: 1px solid $chat-lightgrey;
+  display: flex;
+  height: 73px;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding: 0 10px;
+}
+
+.buttonWrapper {
+  margin: 0 10px;
+}
+
+.columnLabel {
+  align-self: flex-start;
+  color: #959595;
+  font-size: 13px;
+  font-weight: 500;
+  height: 16px;
+  margin-bottom: 7px;
+}
+
+.columnBody {
+  align-items: center;
+  background: $chat-lightgrey;
+  display: flex;
+  height: 152px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.textArea {
+  background-color: $chat-lightgrey;
+  border: none;
+  color: $primary-dark;
+  font-family: $book-font;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 300;
+  height: 80%;
+  outline: none;
+  resize: none;
+  width: 95%;
+}
+
+.tooltip_Popover {
+  display: inline-flex;
+  flex-direction: column;
+  max-width: 37%;
+  transform: translateY(-15px) !important;
+  width: 37%;
+  z-index: 999999;
+
+  > :global(svg.Popover-tip) {
+    fill: #7b7b7b;
+  }
+}
+
+.pref__multi__wrapper {
+  background: $primary-white;
+  border: 1px solid $primary-grey;
+  border-radius: 4px;
+  box-shadow: 2px 2px 8px 0 rgba(128, 128, 128, 0.16);
+  color: $primary-dark;
+  display: flex;
+  flex-direction: column;
+  font-family: $medium-font;
+  font-size: 12px;
+  min-width: 200px;
+  padding: 16px 16px 10px 16px;
+}
+
+.list__item {
+  align-items: center;
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.list__item__label {
+  align-items: center;
+  color: #6e6e6e;
+  display: flex;
+  font-size: 13px;
+  font-weight: normal;
+  height: 16px;
+  margin-left: 8px;
+}
+
+.helpers__wrapper {
+  border-bottom: 1px solid #efefef;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 11px;
+  padding-right: 20%;
+}
+
+.options__wrapper {
+  padding-top: 16px;
+}
+
+.patientContainer {
+  border-color: $clr-table-light-grey;
+  margin: -1px 0 20px;
+  padding: 10px 5px;
+}
+
+.patientSearchClass {
+  box-sizing: border-box;
+  padding: 20px 0;
+  width: 100%;
+
+  .containerOpen {
+    top: 50px;
+  }
+
+  .patientSearchInput {
+    background-color: $color-white;
+    height: 100%;
+
+    > div {
+      padding: 20px 0;
+    }
+
+    > span::before,
+    span::after {
+      bottom: 0;
+    }
+
+    > input {
+      border-bottom: 1px solid $clr-table-light-grey;
+      font-family: $medium-font;
+      height: 30px;
+      padding: 1px 1px 1px 0;
+
+      &::placeholder {
+        color: $clr-table-light-grey;
+        font-style: normal;
+      }
+    }
+  }
+}
+
+.label {
+  font-family: $medium-font;
+}
+
+.placeholder {
+  color: $grey-dark;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.inputWrapper {
+  padding: 20px 0;
+}
+
+.input {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 30px;
+  position: relative;
+}
+
+.inputEl {
+  position: absolute;
+  width: 100%;
+}

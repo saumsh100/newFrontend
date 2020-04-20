@@ -4,7 +4,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import PropTypes from 'prop-types';
-import { legacyQuery } from './fetchWaitSpot';
+import { legacyQuery, newQuery } from './fetchWaitSpot';
 
 const mutation = gql`
   mutation addWaitSpot_Mutation($input: addWaitSpotInput!) {
@@ -21,12 +21,30 @@ const mutation = gql`
   }
 `;
 
-const AddWaitSpot = ({ children }) => (
+const nextMutation = gql`
+  mutation addWaitSpot_Mutation($input: addWaitSpotInput!) {
+    addWaitSpotMutation(input: $input) {
+      waitSpot {
+        patientId
+        unavailableDays
+        availableTimes
+        endDate
+        note
+        duration
+        reasonText
+        daysOfTheWeek
+        preferences
+      }
+    }
+  }
+`;
+
+const AddWaitSpot = ({ children, newWaitlist }) => (
   <Mutation
-    mutation={mutation}
+    mutation={newWaitlist ? nextMutation : mutation}
     refetchQueries={() => [
       {
-        query: legacyQuery,
+        query: newWaitlist ? newQuery : legacyQuery,
         variables: {},
       },
     ]}
@@ -35,7 +53,9 @@ const AddWaitSpot = ({ children }) => (
   </Mutation>
 );
 
-AddWaitSpot.propTypes = { children: PropTypes.func };
-AddWaitSpot.defaultProps = { children: null };
+AddWaitSpot.propTypes = { children: PropTypes.func,
+  newWaitlist: PropTypes.bool };
+AddWaitSpot.defaultProps = { children: null,
+  newWaitlist: false };
 
 export default AddWaitSpot;

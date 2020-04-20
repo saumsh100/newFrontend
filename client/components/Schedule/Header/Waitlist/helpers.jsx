@@ -1,6 +1,11 @@
 
-import { setDateToTimezone, week, dateFormatter, capitalize } from '@carecru/isomorphic';
-import moment from 'moment-timezone';
+import {
+  setDateToTimezone,
+  week,
+  dateFormatter,
+  getHoursFromInterval,
+  capitalize,
+} from '@carecru/isomorphic';
 import PatientUserPopover from '../../../library/PatientUserPopover';
 import PatientPopover from '../../../library/PatientPopover';
 
@@ -51,7 +56,9 @@ const isAWeekendDay = day => week.weekends.includes(day);
  * @param time2
  * @return {boolean}
  */
-const isOneHourApart = (time1, time2) => (moment(time2).diff(moment(time1), 'hour') || 0) === 1;
+const isOneHourApart = (startDate, endDate) =>
+  (getHoursFromInterval({ startDate,
+    endDate }) || 0) === 1;
 
 /**
  * Formats a list of times in a more readable way.
@@ -169,6 +176,18 @@ export const mergeData = (data, dataset) =>
     ...v,
     patientData: dataset[v.waitSpotId][0].patientData,
   }));
+
+export const generateWaitlistHours = (timezone, start = 6, end = 20) => {
+  const baseTime = new Date(1970, 0, 1, 0, 0, 0, 0);
+
+  const result = [];
+  for (let hours = start; hours <= end; hours += 1) {
+    const value = setDateToTimezone(baseTime, timezone).set({ hours });
+    result.push({ value: value.toISOString(),
+      label: value.format('LT') });
+  }
+  return result;
+};
 
 /**
  * Standardize props regardless if the input is a PatientUser or a Patient.

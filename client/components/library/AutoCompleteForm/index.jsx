@@ -67,15 +67,13 @@ class AutoCompleteForm extends Component {
   }
 
   render() {
-    const { suggestions } = this.state;
-
     const newProps = omit(this.props, ['value', 'theme', 'suggestionsContainerComponent']);
     // Autosuggest will pass through all these props to the input element.
     // Finally, render it
     return (
       <Autosuggest
         theme={StyleExtender(this.props.theme, baseTheme)}
-        suggestions={suggestions}
+        suggestions={this.state.suggestions}
         renderInputComponent={this.displayField}
         onSuggestionsFetchRequested={this.getSuggestions}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}

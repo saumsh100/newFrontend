@@ -14,7 +14,6 @@ import { availabilitiesGroupedByPeriod } from '../../../../Widget/Booking/Review
 import PatientSearch from '../../../../PatientSearch';
 import { loadWeeklySchedule } from '../../../../../thunks/waitlist';
 import Loading from '../../../../library/Loading';
-import EnabledFeature from '../../../../library/EnabledFeature';
 import styles from './styles.scss';
 
 const timeFrameOptions = ['morning', 'afternoon', 'evening'];
@@ -41,15 +40,15 @@ const initialState = {
  * @returns {*}
  * @constructor
  */
-const SelectedPatient = ({ handleAutoSuggest, patientSearched }) => (
+export const SelectedPatient = ({ handleAutoSuggest, patientSearched, className, avatarSize }) => (
   <div
-    className={styles.patientContainer}
+    className={classNames(styles.patientContainer, className)}
     onClick={() => handleAutoSuggest(null)}
     role="button"
     onKeyDown={({ keyCode }) => keyCode === 13 && handleAutoSuggest(null)}
     tabIndex="0"
   >
-    <Avatar user={patientSearched} size="sm" />
+    <Avatar user={patientSearched} size={avatarSize} />
     <div className={styles.patientContainer_name}>
       {patientSearched.firstName} {patientSearched.lastName}
     </div>
@@ -425,8 +424,8 @@ const mapStateToProps = ({ auth, availabilities, entities }) => {
     );
 
   return {
-    accountId: auth.get('accountId'),
     availabilities: availabilitiesGrouped,
+    accountId: auth.get('accountId'),
     timezone: activeAccount.get('timezone'),
     waitSpot: availabilities.get('waitSpot'),
   };
@@ -476,6 +475,8 @@ AddToWaitlist.propTypes = {
 };
 
 SelectedPatient.propTypes = {
+  avatarSize: PropTypes.string,
+  className: PropTypes.string,
   handleAutoSuggest: PropTypes.func.isRequired,
   patientSearched: PropTypes.shape({
     avatarUrl: PropTypes.string,
@@ -485,23 +486,16 @@ SelectedPatient.propTypes = {
   }).isRequired,
 };
 
+SelectedPatient.defaultProps = {
+  avatarSize: 'sm',
+  className: '',
+};
+
 export default props =>
   props.active && (
-    <EnabledFeature
-      predicate={({ flags }) => flags.get('waitlist-2-0')}
-      render={() => (
-        <CreateWaitSpot>
-          {createWaitSpotHandler => (
-            <AddToWaitlistEnhanced createWaitSpotHandler={createWaitSpotHandler} {...props} />
-          )}
-        </CreateWaitSpot>
+    <CreateWaitSpot>
+      {createWaitSpotHandler => (
+        <AddToWaitlistEnhanced createWaitSpotHandler={createWaitSpotHandler} {...props} />
       )}
-      fallback={() => (
-        <CreateWaitSpot>
-          {createWaitSpotHandler => (
-            <AddToWaitlistEnhanced createWaitSpotHandler={createWaitSpotHandler} {...props} />
-          )}
-        </CreateWaitSpot>
-      )}
-    />
+    </CreateWaitSpot>
   );

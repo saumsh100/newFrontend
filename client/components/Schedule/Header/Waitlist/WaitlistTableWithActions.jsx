@@ -10,12 +10,12 @@ import styles from './tableStyles.scss';
 
 const WaitlistTableWithActions = ({
   waitlist,
-  openAddTo,
   selectedWaitlistMap,
   setSelectedWaitlistIds,
   removeMultipleWaitSpots,
   batchUpdate,
   goToSendMassMessage,
+  goToAddWaitListForm,
   ...parentProps
 }) => {
   const waitlistLength = waitlist.length;
@@ -77,7 +77,7 @@ const WaitlistTableWithActions = ({
           <Button
             color="blue"
             className={styles.headerButtons}
-            onClick={openAddTo}
+            onClick={goToAddWaitListForm}
             data-test-id="button_addToWaitlist"
           >
             Add to Waitlist
@@ -125,13 +125,13 @@ const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 export default memo(connect(mapStateToProps)(WaitlistTableWithActions));
 
 WaitlistTableWithActions.propTypes = {
-  openAddTo: PropTypes.func.isRequired,
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
   selectedWaitlistMap: PropTypes.objectOf(PropTypes.bool).isRequired,
   removeMultipleWaitSpots: PropTypes.func.isRequired,
   setSelectedWaitlistIds: PropTypes.func.isRequired,
   goToSendMassMessage: PropTypes.func.isRequired,
   batchUpdate: PropTypes.func.isRequired,
+  goToAddWaitListForm: PropTypes.func.isRequired,
 };
 
 WaitlistTableWithActions.defaultProps = {

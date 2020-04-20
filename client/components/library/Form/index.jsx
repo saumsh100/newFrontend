@@ -23,6 +23,7 @@ function Form(props) {
     ignoreSaveButton,
     SaveButton,
     saveButtonProps,
+    id,
   } = props;
 
   const showSubmitButton = !ignoreSaveButton && (
@@ -33,6 +34,7 @@ function Form(props) {
     <div>
       <form
         className={className}
+        id={id}
         onSubmit={handleSubmit}
         onChange={e => e.stopPropagation()}
         data-test-id={props['data-test-id']}
@@ -48,6 +50,7 @@ Form.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
+  id: PropTypes.string,
   pristine: PropTypes.bool,
   ignoreSaveButton: PropTypes.bool,
   SaveButton: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
@@ -58,6 +61,7 @@ Form.propTypes = {
 Form.defaultProps = {
   children: null,
   className: null,
+  id: null,
   pristine: false,
   ignoreSaveButton: false,
   SaveButton: FormButton,
