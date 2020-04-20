@@ -27,7 +27,7 @@ const WaitlistRow = ({
     </td>
     <td className={tableStyles.col}>{addedDate}</td>
     <td className={tableStyles.col}>
-      <PopOverComponent patient={patient}>
+      <PopOverComponent patient={patient} zIndex={9999}>
         <div>{`${patient.firstName} ${patient.lastName}`}</div>
       </PopOverComponent>
     </td>

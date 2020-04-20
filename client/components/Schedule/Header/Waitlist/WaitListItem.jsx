@@ -46,6 +46,7 @@ const WaitListItem = ({
         }
         isPatientUser={isPatientUser}
         placement="left"
+        zIndex={9999}
       >
         <div className={styles.name}>
           {patient.firstName} {patient.lastName}

@@ -3,10 +3,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, RemoteSubmitButton, DialogBox } from '../../../library';
 
-export default function FormModal({ active, title, onToggle, children, formName, isUpdate }) {
+export default function FormModal({
+  active,
+  title,
+  onToggle,
+  children,
+  formName,
+  isUpdate,
+  containerStyles,
+}) {
   return (
     <DialogBox
       active={active}
+      containerStyles={containerStyles}
       onEscKeyDown={onToggle}
       onOverlayClick={onToggle}
       title={title}
@@ -40,4 +49,9 @@ FormModal.propTypes = {
   children: PropTypes.element.isRequired,
   formName: PropTypes.string.isRequired,
   isUpdate: PropTypes.bool.isRequired,
+  containerStyles: PropTypes.string,
+};
+
+FormModal.defaultProps = {
+  containerStyles: null,
 };

@@ -45,6 +45,7 @@ class PatientUserPopover extends Component {
       isNoteFormActive,
       isFollowUpsFormActive,
       isRecallsFormActive,
+      zIndex,
     } = this.props;
     const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
     if (!patient) {
@@ -54,6 +55,7 @@ class PatientUserPopover extends Component {
     return (
       <Popover
         {...this.props}
+        style={{ zIndex }}
         isOpen={this.state.isOpen && !closePopover}
         body={[
           <PatientUserProfile
@@ -95,6 +97,7 @@ PatientUserPopover.propTypes = {
   isNoteFormActive: PropTypes.bool.isRequired,
   isFollowUpsFormActive: PropTypes.bool.isRequired,
   isRecallsFormActive: PropTypes.bool.isRequired,
+  zIndex: PropTypes.number,
 };
 
 PatientUserPopover.defaultProps = {
@@ -105,6 +108,7 @@ PatientUserPopover.defaultProps = {
   className: styles.patientPopover,
   patientStyles: styles.patientPopoverTitle,
   patientChat: null,
+  zIndex: null,
 };
 
 const mapStateToProps = ({ patientTable }) => ({

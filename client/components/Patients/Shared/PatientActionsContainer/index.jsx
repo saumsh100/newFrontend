@@ -323,6 +323,7 @@ class PatientActionsContainer extends Component {
             this.props.setSelectedNote,
             this.props.setIsNoteFormActive,
           )}
+          containerStyles={styles.patientActionsModalTheme}
         >
           <CreateOrUpdatePatientNoteMutation isUpdate={isUpdatingNote}>
             {commit =>
@@ -347,6 +348,7 @@ class PatientActionsContainer extends Component {
             this.props.setSelectedFollowUp,
             this.props.setIsFollowUpsFormActive,
           )}
+          containerStyles={styles.patientActionsModalTheme}
         >
           <CreateOrUpdateFollowUpMutation isUpdate={isUpdatingFollowUp}>
             {commit =>
@@ -377,6 +379,7 @@ class PatientActionsContainer extends Component {
             this.props.setSelectedRecall,
             this.props.setIsRecallsFormActive,
           )}
+          containerStyles={styles.patientActionsModalTheme}
         >
           <CreateOrUpdateSentRecallMutation isUpdate={isUpdatingRecall}>
             {commit =>
