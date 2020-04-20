@@ -9,7 +9,7 @@ const companyIcons = {
   'Rate MDs': '//www.cdnstyles.com/static/images/icon32/sourceId-10450.png',
   Facebook: '//www.cdnstyles.com/static/images/icon32/sourceId-10050.png',
   Yelp: '//www.cdnstyles.com/static/images/icon32/sourceId-10000.png',
-  'Google Maps': '//www.cdnstyles.com/static/images/icon32/sourceId-10010.png',
+  Google: '//www.cdnstyles.com/static/images/icon32/sourceId-10010.png',
   CareCru: 'https://carecru.com/wp-content/uploads/2017/07/cropped-CareCru-Icon.png',
   YellowPages: '//www.cdnstyles.com/static/images/icon32/sourceId-10490.png',
 };
