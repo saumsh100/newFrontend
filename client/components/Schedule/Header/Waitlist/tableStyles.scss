@@ -88,13 +88,21 @@
 }
 
 .patients {
+  display: block;
   border-collapse: collapse;
   font-size: 12px;
   letter-spacing: 0;
   text-align: left;
   width: 100%;
 
+  tr {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+  }
   thead {
+    width: calc(100% - 1rem); // account for the scroll bar width
+    display: block;
     tr {
       th {
         border-bottom: 1px solid $primary-grey;
@@ -110,13 +118,15 @@
   }
 
   tbody {
+    display: block;
+    overflow: auto;
+    height: 500px;
+    width: 100%;
     tr {
-      height: 80px;
-
       td {
         border-bottom: 1px solid $primary-grey;
         color: $primary-dark;
-        padding: 0 12px;
+        padding: 30px 12px;
 
         &[width='20'] {
           border-bottom: 0;
