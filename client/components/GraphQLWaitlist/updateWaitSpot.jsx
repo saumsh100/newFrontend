@@ -7,17 +7,16 @@ import PropTypes from 'prop-types';
 import { query } from './fetchWaitSpot';
 
 const mutation = gql`
-  mutation deleteWaitSpot_Mutation($input: deleteWaitSpotInput!) {
-    deleteWaitSpotMutation(input: $input) {
-      clientMutationId
+  mutation updateWaitSpot_Mutation($input: updateWaitSpotInput!) {
+    updateWaitSpot(input: $input) {
       waitSpot {
-        id
+        ccId
       }
     }
   }
 `;
 
-const DeleteWaitSpot = ({ children }) => (
+const UpdateWaitSpot = ({ children }) => (
   <Mutation
     mutation={mutation}
     refetchQueries={() => [
@@ -31,7 +30,7 @@ const DeleteWaitSpot = ({ children }) => (
   </Mutation>
 );
 
-DeleteWaitSpot.propTypes = { children: PropTypes.func };
-DeleteWaitSpot.defaultProps = { children: null };
+UpdateWaitSpot.propTypes = { children: PropTypes.func };
+UpdateWaitSpot.defaultProps = { children: null };
 
-export default DeleteWaitSpot;
+export default UpdateWaitSpot;

@@ -15,6 +15,7 @@ import {
   waitlistRecipientsAnalyzer,
 } from '../../../../thunks/waitlist';
 import { Create as CreateWaitSpot } from '../../../GraphQLWaitlist';
+import UpdateWaitSpot from '../../../GraphQLWaitlist/updateWaitSpot';
 
 export const WAITLIST_STATE = {
   initial: 0,
@@ -27,7 +28,9 @@ const NextWaitlist = ({ account, ...props }) => {
   const batchUpdate = useCallback((state = false) => batchUpdateFactory(props.waitlist)(state), [
     props.waitlist,
   ]);
-  const [selectedWaitlistMap, setSelectedWaitlistIds] = useState(batchUpdate);
+  const [selectedWaitSpot, setSelectedWaitSpot] = useState({});
+  const isNewWaitSpot = Object.keys(selectedWaitSpot).length === 0;
+  const [selectedWaitlistMap, setSelectedWaitlistMap] = useState(batchUpdate);
   const [waitlistState, setWaitListState] = useState(WAITLIST_STATE.initial);
   const [textMessage, setTextMessage] = useState('');
   const [conversionAnalyzer, setConversionAnalyzer] = useState({ success: [],
@@ -36,7 +39,7 @@ const NextWaitlist = ({ account, ...props }) => {
     errors: [] });
 
   useEffect(() => {
-    setSelectedWaitlistIds(batchUpdate());
+    setSelectedWaitlistMap(batchUpdate());
   }, [batchUpdate]);
 
   useEffect(() => {
@@ -67,35 +70,31 @@ const NextWaitlist = ({ account, ...props }) => {
   }, [account, conversionAnalyzer, textMessage]);
 
   const handleSubmit = callback => ({ patient, ...values }) => {
-    const daysOfTheWeek = values.daysOfTheWeek.reduce(
-      (acc, curr) => ({
-        ...acc,
-        [curr]: true,
-      }),
-      {
-        sunday: false,
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-      },
-    );
-
     callback({
       variables: {
         input: {
           ...values,
           accountId: account.get('id'),
           patientId: patient.id,
-          daysOfTheWeek,
+          id: selectedWaitSpot.id,
         },
       },
     });
 
+    resetEditForm();
+  };
+
+  const handleEdit = id => () => {
+    const waitSpot = props.waitlist.find(({ ccId }) => ccId === id);
+    setSelectedWaitSpot(waitSpot);
+    setWaitListState(WAITLIST_STATE.form);
+  };
+
+  const resetEditForm = () => {
+    setSelectedWaitSpot({});
     setWaitListState(WAITLIST_STATE.initial);
   };
+
   switch (waitlistState) {
     default:
     case WAITLIST_STATE.initial:
@@ -103,9 +102,10 @@ const NextWaitlist = ({ account, ...props }) => {
         <WaitlistTableWithActions
           {...props}
           batchUpdate={batchUpdate}
+          onEdit={handleEdit}
           goToAddWaitListForm={() => setWaitListState(WAITLIST_STATE.form)}
           goToSendMassMessage={goToSendMassMessage}
-          setSelectedWaitlistIds={setSelectedWaitlistIds}
+          setSelectedWaitlistMap={setSelectedWaitlistMap}
           selectedWaitlistMap={selectedWaitlistMap}
         />
       );
@@ -135,15 +135,23 @@ const NextWaitlist = ({ account, ...props }) => {
       );
     case WAITLIST_STATE.form:
       return (
-        <CreateWaitSpot>
-          {createWaitSpotHandler => (
-            <WaitlistForm
-              timezone={account.get('timezone')}
-              handleSubmit={handleSubmit(createWaitSpotHandler)}
-              goToWaitlistTable={() => setWaitListState(WAITLIST_STATE.initial)}
-            />
+        <UpdateWaitSpot>
+          {updateWaitSpotHandler => (
+            <CreateWaitSpot>
+              {createWaitSpotHandler => (
+                <WaitlistForm
+                  isNewWaitSpot={isNewWaitSpot}
+                  timezone={account.get('timezone')}
+                  initialState={selectedWaitSpot}
+                  handleSubmit={handleSubmit(
+                    isNewWaitSpot ? createWaitSpotHandler : updateWaitSpotHandler,
+                  )}
+                  goToWaitlistTable={resetEditForm}
+                />
+              )}
+            </CreateWaitSpot>
           )}
-        </CreateWaitSpot>
+        </UpdateWaitSpot>
       );
   }
 };

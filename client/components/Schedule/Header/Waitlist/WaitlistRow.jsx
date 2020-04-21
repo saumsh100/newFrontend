@@ -17,9 +17,11 @@ const WaitlistRow = ({
   PopOverComponent,
   checked,
   onChange,
+  onEdit,
   reasonText,
   onRemove,
   times,
+  id,
 }) => (
   <tr className={tableStyles.row}>
     <td width={20} />
@@ -48,7 +50,7 @@ const WaitlistRow = ({
           </Button>
         )}
       >
-        <Button className={tableStyles.actionItem} onClick={() => console.log}>
+        <Button className={tableStyles.actionItem} onClick={onEdit(id)}>
           Edit
         </Button>
         <Button className={tableStyles.actionItem} onClick={onRemove}>
@@ -66,6 +68,7 @@ WaitlistRow.propTypes = {
   PopOverComponent: PropTypes.objectOf(PropTypes.any).isRequired,
   addedDate: PropTypes.string.isRequired,
   dates: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   duration: PropTypes.string,
   nextApptDate: PropTypes.string,
   note: PropTypes.string,
@@ -75,6 +78,7 @@ WaitlistRow.propTypes = {
   onRemove: PropTypes.func.isRequired,
   checked: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
 };
 
 WaitlistRow.defaultProps = {

@@ -183,11 +183,28 @@ export const generateWaitlistHours = (timezone, start = 6, end = 20) => {
   const result = [];
   for (let hours = start; hours <= end; hours += 1) {
     const value = setDateToTimezone(baseTime, timezone).set({ hours });
-    result.push({ value: value.toISOString(),
+    result.push({ value: value.toString(),
       label: value.format('LT') });
   }
   return result;
 };
+
+export const convertArrayOfDaysInMap = values =>
+  values.reduce(
+    (acc, curr) => ({
+      ...acc,
+      [curr]: true,
+    }),
+    {
+      sunday: false,
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: false,
+    },
+  );
 
 /**
  * Standardize props regardless if the input is a PatientUser or a Patient.
@@ -233,6 +250,7 @@ export const propsGenerator = ({
   return {
     ...props,
     key: ccId,
+    id: ccId,
     checked: selectedWaitlistMap[ccId],
     onChange: () => toggleSingleWaitlistSelection(ccId),
     onRemove: () => removeWaitSpot({ id: ccId }),

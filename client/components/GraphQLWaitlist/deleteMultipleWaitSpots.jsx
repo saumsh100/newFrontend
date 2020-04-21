@@ -4,7 +4,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import PropTypes from 'prop-types';
-import { legacyQuery } from './fetchWaitSpot';
+import { query } from './fetchWaitSpot';
 
 const mutation = gql`
   mutation deleteMultipleWaitSpots_Mutation($input: deleteMultipleWaitSpotsInput!) {
@@ -19,7 +19,7 @@ const DeleteWaitSpot = ({ children }) => (
     mutation={mutation}
     refetchQueries={() => [
       {
-        query: legacyQuery,
+        query,
         variables: {},
       },
     ]}

@@ -1,7 +1,8 @@
 
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { week, capitalize, dateFormatter } from '@carecru/isomorphic';
+import { week, capitalize, setDateToTimezone } from '@carecru/isomorphic';
+import moment from 'moment-timezone';
 import { Button, Icon } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';
@@ -10,7 +11,7 @@ import { SelectedPatient } from '../AddToWaitlist';
 import MultiSelect from '../../../../library/ui-kit/MultiSelect';
 import styles from './styles.scss';
 import Selector from './Selector';
-import { generateWaitlistHours } from '../helpers';
+import { convertArrayOfDaysInMap, generateWaitlistHours } from '../helpers';
 
 const maxLength = max => value =>
   (value && value.length > max
@@ -47,16 +48,46 @@ const units = [
   { value: 10 },
 ];
 
-const WaitlistForm = ({ goToWaitlistTable, timezone, handleSubmit }) => {
-  const [formValues, setFormValues] = useState({
-    endDate: '',
-    note: '',
-    patient: null,
-    daysOfTheWeek: [],
-    availableTimes: [],
-    reasonText: '',
-    duration: '',
-  });
+const initalWeek = week.all.reduce(
+  (acc, curr) => ({
+    ...acc,
+    [curr]: false,
+  }),
+  {},
+);
+
+const setInitialState = ({
+  endDate = '',
+  note = '',
+  patient = null,
+  daysOfTheWeek = initalWeek,
+  availableTimes = [],
+  reasonText = '',
+  duration = 0,
+}) => ({
+  endDate,
+  note,
+  patient,
+  daysOfTheWeek,
+  availableTimes,
+  reasonText,
+  duration,
+});
+
+const WaitlistForm = ({
+  goToWaitlistTable,
+  timezone,
+  handleSubmit,
+  initialState,
+  isNewWaitSpot,
+}) => {
+  const [formValues, setFormValues] = useState(setInitialState(initialState));
+
+  const selectedDaysOfWeek = Object.entries(formValues.daysOfTheWeek)
+    .filter(([, v]) => v)
+    .map(([v]) => v);
+
+  const selectedTimes = formValues.availableTimes.map(v => moment(v).toString());
 
   const handleAutoSuggest = (newValue) => {
     setFormValues({
@@ -79,6 +110,7 @@ const WaitlistForm = ({ goToWaitlistTable, timezone, handleSubmit }) => {
       [key]: v,
     });
   };
+
   const weekdays = useMemo(
     () =>
       week.all.map(day => ({
@@ -89,6 +121,10 @@ const WaitlistForm = ({ goToWaitlistTable, timezone, handleSubmit }) => {
   );
 
   const timeOptions = useMemo(() => generateWaitlistHours(timezone), [timezone]);
+
+  const onDaysOfTheWeekChange = (values) => {
+    onChange('daysOfTheWeek')(convertArrayOfDaysInMap(values));
+  };
 
   return (
     <div className={styles.waitlistFormContainer}>
@@ -106,7 +142,7 @@ const WaitlistForm = ({ goToWaitlistTable, timezone, handleSubmit }) => {
           Cancel and return to waitlist
         </div>
       </div>
-      <div className={styles.heading}>Add to Waitlist</div>
+      <div className={styles.heading}>{isNewWaitSpot ? 'Add to Waitlist' : 'Update Wait Spot'}</div>
       <form
         id="waitlist-form"
         onSubmit={(e) => {
@@ -138,14 +174,15 @@ const WaitlistForm = ({ goToWaitlistTable, timezone, handleSubmit }) => {
               />
             )}
             <MultiSelect
-              onChange={onChange('daysOfTheWeek')}
+              onChange={onDaysOfTheWeekChange}
               options={weekdays}
-              selected={formValues.daysOfTheWeek}
+              selected={selectedDaysOfWeek}
+              defaultValue={selectedDaysOfWeek}
               theme={{ selectWrapper: styles.inputWrapper }}
               selector={(disabled, selectedItems, error, getToggleButtonProps, handleSelection) => (
                 <Selector
                   disabled={disabled}
-                  selected={formValues.daysOfTheWeek}
+                  selected={selectedDaysOfWeek}
                   placeholder="Preferred Days"
                   error={error}
                   selectorProps={getToggleButtonProps()}
@@ -165,20 +202,21 @@ const WaitlistForm = ({ goToWaitlistTable, timezone, handleSubmit }) => {
             <DayPicker
               label="Date (MM/DD/YYYY)"
               validate={[maxDateLength]}
-              onChange={onChange('endDate')}
+              onChange={v => onChange('endDate')(setDateToTimezone(v, timezone).toString())}
               value={formValues.endDate || ''}
             />
             <MultiSelect
               onChange={onChange('availableTimes')}
               options={timeOptions}
-              selected={formValues.availableTimes}
+              selected={selectedTimes}
+              defaultValue={selectedTimes}
               theme={{ selectWrapper: styles.inputWrapper }}
               selector={(disabled, selectedItems, error, getToggleButtonProps, handleSelection) => (
                 <Selector
                   disabled={disabled}
-                  selected={formValues.availableTimes}
+                  selected={selectedTimes}
                   placeholder="Preferred Times"
-                  formatValue={v => dateFormatter(v, timezone, 'LT')}
+                  formatValue={v => moment(v).format('LT')}
                   error={error}
                   selectorProps={getToggleButtonProps()}
                   handleSelection={handleSelection}
@@ -221,7 +259,7 @@ const WaitlistForm = ({ goToWaitlistTable, timezone, handleSubmit }) => {
             form="waitlist-form"
             disabled={formValues.patient === null}
           >
-            Add
+            {isNewWaitSpot ? 'Add' : 'Update'}
           </Button>
         </div>
       </div>
@@ -233,8 +271,12 @@ WaitlistForm.propTypes = {
   goToWaitlistTable: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  initialState: PropTypes.objectOf(PropTypes.any),
+  isNewWaitSpot: PropTypes.bool.isRequired,
 };
 
-WaitlistForm.defaultProps = {};
+WaitlistForm.defaultProps = {
+  initialState: {},
+};
 
 export default WaitlistForm;

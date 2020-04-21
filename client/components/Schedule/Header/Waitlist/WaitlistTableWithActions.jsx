@@ -11,7 +11,7 @@ import styles from './tableStyles.scss';
 const WaitlistTableWithActions = ({
   waitlist,
   selectedWaitlistMap,
-  setSelectedWaitlistIds,
+  setSelectedWaitlistMap,
   removeMultipleWaitSpots,
   batchUpdate,
   goToSendMassMessage,
@@ -26,11 +26,11 @@ const WaitlistTableWithActions = ({
   const isEveryWaitlistSelected = waitlistLength > 0 && waitlistLength === selectedWaitlistLength;
   const isAnyWaitlistSelected = selectedWaitlistLength > 0;
   const toggleAllWaitlistSelection = () => {
-    setSelectedWaitlistIds(batchUpdate(!isEveryWaitlistSelected));
+    setSelectedWaitlistMap(batchUpdate(!isEveryWaitlistSelected));
   };
 
   const toggleSingleWaitlistSelection = (key) => {
-    setSelectedWaitlistIds(prevState => ({
+    setSelectedWaitlistMap(prevState => ({
       ...prevState,
       [key]: !prevState[key],
     }));
@@ -128,7 +128,7 @@ WaitlistTableWithActions.propTypes = {
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
   selectedWaitlistMap: PropTypes.objectOf(PropTypes.bool).isRequired,
   removeMultipleWaitSpots: PropTypes.func.isRequired,
-  setSelectedWaitlistIds: PropTypes.func.isRequired,
+  setSelectedWaitlistMap: PropTypes.func.isRequired,
   goToSendMassMessage: PropTypes.func.isRequired,
   batchUpdate: PropTypes.func.isRequired,
   goToAddWaitListForm: PropTypes.func.isRequired,
