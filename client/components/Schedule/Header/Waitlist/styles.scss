@@ -81,6 +81,7 @@
 }
 
 .waitList {
+  position: relative;
   min-height: 267px;
   width: 100%;
   composes: fontDefault from '../../../../fonts.scss';
@@ -272,4 +273,10 @@
 }
 .colDel {
   width: 50px;
+}
+
+.loadingBarOverride {
+  background: $color-white;
+  position: absolute;
+  top: 0;
 }

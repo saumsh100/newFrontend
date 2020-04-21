@@ -1,5 +1,5 @@
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Fetch as FetchWaitlist,
@@ -7,50 +7,61 @@ import {
   RemoveWaitSpotSubscription,
 } from '../../../GraphQLWaitlist';
 import graphqlRefetcher from '../../../../util/graphqlRefetcher';
+import LoadingBar from '../../../library/LoadingBar';
 import WaitlistTable from './WaitlistTable';
 import NextWaitlist from './NextWaitlist';
+import styles from './styles.scss';
 
-const WaitlistGQLEnhanced = ({ newWaitlist, accountId, ...props }) => (
-  <FetchWaitlist newWaitlist={newWaitlist}>
-    {({ data: waitSpotData, subscribeToMore, refetch }) => {
-      if (!waitSpotData || !waitSpotData.accountViewer) {
-        return null;
-      }
-      const refetcher = graphqlRefetcher(subscribeToMore, refetch, { accountId });
-      refetcher(AddWaitSpotSubscription);
-      refetcher(RemoveWaitSpotSubscription);
+const WaitlistGQLEnhanced = ({ newWaitlist, accountId, ...props }) => {
+  const [isLoading, setLoadingState] = useState(true);
+  return (
+    <FetchWaitlist newWaitlist={newWaitlist}>
+      {({ data: waitSpotData, subscribeToMore, refetch }) => {
+        if (waitSpotData.accountViewer) {
+          setLoadingState(false);
+        }
 
-      const waitSpots = waitSpotData.accountViewer.waitSpots.edges.map((edge) => {
-        const patient = edge.node.patient && {
-          ...edge.node.patient,
-          clientId: edge.node.patient.id,
-          id: edge.node.patient.ccId,
-        };
+        const refetcher = graphqlRefetcher(subscribeToMore, refetch, { accountId });
+        refetcher(AddWaitSpotSubscription);
+        refetcher(RemoveWaitSpotSubscription);
 
-        const patientUser = edge.node.patientUser && {
-          ...edge.node.patientUser,
-          clientId: edge.node.patientUser.id,
-          id: edge.node.patientUser.ccId,
-        };
+        const waitSpots = !isLoading
+          ? waitSpotData.accountViewer.waitSpots.edges.map((edge) => {
+              const patient = edge.node.patient && {
+                ...edge.node.patient,
+                clientId: edge.node.patient.id,
+                id: edge.node.patient.ccId,
+              };
 
-        return {
-          ...edge.node,
-          clientId: edge.node.id,
-          id: edge.node.ccId,
-          accountViewerClientId: waitSpotData.accountViewer.id,
-          patient,
-          patientUser,
-        };
-      });
+              const patientUser = edge.node.patientUser && {
+                ...edge.node.patientUser,
+                clientId: edge.node.patientUser.id,
+                id: edge.node.patientUser.ccId,
+              };
 
-      return newWaitlist ? (
-        <NextWaitlist waitlist={waitSpots} {...props} />
-      ) : (
-        <WaitlistTable waitlist={waitSpots} {...props} />
-      );
-    }}
-  </FetchWaitlist>
-);
+              return {
+                ...edge.node,
+                clientId: edge.node.id,
+                id: edge.node.ccId,
+                accountViewerClientId: waitSpotData.accountViewer.id,
+                patient,
+                patientUser,
+              };
+            })
+          : [];
+
+        return newWaitlist ? (
+          <>
+            {isLoading && <LoadingBar className={styles.loadingBarOverride} />}
+            <NextWaitlist waitlist={waitSpots} {...props} />
+          </>
+        ) : (
+          <WaitlistTable waitlist={waitSpots} {...props} />
+        );
+      }}
+    </FetchWaitlist>
+  );
+};
 
 WaitlistGQLEnhanced.propTypes = {
   accountId: PropTypes.string.isRequired,
