@@ -57,7 +57,7 @@ const initalWeek = week.all.reduce(
 );
 
 const setInitialState = ({
-  endDate = '',
+  endDate = null,
   note = '',
   patient = null,
   daysOfTheWeek = initalWeek,
@@ -200,7 +200,7 @@ const WaitlistForm = ({
           </div>
           <div className={styles.waitlistFormColumnRight}>
             <DayPicker
-              label="Date (MM/DD/YYYY)"
+              label="Remove from Waitlist (date)"
               validate={[maxDateLength]}
               onChange={v => onChange('endDate')(setDateToTimezone(v, timezone).toString())}
               value={formValues.endDate || ''}

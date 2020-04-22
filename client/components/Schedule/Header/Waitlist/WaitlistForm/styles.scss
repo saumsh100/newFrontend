@@ -5,7 +5,7 @@
   color: black;
   display: flex;
   flex-direction: column;
-  height: 629px;
+  min-height: 629px;
   text-align: left;
   width: 100%;
 }
@@ -61,7 +61,7 @@
 .iconWrapper {
   color: $primary-darkgrey;
   font-size: 14px;
-  margin-right: 0;
+  margin-right: 15px;
   text-align: right;
 }
 
@@ -100,15 +100,18 @@
 .textArea {
   background-color: $chat-lightgrey;
   border: none;
+  box-sizing: border-box;
   color: $primary-dark;
   font-family: $book-font;
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
   font-weight: 300;
-  height: 80%;
+  height: 100%;
+  margin: 0;
   outline: none;
+  padding: 16px 20px;
   resize: none;
-  width: 95%;
+  width: 100%;
 }
 
 .tooltip_Popover {
@@ -122,48 +125,6 @@
   > :global(svg.Popover-tip) {
     fill: #7b7b7b;
   }
-}
-
-.pref__multi__wrapper {
-  background: $primary-white;
-  border: 1px solid $primary-grey;
-  border-radius: 4px;
-  box-shadow: 2px 2px 8px 0 rgba(128, 128, 128, 0.16);
-  color: $primary-dark;
-  display: flex;
-  flex-direction: column;
-  font-family: $medium-font;
-  font-size: 12px;
-  min-width: 200px;
-  padding: 16px 16px 10px 16px;
-}
-
-.list__item {
-  align-items: center;
-  display: flex;
-  margin-bottom: 8px;
-}
-
-.list__item__label {
-  align-items: center;
-  color: #6e6e6e;
-  display: flex;
-  font-size: 13px;
-  font-weight: normal;
-  height: 16px;
-  margin-left: 8px;
-}
-
-.helpers__wrapper {
-  border-bottom: 1px solid #efefef;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 11px;
-  padding-right: 20%;
-}
-
-.options__wrapper {
-  padding-top: 16px;
 }
 
 .patientContainer {

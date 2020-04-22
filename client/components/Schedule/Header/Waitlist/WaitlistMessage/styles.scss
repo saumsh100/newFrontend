@@ -1,4 +1,5 @@
 @import '../../../../../ui';
+@import '../WaitlistForm/styles';
 
 .draftMessageContainer {
   display: flex;
@@ -32,15 +33,6 @@
   display: flex;
   flex-direction: column;
   width: 48%;
-}
-
-.columnLabel {
-  align-self: flex-start;
-  color: #959595;
-  font-size: 13px;
-  font-weight: 500;
-  height: 16px;
-  margin-bottom: 7px;
 }
 
 .patientWrapper {
@@ -79,45 +71,6 @@
   justify-content: center;
 }
 
-.textArea {
-  background: $chat-lightgrey;
-  border: none;
-  color: $primary-dark;
-  font-family: $book-font;
-  font-size: 14px;
-  -webkit-font-smoothing: antialiased;
-  font-weight: 300;
-  height: 80%;
-  outline: none;
-  resize: none;
-  width: 90%;
-}
-
-.footer {
-  align-items: center;
-  border-top: 1px solid $chat-lightgrey;
-  display: flex;
-  height: 73px;
-  justify-content: flex-end;
-  margin-top: auto;
-  padding: 0 10px;
-}
-
-.buttonWrapper {
-  margin: 0 10px;
-}
-
-.redirect {
-  color: $primary-blue;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: $medium-font;
-  font-size: 12px;
-  font-weight: 500;
-  margin-left: 18px;
-  margin-top: 24px;
-}
-
 .heading {
   color: #2e3845;
   font-family: $medium-font;
@@ -153,8 +106,4 @@
   font-size: 11px;
   font-weight: 300;
   margin: 8px 0;
-}
-
-.iconWrapper {
-  margin-right: 8px;
 }

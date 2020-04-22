@@ -10,38 +10,28 @@ const mutation = gql`
   mutation addWaitSpot_Mutation($input: addWaitSpotInput!) {
     addWaitSpotMutation(input: $input) {
       waitSpot {
-        patientId
-        unavailableDays
         availableTimes
-        endDate
-        daysOfTheWeek
-        preferences
-      }
-    }
-  }
-`;
-
-const nextMutation = gql`
-  mutation addWaitSpot_Mutation($input: addWaitSpotInput!) {
-    addWaitSpotMutation(input: $input) {
-      waitSpot {
+        id
+        ccId
+        patientUserId
+        appointmentId
         patientId
-        unavailableDays
-        availableTimes
-        endDate
+        reasonText
         note
         duration
-        reasonText
-        daysOfTheWeek
         preferences
+        unavailableDays
+        daysOfTheWeek
+        endDate
+        createdAt
       }
     }
   }
 `;
 
-const AddWaitSpot = ({ children, newWaitlist }) => (
+const AddWaitSpot = ({ children }) => (
   <Mutation
-    mutation={newWaitlist ? nextMutation : mutation}
+    mutation={mutation}
     refetchQueries={() => [
       {
         query,
@@ -53,9 +43,7 @@ const AddWaitSpot = ({ children, newWaitlist }) => (
   </Mutation>
 );
 
-AddWaitSpot.propTypes = { children: PropTypes.func,
-  newWaitlist: PropTypes.bool };
-AddWaitSpot.defaultProps = { children: null,
-  newWaitlist: false };
+AddWaitSpot.propTypes = { children: PropTypes.func };
+AddWaitSpot.defaultProps = { children: null };
 
 export default AddWaitSpot;

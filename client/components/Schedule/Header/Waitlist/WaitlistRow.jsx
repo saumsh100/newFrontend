@@ -25,7 +25,7 @@ const WaitlistRow = ({
 }) => (
   <tr className={tableStyles.row}>
     <td width={20} />
-    <td className={tableStyles.col} data-width="sm">
+    <td className={tableStyles.col} data-width="xs">
       <Checkbox checked={checked} onChange={onChange} />
     </td>
     <td className={tableStyles.col}>{addedDate}</td>

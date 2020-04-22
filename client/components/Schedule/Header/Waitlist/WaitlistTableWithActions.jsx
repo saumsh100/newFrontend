@@ -88,7 +88,7 @@ const WaitlistTableWithActions = ({
         <thead>
           <tr>
             <th width={20} />
-            <th data-width="sm">
+            <th data-width="xs">
               <Checkbox checked={isEveryWaitlistSelected} onChange={toggleAllWaitlistSelection} />
             </th>
             <th>Date Added</th>
