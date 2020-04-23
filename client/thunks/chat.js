@@ -27,6 +27,7 @@ import { deleteAllEntity, deleteEntity, receiveEntities } from '../reducers/enti
 import { isHub } from '../util/hub';
 import { sortByFieldAsc, sortTextMessages } from '../components/library/util/SortEntities';
 import { httpClient } from '../util/httpClient';
+import determineProspectForChat from './prospects';
 
 function isOnChatPage(currentPath) {
   return currentPath.indexOf('/chat') !== -1;
@@ -69,16 +70,14 @@ export function loadUnreadMessages() {
   return dispatch =>
     httpClient()
       .get('/api/chats/unread/list')
-      .then(result =>
-        dispatch(setUnreadChats(result.data || [])));
+      .then(result => dispatch(setUnreadChats(result.data || [])));
 }
 
 export function loadUnreadChatCount() {
   return dispatch =>
     httpClient()
       .get('/api/chats/unread/count')
-      .then(result =>
-        dispatch(setUnreadChatsCount(result.data.unreadChatsCount || 0)));
+      .then(result => dispatch(setUnreadChatsCount(result.data.unreadChatsCount || 0)));
 }
 
 export function addMessage(message) {
@@ -118,7 +117,7 @@ export function addMessage(message) {
           dispatch(push(`/chat/${chatId}`));
 
           if (isHub()) {
-            import('./electron').then(electronThunk => {
+            import('./electron').then((electronThunk) => {
               dispatch(electronThunk.displayContent());
             });
           }
@@ -129,8 +128,7 @@ export function addMessage(message) {
 }
 
 function filterUnreadMessages(textMessagesList) {
-  return textMessagesList ? Object.values(textMessagesList).filter(message =>
-    !message.read) : [];
+  return textMessagesList ? Object.values(textMessagesList).filter(message => !message.read) : [];
 }
 
 function filterReadMessages(unreadList, textMessages) {
@@ -139,9 +137,8 @@ function filterReadMessages(unreadList, textMessages) {
   }
 
   const textMessagesArray = Object.values(textMessages);
-  return unreadList.filter(unreadId => {
-    const newList = textMessagesArray.filter(message =>
-      message.read && unreadId === message.id);
+  return unreadList.filter((unreadId) => {
+    const newList = textMessagesArray.filter(message => message.read && unreadId === message.id);
     return newList.length !== 0;
   });
 }
@@ -167,8 +164,7 @@ export function createListOfUnreadedChats(result) {
           shouldUpdateUnreadChats(currentLocation, message, selectedChatId) &&
           currentUser !== message.userId,
       )
-      .map(message =>
-        message.id);
+      .map(message => message.id);
 
     result = uniq(result);
     const newUnreadChatsList = union(filteredUnreadList, result);
@@ -202,28 +198,23 @@ export function loadChatList(
 }
 
 export function cleanChatList() {
-  return dispatch =>
-    dispatch(deleteAllEntity('chats'));
+  return dispatch => dispatch(deleteAllEntity('chats'));
 }
 
 export function loadUnreadChatList(limit, skip = 0) {
-  return dispatch =>
-    dispatch(loadChatList(limit, skip, '/api/chats/unread', ['patient']));
+  return dispatch => dispatch(loadChatList(limit, skip, '/api/chats/unread', ['patient']));
 }
 
 export function loadFlaggedChatList(limit, skip = 0) {
-  return dispatch =>
-    dispatch(loadChatList(limit, skip, '/api/chats/flagged'));
+  return dispatch => dispatch(loadChatList(limit, skip, '/api/chats/flagged'));
 }
 
 export function loadOpenChatList(limit, skip = 0) {
-  return dispatch =>
-    dispatch(loadChatList(limit, skip, '/api/chats/open?isOpen=true'));
+  return dispatch => dispatch(loadChatList(limit, skip, '/api/chats/open?isOpen=true'));
 }
 
 export function loadClosedChatList(limit, skip = 0) {
-  return dispatch =>
-    dispatch(loadChatList(limit, skip, '/api/chats/closed?isOpen=false'));
+  return dispatch => dispatch(loadChatList(limit, skip, '/api/chats/closed?isOpen=false'));
 }
 
 export function toggleFlagged(chatId, isFlagged) {
@@ -238,30 +229,29 @@ export function toggleFlagged(chatId, isFlagged) {
     );
 }
 
-export const toggleVisibility = (chatId, isOpen) =>
-  async dispatch => {
-    const values =
+export const toggleVisibility = (chatId, isOpen) => async (dispatch) => {
+  const values =
     isOpen === true
       ? { isOpen }
       : {
         isOpen,
         hasUnread: false,
       };
-    return dispatch(
-      updateEntityRequest({
-        key: 'chats',
-        values,
-        url: `/api/chats/${chatId}`,
-        merge: true,
-        alert: {
-          success: { body: `Successfully ${isOpen ? 'reopened' : 'closed'} conversation` },
-          error: { body: `Failed ${isOpen ? 'closing' : 'reopening'} conversation` },
-        },
-      }),
-    ).then(() => {
-      dispatch(unlockChat(chatId));
-    });
-  };
+  return dispatch(
+    updateEntityRequest({
+      key: 'chats',
+      values,
+      url: `/api/chats/${chatId}`,
+      merge: true,
+      alert: {
+        success: { body: `Successfully ${isOpen ? 'reopened' : 'closed'} conversation` },
+        error: { body: `Failed ${isOpen ? 'closing' : 'reopening'} conversation` },
+      },
+    }),
+  ).then(() => {
+    dispatch(unlockChat(chatId));
+  });
+};
 
 export function markAsUnread(chatId, messageDate) {
   return (dispatch, getState) => {
@@ -279,15 +269,13 @@ export function markAsUnread(chatId, messageDate) {
         url: `/api/chats/${chatId}/textMessages/unread`,
       }),
     )
-      .then(response => {
+      .then((response) => {
         const { chat } = getState();
         const unreadChats = chat.get('unreadChats');
 
         const unreadMessagesList = filterUnreadMessages(response.textMessages)
-          .filter(message =>
-            accountTwilioNumber !== message.from)
-          .map(message =>
-            message.id);
+          .filter(message => accountTwilioNumber !== message.from)
+          .map(message => message.id);
 
         const newUnreadChatsList = union(unreadChats, unreadMessagesList);
         dispatch(setUnreadChats(newUnreadChatsList));
@@ -329,7 +317,7 @@ export function markAsRead(chatId) {
 }
 
 export function loadChatMessages(chatId, offset = 0, limit = 15) {
-  return dispatch => {
+  return (dispatch) => {
     if (!chatId) {
       return dispatch(setChatMessagesListForChat(chatId));
     }
@@ -345,8 +333,7 @@ export function loadChatMessages(chatId, offset = 0, limit = 15) {
         );
         return data.total;
       })
-      .then(total =>
-        dispatch(setChatMessagesListForChat(chatId, total)));
+      .then(total => dispatch(setChatMessagesListForChat(chatId, total)));
   };
 }
 
@@ -355,8 +342,7 @@ export function setChatMessagesListForChat(chatId, total = 0) {
     const { entities } = getState();
     const allMessages = entities.getIn(['textMessages', 'models']);
     const filteredChatMessages = allMessages
-      .filter(message =>
-        message.chatId === chatId)
+      .filter(message => message.chatId === chatId)
       .sort(sortTextMessages);
 
     dispatch(setTotalChatMessages(total));
@@ -409,8 +395,7 @@ export function getChatEntity(id) {
               params: { patientId: data.entities.chats[id].patientId },
             }),
           ))
-        .then(({ chats }) =>
-          Map(chats[id]))
+        .then(({ chats }) => Map(chats[id]))
     );
   };
 }
@@ -429,6 +414,8 @@ export function selectChat(id, createChat = null) {
 
     dispatch(setNewChat(createChat));
     dispatch(setSelectedChat(chatEntity));
+
+    chatEntity && dispatch(determineProspectForChat(chatEntity.toJS()));
 
     const patientId =
       (!!createChat && createChat.patientId) || (id && chatEntity && chatEntity.get('patientId'));
@@ -481,11 +468,9 @@ export function socketLock(textMessages) {
     const unreadChats = chat.get('unreadChats');
     const messages = Object.values(textMessages);
 
-    const chatListToLock = messages.map(message =>
-      message.chatId);
+    const chatListToLock = messages.map(message => message.chatId);
 
-    const unreadMessagesList = filterUnreadMessages(textMessages).map(message =>
-      message.id);
+    const unreadMessagesList = filterUnreadMessages(textMessages).map(message => message.id);
     const newUnreadChatsList = union(unreadChats, unreadMessagesList);
 
     dispatch(setUnreadChats(newUnreadChatsList));
@@ -557,13 +542,12 @@ export function resendMessage(messageId, patientId, chatId) {
 }
 
 export function getOrCreateChatForPatient(patientId) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(unsetPatientChat());
 
     return httpClient()
       .get(`/api/patients/${patientId}/chat`)
-      .then(({ data: { chatId } }) =>
-        dispatch(setPatientChat(chatId)));
+      .then(({ data: { chatId } }) => dispatch(setPatientChat(chatId)));
   };
 }
 
@@ -571,6 +555,5 @@ export function getChatCategoryCounts() {
   return dispatch =>
     httpClient()
       .get('/api/chats/count/categories')
-      .then(({ data }) =>
-        dispatch(setChatCategoriesCount(data)));
+      .then(({ data }) => dispatch(setChatCategoriesCount(data)));
 }

@@ -52,6 +52,8 @@ const PatientSchema = {
   omitRecallIds: null,
   isUnknown: false,
   // virtual field, used to determinate if there is a pre-created chat for that phone number.
+  isProspect: false,
+  request: null,
   foundChatId: null,
 };
 

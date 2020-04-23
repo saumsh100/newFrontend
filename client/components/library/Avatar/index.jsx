@@ -27,10 +27,10 @@ export default function Avatar({
     <img className={styles.img} src={url} alt={user.firstName} />
   ) : (
     <span className={styles.text}>
-      {user.isUnknown || (!user.lastName && !user.firstName) ? (
-        <Icon icon="user" type="solid" />
-      ) : (
+      {!user.isUnknown || user.isProspect ? (
         generateInitials(user.firstName, user.lastName)
+      ) : (
+        <Icon icon="user" type="solid" />
       )}
     </span>
   );

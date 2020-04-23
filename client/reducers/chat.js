@@ -18,6 +18,8 @@ export const SET_PATIENT_CHAT = `${reducer}/SET_PATIENT_CHAT`;
 export const UNSET_PATIENT_CHAT = `${reducer}/UNSET_PATIENT_CHAT`;
 export const SET_CHAT_PLACEHOLDERS = `${reducer}/SET_CHAT_PLACEHOLDERS`;
 export const SET_CHAT_CATEGORIES_COUNT = `${reducer}/SET_CHAT_CATEGORIES_COUNT`;
+export const SET_IS_FETCHING_PROSPECT = `${reducer}/SET_IS_FETCHING_PROSPECT`;
+export const SET_PROSPECT = `${reducer}/SET_PROSPECT`;
 
 export const setSelectedChat = createAction(SET_SELECTED_CHAT);
 export const updateChatId = createAction(UPDATE_CHAT_ID);
@@ -31,6 +33,8 @@ export const setTotalChatMessages = createAction(SET_TOTAL_CHAT_MESSAGES);
 export const setPatientChat = createAction(SET_PATIENT_CHAT);
 export const unsetPatientChat = createAction(UNSET_PATIENT_CHAT);
 export const setChatCategoriesCount = createAction(SET_CHAT_CATEGORIES_COUNT);
+export const setIsFetchingProspect = createAction(SET_IS_FETCHING_PROSPECT);
+export const setProspect = createAction(SET_PROSPECT);
 
 export const initialState = Map({
   selectedChatId: null,
@@ -47,6 +51,8 @@ export const initialState = Map({
   chatPoC: null,
   totalChatMessages: 0,
   chatCategoriesCount: {},
+  isFetchingProspect: false,
+  prospect: null,
 });
 
 export default handleActions(
@@ -113,6 +119,14 @@ export default handleActions(
     [SET_CHAT_CATEGORIES_COUNT](state, { payload }) {
       return state.set('chatCategoriesCount', payload);
     },
+
+    [SET_IS_FETCHING_PROSPECT](state, { payload }) {
+      return state.set('isFetchingProspect', payload);
+    },
+
+    [SET_PROSPECT](state, { payload }) {
+      return state.set('prospect', payload);
+    },
   },
   initialState,
 );
@@ -146,8 +160,7 @@ export function filterChatsByTab(chats, selectedChat, tabIndex) {
  * @return {*}
  */
 export function getUnreadChats(chats, selectedChat) {
-  return chats.filter(c =>
-    c.hasUnread || selectedChat === c.get('id'));
+  return chats.filter(c => c.hasUnread || selectedChat === c.get('id'));
 }
 
 /**
@@ -156,8 +169,7 @@ export function getUnreadChats(chats, selectedChat) {
  * @return {*}
  */
 export function getFlaggedChats(chats) {
-  return chats.filter(filterChat =>
-    filterChat.get('isFlagged'));
+  return chats.filter(filterChat => filterChat.get('isFlagged'));
 }
 
 /**
@@ -166,8 +178,7 @@ export function getFlaggedChats(chats) {
  * @return {*}
  */
 export function getOpenChats(chats) {
-  return chats.filter(filterChat =>
-    filterChat.get('isOpen'));
+  return chats.filter(filterChat => filterChat.get('isOpen'));
 }
 
 /**
@@ -176,6 +187,5 @@ export function getOpenChats(chats) {
  * @return {*}
  */
 export function getClosedChats(chats) {
-  return chats.filter(filterChat =>
-    !filterChat.get('isOpen'));
+  return chats.filter(filterChat => !filterChat.get('isOpen'));
 }

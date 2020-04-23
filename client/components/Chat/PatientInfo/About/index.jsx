@@ -43,6 +43,7 @@ export default function About({ patient }) {
                 value={formatPhoneNumber(patient.cellPhoneNumber) || 'n/a'}
               >
                 {() =>
+                  !patient.isUnknown &&
                   patient.cellPhoneNumber && (
                     <PointOfContactBadge patientId={patient.id} channel="phone" />
                   )
@@ -52,6 +53,7 @@ export default function About({ patient }) {
             <Col xs={12}>
               <Content title="Email" value={patient.email || 'n/a'}>
                 {() =>
+                  !patient.isUnknown &&
                   patient.email && <PointOfContactBadge patientId={patient.id} channel="email" />
                 }
               </Content>

@@ -20,6 +20,7 @@ const ToHeader = (props) => {
     // toggle the current chat to either open/close state
     props.toggleVisibility(props.selectedChatId, !props.isChatOpen);
   };
+
   return window.innerWidth > 576 ? (
     <DesktopHeader {...props} toggleChat={toggleChat} />
   ) : (
@@ -29,11 +30,13 @@ const ToHeader = (props) => {
 
 const mapStateToProps = ({ entities, chat }) => {
   const selectedChatId = chat.get('selectedChatId');
+  const isFetchingProspect = chat.get('isFetchingProspect');
+  const prospect = chat.get('prospect');
   const chats = entities.getIn(['chats', 'models']);
   const patients = entities.getIn(['patients', 'models']);
   const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
   const selectedPatientId = selectedChat && selectedChat.patientId;
-  const isUnknow = selectedChat && selectedChat.patientPhoneNumber && !selectedChat.patientId;
+  const isUnknown = selectedChat && selectedChat.patientPhoneNumber && !selectedChat.patientId;
 
   return {
     selectedChatId,
@@ -43,9 +46,11 @@ const mapStateToProps = ({ entities, chat }) => {
       suggestionsContainerOpen: styles.suggestionsContainer,
     },
     toInputProps: { placeholder: 'To: Type name of patient' },
-    selectedPatient: isUnknow
-      ? UnknownPatient(selectedChat.patientPhoneNumber)
+    selectedPatient: isUnknown
+      ? UnknownPatient(selectedChat.patientPhoneNumber, prospect)
       : patients.get(selectedPatientId),
+
+    isFetchingProspect,
   };
 };
 
@@ -71,6 +76,7 @@ ToHeader.propTypes = {
   toggleVisibility: PropTypes.func.isRequired,
   loadChatByCount: PropTypes.func.isRequired,
   tabIndex: PropTypes.number,
+  isFetchingProspect: PropTypes.bool.isRequired,
 };
 
 ToHeader.defaultProps = {

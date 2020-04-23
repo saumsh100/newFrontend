@@ -5,7 +5,6 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import Popover from 'react-popover';
 import PropTypes from 'prop-types';
-import Practitioner from '../../../entities/models/Practitioners';
 import RequestPopover from '../../Requests/RequestPopover';
 import styles from '../PatientPopover/styles.scss';
 
@@ -96,16 +95,16 @@ RequestPopoverLoader.propTypes = {
   className: PropTypes.string,
   placement: PropTypes.string,
   closePopover: PropTypes.bool,
-  push: PropTypes.func.isRequired,
+  push: PropTypes.func,
   scrollId: PropTypes.string,
   patientStyles: PropTypes.string,
-  getOrCreateChatForPatient: PropTypes.func.isRequired,
+  getOrCreateChatForPatient: PropTypes.func,
   patientChat: PropTypes.string,
   isNoteFormActive: PropTypes.bool.isRequired,
   isFollowUpsFormActive: PropTypes.bool.isRequired,
   isRecallsFormActive: PropTypes.bool.isRequired,
-  practitioners: PropTypes.arrayOf(Practitioner).isRequired,
-  data: PropTypes.shape({}),
+  practitioners: PropTypes.objectOf(PropTypes.any).isRequired,
+  data: PropTypes.objectOf(PropTypes.any),
 };
 
 RequestPopoverLoader.defaultProps = {
@@ -116,6 +115,8 @@ RequestPopoverLoader.defaultProps = {
   patientStyles: '',
   patientChat: null,
   data: null,
+  push: null,
+  getOrCreateChatForPatient: null,
 };
 
 const mapStateToProps = ({ patientTable, entities }) => ({

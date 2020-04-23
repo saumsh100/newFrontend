@@ -14,9 +14,10 @@ const DesktopHeader = ({
   toInputTheme,
   isChatOpen,
   toInputProps,
+  isFetchingProspect,
 }) => (
   <div className={styles.wrapper}>
-    {selectedPatient ? (
+    {selectedPatient && !isFetchingProspect ? (
       <div className={styles.patientInfoWrapper}>
         <Avatar size="sm" user={selectedPatient} />
         <div className={styles.patientInfoName}>
@@ -53,6 +54,7 @@ DesktopHeader.propTypes = {
   toggleChat: PropTypes.func.isRequired,
   isChatOpen: PropTypes.bool.isRequired,
   onSearch: PropTypes.func.isRequired,
+  isFetchingProspect: PropTypes.bool.isRequired,
 };
 
 export default DesktopHeader;

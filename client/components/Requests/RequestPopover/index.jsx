@@ -7,7 +7,6 @@ import { formatPhoneNumber } from '@carecru/isomorphic';
 import { isHub } from '../../../util/hub';
 import PatientUser from '../../../entities/models/PatientUser';
 import Practitioner from '../../../entities/models/Practitioners';
-import Request from '../../../entities/models/Request';
 import { Card, Avatar, Icon, SContainer, SHeader, SBody, SFooter, Button } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
 import styles from './styles.scss';
@@ -299,10 +298,12 @@ RequestPopover.propTypes = {
   insuranceGroupId: PropTypes.string,
   isMobile: PropTypes.bool,
   note: PropTypes.string,
-  patient: PropTypes.instanceOf(PatientUser).isRequired,
   practitioner: PropTypes.instanceOf(Practitioner),
-  request: PropTypes.instanceOf(Request).isRequired,
-  requestingUser: PropTypes.instanceOf(PatientUser),
+  // Not forcing instanceOf(Model) so that components not utilizing
+  // entities reducers can use this component
+  patient: PropTypes.objectOf(PropTypes.any).isRequired,
+  request: PropTypes.objectOf(PropTypes.any).isRequired,
+  requestingUser: PropTypes.objectOf(PropTypes.any),
   service: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
   showButton: PropTypes.bool,

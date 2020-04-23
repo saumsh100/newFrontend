@@ -17,9 +17,9 @@ class PatientInfo extends Component {
   }
 
   render() {
-    const { patient } = this.props;
+    const { patient, isFetchingProspect } = this.props;
 
-    if (!patient) return null;
+    if (!patient || isFetchingProspect) return null;
 
     return (
       <Tabs
@@ -39,12 +39,17 @@ class PatientInfo extends Component {
   }
 }
 
-PatientInfo.propTypes = { patient: PropTypes.shape(patientShape) };
+PatientInfo.propTypes = {
+  patient: PropTypes.shape(patientShape),
+  isFetchingProspect: PropTypes.bool.isRequired,
+};
 
 PatientInfo.defaultProps = { patient: null };
 
 function mapStateToProps({ entities, chat }) {
   const selectedChatId = chat.get('selectedChatId');
+  const isFetchingProspect = chat.get('isFetchingProspect');
+  const prospect = chat.get('prospect');
   const finalChat = selectedChatId || chat.get('newChat');
   const selectedChat = chat.get('selectedChat');
   const selectedPatientId =
@@ -52,10 +57,11 @@ function mapStateToProps({ entities, chat }) {
       ? finalChat.patientId
       : entities.getIn(['chats', 'models', finalChat, 'patientId']);
   const unknownPatientChat =
-    !selectedPatientId && selectedChat && UnknownPatient(selectedChat.patientPhoneNumber);
+    !selectedPatientId && selectedChat && UnknownPatient(selectedChat.patientPhoneNumber, prospect);
 
   return {
     patient: entities.getIn(['patients', 'models', selectedPatientId]) || unknownPatientChat,
+    isFetchingProspect,
   };
 }
 

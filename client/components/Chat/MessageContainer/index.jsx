@@ -151,7 +151,7 @@ class MessageContainer extends Component {
 
     if (!requestObject.chatId) {
       this.createNewChat(requestObject)
-        .then(chat => {
+        .then((chat) => {
           requestObject.chatId = Object.keys(chat.chats)[0];
           return this.sendMessage(requestObject);
         })
@@ -168,15 +168,12 @@ class MessageContainer extends Component {
     }
 
     this.sendMessage(requestObject)
-      .then(() =>
-        this.props.reset(`chatMessageForm_${selectedChat.id}`))
-      .then(() =>
-        this.setState({ sendingMessage: false }))
+      .then(() => this.props.reset(`chatMessageForm_${selectedChat.id}`))
+      .then(() => this.setState({ sendingMessage: false }))
       .then(() => {
         this.props.selectChat(selectedChat.id);
       })
-      .catch(() =>
-        this.setState({ sendingMessage: false }));
+      .catch(() => this.setState({ sendingMessage: false }));
   }
 
   sendMessage(request) {
@@ -197,7 +194,7 @@ class MessageContainer extends Component {
     const group = [];
     let currentGroup = { messages: [] };
 
-    textMessages.forEach(message => {
+    textMessages.forEach((message) => {
       if (!currentGroup.time) {
         currentGroup.time = message.createdAt;
       }
@@ -231,7 +228,7 @@ class MessageContainer extends Component {
       bot: true,
     };
 
-    return messages.map(message => {
+    return messages.map((message) => {
       const isFromPatient = message.get('from') !== accountTwilio;
       const patientId = selectedPatient && selectedPatient.get('id');
 
@@ -282,8 +279,7 @@ class MessageContainer extends Component {
             trigger={['hover']}
             overlay={resendMessageButton}
             placement="left"
-            getTooltipContainer={() =>
-this.failedMessageWrapper.current}
+            getTooltipContainer={() => this.failedMessageWrapper.current}
           >
             <div>
               <Icon className={styles.failedMessageWarning} icon="exclamation-circle" size={2} />
@@ -302,8 +298,7 @@ this.failedMessageWrapper.current}
             trigger={['hover']}
             overlay={markUnreadText}
             placement="right"
-            getTooltipContainer={() =>
-this.optionsWrapper.current}
+            getTooltipContainer={() => this.optionsWrapper.current}
           >
             <div className={styles.dotsIconWrapper}>{dotsIcon}</div>
           </Tooltip>
@@ -387,10 +382,11 @@ function mapStateToProps({ entities, auth, chat }) {
   const patients = entities.getIn(['patients', 'models']);
   const selectedChatId = chat.get('selectedChatId');
   const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
+  const prospect = chat.get('prospect');
   const textMessages = chat.get('chatMessages');
   const totalChatMessages = chat.get('totalChatMessages');
   const getPatient = ({ patientId, patientPhoneNumber }) =>
-    (patientId ? patients.get(patientId) : UnknownPatient(patientPhoneNumber));
+    (patientId ? patients.get(patientId) : UnknownPatient(patientPhoneNumber, prospect));
   const selectedPatient = (selectedChat && getPatient(selectedChat)) || {};
 
   return {
