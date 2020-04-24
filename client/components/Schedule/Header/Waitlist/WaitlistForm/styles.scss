@@ -114,19 +114,6 @@
   width: 100%;
 }
 
-.tooltip_Popover {
-  display: inline-flex;
-  flex-direction: column;
-  max-width: 37%;
-  transform: translateY(-15px) !important;
-  width: 37%;
-  z-index: 999999;
-
-  > :global(svg.Popover-tip) {
-    fill: #7b7b7b;
-  }
-}
-
 .patientContainer {
   border-color: $clr-table-light-grey;
   margin: -1px 0 20px;
