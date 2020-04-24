@@ -3,6 +3,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Checkbox, DropdownMenu, Icon } from '../../../library';
+import Tooltip from '../../../Tooltip';
 import { SortByCreatedAtDesc } from '../../../library/util/SortEntities';
 import WaitlistRow from './WaitlistRow';
 import { propsGenerator } from './helpers';
@@ -94,7 +95,12 @@ const WaitlistTableWithActions = ({
             <th>Date Added</th>
             <th>Patient</th>
             <th>Reason</th>
-            <th data-width="sm">Units</th>
+            <th data-width="sm">
+              Units
+              <Tooltip body={<div>Units are in 10-minute intervals</div>} placement="above">
+                <Icon icon="question-circle" size={0.9} />
+              </Tooltip>
+            </th>
             <th>Days</th>
             <th>Times</th>
             <th>Notes</th>
