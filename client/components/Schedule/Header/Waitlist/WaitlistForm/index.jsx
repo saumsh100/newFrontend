@@ -126,6 +126,16 @@ const WaitlistForm = ({
     onChange('daysOfTheWeek')(convertArrayOfDaysInMap(values));
   };
 
+  const handleDayOnChange = (v) => {
+    const startOfDay = setDateToTimezone(new Date(), timezone)
+      .startOf('day')
+      .toISOString();
+
+    if (v >= startOfDay) {
+      onChange('endDate')(setDateToTimezone(v, timezone).toString());
+    }
+  };
+
   return (
     <div className={styles.waitlistFormContainer}>
       <div>
@@ -203,7 +213,7 @@ const WaitlistForm = ({
               disabledDays={{ before: new Date() }}
               label="Remove from Waitlist (date)"
               validate={[maxDateLength]}
-              onChange={v => onChange('endDate')(setDateToTimezone(v, timezone).toString())}
+              onChange={handleDayOnChange}
               value={formValues.endDate || ''}
             />
             <MultiSelect
