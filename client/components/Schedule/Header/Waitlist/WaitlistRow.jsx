@@ -69,7 +69,7 @@ WaitlistRow.propTypes = {
   addedDate: PropTypes.string.isRequired,
   dates: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  duration: PropTypes.string,
+  duration: PropTypes.number,
   nextApptDate: PropTypes.string,
   note: PropTypes.string,
   patient: PropTypes.shape(patientShape).isRequired,
@@ -84,7 +84,7 @@ WaitlistRow.propTypes = {
 WaitlistRow.defaultProps = {
   checked: false,
   note: '',
-  duration: '',
+  duration: null,
   reasonText: '',
   nextApptDate: '',
 };

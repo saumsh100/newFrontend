@@ -42,9 +42,15 @@ const NextWaitlist = ({ account, ...props }) => {
     setSelectedWaitlistMap(batchUpdate());
   }, [batchUpdate]);
 
+  const loadDefaultTemplate = useCallback(() => {
+    loadMassTextTemplate(account.toJS()).then(({ data }) => {
+      setTextMessage(data);
+    });
+  }, [account]);
+
   useEffect(() => {
-    loadMassTextTemplate(account.toJS()).then(({ data }) => setTextMessage(data));
-  }, [account, sentMessages]);
+    loadDefaultTemplate();
+  }, [account, loadDefaultTemplate]);
 
   const goToSendMassMessage = useCallback(
     (ids) => {
@@ -128,7 +134,10 @@ const NextWaitlist = ({ account, ...props }) => {
         <ResponseMessage
           {...props}
           sentMessages={sentMessages}
-          goToWaitlistTable={() => setWaitListState(WAITLIST_STATE.initial)}
+          goToWaitlistTable={() => {
+            setWaitListState(WAITLIST_STATE.initial);
+            loadDefaultTemplate();
+          }}
           textMessage={textMessage}
           selectedWaitlistMap={selectedWaitlistMap}
         />
