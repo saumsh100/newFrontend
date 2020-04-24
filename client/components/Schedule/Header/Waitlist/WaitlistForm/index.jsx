@@ -200,6 +200,7 @@ const WaitlistForm = ({
           </div>
           <div className={styles.waitlistFormColumnRight}>
             <DayPicker
+              disabledDays={{ before: new Date() }}
               label="Remove from Waitlist (date)"
               validate={[maxDateLength]}
               onChange={v => onChange('endDate')(setDateToTimezone(v, timezone).toString())}
