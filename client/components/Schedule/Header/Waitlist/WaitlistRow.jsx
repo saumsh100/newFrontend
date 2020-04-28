@@ -5,6 +5,7 @@ import { capitalize } from '@carecru/isomorphic';
 import { Checkbox, Button, DropdownMenu } from '../../../library';
 import EllipsisIcon from './EllipsisIcon';
 import { patientShape } from '../../../library/PropTypeShapes';
+import Tooltip from '../../../Tooltip';
 import tableStyles from './tableStyles.scss';
 
 const WaitlistRow = ({
@@ -40,7 +41,16 @@ const WaitlistRow = ({
     </td>
     <td className={tableStyles.col}>{dates}</td>
     <td className={tableStyles.col}>{times}</td>
-    <td className={tableStyles.col}>{note}</td>
+    <td className={tableStyles.col}>
+      <Tooltip
+        body={<div>{note}</div>}
+        placement="below"
+        tipSize={0.01}
+        styleOverride={tableStyles.notesTooltip}
+      >
+        <div className={tableStyles.noteTDWrapper}>{note}</div>
+      </Tooltip>
+    </td>
     <td className={tableStyles.col}>{nextApptDate}</td>
     <td className={tableStyles.col} data-width="sm">
       <DropdownMenu

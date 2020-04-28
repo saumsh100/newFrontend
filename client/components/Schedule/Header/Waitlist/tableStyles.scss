@@ -16,10 +16,6 @@
   }
 }
 
-.row {
-  cursor: pointer;
-}
-
 .dropdown {
   font-size: 11px;
 }
@@ -215,4 +211,22 @@
       transition: all 0.2s ease;
     }
   }
+}
+
+.noteTDWrapper {
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100px;
+  word-break: break-word;
+}
+
+.notesTooltip {
+  background: white;
+  border: 1px solid #efefef;
+  border-radius: 4px;
+  box-shadow: 2px 2px 8px 0 rgba(128, 128, 128, 0.16);
+  color: #2e3845;
+  word-break: break-word;
 }

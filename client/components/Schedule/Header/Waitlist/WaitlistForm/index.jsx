@@ -13,13 +13,6 @@ import styles from './styles.scss';
 import Selector from './Selector';
 import { convertArrayOfDaysInMap, generateWaitlistHours } from '../helpers';
 
-const maxLength = max => value =>
-  (value && value.length > max
-    ? `Must be ${max} characters or less, and no blank spaces`
-    : undefined);
-
-const maxDateLength = maxLength(8);
-
 const reasons = [
   {
     value: 'hygiene',
@@ -212,7 +205,6 @@ const WaitlistForm = ({
             <DayPicker
               disabledDays={{ before: new Date() }}
               label="Remove from Waitlist (date)"
-              validate={[maxDateLength]}
               onChange={handleDayOnChange}
               value={formValues.endDate || ''}
             />
