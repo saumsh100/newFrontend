@@ -88,7 +88,7 @@ const WaitlistTableWithActions = ({
       <table className={styles.patients}>
         <thead>
           <tr>
-            <th width={20} />
+            <th data-width="20" />
             <th data-width="xs">
               <Checkbox checked={isEveryWaitlistSelected} onChange={toggleAllWaitlistSelection} />
             </th>
@@ -103,10 +103,10 @@ const WaitlistTableWithActions = ({
             </th>
             <th>Days</th>
             <th>Times</th>
-            <th>Notes</th>
+            <th data-width="md">Notes</th>
             <th>Next Appt</th>
             <th data-width="sm">Manage</th>
-            <th width={20} />
+            <th data-width="20" />
           </tr>
         </thead>
         <tbody>

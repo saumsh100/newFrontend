@@ -25,7 +25,7 @@ const WaitlistRow = ({
   id,
 }) => (
   <tr className={tableStyles.row}>
-    <td width={20} />
+    <td data-width="20" />
     <td className={tableStyles.col} data-width="xs">
       <Checkbox checked={checked} onChange={onChange} />
     </td>
@@ -41,7 +41,7 @@ const WaitlistRow = ({
     </td>
     <td className={tableStyles.col}>{dates}</td>
     <td className={tableStyles.col}>{times}</td>
-    <td className={tableStyles.col}>
+    <td className={tableStyles.col} data-width="md">
       <Tooltip
         body={<div>{note}</div>}
         placement="below"
@@ -68,7 +68,7 @@ const WaitlistRow = ({
         </Button>
       </DropdownMenu>
     </td>
-    <td width={20} />
+    <td data-width="20" />
   </tr>
 );
 
