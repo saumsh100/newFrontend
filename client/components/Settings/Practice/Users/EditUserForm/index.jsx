@@ -19,7 +19,7 @@ export default function EditUserForm({ user, role, onSubmit }) {
     >
       <Field
         name="sendBookingRequestEmail"
-        label="Receive Appointment Request Emails"
+        label="Receive Email Notifications"
         component="Toggle"
       />
       <Field name="role" component="DropdownSelect" options={roleOptions} />
