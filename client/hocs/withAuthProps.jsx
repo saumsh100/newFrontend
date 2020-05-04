@@ -1,40 +1,35 @@
 
-import React, { Component } from 'react';
-import omit from 'lodash/omit';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 
-class InnerComponent extends Component {
-  shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props, nextProps);
-  }
+const InnerComponent = React.memo(({ el, ...props }) => React.createElement(el, props), isEqual);
 
-  render() {
-    return <this.props.el {...omit(this.props, 'el')} />;
-  }
-}
+InnerComponent.propTypes = {
+  el: PropTypes.elementType.isRequired,
+};
 
+const isEnterpriseOwner = (isEnterprisePlan, isOwner) => isEnterprisePlan && isOwner;
 const ConnectedInnerComponent = connect(({ auth, featureFlags }) => {
-  const session = auth.toJS();
-  const { role, enterprise } = session;
+  const role = auth.get('role');
+  const isEnterprisePlan = auth.getIn(['enterprise', 'plan'], false);
   const isSuperAdmin = role === 'SUPERADMIN';
   const isOwner = role === 'OWNER' || isSuperAdmin;
-  const isEnterprisePlan = !!enterprise && enterprise.plan === 'ENTERPRISE';
-  const isEnterpriseOwner = () => isEnterprisePlan && isOwner;
   const navigationPreferencesState = featureFlags.getIn(['flags', 'navigation-preferences']);
-  const navigationPreferences = navigationPreferencesState && navigationPreferencesState.toJS();
 
   return {
     role,
-    navigationPreferences,
-    isAuth: session.isAuthenticated,
+    isSSO: auth.getIn(['user', 'isSSO']),
+    navigationPreferences: navigationPreferencesState?.toJS(),
+    isAuth: auth.get('isAuthenticated'),
     isSuperAdmin,
-    withEnterprise: isEnterpriseOwner(),
-    enterpriseId: session.enterpriseId,
+    withEnterprise: isEnterpriseOwner(isEnterprisePlan, isOwner),
+    enterpriseId: auth.get('enterpriseId'),
   };
 })(InnerComponent);
 
-const withAuthProps = el => props => (
+export default el => props => (
   <ConnectedInnerComponent
     {...{
       ...props,
@@ -42,5 +37,3 @@ const withAuthProps = el => props => (
     }}
   />
 );
-
-export default withAuthProps;

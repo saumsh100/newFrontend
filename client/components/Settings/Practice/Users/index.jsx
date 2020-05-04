@@ -126,16 +126,15 @@ class Users extends Component {
       .then(() => this.props.reset('emailInvite'));
   }
 
-  sendEdit({ role, sendBookingRequestEmail }) {
-    const { accountId } = this.props;
-
+  sendEdit({ role, sendBookingRequestEmail, isSSO }) {
     this.setState({ editActive: false });
-
     const selectedUser = this.props.users.get(this.state.editUserId);
+    const selectedUserPermission = this.props.permissions.get(selectedUser.get('permissionId'));
 
-    if (selectedUser.get('sendBookingRequestEmail') !== sendBookingRequestEmail) {
-      const url = `/api/users/${this.state.editUserId}/preferences`;
-
+    if (
+      selectedUser.get('sendBookingRequestEmail') !== sendBookingRequestEmail ||
+      selectedUser.get('isSSO') !== isSSO
+    ) {
       const alert = {
         success: { body: 'Updated User.' },
         error: { body: 'User Could Not Be Updated' },
@@ -143,16 +142,17 @@ class Users extends Component {
 
       this.props.updateEntityRequest({
         key: 'user',
-        values: { sendBookingRequestEmail },
-        url,
+        values: { sendBookingRequestEmail,
+          isSSO },
+        url: `/api/users/${this.state.editUserId}/preferences`,
         alert,
       });
     }
 
-    const selectedUserPermission = this.props.permissions.get(selectedUser.get('permissionId'));
-
     if (selectedUserPermission.get('role') !== role) {
-      const url = `/api/accounts/${accountId}/permissions/${this.state.editPermissionId}`;
+      const url = `/api/accounts/${this.props.accountId}/permissions/${
+        this.state.editPermissionId
+      }`;
 
       const usersWithPermissions = this.props.users.filter(
         getUsersWithPermissions(this.props.permissions, this.state.editPermissionId),

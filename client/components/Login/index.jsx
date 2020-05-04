@@ -53,7 +53,7 @@ class Login extends Component {
 
   render() {
     const { [window.location.hostname]: _, ...option } = switchLocations;
-    const differentLocation = Object.values(option)[0];
+    const [differentLocation] = Object.values(option);
     return (
       <DocumentTitle title="CareCru | Login">
         <div className={styles.backDrop}>
@@ -99,7 +99,11 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   location: PropTypes.shape(locationShape).isRequired,
-  hasError: PropTypes.bool.isRequired,
+  hasError: PropTypes.bool,
+};
+
+Login.defaultProps = {
+  hasError: false,
 };
 
 function mapStateToProps({ form }) {

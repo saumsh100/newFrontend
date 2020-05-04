@@ -72,12 +72,13 @@ MenuItem.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   icon: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 };
 
 MenuItem.defaultProps = {
   icon: '',
   className: '',
+  onClick: () => {},
 };
 
 export const MenuSeparator = () => <li role="separator" className="separator" />;

@@ -7,7 +7,6 @@ import { setDashboardDate } from '../../reducers/dashboard';
 import { setScheduleDate } from '../../actions/schedule';
 import { updateFeatureFlagsContext, resetFeatureFlagsState } from '../featureFlags';
 import connectSocketToStoreLogin from '../../socket/connectSocketToStoreLogin';
-import connectSocketToConnectStore from '../../socket/connectSocketToConnectStore';
 import SubscriptionManager from '../../util/graphqlSubscriptions';
 import { httpClient, bookingWidgetHttpClient } from '../../util/httpClient';
 import socket from '../../socket';
@@ -64,61 +63,43 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
     });
 };
 
-export function login({ values, redirectedFrom = '/', connect = false }) {
-  return function (dispatch, getState) {
-    // reduxForm will not have this set if form is not dirty
-    if (!values) return Promise.resolve(null);
+const loginHttp = (url, body, redirectedFrom) => (dispatch, getState) =>
+  httpClient()
+    .post(url, body)
+    .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
+    .then(({ accountId }) => {
+      SubscriptionManager.accountId = accountId;
+      connectSocketToStoreLogin(
+        {
+          dispatch,
+          getState,
+        },
+        socket,
+      );
 
-    const loginDetails = {
-      username: values.email,
-      password: values.password,
-    };
+      // set dates
+      dispatch(setDashboardDate(new Date().toISOString()));
+      dispatch(setScheduleDate({ scheduleDate: new Date().toISOString() }));
 
-    return httpClient()
-      .post('/auth', loginDetails)
-      .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
-      .then(({ user, accountId }) => {
-        const userId = user.id;
-        const fullName = `${user.firstName} ${user.lastName}`;
-        const email = user.username;
+      dispatch(push(redirectedFrom));
+    });
 
-        if (connect && process.env.NODE_ENV === 'production') {
-          window.Intercom('update', {
-            user_id: userId,
-            name: fullName,
-            email,
-            created_at: user.createdAt,
-          });
-        }
+export const loginSSO = ({ code, redirectedFrom = '/' }) => {
+  if (typeof code !== 'string') return Promise.resolve(null);
 
-        SubscriptionManager.accountId = accountId;
+  return loginHttp('/auth/sso', { code }, redirectedFrom);
+};
 
-        if (connect) {
-          connectSocketToConnectStore(
-            {
-              dispatch,
-              getState,
-            },
-            socket,
-          );
-        } else {
-          connectSocketToStoreLogin(
-            {
-              dispatch,
-              getState,
-            },
-            socket,
-          );
-        }
-        // set dates
-        dispatch(setDashboardDate(new Date().toISOString()));
-        dispatch(setScheduleDate({ scheduleDate: new Date().toISOString() }));
-
-        // dispatch(loginSuccess(decodedToken));
-        dispatch(push(redirectedFrom));
-      });
+export const login = ({ values, redirectedFrom = '/' }) => {
+  // reduxForm will not have this set if form is not dirty
+  if (!values) return Promise.resolve(null);
+  const loginDetails = {
+    username: values.email,
+    password: values.password,
   };
-}
+
+  return loginHttp('/auth', loginDetails, redirectedFrom);
+};
 
 const reloadPage = () => {
   window.location = window.location.pathname;
@@ -165,16 +146,19 @@ export function logout() {
     localStorage.removeItem('session');
     sessionStorage.removeItem('scheduleDate');
     sessionStorage.removeItem('dashboardDate');
-
     const { auth } = getState();
+    const isSSO = auth.getIn(['user', 'isSSO'], false);
+    const url = isSSO ? '/auth/sso/session/' : '/auth/session/';
 
     return httpClient()
-      .delete(`/auth/session/${auth.get('sessionId')}`)
-      .then(() => {
+      .delete(url.concat(auth.get('sessionId')))
+      .then(({ data }) => {
         dispatch(resetFeatureFlagsState());
         dispatch(authLogout());
-        dispatch(push('/login'));
         SubscriptionManager.accountId = null;
+        const action = isSSO ? push('/redirect', { redirectUrl: data.logoutUrl }) : push('/login');
+
+        return dispatch(action);
       });
   };
 }

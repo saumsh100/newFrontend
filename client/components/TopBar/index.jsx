@@ -273,11 +273,13 @@ class TopBar extends Component {
                   />
                 )}
               >
-                <Link to="/profile">
-                  <MenuItem className={styles.userMenuLi} icon="user">
-                    User Profile
-                  </MenuItem>
-                </Link>
+                {!user.get('isSSO') && (
+                  <Link to="/profile">
+                    <MenuItem className={styles.userMenuLi} icon="user">
+                      User Profile
+                    </MenuItem>
+                  </Link>
+                )}
                 <Link to="/settings">
                   <MenuItem className={styles.userMenuLi} icon="cogs">
                     Account Settings

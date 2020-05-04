@@ -30,7 +30,7 @@ export default ({ initialState = {}, rootReducer, enableBatchingMode = true }) =
   createStore(
     enableBatchingMode ? enableBatching(rootReducer(browserHistory)) : rootReducer(browserHistory),
     initialState,
-    composeWithDevTools(
+    composeWithDevTools({ trace: true })(
       applyMiddleware(
         routerMiddleware(browserHistory),
         thunkMiddleware,

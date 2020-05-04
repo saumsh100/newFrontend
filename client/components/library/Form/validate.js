@@ -102,8 +102,11 @@ const postalCodeValidate = (value) => {
   }
 };
 
+const isSamePassword = ({ password, confirmPassword }) =>
+  password && confirmPassword && password !== confirmPassword;
+
 const passwordsValidate = (value, values) => {
-  if (values.password && values.confirmPassword && values.password !== values.confirmPassword) {
+  if (isSamePassword(values)) {
     return 'Password is not match';
   }
 
@@ -112,7 +115,7 @@ const passwordsValidate = (value, values) => {
 
 const passwordsMatch = (values) => {
   const errors = {};
-  if (values.password && values.confirmPassword && values.password !== values.confirmPassword) {
+  if (isSamePassword(values)) {
     errors.confirmPassword = 'Passwords do not match';
   }
 
@@ -122,18 +125,20 @@ const passwordsMatch = (values) => {
 const maxLength = max => value =>
   (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 
-const asyncEmailValidateUser = values =>
+const asyncEmailValidateUser = ({ email }) =>
+  email &&
   httpClient()
-    .post('/userCheck', { email: values.email })
+    .post('/userCheck', { email })
     .then(
       response =>
         response.data.exists !== true ||
-        Promise.reject({ email: `User with ${values.email} already exists...` }),
+        Promise.reject({ email: `User with ${email} already exists...` }),
     );
 
-const asyncEmailPasswordReset = values =>
+const asyncEmailPasswordReset = ({ email }) =>
+  email &&
   httpClient()
-    .post('/userCheck', { email: values.email })
+    .post('/userCheck', { email })
     .then((response) => {
       if (response.data.exists !== true) {
         return { email: 'User with this email does not exist' };

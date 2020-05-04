@@ -13,6 +13,7 @@ import withAuthProps from '../hocs/withAuthProps';
 import GraphQlSubscriptions from '../util/graphqlSubscriptions';
 import Loader from '../components/Loader';
 import { browserHistory as history } from '../store/factory';
+import LoginSSO from '../components/LoginSSO';
 
 const Routes = {
   dashboard: lazy(() => import('../components/Dashboard/index')),
@@ -28,7 +29,23 @@ const Routes = {
   calls: lazy(() => import('./Dashboard/Calls')),
 };
 
-const DashboardRouter = ({ isAuth, isSuperAdmin, navigationPreferences }) => {
+const ExternalRedirector = ({
+  location: {
+    state: { redirectUrl },
+  },
+}) => {
+  window.location = redirectUrl;
+  return null;
+};
+
+ExternalRedirector.propTypes = {
+  redirectUrl: PropTypes.string.isRequired,
+};
+
+const DashboardRouter = ({ isAuth, isSuperAdmin, isSSO, navigationPreferences }) => {
+  if (!navigationPreferences) {
+    return null;
+  }
   const n = page => navigationPreferences[page] !== 'disabled';
   const getAuthorizedRoutes = () => (
     <div>
@@ -44,14 +61,13 @@ const DashboardRouter = ({ isAuth, isSuperAdmin, navigationPreferences }) => {
           {n('marketing') && <Route path="/reputation" component={Routes.reputation} />}
           {n('settings') && <Route path="/settings" component={Routes.settings} />}
           {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
-          <Route path="/profile" component={Routes.profile} />
+          {!isSSO && <Route path="/profile" component={Routes.profile} />}
           <Route path="/typography" component={Routes.typography} />
           <Route component={FourZeroFour} />
         </Switch>
       </Suspense>
     </div>
   );
-
   const Dashboard = props =>
     (isAuth ? (
       <DashboardApp {...props}>
@@ -85,6 +101,11 @@ const DashboardRouter = ({ isAuth, isSuperAdmin, navigationPreferences }) => {
           />
           <Route
             exact
+            path="/login/sso"
+            render={props => (isAuth ? <Redirect to="/" /> : <LoginSSO {...props} />)}
+          />
+          <Route
+            exact
             path={urlTest}
             render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)}
           />
@@ -98,6 +119,7 @@ const DashboardRouter = ({ isAuth, isSuperAdmin, navigationPreferences }) => {
             path={resetTest}
             render={props => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)}
           />
+          <Route exact path="/redirect" render={ExternalRedirector} />
           <Route path="/" component={Dashboard} />
         </Switch>
       </div>
@@ -119,6 +141,7 @@ DashboardRouter.propTypes = {
     push: PropTypes.func,
     replace: PropTypes.func,
   }).isRequired,
+  isSSO: PropTypes.bool,
   isAuth: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   withEnterprise: PropTypes.bool.isRequired,
@@ -150,8 +173,9 @@ DashboardRouter.propTypes = {
 };
 
 DashboardRouter.defaultProps = {
+  isSSO: false,
   location: {},
-  navigationPreferences: {},
+  navigationPreferences: null,
 };
 
 export default withAuthProps(DashboardRouter);

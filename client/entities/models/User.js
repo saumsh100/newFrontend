@@ -12,6 +12,7 @@ const UserSchema = {
   twilioPhoneNumber: null,
   role: null,
   sendBookingRequestEmail: false,
+  isSSO: null,
 };
 
 export default class User extends createModel(UserSchema) {
