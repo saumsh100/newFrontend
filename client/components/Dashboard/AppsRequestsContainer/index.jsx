@@ -11,10 +11,12 @@ import { FilterAppointments, FilterPatients } from '../Shared/filters';
 import { Card, Tabs, Tab } from '../../library';
 import { selectedRequestBuilder } from '../../../components/Utils';
 import Requests from '../../../components/Requests';
+import DashboardWaitingRoomContainer from '../../WaitingRoom/DashboardWaitingRoomContainer';
 import RequestsModel from '../../../entities/models/Request';
 import AppointmentsList from './AppointmentsList';
-import styles from './styles.scss';
 import { selectAppointment, setScheduleDate } from '../../../actions/schedule';
+import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
+import styles from './styles.scss';
 
 class AppsRequestsContainer extends Component {
   constructor(props) {
@@ -130,11 +132,15 @@ class AppsRequestsContainer extends Component {
       selectedRequest,
       patients,
       dashAppointments,
+      waitingRoomQueueLength,
+      canSeeVirtualWaitingRoom,
     } = this.props;
 
     const { index } = this.state;
 
     const isLoaded = dashAppointments;
+
+    const displayWaitingRoom = isLoaded ? <DashboardWaitingRoomContainer /> : null;
 
     const displayRequests = isLoaded ? (
       <Requests
@@ -170,25 +176,48 @@ class AppsRequestsContainer extends Component {
       />
     ) : null;
 
+    const display = canSeeVirtualWaitingRoom
+      ? [displayWaitingRoom, displayRequests, displayApps][index]
+      : [displayRequests, displayApps][index];
+
     return (
       <Card runAnimation loaded={isLoaded} className={styles.card}>
         <div>
-          {isLoaded && (
-            <Tabs index={index} onChange={i => this.setState({ index: i })} noUnderLine>
-              <Tab
-                label={`${filteredRequests.length} Online Requests`}
-                className={styles.tab}
-                activeClass={styles.activeTab}
-              />
-              <Tab
-                label={`${appointments.size} Appointments`}
-                className={styles.tab}
-                activeClass={styles.activeTab}
-              />
-            </Tabs>
-          )}
+          {isLoaded &&
+            (canSeeVirtualWaitingRoom ? (
+              <Tabs index={index} onChange={i => this.setState({ index: i })} noUnderLine>
+                <Tab
+                  label={`${waitingRoomQueueLength} Waiting Room`}
+                  className={styles.tab}
+                  activeClass={styles.activeTab}
+                />
+                <Tab
+                  label={`${filteredRequests.length} Online Req`}
+                  className={styles.tab}
+                  activeClass={styles.activeTab}
+                />
+                <Tab
+                  label={`${appointments.size} Appointments`}
+                  className={styles.tab}
+                  activeClass={styles.activeTab}
+                />
+              </Tabs>
+            ) : (
+              <Tabs index={index} onChange={i => this.setState({ index: i })} noUnderLine>
+                <Tab
+                  label={`${filteredRequests.length} Online Requests`}
+                  className={styles.tab}
+                  activeClass={styles.activeTab}
+                />
+                <Tab
+                  label={`${appointments.size} Appointments`}
+                  className={styles.tab}
+                  activeClass={styles.activeTab}
+                />
+              </Tabs>
+            ))}
         </div>
-        <div className={styles.container}>{index === 0 ? displayRequests : displayApps}</div>
+        <div className={styles.container}>{display}</div>
       </Card>
     );
   }
@@ -196,7 +225,10 @@ class AppsRequestsContainer extends Component {
 
 const dateFilter = (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate);
 
-function mapStateToProps({ apiRequests, entities, router }, { dashboardDate, ...ownProps }) {
+function mapStateToProps(
+  { apiRequests, entities, router, featureFlags, waitingRoom },
+  { dashboardDate, ...ownProps },
+) {
   const dashAppointments =
     apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
 
@@ -236,6 +268,13 @@ function mapStateToProps({ apiRequests, entities, router }, { dashboardDate, ...
     ...ownProps,
   };
 
+  const canSeeVirtualWaitingRoom = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'virtual-waiting-room-ui',
+  );
+
+  const waitingRoomQueue = waitingRoom.get('waitingRoomQueue');
+
   return {
     requests,
     filteredRequests,
@@ -251,6 +290,8 @@ function mapStateToProps({ apiRequests, entities, router }, { dashboardDate, ...
     dashAppointments,
     dashRequests,
     ...selectedRequestBuilder(nextProps),
+    waitingRoomQueueLength: waitingRoomQueue ? waitingRoomQueue.length : 0,
+    canSeeVirtualWaitingRoom,
   };
 }
 
@@ -284,6 +325,8 @@ AppsRequestsContainer.propTypes = {
   selectAppointment: PropTypes.func.isRequired,
   services: PropTypes.instanceOf(Map),
   setScheduleDate: PropTypes.func.isRequired,
+  waitingRoomQueueLength: PropTypes.func.isRequired,
+  canSeeVirtualWaitingRoom: PropTypes.bool.isRequired,
 };
 
 AppsRequestsContainer.defaultProps = {

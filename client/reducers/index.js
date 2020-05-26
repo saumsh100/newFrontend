@@ -24,32 +24,35 @@ import reviews from './vendastaReviews';
 import segments from './segments';
 import toolbar from './toolbar';
 import intelligenceReports from './intelligenceReports';
+import waitingRoom from './waitingRoom';
 
-const rootReducer = history => combineReducers({
-  accountSettings,
-  alerts,
-  apiRequests,
-  auth,
-  availabilities,
-  caller,
-  chat,
-  currentDialog: dialogs,
-  dashboard,
-  electron,
-  entities,
-  featureFlags,
-  form,
-  intelligence,
-  intelligenceReports,
-  patientList,
-  patientTable,
-  reputation,
-  requests,
-  reviews,
-  router: connectRouter(history),
-  schedule,
-  segments,
-  toolbar,
-});
+const rootReducer = history =>
+  combineReducers({
+    accountSettings,
+    alerts,
+    apiRequests,
+    auth,
+    availabilities,
+    caller,
+    chat,
+    currentDialog: dialogs,
+    dashboard,
+    electron,
+    entities,
+    featureFlags,
+    form,
+    intelligence,
+    intelligenceReports,
+    patientList,
+    patientTable,
+    reputation,
+    requests,
+    reviews,
+    router: connectRouter(history),
+    schedule,
+    segments,
+    toolbar,
+    waitingRoom,
+  });
 
 export default rootReducer;

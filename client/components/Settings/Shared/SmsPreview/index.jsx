@@ -76,8 +76,8 @@ export default class SmsPreview extends Component {
 SmsPreview.propTypes = {
   url: PropTypes.string.isRequired,
   account: PropTypes.shape({
-    twilioPhoneNumber: PropTypes.string.isRequired,
-    destinationPhoneNumber: PropTypes.string.isRequired,
-    phoneNumber: PropTypes.string.isRequired,
+    twilioPhoneNumber: PropTypes.string,
+    destinationPhoneNumber: PropTypes.string,
+    phoneNumber: PropTypes.string,
   }).isRequired,
 };

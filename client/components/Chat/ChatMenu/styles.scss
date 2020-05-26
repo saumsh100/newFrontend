@@ -1,24 +1,26 @@
+@import '../../../ui.scss';
+
 .chatMenuWrapper {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  line-height: 0;
-  width: 350px;
-  height: 74px;
   background: rgb(244, 244, 244);
   cursor: pointer;
+  display: flex;
+  height: 74px;
+  justify-content: center;
+  line-height: 0;
+  width: 350px;
 }
 
 .chatDropDown {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  background: rgb(32, 100, 119);
+  background: $primary-blue;
+  border-radius: 4px;
   color: white;
+  display: flex;
   font-size: 12px;
   font-weight: 500;
-  border-radius: 4px;
   height: 34px;
+  justify-content: center;
   width: 310px;
 }
 

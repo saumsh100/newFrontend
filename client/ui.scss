@@ -12,8 +12,9 @@ $secondary-color1: #caebf2;
 $secondary-color2: #caebf2;
 $primary-yellow: #ffc45a;
 $primary-orange: #f5c673;
-$primary-blue: #206477;
+$primary-blue: #154b6e;
 $primary-green: #2cc4a7;
+$primary-dull-blue: #206477;
 $primary-dark-blue: #3a5199;
 $primary-navy-blue: #518493;
 $primary-light-blue: #8cbcd6;
@@ -196,12 +197,12 @@ $warning: #eaba4e;
 
 @mixin blurred-mixin() {
   background-color: $clr-dark-grey;
-  filter: url(#blurred);
-  position: absolute;
-  top: 90px;
-  left: -3px;
-  right: -3px;
   bottom: -3px;
+  filter: url(#blurred);
+  left: -3px;
+  position: absolute;
+  right: -3px;
+  top: 90px;
 }
 
 .borderTopRight {

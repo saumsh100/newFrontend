@@ -19,6 +19,7 @@ const ReminderSchema = {
   dontSendWhenClosed: null,
   startTime: null,
   isBusinessDays: null,
+  isWaitingRoomEnabled: null,
 };
 
 export default class Reminder extends createModel(ReminderSchema) {}

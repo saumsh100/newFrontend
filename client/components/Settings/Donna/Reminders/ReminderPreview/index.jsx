@@ -25,11 +25,11 @@ class ReminderPreview extends Component {
 
   render() {
     const { reminder, account } = this.props;
-    const { primaryTypes, isConfirmable } = reminder;
+    const { primaryTypes, isConfirmable, isWaitingRoomEnabled } = reminder;
     const indexZeroSelected = this.state.index === 0;
     const getUrl = slug =>
       `/api/accounts/${account.id}/reminders/${reminder.id}` +
-      `/${slug}?isConfirmable=${!indexZeroSelected}`;
+      `/${slug}?isConfirmable=${!indexZeroSelected}&isWaitingRoomEnabled=${isWaitingRoomEnabled}`;
     // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
     const commsPreviewSections = primaryTypes
       .slice()
@@ -66,28 +66,32 @@ class ReminderPreview extends Component {
         );
       });
 
+    const normalTabs = isConfirmable ? (
+      <Tabs index={this.state.index} onChange={i => this.setState({ index: i })} noUnderLine>
+        <Tab label="Friendly" className={styles.tab} activeClass={styles.activeTab} />
+        <Tab label="Confirmable" className={styles.tab} activeClass={styles.activeTab} />
+      </Tabs>
+    ) : (
+      <Tabs index={this.state.index} noUnderLine>
+        <Tab label="Friendly" className={styles.tab} activeClass={styles.activeTab} />
+      </Tabs>
+    );
+
+    const waitingRoomTab = (
+      <Tabs index={this.state.index} noUnderLine>
+        <Tab label="Virtual Waiting Room" className={styles.tab} activeClass={styles.activeTab} />
+      </Tabs>
+    );
+
+    const tabsSection = isWaitingRoomEnabled ? waitingRoomTab : normalTabs;
+
     return (
       <SContainer>
         <SHeader className={styles.previewHeader}>
           <div className={styles.topHeader}>
             <Header title="Preview" />
           </div>
-          <div className={styles.tabsContainer}>
-            {isConfirmable ? (
-              <Tabs
-                index={this.state.index}
-                onChange={i => this.setState({ index: i })}
-                noUnderLine
-              >
-                <Tab label="Friendly" className={styles.tab} activeClass={styles.activeTab} />
-                <Tab label="Confirmable" className={styles.tab} activeClass={styles.activeTab} />
-              </Tabs>
-            ) : (
-              <Tabs index={this.state.index} noUnderLine>
-                <Tab label="Friendly" className={styles.tab} activeClass={styles.activeTab} />
-              </Tabs>
-            )}
-          </div>
+          <div className={styles.tabsContainer}>{tabsSection}</div>
         </SHeader>
         <SBody className={styles.previewSBody}>
           <CommsPreview>{commsPreviewSections}</CommsPreview>
@@ -101,6 +105,8 @@ ReminderPreview.propTypes = {
   reminder: PropTypes.shape({
     id: PropTypes.string.isRequired,
     primaryTypes: PropTypes.array.isRequired,
+    isConfirmable: PropTypes.bool.isRequired,
+    isWaitingRoomEnabled: PropTypes.bool.isRequired,
   }).isRequired,
   account: PropTypes.instanceOf(Account).isRequired,
   openCallTestModal: PropTypes.func.isRequired,

@@ -1,0 +1,125 @@
+@import '../../../../ui.scss';
+
+.waitingRoomListItem {
+  align-items: center;
+  display: flex;
+  height: 6.5rem;
+  padding: 20px 30px;
+  &:hover {
+    cursor: default;
+    background-color: white;
+    > .leftSection > .subLeftSection > .completionCircleWrapper {
+      display: block;
+    }
+  }
+}
+
+/* Left Section */
+
+.leftSection {
+}
+
+.checkinTime {
+  color: $primary-green;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.subLeftSection {
+  align-items: center;
+  display: flex;
+}
+
+.completionCircleWrapper {
+  display: none;
+}
+
+.patientNameWrapper {
+  padding: 15px 0;
+  display: flex;
+  align-items: center;
+}
+
+.patientName {
+  margin-right: 5px;
+  font-size: 13px;
+}
+
+.familyMembersCount {
+  padding: 0 5px;
+  color: $primary-dark-grey;
+}
+
+.tooltip {
+  background: blue;
+}
+
+.tooltipBody {
+  // background: blue;
+}
+
+.practitionerName {
+  font-size: 12px;
+  color: $primary-dark-grey;
+  margin-bottom: 5px;
+}
+
+.appointmentTimes {
+  font-size: 12px;
+  color: lighten($primary-dark-grey, 10%);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.actionFont {
+  font-size: 12px;
+  color: $primary-blue;
+  letter-spacing: normal;
+}
+
+.checkbox {
+  margin-left: 0;
+  > div {
+    border: 1px solid $primary-blue;
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.completedCheckbox {
+  @extend .checkbox;
+  margin-right: 10px;
+  > div {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+  }
+}
+
+/* Right Section */
+
+.rightSection {
+  margin-left: auto;
+}
+
+.cleanedCheckbox {
+  @extend .checkbox;
+  margin-bottom: 10px;
+  > span {
+    @extend .actionFont;
+  }
+}
+
+.notifyButton {
+  @extend .actionFont;
+  height: 28px;
+  width: 90px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+

@@ -17,6 +17,7 @@ function Checkbox(props) {
     theme,
     customContainer,
     showIndeterminate,
+    className,
   } = props;
 
   const labelClasses = classNames(theme.label, {
@@ -40,7 +41,7 @@ function Checkbox(props) {
   };
 
   return (
-    <div className={containerClasses}>
+    <div className={`${containerClasses} ${className}`}>
       <div
         className={classes}
         onClick={onChange}
@@ -84,6 +85,7 @@ Checkbox.propTypes = {
   hidden: PropTypes.bool,
   labelClassNames: PropTypes.string,
   value: PropTypes.string,
+  className: PropTypes.string,
 };
 
 Checkbox.defaultProps = {
@@ -96,6 +98,7 @@ Checkbox.defaultProps = {
   labelClassNames: '',
   value: '',
   checked: false,
+  className: '',
 };
 
 export default withTheme(Checkbox, styles);

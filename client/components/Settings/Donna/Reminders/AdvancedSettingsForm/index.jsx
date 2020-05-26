@@ -7,6 +7,7 @@ import { isValidUUID, validateJsonString } from '@carecru/isomorphic';
 import { Form, Field } from '../../../../library';
 import { reminderShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
+import { isFeatureEnabledSelector } from '../../../../../reducers/featureFlags';
 
 const formName = reminder => `advancedSettingsReminders_${reminder.id}`;
 const allowedKeys = ['reason', 'isPreConfirmed'];
@@ -54,7 +55,15 @@ const isValidTime = (val) => {
 };
 
 function AdvancedSettingsForm(props) {
-  const { reminder, onSubmit, isCustomConfirmValue, isDailyValue } = props;
+  const {
+    reminder,
+    onSubmit,
+    isCustomConfirmValue,
+    isDailyValue,
+    canSeeAdvancedSettings,
+    canSeeVirtualWaitingRoom,
+  } = props;
+
   const {
     ignoreSendIfConfirmed,
     isCustomConfirm,
@@ -66,6 +75,7 @@ function AdvancedSettingsForm(props) {
     dailyRunTime,
     isConfirmable,
     startTime,
+    isWaitingRoomEnabled,
   } = reminder;
 
   const initialValues = {
@@ -79,6 +89,7 @@ function AdvancedSettingsForm(props) {
     dailyRunTime,
     isConfirmable,
     startTime,
+    isWaitingRoomEnabled,
   };
 
   return (
@@ -92,46 +103,66 @@ function AdvancedSettingsForm(props) {
         className={styles.toggle}
         component="Toggle"
         name="isConfirmable"
-        label="Is Confirmable?"
+        label="Confirmable Reminder (ie. Asks Patient to Confirm)"
       />
-
       <Field
         className={styles.toggle}
         component="Toggle"
         name="ignoreSendIfConfirmed"
-        label="Ignore Send If Already Confirmed?"
+        label="Don’t Send If Appointment Is Already Confirmed"
       />
-      <Field
-        className={styles.toggle}
-        component="Toggle"
-        name="isCustomConfirm"
-        label="Is Custom Confirm?"
-      />
-      {isCustomConfirmValue && (
+      {canSeeVirtualWaitingRoom && (
         <Field
-          required
-          name="customConfirmString"
-          label="Custom Confirm Data"
-          validate={[validateCustomConfirmJson]}
+          className={styles.toggle}
+          component="Toggle"
+          name="isWaitingRoomEnabled"
+          label={'Virtual Waiting Room Message (ie. Respond "HERE")'}
         />
       )}
-      <Field
-        name="omitPractitionerIdsString"
-        label="Omit Practitioner IDs"
-        validate={[validateOmitIdsArray]}
-      />
-      <Field name="omitChairIdsString" label="Omit Chair IDs" validate={[validateOmitIdsArray]} />
-      <Field
-        className={styles.toggle}
-        component="Toggle"
-        name="dontSendWhenClosed"
-        label="Don't Sent When Closed?"
-      />
-      <Field className={styles.toggle} component="Toggle" name="isDaily" label="Only Run Daily?" />
-      {isDailyValue && (
-        <Field required name="dailyRunTime" label="Daily Run Time" validate={[isValidTime]} />
+      {canSeeAdvancedSettings && (
+        <div>
+          <Field
+            className={styles.toggle}
+            component="Toggle"
+            name="isCustomConfirm"
+            label="Is Custom Confirm?"
+          />
+          {isCustomConfirmValue && (
+            <Field
+              required
+              name="customConfirmString"
+              label="Custom Confirm Data"
+              validate={[validateCustomConfirmJson]}
+            />
+          )}
+          <Field
+            name="omitPractitionerIdsString"
+            label="Omit Practitioner IDs"
+            validate={[validateOmitIdsArray]}
+          />
+          <Field
+            name="omitChairIdsString"
+            label="Omit Chair IDs"
+            validate={[validateOmitIdsArray]}
+          />
+          <Field
+            className={styles.toggle}
+            component="Toggle"
+            name="dontSendWhenClosed"
+            label="Don't Sent When Closed?"
+          />
+          <Field
+            className={styles.toggle}
+            component="Toggle"
+            name="isDaily"
+            label="Only Run Daily?"
+          />
+          {isDailyValue && (
+            <Field required name="dailyRunTime" label="Daily Run Time" validate={[isValidTime]} />
+          )}
+          <Field name="startTime" label="Earliest Send Time" validate={[isValidTime]} />
+        </div>
       )}
-      <Field name="startTime" label="Earliest Send Time" validate={[isValidTime]} />
     </Form>
   );
 }
@@ -141,11 +172,18 @@ AdvancedSettingsForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   isCustomConfirmValue: PropTypes.bool.isRequired,
   isDailyValue: PropTypes.bool.isRequired,
+  canSeeAdvancedSettings: PropTypes.bool.isRequired,
+  canSeeVirtualWaitingRoom: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state, { reminder }) {
+  const features = state.featureFlags.get('flags');
+  const canSeeAdvancedSettings = isFeatureEnabledSelector(features, 'reminders-advanced-settings');
+  const canSeeVirtualWaitingRoom = isFeatureEnabledSelector(features, 'virtual-waiting-room-ui');
   const values = getFormValues(formName(reminder))(state);
   return {
+    canSeeAdvancedSettings,
+    canSeeVirtualWaitingRoom,
     isCustomConfirmValue: !!values && values.isCustomConfirm,
     isDailyValue: !!values && values.isDaily,
   };

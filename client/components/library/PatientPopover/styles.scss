@@ -75,7 +75,7 @@
 
   &_text {
     @extend .fontDefault;
-    padding-left: 5px;
+    padding: 0 5px;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 250px;

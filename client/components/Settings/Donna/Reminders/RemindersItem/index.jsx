@@ -337,14 +337,9 @@ class RemindersItem extends Component {
         }
         rightComponent={
           <div className={styles.hoverWrapper}>
-            <EnabledFeature
-              predicate={({ userRole }) => userRole === 'SUPERADMIN'}
-              render={() => (
-                <AdvancedSettingsButton
-                  className={styles.advancedSettingsButton}
-                  onClick={() => onSelectAdvancedSettings(reminder.id)}
-                />
-              )}
+            <AdvancedSettingsButton
+              className={styles.advancedSettingsButton}
+              onClick={() => onSelectAdvancedSettings(reminder.id)}
             />
             <TinyDeleteButton className={styles.deleteButton} onClick={this.deleteReminder} />
           </div>

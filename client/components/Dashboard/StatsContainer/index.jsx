@@ -6,18 +6,27 @@ import { setDateToTimezone } from '@carecru/isomorphic';
 import { IconCard } from '../../library';
 import { FilterAppointments } from '../Shared/filters';
 import styles from './styles.scss';
+import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
 
 function StatsContainer({
   appointmentsCount,
   insightCount,
   requestsCount,
   unConfirmedPatientsCount,
+  waitingRoomQueueLength,
+  canSeeVirtualWaitingRoom,
 }) {
+  const primaryCardCount = canSeeVirtualWaitingRoom ? waitingRoomQueueLength : requestsCount;
+  const waitingRoomTitle =
+    waitingRoomQueueLength === 1 ? 'Patient in Waiting Room' : 'Patients in Waiting Room';
+  const requestsTitle = requestsCount === 1 ? 'Online Request' : 'Online Requests';
+  const primaryCardTitle = canSeeVirtualWaitingRoom ? waitingRoomTitle : requestsTitle;
+
   const cardsToRender = [
     {
       key: 0,
-      count: requestsCount,
-      title: requestsCount === 1 ? 'Online Request' : 'Online Requests',
+      count: primaryCardCount,
+      title: primaryCardTitle,
       src: '/images/icons/Appt-Requests.png',
       size: 6,
       color: 'blue',
@@ -68,6 +77,8 @@ StatsContainer.propTypes = {
   insightCount: PropTypes.number,
   requestsCount: PropTypes.number,
   unConfirmedPatientsCount: PropTypes.number,
+  waitingRoomQueueLength: PropTypes.func.isRequired,
+  canSeeVirtualWaitingRoom: PropTypes.bool.isRequired,
 };
 
 StatsContainer.defaultProps = {
@@ -77,12 +88,20 @@ StatsContainer.defaultProps = {
   unConfirmedPatientsCount: 0,
 };
 
-function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
+function mapStateToProps({ dashboard, entities, waitingRoom, featureFlags }, { dashboardDate }) {
   const appointments = FilterAppointments(
     entities.getIn(['appointments', 'models']),
     entities.getIn(['practitioners', 'models']),
     setDateToTimezone(dashboardDate),
   );
+
+  const canSeeVirtualWaitingRoom = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'virtual-waiting-room-ui',
+  );
+
+  const waitingRoomQueue = waitingRoom.get('waitingRoomQueue');
+
   return {
     appointmentsCount: appointments.size,
     insightCount: dashboard.get('insightCount'),
@@ -90,6 +109,8 @@ function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
       .getIn(['requests', 'models'])
       .filter(req => !req.get('isCancelled') && !req.get('isConfirmed')).size,
     unConfirmedPatientsCount: appointments.filter(app => !app.isPatientConfirmed).size,
+    waitingRoomQueueLength: waitingRoomQueue ? waitingRoomQueue.length : 0,
+    canSeeVirtualWaitingRoom,
   };
 }
 

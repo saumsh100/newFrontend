@@ -9,6 +9,7 @@ import {
   loadUnreadChatCount,
   socketLock,
 } from '../thunks/chat';
+import { fetchWaitingRoomQueue } from '../thunks/waitingRoom';
 import { isHub } from '../util/hub';
 import DesktopNotification from '../util/desktopNotification';
 
@@ -21,10 +22,25 @@ export default function connectSocketToStoreLogin(store, socket) {
     .on('authenticated', () => {
       console.log('client/socket/connectSocketToStoreLogin.js: Socket connected and authenticated');
 
+      socket.on('PatientEnteredWaitingRoom', ({ patient, waitingRoomPatient }) => {
+        DesktopNotification.showNotification('Patient has entered waiting room', {
+          body: `${patient.firstName} ${patient.lastName} has entered the virtual waiting room.`,
+          onClick: () => {
+            dispatch(push('/dashboard'));
+          },
+        });
+
+        dispatch(fetchWaitingRoomQueue({ accountId: waitingRoomPatient.accountId }));
+      });
+
+      socket.on('WaitingRoomHasChanged', ({ waitingRoomPatient }) => {
+        dispatch(fetchWaitingRoomQueue({ accountId: waitingRoomPatient.accountId }));
+      });
+
       /**
        * Request Socket
        */
-      socket.on('request.created', data => {
+      socket.on('request.created', (data) => {
         dispatch(
           receiveEntities({
             key: 'requests',
@@ -41,7 +57,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           body: alert.body,
           onClick: () => {
             if (isHub()) {
-              import('../thunks/electron').then(electronThunk => {
+              import('../thunks/electron').then((electronThunk) => {
                 store.getState().router.location.pathname.indexOf('/requests') === -1 &&
                   dispatch(push('/requests'));
                 dispatch(electronThunk.displayContent());
@@ -53,7 +69,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         });
       });
 
-      socket.on('update:Request', data => {
+      socket.on('update:Request', (data) => {
         dispatch(
           receiveEntities({
             key: 'requests',
@@ -61,7 +77,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('remove:Request', data => {
+      socket.on('remove:Request', (data) => {
         dispatch(
           deleteEntity({
             key: 'requests',
@@ -73,7 +89,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       /**
        * WaitSpot Socket
        */
-      socket.on('create:WaitSpot', data => {
+      socket.on('create:WaitSpot', (data) => {
         dispatch(
           receiveEntities({
             key: 'waitSpots',
@@ -81,7 +97,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('update:WaitSpot', data => {
+      socket.on('update:WaitSpot', (data) => {
         dispatch(
           receiveEntities({
             key: 'waitSpots',
@@ -89,7 +105,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('remove:WaitSpot', data => {
+      socket.on('remove:WaitSpot', (data) => {
         dispatch(
           deleteEntity({
             key: 'waitSpots',
@@ -101,7 +117,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       /**
        * SentReminder Socket
        */
-      socket.on('create:SentReminder', data => {
+      socket.on('create:SentReminder', (data) => {
         dispatch(
           receiveEntities({
             key: 'sentReminders',
@@ -109,7 +125,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('update:SentReminder', data => {
+      socket.on('update:SentReminder', (data) => {
         dispatch(
           receiveEntities({
             key: 'sentReminders',
@@ -117,7 +133,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('remove:SentReminder', data => {
+      socket.on('remove:SentReminder', (data) => {
         dispatch(
           deleteEntity({
             key: 'sentReminders',
@@ -129,7 +145,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       /**
        * SentRecalls Socket
        */
-      socket.on('create:SentRecall', data => {
+      socket.on('create:SentRecall', (data) => {
         dispatch(
           receiveEntities({
             key: 'sentRecalls',
@@ -137,7 +153,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('update:SentRecall', data => {
+      socket.on('update:SentRecall', (data) => {
         dispatch(
           receiveEntities({
             key: 'sentRecalls',
@@ -145,7 +161,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('remove:SentRecall', data => {
+      socket.on('remove:SentRecall', (data) => {
         dispatch(
           deleteEntity({
             key: 'sentRecalls',
@@ -157,7 +173,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       /**
        * Appointment Socket
        */
-      socket.on('create:Appointment', data => {
+      socket.on('create:Appointment', (data) => {
         dispatch(
           receiveEntities({
             key: 'appointments',
@@ -165,7 +181,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('update:Appointment', data => {
+      socket.on('update:Appointment', (data) => {
         dispatch(
           receiveEntities({
             key: 'appointments',
@@ -173,7 +189,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('remove:Appointment', data => {
+      socket.on('remove:Appointment', (data) => {
         // console.log('remove:Appointment event, id=', data.id);
         dispatch(
           deleteEntity({
@@ -186,7 +202,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       /**
        * Calls Socket
        */
-      socket.on('call.started', data => {
+      socket.on('call.started', (data) => {
         /* const callId = Object.keys(data.entities.calls)[0];
         const patientId = data.entities.patients ? Object.keys(data.entities.patients)[0] : null;
         const patient = patientId
@@ -214,7 +230,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         // dispatch(showAlertTimeout({ alert, type: 'success' }));
       });
 
-      socket.on('call.ended', data => {
+      socket.on('call.ended', (data) => {
         // const callId = Object.keys(data.entities.calls)[0];
         dispatch(
           receiveEntities({
@@ -228,7 +244,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       /**
        * Patient Socket
        */
-      socket.on('create:Patient', data => {
+      socket.on('create:Patient', (data) => {
         // console.log('Created Patient', data.entities);
         dispatch(
           receiveEntities({
@@ -238,7 +254,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         );
       });
 
-      socket.on('update:Patient', data => {
+      socket.on('update:Patient', (data) => {
         dispatch(
           receiveEntities({
             key: 'patients',
@@ -246,7 +262,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
-      socket.on('remove:Patient', data => {
+      socket.on('remove:Patient', (data) => {
         dispatch(
           deleteEntity({
             key: 'patients',
@@ -255,7 +271,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         );
       });
 
-      socket.on('create:TextMessage', data => {
+      socket.on('create:TextMessage', (data) => {
         dispatch(
           receiveEntities({
             key: 'chats',
@@ -273,14 +289,14 @@ export default function connectSocketToStoreLogin(store, socket) {
         }
       });
 
-      socket.on('unread:TextMessage', data => {
+      socket.on('unread:TextMessage', (data) => {
         dispatch(loadUnreadChatCount()).then(() => {
           dispatch(socketLock(data.entities.textMessages));
           dispatch(getChatCategoryCounts());
         });
       });
 
-      socket.on('read:TextMessage', data => {
+      socket.on('read:TextMessage', (data) => {
         dispatch(
           receiveEntities({
             key: 'textMessages',
@@ -293,7 +309,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         });
       });
 
-      socket.on('update:Chat', data => {
+      socket.on('update:Chat', (data) => {
         dispatch(
           receiveEntities({
             key: 'chat',
@@ -304,7 +320,7 @@ export default function connectSocketToStoreLogin(store, socket) {
 
       socket.on('syncClientError', () => {});
 
-      socket.on('syncFinished', data => {
+      socket.on('syncFinished', (data) => {
         dispatch(setSyncingWithPMS({ isSyncing: false }));
         dispatch(
           updateEntity({
@@ -316,7 +332,7 @@ export default function connectSocketToStoreLogin(store, socket) {
 
       socket.on('syncProgress', () => {});
     })
-    .on('unauthorized', msg => {
+    .on('unauthorized', (msg) => {
       console.log('unauthorized: ', JSON.stringify(msg.data));
       throw new Error(msg.data.type);
     });

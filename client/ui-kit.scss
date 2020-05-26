@@ -25,10 +25,10 @@ $green-light: #abd0a2;
 $green: #74c261;
 $green-dark: #518f42;
 
-$teal-lightest: #f1f7f9;
-$teal-light: #5999ab;
-$teal: #206477;
-$teal-dark: #064152;
+$teal-lightest: #d8e1e7;
+$teal-light: #8aa5b7;
+$teal: #154b6e;
+$teal-dark: #14415f;
 
 $red-light: #f6a2a2;
 $red: #dc3535;
@@ -48,14 +48,14 @@ $yellow-dark: #e3a83b;
 
 .dropdown {
   &__input__wrapper {
+    background: $white;
+    border: 1px solid $grey-lighter;
+    border-radius: 4px;
+    box-shadow: $shadow;
     box-sizing: border-box;
     min-height: 40px;
     padding: 0 16px;
-    border: 1px solid $grey-lighter;
-    box-shadow: $shadow;
-    border-radius: 4px;
     transition: border-color 0.2s ease;
-    background: $white;
 
     &:hover {
       border-color: $grey-dark;
@@ -64,15 +64,15 @@ $yellow-dark: #e3a83b;
   }
 
   &__input {
-    font-family: $inter;
-    font-weight: 500;
-    font-size: 13px;
     color: $grey-dark;
+    font-family: $inter;
+    font-size: 13px;
+    font-weight: 500;
   }
 
   &__wrapper {
-    padding: 8px 0;
     box-sizing: border-box;
+    padding: 8px 0;
     // we don't have access to the react-dd-menu item
     // so we need to access it using the div selector
     > :not(.dd-menu-items) + div,
@@ -83,12 +83,12 @@ $yellow-dark: #e3a83b;
   }
 
   &__listItem {
-    font-family: $inter;
-    font-weight: 500;
-    font-size: 13px;
-    color: $grey-dark;
-    justify-content: flex-start;
     border: 0;
+    color: $grey-dark;
+    font-family: $inter;
+    font-size: 13px;
+    font-weight: 500;
+    justify-content: flex-start;
     padding: 0 16px;
   }
 
@@ -97,9 +97,9 @@ $yellow-dark: #e3a83b;
   }
 
   &__list {
-    box-shadow: $shadow-md;
-    border-radius: 4px;
     border: 1px solid $grey-lighter;
+    border-radius: 4px;
+    box-shadow: $shadow-md;
     max-height: 200px;
     overflow-y: scroll;
   }
@@ -115,78 +115,78 @@ $yellow-dark: #e3a83b;
 
 .modal {
   &__title {
-    font-family: $inter;
-    font-weight: 500;
-    font-size: 18px;
     color: $teal-dark;
-    padding: 0;
+    font-family: $inter;
+    font-size: 18px;
+    font-weight: 500;
     margin: 0;
+    padding: 0;
   }
 
   &__helper {
-    font-family: $inter;
-    font-weight: 500;
-    font-size: 14px;
     color: $grey-dark;
+    font-family: $inter;
+    font-size: 14px;
+    font-weight: 500;
     margin: 18px 0 12px;
   }
 
   &__add__button {
     background: $white;
     border: 1px solid $grey-lighter;
-    box-shadow: $shadow;
-    font-size: 13px;
-    color: $grey-dark;
     border-radius: 4px;
-    text-align: center;
-    font-family: $inter;
-    font-weight: 500;
+    box-shadow: $shadow;
+    color: $grey-dark;
     display: block;
+    font-family: $inter;
+    font-size: 13px;
+    font-weight: 500;
     margin-top: 8px;
+    text-align: center;
   }
 
   &__cancel {
     background: transparent;
-    color: $grey-dark;
-    border-radius: 4px;
     border: 1px solid transparent;
-    transition: all 0.2s ease-in;
+    border-radius: 4px;
+    color: $grey-dark;
     font-family: $inter;
-    font-weight: 500;
     font-size: 14px;
+    font-weight: 500;
     padding: 12px 20px;
+    transition: all 0.2s ease-in;
 
     &:hover {
+      background: $white;
       border-color: $grey-lighter;
       box-shadow: $shadow;
       transition: all 0.2s ease-in;
-      background: $white;
     }
   }
 
   &__save {
-    font-family: $inter;
-    font-weight: 500;
-    font-size: 14px;
     background: $teal;
-    box-shadow: $shadow;
     border-radius: 4px;
-    transition: all 0.2s ease-in;
+    box-shadow: $shadow;
+    font-family: $inter;
+    font-size: 14px;
+    font-weight: 500;
     margin-left: 8px;
     padding: 12px 20px;
+    transition: all 0.2s ease-in;
 
     &:hover {
+      background: $teal-dark;
       box-shadow: $shadow;
       transition: all 0.2s ease-in;
-      background: $teal-dark;
     }
   }
 
   &__group {
-    margin-top: 0;
-    display: flex;
     align-items: center;
+    display: flex;
     flex-wrap: wrap;
+    margin-top: 0;
 
     &:last-of-type {
       margin-bottom: 16px;
@@ -194,23 +194,23 @@ $yellow-dark: #e3a83b;
   }
 
   &__label {
-    font-family: $inter;
-    font-weight: normal;
-    font-size: 12px;
     color: $grey;
+    font-family: $inter;
+    font-size: 12px;
+    font-weight: normal;
   }
 }
 
 .fieldLabel {
-  margin-top: 0;
-  margin-bottom: 8px;
   color: $grey-light;
+  display: block;
+  font-family: $inter;
   font-size: 12px;
+  font-weight: 400;
   letter-spacing: 0.02px;
   line-height: 12px;
-  font-family: $inter;
-  font-weight: 400;
-  display: block;
+  margin-bottom: 8px;
+  margin-top: 0;
   &.error {
     color: $red;
   }
