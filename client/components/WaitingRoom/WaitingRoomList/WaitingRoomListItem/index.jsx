@@ -21,7 +21,7 @@ function WaitingRoomListItem(props) {
   const tooltipBody = (
     <div className={styles.tooltipBody}>
       {familyMembers.map(fm => (
-        <div>
+        <div key={fm.id}>
           {fm.patient.firstName} {fm.patient.lastName}
         </div>
       ))}

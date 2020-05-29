@@ -62,14 +62,17 @@ function WaitingRoomList(props) {
     <List>
       {waitingRoomPatients.map(waitingRoomPatient => (
         <WaitingRoomListItem
+          key={waitingRoomPatient.id}
           waitingRoomPatient={waitingRoomPatient}
           onNotify={() => setSelectedWaitingRoomPatient(waitingRoomPatient)}
           onClean={({ isCleaned }) =>
             onClean({
               isCleaned,
               waitingRoomPatient,
-              alert: cleanAlert({ isCleaned,
-waitingRoomPatient }),
+              alert: cleanAlert({
+                isCleaned,
+                waitingRoomPatient,
+              }),
             })
           }
           onComplete={({ isCompleted }) =>
@@ -124,9 +127,13 @@ waitingRoomPatient }),
   );
 }
 
+WaitingRoomList.defaultProps = {
+  defaultTemplate: '',
+};
+
 WaitingRoomList.propTypes = {
-  defaultTemplate: PropTypes.string.isRequired,
-  waitingRoomPatients: PropTypes.shape({}).isRequired,
+  defaultTemplate: PropTypes.string,
+  waitingRoomPatients: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onNotify: PropTypes.func.isRequired,
   onClean: PropTypes.func.isRequired,
   onComplete: PropTypes.func.isRequired,

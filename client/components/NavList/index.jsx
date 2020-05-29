@@ -7,6 +7,7 @@ import { Nav, NavItem, Link, Icon } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
 import EnabledFeature from '../library/EnabledFeature';
 import styles from './styles.scss';
+import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
 function NavList({
   location,
@@ -15,6 +16,7 @@ function NavList({
   unreadChats,
   onlineRequests,
   navigationPreferences,
+  waitingRoomQueueLength,
 }) {
   const { navItem, activeItem } = styles;
 
@@ -146,7 +148,13 @@ function NavList({
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        <SingleNavItem path="/" icon="tachometer" label="Dashboard" type={n('dashboard')} />
+        <SingleNavItem
+          path="/"
+          icon="tachometer"
+          label="Dashboard"
+          badge={waitingRoomQueueLength}
+          type={n('dashboard')}
+        />
         <SingleNavItem
           path="/intelligence"
           label="Intelligence"
@@ -215,6 +223,8 @@ NavList.propTypes = {
     marketing: PropTypes.string,
     settings: PropTypes.string,
   }),
+
+  waitingRoomQueueLength: PropTypes.number.isRequired,
 };
 
 NavList.defaultProps = {
@@ -224,7 +234,7 @@ NavList.defaultProps = {
   navigationPreferences: {},
 };
 
-function mapStateToProps({ chat, entities }) {
+function mapStateToProps({ chat, entities, waitingRoom, featureFlags }) {
   const unreadChatsCount = chat.get('unreadChatsCount');
   const requests = entities.getIn(['requests', 'models']);
   const filteredRequests = requests
@@ -233,9 +243,19 @@ function mapStateToProps({ chat, entities }) {
 
   const chatsLength = unreadChatsCount > 100 ? '99+' : unreadChatsCount;
   const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
+
+  const canSeeVirtualWaitingRoom = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'virtual-waiting-room-ui',
+  );
+
+  const waitingRoomQueue = waitingRoom.get('waitingRoomQueue');
+
   return {
     unreadChats: chatsLength,
     onlineRequests: requestsLength,
+    waitingRoomQueueLength:
+      waitingRoomQueue && canSeeVirtualWaitingRoom ? waitingRoomQueue.length : 0,
   };
 }
 

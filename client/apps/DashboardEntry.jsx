@@ -17,6 +17,7 @@ import { browserHistory } from '../store/factory';
 import { load } from '../thunks/auth';
 import { loadUnreadMessages, loadUnreadChatCount } from '../thunks/chat';
 import { loadOnlineRequest } from '../thunks/onlineRequests';
+import { fetchWaitingRoomQueue } from '../thunks/waitingRoom';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import DesktopNotification from '../util/desktopNotification';
 import SubscriptionManager from '../util/graphqlSubscriptions';
@@ -45,6 +46,7 @@ load()(store.dispatch).then(() => {
     const userId = user.id;
     const fullName = `${user.firstName} ${user.lastName}`;
     const email = user.username;
+    const accountId = auth.get('accountId');
 
     if (process.env.NODE_ENV === 'production') {
       identifyPracticeUser({
@@ -69,12 +71,12 @@ load()(store.dispatch).then(() => {
       DesktopNotification.requestPermission();
     }
 
-    SubscriptionManager.accountId = auth.get('accountId');
+    SubscriptionManager.accountId = accountId;
     store.dispatch(
       receiveEntities({
         entities: {
           accounts: {
-            [auth.get('accountId')]: auth.get('account').toJS(),
+            [accountId]: auth.get('account').toJS(),
           },
         },
       }),
@@ -83,6 +85,7 @@ load()(store.dispatch).then(() => {
     store.dispatch(loadUnreadMessages());
     store.dispatch(loadUnreadChatCount());
     store.dispatch(loadOnlineRequest());
+    store.dispatch(fetchWaitingRoomQueue({ accountId }));
     connectSocketToStoreLogin(store, socket);
   }
   // TODO: define globals with webpack ProvidePlugin

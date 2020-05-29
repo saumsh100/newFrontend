@@ -77,7 +77,7 @@ StatsContainer.propTypes = {
   insightCount: PropTypes.number,
   requestsCount: PropTypes.number,
   unConfirmedPatientsCount: PropTypes.number,
-  waitingRoomQueueLength: PropTypes.func.isRequired,
+  waitingRoomQueueLength: PropTypes.number.isRequired,
   canSeeVirtualWaitingRoom: PropTypes.bool.isRequired,
 };
 

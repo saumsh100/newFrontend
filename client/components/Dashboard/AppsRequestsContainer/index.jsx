@@ -325,7 +325,7 @@ AppsRequestsContainer.propTypes = {
   selectAppointment: PropTypes.func.isRequired,
   services: PropTypes.instanceOf(Map),
   setScheduleDate: PropTypes.func.isRequired,
-  waitingRoomQueueLength: PropTypes.func.isRequired,
+  waitingRoomQueueLength: PropTypes.number.isRequired,
   canSeeVirtualWaitingRoom: PropTypes.bool.isRequired,
 };
 

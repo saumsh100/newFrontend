@@ -35,9 +35,9 @@ class DashboardWaitingRoomContainer extends Component {
 }
 
 DashboardWaitingRoomContainer.propTypes = {
-  waitingRoomQueue: PropTypes.shape({}),
+  waitingRoomQueue: PropTypes.arrayOf(PropTypes.shape({})),
   accountId: PropTypes.string.isRequired,
-  defaultTemplate: PropTypes.string.isRequired,
+  defaultTemplate: PropTypes.string,
   fetchWaitingRoomQueue: PropTypes.func.isRequired,
   fetchWaitingRoomNotificationTemplate: PropTypes.func.isRequired,
   sendWaitingRoomNotification: PropTypes.func.isRequired,
@@ -47,6 +47,7 @@ DashboardWaitingRoomContainer.propTypes = {
 
 DashboardWaitingRoomContainer.defaultProps = {
   waitingRoomQueue: null,
+  defaultTemplate: '',
 };
 
 function mapStateToProps({ auth, waitingRoom }) {
