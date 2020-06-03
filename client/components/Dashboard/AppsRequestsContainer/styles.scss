@@ -23,6 +23,7 @@
 .container {
   background-color: $primary-white;
   height: 485px;
+  overflow: scroll;
 }
 .tab {
   background-color: $primary-grey;
