@@ -7,12 +7,13 @@ import styles from './styles.scss';
 import { SortByStartDate } from '../../../library/util/SortEntities';
 
 export default function Insights(props) {
-  const {
-    insights, patients, appointments, timezone,
-  } = props;
+  const { insights, patients, appointments, timezone } = props;
 
   const sortedInsights = insights
-    .filter(insightData => patients.get(insightData.patientId))
+    .filter(
+      insightData =>
+        patients.get(insightData.patientId) && appointments.get(insightData.appointmentId),
+    )
     .sort((a, b) => {
       const app1 = appointments.get(a.appointmentId);
       const app2 = appointments.get(b.appointmentId);
