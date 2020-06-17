@@ -40,8 +40,9 @@ class SettingsForm extends Component {
     super(props);
 
     this.state = {
-      omitReminderIds: props.patient.omitReminderIds,
-      omitRecallIds: props.patient.omitRecallIds,
+      omitReminderIds: props.patient.omitReminderIds.filter(id =>
+        sanitizeList(props.reminders).get(id)),
+      omitRecallIds: props.patient.omitRecallIds.filter(id => sanitizeList(props.recalls).get(id)),
     };
 
     this.omitFormHandler = this.omitFormHandler.bind(this);
@@ -78,7 +79,6 @@ class SettingsForm extends Component {
   render() {
     const { handleSubmit, patient, reminders, recalls } = this.props;
     const { omitReminderIds, omitRecallIds } = this.state;
-
     const { preferences } = patient;
     return (
       <Form
