@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { setDateToTimezone } from '@carecru/isomorphic';
 import { IconCard } from '../../library';
 import { FilterAppointments } from '../Shared/filters';
-import styles from './styles.scss';
 import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
+import styles from './styles.scss';
 
 function StatsContainer({
   appointmentsCount,
@@ -15,6 +15,8 @@ function StatsContainer({
   unConfirmedPatientsCount,
   waitingRoomQueueLength,
   canSeeVirtualWaitingRoom,
+  overrideClassName,
+  overrideStatClassName,
 }) {
   const primaryCardCount = canSeeVirtualWaitingRoom ? waitingRoomQueueLength : requestsCount;
   const waitingRoomTitle =
@@ -58,16 +60,12 @@ function StatsContainer({
   ];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.statCardsContainer}>
-        <div className={styles.statCards}>
-          {cardsToRender.map(options => (
-            <div key={options.key} className={styles.stat}>
-              <IconCard {...options} />
-            </div>
-          ))}
+    <div className={overrideClassName || styles.container}>
+      {cardsToRender.map(options => (
+        <div key={options.key} className={overrideStatClassName || styles.stat}>
+          <IconCard {...options} />
         </div>
-      </div>
+      ))}
     </div>
   );
 }
@@ -79,6 +77,8 @@ StatsContainer.propTypes = {
   unConfirmedPatientsCount: PropTypes.number,
   waitingRoomQueueLength: PropTypes.number.isRequired,
   canSeeVirtualWaitingRoom: PropTypes.bool.isRequired,
+  overrideClassName: PropTypes.string,
+  overrideStatClassName: PropTypes.string,
 };
 
 StatsContainer.defaultProps = {
@@ -86,6 +86,8 @@ StatsContainer.defaultProps = {
   insightCount: 0,
   requestsCount: 0,
   unConfirmedPatientsCount: 0,
+  overrideClassName: null,
+  overrideStatClassName: null,
 };
 
 function mapStateToProps({ dashboard, entities, waitingRoom, featureFlags }, { dashboardDate }) {

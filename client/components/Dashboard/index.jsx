@@ -6,16 +6,17 @@ import { bindActionCreators } from 'redux';
 import jwt from 'jwt-decode';
 import { Map } from 'immutable';
 import DocumentTitle from 'react-document-title';
-import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
-import styles from './styles.scss';
+import EnabledFeature from '../library/EnabledFeature';
 import HeaderUserDate from './HeaderUserDate/index';
 import StatsContainer from './StatsContainer';
 import AppsRequestsContainer from './AppsRequestsContainer/index';
 import PatientInsightsContainer from './PatientInsightsContainer/index';
 import DonnaToDoListContainer from './DonnaToDoListContainer/index';
-import { setDashboardDate } from '../../reducers/dashboard';
 import RevenueContainer from './RevenueContainer';
+import { setDashboardDate } from '../../reducers/dashboard';
+import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { fetchDonnasToDos } from '../../thunks/dashboard';
+import styles from './styles.scss';
 
 class Dashboard extends React.Component {
   componentDidMount() {
@@ -41,12 +42,22 @@ class Dashboard extends React.Component {
             dashboardDate={this.props.dashboardDate}
             setDashboardDate={this.props.setDashboardDate}
           />
-
-          <div className={styles.revenueColFlex}>
-            <RevenueContainer dashboardDate={this.props.dashboardDate} />
-            <StatsContainer dashboardDate={this.props.dashboardDate} />
-          </div>
-
+          <EnabledFeature
+            predicate={({ flags }) => flags.get('production-data-in-dashboard')}
+            render={() => (
+              <div className={styles.revenueColFlex}>
+                <RevenueContainer dashboardDate={this.props.dashboardDate} />
+                <StatsContainer dashboardDate={this.props.dashboardDate} />
+              </div>
+            )}
+            fallback={() => (
+              <StatsContainer
+                dashboardDate={this.props.dashboardDate}
+                overrideClassName={styles.statsContainer}
+                overrideStatClassName={styles.statContainer}
+              />
+            )}
+          />
           <div className={styles.colFlex}>
             <AppsRequestsContainer dashboardDate={this.props.dashboardDate} />
             <PatientInsightsContainer dashboardDate={this.props.dashboardDate} />
