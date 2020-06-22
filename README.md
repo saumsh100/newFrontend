@@ -68,10 +68,11 @@ SERVER_PATH=
  ```
 **Note**: Ask a team member for the keys to the `.env` file
 
-3. Run `npm run npmrc` to create a `.npmrc` file with the right token
-4. Run `npm install`
-5. Run `npm run client:build`
-6. Run `npm run client:dev:server`
+3. Change `SERVER_PATH` env var with the path to your `backend` repo. `Hint:` run `pwd` while in your backend dir and use that path.
+4. Run `npm run npmrc` to create a `.npmrc` file with the right token
+5. Run `npm install`
+6. Run `npm run client:build`
+7. Run `npm run client:dev:server`
 
 note: make sure you replace the SERVER_PATH in the `.env` file.
 
@@ -102,12 +103,12 @@ It is useful to have your terminal application view split into 4 terminal panes.
 
 |Order|Execution Directory| Command  | Description |
 |---|---|---|---|
-|1|backend/|`docker-compose up`| Starts 3rd-parth dependencies (see above) and shows their logs|
+|1|backend/|`docker-compose up`| Starts 3rd-parth dependencies (see above) and shows their logs. To run this container in detached mode, use `-d` flag|
 |2|backend/|`npm run start:dev`| Starts CareCru application |
 |3|api/|`npm run start`| Starts new Nest application |
 |-|any|-|Log tailing or anything similar|
 
-You should now have the application running at `localhost:5000` and at `care.cru:5000` if you configured that as well.
+If your backend service is running, you should now have the application running at `localhost:5000` and at `care.cru:5000` if you configured that as well.
 
 ### Other Services
 You can run different jobs separately.
