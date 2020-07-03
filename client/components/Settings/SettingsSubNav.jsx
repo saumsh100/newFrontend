@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import find from 'lodash/find';
 import { RouterList } from '../library';
@@ -26,6 +27,11 @@ const PATHS = {
     {
       to: '/settings/practice/chairs',
       label: 'Chairs',
+    },
+    {
+      to: '/settings/practice/forms',
+      label: 'Forms',
+      featureFlag: 'forms-tab-in-practice-settings',
     },
     {
       to: '/settings/practice/superadmin',
@@ -65,11 +71,18 @@ const PATHS = {
   ],
 };
 
-export default function SettingsSubNav({ location, className, users }) {
+function SettingsSubNav({ location, className, users, featureFlags }) {
   const routes = find(PATHS, (route, key) => location.pathname.indexOf(key) === 0);
+
   // Workaround for redirects
   return routes ? (
-    <RouterList location={location} routes={routes} className={className} users={users} />
+    <RouterList
+      location={location}
+      routes={routes}
+      className={className}
+      users={users}
+      featureFlags={featureFlags}
+    />
   ) : null;
 }
 
@@ -77,8 +90,20 @@ SettingsSubNav.propTypes = {
   className: PropTypes.string,
   location: PropTypes.objectOf(PropTypes.string).isRequired,
   users: PropTypes.instanceOf(Map).isRequired,
+  featureFlags: PropTypes.shape({}).isRequired,
 };
 
 SettingsSubNav.defaultProps = {
   className: '',
 };
+
+function mapStateToProps({ featureFlags }) {
+  return { featureFlags: featureFlags.toJS().flags };
+}
+
+const enhance = connect(
+  mapStateToProps,
+  null,
+);
+
+export default enhance(SettingsSubNav);

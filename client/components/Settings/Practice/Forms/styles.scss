@@ -1,0 +1,34 @@
+@import '../../../../ui.scss';
+
+.cell {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  font-family: $medium-font;
+  font-size: 14px;
+}
+
+.titleCell {
+  @extend .cell;
+}
+
+.linkCell {
+  @extend .cell;
+  cursor: pointer;
+  color: $primary-dark-blue;
+  &:hover {
+    > div > i {
+      display: block;
+    }
+  }
+}
+
+.linkCellContent {
+  display: flex;
+  align-items: center;
+}
+
+.clipboardIcon {
+  margin-left: 10px;
+  display: none;
+}

@@ -19,6 +19,7 @@ const Routes = {
   scheduleOfficeHours: lazy(() => import('../../components/Settings/Practice/OfficeHours')),
   scheduleOnlineBooking: lazy(() => import('../../components/Settings/Practice/OnlineBooking')),
   chairs: lazy(() => import('../../components/Settings/Practice/Chairs')),
+  forms: lazy(() => import('../../components/Settings/Practice/Forms')),
   superAdmin: lazy(() => import('../../components/Settings/Practice/SuperAdmin')),
 
   reminders: lazy(() => import('../../components/Settings/Donna/Reminders')),
@@ -38,6 +39,7 @@ const PracticeContainer = props => (
       <Route path={practiceBase('/hours')} component={Routes.scheduleOfficeHours} />
       <Route path={practiceBase('/onlinebooking')} component={Routes.scheduleOnlineBooking} />
       <Route path={practiceBase('/chairs')} component={Routes.chairs} />
+      <Route path={practiceBase('/forms')} component={Routes.forms} />
       <Route path={practiceBase('/superadmin')} component={Routes.superAdmin} />
     </Switch>
   </Practice>
