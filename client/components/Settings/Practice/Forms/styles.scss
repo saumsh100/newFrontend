@@ -1,11 +1,11 @@
 @import '../../../../ui.scss';
 
 .cell {
-  height: 40px;
-  display: flex;
   align-items: center;
+  display: flex;
   font-family: $medium-font;
   font-size: 14px;
+  height: 40px;
 }
 
 .titleCell {
@@ -14,8 +14,11 @@
 
 .linkCell {
   @extend .cell;
-  cursor: pointer;
+  background: none;
+  border: none;
   color: $primary-dark-blue;
+  cursor: pointer;
+  outline: none;
   &:hover {
     > div > i {
       display: block;
@@ -24,11 +27,11 @@
 }
 
 .linkCellContent {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .clipboardIcon {
-  margin-left: 10px;
   display: none;
+  margin-left: 10px;
 }
