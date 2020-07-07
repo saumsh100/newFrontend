@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { RouterTabs } from '../library';
 
 const ROUTES = {
@@ -32,6 +33,11 @@ const ROUTES = {
     {
       to: '/settings/donna',
       label: 'Donna',
+    },
+    {
+      to: '/settings/forms',
+      label: 'Forms',
+      flag: 'forms-tab-in-practice-settings',
     },
   ],
   '/reputation': [
@@ -74,13 +80,26 @@ class SubTabs extends Component {
   render() {
     const {
       location: { pathname },
+      featureFlags,
     } = this.props;
-    const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
 
-    return activeRoute ? <RouterTabs routes={ROUTES[activeRoute]} /> : null;
+    const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
+    const routes = ROUTES[activeRoute].filter(({ flag }) => !flag || featureFlags.getIn(['flags', flag]));
+    return activeRoute ? <RouterTabs routes={routes} /> : null;
   }
 }
 
 SubTabs.propTypes = { location: PropTypes.objectOf(PropTypes.any).isRequired };
 
-export default SubTabs;
+const mapStateToProps = ({ featureFlags }) => {
+  return {
+    featureFlags,
+  };
+};
+
+const enhance = connect(
+  mapStateToProps,
+  null,
+);
+
+export default enhance(SubTabs);

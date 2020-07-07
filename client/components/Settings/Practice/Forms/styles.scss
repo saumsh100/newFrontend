@@ -1,5 +1,9 @@
 @import '../../../../ui.scss';
 
+.container {
+  background-color: $primary-white;
+}
+
 .cell {
   align-items: center;
   display: flex;

@@ -29,11 +29,6 @@ const PATHS = {
       label: 'Chairs',
     },
     {
-      to: '/settings/practice/forms',
-      label: 'Forms',
-      featureFlag: 'forms-tab-in-practice-settings',
-    },
-    {
       to: '/settings/practice/superadmin',
       label: 'Super Admin',
       adminOnly: true,

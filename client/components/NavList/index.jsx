@@ -192,6 +192,10 @@ function NavList({
           <SubNavItem path="/settings/reasons" label="Reasons" />
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
           <SubNavItem path="/settings/donna" label="Donna" />
+          <EnabledFeature
+            predicate={({ flags }) => flags.get('forms-tab-in-practice-settings')}
+            render={() => <SubNavItem path="/settings/forms" label="Forms" />}
+          />
         </MultiNavItem>
         <EnabledFeature
           predicate={() => isSuperAdmin}

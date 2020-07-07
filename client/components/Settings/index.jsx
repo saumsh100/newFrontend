@@ -13,7 +13,8 @@ export default function Settings(props) {
 
   if (
     location.pathname === '/settings/reasons' ||
-    location.pathname === '/settings/practitioners'
+    location.pathname === '/settings/practitioners' ||
+    location.pathname === '/settings/forms'
   ) {
     showNav = <div className={styles.rowContainer}>{children}</div>;
   } else {

@@ -107,7 +107,7 @@ class Forms extends Component {
     ];
 
     return (
-      <SettingsCard title="Forms" bodyClass={styles.container}>
+      <SettingsCard title="Forms" className={styles.container}>
         <FetchAvailableForms
           accountId={this.props.accountId}
           render={({ isLoading, forms }) =>

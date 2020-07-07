@@ -13,12 +13,13 @@ export default function SettingsCard(props) {
     headerClass,
     bodyClass,
     subHeader,
+    className,
   } = props;
 
   const headerClasses = classNames(headerClass, styles.headerWrapper);
 
   return (
-    <SContainer>
+    <SContainer className={className}>
       <SHeader className={headerClasses}>
         <div className={styles.mainHeader}>
           <Header title={title} />

@@ -39,7 +39,6 @@ const PracticeContainer = props => (
       <Route path={practiceBase('/hours')} component={Routes.scheduleOfficeHours} />
       <Route path={practiceBase('/onlinebooking')} component={Routes.scheduleOnlineBooking} />
       <Route path={practiceBase('/chairs')} component={Routes.chairs} />
-      <Route path={practiceBase('/forms')} component={Routes.forms} />
       <Route path={practiceBase('/superadmin')} component={Routes.superAdmin} />
     </Switch>
   </Practice>
@@ -66,6 +65,7 @@ const Settings = props => (
           <Route path={donnaBase()} component={DonnaContainer} />
           <Route path={base('/reasons')} component={Routes.reasons} />
           <Route path={base('/practitioners')} component={Routes.practitioners} />
+          <Route path={base('/forms')} component={Routes.forms} />
         </Switch>
       </Suspense>
     </DocumentTitle>
