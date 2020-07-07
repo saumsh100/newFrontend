@@ -84,18 +84,23 @@ class SubTabs extends Component {
     } = this.props;
 
     const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
-    const routes = ROUTES[activeRoute].filter(({ flag }) => !flag || featureFlags.getIn(['flags', flag]));
-    return activeRoute ? <RouterTabs routes={routes} /> : null;
+    if (!activeRoute) return null;
+    const routes = ROUTES[activeRoute].filter(
+      ({ flag }) => !flag || featureFlags.getIn(['flags', flag]),
+    );
+
+    return <RouterTabs routes={routes} />;
   }
 }
 
-SubTabs.propTypes = { location: PropTypes.objectOf(PropTypes.any).isRequired };
-
-const mapStateToProps = ({ featureFlags }) => {
-  return {
-    featureFlags,
-  };
+SubTabs.propTypes = {
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
+  featureFlags: PropTypes.shape({}).isRequired,
 };
+
+const mapStateToProps = ({ featureFlags }) => ({
+  featureFlags,
+});
 
 const enhance = connect(
   mapStateToProps,

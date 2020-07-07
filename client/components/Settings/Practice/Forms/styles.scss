@@ -23,6 +23,7 @@
   color: $primary-dark-blue;
   cursor: pointer;
   outline: none;
+  padding: 0;
   &:hover {
     > div > i {
       display: block;

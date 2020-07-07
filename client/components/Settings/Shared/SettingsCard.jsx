@@ -6,15 +6,7 @@ import { SContainer, SHeader, SBody, Header } from '../../library';
 import styles from './settings-card.scss';
 
 export default function SettingsCard(props) {
-  const {
-    title,
-    rightActions,
-    children,
-    headerClass,
-    bodyClass,
-    subHeader,
-    className,
-  } = props;
+  const { title, rightActions, children, headerClass, bodyClass, subHeader, className } = props;
 
   const headerClasses = classNames(headerClass, styles.headerWrapper);
 
@@ -23,9 +15,7 @@ export default function SettingsCard(props) {
       <SHeader className={headerClasses}>
         <div className={styles.mainHeader}>
           <Header title={title} />
-          {rightActions ? (
-            <div className={styles.pullRight}>{rightActions}</div>
-          ) : null}
+          {rightActions ? <div className={styles.pullRight}>{rightActions}</div> : null}
         </div>
         {subHeader ? <div className={styles.subHeader}>{subHeader}</div> : null}
       </SHeader>
