@@ -14,6 +14,7 @@ import Account from '../../../../../entities/models/Account';
 import Reminders from '../../../../../entities/models/Reminder';
 import EnabledFeature from '../../../../library/EnabledFeature';
 import styles from './styles.scss';
+import { wordMap } from '../../helpers';
 
 const BUSINESS_DAYS_STRING = 'business days';
 
@@ -24,13 +25,6 @@ const iconsMap = {
   email_sms: 'envelope_comment',
 };
 
-const wordMap = {
-  sms: 'SMS',
-  phone: 'Voice',
-  email: 'Email',
-  email_sms: 'Email & SMS',
-};
-
 const typeOptions = [
   {
     label: 'Hours',
@@ -39,10 +33,6 @@ const typeOptions = [
   {
     label: 'Days',
     value: 'days',
-  },
-  {
-    label: 'Hours',
-    value: 'hours',
   },
   {
     label: 'Business Days',
