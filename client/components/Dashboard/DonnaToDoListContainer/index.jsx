@@ -53,6 +53,7 @@ class DonnaToDoListContainer extends Component {
               reminders={reminders}
               recalls={recalls}
               reviews={reviews}
+              account={account}
               loadingToDos={loadingToDos}
               timezone={account.timezone}
             />

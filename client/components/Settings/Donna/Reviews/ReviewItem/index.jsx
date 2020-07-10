@@ -10,6 +10,7 @@ import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
 import styles from './styles.scss';
+import { wordMap } from '../../helpers';
 
 const iconsMap = {
   sms: 'comment',
@@ -78,6 +79,7 @@ class ReviewItem extends Component {
     this.onChangeInterval = this.onChangeInterval.bind(this);
     this.onIntervalNumberBlur = this.onIntervalNumberBlur.bind(this);
     this.updateNumberInput = this.updateNumberInput.bind(this);
+    this.changePrimaryTypes = this.changePrimaryTypes.bind(this);
   }
 
   onChangeInterval(newType) {
@@ -140,18 +142,37 @@ class ReviewItem extends Component {
     );
   }
 
+  changePrimaryTypes(value) {
+    const { account } = this.props;
+    const word = wordMap[value];
+    const reviewsChannels = value.split('_');
+
+    const alert = {
+      success: {
+        title: 'Updated',
+        body: `Set the primary communication type to ${word}`,
+      },
+
+      error: {
+        title: 'Error Updating',
+        body: `Failed to set the review's primary communication type to ${word}`,
+      },
+    };
+
+    this.props.updateReviewsSettings(account.id, { reviewsChannels }, alert);
+  }
+
   renderLabel() {
     return <TouchPointLabel title="Review Request" className={styles.reviewLabel} />;
   }
 
   renderMainComponent() {
     const { selected, reviewSettings } = this.props;
-    const { primaryTypes, interval } = reviewSettings;
-    const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
+    const primaryTypesKey = convertPrimaryTypesToKey(reviewSettings.reviewsChannels);
     const icon = iconsMap[primaryTypesKey];
     const { number } = this.state;
     const dropdownSelectClass = selected ? styles.dropdownSelectSelected : styles.dropdownSelect;
-    const { type } = intervalToNumType(interval);
+    const { type } = intervalToNumType(reviewSettings.interval);
 
     return (
       <div>
@@ -165,8 +186,7 @@ class ReviewItem extends Component {
           <div className={styles.dropdownsWrapper}>
             <div className={styles.topRow}>
               <DropdownSelect
-                disabled
-                onChange={() => {}}
+                onChange={this.changePrimaryTypes}
                 className={dropdownSelectClass}
                 value={primaryTypesKey}
                 options={primaryTypesOptions}
@@ -218,8 +238,7 @@ ReviewItem.propTypes = {
   onSelect: PropTypes.func.isRequired,
   reviewSettings: PropTypes.shape({
     interval: PropTypes.string,
-    primaryType: PropTypes.string,
-    primaryTypes: PropTypes.array,
+    reviewsChannels: PropTypes.array,
   }).isRequired,
   selected: PropTypes.bool.isRequired,
   account: PropTypes.shape({}).isRequired,

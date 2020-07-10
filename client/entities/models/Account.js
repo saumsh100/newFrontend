@@ -1,3 +1,4 @@
+
 import createModel from '../createModel';
 
 const AccountSchema = {
@@ -45,6 +46,7 @@ const AccountSchema = {
   recallStartTime: null,
   recallEndTime: null,
   reviewsInterval: null,
+  reviewsChannels: null,
   massOnlineEmailSentDate: null,
   suggestedChairId: null,
   sendUnconfirmedReviews: null,

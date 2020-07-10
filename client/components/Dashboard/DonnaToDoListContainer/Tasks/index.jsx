@@ -7,6 +7,7 @@ import AppointmentReminders from './AppointmentReminders';
 import ReviewsRequests from './ReviewsRequests';
 import PatientRecalls from './PatientRecalls';
 import styles from './styles.scss';
+import Account from '../../../../entities/models/Account';
 
 const toDoListNames = [
   'Appointment Reminders',
@@ -44,7 +45,15 @@ const ReviewRequestHeader = () => (
   </SHeader>
 );
 
-const getCurrentTaskList = ({ toDoIndex, loadingToDos, reminders, reviews, recalls, timezone }) => {
+const getCurrentTaskList = ({
+  toDoIndex,
+  loadingToDos,
+  account,
+  reminders,
+  reviews,
+  recalls,
+  timezone,
+}) => {
   if (toDoIndex === 0 && reminders && reminders.size) {
     return {
       count: reminders.size,
@@ -65,7 +74,13 @@ const getCurrentTaskList = ({ toDoIndex, loadingToDos, reminders, reviews, recal
     return {
       count: reviews.size,
       header: <ReviewRequestHeader />,
-      body: <ReviewsRequests reviews={reviews.toJS()} timezone={timezone} />,
+      body: (
+        <ReviewsRequests
+          reviewsChannels={account.get('reviewsChannels')}
+          reviews={reviews.toJS()}
+          timezone={timezone}
+        />
+      ),
     };
   }
 
@@ -76,7 +91,15 @@ const getCurrentTaskList = ({ toDoIndex, loadingToDos, reminders, reviews, recal
   };
 };
 
-export default function Tasks({ toDoIndex, loadingToDos, reminders, reviews, recalls, timezone }) {
+export default function Tasks({
+  account,
+  toDoIndex,
+  loadingToDos,
+  reminders,
+  reviews,
+  recalls,
+  timezone,
+}) {
   if (loadingToDos) {
     return null;
   }
@@ -84,6 +107,7 @@ export default function Tasks({ toDoIndex, loadingToDos, reminders, reviews, rec
   const { count, header, body } = getCurrentTaskList({
     toDoIndex,
     loadingToDos,
+    account,
     reminders,
     reviews,
     recalls,
@@ -111,6 +135,7 @@ Tasks.propTypes = {
   recalls: PropTypes.instanceOf(List),
   toDoIndex: PropTypes.number,
   loadingToDos: PropTypes.bool,
+  account: PropTypes.instanceOf(Account).isRequired,
   timezone: PropTypes.string.isRequired,
 };
 

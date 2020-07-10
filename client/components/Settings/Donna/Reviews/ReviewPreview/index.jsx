@@ -2,18 +2,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Header, SBody, SContainer, SHeader, SMSPreview } from '../../../../library';
+import { Header, SBody, SContainer, SHeader } from '../../../../library';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
 import SmsPreview from '../../../Shared/SmsPreview';
 import styles from './styles.scss';
+import Review from '../../../../../entities/models/Review';
+import Account from '../../../../../entities/models/Account';
 
 function ReviewPreview(props) {
   const { review, account, reviewsTemplateName } = props;
-  const { primaryTypes } = review;
+  const { reviewsChannels } = review;
 
   // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
-  const commsPreviewSections = primaryTypes
+  const commsPreviewSections = reviewsChannels
     .slice()
     .reverse()
     .map((type) => {
@@ -22,7 +24,8 @@ function ReviewPreview(props) {
         const templateName = 'review-request';
         const link = 'carecru.co/a35fg';
         const firstName = 'Jane';
-        const url = `/api/accounts/${account.id}/renderedTemplate` +
+        const url =
+          `/api/accounts/${account.id}/renderedTemplate` +
           `?templateName=${templateName}` +
           `&parameters[link]=${link}` +
           `&parameters[account][name]=${account.name}` +
@@ -33,7 +36,9 @@ function ReviewPreview(props) {
           </div>
         );
       } else if (type === 'email') {
-        const url = `/api/accounts/${account.id}/emails/preview?templateName=${reviewsTemplateName}`;
+        const url = `/api/accounts/${
+          account.id
+        }/emails/preview?templateName=${reviewsTemplateName}`;
         typePreview = (
           <div>
             <EmailPreview url={url} />
@@ -61,8 +66,9 @@ function ReviewPreview(props) {
 }
 
 ReviewPreview.propTypes = {
-  review: PropTypes.shape({}).isRequired,
-  account: PropTypes.shape({}).isRequired,
+  review: PropTypes.instanceOf(Review).isRequired,
+  reviewsTemplateName: PropTypes.string.isRequired,
+  account: PropTypes.instanceOf(Account).isRequired,
 };
 
 const mapStateToProps = ({ featureFlags }) => ({

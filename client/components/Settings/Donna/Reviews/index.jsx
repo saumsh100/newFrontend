@@ -23,8 +23,7 @@ class Reviews extends Component {
       selectedReview: false,
       reviewSettings: {
         interval: activeAccount.get('reviewsInterval'),
-        primaryType: 'email',
-        primaryTypes: ['email', 'sms'],
+        reviewsChannels: activeAccount.get('reviewsChannels'),
       },
     };
 
@@ -36,15 +35,17 @@ class Reviews extends Component {
   static getDerivedStateFromProps(props, state) {
     const { activeAccount } = props;
     const interval = activeAccount.get('reviewsInterval');
+    const reviewsChannels = activeAccount.get('reviewsChannels');
 
-    if (interval !== state.interval) {
+    if (interval !== state.interval || reviewsChannels !== state.reviewsChannels) {
       return {
         reviewSettings: {
-          ...state.reviewSettings,
+          reviewsChannels,
           interval,
         },
       };
     }
+
     return null;
   }
 

@@ -11,11 +11,11 @@ import styles2 from '../styles.scss';
 import PatientPopover from '../../../../library/PatientPopover';
 import AppointmentPopover from '../../../../library/AppointmentPopover';
 
-export default function ReviewRequests({ reviews, timezone }) {
+export default function ReviewRequests({ reviews, timezone, reviewsChannels }) {
   return (
     <List className={styles.list}>
       {orderBy(reviews, 'sendDate').map((review) => {
-        const { patient, primaryTypes, sendDate } = review;
+        const { patient, sendDate } = review;
 
         const { appointment } = patient;
 
@@ -38,7 +38,7 @@ export default function ReviewRequests({ reviews, timezone }) {
                 </div>
               </span>
             </div>
-            <div className={styles2.smallCol}>{primaryTypes.join(' & ')}</div>
+            <div className={styles2.smallCol}>{reviewsChannels.toJS().join(' & ')}</div>
             <div className={styles2.col}>
               <AppointmentPopover patient={patient} appointment={appointment}>
                 <span>{dateFormatter(appointment.startDate, timezone, 'MMM Do - h:mm A')}</span>
@@ -59,10 +59,10 @@ export default function ReviewRequests({ reviews, timezone }) {
 }
 
 ReviewRequests.propTypes = {
+  reviewsChannels: PropTypes.arrayOf(PropTypes.string),
   reviews: PropTypes.arrayOf(
     PropTypes.shape({
       patient: PropTypes.shape(patientShape),
-      primaryTypes: PropTypes.arrayOf(PropTypes.string),
       sendDate: PropTypes.string,
     }),
   ),
@@ -71,4 +71,5 @@ ReviewRequests.propTypes = {
 
 ReviewRequests.defaultProps = {
   reviews: [],
+  reviewsChannels: [],
 };
