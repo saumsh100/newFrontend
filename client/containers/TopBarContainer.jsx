@@ -46,6 +46,8 @@ TopBarContainer.propTypes = {
 };
 
 const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {
+  const userRole = auth.get('role');
+  const isSuperAdmin = userRole === 'SUPERADMIN';
   const authAccountId = auth.get('accountId');
   const activeAccount = entities.getIn(['accounts', 'models', authAccountId]);
   const accountsFlag = featureFlags.getIn(['flags', 'accounts-available-to-switch']);
@@ -58,12 +60,13 @@ const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {
   );
 
   // If the feature flag is an array, we ensure we are only showing those practices
-  const accounts = allowedAccounts
-    ? enterpriseAccounts.filter(a => allowedAccounts.indexOf(a.id) > -1)
-    : enterpriseAccounts;
+  const accounts =
+    allowedAccounts.length > 0
+      ? enterpriseAccounts.filter(a => allowedAccounts.indexOf(a.id) > -1)
+      : enterpriseAccounts;
 
   return {
-    accounts,
+    accounts: isSuperAdmin ? enterpriseAccounts : accounts,
     authAccountId,
     isCollapsed: toolbar.get('isCollapsed'),
     isSearchCollapsed: toolbar.get('isSearchCollapsed'),
