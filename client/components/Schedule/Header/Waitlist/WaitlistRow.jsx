@@ -31,9 +31,11 @@ const WaitlistRow = ({
     </td>
     <td className={tableStyles.col}>{addedDate}</td>
     <td className={tableStyles.col}>
-      <PopOverComponent patient={patient} zIndex={9999}>
-        <div>{`${patient.firstName} ${patient.lastName}`}</div>
-      </PopOverComponent>
+      {patient && (
+        <PopOverComponent patient={patient} zIndex={9999}>
+          <div>{`${patient.firstName} ${patient.lastName}`}</div>
+        </PopOverComponent>
+      )}
     </td>
     <td className={tableStyles.col}>{capitalize(reasonText || '')}</td>
     <td className={tableStyles.col} data-width="sm">
