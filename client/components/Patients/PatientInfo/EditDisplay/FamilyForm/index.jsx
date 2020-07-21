@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Row, Col, Form, FormSection } from '../../../../library';
-import {patientShape} from '../../../../library/PropTypeShapes';
+import { patientShape } from '../../../../library/PropTypeShapes';
 import Family from '../../../Shared/Family';
 import FamilyMember from '../../../Shared/FamilyMember';
 import PatientSearch from '../../../../PatientSearch';
@@ -150,12 +150,14 @@ renderAddFamily.defaultProps = {
   patientNode: null,
 };
 
+const FORM_NAME = 'Form3';
+
 const FamilyForm = (props) => {
   const { handleSubmit, familyLength } = props;
 
   return (
     <Form
-      form="Form4"
+      form={FORM_NAME}
       onSubmit={handleSubmit}
       className={styles.formContainer}
       ignoreSaveButton={!isResponsive()}
