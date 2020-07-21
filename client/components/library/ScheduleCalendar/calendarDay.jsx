@@ -1,45 +1,52 @@
 
 import React from 'react';
-import { setDateToTimezone } from '@carecru/isomorphic';
+import { dateFormatter } from '@carecru/isomorphic';
 import classNames from 'classnames';
 import styles from './day.scss';
 
-const formatTimeToTz = (value, timezone) => {
-  const valueInstance = setDateToTimezone(value, timezone);
-  const format = valueInstance.minutes() === 0 ? 'h' : 'h:mm';
-  return valueInstance.format(format);
-};
+const formatTimeToTz = (value, timezone) => dateFormatter(value, timezone, 'LT');
 
 const generateHours = (startTime, endTime, breaks, timezone) => {
-  const startTZ = formatTimeToTz(startTime, timezone);
-  const endTZ = formatTimeToTz(endTime, timezone);
+  const defaultHours = [
+    { startTime: formatTimeToTz(startTime, timezone),
+      endTime: formatTimeToTz(endTime, timezone) },
+  ];
 
   if (breaks.length === 0) {
-    return [{ startTime: startTZ,
-      endTime: endTZ }];
+    return defaultHours;
   }
 
-  const sanitizedBreaks = breaks
-    .sort(({ startTime: a }, { startTime: b }) => b < a)
-    .map(bk => ({
-      startTime: formatTimeToTz(bk.startTime, timezone),
-      endTime: formatTimeToTz(bk.endTime, timezone),
+  const sortedBreaks = breaks.sort(
+    ({ startTime: a }, { startTime: b }) => new Date(a) - new Date(b),
+  );
+
+  const operationHours = [];
+
+  operationHours[0] = { startTime,
+    endTime: sortedBreaks[0].startTime };
+
+  operationHours[sortedBreaks.length] = {
+    startTime: sortedBreaks[sortedBreaks.length - 1].endTime,
+    endTime,
+  };
+
+  for (let i = 0; i < sortedBreaks.length - 1; i += 1) {
+    operationHours[i + 1] = {
+      startTime: sortedBreaks[i].endTime,
+      endTime: sortedBreaks[i + 1].startTime,
+    };
+  }
+
+  return operationHours
+    .filter(
+      ({ startTime: a, endTime: b }) =>
+        // filter out starting hours that's after endTime and ending hours before startTime
+        new Date(a) < new Date(endTime) && new Date(b) > new Date(startTime),
+    )
+    .map(rs => ({
+      startTime: formatTimeToTz(rs.startTime, timezone),
+      endTime: formatTimeToTz(rs.endTime, timezone),
     }));
-  const result = [];
-
-  for (let i = 0; i < sanitizedBreaks.length; i += 1) {
-    if (i === 0) {
-      result.push({ startTime: startTZ });
-    }
-
-    result[i].endTime = sanitizedBreaks[i].startTime;
-    result.push({ startTime: sanitizedBreaks[i].endTime });
-
-    if (i === sanitizedBreaks.length - 1) {
-      result[i + 1].endTime = endTZ;
-    }
-  }
-  return result;
 };
 
 const calendarDay = (
