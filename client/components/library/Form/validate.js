@@ -33,16 +33,13 @@ function composeAsyncValidators(validatorFns) {
     let errors;
     for (const validatorFn of validatorFns) {
       try {
-        console.log('running validatorFn');
         await validatorFn(values, dispatch, props, field);
       } catch (err) {
-        console.log('err', err);
         errors = Object.assign({}, errors, err);
       }
     }
 
     if (errors) {
-      console.log('errors', errors);
       throw errors;
     }
   };
@@ -166,7 +163,7 @@ const passwordStrength = (value) => {
     score,
     feedback: { warning },
   } = result;
-  if (score < 1) {
+  if (score <= 1 || warning) {
     return warning || 'Password not strong enough';
   }
 };
