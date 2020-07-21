@@ -84,10 +84,6 @@ class PractitionerList extends Component {
     const { practitioners, services, selectedPractitioner } = this.props;
     const activePractitioner = selectedPractitioner || practitioners[0];
 
-    if (!activePractitioner) {
-      return null;
-    }
-
     const formName = 'addPractitionerForm';
     const actions = [
       {
@@ -152,14 +148,16 @@ class PractitionerList extends Component {
             </SBody>
           </SContainer>
         </Card>
-        <Card className={styles.practDataContainer} noBorder>
-          <PractitionerTabs
-            key={activePractitioner.get('id')}
-            practitioner={activePractitioner}
-            setPractitionerId={this.props.setPractitionerId}
-            services={services}
-          />
-        </Card>
+        {activePractitioner && (
+          <Card className={styles.practDataContainer} noBorder>
+            <PractitionerTabs
+              key={activePractitioner.get('id')}
+              practitioner={activePractitioner}
+              setPractitionerId={this.props.setPractitionerId}
+              services={services}
+            />
+          </Card>
+        )}
       </div>
     );
   }
