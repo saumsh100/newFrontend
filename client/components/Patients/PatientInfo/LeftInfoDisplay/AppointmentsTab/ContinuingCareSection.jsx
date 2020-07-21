@@ -13,10 +13,10 @@ export default function ContinuingCareSection(props) {
       <div className={styles.lastAppointmentHeader}>Continuing Care</div>
       <Row className={styles.row}>
         <Col xs={6}>
-          <InfoDump label="HYGIENE" data={validDateValue(patient.dueForRecallExamDate)} />
+          <InfoDump label="HYGIENE" data={validDateValue(patient.dueForHygieneDate)} />
         </Col>
         <Col xs={6}>
-          <InfoDump label="RECALL" data={validDateValue(patient.dueForHygieneDate)} />
+          <InfoDump label="RECALL" data={validDateValue(patient.dueForRecallExamDate)} />
         </Col>
       </Row>
     </div>
