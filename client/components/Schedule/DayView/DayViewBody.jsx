@@ -50,6 +50,7 @@ class DayViewBody extends Component {
       allFetched
     ) {
       this.headerComponent.current.scrollLeft = 0;
+      this.timeComponent.current.scrollTop = 0;
     }
   }
 
@@ -190,7 +191,7 @@ class DayViewBody extends Component {
 }
 
 function mapStateToProps({ schedule, apiRequests }) {
-  const scheduleView = schedule.toJS().scheduleView;
+  const scheduleView = schedule.get('scheduleView');
 
   const appsFetched = apiRequests.get('appSchedule')
     ? apiRequests.get('appSchedule').wasFetched
