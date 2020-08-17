@@ -2,6 +2,7 @@
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { OrderedMap } from 'immutable';
+import isEmpty from 'lodash/isEmpty';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
@@ -230,7 +231,7 @@ class MessageContainer extends Component {
 
     return messages.map((message) => {
       const isFromPatient = message.get('from') !== accountTwilio;
-      const patientId = selectedPatient && selectedPatient.get('id');
+      const patientId = !isEmpty(selectedPatient) ? selectedPatient.get('id') : null;
 
       const dotsIcon = (
         <Icon icon="ellipsis-h" size={2} className={styles.dotsIcon} id={`dots_${message.id}`} />
