@@ -48,6 +48,9 @@ class PractitionerTabs extends Component {
       model: modifiedPractitioner,
       alert,
     });
+    if (!modifiedPractitioner.isActive) {
+      this.props.setPractitionerId({ id: null });
+    }
   }
 
   deletePractitioner() {
