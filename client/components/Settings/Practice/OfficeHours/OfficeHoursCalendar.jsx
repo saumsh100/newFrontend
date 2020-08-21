@@ -21,6 +21,8 @@ import {
 import { showAlertTimeout } from '../../../../thunks/alerts';
 import calendarDay from '../../../library/ScheduleCalendar/calendarDay';
 
+import defaultDays from './defaultWeeklyTemplate';
+
 class OfficeHoursCalendar extends Component {
   constructor(props) {
     super(props);
@@ -85,9 +87,20 @@ class OfficeHoursCalendar extends Component {
       accountId: this.props.accountId,
       startDate: getStartOfTheMonth(month),
       endDate: getEndOfTheMonth(month),
-    }).then(({ data }) =>
-      this.setState({ baseSchedule: data }, () =>
-        setTimeout(() => this.setState({ isLoading: false }), 1000)));
+    }).then(({ data }) => {
+      const { weeklySchedule } = data;
+      const defaultDaysKeys = Object.keys(defaultDays);
+      defaultDaysKeys.forEach((key) => {
+        // provide default values to avoid crash
+        if (!weeklySchedule[key]) {
+          weeklySchedule[key] = defaultDays[key];
+        }
+      });
+
+      return this.setState({ baseSchedule: { ...data,
+        weeklySchedule } }, () =>
+        setTimeout(() => this.setState({ isLoading: false }), 1000));
+    });
   }
 
   getFeaturedDay(date = this.state.selectedDay) {
@@ -134,6 +147,7 @@ class OfficeHoursCalendar extends Component {
       'friday',
       'saturday',
     ]);
+
     return Object.entries(parsedWeeklySchedule).reduce(
       (acc, [day, sc]) => ({
         ...acc,
