@@ -249,6 +249,7 @@ export const propsGenerator = ({
   const nextAppt = isPatientUser ? endDate : patient?.nextApptDate;
   return {
     ...props,
+    isPatientUser,
     key: ccId,
     id: ccId,
     checked: selectedWaitlistMap[ccId],

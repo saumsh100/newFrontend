@@ -53,6 +53,7 @@ const setInitialState = ({
   endDate = null,
   note = '',
   patient = null,
+  patientUser = null,
   daysOfTheWeek = initalWeek,
   availableTimes = [],
   reasonText = '',
@@ -61,6 +62,7 @@ const setInitialState = ({
   endDate,
   note,
   patient,
+  patientUser,
   daysOfTheWeek,
   availableTimes,
   reasonText,
@@ -75,7 +77,7 @@ const WaitlistForm = ({
   isNewWaitSpot,
 }) => {
   const [formValues, setFormValues] = useState(setInitialState(initialState));
-
+  const selectedPatient = formValues.patient || formValues.patientUser;
   const selectedDaysOfWeek = Object.entries(formValues.daysOfTheWeek)
     .filter(([, v]) => v)
     .map(([v]) => v);
@@ -156,12 +158,12 @@ const WaitlistForm = ({
       >
         <div className={styles.waitlistForm}>
           <div className={styles.waitlistFormColumnLeft}>
-            {formValues.patient ? (
+            {selectedPatient ? (
               <SelectedPatient
                 avatarSize="xs"
                 className={styles.patientContainer}
                 handleAutoSuggest={handleAutoSuggest}
-                patientSearched={formValues.patient}
+                patientSearched={selectedPatient}
               />
             ) : (
               <PatientSearch
@@ -260,7 +262,7 @@ const WaitlistForm = ({
             color="blue"
             type="submit"
             form="waitlist-form"
-            disabled={formValues.patient === null}
+            disabled={selectedPatient === null}
           >
             {isNewWaitSpot ? 'Add' : 'Update'}
           </Button>

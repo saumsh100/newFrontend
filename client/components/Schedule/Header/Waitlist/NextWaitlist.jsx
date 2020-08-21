@@ -75,13 +75,14 @@ const NextWaitlist = ({ account, ...props }) => {
     });
   }, [account, conversionAnalyzer, textMessage]);
 
-  const handleSubmit = callback => ({ patient, ...values }) => {
+  const handleSubmit = callback => ({ patient, patientUser, ...values }) => {
     callback({
       variables: {
         input: {
           ...values,
           accountId: account.get('id'),
-          patientId: patient.id,
+          patientId: patient && patient.id,
+          patientUserId: patientUser && patientUser.id,
           id: selectedWaitSpot.id,
         },
       },

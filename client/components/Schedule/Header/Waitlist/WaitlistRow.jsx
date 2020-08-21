@@ -23,6 +23,7 @@ const WaitlistRow = ({
   onRemove,
   times,
   id,
+  isPatientUser,
 }) => (
   <tr className={tableStyles.row}>
     <td data-width="20" />
@@ -62,9 +63,11 @@ const WaitlistRow = ({
           </Button>
         )}
       >
-        <Button className={tableStyles.actionItem} onClick={onEdit(id)}>
-          Edit
-        </Button>
+        {!isPatientUser && (
+          <Button className={tableStyles.actionItem} onClick={onEdit(id)}>
+            Edit
+          </Button>
+        )}
         <Button className={tableStyles.actionItem} onClick={onRemove}>
           Delete
         </Button>
@@ -91,6 +94,7 @@ WaitlistRow.propTypes = {
   checked: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+  isPatientUser: PropTypes.bool.isRequired,
 };
 
 WaitlistRow.defaultProps = {
