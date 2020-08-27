@@ -127,7 +127,7 @@ class DayViewBody extends Component {
     // Display the practitioners that have been checked on the filters card.
     const checkedPractitioners = schedule.get('practitionersFilter');
     practitionersArray = practitionersArray.filter((pr) => {
-      if (checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive) {
+      if (checkedPractitioners.indexOf(pr.id) > -1) {
         return pr;
       }
       return null;

@@ -25,8 +25,14 @@ const PractitionerSchema = {
 };
 
 export default class Practitioner extends createModel(PractitionerSchema) {
+  additionalInfo(isActive) {
+    return isActive ? '' : ' (Inactive)';
+  }
+
   getFullName() {
-    return generateFullName(this.get('firstName'), this.get('lastName'));
+    return generateFullName(this.get('firstName'), this.get('lastName')).concat(
+      this.additionalInfo(this.get('isActive')),
+    );
   }
 
   getPrettyName() {
@@ -42,7 +48,7 @@ export default class Practitioner extends createModel(PractitionerSchema) {
     if (this.get('type') === 'Dentist') {
       return `Dr. ${this.get('lastName') || this.get('firstName')}`;
     }
-    return this.get('firstName');
+    return this.get('firstName').concat(this.additionalInfo(this.get('isActive')));
   }
 
   getUrlRoot() {

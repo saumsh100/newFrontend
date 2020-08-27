@@ -415,7 +415,7 @@ class ScheduleComponent extends Component {
                 showSchedule={this.showSchedule}
                 schedule={schedule}
                 chairs={filterChairs}
-                practitioners={filterPractitioners}
+                practitioners={practitioners.get('models')}
                 appointments={appointments}
                 previousDay={this.previousDay}
                 setCurrentDay={this.setCurrentDay}
@@ -425,7 +425,7 @@ class ScheduleComponent extends Component {
               <SBody>
                 <DayView
                   currentDate={currentDate}
-                  practitioners={filterPractitioners}
+                  practitioners={practitioners.get('models')}
                   patients={patients}
                   chairs={chairs}
                   services={services}

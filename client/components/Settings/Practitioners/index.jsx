@@ -28,9 +28,7 @@ class Practitioners extends Component {
     const { practitioners, services, recurringTimeOffs } = this.props;
     let showComponent = null;
     if (practitioners) {
-      const filteredPractitioners = practitioners
-        .sort(sortPractitionersAlphabetical)
-        .filter(practitioner => practitioner.isActive);
+      const filteredPractitioners = practitioners.sort(sortPractitionersAlphabetical);
       showComponent = (
         <PractitionerList
           recurringTimeOffs={recurringTimeOffs}
