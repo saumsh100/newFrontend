@@ -31,14 +31,17 @@ const validateBirthdate = (value) => {
 const validateZipcodePostal = (value, country) => {
   if (!value) return undefined;
 
-  const regex = new RegExp(
+  const caRegex = new RegExp(
     /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i,
   );
+  const usRegex = new RegExp(/^\d{5}(-\d{4})?$/);
 
-  if (country === 'US') {
-    return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'This is not a valid zip code.';
-  } else if (!regex.test(value)) {
+  if (!country && !usRegex.test(value) && !caRegex.test(value)) {
     return 'This is not a valid postal code.';
+  } else if (country === 'US') {
+    return usRegex.test(value) ? undefined : 'This is not a valid zip code.';
+  } else if (country === 'CA') {
+    return caRegex.test(value) ? undefined : 'This is not a valid postal code.';
   }
 
   return undefined;
