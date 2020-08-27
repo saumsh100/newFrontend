@@ -38,6 +38,9 @@ class DropdownTimeSuggestion extends Component {
   componentDidMount() {
     const { value, renderValue } = this.props;
     this.scrollIndex = this.getIndex(renderValue(value));
+    this.setState({
+      currentValue: renderValue(value),
+    });
   }
 
   /**
