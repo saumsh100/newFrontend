@@ -65,6 +65,7 @@ INTERCOM_APP_ID=enpxykhl
 REGION="CA"
 NODE_OPTIONS=--max-old-space-size=8192
 SERVER_PATH=
+LIVESESSION_ID=
  ```
 **Note**: Ask a team member for the keys to the `.env` file
 

@@ -17,6 +17,7 @@ import { initializeFeatureFlags } from '../thunks/featureFlags';
 import { setOnlineBookingUserVars } from '../util/fullStory';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { browserHistory } from '../store/factory';
+import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
 
 const store = configure({
   initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle
@@ -53,6 +54,11 @@ loadPatient()(store.dispatch).then(() => {
         name: `${patientUser.firstName} ${patientUser.lastName}`,
         email: patientUser.email,
         env: process.env.NODE_ENV,
+      });
+
+      identifyLiveSession({
+        account,
+        patientUser,
       });
     }
   }

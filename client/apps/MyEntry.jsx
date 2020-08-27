@@ -6,6 +6,7 @@ import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
+import ls from '@livesession/sdk';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
 import './logrocketSetup';
@@ -14,6 +15,11 @@ import configure from '../store/myStore';
 import { loadPatient } from '../thunks/patientAuth';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import { browserHistory } from '../store/factory';
+import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
+
+if (process.env.NODE_ENV === 'production') {
+  ls.init(process.env.LIVESESSION_ID);
+}
 
 const store = configure({
   initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle
@@ -23,17 +29,21 @@ const store = configure({
 store.dispatch(initializeFeatureFlags());
 
 loadPatient()(store.dispatch).then(() => {
-  const { auth } = store.getState();
-
+  const { auth, availabilities } = store.getState();
+  const account = availabilities.get('account').toJS();
   if (process.env.NODE_ENV === 'production') {
     if (auth.get('isAuthenticated')) {
       const patientUser = auth.get('patientUser').toJS();
-
       LogRocket.identify(patientUser.id, {
         app: 'CCRU_MY',
         name: `${patientUser.firstName} ${patientUser.lastName}`,
         email: patientUser.email,
         env: process.env.NODE_ENV,
+      });
+
+      identifyLiveSession({
+        account,
+        patientUser,
       });
     }
   }

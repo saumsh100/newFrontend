@@ -6,6 +6,7 @@ import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
+import ls from '@livesession/sdk';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
 import './logrocketSetup';
@@ -37,6 +38,7 @@ import { setApiUrl } from '../util/hub';
 import SubscriptionManager from '../util/graphqlSubscriptions';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import { browserHistory } from '../store/factory';
+import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
 
 electron.send(REQUEST_HOST);
 
@@ -51,6 +53,7 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
     app_id: process.env.INTERCOM_APP_ID,
     hide_default_launcher: true,
   });
+  ls.init(process.env.LIVESESSION_ID);
 
   const store = configure();
 
@@ -85,6 +88,8 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
     const { auth } = store.getState();
     if (auth.get('isAuthenticated')) {
       const user = auth.get('user').toJS();
+      const account = auth.get('account').toJS();
+      const enterprise = auth.get('enterprise').toJS();
       const fullName = `${user.firstName} ${user.lastName}`;
       const userId = user.id;
       const email = user.username;
@@ -96,14 +101,20 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
           email,
           env: process.env.NODE_ENV,
         });
-      }
 
-      window.Intercom('update', {
-        user_id: userId,
-        name: fullName,
-        email,
-        created_at: user.createdAt,
-      });
+        identifyLiveSession({
+          account,
+          enterprise,
+          user,
+        });
+
+        window.Intercom('update', {
+          user_id: userId,
+          name: fullName,
+          email,
+          created_at: user.createdAt,
+        });
+      }
 
       SubscriptionManager.accountId = auth.get('accountId');
       store.dispatch(loadUnreadMessages());

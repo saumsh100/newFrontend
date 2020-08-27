@@ -5,10 +5,12 @@ import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
+import ls from '@livesession/sdk';
 import Immutable from 'immutable';
 import nlp from 'compromise';
 import * as time from '@carecru/isomorphic';
 import './logrocketSetup';
+import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import socket from '../socket';
 import App from './Dashboard';
@@ -27,6 +29,7 @@ import ErrorBoundary from '../components/ErrorBoundary';
 
 if (process.env.NODE_ENV === 'production') {
   window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
+  ls.init(process.env.LIVESESSION_ID);
 }
 
 const store = configure();
@@ -42,7 +45,9 @@ store.dispatch(
 load()(store.dispatch).then(() => {
   const { auth } = store.getState();
   if (auth.get('isAuthenticated')) {
-    const { account, enterprise, user } = auth.toJS();
+    const user = auth.get('user').toJS();
+    const account = auth.get('account').toJS();
+    const enterprise = auth.get('enterprise').toJS();
     const userId = user.id;
     const fullName = `${user.firstName} ${user.lastName}`;
     const email = user.username;
@@ -60,6 +65,12 @@ load()(store.dispatch).then(() => {
         name: fullName,
         email,
         env: process.env.NODE_ENV,
+      });
+
+      identifyLiveSession({
+        account,
+        enterprise,
+        user,
       });
 
       window.Intercom('update', {
