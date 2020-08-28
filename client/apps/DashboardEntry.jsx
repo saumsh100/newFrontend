@@ -29,6 +29,9 @@ import ErrorBoundary from '../components/ErrorBoundary';
 
 if (process.env.NODE_ENV === 'production') {
   window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
+}
+
+if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
   ls.init(process.env.LIVESESSION_ID);
 }
 
@@ -67,11 +70,13 @@ load()(store.dispatch).then(() => {
         env: process.env.NODE_ENV,
       });
 
-      identifyLiveSession({
-        account,
-        enterprise,
-        user,
-      });
+      if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
+        identifyLiveSession({
+          account,
+          enterprise,
+          user,
+        });
+      }
 
       window.Intercom('update', {
         user_id: userId,

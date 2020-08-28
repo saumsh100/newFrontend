@@ -53,7 +53,10 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
     app_id: process.env.INTERCOM_APP_ID,
     hide_default_launcher: true,
   });
-  ls.init(process.env.LIVESESSION_ID);
+
+  if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
+    ls.init(process.env.LIVESESSION_ID);
+  }
 
   const store = configure();
 
@@ -102,11 +105,13 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
           env: process.env.NODE_ENV,
         });
 
-        identifyLiveSession({
-          account,
-          enterprise,
-          user,
-        });
+        if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
+          identifyLiveSession({
+            account,
+            enterprise,
+            user,
+          });
+        }
 
         window.Intercom('update', {
           user_id: userId,

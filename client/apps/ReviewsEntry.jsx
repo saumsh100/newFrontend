@@ -6,6 +6,7 @@ import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
+import ls from '@livesession/sdk';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
 import './logrocketSetup';
@@ -18,6 +19,10 @@ import { setOnlineBookingUserVars } from '../util/fullStory';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { browserHistory } from '../store/factory';
 import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
+
+if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
+  ls.init(process.env.LIVESESSION_ID);
+}
 
 const store = configure({
   initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle
@@ -56,10 +61,12 @@ loadPatient()(store.dispatch).then(() => {
         env: process.env.NODE_ENV,
       });
 
-      identifyLiveSession({
-        account,
-        patientUser,
-      });
+      if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
+        identifyLiveSession({
+          account,
+          patientUser,
+        });
+      }
     }
   }
 

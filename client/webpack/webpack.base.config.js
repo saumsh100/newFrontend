@@ -13,6 +13,7 @@ const {
   GOOGLE_API_KEY,
   LOGROCKET_APP_ID,
   LIVESESSION_ID,
+  EXECUTION_ENVIRONMENT,
 } = process.env;
 
 const localIdentName = '[name]__[local]___[hash:base64:5]';
@@ -45,6 +46,7 @@ module.exports = {
         GOOGLE_API_KEY: JSON.stringify(GOOGLE_API_KEY),
         LOGROCKET_APP_ID: JSON.stringify(LOGROCKET_APP_ID),
         LIVESESSION_ID: JSON.stringify(LIVESESSION_ID),
+        EXECUTION_ENVIRONMENT: JSON.stringify(EXECUTION_ENVIRONMENT),
       },
     }),
 
