@@ -33,6 +33,7 @@ import ChatTextMessage from '../../../entities/models/TextMessage';
 import chatTabs from '../consts';
 import UnknownPatient from '../unknownPatient';
 import styles from './styles.scss';
+import Loader from '../../Loader';
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 15;
@@ -95,8 +96,6 @@ class MessageContainer extends Component {
   getMessageTime(message) {
     return moment(message).calendar(null, {
       sameDay: '[Today], h:mm a',
-      nextDay: '[Tomorrow]',
-      nextWeek: 'dddd',
       lastDay: '[Yesterday], h:mm a',
       lastWeek: '[Last] dddd h:mm a',
       sameElse: 'YYYY/MM/DD, h:mm a',
@@ -341,13 +340,14 @@ class MessageContainer extends Component {
 
   render() {
     const { loadingMessages, loadedMessages } = this.state;
-    const { selectedChat, newChat, totalChatMessages } = this.props;
+    const { selectedChat, newChat, totalChatMessages, isChatLoading } = this.props;
 
     const hasMoreMessages = totalChatMessages > loadedMessages;
     const chat = selectedChat || Object.assign({}, newChat, { id: 'newChat' });
 
     return (
       <SContainer className={styles.messageContainer}>
+        {selectedChat && isChatLoading && <Loader />}
         <SBody
           id="careCruChatScrollIntoView"
           className={styles.allMessages}
@@ -360,6 +360,7 @@ class MessageContainer extends Component {
             loadMore={this.loadMoreMessages}
             hasMore={hasMoreMessages && !loadingMessages}
             threshold={100}
+            loader={<Loader key="loader" />}
           >
             {selectedChat && this.renderMessagesTree()}
             <div className={styles.raise} />
@@ -389,8 +390,10 @@ function mapStateToProps({ entities, auth, chat }) {
   const getPatient = ({ patientId, patientPhoneNumber }) =>
     (patientId ? patients.get(patientId) : UnknownPatient(patientPhoneNumber, prospect));
   const selectedPatient = (selectedChat && getPatient(selectedChat)) || {};
+  const isChatLoading = chat.get('isChatLoading');
 
   return {
+    isChatLoading,
     textMessages,
     selectedChat,
     totalChatMessages,
@@ -418,6 +421,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 MessageContainer.propTypes = {
+  isChatLoading: PropTypes.bool.isRequired,
   textMessages: PropTypes.oneOfType([
     PropTypes.arrayOf(ChatTextMessage),
     PropTypes.instanceOf(OrderedMap),
