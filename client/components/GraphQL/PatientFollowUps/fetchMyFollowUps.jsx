@@ -22,8 +22,9 @@ export const fetchMyFollowUpsQuery = gql`
 `;
 
 export default function FetchMyFollowUps({ children, variables }) {
+  const pollInterval = Number(process.env.POLLING_FOLLOWUP_INTERVAL || '10') * 1000;
   return (
-    <Query query={fetchMyFollowUpsQuery} variables={variables} pollInterval={10000}>
+    <Query query={fetchMyFollowUpsQuery} variables={variables} pollInterval={pollInterval}>
       {children}
     </Query>
   );

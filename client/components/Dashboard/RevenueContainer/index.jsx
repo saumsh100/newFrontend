@@ -122,8 +122,9 @@ class RevenueContainer extends Component {
   constructor(props) {
     super(props);
 
+    const pollInterval = Number(process.env.POLLING_REVENUE_INTERVAL || '20');
     this.state = {
-      timeout: 20 * 1000,
+      timeout: pollInterval * 1000,
     };
 
     this.fetchRevenueData = this.fetchRevenueData.bind(this);

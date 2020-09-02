@@ -25,8 +25,9 @@ class ScheduleContainer extends Component {
   constructor(props) {
     super(props);
 
+    const pollInterval = Number(process.env.POLLING_SCHEDULE_INTERVAL || '20');
     this.state = {
-      timeout: 20 * 1000,
+      timeout: pollInterval * 1000,
     };
 
     this.refetchRecentlyUpdatedAppointments = this.refetchRecentlyUpdatedAppointments.bind(this);
