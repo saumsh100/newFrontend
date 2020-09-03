@@ -19,7 +19,6 @@ import {
   setUnreadChatsCount,
   unsetPatientChat,
   updateChatId,
-  setIsChatLoading,
 } from '../reducers/chat';
 import { createEntityRequest, fetchEntitiesRequest, updateEntityRequest } from './fetchEntities';
 import DesktopNotification from '../util/desktopNotification';
@@ -318,24 +317,23 @@ export function markAsRead(chatId) {
 }
 
 export function loadChatMessages(chatId, offset = 0, limit = 15) {
-  return async (dispatch) => {
-    dispatch(setIsChatLoading(true));
+  return (dispatch) => {
     if (!chatId) {
       return dispatch(setChatMessagesListForChat(chatId));
     }
     const url = `/api/chats/${chatId}/textMessages?skip=${offset}&limit=${limit}`;
-    const res = await httpClient().get(url);
-    const {
-      data: { entities, total },
-    } = res;
-    dispatch(
-      receiveEntities({
-        key: 'textMessages',
-        entities,
-      }),
-    );
-    dispatch(setChatMessagesListForChat(chatId, total));
-    dispatch(setIsChatLoading(false));
+    return httpClient()
+      .get(url)
+      .then(({ data }) => {
+        dispatch(
+          receiveEntities({
+            key: 'textMessages',
+            entities: data.entities,
+          }),
+        );
+        return data.total;
+      })
+      .then(total => dispatch(setChatMessagesListForChat(chatId, total)));
   };
 }
 
@@ -432,8 +430,8 @@ export function selectChat(id, createChat = null) {
       dispatch(push(`/chat/${id || ''}`));
     }
 
-    dispatch(loadChatMessages(id));
     dispatch(unlockChat(id));
+    dispatch(loadChatMessages(id));
     return chatEntity;
   };
 }
@@ -453,9 +451,8 @@ export function createNewChat(entityData) {
 }
 
 export function sendChatMessage(entityData) {
-  return async (dispatch) => {
-    dispatch(setIsChatLoading(true));
-    await dispatch(
+  return dispatch =>
+    dispatch(
       createEntityRequest({
         key: 'chats',
         entityData,
@@ -463,8 +460,6 @@ export function sendChatMessage(entityData) {
         alert: { error: { body: 'Failed to send patient the text message.' } },
       }),
     );
-    dispatch(setIsChatLoading(false));
-  };
 }
 
 export function socketLock(textMessages) {

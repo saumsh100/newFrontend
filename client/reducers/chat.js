@@ -20,7 +20,6 @@ export const SET_CHAT_PLACEHOLDERS = `${reducer}/SET_CHAT_PLACEHOLDERS`;
 export const SET_CHAT_CATEGORIES_COUNT = `${reducer}/SET_CHAT_CATEGORIES_COUNT`;
 export const SET_IS_FETCHING_PROSPECT = `${reducer}/SET_IS_FETCHING_PROSPECT`;
 export const SET_PROSPECT = `${reducer}/SET_PROSPECT`;
-export const SET_IS_CHAT_LOADING = `${reducer}/SET_IS_CHAT_LOADING`;
 
 export const setSelectedChat = createAction(SET_SELECTED_CHAT);
 export const updateChatId = createAction(UPDATE_CHAT_ID);
@@ -36,10 +35,8 @@ export const unsetPatientChat = createAction(UNSET_PATIENT_CHAT);
 export const setChatCategoriesCount = createAction(SET_CHAT_CATEGORIES_COUNT);
 export const setIsFetchingProspect = createAction(SET_IS_FETCHING_PROSPECT);
 export const setProspect = createAction(SET_PROSPECT);
-export const setIsChatLoading = createAction(SET_IS_CHAT_LOADING);
 
 export const initialState = Map({
-  isChatLoading: true,
   selectedChatId: null,
   selectedChat: null,
   selectedPatientId: null,
@@ -68,10 +65,6 @@ export default handleActions(
 
     [SET_SELECTED_CHAT](state, { payload }) {
       return state.set('selectedChat', payload);
-    },
-
-    [SET_IS_CHAT_LOADING](state, { payload }) {
-      return state.set('isChatLoading', payload);
     },
 
     [SET_NEW_CHAT](state, { payload }) {
