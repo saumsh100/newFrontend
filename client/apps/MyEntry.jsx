@@ -19,6 +19,7 @@ import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
 
 if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
   ls.init(process.env.LIVESESSION_ID);
+  ls.newPageView();
 }
 
 const store = configure({
