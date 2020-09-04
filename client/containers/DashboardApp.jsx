@@ -26,7 +26,19 @@ class DashboardApp extends React.Component {
     this.vwrIntervalId = null;
   }
 
+  componentDidMount() {
+    this.setupPolling();
+  }
+
   componentDidUpdate() {
+    this.setupPolling();
+  }
+
+  componentWillUnmount() {
+    this.resetIntervals();
+  }
+
+  setupPolling() {
     const { isPollingNeeded } = this.props;
 
     if (isPollingNeeded) {
@@ -35,10 +47,6 @@ class DashboardApp extends React.Component {
     } else {
       this.resetIntervals();
     }
-  }
-
-  componentWillUnmount() {
-    this.resetIntervals();
   }
 
   initiatePolling({ interval, pollFn }) {
