@@ -276,7 +276,6 @@ class DropdownTimeSuggestion extends Component {
           onClose={this.close}
           isOpen={isOpen}
           toggleView={this.toggle}
-          handleBlur={this.selectBeforeClose}
           handleChange={this.handleChange}
           handleKeydown={this.handleKeydown}
           value={matchingValue || currentValue}

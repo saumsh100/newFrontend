@@ -75,8 +75,8 @@ const EditReasonWeeklyHours = props => (
                   timezone={props.timezone}
                   renderList={renderList}
                   theme={theme}
-                  startTime={props.timeToIsoString(option.startTime)}
-                  endTime={props.timeToIsoString(option.endTime)}
+                  startTime={option.startTime}
+                  endTime={option.endTime}
                   onChange={update => props.updateBreakTime(index, update)}
                 />
               ) : (
@@ -89,8 +89,8 @@ const EditReasonWeeklyHours = props => (
                   timezone={props.timezone}
                   renderList={renderList}
                   theme={theme}
-                  startTime={props.timeToIsoString(option.startTime)}
-                  endTime={props.timeToIsoString(option.endTime)}
+                  startTime={option.startTime}
+                  endTime={option.endTime}
                   onChange={update => props.updateAvailabilities(index, update)}
                 />
               ))
@@ -122,10 +122,12 @@ EditReasonWeeklyHours.propTypes = {
   isModalVisible: PropTypes.bool.isRequired,
   removeAvailability: PropTypes.func.isRequired,
   removeBreak: PropTypes.func.isRequired,
-  timeOptions: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
-    labe: PropTypes.string,
-  })).isRequired,
+  timeOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      labe: PropTypes.string,
+    }),
+  ).isRequired,
   timezone: PropTypes.string.isRequired,
   timeToIsoString: PropTypes.func.isRequired,
   updateAvailabilities: PropTypes.func.isRequired,

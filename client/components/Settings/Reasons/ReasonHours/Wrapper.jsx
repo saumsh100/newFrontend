@@ -3,12 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
-import {
-  capitalize,
-  dateFormatter,
-  setDateToTimezone,
-  timeOptionsWithTimezone,
-} from '@carecru/isomorphic';
+import { capitalize, setDateToTimezone, timeOptions } from '@carecru/isomorphic';
 import Service from '../../../../entities/models/Service';
 import UpdateReasonWeeklyHours from '../../../GraphQL/ReasonHours/updateReasonWeeklyHours';
 import EditReasonWeeklyHours from './EditReasonWeeklyHours';
@@ -75,7 +70,7 @@ const genericTimeRange = (
  *
  * @type {string}
  */
-const allowedTimeFormat = 'HH:mm:ssZ';
+const allowedTimeFormat = 'HH:mm:ss.SSS[Z]';
 
 /**
  * Initial data structure for a ReasonWeeklyHours
@@ -233,7 +228,7 @@ class ReasonWeeklyHoursWrapper extends Component {
   updateBreakTime(index, values) {
     const [key] = Object.keys(values);
     this.updateTimeItem('breaks', index, {
-      [key]: dateFormatter(values[key], this.props.timezone, allowedTimeFormat),
+      [key]: values[key],
     });
   }
 
@@ -305,10 +300,15 @@ class ReasonWeeklyHoursWrapper extends Component {
   }
 
   render() {
-    const timeOptions = timeOptionsWithTimezone(this.props.timezone, 30).map(option => ({
-      ...option,
-      value: moment.tz(option.label, 'LT', this.props.timezone).toISOString(),
-    }));
+    const timeOpts = timeOptions();
+    const momentBreaksData = {
+      ...this.state.data,
+      breaks: this.state.data.breaks.map(({ startTime, endTime, ...rest }) => ({
+        ...rest,
+        startTime: timeToMoment(startTime, this.props.timezone),
+        endTime: timeToMoment(endTime, this.props.timezone),
+      })),
+    };
     return (
       <div>
         <ReasonHours
@@ -319,10 +319,10 @@ class ReasonWeeklyHoursWrapper extends Component {
         <UpdateReasonWeeklyHours>
           {commit => (
             <EditReasonWeeklyHours
-              data={this.state.data}
+              data={momentBreaksData}
               active={this.state.active}
               timeToIsoString={time => timeToMoment(time, this.props.timezone).toISOString()}
-              timeOptions={timeOptions}
+              timeOptions={timeOpts}
               handleOverrideDropdownChange={this.handleDropdownChange}
               timezone={this.props.timezone}
               validate={dateRange => validate(dateRange, this.props.timezone)}
