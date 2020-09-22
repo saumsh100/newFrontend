@@ -30,10 +30,11 @@ const store = configure({
 store.dispatch(initializeFeatureFlags());
 
 loadPatient()(store.dispatch).then(() => {
-  const { auth, availabilities } = store.getState();
-  const account = availabilities.get('account').toJS();
+  const { auth } = store.getState();
+
   if (process.env.NODE_ENV === 'production') {
     if (auth.get('isAuthenticated')) {
+      const account = auth.get('account').toJS();
       const patientUser = auth.get('patientUser').toJS();
       LogRocket.identify(patientUser.id, {
         app: 'CCRU_MY',
