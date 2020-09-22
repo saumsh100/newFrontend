@@ -238,11 +238,13 @@ class ReasonWeeklyHoursWrapper extends Component {
    * @param value
    */
   updateAvailabilities(index, value) {
-    this.updateTimeItem(
-      'availabilities',
-      index,
-      genericTimeRange(this.props.timezone, this.props.reason.get('duration'), value.startTime),
-    );
+    const startTime = timeToMoment(value.startTime, this.props.timezone);
+    this.updateTimeItem('availabilities', index, {
+      startTime: startTime.format(allowedTimeFormat),
+      endTime: startTime
+        .add(this.props.reason.get('duration'), 'minutes')
+        .format(allowedTimeFormat),
+    });
   }
 
   /**
