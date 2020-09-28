@@ -4,15 +4,34 @@ import PropTypes from 'prop-types';
 import { Form, Field } from '../../library';
 import styles from './styles.scss';
 
+const getPatientName = (patient, displayNameOption) => {
+  if (displayNameOption === 'prefName') {
+    return patient.displayName || patient.firstName;
+  }
+  return patient.firstName;
+};
+
+const getMessageFromTemplate = (template, patient, displayNameOption) => {
+  const regEx = new RegExp('\\$\\{displayName\\}', 'g');
+  const patientName = getPatientName(patient, displayNameOption);
+  return template.replace(regEx, patientName);
+};
+
 export default function NotifyPatientForm({
   waitingRoomPatient,
+  displayNameOption,
   defaultTemplate,
   formName,
   onSubmit,
 }) {
-  const regex = new RegExp('\\$\\{firstName\\}', 'g');
-  const message = defaultTemplate.replace(regex, waitingRoomPatient.patient.firstName);
+  const message = getMessageFromTemplate(
+    defaultTemplate,
+    waitingRoomPatient.patient,
+    displayNameOption,
+  );
+
   const initialValues = { message };
+
   return (
     <Form
       key={formName}
@@ -20,7 +39,7 @@ export default function NotifyPatientForm({
       onSubmit={onSubmit}
       initialValues={initialValues}
       data-test-id={formName}
-      destroyOnUnmount={false}
+      destroyOnUnmount
       ignoreSaveButton
     >
       <div className={styles.heading}>Make any final changes to the text before you send</div>
@@ -38,6 +57,7 @@ export default function NotifyPatientForm({
 }
 
 NotifyPatientForm.propTypes = {
+  displayNameOption: PropTypes.oneOf(['firstName', 'prefName']).isRequired,
   waitingRoomPatient: PropTypes.shape({}).isRequired,
   defaultTemplate: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,

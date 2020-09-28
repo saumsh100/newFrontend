@@ -20,10 +20,11 @@ class DashboardWaitingRoomContainer extends Component {
   }
 
   render() {
-    const { waitingRoomQueue, defaultTemplate } = this.props;
+    const { waitingRoomQueue, defaultTemplate, displayNameOption } = this.props;
     if (!waitingRoomQueue) return null;
     return (
       <WaitingRoomList
+        displayNameOption={displayNameOption}
         waitingRoomPatients={waitingRoomQueue}
         defaultTemplate={defaultTemplate}
         onNotify={this.props.sendWaitingRoomNotification}
@@ -35,6 +36,7 @@ class DashboardWaitingRoomContainer extends Component {
 }
 
 DashboardWaitingRoomContainer.propTypes = {
+  displayNameOption: PropTypes.oneOfType(['firstName', 'prefName']).isRequired,
   waitingRoomQueue: PropTypes.arrayOf(PropTypes.shape({})),
   accountId: PropTypes.string.isRequired,
   defaultTemplate: PropTypes.string,
@@ -50,8 +52,12 @@ DashboardWaitingRoomContainer.defaultProps = {
   defaultTemplate: '',
 };
 
-function mapStateToProps({ auth, waitingRoom }) {
+function mapStateToProps({ entities, auth, waitingRoom }) {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const displayNameOption = activeAccount.get('displayNameOption') || 'firstName';
+
   return {
+    displayNameOption,
     accountId: auth.get('accountId'),
     waitingRoomQueue: waitingRoom.get('waitingRoomQueue'),
     defaultTemplate: waitingRoom.get('defaultTemplate'),

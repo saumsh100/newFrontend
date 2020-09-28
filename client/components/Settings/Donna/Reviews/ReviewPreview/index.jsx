@@ -10,8 +10,7 @@ import styles from './styles.scss';
 import Review from '../../../../../entities/models/Review';
 import Account from '../../../../../entities/models/Account';
 
-function ReviewPreview(props) {
-  const { review, account, reviewsTemplateName } = props;
+function ReviewPreview({ review, account, reviewsTemplateName }) {
   const { reviewsChannels } = review;
 
   // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
@@ -29,7 +28,8 @@ function ReviewPreview(props) {
           `?templateName=${templateName}` +
           `&parameters[link]=${link}` +
           `&parameters[account][name]=${account.name}` +
-          `&parameters[patient][firstName]=${firstName}`;
+          `&parameters[patient][firstName]=${firstName}` +
+          `&parameters[patient][displayName]=${firstName}`;
         typePreview = (
           <div>
             <SmsPreview account={account} url={url} />

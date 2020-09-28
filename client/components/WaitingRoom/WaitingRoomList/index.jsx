@@ -47,7 +47,14 @@ const completeAlert = ({ waitingRoomPatient: { patient } }) => ({
 });
 
 function WaitingRoomList(props) {
-  const { waitingRoomPatients, defaultTemplate, onNotify, onClean, onComplete } = props;
+  const {
+    waitingRoomPatients,
+    defaultTemplate,
+    onNotify,
+    onClean,
+    onComplete,
+    displayNameOption,
+  } = props;
   const [selectedWaitingRoomPatient, setSelectedWaitingRoomPatient] = useState(null);
   const toggleNotifying = () => setSelectedWaitingRoomPatient(null);
 
@@ -112,6 +119,7 @@ function WaitingRoomList(props) {
           <NotifyPatientForm
             formName={formName}
             defaultTemplate={defaultTemplate}
+            displayNameOption={displayNameOption}
             waitingRoomPatient={selectedWaitingRoomPatient}
             onSubmit={({ message }) =>
               onNotify({
@@ -133,6 +141,7 @@ WaitingRoomList.defaultProps = {
 
 WaitingRoomList.propTypes = {
   defaultTemplate: PropTypes.string,
+  displayNameOption: PropTypes.oneOf(['firstName', 'prefName']).isRequired,
   waitingRoomPatients: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onNotify: PropTypes.func.isRequired,
   onClean: PropTypes.func.isRequired,

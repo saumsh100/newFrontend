@@ -55,6 +55,7 @@ const AccountSchema = {
   isChairSchedulingEnabled: null,
   omitChairIds: [],
   omitPractitionerIds: [],
+  displayNameOption: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

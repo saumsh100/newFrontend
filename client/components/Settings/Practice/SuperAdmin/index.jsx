@@ -23,6 +23,7 @@ import MassEmailDisplay from './MassEmailDisplay';
 import Account from '../../../../entities/models/Account';
 import ChatSection from '../General/ChatSection';
 import CellPhoneFallback from './CellPhoneFallback';
+import DisplayName from './DisplayName';
 import styles from './styles.scss';
 
 class SuperAdmin extends Component {
@@ -257,11 +258,12 @@ class SuperAdmin extends Component {
             <CellPhoneFallback />
           </div>
 
-          <><Header title="API Accounts" contentHeader key="API Accounts" />
+          <>
+            <Header title="API Accounts" contentHeader key="API Accounts" />
             <div className={styles.formContainer} key="API Accounts Form">
               <AddAccounts onSubmit={this.updateApis} activeAccount={activeAccount} />
             </div>
-         </>
+          </>
 
           <MassEmailDisplay
             massOnlineDate={massOnlineDate}
@@ -284,6 +286,11 @@ class SuperAdmin extends Component {
           <Header title="Chat" contentHeader />
           <div className={styles.formContainer}>
             <ChatSection activeAccount={activeAccount} />
+          </div>
+
+          <Header contentHeader title="Patient Name Preference" key="Patient Name Preference" />
+          <div className={styles.formContainer} key="Patient Name Preference">
+            <DisplayName />
           </div>
         </SettingsCard>
       )
