@@ -56,14 +56,12 @@ const WaitlistGQLEnhanced = ({ newWaitlist, accountId, ...props }) => {
               )
           : [];
 
-        return newWaitlist ? (
-          <>
-            {isLoading && <LoadingBar className={styles.loadingBarOverride} />}
-            <NextWaitlist waitlist={waitSpots} {...props} />
-          </>
+        const nextWaitList = isLoading ? (
+          <LoadingBar className={styles.loadingBarOverride} />
         ) : (
-          <WaitlistTable waitlist={waitSpots} {...props} />
+          <NextWaitlist waitlist={waitSpots} {...props} />
         );
+        return newWaitlist ? nextWaitList : <WaitlistTable waitlist={waitSpots} {...props} />;
       }}
     </FetchWaitlist>
   );
