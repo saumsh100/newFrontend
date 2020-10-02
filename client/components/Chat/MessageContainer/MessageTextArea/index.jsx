@@ -52,8 +52,7 @@ class MessageTextArea extends Component {
 
   contactPoC() {
     const { poc } = this.props;
-    const chatOrPoC = poc.chats[0] ? { chatId: poc.chats[0] } : { id: poc.id };
-    this.props.selectChatOrCreate(chatOrPoC);
+    this.props.selectChatOrCreate(poc);
   }
 
   renderSendButton() {
@@ -219,6 +218,7 @@ function mapStateToProps(state, { chat = {} }) {
     (!patient && 'Select a patient above') ||
     (phoneNumber ? 'Type a message' : 'This patient does not have a mobile phone number');
   const poc = state.chat.get('chatPoC') || {};
+
   return {
     isPoC,
     phoneNumber,

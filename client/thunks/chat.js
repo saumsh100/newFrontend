@@ -363,7 +363,12 @@ export async function setChatIsPoC(patient, dispatch) {
     console.error(e);
   }
 
-  return dispatch(setChatPoC(pocPatient));
+  const {
+    data: { chatId },
+  } = await httpClient().get(`/api/patients/${pocPatient.id}/chat`);
+
+  return dispatch(setChatPoC({ ...pocPatient,
+    chatId }));
 }
 
 export function getChatEntity(id) {
