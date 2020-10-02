@@ -21,8 +21,7 @@ const nameOptions = [
 
 class DisplayName extends React.Component {
   constructor(props) {
-    super();
-
+    super(props);
     this.state = props;
     this.handleDisplayNameSubmit = this.handleDisplayNameSubmit.bind(this);
   }
@@ -33,6 +32,8 @@ class DisplayName extends React.Component {
         'Are you sure you want to change the preference name in which Donna will use for patient communication?',
       )
     ) {
+      this.setState({ ...values });
+
       const { activeAccount } = this.props;
       const modifiedAccount = activeAccount.merge(values);
 
@@ -55,9 +56,10 @@ class DisplayName extends React.Component {
   render() {
     return (
       <Form
+        enableReinitialize
         form="displayNameForm"
         initialValues={this.state}
-        destroyOnUnmount={false}
+        destroyOnUnmount
         values={this.state}
         onSubmit={this.handleDisplayNameSubmit}
         alignSave="left"
