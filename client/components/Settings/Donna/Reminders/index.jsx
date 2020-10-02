@@ -38,6 +38,7 @@ class Reminders extends Component {
     this.newReminder = this.newReminder.bind(this);
     this.openModal = this.openModal.bind(this);
     this.selectReminder = this.selectReminder.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
     this.selectAdvancedSettings = this.selectAdvancedSettings.bind(this);
     this.toggleAction = this.toggleAction.bind(this);
     this.closeAdvancedSettings = this.closeAdvancedSettings.bind(this);
@@ -59,6 +60,10 @@ class Reminders extends Component {
     };
 
     this.setState(newState);
+  }
+
+  reinitializeState() {
+    this.toggleAction('isAdding');
   }
 
   newReminder(values) {
