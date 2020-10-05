@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import toArray from 'lodash/toArray';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
@@ -9,6 +8,8 @@ import classNames from 'classnames';
 import { Avatar, AutoCompleteForm } from '../library';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { StyleExtender } from '../Utils/Themer';
+import FetchPatients from '../GraphQLPatientSearch/fetchPatients';
+import composeSearchQuery from '../GraphQLPatientSearch/composeSearchQuery';
 import styles from './styles.scss';
 
 const baseTheme = { suggestionsContainerOpen: styles.containerOpen };
@@ -54,23 +55,10 @@ class PatientSearch extends Component {
     this.setState({ value: e.target.value });
   }
 
-  searchPatients(value) {
-    // The reason we use fetchEntities is to populate the store with joined data
-    // like chats and textMessages while we search
-    return this.props
-      .fetchEntitiesRequest({
-        url: '/api/patients/search',
-        params: { patients: value },
-      })
-      .then(({ patients }) => {
-        // need to merge in chat information
-        const suggestions = toArray(patients).map((patient) => {
-          patient.chatId = patient.chats[0];
-          return patient;
-        });
-
-        this.setState({ suggestions });
-      });
+  async searchPatients(value, fetchPatients) {
+    const { data } = await fetchPatients({ search: value });
+    const suggestions = data.accountViewer.patients.edges.map(v => v.node);
+    this.setState({ suggestions });
   }
 
   render() {
@@ -86,25 +74,29 @@ class PatientSearch extends Component {
 
     const newTheme = StyleExtender(theme, baseTheme);
 
+    const setSearchData = refetch => data => refetch(composeSearchQuery(data));
     return (
-      <AutoCompleteForm
-        data-test-id={this.props['data-test-id']}
-        suggestions={suggestions}
-        getSuggestions={this.searchPatients}
-        onSuggestionSelected={this.onSuggestionSelected}
-        getSuggestionValue={p => p.firstName}
-        inputProps={finalInputProps}
-        theme={newTheme}
-        focusInputOnMount={focusInputOnMount}
-        renderSuggestion={Suggestion}
-      />
+      <FetchPatients>
+        {({ refetch }) => (
+          <AutoCompleteForm
+            data-test-id={this.props['data-test-id']}
+            suggestions={suggestions}
+            getSuggestions={val => this.searchPatients(val, setSearchData(refetch))}
+            onSuggestionSelected={this.onSuggestionSelected}
+            getSuggestionValue={p => p.firstName}
+            inputProps={finalInputProps}
+            theme={newTheme}
+            focusInputOnMount={focusInputOnMount}
+            renderSuggestion={Suggestion}
+          />
+        )}
+      </FetchPatients>
     );
   }
 }
 
 PatientSearch.propTypes = {
   onSelect: PropTypes.func.isRequired,
-  fetchEntitiesRequest: PropTypes.func.isRequired,
   inputProps: PropTypes.objectOf(PropTypes.any),
   theme: PropTypes.objectOf(PropTypes.string),
   focusInputOnMount: PropTypes.bool,

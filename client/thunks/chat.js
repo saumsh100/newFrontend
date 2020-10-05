@@ -553,3 +553,12 @@ export function getChatCategoryCounts() {
       .get('/api/chats/count/categories')
       .then(({ data }) => dispatch(setChatCategoriesCount(data)));
 }
+
+export function selectChatByPatientId(patientId) {
+  return dispatch =>
+    httpClient()
+      .get(`/api/patients/${patientId}/chat`)
+      .then(({ data: { chatId } }) => {
+        dispatch(selectChat(chatId));
+      });
+}

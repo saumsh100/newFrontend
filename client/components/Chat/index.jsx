@@ -21,6 +21,7 @@ import {
   cleanChatList,
   getChatEntity,
   getChatCategoryCounts,
+  selectChatByPatientId,
 } from '../../thunks/chat';
 import Loader from '../Loader';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
@@ -58,7 +59,6 @@ class ChatMessage extends Component {
     };
 
     this.addNewChat = this.addNewChat.bind(this);
-    this.selectChatOrCreate = this.selectChatOrCreate.bind(this);
     this.loadChatList = this.loadChatList.bind(this);
     this.changeTab = this.changeTab.bind(this);
     this.togglePatientsList = this.togglePatientsList.bind(this);
@@ -159,16 +159,11 @@ class ChatMessage extends Component {
 
   selectChatOrCreate(patient) {
     const selectChatCallback = async () => {
-      // If this patient has a chat, select the chat
-      const chatToSelect = patient.chatId || null;
-      const newChat = patient.chatId ? null : { patientId: patient.id };
-
       if (!this.state.showMessageContainer) {
         this.toggleShowMessageContainer();
       }
-
       await this.hubChatPage();
-      this.props.selectChat(chatToSelect, newChat);
+      this.props.selectChatByPatientId(patient.ccId);
     };
     this.changeTab(tabsConstants.ALL_TAB, selectChatCallback);
   }
@@ -392,6 +387,7 @@ ChatMessage.propTypes = {
   toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
   getChatEntity: PropTypes.func.isRequired,
   getChatCategoryCounts: PropTypes.func.isRequired,
+  selectChatByPatientId: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ apiRequests, electron }) {
@@ -423,6 +419,7 @@ function mapDispatchToProps(dispatch) {
       fetchEntitiesRequest,
       getChatEntity,
       getChatCategoryCounts,
+      selectChatByPatientId,
     },
     dispatch,
   );
