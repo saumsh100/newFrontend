@@ -3,10 +3,11 @@
 }
 
 .userListItem {
-  padding-top: 20px;
-  padding-bottom: 20px;
   border: 1px solid #f0f0f0;
   border-bottom: 0;
+  min-width: 560px;
+  padding-bottom: 20px;
+  padding-top: 20px;
 
   &:last-child {
     border-bottom: 1px solid #f0f0f0;
@@ -18,17 +19,18 @@
   border-radius: 25%;
   color: black;
   display: inline-block;
+  font-family: 'Gotham-Medium', sans-serif;
+  font-size: 10px;
+  padding-bottom: 2px;
   padding-left: 6px;
   padding-right: 6px;
-  text-align: center;
   padding-top: 5px;
-  font-size: 10px;
-  font-family: 'Gotham-Medium';
-  padding-bottom: 2px;
+  text-align: center;
 }
 
 .dropdown {
   margin-bottom: 10px;
+
   div {
     margin-right: 10px;
   }
@@ -49,10 +51,9 @@
 }
 
 .mainHead {
-  font-size: 16px;
   display: flex;
+  font-size: 16px;
   justify-content: space-between;
-  height: 60px;
 }
 
 .mainHeadInvites {
@@ -65,8 +66,8 @@
 }
 
 .mainHeader {
-  font-style: italic;
   font-size: 16px;
+  font-style: italic;
   margin-top: 35px;
 }
 
@@ -76,6 +77,7 @@
 
 .form {
   display: block;
+
   button {
     margin: 0 0 0 auto;
   }
@@ -94,49 +96,56 @@
 }
 
 .name {
-  font-family: 'Gotham-Medium';
+  font-family: 'Gotham-Medium', sans-serif;
   font-size: 1.3em;
   margin: 0 0 0 15px;
 }
 
 .email {
-  font-family: 'Gotham-Medium';
   color: grey;
-  margin: 0 0 0 15px;
+  font-family: 'Gotham-Medium', sans-serif;
+  margin: 0 15px;
 }
 
 .image {
   margin-left: 15px;
+
   img {
     height: 100%;
   }
 }
 
 .main {
-  display: flex;
-  width: 100%;
-  justify-content: flex-start;
   align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .delete {
   display: flex;
+
   i {
     margin-top: -1.7px;
   }
 }
 
 .edit {
-  margin-right: 25px;
   display: flex;
+  margin-right: 25px;
+
   i {
     margin-top: -1px;
   }
 }
 
 .cancel {
-  margin-right: 10px !important;
   display: flex;
+
+  &:last-of-type {
+    margin-right: 10px;
+  }
+
   i {
     margin-top: -1px;
   }
@@ -144,4 +153,12 @@
 
 .inviteFormContainer {
   padding-bottom: 15px;
+}
+
+.buttonContainer {
+  margin-bottom: 10px;
+
+  &--pendingInvite {
+    display: flex;
+  }
 }

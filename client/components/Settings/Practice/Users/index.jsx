@@ -1,25 +1,26 @@
 
+import { sortDesc } from '@carecru/isomorphic';
+import Map from 'immutable';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { sortDesc } from '@carecru/isomorphic';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
-import Map from 'immutable';
+
 import {
-  fetchEntities,
-  deleteEntityRequest,
   createEntityRequest,
+  deleteEntityRequest,
+  fetchEntities,
   updateEntityRequest,
 } from '../../../../thunks/fetchEntities';
-import { List, Header, DialogBox, Row, Button } from '../../../library';
+import { Button, DialogBox, Header, List, Row } from '../../../library';
+import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
+import SettingsCard from '../../Shared/SettingsCard';
 import ActiveUsersList from './ActiveUsersList';
+import EditUserForm from './EditUserForm';
+import InviteUserForm from './InviteUserForm';
 import InviteUsersList from './InviteUsersList';
 import NewUserForm from './NewUserForm';
-import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
-import InviteUserForm from './InviteUserForm';
-import SettingsCard from '../../Shared/SettingsCard';
-import EditUserForm from './EditUserForm';
 import styles from './styles.scss';
 
 const getUsersWithPermissions = usr => (permissions, editPermissionId) => {
@@ -366,7 +367,7 @@ class Users extends Component {
         </DialogBox>
         <Row className={styles.mainHead}>
           <Header className={styles.header} contentHeader title={`Users in ${practiceName}`} />
-          <div className={styles.paddingRight}>
+          <div className={styles.buttonContainer}>
             {addUserButton}
             <Button
               className={styles.inviteUser}

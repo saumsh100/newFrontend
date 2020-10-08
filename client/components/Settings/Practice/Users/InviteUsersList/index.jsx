@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { ListItem, Button } from '../../../../library';
+
 import { createEntityRequest } from '../../../../../thunks/fetchEntities';
+import { Button, ListItem } from '../../../../library';
 
 class InviteUsersList extends Component {
   constructor(props) {
     super(props);
-
     this.resendInvite = this.resendInvite.bind(this);
   }
 
   resendInvite(id) {
-    const { account } = this.props;
+    const { accountId } = this.props;
+
     const alert = {
       success: {
         body: 'Email Resent.',
@@ -26,7 +27,7 @@ class InviteUsersList extends Component {
 
     this.props.createEntityRequest({
       values: {},
-      url: `/api/accounts/${account.id}/invites/${id}/resend`,
+      url: `/api/accounts/${accountId}/invites/${id}/resend`,
       alert,
     });
   }
@@ -70,35 +71,29 @@ class InviteUsersList extends Component {
 }
 
 InviteUsersList.propTypes = {
-  activeUser: PropTypes.object,
-  date: PropTypes.instanceOf(Date),
-  mainStyle: PropTypes.object,
-  accountId: PropTypes.object,
-  nameStyle: PropTypes.object,
-  emailStyle: PropTypes.object,
-  editStyles: PropTypes.object,
-  userListStyle: PropTypes.object,
-  email: PropTypes.string,
-  id: PropTypes.string,
+  accountId: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  mainStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  nameStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  emailStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  editStyles: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  userListStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  email: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   currentUserRole: PropTypes.string,
-  createEntityRequest: PropTypes.func,
-  onDelete: PropTypes.func,
+  createEntityRequest: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ entities }) {
-  return {
-    account: entities.getIn(['accounts', 'models']).first(),
-  };
-}
+InviteUsersList.defaultProps = {
+  currentUserRole: undefined,
+};
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      createEntityRequest,
-    },
-    dispatch,
-  );
-}
+const mapStateToProps = ({ entities }) => ({
+  accountId: entities.getIn(['accounts', 'models']).first().id,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({ createEntityRequest }, dispatch);
 
 const enhance = connect(
   mapStateToProps,

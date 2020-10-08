@@ -52,7 +52,6 @@
     "@storybook/addon-links": "^5.1.11",
     "@storybook/addons": "^5.1.11",
     "@storybook/react": "^5.1.11",
-    "@types/react": "^16.9.2",
     "apollo-boost": "^0.4.4",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-link": "^1.2.12",
@@ -159,6 +158,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@hot-loader/react-dom": "^16.9.0",
+    "@types/react": "^16.9.51",
     "babel-jest": "^24.9.0",
     "babel-runtime": "^6.26.0",
     "browser-sync": "^2.26.7",
@@ -191,6 +191,7 @@
     "stylelint": "^13.3.2",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-order": "^4.0.0",
+    "stylelint-scss": "^3.18.0",
     "supertest": "^3.3.0",
     "twilio-run": "^1.0.1"
   }

@@ -1,6 +1,7 @@
 {
   "plugins": [
-    "stylelint-order"
+    "stylelint-order",
+    "stylelint-scss"
   ],
   "extends": [
     "stylelint-config-recommended"
@@ -19,6 +20,8 @@
       }
     ],
     "max-empty-lines": 2,
-    "declaration-no-important": true
+    "declaration-no-important": true,
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": true
   }
 }
