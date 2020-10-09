@@ -2,28 +2,52 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Map } from 'immutable';
 import PatientModel from '../../../entities/models/Patient';
-import { ListItem, Avatar, Icon } from '../../library';
-import ChatListItem from './ChatListItem';
-import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
 import { filterChatsByTab } from '../../../reducers/chat';
+import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
+import { Avatar, Icon, ListItem } from '../../library';
 import { sortByFieldAsc } from '../../library/util/SortEntities';
+import ChatListItem from './ChatListItem';
 import listItemStyles from './ChatListItem/styles.scss';
+import ChatListSkeleton from './ChatListSkeleton';
 
 class ChatListContainer extends Component {
   constructor(props) {
     super(props);
-
+    this.state = { loaded: false };
     this.removeNewChat = this.removeNewChat.bind(this);
     this.selectNewChat = this.selectNewChat.bind(this);
   }
 
-  sortChatList() {
+  componentDidUpdate(prevProps) {
     const { chats } = this.props;
-    return sortByFieldAsc(chats, 'lastTextMessageDate').toArray();
+    if (prevProps.chats.size !== chats.size) {
+      this.setLoaded();
+    }
+  }
+
+  setLoaded() {
+    const { loaded } = this.state;
+    const { isLoading } = this.props;
+
+    if (!loaded) {
+      this.setState({
+        loaded: Array.isArray(this.sortedChats()) && !isLoading,
+      });
+    }
+  }
+
+  sortedChats() {
+    const { chats } = this.props;
+
+    if (chats) {
+      return sortByFieldAsc(chats, 'lastTextMessageDate').toArray();
+    }
+
+    return null;
   }
 
   selectNewChat() {
@@ -39,17 +63,18 @@ class ChatListContainer extends Component {
   }
 
   renderChatList() {
-    return this.sortChatList()
-      .filter(chat =>
-        !chat.patient)
-      .map(chat =>
-        (
-        <ChatListItem
-          key={`${chat.id}_listItem`}
-          onChatClick={this.props.onChatClick}
-          chat={chat}
-        />
-        ));
+    const { loaded } = this.state;
+    const { onChatClick } = this.props;
+
+    if (!loaded) {
+      return <ChatListSkeleton />;
+    }
+
+    return this.sortedChats()
+      .filter(chat => !chat.patient)
+      .map(chat => (
+        <ChatListItem key={`${chat.id}_listItem`} chat={chat} onChatClick={onChatClick} />
+      ));
   }
 
   renderNewChat() {
@@ -58,6 +83,7 @@ class ChatListContainer extends Component {
     if (!newChat) {
       return null;
     }
+
     const isNewPatientChat = newChat.patientId && newChatPatient;
     const title = isNewPatientChat
       ? `${newChatPatient.getFullName()}, ${newChatPatient.getAge()}`
@@ -76,8 +102,7 @@ class ChatListContainer extends Component {
           <Icon
             icon="times"
             onClick={this.removeNewChat}
-            onKeyDown={({ keyCode }) =>
-keyCode === 13 && this.removeNewChat}
+            onKeyDown={({ keyCode }) => keyCode === 13 && this.removeNewChat}
             role="button"
             tabIndex={0}
           />
@@ -111,6 +136,7 @@ keyCode === 13 && this.removeNewChat}
 
 ChatListContainer.propTypes = {
   chats: PropTypes.instanceOf(Map),
+  isLoading: PropTypes.bool.isRequired,
   newChat: PropTypes.shape({ patientId: PropTypes.string }),
   newChatPatient: PropTypes.instanceOf(PatientModel),
   selectedChatId: PropTypes.string,
@@ -124,8 +150,7 @@ ChatListContainer.defaultProps = {
   newChat: null,
   newChatPatient: null,
   selectedChatId: null,
-  onChatClick: e =>
-    e,
+  onChatClick: e => e,
 };
 
 function mapStateToProps({ entities, chat }, { tabIndex }) {
@@ -135,6 +160,7 @@ function mapStateToProps({ entities, chat }, { tabIndex }) {
   const chats = entities.getIn(['chats', 'models']);
 
   return {
+    isLoading: chat.get('isLoading'),
     newChat,
     chats: filterChatsByTab(chats, selectedChat, tabIndex),
     selectedChatId: chat.get('selectedChatId'),

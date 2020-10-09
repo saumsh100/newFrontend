@@ -678,6 +678,19 @@ $size: 32px;
 
 .messageHeader {
   height: 50px;
-  box-sizing: border-box;
-  border-bottom: 1px solid #f4f4f4;
+}
+
+.skeleton {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.skeletonAvatar {
+  margin-left: 1.25rem;
+}
+
+.skeletonRow {
+  margin-left: 1rem;
 }

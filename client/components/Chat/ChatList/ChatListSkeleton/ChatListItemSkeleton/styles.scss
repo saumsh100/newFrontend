@@ -1,0 +1,47 @@
+.avatar {
+  padding: 0 10px;
+}
+
+.chatListItem {
+  box-sizing: border-box;
+  height: 100px;
+  padding: 20px;
+}
+
+.flexSection {
+  flex: 1;
+}
+
+.fullName {
+  display: flex;
+  flex: 1;
+  font-size: 16px;
+  justify-content: space-between;
+}
+
+.name {
+  display: flex;
+  max-width: 250px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nameAgeWrapper {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.preview {
+  display: flex;
+}
+
+.timesIcon {
+  width: 13px;
+}
+
+.topSection {
+  display: flex;
+  width: 100%;
+}

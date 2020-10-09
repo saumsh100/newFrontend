@@ -1,0 +1,52 @@
+.widthFull {
+  width: 100%;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  padding: 3rem;
+  text-align: center;
+}
+
+.name {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.row {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.innerRow {
+  display: flex;
+  justify-content: space-around;
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.leftPlaceholder {
+  text-align: left;
+  width: 50%;
+}
+
+.rightPlaceholder {
+  margin-left: 3rem;
+  text-align: left;
+  width: 50%;
+}
+
+.firstFooter {
+  margin-top: 3rem;
+  padding: 0 1.75rem;
+  text-align: left;
+}
+
+.secondFooter {
+  margin-top: 1rem;
+  padding: 0 1.75rem;
+  text-align: left;
+}

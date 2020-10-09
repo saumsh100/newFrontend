@@ -1,11 +1,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './styles.scss';
+import Skeleton from 'react-loading-skeleton';
 import { Avatar } from '../../library';
-import ToggleChatButton from './ToggleChatButton';
 import PatientSearch from '../../PatientSearch';
 import PatientName from './PatientName';
+import styles from './styles.scss';
+import ToggleChatButton from './ToggleChatButton';
 
 const DesktopHeader = ({
   selectedPatient,
@@ -15,9 +16,20 @@ const DesktopHeader = ({
   isChatOpen,
   toInputProps,
   isFetchingProspect,
-}) => (
-  <div className={styles.wrapper}>
-    {selectedPatient && !isFetchingProspect ? (
+}) => {
+  if (isFetchingProspect) {
+    return (
+      <div className={styles.patientInfoWrapper}>
+        <Skeleton circle width={30} height={30} />
+        <div className={styles.patientInfoName}>
+          <Skeleton width={200} />
+        </div>
+      </div>
+    );
+  }
+
+  if (selectedPatient && !isFetchingProspect) {
+    return (
       <div className={styles.patientInfoWrapper}>
         <Avatar size="sm" user={selectedPatient} />
         <div className={styles.patientInfoName}>
@@ -25,16 +37,18 @@ const DesktopHeader = ({
         </div>
         <ToggleChatButton toggleChat={toggleChat} isChatOpen={isChatOpen} />
       </div>
-    ) : (
-      <PatientSearch
-        placeholder="To: Type the name of the person"
-        onSelect={onSearch}
-        inputProps={toInputProps}
-        theme={toInputTheme}
-      />
-    )}
-  </div>
-);
+    );
+  }
+
+  return (
+    <PatientSearch
+      placeholder="To: Type the name of the person"
+      onSelect={onSearch}
+      inputProps={toInputProps}
+      theme={toInputTheme}
+    />
+  );
+};
 
 DesktopHeader.defaultProps = {
   toInputTheme: {},

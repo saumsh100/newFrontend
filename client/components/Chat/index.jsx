@@ -3,35 +3,37 @@ import React, { Component } from 'react';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import Skeleton from 'react-loading-skeleton';
 import classnames from 'classnames';
-import ChatList from './ChatList';
-import MessageContainer from './MessageContainer';
-import PatientInfo from './PatientInfo';
-import PatientInfoPage from '../Patients/PatientInfo/Electron';
-import ToHeader from './ToHeader';
-import { Button, SContainer, SHeader, SBody, Card, List, InfiniteScroll } from '../library';
+import { bindActionCreators } from 'redux';
+import { CHAT_PAGE } from '../../constants/PageTitle';
+import { setBackHandler, setTitle } from '../../reducers/electron';
 import {
+  cleanChatList,
+  getChatCategoryCounts,
+  getChatEntity,
   loadChatList,
-  selectChat,
-  loadUnreadChatList,
+  loadClosedChatList,
   loadFlaggedChatList,
   loadOpenChatList,
-  loadClosedChatList,
-  cleanChatList,
-  getChatEntity,
-  getChatCategoryCounts,
+  loadUnreadChatList,
+  selectChat,
   selectChatByPatientId,
 } from '../../thunks/chat';
-import Loader from '../Loader';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
-import { setBackHandler, setTitle } from '../../reducers/electron';
-import PatientSearch from '../PatientSearch';
 import { isHub, TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../util/hub';
-import { CHAT_PAGE } from '../../constants/PageTitle';
-import tabsConstants from './consts';
+import { Button, Card, InfiniteScroll, List, SBody, SContainer, SHeader } from '../library';
+import Loader from '../Loader';
+import PatientInfoPage from '../Patients/PatientInfo/Electron';
+import PatientSearch from '../PatientSearch';
+import ChatList from './ChatList';
 import ChatMenu from './ChatMenu';
+import tabsConstants from './consts';
+import MessageContainer from './MessageContainer';
+import PatientInfo from './PatientInfo';
 import styles from './styles.scss';
+import ToHeader from './ToHeader';
+import DesktopSkeleton from './ToHeader/DesktopSkeleton';
 
 const patientSearchTheme = {
   container: styles.patientSearchClass,
@@ -44,6 +46,13 @@ const patientSearchInputProps = {
 };
 
 const CHAT_LIST_LIMIT = 15;
+
+const HeaderSkeleton = () => (
+  <div className={styles.skeleton}>
+    <Skeleton circle className={styles.skeletonAvatar} height={35} width={35} />
+    <Skeleton className={styles.skeletonRow} width={150} />
+  </div>
+);
 
 class ChatMessage extends Component {
   constructor(props) {
@@ -95,12 +104,7 @@ class ChatMessage extends Component {
         return selectedChat;
       });
     } else {
-      this.setState(
-        {
-          tabIndex: tabsConstants.OPEN_TAB,
-        },
-        () => this.loadChatList(),
-      );
+      this.setState({ tabIndex: tabsConstants.OPEN_TAB }, () => this.loadChatList());
     }
   }
 
@@ -232,8 +236,15 @@ class ChatMessage extends Component {
   }
 
   showPatientInfo() {
-    if (isHub()) {
-      return this.state.showPatientInfo && <PatientInfoPage />;
+    const { chatsFetching, isLoading } = this.props;
+    const { showPatientInfo } = this.state;
+
+    if (chatsFetching || isLoading) {
+      return <DesktopSkeleton />;
+    }
+
+    if (isHub() && showPatientInfo) {
+      return <PatientInfoPage />;
     }
 
     return (
@@ -251,21 +262,20 @@ class ChatMessage extends Component {
 
   renderChatList() {
     const { chatsFetching } = this.props;
+    const { moreData, tabIndex } = this.state;
+
     return (
       <SBody>
         <List className={styles.chatsList}>
           <InfiniteScroll
             loadMore={this.loadChatList}
             loader={<Loader key="loader" />}
-            hasMore={this.state.moreData && !chatsFetching}
+            hasMore={moreData && !chatsFetching}
             initialLoad={false}
             useWindow={false}
             threshold={1}
           >
-            <ChatList
-              tabIndex={this.state.tabIndex}
-              onChatClick={this.toggleShowMessageContainer}
-            />
+            <ChatList tabIndex={tabIndex} onChatClick={this.toggleShowMessageContainer} />
           </InfiniteScroll>
         </List>
       </SBody>
@@ -273,7 +283,8 @@ class ChatMessage extends Component {
   }
 
   renderMessageContainer() {
-    const { showPatientInfo } = this.state;
+    const { showPatientInfo, tabIndex } = this.state;
+    const { isLoading } = this.props;
     const patientInfoStyle = classnames(styles.rightSplit, {
       [styles.slideIn]: showPatientInfo,
       [styles.hubRightSplit]: isHub(),
@@ -287,18 +298,24 @@ class ChatMessage extends Component {
         <div className={styles.splitWrapper}>
           <div className={container}>
             <SHeader className={styles.messageHeader}>
-              <ToHeader
-                onPatientInfoClick={this.togglePatientsInfo}
-                onPatientListClick={this.togglePatientsList}
-                onSearch={this.selectChatOrCreate}
-                loadChatByCount={this.loadChatByCount}
-                tabIndex={this.state.tabIndex}
-              />
+              {isLoading ? (
+                <HeaderSkeleton />
+              ) : (
+                <ToHeader
+                  onPatientInfoClick={this.togglePatientsInfo}
+                  onPatientListClick={this.togglePatientsList}
+                  onSearch={this.selectChatOrCreate}
+                  loadChatByCount={this.loadChatByCount}
+                  tabIndex={tabIndex}
+                />
+              )}
             </SHeader>
-            <MessageContainer
-              setTab={this.changeTab}
-              selectChatOrCreate={this.selectChatOrCreate}
-            />
+            {!isLoading && (
+              <MessageContainer
+                setTab={this.changeTab}
+                selectChatOrCreate={this.selectChatOrCreate}
+              />
+            )}
           </div>
           <div className={patientInfoStyle}>{this.showPatientInfo()}</div>
         </div>
@@ -387,16 +404,18 @@ ChatMessage.propTypes = {
   toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
   getChatEntity: PropTypes.func.isRequired,
   getChatCategoryCounts: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   selectChatByPatientId: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ apiRequests, electron }) {
+function mapStateToProps({ apiRequests, chat, electron }) {
   const wasChatsFetched =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('wasFetched');
   const chatsFetching =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('isFetching');
 
   return {
+    isLoading: chat.get('isLoading'),
     wasChatsFetched,
     chatsFetching,
     toolbarPosition: electron.get('toolbarPosition'),

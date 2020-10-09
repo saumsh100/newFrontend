@@ -118,6 +118,7 @@
     "react-hot-loader": "^4.12.12",
     "react-infinite-scroller": "^1.0.6",
     "react-loader": "^2.4.5",
+    "react-loading-skeleton": "^2.1.1",
     "react-lorem-component": "^0.13.0",
     "react-media": "^1.8.0",
     "react-popover": "^0.5.10",

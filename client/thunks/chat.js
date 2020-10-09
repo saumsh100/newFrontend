@@ -7,6 +7,7 @@ import uniq from 'lodash/uniq';
 import union from 'lodash/union';
 import without from 'lodash/without';
 import {
+  setChatIsLoading,
   setChatMessages,
   setChatCategoriesCount,
   setChatPoC,
@@ -317,11 +318,17 @@ export function markAsRead(chatId) {
 }
 
 export function loadChatMessages(chatId, offset = 0, limit = 15) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const { chat } = getState();
+
     if (!chatId) {
       return dispatch(setChatMessagesListForChat(chatId));
     }
+
     const url = `/api/chats/${chatId}/textMessages?skip=${offset}&limit=${limit}`;
+
+    dispatch(setChatIsLoading(true));
+
     return httpClient()
       .get(url)
       .then(({ data }) => {
@@ -333,7 +340,12 @@ export function loadChatMessages(chatId, offset = 0, limit = 15) {
         );
         return data.total;
       })
-      .then(total => dispatch(setChatMessagesListForChat(chatId, total)));
+      .then(total => dispatch(setChatMessagesListForChat(chatId, total)))
+      .finally(() => {
+        if (chat.get('isLoading')) {
+          dispatch(setChatIsLoading(false));
+        }
+      });
   };
 }
 
@@ -377,8 +389,10 @@ export function getChatEntity(id) {
     if (id === null) {
       return null;
     }
-    const { entities } = getState();
+    const { chat, entities } = getState();
     const storedEntity = entities.getIn(['chats', 'models', id]);
+
+    dispatch(setChatIsLoading(true));
 
     return (
       storedEntity ||
@@ -392,6 +406,11 @@ export function getChatEntity(id) {
             }),
           ))
         .then(({ chats }) => Map(chats[id]))
+        .finally(() => {
+          if (chat.get('isLoading')) {
+            dispatch(setChatIsLoading(false));
+          }
+        })
     );
   };
 }
@@ -404,6 +423,8 @@ export function selectChat(id, createChat = null) {
     if (id && currentChatId === id) {
       return;
     }
+
+    dispatch(setChatIsLoading(true));
 
     const chatEntity = await dispatch(getChatEntity(id)).then(data =>
       (data === null ? data : data.delete('textMessages')));
@@ -428,6 +449,8 @@ export function selectChat(id, createChat = null) {
 
     dispatch(unlockChat(id));
     dispatch(loadChatMessages(id));
+    dispatch(setChatIsLoading(false));
+
     return chatEntity;
   };
 }
