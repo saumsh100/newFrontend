@@ -6,9 +6,10 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../reducers/accountSettings';
-import { BadgeHeader, Card, Button, SContainer, SHeader, SBody } from '../../library';
+import { Card, Button, SContainer, SHeader, SBody } from '../../library';
 import PractitionerTabs from './PractitionerTabs';
 import PractitionerItem from './PractitionerItem';
+import PractitionerListFilter, { practitionerFilterOptions } from './PractitionerListFilter';
 import CreatePractitionerForm from './CreatePractitionerForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import DialogBox from '../../library/DialogBox';
@@ -19,14 +20,33 @@ import styles from './styles.scss';
 class PractitionerList extends Component {
   constructor(props) {
     super(props);
-    this.state = { active: false };
+    this.state = {
+      active: false,
+      activePractitioner: null,
+      filter: {
+        name: 'Active Practitioners',
+        apply: practitionerFilterOptions['Active Practitioners'].filter,
+      },
+    };
 
     this.setActive = this.setActive.bind(this);
     this.createPractitioner = this.createPractitioner.bind(this);
   }
 
   componentDidMount() {
-    this.props.setPractitionerId({ id: null });
+    const firstInList = this.state.filter.apply(this.props.practitioners).toArray()[0];
+    firstInList && this.props.setPractitionerId({ id: firstInList.get('id') });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const filterHasChanged = prevState.filter.name !== this.state.filter.name;
+
+    if (this.state.activePractitioner !== this.props.selectedPractitioner && !filterHasChanged) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        activePractitioner: this.props.selectedPractitioner,
+      });
+    }
   }
 
   setActive() {
@@ -80,10 +100,28 @@ class PractitionerList extends Component {
     this.setState({ active: false });
   }
 
-  render() {
-    const { practitioners, services, selectedPractitioner } = this.props;
-    const activePractitioner = selectedPractitioner || practitioners[0];
+  updateFilter = ({ name, filterFunction }) => {
+    const { practitioners } = this.props;
+    this.setState(
+      prevState => ({
+        ...prevState,
+        filter: {
+          name,
+          apply: filterFunction,
+        },
+      }),
+      () => {
+        const firstInList = filterFunction(practitioners).toArray()[0];
+        firstInList && this.props.setPractitionerId({ id: firstInList.get('id') });
+      },
+    );
+  };
 
+  render() {
+    const { practitioners, services } = this.props;
+    const { activePractitioner } = this.state;
+    const filteredPractitioners = this.state.filter.apply(practitioners);
+    const practitionerCount = this.state.filter.apply(practitioners).size;
     const formName = 'addPractitionerForm';
     const actions = [
       {
@@ -118,11 +156,14 @@ class PractitionerList extends Component {
                   Add New Practitioner
                 </Button>
               </div>
-              <BadgeHeader
-                count={practitioners.size}
-                title="Practitioners"
-                className={styles.badgeHeader}
-              />
+              <div className={styles.practitionerListFilterWrapper}>
+                <PractitionerListFilter
+                  practitioners={practitioners}
+                  filterName={this.state.filter.name}
+                  updateFilter={this.updateFilter}
+                />
+                <div className={styles.badgeCount}>{practitionerCount}</div>
+              </div>
               <DialogBox
                 active={this.state.active}
                 onEscKeyDown={this.setActive}
@@ -134,17 +175,22 @@ class PractitionerList extends Component {
               </DialogBox>
             </SHeader>
             <SBody>
-              {practitioners.toArray().map(practitioner => (
-                <PractitionerItem
-                  key={practitioner.get('id')}
-                  id={practitioner.get('id')}
-                  practitionerId={activePractitioner.get('id')}
-                  practitioner={practitioner}
-                  fullName={practitioner.getFullName()}
-                  setPractitionerId={this.props.setPractitionerId}
-                  data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
-                />
-              ))}
+              {this.state.activePractitioner &&
+                filteredPractitioners
+                  .toArray()
+                  .map(practitioner => (
+                    <PractitionerItem
+                      key={practitioner.get('id')}
+                      id={practitioner.get('id')}
+                      practitionerId={activePractitioner.get('id')}
+                      practitioner={practitioner}
+                      fullName={practitioner.getFullName()}
+                      setPractitionerId={this.props.setPractitionerId}
+                      data-test-id={`${practitioner.get('firstName')}${practitioner.get(
+                        'lastName',
+                      )}`}
+                    />
+                  ))}
             </SBody>
           </SContainer>
         </Card>
