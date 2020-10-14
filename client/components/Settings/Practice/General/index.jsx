@@ -93,7 +93,9 @@ class General extends Component {
       website: activeAccount.get('website'),
       phoneNumber: activeAccount.get('phoneNumber'),
       contactEmail: activeAccount.get('contactEmail'),
-      notificationEmails: activeAccount.get('notificationEmails').join(', '),
+      notificationEmails: activeAccount.get('notificationEmails')
+        ? activeAccount.get('notificationEmails').join(', ')
+        : '',
       useNotificationEmails: activeAccount.get('useNotificationEmails'),
     };
     const token = localStorage.getItem('token');
