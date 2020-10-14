@@ -63,7 +63,11 @@ class General extends Component {
 
   updatePracticeData(values) {
     const { activeAccount } = this.props;
-    const valuesMap = Map(values);
+    const notificationEmailsArr = values.notificationEmails.split(',').map(val => val.trim());
+    const valuesMap = Map({
+      ...values,
+      notificationEmails: notificationEmailsArr,
+    });
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {
       success: { body: 'Updated Practice Information' },
@@ -84,7 +88,14 @@ class General extends Component {
     const { activeAccount, users } = this.props;
 
     if (!activeAccount) return null;
-
+    const PracticeDetailsInitValues = {
+      name: activeAccount.get('name'),
+      website: activeAccount.get('website'),
+      phoneNumber: activeAccount.get('phoneNumber'),
+      contactEmail: activeAccount.get('contactEmail'),
+      notificationEmails: activeAccount.get('notificationEmails').join(', '),
+      useNotificationEmails: activeAccount.get('useNotificationEmails'),
+    };
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
     let role = null;
@@ -127,9 +138,11 @@ class General extends Component {
           <div className={styles.formContainer}>
             <Header title="Practice Details" contentHeader />
             <GeneralForm
-              role={role}
+              enableReinitialize
+              form="PracticeDetailsForm123"
+              initialValues={PracticeDetailsInitValues}
               onSubmit={this.updatePracticeData}
-              activeAccount={activeAccount}
+              role={role}
             />
           </div>
           <div className={styles.drop}>

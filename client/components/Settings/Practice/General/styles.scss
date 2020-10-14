@@ -5,15 +5,15 @@
 }
 
 .generalMainContainer {
+  box-sizing: border-box;
   display: -webkit-box;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .generalHeader {
-  margin-bottom: 30px;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
+  margin-bottom: 30px;
 }
 
 .generalGrid {
@@ -22,8 +22,8 @@
 }
 
 .formContainer {
-  width: 40%;
   margin-bottom: 35px;
+  width: 40%;
 
   &_contact {
     margin-left: 35px;
@@ -37,18 +37,18 @@
 .generalRow {
   display: inline-block;
   height: 100%;
-  width: 100%;
   padding-left: 15px;
+  width: 100%;
 }
 
 .paddingField {
   padding-bottom: 15px;
 
   &_flex {
-    width: 40%;
-    padding-top: 10px;
-    display: flex;
     align-items: center;
+    display: flex;
+    padding-top: 10px;
+    width: 100%;
   }
 
   &_toggle {
@@ -57,7 +57,7 @@
 }
 
 .paddingText {
-  padding-right: 5px;
+  font-size: 12px;
 }
 
 .drop {
@@ -76,23 +76,23 @@
 }
 
 .linkAsButton {
-  font-size: 14px;
-  font-family: Gotham-Book;
   background-color: var(--primaryButtonColor);
-  color: #ededed;
-  vertical-align: middle;
-  cursor: pointer;
-  font-weight: bold;
-  outline: none;
-  text-decoration: none;
   border: none;
   border-radius: 2px;
-  padding: 0.85714em 1.5em;
-  margin: 0 0.35714em 0 0;
-  line-height: 1em;
-  text-align: center;
-  transition: background-color 0.1s ease, color 0.1s;
+  color: #ededed;
+  cursor: pointer;
   display: block;
+  font-family: Gotham-Book, serif;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1em;
+  margin: 0 0.35714em 0 0;
+  outline: none;
+  padding: 0.85714em 1.5em;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.1s ease, color 0.1s;
+  vertical-align: middle;
   width: 140px;
 }
 
@@ -124,4 +124,20 @@
 
 .deleteLogo {
   width: 100%;
+}
+
+.submitButton {
+  margin-top: 20px;
+}
+
+.tooltipBody {
+  padding: 4px;
+}
+
+.tooltipBodyRow {
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }

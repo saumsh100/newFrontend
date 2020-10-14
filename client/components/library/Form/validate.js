@@ -67,6 +67,29 @@ const emailValidate = (value) => {
   }
 };
 
+/**
+ * validate comma separated emails string
+ */
+function validateEmails(str) {
+  if (!str) {
+    return null;
+  }
+
+  const emails = str.split(',');
+  // get rid of empty spaces
+  const trimmedEmails = emails.map(email => email.trim());
+  // check how many invalid emails are in the array
+  const invalidEmails = trimmedEmails
+    .map(email => emailValidate(email))
+    .filter(val => typeof val === 'string');
+
+  if (invalidEmails.length > 0) {
+    return 'Invalid email addresses';
+  }
+
+  return null;
+}
+
 const leftTrim = value => value.replace(/^\s+/g, '');
 
 const phoneNumberValidate = (value) => {
@@ -222,4 +245,5 @@ export {
   normalizeBirthdate,
   validateBirthdate,
   onlyNumber,
+  validateEmails,
 };

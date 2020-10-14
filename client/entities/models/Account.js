@@ -56,6 +56,8 @@ const AccountSchema = {
   omitChairIds: [],
   omitPractitionerIds: [],
   displayNameOption: null,
+  notificationEmails: [],
+  useNotificationEmails: false,
 };
 
 export default class Account extends createModel(AccountSchema) {

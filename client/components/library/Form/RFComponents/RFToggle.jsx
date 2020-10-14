@@ -4,35 +4,35 @@ import React from 'react';
 import Toggle from '../../Toggle';
 
 export default function RFToggle(props) {
-  const {
-    input,
-    flipped,
-    label,
-    className,
-    error,
-    meta,
-    checked,
-    theme,
-  } = props;
+  const { input, disabled, flipped, label, className } = props;
 
   return (
     <Toggle
       label={label}
       className={className}
+      disabled={disabled}
       checked={flipped ? !input.value : input.value}
-      onChange={e =>
-        input.onChange(flipped ? !e.target.checked : e.target.checked)
-      }
+      onChange={e => input.onChange(flipped ? !e.target.checked : e.target.checked)}
     />
   );
 }
 
 /* eslint react/forbid-prop-types: 0 */
 RFToggle.propTypes = {
-  toggle: PropTypes.object,
-  meta: PropTypes.object,
-  icon: PropTypes.node,
+  input: PropTypes.object,
   label: PropTypes.node,
-  type: PropTypes.string,
-  error: PropTypes.string,
+  flipped: PropTypes.bool,
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
+};
+
+RFToggle.defaultProps = {
+  input: {
+    value: null,
+    onChange: () => {},
+  },
+  label: null,
+  flipped: false,
+  disabled: false,
+  className: undefined,
 };
