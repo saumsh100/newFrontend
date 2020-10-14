@@ -27,10 +27,13 @@ class ServicesPractForm extends Component {
   render() {
     const { practitioners, practitionerIds, handleSubmit } = this.props;
     if (practitioners.size === 0 || !practitionerIds) return null;
-    const mappedPractitioners = practitioners.toArray().map(practitioner => ({
-      value: practitioner.get('id'),
-      label: practitioner.getPrettyName(),
-    }));
+    const mappedPractitioners = practitioners
+      .toArray()
+      .filter(practitioner => practitioner.isActive)
+      .map(practitioner => ({
+        value: practitioner.get('id'),
+        label: practitioner.getPrettyName(),
+      }));
     return (
       <div>
         <Header
