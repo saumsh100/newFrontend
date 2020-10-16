@@ -39,9 +39,7 @@ class CallsTable extends Component {
     const displayCalls = sortedCalls.map((call, index) => {
       const callJS = call.toJS();
       const patient = callJS.patientId ? patients.get(callJS.patientId) : null;
-      const callerName = callJS.patientId
-        ? `${patients.get(callJS.patientId).firstName} ${patients.get(callJS.patientId).lastName}`
-        : callJS.callerName;
+      const callerName = patient ? `${patient.firstName} ${patient.lastName}` : callJS.callerName;
 
       callJS.callerName = callerName;
 
