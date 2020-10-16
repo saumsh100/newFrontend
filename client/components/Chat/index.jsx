@@ -167,7 +167,7 @@ class ChatMessage extends Component {
         this.toggleShowMessageContainer();
       }
       await this.hubChatPage();
-      this.props.selectChatByPatientId(patient.ccId);
+      this.props.selectChatByPatientId(patient.ccId || patient.id);
     };
     this.changeTab(tabsConstants.ALL_TAB, selectChatCallback);
   }
