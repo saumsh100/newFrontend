@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Avatar, ListItem, Button, IconButton } from '../../../../library';
+import User from '../../../../../entities/models/User';
+import { Avatar, ListItem, IconButton } from '../../../../library';
 import { deleteEntityRequest } from '../../../../../thunks/fetchEntities';
 import styles from '../styles.scss';
 
@@ -25,7 +26,11 @@ class ActiveUsersList extends Component {
     };
 
     if (confirm(`Are you sure you want to delete ${name}?`)) {
-      this.props.deleteEntityRequest({ key: 'users', id, alert });
+      this.props.deleteEntityRequest({
+        key: 'users',
+        id,
+        alert,
+      });
     }
   }
 
@@ -37,16 +42,19 @@ class ActiveUsersList extends Component {
       userId,
       currentUserRole,
       edit,
+      userIsSSO,
     } = this.props;
-    const badge =
-      userId === currentUserId ? (
-        <span className={styles.badge}>You</span>
-      ) : null;
-    let button = null;
-    if (
+    const allowEdit =
       (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') &&
-      role !== 'SUPERADMIN'
-    ) {
+      role !== 'SUPERADMIN' &&
+      !userIsSSO;
+    const allowDelete =
+      (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') &&
+      (role !== 'SUPERADMIN' && role !== 'OWNER') &&
+      !userIsSSO;
+    const badge = userId === currentUserId ? <span className={styles.badge}>You</span> : null;
+    let button = null;
+    if (allowEdit) {
       button =
         userId !== currentUserId ? (
           <div className={styles.paddingRight}>
@@ -57,11 +65,7 @@ class ActiveUsersList extends Component {
         ) : null;
     }
 
-    const check =
-      (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') &&
-      (role !== 'SUPERADMIN' && role !== 'OWNER');
-
-    const deleteMe = check ? (
+    const deleteMe = allowDelete ? (
       <IconButton
         icon="trash"
         className={styles.delete}
@@ -72,10 +76,7 @@ class ActiveUsersList extends Component {
     ) : null;
 
     return (
-      <ListItem
-        className={styles.userListItem}
-        data-test-id={activeUser.getName()}
-      >
+      <ListItem className={styles.userListItem} data-test-id={activeUser.getName()}>
         <div className={styles.main}>
           <Avatar className={styles.image} user={activeUser} />
           <div className={styles.userName}>
@@ -97,13 +98,14 @@ class ActiveUsersList extends Component {
 }
 
 ActiveUsersList.propTypes = {
-  activeUser: PropTypes.object,
-  role: PropTypes.string,
-  currentUserId: PropTypes.string,
-  userId: PropTypes.string,
-  currentUserRole: PropTypes.string,
-  edit: PropTypes.func,
-  deleteEntityRequest: PropTypes.func,
+  activeUser: PropTypes.shape(User).isRequired,
+  role: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
+  currentUserRole: PropTypes.string.isRequired,
+  edit: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  userIsSSO: PropTypes.bool.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {

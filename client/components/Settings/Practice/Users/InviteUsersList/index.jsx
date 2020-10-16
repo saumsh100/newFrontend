@@ -44,9 +44,10 @@ class InviteUsersList extends Component {
       editStyles,
       currentUserRole,
       id,
+      userIsSSO,
     } = this.props;
     const button =
-      currentUserRole !== 'MANAGER' ? (
+      currentUserRole !== 'MANAGER' && !userIsSSO ? (
         <Button onClick={onDelete} className={editStyles}>
           Cancel Invitation
         </Button>
@@ -61,9 +62,11 @@ class InviteUsersList extends Component {
             Invited {localDate.toDateString()} {localDate.toLocaleTimeString()}
           </p>
         </div>
-        <Button onClick={() => this.resendInvite(id)} className={editStyles}>
-          Resend Invitation
-        </Button>
+        {!userIsSSO && (
+          <Button onClick={() => this.resendInvite(id)} className={editStyles}>
+            Resend Invitation
+          </Button>
+        )}
         {button}
       </ListItem>
     );
@@ -83,6 +86,7 @@ InviteUsersList.propTypes = {
   currentUserRole: PropTypes.string,
   createEntityRequest: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  userIsSSO: PropTypes.bool.isRequired,
 };
 
 InviteUsersList.defaultProps = {

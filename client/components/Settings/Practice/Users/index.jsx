@@ -219,7 +219,7 @@ class Users extends Component {
 
   render() {
     const formName = 'emailInvite';
-    const { users, permissions, invites, practiceName } = this.props;
+    const { users, permissions, invites, practiceName, userIsSSO } = this.props;
     const { active, editActive, newActive } = this.state;
 
     let usersInvited = (
@@ -246,6 +246,7 @@ class Users extends Component {
             emailStyle={styles.email}
             userListStyle={styles.userListItem}
             editStyles={styles.cancel}
+            userIsSSO={userIsSSO}
           />
         ));
     }
@@ -369,14 +370,16 @@ class Users extends Component {
           <Header className={styles.header} contentHeader title={`Users in ${practiceName}`} />
           <div className={styles.buttonContainer}>
             {addUserButton}
-            <Button
-              className={styles.inviteUser}
-              onClick={this.addUser}
-              data-test-id="inviteUserButton"
-              secondary
-            >
-              Invite a User
-            </Button>
+            {!userIsSSO && (
+              <Button
+                className={styles.inviteUser}
+                onClick={this.addUser}
+                data-test-id="inviteUserButton"
+                secondary
+              >
+                Invite a User
+              </Button>
+            )}
           </div>
         </Row>
         <List className={styles.userList} data-test-id="activeUsersList">
@@ -390,6 +393,7 @@ class Users extends Component {
               }
               return (
                 <ActiveUsersList
+                  userIsSSO={userIsSSO}
                   key={user.id}
                   activeUser={user}
                   role={permission.get('role')}
@@ -420,6 +424,7 @@ Users.propTypes = {
   updateEntityRequest: PropTypes.func.isRequired,
   accountId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
+  userIsSSO: PropTypes.bool.isRequired,
   role: PropTypes.string.isRequired,
   practiceName: PropTypes.string,
   users: PropTypes.instanceOf(Map).isRequired,
@@ -435,6 +440,7 @@ function mapStateToProps({ entities, auth }) {
   return {
     accountId: auth.get('accountId'),
     userId: auth.getIn(['user', 'id']),
+    userIsSSO: auth.getIn(['user', 'isSSO']),
     role: auth.get('role'),
     users: entities.getIn(['users', 'models']),
     permissions: entities.getIn(['permissions', 'models']),
