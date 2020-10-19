@@ -49,7 +49,7 @@ class DropdownSelect extends Component {
   }
 
   componentDidUpdate() {
-    const options = this.props.options;
+    const { options } = this.props;
     if (this.props.value && this.state.isOpen) {
       let valueHeight = 0;
 
@@ -59,7 +59,7 @@ class DropdownSelect extends Component {
         }
       });
 
-      if (this.valueScrollComponent) {
+      if (this.valueScrollComponent?.current?.scrollHeight) {
         this.scrollComponent.current.scrollTop =
           valueHeight * this.valueScrollComponent.current.scrollHeight;
       }
@@ -84,7 +84,7 @@ class DropdownSelect extends Component {
       (event.keyCode >= 48 && event.keyCode <= 57) ||
       event.keyCode === 186
     ) {
-      this.searchValue = this.searchValue + event.key;
+      this.searchValue += event.key;
       this.handleSearch(this.searchValue);
     }
   }
