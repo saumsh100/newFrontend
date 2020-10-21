@@ -28,7 +28,18 @@ const reasons = [
   },
 ];
 
-const getUnits = (start, end) => Array.from(Array(end), (_, index) => ({ value: start + index }));
+const units = [
+  { value: 1 },
+  { value: 2 },
+  { value: 3 },
+  { value: 4 },
+  { value: 5 },
+  { value: 6 },
+  { value: 7 },
+  { value: 8 },
+  { value: 9 },
+  { value: 10 },
+];
 
 const initalWeek = week.all.reduce(
   (acc, curr) => ({
@@ -72,8 +83,6 @@ const WaitlistForm = ({
     .map(([v]) => v);
 
   const selectedTimes = formValues.availableTimes.map(v => moment(v).toString());
-
-  const units = useMemo(() => getUnits(1, 20), []);
 
   const handleAutoSuggest = (newValue) => {
     setFormValues({
