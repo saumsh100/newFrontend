@@ -72,7 +72,7 @@ class PractitionerTabs extends Component {
   }
 
   render() {
-    const { practitioner, weeklySchedule, timeOffs, recurringTimeOffs } = this.props;
+    const { practitioner, weeklySchedule, timeOffs, recurringTimeOffs, role } = this.props;
 
     if (!practitioner) {
       return null;
@@ -105,14 +105,16 @@ class PractitionerTabs extends Component {
               practitioner={practitioner}
               updatePractitioner={this.updatePractitioner}
             />
-            <div className={styles.trashButton}>
-              <IconButton
-                iconType="solid"
-                icon="trash"
-                onClick={this.deletePractitioner}
-                data-test-id="deletePractitioner"
-              />
-            </div>
+            {role === 'SUPERADMIN' && (
+              <div className={styles.trashButton}>
+                <IconButton
+                  iconType="solid"
+                  icon="trash"
+                  onClick={this.deletePractitioner}
+                  data-test-id="deletePractitioner"
+                />
+              </div>
+            )}
           </div>
         }
         subHeader={
@@ -182,7 +184,7 @@ class PractitionerTabs extends Component {
   }
 }
 
-function mapStateToProps({ entities }, { practitioner }) {
+function mapStateToProps({ auth, entities }, { practitioner }) {
   const weeklyScheduleId = practitioner.get('isCustomSchedule')
     ? practitioner.get('weeklyScheduleId')
     : null;
@@ -197,6 +199,7 @@ function mapStateToProps({ entities }, { practitioner }) {
     timeOffs,
     recurringTimeOffs,
     weeklySchedule,
+    role: auth.get('role'),
   };
 }
 
@@ -221,6 +224,7 @@ PractitionerTabs.propTypes = {
   timeOffs: PropTypes.instanceOf(Map),
   recurringTimeOffs: PropTypes.instanceOf(Map),
   weeklySchedule: PropTypes.instanceOf(WeeklyScheduleModel),
+  role: PropTypes.string.isRequired,
 };
 
 PractitionerTabs.defaultProps = {

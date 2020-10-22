@@ -145,6 +145,7 @@
 }
 
 .trashButton {
+  border-left: 1px solid $primary-darkgrey;
 }
 
 .toggleContainer {
@@ -231,7 +232,6 @@
   align-items: center;
   margin-left: auto;
   padding-right: 20px;
-  border-right: 1px solid $primary-darkgrey;
 
   &_text {
     font-family: $medium-font;
