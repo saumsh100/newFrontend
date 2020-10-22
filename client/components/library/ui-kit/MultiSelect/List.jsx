@@ -13,16 +13,29 @@ const List = ({
   hasAvailableItems,
   hasSelectedItems,
   handleSelection,
+  extraPickers,
 }) => (
   <ul className={classNames(styles.list, { [styles.active]: isOpen })}>
     <div className={styles.selectAll}>
       <Checkbox
+        key="Select All"
         checked={hasSelectedItems}
         showIndeterminate={hasAvailableItems}
         label="Select All"
         labelClassNames={styles.cbLabel}
         onChange={onChangeAll}
       />
+      {extraPickers &&
+        extraPickers.map(picker => (
+          <Checkbox
+            key={picker.label}
+            checked={picker.checked}
+            showIndeterminate={picker.showIndeterminate}
+            label={picker.label}
+            labelClassNames={styles.cbLabel}
+            onChange={picker.onChange}
+          />
+        ))}
     </div>
     {hasSelectedItems && (
       <div className={styles.selectionGroup}>
@@ -72,12 +85,21 @@ List.propTypes = {
       label: PropTypes.string,
     }),
   ),
+  extraPickers: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      checked: PropTypes.bool.isRequired,
+      onChange: PropTypes.func.isRequired,
+      showIndeterminate: PropTypes.bool.isRequired,
+    }),
+  ),
 };
 
 List.defaultProps = {
   isOpen: false,
   availableItems: [],
   selectedItems: [],
+  extraPickers: [],
 };
 
 export default List;

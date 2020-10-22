@@ -2,7 +2,6 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { week, capitalize, setDateToTimezone } from '@carecru/isomorphic';
-import moment from 'moment-timezone';
 import { Button, Icon } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';
@@ -11,7 +10,14 @@ import { SelectedPatient } from '../AddToWaitlist';
 import MultiSelect from '../../../../library/ui-kit/MultiSelect';
 import styles from './styles.scss';
 import Selector from './Selector';
-import { convertArrayOfDaysInMap, generateWaitlistHours } from '../helpers';
+import {
+  convertArrayOfDaysInMap,
+  generateWaitlistHours,
+  getDayPickers,
+  getTimePickers,
+  getTimeSlot,
+  getAllTimeSlots,
+} from '../helpers';
 
 const reasons = [
   {
@@ -82,7 +88,7 @@ const WaitlistForm = ({
     .filter(([, v]) => v)
     .map(([v]) => v);
 
-  const selectedTimes = formValues.availableTimes.map(v => moment(v).toString());
+  const selectedTimes = formValues.availableTimes;
 
   const handleAutoSuggest = (newValue) => {
     setFormValues({
@@ -92,7 +98,7 @@ const WaitlistForm = ({
           ? {
             avatarUrl: newValue.avatarUrl,
             firstName: newValue.firstName,
-            id: newValue.id,
+            id: newValue.ccId,
             lastName: newValue.lastName,
           }
           : null,
@@ -106,7 +112,7 @@ const WaitlistForm = ({
     });
   };
 
-  const weekdays = useMemo(
+  const allWeekDays = useMemo(
     () =>
       week.all.map(day => ({
         value: day,
@@ -130,6 +136,39 @@ const WaitlistForm = ({
       onChange('endDate')(setDateToTimezone(v, timezone).toString());
     }
   };
+
+  const onToggleDayPicker = (key) => {
+    const allChecked = week[key].every(day => selectedDaysOfWeek.includes(day));
+    const newValue = selectedDaysOfWeek.filter(day => !week[key].includes(day));
+    if (allChecked) {
+      onDaysOfTheWeekChange(newValue);
+    } else {
+      onDaysOfTheWeekChange([...newValue, ...week[key]]);
+    }
+  };
+
+  const onToggleTimePicker = (data) => {
+    const allChecked = data.every(time => selectedTimes.includes(time));
+    const newValue = selectedTimes.filter(time => !data.includes(time));
+    if (allChecked) {
+      onChange('availableTimes')(newValue);
+    } else {
+      onChange('availableTimes')([...newValue, ...data]);
+    }
+  };
+
+  const timeSlots = useMemo(() => {
+    const options = timeOptions.map((option) => {
+      option.slot = getTimeSlot(option.label);
+      return option;
+    });
+    return getAllTimeSlots(options);
+  }, [timeOptions]);
+
+  const getTimePickersMemo = useMemo(
+    () => getTimePickers(selectedTimes, timeSlots, onToggleTimePicker),
+    [onToggleTimePicker, selectedTimes, timeSlots],
+  );
 
   return (
     <div className={styles.waitlistFormContainer}>
@@ -180,7 +219,7 @@ const WaitlistForm = ({
             )}
             <MultiSelect
               onChange={onDaysOfTheWeekChange}
-              options={weekdays}
+              options={allWeekDays}
               selected={selectedDaysOfWeek}
               defaultValue={selectedDaysOfWeek}
               theme={{ selectWrapper: styles.inputWrapper }}
@@ -194,6 +233,8 @@ const WaitlistForm = ({
                   handleSelection={handleSelection}
                 />
               )}
+              extraPickers={getDayPickers(selectedDaysOfWeek, onToggleDayPicker)}
+              shouldCheckUpdate
             />
             <DropdownSelect
               onChange={onChange('reasonText')}
@@ -221,12 +262,14 @@ const WaitlistForm = ({
                   disabled={disabled}
                   selected={selectedTimes}
                   placeholder="Preferred Times"
-                  formatValue={v => moment(v).format('LT')}
+                  formatValue={v => timeOptions.find(option => option.value === v)?.label}
                   error={error}
                   selectorProps={getToggleButtonProps()}
                   handleSelection={handleSelection}
                 />
               )}
+              extraPickers={getTimePickersMemo}
+              shouldCheckUpdate
             />
             <DropdownSelect
               theme={{ label: styles.label }}

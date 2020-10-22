@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import classNames from 'classnames';
+import isEqual from 'lodash/isEqual';
 import Selector from './Selector';
 import List from './List';
 import styles from './styles.scss';
@@ -21,6 +22,7 @@ class MultiSelect extends Component {
     this.removeItem = this.removeItem.bind(this);
     this.callbackHandler = this.callbackHandler.bind(this);
     this.addSelectedItem = this.addSelectedItem.bind(this);
+    this.setSelectedItems = this.setSelectedItems.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +34,24 @@ class MultiSelect extends Component {
     const arrayIfString = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
     return (selectedItems.length > 0 ? selectedItems : arrayIfString).map(value =>
       this.handleSelection({ value }));
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.shouldCheckUpdate) {
+      const newItems = this.props.selected || [];
+      const oldItems = prevProps.selected || [];
+      if (newItems.length !== oldItems.length || !isEqual(newItems.sort(), oldItems.sort())) {
+        this.setSelectedItems(newItems);
+      }
+    }
+  }
+
+  setSelectedItems(newItems) {
+    this.setState({
+      selectedItems: this.props.options
+        .filter(({ value }) => newItems.includes(value))
+        .map(({ value }) => value),
+    });
   }
 
   /**
@@ -109,7 +129,7 @@ class MultiSelect extends Component {
   }
 
   render() {
-    const { label, options, disabled, placeholder, selector, theme } = this.props;
+    const { label, options, disabled, placeholder, selector, theme, extraPickers } = this.props;
 
     const selectedItems = options.filter(({ value }) => this.state.selectedItems.includes(value));
     const availableItems = options.filter(({ value }) => !this.state.selectedItems.includes(value));
@@ -152,6 +172,7 @@ class MultiSelect extends Component {
               hasAvailableItems={availableItems.length > 0}
               handleSelection={this.handleSelection}
               onChangeAll={() => this.handleHelperLink(hasAvailableItems)}
+              extraPickers={extraPickers}
             />
           </div>
         )}
@@ -177,6 +198,15 @@ MultiSelect.propTypes = {
   theme: PropTypes.objectOf(PropTypes.string),
   selected: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
   defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+  extraPickers: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      checked: PropTypes.bool.isRequired,
+      onChange: PropTypes.func.isRequired,
+      showIndeterminate: PropTypes.bool.isRequired,
+    }),
+  ),
+  shouldCheckUpdate: PropTypes.bool,
 };
 MultiSelect.defaultProps = {
   onChange: () => {},
@@ -188,6 +218,8 @@ MultiSelect.defaultProps = {
   theme: {},
   placeholder: '',
   initialSelectedItem: [],
+  extraPickers: [],
+  shouldCheckUpdate: false,
   selector: (
     disabled,
     selectedItems,

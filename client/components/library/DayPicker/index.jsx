@@ -84,7 +84,7 @@ class DayPicker extends Component {
   }
 
   handleClose(e) {
-    const key = e.key;
+    const { key } = e;
     if (key === 'Tab' || key === 'Enter' || key === 'Escape') {
       this.setState({ isOpen: false });
     }
@@ -101,6 +101,7 @@ class DayPicker extends Component {
       'handleThisInput',
       'noTarget',
       'TargetComponent',
+      'disabledDays',
     ]);
 
     let dayPickerTargetComponent = (
@@ -132,7 +133,7 @@ class DayPicker extends Component {
       }
     }
     const body = (
-      <div className={styles.outerContainer}>
+      <div className={styles.outerContainer} key="body">
         <RDayPicker
           onDayClick={this.handleDayClick}
           selectedDays={convertValueToDate(value)}

@@ -6,6 +6,7 @@ import {
   getHoursFromInterval,
   capitalize,
 } from '@carecru/isomorphic';
+import moment from 'moment';
 import PatientUserPopover from '../../../library/PatientUserPopover';
 import PatientPopover from '../../../library/PatientPopover';
 
@@ -177,12 +178,15 @@ export const mergeData = (data, dataset) =>
     patientData: dataset[v.waitSpotId][0].patientData,
   }));
 
-export const generateWaitlistHours = (timezone, start = 6, end = 20) => {
+export const generateWaitlistHours = (timezone, start = 7, end = 21, hourInterval = 0.5) => {
   const baseTime = new Date(1970, 0, 1, 0, 0, 0, 0);
 
   const result = [];
-  for (let hours = start; hours <= end; hours += 1) {
-    const value = setDateToTimezone(baseTime, timezone).set({ hours });
+  for (let hours = start; hours <= end; hours += hourInterval) {
+    const value = setDateToTimezone(baseTime, timezone).set({
+      hours: Math.floor(hours),
+      minutes: Math.round(60 * (hours % 1)),
+    });
     result.push({ value: value.toString(),
       label: value.format('LT') });
   }
@@ -262,4 +266,87 @@ export const propsGenerator = ({
     PopOverComponent: isPatientUser ? PatientUserPopover : PatientPopover,
     times: hasTimes ? waitlistTimesFormatter(availableTimes.sort(), timezone) : 'N/A',
   };
+};
+
+export const getDayPickers = (selectedDaysOfWeek, onToggleDayPicker) => {
+  const weekdaysChecked = !!week.weekdays.find(day => selectedDaysOfWeek.includes(day));
+  const weekdaysShowIndeterminate = !week.weekdays.every(day => selectedDaysOfWeek.includes(day));
+
+  const weekendsChecked = !!week.weekends.find(day => selectedDaysOfWeek.includes(day));
+  const weekendsShowIndeterminate = !week.weekends.every(day => selectedDaysOfWeek.includes(day));
+  return [
+    {
+      label: 'Weekdays',
+      checked: weekdaysChecked,
+      onChange: () => onToggleDayPicker('weekdays'),
+      showIndeterminate: weekdaysShowIndeterminate,
+    },
+    {
+      label: 'Weekends',
+      checked: weekendsChecked,
+      onChange: () => onToggleDayPicker('weekends'),
+      showIndeterminate: weekendsShowIndeterminate,
+    },
+  ];
+};
+
+export const getTimeSlot = (
+  currentTime,
+  format = 'HH:mm a',
+  beforeAfterNoon = '12:00 PM',
+  beforeEvening = '5:30 PM',
+) => {
+  const value = moment(currentTime, format);
+  if (value.isBefore(moment(beforeAfterNoon, format))) {
+    return 'morning';
+  } else if (value.isAfter(moment(beforeEvening, format))) {
+    return 'evening';
+  }
+  return 'afternoon';
+};
+
+export const getAllTimeSlots = (timeOptions) => {
+  const result = { mornings: [],
+    afternoons: [],
+    evenings: [] };
+
+  result.mornings = timeOptions.filter(time => time.slot === 'morning').map(time => time.value);
+  result.afternoons = timeOptions.filter(time => time.slot === 'afternoon').map(time => time.value);
+  result.evenings = timeOptions.filter(time => time.slot === 'evening').map(time => time.value);
+
+  return result;
+};
+
+export const getTimePickers = (selectedTimes, timeSlots, onToggleTimePicker) => {
+  const { mornings, afternoons, evenings } = timeSlots;
+
+  const morningsChecked = !!mornings.find(time => selectedTimes.includes(time));
+  const morningsShowIndeterminate = !mornings.every(time => selectedTimes.includes(time));
+
+  const afternoonsChecked = !!afternoons.find(time => selectedTimes.includes(time));
+  const afternoonsShowIndeterminate = !afternoons.every(time => selectedTimes.includes(time));
+
+  const eveningsChecked = !!evenings.find(time => selectedTimes.includes(time));
+  const eveningsShowIndeterminate = !evenings.every(time => selectedTimes.includes(time));
+
+  return [
+    {
+      label: 'Mornings',
+      checked: morningsChecked,
+      onChange: () => onToggleTimePicker(mornings),
+      showIndeterminate: morningsShowIndeterminate,
+    },
+    {
+      label: 'Afternoons',
+      checked: afternoonsChecked,
+      onChange: () => onToggleTimePicker(afternoons),
+      showIndeterminate: afternoonsShowIndeterminate,
+    },
+    {
+      label: 'Evenings',
+      checked: eveningsChecked,
+      onChange: () => onToggleTimePicker(evenings),
+      showIndeterminate: eveningsShowIndeterminate,
+    },
+  ];
 };

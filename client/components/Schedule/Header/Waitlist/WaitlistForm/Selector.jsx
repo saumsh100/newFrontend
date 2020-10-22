@@ -23,6 +23,7 @@ const Selector = ({
       label={placeholder}
       classStyles={styles.inputEl}
       value={selected.map(formatValue).join(', ')}
+      autoComplete="off"
     />
     <div className={styles.iconWrapper}>
       <Icon icon="caret-down" type="solid" />
