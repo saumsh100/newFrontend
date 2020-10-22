@@ -58,6 +58,7 @@ const AccountSchema = {
   displayNameOption: null,
   notificationEmails: [],
   useNotificationEmails: false,
+  canSendRemindersToInactivePatients: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

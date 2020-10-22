@@ -14,7 +14,7 @@ import {
   deleteEntityRequest,
 } from '../../../../thunks/fetchEntities';
 import revertRecallsTouchpoints from '../../../../thunks/defaultSettings/recalls';
-import { Button, RemoteSubmitButton, DialogBox, DropdownSelect } from '../../../library';
+import { Button, RemoteSubmitButton, DialogBox, DropdownSelect, Icon } from '../../../library';
 import { accountShape } from '../../../library/PropTypeShapes';
 import EnabledFeature from '../../../library/EnabledFeature';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
@@ -329,7 +329,8 @@ class Recalls extends Component {
               predicate={({ flags }) => flags.get('revert-to-default-recalls-settings-button')}
               render={() => (
                 <Button
-                  color="blue"
+                  compact
+                  border="blue"
                   onClick={this.revertToDefaultSettings}
                   className={styles.revertButton}
                 >
@@ -338,8 +339,13 @@ class Recalls extends Component {
               )}
             />
             {role === 'SUPERADMIN' ? (
-              <Button border="blue" onClick={this.toggleAdvancedSettings}>
-                Advanced Settings
+              <Button
+                compact
+                color="blue"
+                onClick={this.toggleAdvancedSettings}
+                className={styles.settingsButton}
+              >
+                <Icon icon="cog" type="solid" />
               </Button>
             ) : null}
           </div>

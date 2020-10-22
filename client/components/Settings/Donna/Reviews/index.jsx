@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Button, DialogBox, RemoteSubmitButton } from '../../../library';
+import { Button, DialogBox, Icon, RemoteSubmitButton } from '../../../library';
 import ReviewItem from './ReviewItem';
 import ReviewPreview from './ReviewPreview';
 import AdvancedSettingsForm from './AdvancedSettingsForm';
@@ -114,8 +114,13 @@ class Reviews extends Component {
 
   renderRightActions() {
     return this.props.role === 'SUPERADMIN' ? (
-      <Button border="blue" onClick={this.toggleAdvancedSettings}>
-        Advanced Settings
+      <Button
+        compact
+        color="blue"
+        className={styles.settingsButton}
+        onClick={this.toggleAdvancedSettings}
+      >
+        <Icon icon="cog" type="solid" />
       </Button>
     ) : null;
   }

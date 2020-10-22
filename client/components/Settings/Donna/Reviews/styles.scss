@@ -1,4 +1,5 @@
 @import '../../../../ui';
+@import '../../../../ui-kit';
 
 .bottomItem {
   cursor: default;
@@ -10,18 +11,18 @@
 }
 
 .bottomLabel {
-  height: 30px;
-  box-sizing: border-box;
-  display: flex;
   align-items: center;
-  justify-content: center;
   background-color: $primary-white;
   border: 1px solid $primary-blue;
+  box-sizing: border-box;
+  display: flex;
+  float: right;
+  height: 30px;
+  justify-content: center;
   margin-left: 0;
-  width: 77%;
   position: relative;
   top: -53px;
-  float: right;
+  width: 77%;
   > div {
     color: $primary-blue !important;
   }
@@ -32,7 +33,11 @@ $width: 26px;
 $wrapper-thickness: 6px;
 
 .bottomIconContainer {
+  left: -($width + 2 * $wrapper-thickness) / 2;
   position: relative;
   top: -($width + 2 * $wrapper-thickness) / 2;
-  left: -($width + 2 * $wrapper-thickness) / 2;
+}
+
+.settingsButton {
+  border: 1px solid $teal;
 }

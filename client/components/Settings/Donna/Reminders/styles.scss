@@ -7,47 +7,45 @@
 
 .outlineButton {
   background-color: transparent;
-  color: $teal;
   border: 1px solid $teal;
+  color: $teal;
+  margin-right: 12px;
 }
 
 .bottomBox {
   border-top: 1px solid $primary-blue;
 }
 
-.labelButton {
+.settingsButton {
   background: $teal;
   border: 1px solid $teal;
-  padding: 0.85714em 1.5em;
-  margin: 0 0 0 12px;
 
   &:hover {
     background: $teal-dark;
     border-color: $teal-dark;
   }
+}
 
-  .labelIcon {
-    color: $white;
-    margin-left: 10px;
-    position: relative;
-    bottom: 2px;
-  }
+.caretIcon {
+  bottom: 2px;
+  margin-left: 10px;
+  position: relative;
 }
 
 .listItem {
   background-color: $white;
-  color: $grey-dark;
-  width: 100%;
   border-bottom: 1px solid $grey-lighter;
-  text-align: left;
-  padding: 12px 10px;
-  justify-content: space-between;
-  display: flex;
   box-sizing: border-box;
+  color: $grey-dark;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 10px;
+  text-align: left;
+  width: 100%;
 
   span {
-    font-style: italic;
     font-size: 9px;
+    font-style: italic;
     margin-left: 20px;
   }
 
@@ -58,24 +56,24 @@
   }
 
   &:hover {
-    color: $teal;
     background: $grey-lightest;
+    color: $teal;
   }
 }
 
 .bottomLabel {
-  height: 30px;
-  box-sizing: border-box;
-  display: flex;
   align-items: center;
-  justify-content: center;
   background-color: $primary-white;
   border: 1px solid $primary-blue;
+  box-sizing: border-box;
+  display: flex;
+  float: right;
+  height: 30px;
+  justify-content: center;
   margin-left: 0;
-  width: 77%;
   position: relative;
   top: -53px;
-  float: right;
+  width: 77%;
 
   > div {
     color: $primary-blue !important;
@@ -87,7 +85,7 @@ $width: 26px;
 $wrapper-thickness: 6px;
 
 .bottomIconContainer {
+  left: -($width + 2 * $wrapper-thickness) / 2;
   position: relative;
   top: -($width + 2 * $wrapper-thickness) / 2;
-  left: -($width + 2 * $wrapper-thickness) / 2;
 }

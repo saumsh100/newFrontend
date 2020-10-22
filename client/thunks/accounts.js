@@ -110,6 +110,20 @@ export function updateReviewsSettings(accountId, values, alert) {
         url: `/api/accounts/${accountId}`,
         values,
         alert,
+        merge: true,
+      }),
+    );
+}
+
+export function updateRemindersSettings(accountId, values, alert) {
+  return dispatch =>
+    dispatch(
+      updateEntityRequest({
+        key: 'accounts',
+        url: `/api/accounts/${accountId}`,
+        values,
+        alert,
+        merge: true,
       }),
     );
 }

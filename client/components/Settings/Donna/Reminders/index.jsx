@@ -17,11 +17,12 @@ import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RemindersItem from './RemindersItem';
 import CreateRemindersForm from './CreateRemindersForm';
 import AdvancedSettingsForm from './AdvancedSettingsForm';
+import AdvancedRemindersSettingsForm from './AdvancedRemindersSettingsForm';
 import ReminderPreview from './ReminderPreview';
 import IconCircle from '../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
-import EnabledFeature from '../../../library/EnabledFeature';
 import CreatePhoneCall from './CreatePhoneCall';
+import { updateRemindersSettings } from '../../../../thunks/accounts';
 import styles from './styles.scss';
 
 class Reminders extends Component {
@@ -31,6 +32,7 @@ class Reminders extends Component {
     this.state = {
       isAdding: false,
       isTesting: false,
+      isCustomizing: false,
       selectedReminderId: null,
       selectedAdvancedReminderId: null,
     };
@@ -43,6 +45,7 @@ class Reminders extends Component {
     this.toggleAction = this.toggleAction.bind(this);
     this.closeAdvancedSettings = this.closeAdvancedSettings.bind(this);
     this.saveAdvancedSettingsReminder = this.saveAdvancedSettingsReminder.bind(this);
+    this.saveAdvancedSettings = this.saveAdvancedSettings.bind(this);
   }
 
   componentDidMount() {
@@ -156,6 +159,32 @@ class Reminders extends Component {
       .then(this.closeAdvancedSettings);
   }
 
+  saveAdvancedSettings(values) {
+    const { activeAccount } = this.props;
+    const { canSendRemindersToInactivePatients } = values;
+    const alert = {
+      success: {
+        title: 'Reminders Advanced Settings Updated',
+        body: 'Successfully updated the advanced settings for reminders',
+      },
+
+      error: {
+        title: 'Failed to Update Reminders Settings',
+        body: 'Error trying to update the advanced settings for reminders',
+      },
+    };
+
+    this.props
+      .updateRemindersSettings(
+        activeAccount.id,
+        {
+          canSendRemindersToInactivePatients,
+        },
+        alert,
+      )
+      .then(this.toggleAction('isCustomizing'));
+  }
+
   selectReminder(reminderId) {
     if (reminderId === this.state.selectedReminderId) {
       return;
@@ -235,39 +264,41 @@ class Reminders extends Component {
           <div>
             <Button
               color="blue"
+              compact
               onClick={() => this.toggleAction('isAdding')}
               className={styles.outlineButton}
               data-test-id="button_createNewReminder"
             >
-              Add
+              <Icon icon="plus" className={styles.labelIcon} type="solid" />
             </Button>
-            <EnabledFeature
-              predicate={({ flags }) => flags.get('voice-touchpoint-settings')}
-              render={() => (
-                <DropdownMenu
-                  labelComponent={props => (
-                    <Button {...props} compact className={styles.labelButton}>
-                      Send a Test
-                      <Icon icon="sort-down" size={1} className={styles.labelIcon} type="solid" />
-                    </Button>
-                  )}
-                  className={styles.optionMenu}
-                >
-                  <Button
-                    className={styles.listItem}
-                    onClick={() => this.toggleAction('isTesting')}
-                  >
-                    Voice
-                  </Button>
-                  <Button className={styles.listItem} disabled>
-                    SMS <span>Coming Soon</span>
-                  </Button>
-                  <Button className={styles.listItem} disabled>
-                    Email <span>Coming Soon</span>
-                  </Button>
-                </DropdownMenu>
+            <DropdownMenu
+              labelComponent={props => (
+                <Button {...props} compact color="blue" className={styles.outlineButton}>
+                  Send a Test
+                  <Icon icon="sort-down" size={1} className={styles.caretIcon} type="solid" />
+                </Button>
               )}
-            />
+              className={styles.optionMenu}
+            >
+              <Button className={styles.listItem} onClick={() => this.toggleAction('isTesting')}>
+                Voice
+              </Button>
+              <Button className={styles.listItem} disabled>
+                SMS <span>Coming Soon</span>
+              </Button>
+              <Button className={styles.listItem} disabled>
+                Email <span>Coming Soon</span>
+              </Button>
+            </DropdownMenu>
+            <Button
+              compact
+              color="blue"
+              className={styles.settingsButton}
+              onClick={() => this.toggleAction('isCustomizing')}
+              data-test-id="button_createNewReminder"
+            >
+              <Icon icon="cog" type="solid" />
+            </Button>
           </div>
         }
         leftColumn={
@@ -336,6 +367,36 @@ class Reminders extends Component {
             sendReminderPreviewCall={this.props.sendReminderPreviewCall}
           />
         )}
+        <DialogBox
+          actions={[
+            {
+              label: 'Cancel',
+              onClick: this.reinitializeState,
+              component: Button,
+              props: { border: 'blue' },
+            },
+            {
+              label: 'Save',
+              onClick: this.saveAdvancedSettings,
+              component: RemoteSubmitButton,
+              props: {
+                color: 'blue',
+                form: 'remindersAdvancedSettings',
+              },
+            },
+          ]}
+          title="Reminders Advanced Settings"
+          type="small"
+          active={this.state.isCustomizing}
+          onEscKeyDown={() => this.toggleAction('isCustomizing')}
+          onOverlayClick={() => this.toggleAction('isCustomizing')}
+        >
+          <AdvancedRemindersSettingsForm
+            form="remindersAdvancedSettings"
+            initialValues={this.props.activeAccount.toJS()}
+            onSubmit={this.saveAdvancedSettings}
+          />
+        </DialogBox>
       </CommunicationSettingsCard>
     );
   }
@@ -349,6 +410,7 @@ Reminders.propTypes = {
   createEntityRequest: PropTypes.func.isRequired,
   sendReminderPreviewCall: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
+  updateRemindersSettings: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, auth }) {
@@ -370,6 +432,7 @@ const mapDispatchToProps = dispatch =>
       createEntityRequest,
       updateEntityRequest,
       sendReminderPreviewCall,
+      updateRemindersSettings,
       reset,
     },
     dispatch,

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../../../library';
@@ -43,36 +44,26 @@ const lastSentReviewIntervalOptions = [
 
 const Question = props => <div className={styles.question} {...props} />;
 
-export default function AdvancedSettingsForm({
-  form,
-  initialValues,
-  onSubmit,
-}) {
+export default function AdvancedSettingsForm({ form, initialValues, onSubmit }) {
   const { lastReviewInterval, lastSentReviewInterval } = initialValues;
-  initialValues.lastReviewInterval =
-    lastReviewInterval === null ? 'null' : lastReviewInterval;
+  initialValues.lastReviewInterval = lastReviewInterval === null ? 'null' : lastReviewInterval;
   initialValues.lastSentReviewInterval =
     lastSentReviewInterval === null ? 'null' : lastSentReviewInterval;
   return (
     <Form
       ignoreSaveButton
+      enableReinitialize
       form={form}
       onSubmit={onSubmit}
       initialValues={initialValues}
       data-test-id={form}
     >
       <Question>
-        Do you want Donna to send Review Requests to patients with unconfirmed
-        appointments?
+        Do you want Donna to send Review Requests to patients with unconfirmed appointments?
       </Question>
-      <Field
-        component="Toggle"
-        name="sendUnconfirmedReviews"
-        className={styles.toggleWrapper}
-      />
+      <Field component="Toggle" name="sendUnconfirmedReviews" className={styles.toggleWrapper} />
       <Question>
-        If a CareCru Review is submitted by the patient, how long until Donna
-        asks again?
+        If a CareCru Review is submitted by the patient, how long until Donna asks again?
       </Question>
       <Field
         component="DropdownSelect"
@@ -81,8 +72,7 @@ export default function AdvancedSettingsForm({
         options={lastReviewIntervalOptions}
       />
       <Question>
-        If a CareCru Review is <u>not</u> submitted by the patient, how long
-        until Donna asks again?
+        If a CareCru Review is <u>not</u> submitted by the patient, how long until Donna asks again?
       </Question>
       <Field
         component="DropdownSelect"

@@ -1,4 +1,5 @@
 @import '../../../../ui';
+@import '../../../../ui-kit';
 
 .dueDateItem {
   cursor: default;
@@ -29,17 +30,17 @@
 }
 
 .bottomLabel {
-  height: 30px;
+  align-items: center;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  float: right;
+  height: 30px;
   justify-content: center;
   margin-left: 0;
-  width: 100%;
   padding-left: 74px;
   position: relative;
   top: -54px;
-  float: right;
+  width: 100%;
   > div {
     color: $primary-blue !important;
   }
@@ -64,27 +65,27 @@
 .dropdownWrapper {
   background-color: $primary-white;
   border: 1px solid $primary-blue;
-  height: 100%;
   flex: 1;
+  height: 100%;
 }
 
 .dueDateDropdown {
-  padding: 0;
   height: 100%;
+  padding: 0;
   > div:not(:last-child) {
+    border-bottom: none;
+    box-sizing: border-box;
     color: black;
     font-size: 11px;
-    border-bottom: none;
+    height: 100%;
     padding-left: 6px;
     padding-right: 6px;
-    height: 100%;
-    box-sizing: border-box;
     > div > label {
+      color: $primary-darkgrey;
+      font-size: 9px !important;
+      text-transform: uppercase;
       // font-family: $medium-font;
       top: -15px !important;
-      color: $primary-darkgrey;
-      text-transform: uppercase;
-      font-size: 9px !important;
     }
   }
 
@@ -98,9 +99,9 @@ $width: 26px;
 $wrapper-thickness: 6px;
 
 .bottomIconContainer {
+  left: -($width + 2 * $wrapper-thickness) / 2;
   position: relative;
   top: -($width + 2 * $wrapper-thickness) / 2;
-  left: -($width + 2 * $wrapper-thickness) / 2;
 }
 
 .filledLabel {
@@ -109,4 +110,8 @@ $wrapper-thickness: 6px;
 
 .revertButton {
   margin-right: 12px;
+}
+
+.settingsButton {
+  border: 1px solid $teal;
 }
