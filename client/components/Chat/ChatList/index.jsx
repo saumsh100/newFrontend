@@ -1,8 +1,8 @@
 
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Map } from 'immutable';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PatientModel from '../../../entities/models/Patient';
@@ -17,27 +17,8 @@ import ChatListSkeleton from './ChatListSkeleton';
 class ChatListContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = { loaded: false };
     this.removeNewChat = this.removeNewChat.bind(this);
     this.selectNewChat = this.selectNewChat.bind(this);
-  }
-
-  componentDidUpdate(prevProps) {
-    const { chats } = this.props;
-    if (prevProps.chats.size !== chats.size) {
-      this.setLoaded();
-    }
-  }
-
-  setLoaded() {
-    const { loaded } = this.state;
-    const { isLoading } = this.props;
-
-    if (!loaded) {
-      this.setState({
-        loaded: Array.isArray(this.sortedChats()) && !isLoading,
-      });
-    }
   }
 
   sortedChats() {
@@ -63,10 +44,9 @@ class ChatListContainer extends Component {
   }
 
   renderChatList() {
-    const { loaded } = this.state;
-    const { onChatClick } = this.props;
+    const { isLoading, onChatClick } = this.props;
 
-    if (!loaded) {
+    if (isLoading) {
       return <ChatListSkeleton />;
     }
 

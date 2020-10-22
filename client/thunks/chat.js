@@ -11,6 +11,7 @@ import {
   setChatMessages,
   setChatCategoriesCount,
   setChatPoC,
+  setConversationIsLoading,
   setLockedChats,
   setNewChat,
   setPatientChat,
@@ -327,8 +328,6 @@ export function loadChatMessages(chatId, offset = 0, limit = 15) {
 
     const url = `/api/chats/${chatId}/textMessages?skip=${offset}&limit=${limit}`;
 
-    dispatch(setChatIsLoading(true));
-
     return httpClient()
       .get(url)
       .then(({ data }) => {
@@ -387,8 +386,6 @@ export function getChatEntity(id) {
     const { chat, entities } = getState();
     const storedEntity = entities.getIn(['chats', 'models', id]);
 
-    dispatch(setChatIsLoading(true));
-
     return (
       storedEntity ||
       httpClient()
@@ -419,11 +416,10 @@ export function selectChat(id, createChat = null) {
       return;
     }
 
-    dispatch(setChatIsLoading(true));
-
     const chatEntity = await dispatch(getChatEntity(id)).then(data =>
       (data === null ? data : data.delete('textMessages')));
 
+    dispatch(setConversationIsLoading(true));
     dispatch(setNewChat(createChat));
     dispatch(setSelectedChat(chatEntity));
 
@@ -444,7 +440,7 @@ export function selectChat(id, createChat = null) {
 
     dispatch(unlockChat(id));
     dispatch(loadChatMessages(id));
-    dispatch(setChatIsLoading(false));
+    dispatch(setConversationIsLoading(false));
 
     return chatEntity;
   };

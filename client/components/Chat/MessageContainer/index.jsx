@@ -341,7 +341,7 @@ class MessageContainer extends Component {
 
   render() {
     const { loadingMessages, loadedMessages } = this.state;
-    const { isLoading, selectedChat, newChat, totalChatMessages } = this.props;
+    const { conversationIsLoading, selectedChat, newChat, totalChatMessages } = this.props;
 
     const hasMoreMessages = totalChatMessages > loadedMessages;
     const chat = selectedChat || Object.assign({}, newChat, { id: 'newChat' });
@@ -361,7 +361,7 @@ class MessageContainer extends Component {
             hasMore={hasMoreMessages && !loadingMessages}
             threshold={100}
           >
-            {selectedChat && !isLoading && this.renderMessagesTree()}
+            {selectedChat && !conversationIsLoading && this.renderMessagesTree()}
             <div className={styles.raise} />
           </InfiniteScroll>
         </SBody>
@@ -391,7 +391,7 @@ function mapStateToProps({ entities, auth, chat }) {
   const selectedPatient = (selectedChat && getPatient(selectedChat)) || {};
 
   return {
-    isLoading: chat.get('isLoading'),
+    conversationIsLoading: chat.get('conversationIsLoading'),
     textMessages,
     selectedChat,
     totalChatMessages,
@@ -419,7 +419,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 MessageContainer.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
+  conversationIsLoading: PropTypes.bool.isRequired,
   textMessages: PropTypes.oneOfType([
     PropTypes.arrayOf(ChatTextMessage),
     PropTypes.instanceOf(OrderedMap),

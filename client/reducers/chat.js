@@ -9,6 +9,7 @@ export const SET_SELECTED_CHAT = `${reducer}/SET_SELECTED_CHAT`;
 export const UPDATE_CHAT_ID = `${reducer}/UPDATE_CHAT_ID`;
 export const SET_NEW_CHAT = `${reducer}/SET_NEW_CHAT`;
 export const SET_CHAT_IS_LOADING = `${reducer}/SET_CHAT_IS_LOADING`;
+export const SET_CONVERSATION_IS_LOADING = `${reducer}/SET_CONVERSATION_IS_LOADING`;
 export const SET_UNREAD_CHATS = `${reducer}/SET_UNREAD_CHATS`;
 export const SET_UNREAD_CHATS_COUNT = `${reducer}/SET_UNREAD_CHATS_COUNT`;
 export const SET_CHAT_MESSAGES = `${reducer}/SET_CHAT_MESSAGES`;
@@ -26,6 +27,7 @@ export const setSelectedChat = createAction(SET_SELECTED_CHAT);
 export const updateChatId = createAction(UPDATE_CHAT_ID);
 export const setNewChat = createAction(SET_NEW_CHAT);
 export const setChatIsLoading = createAction(SET_CHAT_IS_LOADING);
+export const setConversationIsLoading = createAction(SET_CONVERSATION_IS_LOADING);
 export const setUnreadChats = createAction(SET_UNREAD_CHATS);
 export const setUnreadChatsCount = createAction(SET_UNREAD_CHATS_COUNT);
 export const setChatMessages = createAction(SET_CHAT_MESSAGES);
@@ -54,7 +56,8 @@ export const initialState = Map({
   totalChatMessages: 0,
   chatCategoriesCount: {},
   isFetchingProspect: false,
-  isLoading: false,
+  isLoading: true,
+  conversationIsLoading: false,
   prospect: null,
 });
 
@@ -76,6 +79,10 @@ export default handleActions(
 
     [SET_CHAT_IS_LOADING](state, { payload }) {
       return state.set('isLoading', payload);
+    },
+
+    [SET_CONVERSATION_IS_LOADING](state, { payload }) {
+      return state.set('conversationIsLoading', payload);
     },
 
     [SET_UNREAD_CHATS](state, { payload }) {

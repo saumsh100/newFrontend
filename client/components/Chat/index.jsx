@@ -7,6 +7,7 @@ import Skeleton from 'react-loading-skeleton';
 import classnames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { CHAT_PAGE } from '../../constants/PageTitle';
+import { setChatIsLoading } from '../../reducers/chat';
 import { setBackHandler, setTitle } from '../../reducers/electron';
 import {
   cleanChatList,
@@ -80,10 +81,14 @@ class ChatMessage extends Component {
 
   componentDidMount() {
     this.props.getChatCategoryCounts();
-    this.props.fetchEntitiesRequest({
-      id: 'dashAccount',
-      key: 'accounts',
-    });
+    this.props
+      .fetchEntitiesRequest({
+        id: 'dashAccount',
+        key: 'accounts',
+      })
+      .then(() => {
+        this.props.setChatIsLoading(false);
+      });
     this.selectChatIfIdIsProvided(this.props.match.params.chatId);
   }
 
@@ -236,10 +241,10 @@ class ChatMessage extends Component {
   }
 
   showPatientInfo() {
-    const { chatsFetching, isLoading } = this.props;
+    const { conversationIsLoading } = this.props;
     const { showPatientInfo } = this.state;
 
-    if (chatsFetching || isLoading) {
+    if (conversationIsLoading) {
       return <DesktopSkeleton />;
     }
 
@@ -284,7 +289,7 @@ class ChatMessage extends Component {
 
   renderMessageContainer() {
     const { showPatientInfo, tabIndex } = this.state;
-    const { isLoading } = this.props;
+    const { conversationIsLoading } = this.props;
     const patientInfoStyle = classnames(styles.rightSplit, {
       [styles.slideIn]: showPatientInfo,
       [styles.hubRightSplit]: isHub(),
@@ -298,7 +303,7 @@ class ChatMessage extends Component {
         <div className={styles.splitWrapper}>
           <div className={container}>
             <SHeader className={styles.messageHeader}>
-              {isLoading ? (
+              {conversationIsLoading ? (
                 <HeaderSkeleton />
               ) : (
                 <ToHeader
@@ -310,7 +315,7 @@ class ChatMessage extends Component {
                 />
               )}
             </SHeader>
-            {!isLoading && (
+            {!conversationIsLoading && (
               <MessageContainer
                 setTab={this.changeTab}
                 selectChatOrCreate={this.selectChatOrCreate}
@@ -404,8 +409,9 @@ ChatMessage.propTypes = {
   toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
   getChatEntity: PropTypes.func.isRequired,
   getChatCategoryCounts: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  conversationIsLoading: PropTypes.bool.isRequired,
   selectChatByPatientId: PropTypes.func.isRequired,
+  setChatIsLoading: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ apiRequests, chat, electron }) {
@@ -415,9 +421,9 @@ function mapStateToProps({ apiRequests, chat, electron }) {
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('isFetching');
 
   return {
-    isLoading: chat.get('isLoading'),
     wasChatsFetched,
     chatsFetching,
+    conversationIsLoading: chat.get('conversationIsLoading'),
     toolbarPosition: electron.get('toolbarPosition'),
   };
 }
@@ -439,6 +445,7 @@ function mapDispatchToProps(dispatch) {
       getChatEntity,
       getChatCategoryCounts,
       selectChatByPatientId,
+      setChatIsLoading,
     },
     dispatch,
   );
