@@ -371,7 +371,7 @@ class Reminders extends Component {
           actions={[
             {
               label: 'Cancel',
-              onClick: this.reinitializeState,
+              onClick: () => this.toggleAction('isCustomizing'),
               component: Button,
               props: { border: 'blue' },
             },
