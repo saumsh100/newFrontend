@@ -35,7 +35,12 @@ class PractitionerList extends Component {
 
   componentDidMount() {
     const firstInList = this.state.filter.apply(this.props.practitioners).toArray()[0];
-    firstInList && this.props.setPractitionerId({ id: firstInList.get('id') });
+    if (firstInList) {
+      this.props.setPractitionerId({ id: firstInList.get('id') });
+      this.setState({
+        activePractitioner: firstInList,
+      });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -175,7 +180,7 @@ class PractitionerList extends Component {
               </DialogBox>
             </SHeader>
             <SBody>
-              {this.state.activePractitioner &&
+              {activePractitioner &&
                 filteredPractitioners
                   .toArray()
                   .map(practitioner => (
