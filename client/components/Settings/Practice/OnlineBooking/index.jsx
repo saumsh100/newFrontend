@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
@@ -46,7 +45,7 @@ class OnlineBooking extends Component {
       return null;
     }
 
-    const location = useLocation();
+    const { location } = window;
     const port = location.port ? `:${location.port}` : '';
     const snippet = `<script type="text/javascript" src="${location.protocol}//my.${
       location.hostname
