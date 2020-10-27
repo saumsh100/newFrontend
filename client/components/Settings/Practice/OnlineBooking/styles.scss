@@ -33,15 +33,19 @@
 }
 
 .label {
-  padding-top: 15px;
   color: $primary-dark;
-  font-weight: $large-weight;
   font-size: $medium-font;
+  font-weight: $large-weight;
   padding-bottom: 5px;
+  padding-top: 15px;
 }
 
 .chairSchedulingToggleWrapper {
   > div > div {
     margin-left: 20px;
   }
+}
+
+.inputFieldWrapper {
+  width: 400px;
 }

@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
@@ -10,6 +11,7 @@ import accountModel from '../../../../entities/models/Account';
 import PreferencesForm from './PreferencesForm';
 import IntervalForm from './IntervalForm';
 import ChairSchedulingForm from './ChairSchedulingForm';
+import SchedulingUrlForm from './SchedulingUrlForm';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
@@ -44,8 +46,7 @@ class OnlineBooking extends Component {
       return null;
     }
 
-    const location = window.location;
-
+    const location = useLocation();
     const port = location.port ? `:${location.port}` : '';
     const snippet = `<script type="text/javascript" src="${location.protocol}//my.${
       location.hostname
@@ -71,6 +72,10 @@ class OnlineBooking extends Component {
         <div className={styles.formContainer}>
           <Header title="Chair Scheduling" contentHeader />
           <ChairSchedulingForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
+        </div>
+        <div className={styles.formContainer}>
+          <Header title="Online Scheduling URL" contentHeader />
+          <SchedulingUrlForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
         </div>
       </SettingsCard>
     );

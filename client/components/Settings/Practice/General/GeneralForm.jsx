@@ -29,7 +29,7 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
     const { useNotificationEmails } = formValues;
     const currentVal = e.target.value;
     const previousVal = formValues.notificationEmails;
-    const onInitialChange = previousVal.length === 0 && currentVal.length === 1;
+    const onInitialChange = previousVal.length === 0 && currentVal.length > 0;
 
     if (currentVal.length === 0 && useNotificationEmails === true) {
       change('useNotificationEmails', false);

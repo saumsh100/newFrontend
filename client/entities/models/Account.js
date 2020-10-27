@@ -58,6 +58,7 @@ const AccountSchema = {
   displayNameOption: null,
   notificationEmails: [],
   useNotificationEmails: false,
+  onlineBookingUrl: null,
   canSendRemindersToInactivePatients: null,
 };
 
