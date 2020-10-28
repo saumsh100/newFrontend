@@ -9,13 +9,13 @@
 }
 
 .bubbleBody {
-  border-radius: 18px;
-  line-height: 18px;
   // font-size: 13px;
   padding: 6px 12px;
+  border-radius: 18px;
   text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
+  line-height: 18px;
 }
 
 .fromPatientBody {
@@ -25,8 +25,8 @@
 
 .fromClinicBody {
   background-color: $primary-blue;
-  border-bottom-right-radius: 0;
   color: white;
+  border-bottom-right-radius: 0;
 }
 
 .fromClinicBodyHub {
@@ -35,8 +35,8 @@
 }
 
 .bubbleTime {
-  color: $primary-gray;
   font-size: 9px;
+  color: $primary-gray;
   padding-top: 5px;
 }
 
@@ -49,5 +49,6 @@
 }
 
 .failedMessage {
-  opacity: 0.5;
+  background-color: $clr-bg-dark-grey;
+  color: $clr-dark-grey;
 }

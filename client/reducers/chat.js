@@ -5,8 +5,6 @@ import tabConstants from '../components/Chat/consts';
 
 const reducer = '@chat';
 
-export const ADD_PENDING_MESSAGE = `${reducer}/ADD_PENDING_MESSAGE`;
-export const PRUNE_PENDING_MESSAGES = `${reducer}/PRUNE_PENDING_MESSAGES`;
 export const SET_SELECTED_CHAT = `${reducer}/SET_SELECTED_CHAT`;
 export const UPDATE_CHAT_ID = `${reducer}/UPDATE_CHAT_ID`;
 export const SET_NEW_CHAT = `${reducer}/SET_NEW_CHAT`;
@@ -25,8 +23,6 @@ export const SET_CHAT_CATEGORIES_COUNT = `${reducer}/SET_CHAT_CATEGORIES_COUNT`;
 export const SET_IS_FETCHING_PROSPECT = `${reducer}/SET_IS_FETCHING_PROSPECT`;
 export const SET_PROSPECT = `${reducer}/SET_PROSPECT`;
 
-export const addPendingMessage = createAction(ADD_PENDING_MESSAGE);
-export const prunePendingMessages = createAction(PRUNE_PENDING_MESSAGES);
 export const setSelectedChat = createAction(SET_SELECTED_CHAT);
 export const updateChatId = createAction(UPDATE_CHAT_ID);
 export const setNewChat = createAction(SET_NEW_CHAT);
@@ -62,20 +58,11 @@ export const initialState = Map({
   isFetchingProspect: false,
   isLoading: true,
   conversationIsLoading: false,
-  pendingMessages: [],
   prospect: null,
 });
 
 export default handleActions(
   {
-    [ADD_PENDING_MESSAGE](state, { payload }) {
-      return state.set('pendingMessages', [...state.get('pendingMessages'), payload]);
-    },
-
-    [PRUNE_PENDING_MESSAGES](state) {
-      return state.set('pendingMessages', []);
-    },
-
     [UPDATE_CHAT_ID](state) {
       const selectedChatId =
         (state.get('selectedChat') && state.get('selectedChat').get('id')) || null;
