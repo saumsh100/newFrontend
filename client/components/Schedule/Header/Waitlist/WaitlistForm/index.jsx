@@ -165,7 +165,10 @@ const WaitlistForm = ({
     return getAllTimeSlots(options);
   }, [timeOptions]);
 
-  const timePickers = getTimePickers(selectedTimes, timeSlots, onToggleTimePicker);
+  const getTimePickersMemo = useMemo(
+    () => getTimePickers(selectedTimes, timeSlots, onToggleTimePicker),
+    [onToggleTimePicker, selectedTimes, timeSlots],
+  );
 
   return (
     <div className={styles.waitlistFormContainer}>
@@ -265,7 +268,7 @@ const WaitlistForm = ({
                   handleSelection={handleSelection}
                 />
               )}
-              extraPickers={timePickers}
+              extraPickers={getTimePickersMemo}
               shouldCheckUpdate
             />
             <DropdownSelect
