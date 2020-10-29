@@ -1,40 +1,42 @@
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
 import classNames from 'classnames';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React from 'react';
 import TextMessageModel from '../../../../entities/models/TextMessage';
 import { isHub } from '../../../../util/hub';
+import RetryMessage from '../RetryMessage/RetryMessage';
 import styles from './styles.scss';
 
-function MessageBubble(props) {
-  const { textMessage, isFromPatient } = props;
-  const smsStatus = textMessage.get('smsStatus');
-  const failedMessage = smsStatus && smsStatus === 'failed';
-
+const MessageBubble = ({ isFromPatient, textMessage }) => {
+  const status = textMessage.get('smsStatus');
+  const hasFailed = status === 'failed';
   const bodyClasses = classNames(styles.bubbleBody, {
     [styles.fromPatientBody]: isFromPatient,
     [styles.fromClinicBodyHub]: !isFromPatient && isHub(),
     [styles.fromClinicBody]: !isFromPatient && !isHub(),
-    [styles.failedMessage]: !isFromPatient && failedMessage,
+    [styles.failedMessage]: !isFromPatient && hasFailed,
   });
-
   const timeClasses = classNames(styles.bubbleTime, {
     [styles.fromPatientTime]: isFromPatient,
     [styles.fromClinicTime]: !isFromPatient,
   });
+  const body = textMessage.get('body');
+  const time = moment(textMessage.get('createdAt')).format('h:mm a');
 
   return (
     <div className={styles.bubbleWrapper}>
-      <div className={bodyClasses}>{textMessage.get('body')}</div>
-      <div className={timeClasses}>{moment(textMessage.get('createdAt')).format('h:mm a')}</div>
+      <div className={bodyClasses}>{body}</div>
+      <div className={timeClasses}>
+        {hasFailed ? <RetryMessage message={textMessage} /> : `Sent - ${time}`}
+      </div>
     </div>
   );
-}
+};
 
 MessageBubble.propTypes = {
-  textMessage: PropTypes.instanceOf(TextMessageModel).isRequired,
   isFromPatient: PropTypes.bool,
+  textMessage: PropTypes.instanceOf(TextMessageModel).isRequired,
 };
 
 MessageBubble.defaultProps = {

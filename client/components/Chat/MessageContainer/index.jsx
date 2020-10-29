@@ -1,46 +1,58 @@
 
-import React, { Component, createRef } from 'react';
-import PropTypes from 'prop-types';
 import { OrderedMap } from 'immutable';
-import isEmpty from 'lodash/isEmpty';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
-import classNames from 'classnames';
-import moment from 'moment';
-import {
-  Avatar,
-  SContainer,
-  SBody,
-  SFooter,
-  Icon,
-  Tooltip,
-  Button,
-  InfiniteScroll,
-} from '../../library';
-import MessageBubble from './MessageBubble';
-import MessageTextArea from './MessageTextArea';
-import {
-  sendChatMessage,
-  createNewChat,
-  selectChat,
-  markAsUnread,
-  resendMessage,
-  loadChatMessages,
-  getChatCategoryCounts,
-} from '../../../thunks/chat';
 import ChatTextMessage from '../../../entities/models/TextMessage';
+import { addPendingMessage } from '../../../reducers/chat';
+import {
+  createNewChat,
+  getChatCategoryCounts,
+  loadChatMessages,
+  markAsUnread,
+  selectChat,
+  sendChatMessage,
+} from '../../../thunks/chat';
+import { Avatar, Icon, InfiniteScroll, SBody, SContainer, SFooter, Tooltip } from '../../library';
 import chatTabs from '../consts';
 import UnknownPatient from '../unknownPatient';
+import MarkUnreadButton from './MarkUnreadButton/MarkUnreadButton';
+import MessageBubble from './MessageBubble';
+import MessageTextArea from './MessageTextArea';
+import PendingMessages from './PendingMessages/PendingMessages';
 import styles from './styles.scss';
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 15;
 
+const getMessageTime = message =>
+  moment(message).calendar(null, {
+    sameDay: '[Today], h:mm a',
+    nextDay: '[Tomorrow]',
+    nextWeek: 'dddd',
+    lastDay: '[Yesterday], h:mm a',
+    lastWeek: '[Last] dddd h:mm a',
+    sameElse: 'YYYY/MM/DD, h:mm a',
+  });
+
+const isWithinTimePeriod = (
+  startDate,
+  testingDate,
+  maxIntervalValue = 1,
+  maxIntervalUnit = 'hours',
+) => moment(startDate).diff(moment(testingDate), maxIntervalUnit) > -Math.abs(maxIntervalValue);
+
+const botAvatar = {
+  fullAvatarUrl: '/images/donna.png',
+  bot: true,
+};
+
 class MessageContainer extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       currentlySelectedChat: null,
       sendingMessage: false,
@@ -48,7 +60,6 @@ class MessageContainer extends Component {
       offset: DEFAULT_OFFSET,
       loadedMessages: 0,
     };
-
     this.scrollContainer = createRef();
     this.optionsWrapper = createRef();
     this.failedMessageWrapper = createRef();
@@ -92,123 +103,101 @@ class MessageContainer extends Component {
     }
   }
 
-  getMessageTime(message) {
-    return moment(message).calendar(null, {
-      sameDay: '[Today], h:mm a',
-      nextDay: '[Tomorrow]',
-      nextWeek: 'dddd',
-      lastDay: '[Yesterday], h:mm a',
-      lastWeek: '[Last] dddd h:mm a',
-      sameElse: 'YYYY/MM/DD, h:mm a',
-    });
-  }
-
   loadMoreMessages() {
-    const { selectedChat, textMessages } = this.props;
-    if (!selectedChat || !selectedChat.id) {
+    const {
+      selectedChat: { id: chatId },
+      textMessages,
+    } = this.props;
+    if (!chatId) {
       return;
     }
 
     this.setState(
       {
-        offset: textMessages.size,
         loadingMessages: true,
+        offset: textMessages.size,
       },
       () => {
         const { offset } = this.state;
-        this.props.loadChatMessages(selectedChat.id, offset, DEFAULT_LIMIT).then(() => {
+        this.props.loadChatMessages(chatId, offset, DEFAULT_LIMIT).then(() => {
           this.setState({ loadingMessages: false });
         });
       },
     );
   }
 
-  sendMessageHandler(values) {
-    if (this.state.sendingMessage) return;
-
+  sendMessageHandler({ message }) {
+    if (this.state.sendingMessage || !message) return;
     this.setState({ sendingMessage: true });
-
     const accountId = this.props.activeAccount.id;
-    const { selectedPatient, selectedChat, userId } = this.props;
-    const { cellPhoneNumber } = selectedPatient;
-
-    if (!values.message) return;
+    const {
+      selectedPatient: { cellPhoneNumber, id },
+      selectedChat: { id: chatId },
+      userId,
+    } = this.props;
 
     const patient = {
-      id: this.props.selectedPatient.id,
-      cellPhoneNumber,
       accountId,
+      cellPhoneNumber,
+      id,
     };
 
-    const requestObject = {
-      message: values.message,
+    const request = {
+      addedAt: Date.now(),
+      message,
       patient,
       userId,
     };
 
-    if (selectedChat && selectedChat.id) {
-      requestObject.chatId = selectedChat.id;
+    if (chatId) {
+      request.chatId = chatId;
     }
 
-    if (!requestObject.chatId) {
-      this.createNewChat(requestObject)
+    this.props.addPendingMessage(request);
+
+    if (!chatId) {
+      this.props.reset('chatMessageForm_newChat');
+      this.props
+        .createNewChat(request)
         .then((chat) => {
-          requestObject.chatId = Object.keys(chat.chats)[0];
-          return this.sendMessage(requestObject);
-        })
-        .then(() => {
-          this.props.selectChat(requestObject.chatId);
+          request.chatId = Object.keys(chat.chats)[0];
+          this.props.sendChatMessage(request);
           this.props.setTab(chatTabs.ALL_TAB);
-          this.props.reset('chatMessageForm_newChat');
-          this.setState({ sendingMessage: false });
         })
-        .catch(() => {
+        .finally(() => {
           this.setState({ sendingMessage: false });
         });
       return;
     }
 
-    this.sendMessage(requestObject)
-      .then(() => this.props.reset(`chatMessageForm_${selectedChat.id}`))
-      .then(() => this.setState({ sendingMessage: false }))
-      .then(() => {
-        this.props.selectChat(selectedChat.id);
-      })
-      .catch(() => this.setState({ sendingMessage: false }));
+    this.props.reset(`chatMessageForm_${chatId}`);
+    this.props
+      .sendChatMessage(request)
+      .then(() => this.props.selectChat(chatId))
+      .finally(() => {
+        this.setState({ sendingMessage: false });
+      });
   }
 
-  sendMessage(request) {
-    return this.props.sendChatMessage(request);
-  }
-
-  createNewChat(request) {
-    return this.props.createNewChat(request);
-  }
-
-  isWithinTimePeriod(startDate, testingDate, maxIntervalValue = 1, maxIntervalUnit = 'hours') {
-    const firstDate = moment(startDate);
-    const secondDate = moment(testingDate);
-    return firstDate.diff(secondDate, maxIntervalUnit) > -Math.abs(maxIntervalValue);
-  }
-
-  groupChatMessages(textMessages) {
+  groupChatMessages() {
+    const { textMessages } = this.props;
     const group = [];
     let currentGroup = { messages: [] };
 
     textMessages.forEach((message) => {
+      const { createdAt } = message;
       if (!currentGroup.time) {
-        currentGroup.time = message.createdAt;
+        currentGroup.time = createdAt;
       }
 
       if (currentGroup.messages.length === 0) {
         return currentGroup.messages.push(message);
       }
 
-      if (!this.isWithinTimePeriod(currentGroup.time, message.createdAt)) {
+      if (!isWithinTimePeriod(currentGroup.time, createdAt)) {
         group.push(currentGroup);
-
         currentGroup = {
-          time: message.createdAt,
+          time: createdAt,
           messages: [],
         };
       }
@@ -221,89 +210,35 @@ class MessageContainer extends Component {
   }
 
   renderMessageGroup(messages) {
-    const { selectedPatient } = this.props;
+    const { pendingMessages, selectedPatient } = this.props;
     const activeAccount = this.props.activeAccount.toJS();
-    const accountTwilio = activeAccount.twilioPhoneNumber;
-    const botAvatar = {
-      fullAvatarUrl: '/images/donna.png',
-      bot: true,
-    };
 
-    return messages.map((message) => {
-      const isFromPatient = message.get('from') !== accountTwilio;
-      const patientId = !isEmpty(selectedPatient) ? selectedPatient.get('id') : null;
+    if (!Array.isArray(messages) || messages.length < 1) {
+      return null;
+    }
 
-      const dotsIcon = (
-        <Icon icon="ellipsis-h" size={2} className={styles.dotsIcon} id={`dots_${message.id}`} />
-      );
+    const isPending = message =>
+      Boolean(message.get('id')) &&
+      !pendingMessages.includes(pending => pending.id === message.get('id'));
 
-      const markUnreadText = (
-        <Button
-          className={styles.markUnreadButton}
-          data-test-id="chat_markUnreadBtn"
-          onClick={() => {
-            this.props.markAsUnread(message.get('chatId'), message.get('createdAt'));
-            this.props.getChatCategoryCounts();
-          }}
-        >
-          Mark unread
-        </Button>
-      );
-
-      const resendMessageButton = (
-        <Button
-          className={styles.markUnreadButton}
-          onClick={() =>
-            this.props.resendMessage(message.get('id'), patientId, message.get('chatId'))
-          }
-        >
-          Failed to send message, click to retry.
-        </Button>
-      );
-
+    return messages.filter(isPending).map((message) => {
+      const isFromPatient = message.get('from') !== activeAccount.twilioPhoneNumber;
       let avatarUser = selectedPatient;
 
       if (!isFromPatient) {
         avatarUser = message.user && message.user.id ? message.user : botAvatar;
       }
 
-      const isBot = avatarUser && avatarUser.bot;
-      const avatarStyles = classNames(styles.bubbleAvatar, { [styles.botAvatar]: isBot });
-
-      const avatar = (
-        <Avatar size="xs" className={avatarStyles} user={avatarUser} isPatient={isFromPatient} />
-      );
-
-      const failedMessage = message.get('smsStatus') === 'failed' && (
-        <div className={styles.failedMessage} ref={this.failedMessageWrapper}>
-          <Tooltip
-            trigger={['hover']}
-            overlay={resendMessageButton}
-            placement="left"
-            getTooltipContainer={() => this.failedMessageWrapper.current}
-          >
-            <div>
-              <Icon className={styles.failedMessageWarning} icon="exclamation-circle" size={2} />
-            </div>
-          </Tooltip>
-        </div>
-      );
-
-      const messageOptions = isFromPatient && (
-        <div
-          className={styles.dotsWrapper}
-          data-test-id="chat_unreadDots"
-          ref={this.optionsWrapper}
-        >
-          <Tooltip
-            trigger={['hover']}
-            overlay={markUnreadText}
-            placement="right"
-            getTooltipContainer={() => this.optionsWrapper.current}
-          >
-            <div className={styles.dotsIconWrapper}>{dotsIcon}</div>
-          </Tooltip>
-        </div>
+      const hasFailed = message.get('smsStatus') === 'failed';
+      const avatar = hasFailed ? (
+        <Icon className={styles.avatar__failed} icon="exclamation-circle" size={2} type="solid" />
+      ) : (
+        <Avatar
+          size="xs"
+          className={styles.bubbleAvatar}
+          user={avatarUser}
+          isPatient={isFromPatient}
+        />
       );
 
       return (
@@ -313,10 +248,36 @@ class MessageContainer extends Component {
             className={isFromPatient ? styles.patientMessage : styles.clinicMessage}
           >
             {isFromPatient && avatar}
-            {failedMessage}
             <MessageBubble textMessage={message} isFromPatient={isFromPatient} />
             {!isFromPatient && avatar}
-            {messageOptions}
+            {isFromPatient && (
+              <div
+                className={styles.dotsWrapper}
+                data-test-id="chat_unreadDots"
+                ref={this.optionsWrapper}
+              >
+                <Tooltip
+                  getTooltipContainer={() => this.optionsWrapper.current}
+                  overlay={
+                    <MarkUnreadButton
+                      chatId={message.get('chatId')}
+                      createdAt={message.get('createdAt')}
+                    />
+                  }
+                  placement="right"
+                  trigger={['hover']}
+                >
+                  <div className={styles.dotsIconWrapper}>
+                    <Icon
+                      icon="ellipsis-h"
+                      size={2}
+                      className={styles.dotsIcon}
+                      id={`dots_${message.id}`}
+                    />
+                  </div>
+                </Tooltip>
+              </div>
+            )}
           </div>
         </div>
       );
@@ -324,16 +285,13 @@ class MessageContainer extends Component {
   }
 
   renderMessagesTree() {
-    const { textMessages } = this.props;
-
-    return this.groupChatMessages(textMessages).map((group, index) => {
-      const headingContent =
-        group.messages.length !== 0 ? this.getMessageTime(group.time) : 'No messages';
+    return this.groupChatMessages().map(({ messages, time }, index) => {
+      const heading = messages.length !== 0 ? getMessageTime(time) : 'No messages';
 
       return (
-        <div className={styles.groupWrapper} key={group.time || index}>
-          <div className={styles.time}>{headingContent}</div>
-          <div>{this.renderMessageGroup(group.messages)}</div>
+        <div className={styles.groupWrapper} key={time || index}>
+          <div className={styles.time}>{heading}</div>
+          <div>{this.renderMessageGroup(messages)}</div>
         </div>
       );
     });
@@ -361,6 +319,7 @@ class MessageContainer extends Component {
             hasMore={hasMoreMessages && !loadingMessages}
             threshold={100}
           >
+            {selectedChat && !conversationIsLoading && <PendingMessages />}
             {selectedChat && !conversationIsLoading && this.renderMessagesTree()}
             <div className={styles.raise} />
           </InfiniteScroll>
@@ -383,6 +342,7 @@ function mapStateToProps({ entities, auth, chat }) {
   const patients = entities.getIn(['patients', 'models']);
   const selectedChatId = chat.get('selectedChatId');
   const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
+  const pendingMessages = chat.get('pendingMessages');
   const prospect = chat.get('prospect');
   const textMessages = chat.get('chatMessages');
   const totalChatMessages = chat.get('totalChatMessages');
@@ -399,18 +359,19 @@ function mapStateToProps({ entities, auth, chat }) {
     newChat: chat.get('newChat'),
     userId: auth.getIn(['user', 'id']),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+    pendingMessages,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
+      addPendingMessage,
       selectChat,
       reset,
       sendChatMessage,
       createNewChat,
       markAsUnread,
-      resendMessage,
       loadChatMessages,
       getChatCategoryCounts,
     },
@@ -439,17 +400,20 @@ MessageContainer.propTypes = {
   reset: PropTypes.func.isRequired,
   sendChatMessage: PropTypes.func.isRequired,
   createNewChat: PropTypes.func.isRequired,
-  markAsUnread: PropTypes.func.isRequired,
-  resendMessage: PropTypes.func.isRequired,
   setTab: PropTypes.func.isRequired,
   loadChatMessages: PropTypes.func.isRequired,
-  getChatCategoryCounts: PropTypes.func.isRequired,
+  addPendingMessage: PropTypes.func.isRequired,
+  pendingMessages: PropTypes.oneOfType([
+    PropTypes.arrayOf(ChatTextMessage),
+    PropTypes.instanceOf(OrderedMap),
+  ]),
 };
 
 MessageContainer.defaultProps = {
-  selectedPatient: null,
   newChat: null,
   selectedChat: null,
+  selectedPatient: null,
+  pendingMessages: [],
 };
 
 const enhance = connect(

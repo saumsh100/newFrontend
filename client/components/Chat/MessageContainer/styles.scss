@@ -1,37 +1,51 @@
 @import '../../../ui';
 
 .time {
-  text-align: center;
-  margin: 10px 0;
-  font-size: 12px;
   color: $inactive-color;
+  font-size: 12px;
+  margin: 10px 0;
+  text-align: center;
 }
 
 .bubbleAvatar {
   margin-top: -38px;
 }
 
+.avatar__failed {
+  background-color: transparent;
+  color: $danger-color;
+  margin-bottom: 15px;
+  opacity: 1;
+  padding: 3px;
+}
+
 .botAvatar {
   background: $primary-white;
   border: 1px solid lighten($primary-blue, 50%);
-  width: 1.377rem;
-  min-width: 1.377rem;
   height: 1.377rem;
   min-height: 1.377rem;
+  min-width: 1.377rem;
+  width: 1.377rem;
 
   & > img {
-    width: 42px;
-    padding-top: 15px;
     padding-right: 2px;
+    padding-top: 15px;
+    width: 42px;
   }
 }
 
+.dotsIcon {
+  cursor: pointer;
+  line-height: 0;
+  margin-left: 10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
 .messageWrapper {
-  // display: flex;
-  // flex-direction: row;
-  width: 100%;
-  padding: 10px 20px;
   box-sizing: border-box;
+  padding: 10px 20px;
+  width: 100%;
 
   &:hover,
   .visibleOptions {
@@ -41,34 +55,23 @@
   }
 }
 
+.messageWrapper--hidden {
+  display: none;
+}
+
 .dotsIconWrapper {
   height: 5px;
 }
 
-.dotsIcon {
-  opacity: 0;
-  transition: opacity 0.3s;
-  line-height: 0;
-  margin-left: 10px;
-  cursor: pointer;
-}
-
-.markUnreadButton {
-  cursor: pointer;
-  background-color: transparent;
-  color: $primary-white;
-  padding: 0;
-}
-
 .sharedMessage {
-  // width: 100%;
-  display: flex;
   align-items: flex-end;
+  display: flex;
 }
 
 .groupWrapper {
-  width: 100%;
   display: block;
+  width: 100%;
+
   & > div {
     display: flex;
     flex-direction: column;
@@ -91,11 +94,11 @@
 }
 
 .allMessages {
-  overflow-y: auto;
+  background-color: $chat-lightgrey;
   flex-direction: column;
+  overflow-y: auto;
   position: relative;
   width: 100%;
-  background-color: $chat-lightgrey;
 }
 
 .raise {
@@ -103,14 +106,14 @@
 }
 
 .sendMessage {
-  // border-top: 1px solid #e6e6e6;
-  padding: 20px;
-  padding-top: 0;
-  boz-sizing: border-box;
   background-color: $chat-lightgrey;
+  box-sizing: border-box;
   height: 160px;
+  padding: 0 20px 20px;
+
   > div {
     height: 100%;
+
     > form {
       height: 100%;
     }
@@ -118,13 +121,17 @@
 }
 
 .failedMessage {
-  margin-right: 10px;
+  color: $primary-red;
   margin-bottom: 15px;
+  margin-right: 10px;
+  opacity: 0.5;
+}
 
-  .failedMessageWarning {
-    color: $primary-red;
-    cursor: pointer;
-  }
+.failedMessage__Warning {
+  color: $primary-red;
+  cursor: pointer;
+  margin-bottom: 15px;
+  margin-right: 10px;
 }
 
 .messageContainer {
