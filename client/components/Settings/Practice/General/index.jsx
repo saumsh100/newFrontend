@@ -93,6 +93,7 @@ class General extends Component {
       website: activeAccount.get('website'),
       phoneNumber: activeAccount.get('phoneNumber'),
       contactEmail: activeAccount.get('contactEmail'),
+      unit: activeAccount.get('unit'),
       notificationEmails: activeAccount.get('notificationEmails')
         ? activeAccount.get('notificationEmails').join(', ')
         : '',

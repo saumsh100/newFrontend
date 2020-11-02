@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import { Field } from '../../../library';
-import { emailValidate, validateEmails } from '../../../library/Form/validate';
+import { emailValidate, notNegative, validateEmails } from '../../../library/Form/validate';
 import FormButton from '../../../library/Form/FormButton';
 import Icon from '../../../library/Icon';
 import Tooltip from '../../../Tooltip';
@@ -21,6 +21,8 @@ const emailValidateNull = (str) => {
   }
   return emailValidate(str);
 };
+
+const maxUnitSize = value => value && value > 60 && 'Must be less than or equal to 60';
 
 const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
   const emailValid = role === 'SUPERADMIN' ? emailValidateNull : emailValidate;
@@ -59,6 +61,14 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
         label="Contact Email"
         validate={[emailValid]}
         data-test-id="contactEmail"
+      />
+      <Field
+        name="unit"
+        label="Schedule Unit Value"
+        type="number"
+        step={5}
+        validate={[notNegative, maxUnitSize]}
+        data-test-id="unit"
       />
       <Field
         name="notificationEmails"

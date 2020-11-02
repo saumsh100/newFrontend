@@ -3,15 +3,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { isValidUUID } from '@carecru/isomorphic';
 import { Form, Field } from '../../../library';
-import { notNegative } from '../../../library/Form/validate';
 import LastSyncDisplay from '../../../LastSyncDisplay';
 import AccountModel from '../../../../entities/models/Account';
 import TwilioPhoneNumber from './TwilioPhoneNumber';
 import VendestaInfo from './VendastaInfo';
 import CallRail from './CallRail';
 import styles from './styles.scss';
-
-const maxUnitSize = value => value && value > 60 && 'Must be less than or equal to 60';
 
 const validateOmitIdsArray = (val) => {
   if (!val) return;
@@ -28,7 +25,6 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     destinationPhoneNumber: activeAccount.get('destinationPhoneNumber'),
     vendastaId: activeAccount.get('vendastaId'),
     callrailId: activeAccount.get('callrailId'),
-    unit: activeAccount.get('unit'),
     timeInterval: activeAccount.get('timeInterval'),
     suggestedChairId: activeAccount.get('suggestedChairId'),
     canSendReminders: activeAccount.get('canSendReminders'),
@@ -96,13 +92,6 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       />
       <VendestaInfo activeAccount={activeAccount} />
       <CallRail activeAccount={activeAccount} />
-      <Field
-        name="unit"
-        label="Schedule Unit"
-        type="number"
-        validate={[notNegative, maxUnitSize]}
-        data-test-id="unit"
-      />
       <Field name="suggestedChairId" label="Suggested Chair ID" data-test-id="suggestedChairId" />
       <Field name="facebookUrl" label="Facebook URL" data-test-id="facebookUrl" />
       <Field name="googlePlaceId" label="Google Place ID" data-test-id="googlePlaceId" />

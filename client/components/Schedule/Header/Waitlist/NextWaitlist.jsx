@@ -38,6 +38,8 @@ const NextWaitlist = ({ account, ...props }) => {
   const [sentMessages, setSentMessages] = useState({ success: [],
     errors: [] });
 
+  const defaultUnit = account.get('unit');
+
   useEffect(() => {
     setSelectedWaitlistMap(batchUpdate());
   }, [batchUpdate]);
@@ -157,6 +159,7 @@ const NextWaitlist = ({ account, ...props }) => {
                     isNewWaitSpot ? createWaitSpotHandler : updateWaitSpotHandler,
                   )}
                   goToWaitlistTable={resetEditForm}
+                  defaultUnit={defaultUnit}
                 />
               )}
             </CreateWaitSpot>

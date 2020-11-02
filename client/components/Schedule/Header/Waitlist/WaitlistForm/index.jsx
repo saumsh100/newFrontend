@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { week, capitalize, setDateToTimezone } from '@carecru/isomorphic';
-import { Button, Icon } from '../../../../library';
+import { Button, Icon, Input } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';
 import PatientSearch from '../../../../PatientSearch';
@@ -34,19 +34,6 @@ const reasons = [
   },
 ];
 
-const units = [
-  { value: 1 },
-  { value: 2 },
-  { value: 3 },
-  { value: 4 },
-  { value: 5 },
-  { value: 6 },
-  { value: 7 },
-  { value: 8 },
-  { value: 9 },
-  { value: 10 },
-];
-
 const initalWeek = week.all.reduce(
   (acc, curr) => ({
     ...acc,
@@ -55,16 +42,21 @@ const initalWeek = week.all.reduce(
   {},
 );
 
-const setInitialState = ({
-  endDate = null,
-  note = '',
-  patient = null,
-  patientUser = null,
-  daysOfTheWeek = initalWeek,
-  availableTimes = [],
-  reasonText = '',
-  duration = 0,
-}) => ({
+const setInitialState = (
+  {
+    endDate = null,
+    note = '',
+    patient = null,
+    patientUser = null,
+    daysOfTheWeek = initalWeek,
+    availableTimes = [],
+    reasonText = '',
+    duration = 6,
+  },
+  defaultUnit,
+) => ({
+  duration,
+  minutes: duration ? defaultUnit * duration : 0,
   endDate,
   note,
   patient,
@@ -72,7 +64,6 @@ const setInitialState = ({
   daysOfTheWeek,
   availableTimes,
   reasonText,
-  duration,
 });
 
 const WaitlistForm = ({
@@ -81,8 +72,10 @@ const WaitlistForm = ({
   handleSubmit,
   initialState,
   isNewWaitSpot,
+  defaultUnit,
 }) => {
-  const [formValues, setFormValues] = useState(setInitialState(initialState));
+  const [formValues, setFormValues] = useState(setInitialState(initialState, defaultUnit));
+
   const selectedPatient = formValues.patient || formValues.patientUser;
   const selectedDaysOfWeek = Object.entries(formValues.daysOfTheWeek)
     .filter(([, v]) => v)
@@ -94,7 +87,7 @@ const WaitlistForm = ({
     setFormValues({
       ...formValues,
       patient:
-        newValue && 'id' in newValue
+        newValue && 'ccId' in newValue
           ? {
             avatarUrl: newValue.avatarUrl,
             firstName: newValue.firstName,
@@ -120,6 +113,22 @@ const WaitlistForm = ({
       })),
     [],
   );
+
+  const handleDurationChange = (value) => {
+    setFormValues({
+      ...formValues,
+      minutes: value * defaultUnit,
+      duration: value,
+    });
+  };
+
+  const handleMinutesChange = (value) => {
+    setFormValues({
+      ...formValues,
+      minutes: value,
+      duration: value / defaultUnit,
+    });
+  };
 
   const timeOptions = useMemo(() => generateWaitlistHours(timezone), [timezone]);
 
@@ -188,6 +197,7 @@ const WaitlistForm = ({
         id="waitlist-form"
         onSubmit={(e) => {
           e.preventDefault();
+          delete formValues.minutes;
           handleSubmit(formValues);
         }}
         className={styles.waitlistFormWrapper}
@@ -268,13 +278,32 @@ const WaitlistForm = ({
               extraPickers={timePickers}
               shouldCheckUpdate
             />
-            <DropdownSelect
-              theme={{ label: styles.label }}
-              label="Units"
-              onChange={onChange('duration')}
-              value={formValues.duration || ''}
-              options={units}
-            />
+            <div className={styles.unitFieldsWrapper}>
+              <div className={styles.waitlistFormColumnLeft}>
+                <Input
+                  id="duration"
+                  name="duration"
+                  type="number"
+                  label={`Unit (${defaultUnit})`}
+                  step={1}
+                  min={0}
+                  onChange={({ target }) => handleDurationChange(target.value)}
+                  value={formValues.duration || ''}
+                />
+              </div>
+              <div className={styles.waitlistFormColumnRight}>
+                <Input
+                  id="minutes"
+                  name="minutes"
+                  type="number"
+                  label="Duration"
+                  step={1}
+                  min={0}
+                  onChange={({ target }) => handleMinutesChange(target.value)}
+                  value={formValues.minutes || ''}
+                />
+              </div>
+            </div>
           </div>
           <div className={styles.waitlistFormColumnFull}>
             <label htmlFor="textarea" className={styles.columnLabel}>
@@ -318,6 +347,7 @@ WaitlistForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   initialState: PropTypes.objectOf(PropTypes.any),
   isNewWaitSpot: PropTypes.bool.isRequired,
+  defaultUnit: PropTypes.number.isRequired,
 };
 
 WaitlistForm.defaultProps = {
