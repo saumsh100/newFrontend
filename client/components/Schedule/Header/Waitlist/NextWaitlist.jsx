@@ -46,7 +46,15 @@ const NextWaitlist = ({ account, ...props }) => {
 
   const loadDefaultTemplate = useCallback(() => {
     loadMassTextTemplate(account.toJS()).then(({ data }) => {
-      setTextMessage(data);
+      setTextMessage((prevTextMessage) => {
+        if (!prevTextMessage) {
+          return data;
+        }
+        if (prevTextMessage !== data) {
+          return prevTextMessage;
+        }
+        return data;
+      });
     });
   }, [account]);
 
