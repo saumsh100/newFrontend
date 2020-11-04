@@ -319,8 +319,8 @@ class MessageContainer extends Component {
             hasMore={hasMoreMessages && !loadingMessages}
             threshold={100}
           >
-            {selectedChat && !conversationIsLoading && <PendingMessages />}
             {selectedChat && !conversationIsLoading && this.renderMessagesTree()}
+            {selectedChat && !conversationIsLoading && <PendingMessages />}
             <div className={styles.raise} />
           </InfiniteScroll>
         </SBody>
