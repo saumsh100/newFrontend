@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
 import ChatTextMessage from '../../../entities/models/TextMessage';
-import { addPendingMessage } from '../../../reducers/chat';
 import {
   createNewChat,
   getChatCategoryCounts,
@@ -153,14 +152,13 @@ class MessageContainer extends Component {
       request.chatId = chatId;
     }
 
-    this.props.addPendingMessage(request);
-
     if (!chatId) {
       this.props.reset('chatMessageForm_newChat');
       this.props
         .createNewChat(request)
         .then((chat) => {
-          request.chatId = Object.keys(chat.chats)[0];
+          const [newId] = Object.keys(chat.chats);
+          request.chatId = newId;
           this.props.sendChatMessage(request);
           this.props.setTab(chatTabs.ALL_TAB);
         })
@@ -366,7 +364,6 @@ function mapStateToProps({ entities, auth, chat }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      addPendingMessage,
       selectChat,
       reset,
       sendChatMessage,
@@ -402,7 +399,6 @@ MessageContainer.propTypes = {
   createNewChat: PropTypes.func.isRequired,
   setTab: PropTypes.func.isRequired,
   loadChatMessages: PropTypes.func.isRequired,
-  addPendingMessage: PropTypes.func.isRequired,
   pendingMessages: PropTypes.oneOfType([
     PropTypes.arrayOf(ChatTextMessage),
     PropTypes.instanceOf(OrderedMap),

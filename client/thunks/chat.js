@@ -3,18 +3,22 @@ import { push } from 'connected-react-router';
 import { Map } from 'immutable';
 import pull from 'lodash/pull';
 import pullAll from 'lodash/pullAll';
-import uniq from 'lodash/uniq';
 import union from 'lodash/union';
+import uniq from 'lodash/uniq';
 import without from 'lodash/without';
+import { sortByFieldAsc, sortTextMessages } from '../components/library/util/SortEntities';
+import PatientModel from '../entities/models/Patient';
 import {
+  addPendingMessage,
+  setChatCategoriesCount,
   setChatIsLoading,
   setChatMessages,
-  setChatCategoriesCount,
   setChatPoC,
   setConversationIsLoading,
   setLockedChats,
   setNewChat,
   setPatientChat,
+  setPendingMessages,
   setSelectedChat,
   setTotalChatMessages,
   setUnreadChats,
@@ -22,13 +26,11 @@ import {
   unsetPatientChat,
   updateChatId,
 } from '../reducers/chat';
-import { createEntityRequest, fetchEntitiesRequest, updateEntityRequest } from './fetchEntities';
-import DesktopNotification from '../util/desktopNotification';
-import PatientModel from '../entities/models/Patient';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../reducers/entities';
-import { isHub } from '../util/hub';
-import { sortByFieldAsc, sortTextMessages } from '../components/library/util/SortEntities';
+import DesktopNotification from '../util/desktopNotification';
 import { httpClient } from '../util/httpClient';
+import { isHub } from '../util/hub';
+import { createEntityRequest, fetchEntitiesRequest, updateEntityRequest } from './fetchEntities';
 import determineProspectForChat from './prospects';
 
 function isOnChatPage(currentPath) {
@@ -413,7 +415,7 @@ export function selectChat(id, createChat = null) {
     const currentChatId = chat.get('selectedChatId');
 
     if (id && currentChatId === id) {
-      return;
+      return null;
     }
 
     const chatEntity = await dispatch(getChatEntity(id)).then(data =>
@@ -461,15 +463,25 @@ export function createNewChat(entityData) {
 }
 
 export function sendChatMessage(entityData) {
-  return dispatch =>
-    dispatch(
+  return (dispatch, getState) => {
+    const { chat } = getState();
+    const pendingMessages = chat.get('pendingMessages');
+
+    dispatch(addPendingMessage(entityData));
+    return dispatch(
       createEntityRequest({
         key: 'chats',
         entityData,
         url: '/api/chats/textMessages',
         alert: { error: { body: 'Failed to send patient the text message.' } },
       }),
-    );
+    ).finally(() => {
+      const index = pendingMessages.findIndex(
+        pendingMessage => pendingMessage.message === entityData.message,
+      );
+      dispatch(setPendingMessages(pendingMessages.splice(index, 1)));
+    });
+  };
 }
 
 export function socketLock(textMessages) {
@@ -533,22 +545,47 @@ export function unlockChat(chatId) {
 }
 
 export function resendMessage(messageId, patientId, chatId) {
-  return dispatch =>
+  return (dispatch, getState) => {
+    const { auth, chat, entities } = getState();
+    const chatMessages = chat.get('chatMessages');
+    const message = chat.get('chatMessages').get(messageId);
+    const pendingMessages = chat.get('pendingMessages');
+    const selectedPatient = entities.getIn(['patients', 'models']).get(patientId);
+
+    dispatch(setChatMessages(chatMessages.remove(messageId)));
     dispatch(
+      deleteEntity({
+        key: 'textMessages',
+        id: messageId,
+      }),
+    );
+    dispatch(
+      addPendingMessage({
+        addedAt: Date.now(),
+        chatId,
+        id: message.get('id'),
+        message: message.get('body'),
+        patient: {
+          accountId: entities.getIn(['accounts', 'models', auth.get('accountId')]).id,
+          cellPhoneNumber: selectedPatient.cellPhoneNumber,
+          id: selectedPatient.id,
+        },
+        userId: auth.getIn(['user', 'id']),
+      }),
+    );
+
+    return dispatch(
       updateEntityRequest({
         key: 'chats',
         values: { patientId },
         url: `/api/chats/textMessage/${messageId}/resend`,
       }),
-    ).then(() => {
-      dispatch(
-        deleteEntity({
-          key: 'textMessages',
-          id: messageId,
-        }),
-      );
+    ).finally(() => {
+      const index = pendingMessages.findIndex(msg => msg.id === messageId);
+      dispatch(setPendingMessages(pendingMessages.splice(index)));
       dispatch(setChatMessagesListForChat(chatId));
     });
+  };
 }
 
 export function getOrCreateChatForPatient(patientId) {

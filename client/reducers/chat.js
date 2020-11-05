@@ -7,6 +7,7 @@ const reducer = '@chat';
 
 export const ADD_PENDING_MESSAGE = `${reducer}/ADD_PENDING_MESSAGE`;
 export const PRUNE_PENDING_MESSAGES = `${reducer}/PRUNE_PENDING_MESSAGES`;
+export const SET_PENDING_MESSAGES = `${reducer}/SET_PENDING_MESSAGES`;
 export const SET_SELECTED_CHAT = `${reducer}/SET_SELECTED_CHAT`;
 export const UPDATE_CHAT_ID = `${reducer}/UPDATE_CHAT_ID`;
 export const SET_NEW_CHAT = `${reducer}/SET_NEW_CHAT`;
@@ -27,6 +28,7 @@ export const SET_PROSPECT = `${reducer}/SET_PROSPECT`;
 
 export const addPendingMessage = createAction(ADD_PENDING_MESSAGE);
 export const prunePendingMessages = createAction(PRUNE_PENDING_MESSAGES);
+export const setPendingMessages = createAction(SET_PENDING_MESSAGES);
 export const setSelectedChat = createAction(SET_SELECTED_CHAT);
 export const updateChatId = createAction(UPDATE_CHAT_ID);
 export const setNewChat = createAction(SET_NEW_CHAT);
@@ -74,6 +76,10 @@ export default handleActions(
 
     [PRUNE_PENDING_MESSAGES](state) {
       return state.set('pendingMessages', []);
+    },
+
+    [SET_PENDING_MESSAGES](state, { payload }) {
+      return state.set('pendingMessages', payload);
     },
 
     [UPDATE_CHAT_ID](state) {
