@@ -1,21 +1,8 @@
 
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../library';
 import styles from './styles.scss';
-
-const getPatientName = (patient, displayNameOption) => {
-  if (displayNameOption === 'prefName') {
-    return patient.displayName || patient.firstName;
-  }
-  return patient.firstName;
-};
-
-const getMessageFromTemplate = (template, patient, displayNameOption) => {
-  const regEx = new RegExp('\\$\\{displayName\\}', 'g');
-  const patientName = getPatientName(patient, displayNameOption);
-  return template.replace(regEx, patientName);
-};
 
 export default function NotifyPatientForm({
   waitingRoomPatient,
@@ -24,10 +11,25 @@ export default function NotifyPatientForm({
   formName,
   onSubmit,
 }) {
-  const message = getMessageFromTemplate(
-    defaultTemplate,
-    waitingRoomPatient.patient,
-    displayNameOption,
+  const getPatientName = useCallback((patient, option) => {
+    if (option === 'prefName') {
+      return patient.prefName || patient.firstName;
+    }
+    return patient.firstName;
+  }, []);
+
+  const getMessageFromTemplate = useCallback(
+    (template, patient, option) => {
+      const regEx = new RegExp('\\$\\{displayName\\}', 'g');
+      const patientName = getPatientName(patient, option);
+      return template.replace(regEx, patientName);
+    },
+    [getPatientName],
+  );
+
+  const message = useMemo(
+    () => getMessageFromTemplate(defaultTemplate, waitingRoomPatient.patient, displayNameOption),
+    [defaultTemplate, displayNameOption, getMessageFromTemplate, waitingRoomPatient.patient],
   );
 
   const initialValues = { message };
