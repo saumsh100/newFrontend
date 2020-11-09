@@ -19,7 +19,7 @@ class Unsubscribe extends Component {
     this.props.fetchEntitiesRequest({
       id: 'fetchPatientPreferences',
       key: 'patients',
-      url: `/patients/${patientId}/preferences`,
+      url: `/my/patients/${patientId}/preferences`,
     });
   }
 
@@ -28,7 +28,7 @@ class Unsubscribe extends Component {
     this.props.updateEntityRequest({
       id: 'updatePatientPreferences',
       key: 'patients',
-      url: `/patients/${patientId}/preferences`,
+      url: `/my/patients/${patientId}/preferences`,
       values,
     });
   }
