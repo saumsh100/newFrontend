@@ -4,13 +4,16 @@ import moment from 'moment';
 import { httpClient, bookingWidgetHttpClient } from '../../../util/httpClient';
 
 const asyncEmailValidatePatient = ({ email }) => {
-  if (!email) return;
+  if (!email) return null;
   return bookingWidgetHttpClient()
     .post('/patientUsers/email', { email })
     .then(({ data }) => {
       if (data.exists) {
-        throw { email: 'There is already a user with that email' };
+        throw Object.assign(new Error(), { email: 'There is already a user with that email' });
       }
+    })
+    .catch((error) => {
+      throw Object.assign(new Error(), { email: error.response?.data });
     });
 };
 
@@ -18,8 +21,8 @@ const asyncPhoneNumberValidatePatient = ({ phoneNumber }) => {
   if (!phoneNumber) return undefined;
   return bookingWidgetHttpClient()
     .post('/patientUsers/phoneNumber', { phoneNumber })
-    .catch(({ data }) => {
-      throw { phoneNumber: data };
+    .catch((error) => {
+      throw Object.assign(new Error(), { phoneNumber: error.response?.data });
     });
 };
 
@@ -31,13 +34,20 @@ const asyncValidatePatient = composeAsyncValidators([
 function composeAsyncValidators(validatorFns) {
   return async (values, dispatch, props, field) => {
     let errors;
-    for (const validatorFn of validatorFns) {
-      try {
-        await validatorFn(values, dispatch, props, field);
-      } catch (err) {
-        errors = Object.assign({}, errors, err);
-      }
-    }
+    const results = validatorFns.map(validatorFn => validatorFn(values, dispatch, props, field));
+    await Promise.allSettled(results)
+      .then((responses) => {
+        responses.forEach((response) => {
+          if (response.status === 'rejected') {
+            const error = { ...response.reason };
+            delete error.stack;
+            errors = Object.assign({}, errors, error);
+          }
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
     if (errors) {
       throw errors;
@@ -152,7 +162,9 @@ const asyncEmailValidateUser = ({ email }) =>
     .then(
       response =>
         response.data.exists !== true ||
-        Promise.reject({ email: `User with ${email} already exists...` }),
+        Promise.reject(
+          Object.assign(new Error(), { email: `User with ${email} already exists...` }),
+        ),
     );
 
 const asyncEmailPasswordReset = ({ email }) =>
@@ -166,7 +178,7 @@ const asyncEmailPasswordReset = ({ email }) =>
     });
 
 const numDigitsValidate = max => (value) => {
-  if (!value || value.length >= max) return;
+  if (!value || value.length >= max) return null;
   return 'Not enough digits';
 };
 
@@ -180,7 +192,7 @@ const compose = validators => (values) => {
 };
 
 const passwordStrength = (value) => {
-  if (!value) return;
+  if (!value) return null;
   const result = zxcvbn(value);
   const {
     score,
