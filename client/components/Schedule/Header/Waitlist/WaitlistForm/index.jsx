@@ -2,6 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { week, capitalize, setDateToTimezone } from '@carecru/isomorphic';
+import moment from 'moment';
 import { Button, Icon, Input } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';
@@ -11,12 +12,13 @@ import MultiSelect from '../../../../library/ui-kit/MultiSelect';
 import styles from './styles.scss';
 import Selector from './Selector';
 import {
-  convertArrayOfDaysInMap,
+  convertArrayOfOptionsInMap,
   generateWaitlistHours,
   getDayPickers,
   getTimePickers,
   getTimeSlot,
   getAllTimeSlots,
+  generateDaysOfWeek,
 } from '../helpers';
 
 const reasons = [
@@ -133,7 +135,7 @@ const WaitlistForm = ({
   const timeOptions = useMemo(() => generateWaitlistHours(timezone), [timezone]);
 
   const onDaysOfTheWeekChange = (values) => {
-    onChange('daysOfTheWeek')(convertArrayOfDaysInMap(values));
+    onChange('daysOfTheWeek')(convertArrayOfOptionsInMap(values, generateDaysOfWeek()));
   };
 
   const handleDayOnChange = (v) => {
@@ -269,7 +271,9 @@ const WaitlistForm = ({
                   disabled={disabled}
                   selected={selectedTimes}
                   placeholder="Preferred Times"
-                  formatValue={v => timeOptions.find(option => option.value === v)?.label}
+                  formatValue={v =>
+                    timeOptions.find(option => option.value === moment(v).toLocaleString())?.label
+                  }
                   error={error}
                   selectorProps={getToggleButtonProps()}
                   handleSelection={handleSelection}

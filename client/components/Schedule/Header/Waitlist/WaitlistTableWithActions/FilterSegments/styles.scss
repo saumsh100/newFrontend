@@ -1,0 +1,91 @@
+.listWrapper {
+  border-radius: 4px;
+  box-shadow: 1px 1px 7px 1px rgba(31, 82, 130, 0.16);
+  margin-top: 10px;
+  min-height: 300px;
+  width: 350px;
+  z-index: 99999;
+}
+
+.alignRight {
+  transform: translateX(-200px) !important;
+}
+
+.popOverCard {
+  background: #fff;
+  border: 1px solid #efefef;
+  border-radius: 4px;
+  border-top: 0;
+  box-shadow: 1px 1px 7px 1px rgba(31, 82, 130, 0.16);
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  height: 164px;
+  margin-top: 10px;
+  overflow-y: auto;
+  width: 336px;
+  z-index: 99999;
+}
+
+.tooltip_Popover {
+  z-index: 999999;
+
+  > :global(svg.Popover-tip) {
+    fill: rgb(123, 123, 123);
+  }
+}
+
+.row {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 16px;
+
+  &:first-of-type {
+    border-bottom: 1px solid rgb(242, 243, 245);
+  }
+}
+
+.unitInputsWrapper {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.unitsLabel {
+  display: flex;
+  flex-direction: column;
+}
+
+.unitsLabelText {
+  color: rgb(104, 110, 116);
+  margin: 8px 0;
+}
+
+.unitsInput {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(233, 235, 237);
+  border-radius: 4px;
+  box-shadow: 1px 1px 2px 0px rgba(31, 82, 130, 0.08);
+  box-sizing: border-box;
+  height: 40px;
+  padding-left: 16px;
+  width: 144px;
+}
+
+.clearButton {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: #093c61;
+  cursor: pointer;
+  font-family: 'Gotham-Book', sans-serif;
+  height: 12px;
+  margin: 4px 0 8px auto;
+}
+
+.unsetUnitLabel {
+  color: #093c61;
+}

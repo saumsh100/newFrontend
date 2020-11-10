@@ -1,0 +1,105 @@
+.waitlistTable {
+  border: none;
+  flex: 1;
+  min-width: unset;
+  overflow: hidden;
+
+  * {
+    .rt-thead {
+      position: sticky;
+    }
+  }
+}
+
+.manageCell {
+  overflow: visible !important;
+}
+
+.waitSpotCheckboxWrapper {
+  display: flex;
+  justify-content: flex-end;
+  * {
+    box-sizing: content-box;
+  }
+}
+
+$width: 6px;
+$height: 4px;
+
+.caretButton {
+  border-bottom: $height/2 solid transparent;
+  border-left: $width/2 solid transparent;
+  border-right: $width/2 solid transparent;
+  border-top: $height/2 solid transparent;
+  content: '';
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.bottomCaretButton {
+  @extend .caretButton;
+  border-top: $height solid #686e74;
+}
+
+.topCaretButton {
+  @extend .caretButton;
+  border-bottom: $height solid #686e74;
+}
+
+.thead-after {
+}
+
+.thead-order {
+  color: #686e74;
+}
+
+.theadDesc {
+  @extend .thead-order;
+  &:after {
+    @extend .bottomCaretButton;
+    margin-left: 5px;
+    margin-top: 3px;
+  }
+}
+
+.theadAsc {
+  @extend .thead-order;
+  &:after {
+    @extend .topCaretButton;
+    margin-left: 5px;
+    margin-top: -2px;
+  }
+}
+
+.filterBarWrapper {
+  display: flex;
+  margin-left: auto;
+  padding: 0 16px;
+}
+
+.segmentWrapper {
+  margin-left: 16px;
+}
+
+.addButton {
+  background: none;
+  border: none;
+  color: rgb(60, 68, 76);
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 300;
+  height: 40px;
+  width: 40px;
+}
+
+.waitListCountWrapper {
+  align-items: center;
+  background: rgb(255, 196, 90);
+  border-radius: 13.5px;
+  color: rgb(255, 255, 255);
+  display: inline-flex;
+  height: 27px;
+  justify-content: center;
+  width: 27px;
+}

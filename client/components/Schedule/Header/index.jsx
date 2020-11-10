@@ -6,7 +6,7 @@ import { Map, List } from 'immutable';
 import Popover from 'react-popover';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { IconButton, Button, DialogBox, SHeader } from '../../library/index';
+import { IconButton, Button, SHeader, Modal } from '../../library/index';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
 import CurrentDate from './CurrentDate';
@@ -189,10 +189,11 @@ class Header extends Component {
             >
               Quick Add
             </Button>
-            <DialogBox
+            <Modal
               title="Waitlist"
               active={this.state.showWaitlist}
               bodyStyles={styles.dialogBodyList}
+              className={styles.waitlistFullScreen}
               onEscKeyDown={this.toggleWaitlist}
               onOverlayClick={this.toggleWaitlist}
               type={newWaitlist ? 'large' : 'medium'}
@@ -207,12 +208,13 @@ class Header extends Component {
                         removeMultipleWaitSpots={this.removeMultipleWaitSpots(massRemoveCallback)}
                         openAddTo={this.openAddToWaitlist}
                         accountId={this.props.accountId}
+                        onOverlayClick={this.toggleWaitlist}
                       />
                     )}
                   </DeleteWaitSpot>
                 )}
               </MassDelete>
-            </DialogBox>
+            </Modal>
             <AddToWaitlist
               toggleModal={this.openAddToWaitlist}
               active={this.state.showAddToWaitlist}

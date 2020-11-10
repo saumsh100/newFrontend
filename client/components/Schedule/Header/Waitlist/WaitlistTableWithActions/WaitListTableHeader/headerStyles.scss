@@ -1,0 +1,15 @@
+.waitListTableHeaderWrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 32px 24px 26px 32px;
+}
+
+.waitListTableHeaderTitle {
+  color: #1c2b33;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.closeButton {
+  font-weight: 500;
+}

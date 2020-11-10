@@ -14,8 +14,9 @@ const List = ({
   hasSelectedItems,
   handleSelection,
   extraPickers,
+  themeOverride,
 }) => (
-  <ul className={classNames(styles.list, { [styles.active]: isOpen })}>
+  <ul className={classNames(styles.list, { [styles.active]: isOpen }, themeOverride)}>
     <div className={styles.selectAll}>
       <Checkbox
         key="Select All"
@@ -93,6 +94,7 @@ List.propTypes = {
       showIndeterminate: PropTypes.bool.isRequired,
     }),
   ),
+  themeOverride: PropTypes.string,
 };
 
 List.defaultProps = {
@@ -100,6 +102,7 @@ List.defaultProps = {
   availableItems: [],
   selectedItems: [],
   extraPickers: [],
+  themeOverride: undefined,
 };
 
 export default List;

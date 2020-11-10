@@ -163,11 +163,11 @@ export const waitlistDatesFormatter = (days) => {
  * @return {object}
  * @param waitlist
  */
-export const batchUpdateFactory = waitlist => (state = false) =>
+export const batchUpdateFactory = waitlist => (state = false, waitListIDs = []) =>
   waitlist.reduce(
     (acc, curr) => ({
       ...acc,
-      [curr.id]: state,
+      [curr.id]: waitListIDs.includes(curr.id) ? state : false,
     }),
     {},
   );
@@ -193,21 +193,38 @@ export const generateWaitlistHours = (timezone, start = 7, end = 21, hourInterva
   return result;
 };
 
-export const convertArrayOfDaysInMap = values =>
+export const generateTimesFilter = (timezone, start = 7, end = 21, hourInterval = 0.5) => {
+  const times = generateWaitlistHours(timezone, start, end, hourInterval);
+  return times.reduce((update, curr) => {
+    update[curr.value] = false;
+    return update;
+  }, {});
+};
+
+export const generatePractitionersFilter = practitioners =>
+  practitioners.reduce((update, curr) => {
+    update.push({ ...curr,
+      selected: false });
+    return update;
+  }, []);
+
+export const generateDaysOfWeek = (active = false) => ({
+  sunday: active,
+  monday: active,
+  tuesday: active,
+  wednesday: active,
+  thursday: active,
+  friday: active,
+  saturday: active,
+});
+
+export const convertArrayOfOptionsInMap = (values, shape) =>
   values.reduce(
     (acc, curr) => ({
       ...acc,
       [curr]: true,
     }),
-    {
-      sunday: false,
-      monday: false,
-      tuesday: false,
-      wednesday: false,
-      thursday: false,
-      friday: false,
-      saturday: false,
-    },
+    shape,
   );
 
 /**
@@ -248,7 +265,7 @@ export const propsGenerator = ({
   toggleSingleWaitlistSelection,
   ...props
 }) => {
-  const hasTimes = availableTimes.length > 0;
+  const hasTimes = availableTimes?.length > 0;
   const isPatientUser = !!patientUser;
   const nextAppt = isPatientUser ? endDate : patient?.nextApptDate;
   return {
@@ -264,7 +281,7 @@ export const propsGenerator = ({
     nextApptDate: nextAppt ? dateFormatter(nextAppt, '', 'YYYY/MM/DD') : null,
     patient: isPatientUser ? patientUser : patient,
     PopOverComponent: isPatientUser ? PatientUserPopover : PatientPopover,
-    times: hasTimes ? waitlistTimesFormatter(availableTimes.sort(), timezone) : 'N/A',
+    times: hasTimes ? waitlistTimesFormatter(availableTimes.sort(), timezone) : '',
   };
 };
 

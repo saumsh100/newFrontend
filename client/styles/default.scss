@@ -7,35 +7,36 @@ $intercom-side-margin: 50px;
   html.Dashboard,
   html.hub {
     height: 100%;
+    overflow: unset;
   }
 
   body.hub {
-    height: 100%;
-    color: $primary-dark;
     background: transparent;
+    color: $primary-dark;
     font-size: 12px;
+    height: 100%;
     overflow: hidden;
 
     #intercom-container {
+      bottom: $electron-anti-radius-padding;
+      left: $intercom-side-margin !important;
+      opacity: 0;
       position: absolute !important;
       right: $electron-anti-radius-padding;
-      left: $intercom-side-margin !important;
       top: $electron-anti-radius-padding;
-      bottom: $electron-anti-radius-padding;
-      width: auto !important;
-      opacity: 0;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 0 !important;
       transform: translateX(-100%);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: auto !important;
+      z-index: 0 !important;
 
       &.active {
-        transform: translateX(0) !important;
         opacity: 1;
+        transform: translateX(0) !important;
       }
 
       &.right {
-        right: $intercom-side-margin !important;
         left: $electron-anti-radius-padding !important;
+        right: $intercom-side-margin !important;
         transform: translateX(0) !important;
 
         .intercom-messenger-frame {
@@ -46,14 +47,14 @@ $intercom-side-margin: 50px;
       }
 
       .intercom-messenger-frame {
-        position: absolute !important;
-        top: $electron-anti-radius-padding !important;
+        border-bottom-right-radius: $electron-border-radius !important;
+        border-top-right-radius: $electron-border-radius !important;
         bottom: $electron-anti-radius-padding !important;
+        box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.14), -1px 1px 6px 0 rgba(0, 0, 0, 0.12) !important;
         height: auto !important;
         min-height: 655px - 3 * $electron-anti-radius-padding - 1px !important;
-        border-top-right-radius: $electron-border-radius !important;
-        border-bottom-right-radius: $electron-border-radius !important;
-        box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.14), -1px 1px 6px 0 rgba(0, 0, 0, 0.12) !important;
+        position: absolute !important;
+        top: $electron-anti-radius-padding !important;
       }
 
       .intercom-gradient {
@@ -68,10 +69,10 @@ $intercom-side-margin: 50px;
   }
 
   body.Dashboard {
-    height: 100%;
     background-color: $primary-dark;
     color: $primary-dark;
     font-size: 12px;
+    height: 100%;
     overflow: hidden;
   }
 
@@ -80,9 +81,9 @@ $intercom-side-margin: 50px;
   }
 
   body.MyPatientApp {
-    height: 100%;
     background-color: $primary-grey;
     font-size: 12px;
+    height: 100%;
   }
 
   body.Widget {
@@ -94,19 +95,19 @@ $intercom-side-margin: 50px;
     > div {
       height: 100%;
       > div {
-        height: 100%;
-        display: flex;
-        justify-content: center;
         align-items: center;
+        display: flex;
         flex-direction: column;
+        height: 100%;
+        justify-content: center;
       }
     }
   }
 
   .loader {
-    width: 100%;
-    height: calc(100vh - 65px);
     background: #e6e6e6;
+    height: calc(100vh - 65px);
+    width: 100%;
     z-index: 9999;
   }
 
@@ -117,11 +118,11 @@ $intercom-side-margin: 50px;
   }
 
   .dd-menu-items {
-    width: 100%;
-    min-width: 100px;
-    z-index: 2500 !important;
-    white-space: nowrap;
     background: transparent;
+    min-width: 100px;
+    white-space: nowrap;
+    width: 100%;
+    z-index: 2500 !important;
   }
 
   .dd-menu .dd-menu-items ul,
@@ -130,14 +131,14 @@ $intercom-side-margin: 50px;
   }
 
   .separator {
-    height: 2px !important;
     background-color: $primary-lightgrey !important;
+    height: 2px !important;
   }
 
   .rc-tooltip-inner {
-    min-height: 0;
-    border-radius: 0;
     background-color: #2e3845;
+    border-radius: 0;
+    min-height: 0;
   }
 
   .rc-tooltip-placement-top .rc-tooltip-arrow {
@@ -145,64 +146,64 @@ $intercom-side-margin: 50px;
   }
   .rc-tooltip {
     &.light {
-      width: 250px;
       opacity: 1;
+      width: 250px;
       .rc-tooltip-arrow {
         border-top-color: #ccc;
+        border-width: 6px 8px 0;
         bottom: 2px;
         margin-left: -5px;
-        border-width: 6px 8px 0;
       }
       .rc-tooltip-inner {
-        border-radius: 4px;
         background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 1px 10px 1px rgba(181, 181, 181, 0.6);
         color: $primary-dark-grey;
+        font-size: 12px;
         padding: 12px 14px;
         text-transform: none;
-        font-size: 12px;
-        box-shadow: 0 1px 10px 1px rgba(181, 181, 181, 0.6);
       }
     }
   }
 }
 
 .loadBar {
+  background-color: $card-border-color;
+  height: 3px !important;
   position: relative;
   width: 100%;
-  height: 3px !important;
-  background-color: $card-border-color;
 }
 
 .barInContainer {
-  position: absolute;
-  margin-top: -15px;
   margin-left: -10px;
   margin-right: -15px;
+  margin-top: -15px;
+  position: absolute;
 }
 
 .bar {
   content: '';
   display: inline;
-  position: absolute;
-  width: 0;
   height: 100%;
   left: 50%;
+  position: absolute;
   text-align: center;
+  width: 0;
 }
 
 .bar:nth-child(1) {
-  background-color: $primary-blue;
   animation: loading 2.5s linear infinite;
+  background-color: $primary-blue;
 }
 
 .bar:nth-child(2) {
-  background-color: $primary-blue;
   animation: loading 2.5s linear infinite;
+  background-color: $primary-blue;
 }
 
 .bar:nth-child(3) {
-  background-color: $primary-blue;
   animation: loading 2.5s linear infinite;
+  background-color: $primary-blue;
 }
 
 @keyframes loading {
@@ -220,16 +221,16 @@ $intercom-side-margin: 50px;
   }
 }
 .displayContainer {
-  overflow-y: scroll;
+  align-items: center;
+  color: var(--primaryButtonColor);
+  display: flex;
+  font-family: $medium-font;
+  font-size: 12px;
   // height: 250px;
   height: 210px;
-  min-height: 210px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  margin-top: 20px;
   line-height: 20px;
-  font-size: 12px;
-  color: var(--primaryButtonColor);
-  font-family: $medium-font;
+  margin-top: 20px;
+  min-height: 210px;
+  overflow-y: scroll;
 }

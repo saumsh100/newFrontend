@@ -1,0 +1,53 @@
+@import '../../../ui';
+
+.segmentButton {
+  align-items: center;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 0 3px 1px rgba(31, 82, 130, 0.12);
+  box-sizing: border-box;
+  color: $primary-blue;
+  cursor: pointer;
+  display: block;
+  height: 32px;
+  line-height: 32px;
+  outline: none;
+  overflow: hidden;
+  padding: 0 20px 0 16px;
+  position: relative;
+  text-align: left;
+  text-overflow: ellipsis;
+  transition: all 0.2s ease-in 0s;
+  user-select: none;
+  white-space: nowrap;
+  width: 152px;
+
+  &:hover {
+    background: #f0f6fa;
+    color: $primary-blue;
+  }
+
+  &:focus {
+    background: $primary-blue;
+    color: white;
+  }
+}
+
+.segmentButton_active {
+  background: $primary-blue;
+  color: white;
+}
+
+.segmentButton_dirty {
+  background: #f0f6fa;
+  color: $primary-blue;
+}
+
+.segmentButtonCount {
+  color: #a6aaae;
+  //font-family: ;
+  font-size: 10px;
+  position: absolute;
+  right: 12px;
+  text-align: right;
+}

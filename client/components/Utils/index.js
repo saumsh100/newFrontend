@@ -207,3 +207,26 @@ export const selectedRequestBuilder = (props) => {
       : null,
   };
 };
+
+/**
+ * Sort Practitioners Alphabetically
+ * @param {Practitioner} a
+ * @param {Practitioner} b
+ * */
+export const sortPractitionersAlphabetical = (a, b) => {
+  if (!a.firstName || !b.firstName) return -1;
+  if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
+  if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
+  return 0;
+};
+
+/**
+ * Sort Services Alphabetically
+ * @param {Practitioner} a
+ * @param {Practitioner} b
+ * */
+export const sortServicesAlphabetical = (a, b) => {
+  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+  return 0;
+};

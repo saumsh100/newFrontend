@@ -173,6 +173,7 @@ class MultiSelect extends Component {
               handleSelection={this.handleSelection}
               onChangeAll={() => this.handleHelperLink(hasAvailableItems)}
               extraPickers={extraPickers}
+              themeOverride={theme.listWrapper}
             />
           </div>
         )}

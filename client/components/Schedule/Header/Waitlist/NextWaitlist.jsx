@@ -3,6 +3,7 @@ import React, { memo, useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import groupBy from 'lodash/groupBy';
 import { connect } from 'react-redux';
+import DialogBox from '../../../library/DialogBox';
 import WaitlistTableWithActions from './WaitlistTableWithActions';
 import Account from '../../../../entities/models/Account';
 import { batchUpdateFactory, mergeData } from './helpers';
@@ -16,6 +17,7 @@ import {
 } from '../../../../thunks/waitlist';
 import { Create as CreateWaitSpot } from '../../../GraphQLWaitlist';
 import UpdateWaitSpot from '../../../GraphQLWaitlist/updateWaitSpot';
+import styles from '../styles.scss';
 
 export const WAITLIST_STATE = {
   initial: 0,
@@ -25,9 +27,10 @@ export const WAITLIST_STATE = {
 };
 
 const NextWaitlist = ({ account, ...props }) => {
-  const batchUpdate = useCallback((state = false) => batchUpdateFactory(props.waitlist)(state), [
-    props.waitlist,
-  ]);
+  const batchUpdate = useCallback(
+    (state = false, waitListIDs) => batchUpdateFactory(props.waitlist)(state, waitListIDs),
+    [props.waitlist],
+  );
   const [selectedWaitSpot, setSelectedWaitSpot] = useState({});
   const isNewWaitSpot = Object.keys(selectedWaitSpot).length === 0;
   const [selectedWaitlistMap, setSelectedWaitlistMap] = useState(batchUpdate);
@@ -112,23 +115,25 @@ const NextWaitlist = ({ account, ...props }) => {
     setWaitListState(WAITLIST_STATE.initial);
   };
 
-  switch (waitlistState) {
-    default:
-    case WAITLIST_STATE.initial:
-      return (
-        <WaitlistTableWithActions
-          {...props}
-          batchUpdate={batchUpdate}
-          onEdit={handleEdit}
-          goToAddWaitListForm={() => setWaitListState(WAITLIST_STATE.form)}
-          goToSendMassMessage={goToSendMassMessage}
-          setSelectedWaitlistMap={setSelectedWaitlistMap}
-          selectedWaitlistMap={selectedWaitlistMap}
-        />
-      );
-
-    case WAITLIST_STATE.draft:
-      return (
+  return (
+    <>
+      <WaitlistTableWithActions
+        {...props}
+        batchUpdate={batchUpdate}
+        onEdit={handleEdit}
+        goToAddWaitListForm={() => setWaitListState(WAITLIST_STATE.form)}
+        goToSendMassMessage={goToSendMassMessage}
+        setSelectedWaitlistMap={setSelectedWaitlistMap}
+        selectedWaitlistMap={selectedWaitlistMap}
+      />
+      <DialogBox
+        title="Waitlist"
+        active={waitlistState === WAITLIST_STATE.draft}
+        bodyStyles={styles.dialogBodyList}
+        onEscKeyDown={() => setWaitListState(WAITLIST_STATE.initial)}
+        onOverlayClick={() => setWaitListState(WAITLIST_STATE.initial)}
+        type="large"
+      >
         <DraftMessage
           {...props}
           conversionAnalyzer={conversionAnalyzer}
@@ -138,10 +143,15 @@ const NextWaitlist = ({ account, ...props }) => {
           selectedWaitlistMap={selectedWaitlistMap}
           setTextMessage={setTextMessage}
         />
-      );
-
-    case WAITLIST_STATE.sent:
-      return (
+      </DialogBox>
+      <DialogBox
+        title="Waitlist"
+        active={waitlistState === WAITLIST_STATE.sent}
+        bodyStyles={styles.dialogBodyList}
+        onEscKeyDown={() => setWaitListState(WAITLIST_STATE.initial)}
+        onOverlayClick={() => setWaitListState(WAITLIST_STATE.initial)}
+        type="large"
+      >
         <ResponseMessage
           {...props}
           sentMessages={sentMessages}
@@ -152,29 +162,38 @@ const NextWaitlist = ({ account, ...props }) => {
           textMessage={textMessage}
           selectedWaitlistMap={selectedWaitlistMap}
         />
-      );
-    case WAITLIST_STATE.form:
-      return (
-        <UpdateWaitSpot>
-          {updateWaitSpotHandler => (
-            <CreateWaitSpot>
-              {createWaitSpotHandler => (
-                <WaitlistForm
-                  isNewWaitSpot={isNewWaitSpot}
-                  timezone={account.get('timezone')}
-                  initialState={selectedWaitSpot}
-                  handleSubmit={handleSubmit(
-                    isNewWaitSpot ? createWaitSpotHandler : updateWaitSpotHandler,
-                  )}
-                  goToWaitlistTable={resetEditForm}
-                  defaultUnit={defaultUnit}
-                />
-              )}
-            </CreateWaitSpot>
-          )}
-        </UpdateWaitSpot>
-      );
-  }
+      </DialogBox>
+      {waitlistState === WAITLIST_STATE.form && (
+        <DialogBox
+          title="Waitlist"
+          active={waitlistState === WAITLIST_STATE.form}
+          bodyStyles={styles.dialogBodyList}
+          onEscKeyDown={() => setWaitListState(WAITLIST_STATE.initial)}
+          onOverlayClick={() => setWaitListState(WAITLIST_STATE.initial)}
+          type="large"
+        >
+          <UpdateWaitSpot>
+            {updateWaitSpotHandler => (
+              <CreateWaitSpot>
+                {createWaitSpotHandler => (
+                  <WaitlistForm
+                    isNewWaitSpot={isNewWaitSpot}
+                    timezone={account.get('timezone')}
+                    initialState={selectedWaitSpot}
+                    handleSubmit={handleSubmit(
+                      isNewWaitSpot ? createWaitSpotHandler : updateWaitSpotHandler,
+                    )}
+                    goToWaitlistTable={resetEditForm}
+                    defaultUnit={defaultUnit}
+                  />
+                )}
+              </CreateWaitSpot>
+            )}
+          </UpdateWaitSpot>
+        </DialogBox>
+      )}
+    </>
+  );
 };
 
 const mapStateToProps = ({ auth, entities }) => ({
