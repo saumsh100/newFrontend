@@ -13,6 +13,7 @@ const DraftMessage = ({
   setTextMessage,
   handleSendMessage,
   goToWaitlistTable,
+  isSendingMessage,
 }) => {
   const { success, errors } = conversionAnalyzer;
   const { 1200: noPhoneNumber = [], 2200: smsDisabled = [] } = groupBy(errors, 'errorCode');
@@ -74,7 +75,7 @@ const DraftMessage = ({
           </Button>
         </div>
         <div className={styles.buttonWrapper}>
-          <Button onClick={handleSendMessage} color="blue">
+          <Button onClick={handleSendMessage} disabled={isSendingMessage} color="blue">
             Send
           </Button>
         </div>
@@ -92,6 +93,7 @@ DraftMessage.propTypes = {
   setTextMessage: PropTypes.func.isRequired,
   handleSendMessage: PropTypes.func.isRequired,
   goToWaitlistTable: PropTypes.func.isRequired,
+  isSendingMessage: PropTypes.bool.isRequired,
 };
 
 export default DraftMessage;

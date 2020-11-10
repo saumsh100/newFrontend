@@ -41,6 +41,8 @@ const NextWaitlist = ({ account, ...props }) => {
   const [sentMessages, setSentMessages] = useState({ success: [],
     errors: [] });
 
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+
   const defaultUnit = account.get('unit');
 
   useEffect(() => {
@@ -76,6 +78,7 @@ const NextWaitlist = ({ account, ...props }) => {
   );
 
   const handleSendMessage = useCallback(() => {
+    setIsSendingMessage(true);
     const dataset = groupBy([...conversionAnalyzer.success, ...conversionAnalyzer.errors], 'id');
     sendMassMessage(account.get('id'), Object.keys(dataset), textMessage).then(({ data }) => {
       const sentData = {
@@ -84,6 +87,7 @@ const NextWaitlist = ({ account, ...props }) => {
       };
 
       setSentMessages(sentData);
+      setIsSendingMessage(false);
       setWaitListState(WAITLIST_STATE.sent);
     });
   }, [account, conversionAnalyzer, textMessage]);
@@ -142,6 +146,7 @@ const NextWaitlist = ({ account, ...props }) => {
           textMessage={textMessage}
           selectedWaitlistMap={selectedWaitlistMap}
           setTextMessage={setTextMessage}
+          isSendingMessage={isSendingMessage}
         />
       </DialogBox>
       <DialogBox
