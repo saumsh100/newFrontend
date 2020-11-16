@@ -77,7 +77,7 @@ function Checkbox(props) {
 Checkbox.propTypes = {
   customContainer: PropTypes.string,
   id: PropTypes.string,
-  label: PropTypes.string,
+  label: PropTypes.node,
   onChange: PropTypes.func.isRequired,
   showIndeterminate: PropTypes.bool,
   theme: PropTypes.objectOf(PropTypes.string),

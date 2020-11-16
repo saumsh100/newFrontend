@@ -77,13 +77,13 @@ List.propTypes = {
   selectedItems: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,
-      label: PropTypes.string,
+      label: PropTypes.node,
     }),
   ),
   availableItems: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,
-      label: PropTypes.string,
+      label: PropTypes.node,
     }),
   ),
   extraPickers: PropTypes.arrayOf(

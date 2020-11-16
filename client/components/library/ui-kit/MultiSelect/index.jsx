@@ -190,10 +190,10 @@ MultiSelect.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,
-      label: PropTypes.string,
+      label: PropTypes.node,
     }),
   ).isRequired,
-  label: PropTypes.string,
+  label: PropTypes.node,
   placeholder: PropTypes.string,
   selector: PropTypes.node,
   theme: PropTypes.objectOf(PropTypes.string),

@@ -1,20 +1,21 @@
 
-import React, { memo, useEffect, useState, useCallback } from 'react';
+import React, { memo, useEffect, useState, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DayOfWeekSegment from './FilterSegments/DayOfWeekSegment';
 import ReasonSegment from './FilterSegments/ReasonSegment';
 import UnitSegment from './FilterSegments/UnitSegment';
-import { DEFAULT_DAY_OF_WEEK, DEFAULT_REASONS, DEFAULT_UNITS_RANGE } from './consts';
-import { applyAllFilters } from './filterFunctions';
-import styles from './styles.scss';
+import { DEFAULT_DAY_OF_WEEK, DEFAULT_REASONS, DEFAULT_UNITS_RANGE, NOT_SET_LABEL } from './consts';
+import { applyAllFilters, dayOfWeekFilter } from './filterFunctions';
 import TimesSegment from './FilterSegments/TimesSegment';
 import { generatePractitionersFilter, generateTimesFilter } from '../helpers';
 import { sortPractitionersAlphabetical } from '../../../../Utils';
+import styles from './styles.scss';
 
 const FilterBar = ({
   updateSegmentedWaitList,
   waitlist,
+  segmentedWaitList,
   timezone,
   practitioners,
   setIsFilterActive,
@@ -54,6 +55,27 @@ const FilterBar = ({
     }));
   }, []);
 
+  const rowCountByDayOfWeek = useMemo(() => {
+    const dayOfWeekKeys = Object.keys(DEFAULT_DAY_OF_WEEK);
+    const EveryDayOfWeek = dayOfWeekKeys.map(day => ({
+      ...DEFAULT_DAY_OF_WEEK,
+      [day]: true,
+    }));
+
+    const countByDay = Object.fromEntries(
+      EveryDayOfWeek.map((val, index) => {
+        const day = Object.keys(val)[index];
+        const count = dayOfWeekFilter(segmentedWaitList, val, false).length;
+        return [day, count];
+      }),
+    );
+
+    return {
+      ...countByDay,
+      [NOT_SET_LABEL]: dayOfWeekFilter(segmentedWaitList, DEFAULT_DAY_OF_WEEK, true).length,
+    };
+  }, [segmentedWaitList]);
+
   useEffect(() => {
     const isFilterActive = Object.keys(filterRules).filter(filter => filterRules[filter].isActive)
       .length;
@@ -84,6 +106,7 @@ const FilterBar = ({
         <DayOfWeekSegment
           selectedDayOfWeek={filterRules.dayOfWeek}
           updateDayOfWeek={val => updateFilterRule('dayOfWeek', val)}
+          rowCountByDayOfWeek={rowCountByDayOfWeek}
         />
       </div>
       <div className={styles.segmentWrapper}>
@@ -114,6 +137,7 @@ export default memo(connect(mapStateToProps)(FilterBar));
 FilterBar.propTypes = {
   updateSegmentedWaitList: PropTypes.func.isRequired,
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
+  segmentedWaitList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
   timezone: PropTypes.string.isRequired,
   practitioners: PropTypes.instanceOf(Map),
   setIsFilterActive: PropTypes.func.isRequired,

@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 import { convertArrayOfOptionsInMap, getDayPickers } from '../../helpers';
 import SegmentButton from '../../../../../library/SegmentButton';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';
-import { NOT_SET_VALUE, NOT_SET_OPTION, DEFAULT_DAY_OF_WEEK } from '../consts';
+import { NOT_SET_VALUE, NOT_SET_LABEL, DEFAULT_DAY_OF_WEEK } from '../consts';
+import CustomMultiSelectLabel from './customComponents/customMultiSelectLabel';
 import styles from './styles.scss';
 
-const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek }) => {
+const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek, rowCountByDayOfWeek }) => {
   const { rule: dayOfWeekFilter, showNotSet, isActive } = selectedDayOfWeek;
   const [selectedOptions, setSelectedOptions] = useState([]);
   const selectedDaysArr = Object.entries(dayOfWeekFilter)
@@ -23,10 +24,23 @@ const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek }) => {
       week.all
         .map(day => ({
           value: day,
-          label: capitalize(day),
+          label: (
+            <CustomMultiSelectLabel count={rowCountByDayOfWeek[day]}>
+              {capitalize(day)}
+            </CustomMultiSelectLabel>
+          ),
         }))
-        .concat(NOT_SET_OPTION),
-    [],
+        .concat([
+          {
+            value: NOT_SET_VALUE,
+            label: (
+              <CustomMultiSelectLabel count={rowCountByDayOfWeek[NOT_SET_LABEL]}>
+                {NOT_SET_LABEL}
+              </CustomMultiSelectLabel>
+            ),
+          },
+        ]),
+    [rowCountByDayOfWeek],
   );
 
   const onDaysOfTheWeekChange = (values) => {
@@ -112,6 +126,16 @@ DayOfWeekSegment.propTypes = {
     saturday: PropTypes.bool,
   }).isRequired,
   updateDayOfWeek: PropTypes.func.isRequired,
+  rowCountByDayOfWeek: PropTypes.shape({
+    '(not set)': PropTypes.number,
+    sunday: PropTypes.number,
+    monday: PropTypes.number,
+    tuesday: PropTypes.number,
+    wednesday: PropTypes.number,
+    thursday: PropTypes.number,
+    friday: PropTypes.number,
+    saturday: PropTypes.number,
+  }).isRequired,
 };
 
 export default memo(DayOfWeekSegment);

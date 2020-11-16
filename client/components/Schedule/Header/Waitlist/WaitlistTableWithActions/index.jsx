@@ -251,6 +251,7 @@ const Index = ({
           </h3>
           <FilterBar
             waitlist={waitlist}
+            segmentedWaitList={segmentedWaitList}
             updateSegmentedWaitList={updateSegmentedWaitList}
             setIsFilterActive={setIsFilterActive}
           />

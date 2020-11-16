@@ -173,8 +173,8 @@ const NextWaitlist = ({ account, ...props }) => {
           title="Waitlist"
           active={waitlistState === WAITLIST_STATE.form}
           bodyStyles={styles.dialogBodyList}
-          onEscKeyDown={() => setWaitListState(WAITLIST_STATE.initial)}
-          onOverlayClick={() => setWaitListState(WAITLIST_STATE.initial)}
+          onEscKeyDown={resetEditForm}
+          onOverlayClick={resetEditForm}
           type="large"
         >
           <UpdateWaitSpot>

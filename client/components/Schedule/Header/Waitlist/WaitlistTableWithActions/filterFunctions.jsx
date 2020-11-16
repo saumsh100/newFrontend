@@ -69,7 +69,7 @@ function reasonsFilter(waitlist, filterRule, showNotSet) {
  * @param showNotSet - Boolean
  * @return Array
  */
-function dayOfWeekFilter(waitlist, filterRule, showNotSet) {
+export function dayOfWeekFilter(waitlist, filterRule, showNotSet) {
   return waitlist.filter(({ daysOfTheWeek }) => {
     const activeFilterRuleEntries = Object.entries(filterRule).filter(([, value]) => value);
     const activeFilterRule = Object.fromEntries(activeFilterRuleEntries);
