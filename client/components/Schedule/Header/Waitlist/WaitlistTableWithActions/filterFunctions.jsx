@@ -107,11 +107,17 @@ const timesFilter = (waitlist, filterRule, showNotSet) =>
 /**
  * @param waitlist - Array
  * @param filterRule - Object
+ * @param showNotSet - Boolean
  * @return Array
  */
 
-const practitionersFilter = (waitlist, filterRule) => waitlist;
-
+const practitionersFilter = (waitlist, filterRule, showNotSet) =>
+  waitlist.filter(({ practitioner }) => {
+    if (showNotSet && !practitioner) {
+      return true;
+    }
+    return filterRule.find(pract => pract.id === practitioner?.ccId && pract.selected);
+  });
 /**
  * @param waitlist - Array
  * @param filterRule - Object

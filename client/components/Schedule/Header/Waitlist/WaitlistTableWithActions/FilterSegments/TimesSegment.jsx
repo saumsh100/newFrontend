@@ -3,12 +3,13 @@ import React, { useMemo, memo, useCallback } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { cloneDeep } from 'lodash';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';
 import { generateWaitlistHours, getAllTimeSlots, getTimePickers, getTimeSlot } from '../../helpers';
 import Account from '../../../../../../entities/models/Account';
 import SegmentButton from '../../../../../library/SegmentButton';
 import styles from './styles.scss';
-import { NOT_SET_OPTION } from '../consts';
+import { NOT_SET_LABEL, NOT_SET_OPTION } from '../consts';
 
 const TimesSegment = ({ account, timesRule, updateSelectedTimes }) => {
   const { rule: selectedTimes, isActive } = timesRule;
@@ -30,7 +31,7 @@ const TimesSegment = ({ account, timesRule, updateSelectedTimes }) => {
       const updatedRule = {
         rule: selectedTimes,
         isActive: times.length > 0,
-        showNotSet: selectedTimes['(not set)'],
+        showNotSet: selectedTimes[NOT_SET_LABEL],
       };
       updateSelectedTimes(updatedRule);
     },
@@ -64,18 +65,19 @@ const TimesSegment = ({ account, timesRule, updateSelectedTimes }) => {
   );
 
   const timeSlots = useMemo(() => {
-    const options = timeOptions.map((option) => {
+    const timeOptionsCopy = cloneDeep(timeOptions);
+    const options = timeOptionsCopy.map((option) => {
       option.slot = getTimeSlot(option.label);
-      if (option.label === '(not set)') {
-        option.slot = '(not set)';
+      if (option.label === NOT_SET_LABEL) {
+        option.slot = NOT_SET_LABEL;
       }
       return option;
     });
 
     const allTimeSlots = {
       ...getAllTimeSlots(options),
-      '(not set)': { ...NOT_SET_OPTION,
-        slot: '(not set)' },
+      NOT_SET_LABEL: { ...NOT_SET_OPTION },
+      slot: NOT_SET_LABEL,
     };
 
     return allTimeSlots;

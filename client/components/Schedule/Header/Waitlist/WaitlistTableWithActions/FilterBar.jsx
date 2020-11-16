@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DayOfWeekSegment from './FilterSegments/DayOfWeekSegment';
 import ReasonSegment from './FilterSegments/ReasonSegment';
+import PractitionersSegment from './FilterSegments/PractitionersSegment';
 import UnitSegment from './FilterSegments/UnitSegment';
 import { DEFAULT_DAY_OF_WEEK, DEFAULT_REASONS, DEFAULT_UNITS_RANGE, NOT_SET_LABEL } from './consts';
 import { applyAllFilters, dayOfWeekFilter } from './filterFunctions';
@@ -94,6 +95,12 @@ const FilterBar = ({
         <ReasonSegment
           selectedReasons={filterRules.reasons}
           updateReasons={val => updateFilterRule('reasons', val)}
+        />
+      </div>
+      <div className={styles.segmentWrapper}>
+        <PractitionersSegment
+          practitionerRule={filterRules.practitioners}
+          updatePractitioners={val => updateFilterRule('practitioners', val)}
         />
       </div>
       <div className={styles.segmentWrapper}>

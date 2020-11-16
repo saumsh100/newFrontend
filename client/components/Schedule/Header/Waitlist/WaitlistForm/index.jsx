@@ -54,6 +54,7 @@ const setInitialState = (
     availableTimes = [],
     reasonText = '',
     duration = 6,
+    practitioner = null,
   },
   defaultUnit,
 ) => ({
@@ -66,6 +67,7 @@ const setInitialState = (
   daysOfTheWeek,
   availableTimes,
   reasonText,
+  practitionerId: practitioner?.ccId || null,
 });
 
 const WaitlistForm = ({
@@ -75,6 +77,7 @@ const WaitlistForm = ({
   initialState,
   isNewWaitSpot,
   defaultUnit,
+  practitioners,
 }) => {
   const [formValues, setFormValues] = useState(setInitialState(initialState, defaultUnit));
 
@@ -245,13 +248,26 @@ const WaitlistForm = ({
               extraPickers={getDayPickers(selectedDaysOfWeek, onToggleDayPicker)}
               shouldCheckUpdate
             />
-            <DropdownSelect
-              onChange={onChange('reasonText')}
-              value={formValues.reasonText || ''}
-              theme={{ label: styles.label }}
-              label="Reason"
-              options={reasons}
-            />
+            <div className={styles.unitFieldsWrapper}>
+              <div className={styles.waitlistFormColumnLeft}>
+                <DropdownSelect
+                  onChange={onChange('reasonText')}
+                  value={formValues.reasonText || ''}
+                  theme={{ label: styles.label }}
+                  label="Reason"
+                  options={reasons}
+                />
+              </div>
+              <div className={styles.waitlistFormColumnRight}>
+                <DropdownSelect
+                  onChange={onChange('practitionerId')}
+                  value={formValues?.practitionerId || ''}
+                  theme={{ label: styles.label }}
+                  label="Preferred Practitioner"
+                  options={practitioners}
+                />
+              </div>
+            </div>
           </div>
           <div className={styles.waitlistFormColumnRight}>
             <DayPicker
@@ -352,6 +368,7 @@ WaitlistForm.propTypes = {
   initialState: PropTypes.objectOf(PropTypes.any),
   isNewWaitSpot: PropTypes.bool.isRequired,
   defaultUnit: PropTypes.number.isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
 };
 
 WaitlistForm.defaultProps = {

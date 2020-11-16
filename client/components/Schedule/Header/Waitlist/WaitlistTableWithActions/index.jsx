@@ -152,6 +152,11 @@ const Index = ({
       accessor: waitspot => capitalize(waitspot.reasonText || ''),
     },
     {
+      id: 'practitioners',
+      Header: 'Practitioner',
+      accessor: waitspot => capitalize(waitspot.practitioner?.firstName || ''),
+    },
+    {
       id: 'duration',
       Header: () => (
         <>

@@ -26,6 +26,16 @@ export const query = gql`
             daysOfTheWeek
             endDate
             createdAt
+            practitioner {
+              id
+              ccId
+              accountId
+              type
+              isActive
+              isHidden
+              firstName
+              lastName
+            }
             patient {
               id
               ccId

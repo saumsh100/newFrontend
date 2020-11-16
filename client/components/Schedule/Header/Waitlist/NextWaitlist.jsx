@@ -17,6 +17,7 @@ import {
 } from '../../../../thunks/waitlist';
 import { Create as CreateWaitSpot } from '../../../GraphQLWaitlist';
 import UpdateWaitSpot from '../../../GraphQLWaitlist/updateWaitSpot';
+import { sortPractitionersAlphabetical } from '../../../Utils';
 import styles from '../styles.scss';
 
 export const WAITLIST_STATE = {
@@ -190,6 +191,7 @@ const NextWaitlist = ({ account, ...props }) => {
                     )}
                     goToWaitlistTable={resetEditForm}
                     defaultUnit={defaultUnit}
+                    practitioners={props.practitioners}
                   />
                 )}
               </CreateWaitSpot>
@@ -203,6 +205,15 @@ const NextWaitlist = ({ account, ...props }) => {
 
 const mapStateToProps = ({ auth, entities }) => ({
   account: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+  practitioners: entities
+    .getIn(['practitioners', 'models'])
+    .sort(sortPractitionersAlphabetical)
+    .toArray()
+    .filter(practitioner => practitioner.isActive)
+    .map(practitioner => ({
+      value: practitioner.get('id'),
+      label: practitioner.getPrettyName(),
+    })),
 });
 
 export default memo(connect(mapStateToProps)(NextWaitlist));
@@ -210,6 +221,7 @@ export default memo(connect(mapStateToProps)(NextWaitlist));
 NextWaitlist.propTypes = {
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
   account: PropTypes.instanceOf(Account).isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
 };
 
 NextWaitlist.defaultProps = {
