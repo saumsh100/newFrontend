@@ -1,6 +1,7 @@
 
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { capitalize } from '@carecru/isomorphic';
 import ReactTable from 'react-table';
@@ -62,15 +63,21 @@ const Index = ({
     }));
   };
 
-  const waitlistWithProps = segmentedWaitList.map(spot =>
-    propsGenerator({
+  const waitlistWithProps = segmentedWaitList.map((spot) => {
+    const generatedProps = propsGenerator({
       ...spot,
       ...parentProps,
       toggleSingleWaitlistSelection,
       selectedWaitlistMap,
-    }));
+    });
 
-  const sortNames = useCallback((a, b) => {
+    const availableTimes = spot.availableTimes.map(time => moment(time).toISOString());
+
+    return { ...generatedProps,
+      availableTimes };
+  });
+
+  const sortHelper = useCallback((a, b) => {
     if (a < b) {
       return -1;
     }
@@ -118,7 +125,7 @@ const Index = ({
       id: 'firstName',
       Header: 'First Name',
       accessor: waitspot => waitspot,
-      sortMethod: (a, b) => sortNames(a.patient.firstName, b.patient.firstName),
+      sortMethod: (a, b) => sortHelper(a.patient.firstName, b.patient.firstName),
       Cell: ({ value }) => {
         const { PopOverComponent, patient } = value;
         return (
@@ -134,7 +141,7 @@ const Index = ({
       id: 'lastName',
       Header: 'Last Name',
       accessor: waitspot => waitspot,
-      sortMethod: (a, b) => sortNames(a.patient.lastName, b.patient.lastName),
+      sortMethod: (a, b) => sortHelper(a.patient.lastName, b.patient.lastName),
       Cell: ({ value }) => {
         const { PopOverComponent, patient } = value;
         return (
@@ -176,6 +183,7 @@ const Index = ({
       id: 'times',
       Header: 'Times',
       accessor: waitspot => waitspot,
+      sortMethod: (a, b) => sortHelper(a.availableTimes, b.availableTimes),
       // eslint-disable-next-line react/prop-types
       Cell: ({ value }) => (
         <Tooltip
@@ -195,6 +203,7 @@ const Index = ({
     {
       id: 'waitspotNotes',
       Header: 'Notes',
+      sortMethod: (a, b) => sortHelper(a.note, b.note),
       accessor: waitspot => waitspot,
       // eslint-disable-next-line react/prop-types
       Cell: ({ value }) => (
