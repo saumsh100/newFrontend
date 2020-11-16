@@ -125,7 +125,8 @@ const Index = ({
       id: 'firstName',
       Header: 'First Name',
       accessor: waitspot => waitspot,
-      sortMethod: (a, b) => sortHelper(a.patient.firstName, b.patient.firstName),
+      sortMethod: (a, b) =>
+        sortHelper(a.patient.firstName.toLowerCase(), b.patient.firstName.toLowerCase()),
       Cell: ({ value }) => {
         const { PopOverComponent, patient } = value;
         return (
@@ -141,7 +142,8 @@ const Index = ({
       id: 'lastName',
       Header: 'Last Name',
       accessor: waitspot => waitspot,
-      sortMethod: (a, b) => sortHelper(a.patient.lastName, b.patient.lastName),
+      sortMethod: (a, b) =>
+        sortHelper(a.patient.lastName.toLowerCase(), b.patient.lastName.toLowerCase()),
       Cell: ({ value }) => {
         const { PopOverComponent, patient } = value;
         return (
@@ -203,7 +205,7 @@ const Index = ({
     {
       id: 'waitspotNotes',
       Header: 'Notes',
-      sortMethod: (a, b) => sortHelper(a.note, b.note),
+      sortMethod: (a, b) => sortHelper(a.note.toLowerCase(), b.note.toLowerCase()),
       accessor: waitspot => waitspot,
       // eslint-disable-next-line react/prop-types
       Cell: ({ value }) => (
