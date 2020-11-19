@@ -181,6 +181,12 @@ const WaitlistForm = ({
 
   const timePickers = getTimePickers(selectedTimes, timeSlots, onToggleTimePicker);
 
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
+    delete formValues.minutes;
+    handleSubmit(formValues);
+  };
+
   return (
     <div className={styles.waitlistFormContainer}>
       <div>
@@ -198,15 +204,7 @@ const WaitlistForm = ({
         </div>
       </div>
       <div className={styles.heading}>{isNewWaitSpot ? 'Add to Waitlist' : 'Update Wait Spot'}</div>
-      <form
-        id="waitlist-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          delete formValues.minutes;
-          handleSubmit(formValues);
-        }}
-        className={styles.waitlistFormWrapper}
-      >
+      <form id="waitlist-form" onSubmit={handleSubmitForm} className={styles.waitlistFormWrapper}>
         <div className={styles.waitlistForm}>
           <div className={styles.waitlistFormColumnLeft}>
             {selectedPatient ? (
@@ -307,7 +305,7 @@ const WaitlistForm = ({
                   label={`Unit (${defaultUnit})`}
                   step={1}
                   min={0}
-                  onChange={({ target }) => handleDurationChange(target.value)}
+                  onChange={({ target }) => handleDurationChange(target.value || null)}
                   value={formValues.duration || ''}
                 />
               </div>
