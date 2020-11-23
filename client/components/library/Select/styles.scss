@@ -6,29 +6,26 @@ $active-color: $primary-dark;
 $empty-grey: $primary-darkgrey;
 
 .group {
-  position: relative;
   margin-bottom: 45px;
   margin-top: 30px;
+  position: relative;
 }
 
 .input {
-  font-size: 16px;
-  padding: 10px 10px 10px 5px;
-  display: block;
-  width: 100%;
+  background-color: transparent;
   border: none;
   border-bottom: 1px solid $empty-grey;
-  background-color: transparent;
+  display: block;
+  font-size: 16px;
+  padding: 10px 10px 10px 5px;
+  width: 100%;
   &:focus {
     outline: none;
   }
 
   &:focus ~ .label {
     color: $active-color;
-  }
-
-  // Bring the label above the input when focused / filled in
-  &:focus ~ .label {
+    // Bring the label above the input when focused / filled in
     @extend .filled;
   }
 }
@@ -39,19 +36,19 @@ $empty-grey: $primary-darkgrey;
 
 // TODO: figure out how to stack the CSS to make sure we dont have to use !important
 .filled {
-  top: -20px !important;
   font-size: 12px !important;
+  top: -20px !important;
 }
 
 .label {
   color: $empty-grey;
-  font-weight: normal;
-  position: absolute;
-  pointer-events: none;
-  left: 5px;
-  transition: 0.2s ease all;
-  top: 10px;
   font-size: 16px;
+  font-weight: normal;
+  left: 5px;
+  pointer-events: none;
+  position: absolute;
+  top: 10px;
+  transition: 0.2s ease all;
 }
 
 .erroredLabel {
@@ -59,17 +56,17 @@ $empty-grey: $primary-darkgrey;
 }
 
 .bar {
-  position: relative;
   display: block;
+  position: relative;
   width: 100%;
   &:before,  &:after {
+    background: $active-color;
+    bottom: 0;
     content: '';
     height: 2px;
-    width: 0;
-    bottom: 0;
     position: absolute;
-    background: $active-color;
     transition: 0.2s ease all;
+    width: 0;
   }
 
   &:before {
@@ -90,12 +87,12 @@ $empty-grey: $primary-darkgrey;
 
 .error {
   color: $error-color;
-  font-weight: normal;
-  position: absolute;
-  pointer-events: none;
-  left: 5px;
-  top: 41px;
   font-size: 12px;
+  font-weight: normal;
+  left: 5px;
+  pointer-events: none;
+  position: absolute;
+  top: 41px;
 }
 
 /*.highlight {

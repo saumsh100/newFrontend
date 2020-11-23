@@ -1,33 +1,33 @@
 @import '../styles';
 
 .filled {
+  left: 0 !important;
+  position: relative;
   top: -5px !important;
   width: 100%;
-  position: relative;
-  left: 0 !important;
 }
 
 .label {
   color: $empty-grey;
-  font-weight: normal;
-  pointer-events: none;
   font-family: 'Roboto', sans-serif;
-  transition: 0.2s ease all;
-  top: 0;
+  font-weight: normal;
   left: 0 !important;
+  pointer-events: none;
+  top: 0;
+  transition: 0.2s ease all;
 }
 .labelWrapper {
-  left: 1px;
-  position: absolute;
-  width: calc((100% - 2px) - var(--widget-spacer));
-  font-size: 14px;
-  padding-top: 12px;
-  padding-bottom: 2px;
-  color: $widget-grey-light;
   background: $widget-white;
-  top: 1px;
   border-radius: 4px;
+  color: $widget-grey-light;
+  font-size: 14px;
+  left: 1px;
+  padding-bottom: 2px;
   padding-left: var(--widget-spacer);
+  padding-top: 12px;
+  position: absolute;
+  top: 1px;
+  width: calc((100% - 2px) - var(--widget-spacer));
 }
 
 .container {

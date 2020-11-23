@@ -1,12 +1,12 @@
 @import '../../../../ui.scss';
 
 .submitButton {
-  margin-top: 20px;
   margin-bottom: 20px;
+  margin-top: 20px;
 
   & > button {
-    width: 100%;
     border-radius: 4px;
+    width: 100%;
 
     &:hover {
       background-color: $electron-button-primary-hover;
@@ -15,11 +15,11 @@
 }
 
 .toggle {
+  background: hsl(0, 0%, 27%);
+  border-radius: 0.3rem;
+  color: white;
   display: inline-flex;
   flex-direction: column;
   max-width: 200px;
   padding: 0.4rem 0.8rem;
-  background: hsl(0, 0%, 27%);
-  color: white;
-  border-radius: 0.3rem;
 }

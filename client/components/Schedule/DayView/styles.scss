@@ -1,10 +1,10 @@
 @import '../../../ui.scss';
 
 .card {
-  height: 100%;
   display: flex;
   flex: 1;
   flex-direction: column;
+  height: 100%;
 }
 
 .header {
@@ -12,13 +12,13 @@
 }
 
 .scrollDiv {
-  width: 100%;
+  box-sizing: border-box;
   display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
   overflow-x: auto;
   overflow-y: scroll;
-  flex-direction: row;
-  flex: 1 1 auto;
-  box-sizing: border-box;
+  width: 100%;
 
   &::-webkit-scrollbar {
     background: transparent;
@@ -27,40 +27,40 @@
   }
 
   &::-webkit-scrollbar-thumb {
+    background: #ddd;
     border: none;
     -webkit-box-shadow: none;
     box-shadow: none;
-    background: #ddd;
     min-height: 40px;
   }
 }
 
 .dayView {
-  display: flex;
-  flex-direction: row;
   align-items: stretch;
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: row;
   overflow: hidden;
   //border-top: 1px solid $primary-grey;
 }
 
 .timeColumn {
+  border-right: 0.13em solid $primary-grey;
   box-sizing: border-box;
-  width: 100px;
   color: $inactive-color;
   font-weight: $large-weight;
-  overflow: hidden;
   height: inherit;
-  border-right: 0.13em solid $primary-grey;
+  overflow: hidden;
   position: relative;
+  width: 100px;
 }
 
 .timeColumnItem {
-  display: flex;
   box-sizing: border-box;
-  justify-content: center;
   color: $primary-dark;
+  display: flex;
   font-size: 10px;
+  justify-content: center;
   overflow: hidden;
 
   &_time {
@@ -72,27 +72,27 @@
 }
 
 .timeSlot {
-  display: inline-flex;
   box-sizing: border-box;
+  display: inline-flex;
   min-width: 100%;
 }
 
 .timeSlotColumn {
-  flex: 1;
   box-sizing: border-box;
+  flex: 1;
   position: relative;
 }
 
 .timeSlotColumnItem {
+  align-items: center;
+  animation: fadein 0.5s ease;
+  border: 0.13em solid $primary-grey;
+  border-left: 0;
+  border-top: 0;
   box-sizing: border-box;
   justify-content: center;
-  align-items: center;
-  border: 0.13em solid $primary-grey;
-  border-top: 0;
-  border-left: 0;
-  overflow: hidden;
   opacity: 1;
-  animation: fadein 0.5s ease;
+  overflow: hidden;
 }
 
 @keyframes fadein {

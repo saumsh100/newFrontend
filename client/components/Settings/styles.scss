@@ -1,24 +1,24 @@
 @import '../../ui.scss';
 
 .rowContainer {
-  display: flex;
-  height: calc(100vh - 65px);
   background-color: $background-color;
   box-sizing: border-box;
-  padding-left: 15px;
-  padding-top: 15px;
-  padding-right: 15px;
+  display: flex;
+  height: calc(100vh - 65px);
   padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
 }
 
 .subSettingsCol {
-  max-width: 270px;
-  min-width: 270px;
-  width: 270px;
-  margin-right: 15px;
   //padding-top: 10px;
   background: $primary-white;
   height: fit-content;
+  margin-right: 15px;
+  max-width: 270px;
+  min-width: 270px;
+  width: 270px;
 }
 
 .subSettingsCard {
@@ -27,15 +27,15 @@
 }
 
 .subSettingsListItem {
+  color: $primary-darkgrey;
   height: 65px;
   padding-left: 15px;
-  color: $primary-darkgrey;
 }
 
 .settingsFormsCol {
-  width: 100%;
   background: #fafafa;
   overflow: auto;
+  width: 100%;
 }
 
 .settingsFormsCard {

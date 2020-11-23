@@ -5,19 +5,19 @@
 }
 
 .input {
-  border: 1px solid $primary-grey;
   background-color: white;
-  width: 100%;
+  border: 1px solid $primary-grey;
   padding-left: 4px;
+  width: 100%;
 }
 
 .group {
   //padding: 0 0 10px 0;
   box-sizing: border-box;
   input::placeholder {
-    padding-left: 16px;
-    font-size: 12px;
     font-family: $medium-font;
+    font-size: 12px;
+    padding-left: 16px;
   }
 }
 
@@ -29,8 +29,8 @@
 
 .hidden {
   display: block;
-  right: 10px;
   left: unset;
+  right: 10px;
 }
 
 .bar {

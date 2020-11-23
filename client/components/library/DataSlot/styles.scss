@@ -1,40 +1,40 @@
 @import '../../../ui.scss';
 
 .optionDiv {
-  padding: 0 !important;
   font-family: $dashboard-font !important;
+  padding: 0 !important;
   white-space: normal !important;
 }
 
 .optionListItem {
-  font-size: $small-size;
-  cursor: pointer;
-  padding-left: 20px;
-  padding-right: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  display: flex;
   align-items: center;
-  height: 2.5rem;
   background-color: $primary-white;
   border: 0;
-  width: 100%;
   border-bottom: 1px solid;
   border-bottom-color: $primary-grey;
-  text-align: center;
   color: $primary-dark;
+  cursor: pointer;
+
+  display: flex;
+  font-size: $small-size;
+  height: 2.5rem;
   justify-content: center;
   letter-spacing: 0;
+  overflow: hidden;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+  text-overflow: ellipsis;
+  width: 100%;
   &:hover {
-    cursor: pointer;
     background-color: lighten($primary-grey, 5%);
     background-color: $primary-lightgrey !important;
     color: $primary-dark !important;
+    cursor: pointer;
   }
 }
 
 .selectedListItem {
-  padding-left: 15px;
   border-left: $selection-border $primary-color;
+  padding-left: 15px;
 }

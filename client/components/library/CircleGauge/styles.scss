@@ -9,8 +9,8 @@
 .empty {
   fill: transparent;
   stroke: fade-out($primary-color, .5);
-  stroke-width: 5;
   stroke-dashoffset: 0;
+  stroke-width: 5;
 }
 
 .gauge {

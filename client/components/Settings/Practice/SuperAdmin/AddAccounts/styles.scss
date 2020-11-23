@@ -1,8 +1,8 @@
 @import '../../../../../ui';
 
 .mainContainer {
-  background: $primary-white;
   animation: fadeinform 0.9s;
+  background: $primary-white;
   //border-radius: 10px;
   padding: 10px;
   position: relative;
@@ -12,38 +12,38 @@
 }
 
 .header {
-  box-sizing: border-box;
-  display: flex;
   align-items: center;
+  box-sizing: border-box;
   color: $primary-dark;
   composes: fontMediumLarge from '../../../../../fonts.scss';
+  display: flex;
   &_text {
     padding-left: 10px;
   }
   &_icon {
-    margin-left: auto;
+    cursor: pointer;
     font-size: 1rem;
+    margin-left: auto;
     padding-right: 15px;
     padding-top: 15px;
-    cursor: pointer;
     position: absolute;
-    top: 0;
     right: 0;
+    top: 0;
   }
 }
 
 .formContainer {
-  margin: 10px;
   display: flex;
   flex-direction: column;
+  margin: 10px;
 }
 
 .buttonContainer {
-  display: flex;
   align-items: center;
-  width: 100%;
   box-sizing: border-box;
+  display: flex;
   padding: 0 10px 10px;
+  width: 100%;
 }
 .nextButton {
   margin-left: auto;
@@ -58,13 +58,13 @@
 }
 
 .selectPadding {
-  padding-top: 15px;
   padding-bottom: 15px;
+  padding-top: 15px;
 }
 
 .dropDownEnterprise {
-  padding-top: 15px;
   padding-bottom: 15px;
+  padding-top: 15px;
   z-index: 1000000;
 }
 
@@ -72,34 +72,34 @@
 }
 
 .selectEnterprise {
-  display: flex;
-  width: 100%;
   align-items: center;
+  display: flex;
   justify-content: center;
+  width: 100%;
 
   &_dd {
     width: 45%;
   }
 
   &_icon {
-    padding-top: 12px;
     align-items: center;
+    padding-top: 12px;
   }
 }
 
 .accountOptions {
-  padding-top: 10px;
-  padding-bottom: 15px;
-  display: flex;
   align-items: center;
-  width: 100%;
+  display: flex;
   min-width: 300px;
+  padding-bottom: 15px;
+  padding-top: 10px;
+  width: 100%;
 
   &_text {
-    width: 210px;
     color: $primary-darkgrey;
     font-weight: $large-weight;
     padding-left: 20px;
+    width: 210px;
   }
   &_row {
     min-width: 400px;
@@ -114,8 +114,8 @@
 }
 
 .displayFlex {
-  display: flex;
   align-items: center;
+  display: flex;
   padding-bottom: 15px;
 }
 

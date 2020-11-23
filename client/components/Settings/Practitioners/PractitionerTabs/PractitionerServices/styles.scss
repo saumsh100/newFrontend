@@ -3,23 +3,23 @@
   padding-top: 15px;
 
   &_content {
-    padding-top: 10px;
     padding-bottom: 10px;
+    padding-top: 10px;
     width: 300px;
   }
 
   &_service {
-    display: flex;
     align-items: center;
+    display: flex;
     padding-bottom: 5px;
 
     &_name {
-      padding-right: 35px;
       max-width: 250px;
-      width: 300px;
       overflow: hidden;
-      white-space: nowrap;
+      padding-right: 35px;
       text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 300px;
     }
 
     &_toggle {
@@ -39,7 +39,7 @@
 }
 
 .allContainer {
+  align-items: center;
   display: flex;
   width: 300px;
-  align-items: center;
 }

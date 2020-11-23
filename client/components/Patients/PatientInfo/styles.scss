@@ -1,16 +1,16 @@
 @import '../../../ui.scss';
 
 @mixin responsiveMainContainer {
-  min-width: auto !important;
   max-width: none !important;
+  min-width: auto !important;
   padding: 10px !important;
 }
 
 @mixin containerSections {
-  width: 100%;
-  display: block;
   background: $primary-white;
+  display: block;
   padding: 0;
+  width: 100%;
 }
 
 .responsiveContainer {
@@ -25,8 +25,8 @@
     }
 
     .topDisplay {
-      max-height: none;
       height: 150px;
+      max-height: none;
     }
 
     .tabsSection {
@@ -40,12 +40,12 @@
 }
 
 .tab {
-  height: 30px;
-  font-family: $medium-font;
   background: $primary-white;
   border: 1px solid $electron-chat-tabs-border;
-  text-transform: uppercase;
+  font-family: $medium-font;
   font-size: 11px;
+  height: 30px;
+  text-transform: uppercase;
 }
 
 .activeTab {
@@ -61,15 +61,15 @@
 }
 
 .mainContainer {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
-  padding: 35px 15px 15px;
-  min-width: 1200px;
-  //overflow: auto;
-  max-width: 1566px;
   height: 100%;
   margin: 0 auto;
+  //overflow: auto;
+  max-width: 1566px;
+  min-width: 1200px;
+  padding: 35px 15px 15px;
 
   @media screen and (max-width: 1366px) {
     padding-top: 15px;
@@ -81,9 +81,9 @@
 .body {
   display: flex;
   flex-direction: row;
-  width: 100%;
   height: 100%;
   padding-bottom: 35px;
+  width: 100%;
   @media screen and (max-width: 1366px) {
     padding-bottom: 15px;
   }
@@ -95,63 +95,63 @@
 
 .topDisplay {
   height: 320px;
-  max-height: 320px;
   margin-bottom: 15px;
+  max-height: 320px;
 }
 
 .infoDisplay {
-  padding-right: 15px;
-  width: 455px;
   display: flex;
   flex-direction: column;
+  padding-right: 15px;
+  width: 455px;
 }
 
 .timeline {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   &_header {
-    padding-top: 25px;
-    padding-bottom: 10px;
-    composes: fontMedium from '../../../fonts.scss';
     color: $primary-darkgrey;
+    composes: fontMedium from '../../../fonts.scss';
+    padding-bottom: 10px;
+    padding-top: 25px;
   }
 }
 
 .loadingContainer {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
 }
 
 .textContainer {
   display: flex;
   flex-direction: row;
-  width: 100%;
-  min-height: 15px;
-  margin-top: 10px;
   margin-bottom: 10px;
+  margin-top: 10px;
+  min-height: 15px;
+  width: 100%;
 }
 
 .cardTitle {
-  font-size: 15px;
   composes: fontMedium from '../../../fonts.scss';
+  font-size: 15px;
 }
 
 .textHeader {
-  margin-left: auto;
-  display: flex;
-  padding-bottom: 2px;
   align-items: center;
-  composes: fontMedium from '../../../fonts.scss';
-  color: $primary-darkgrey;
   background: none;
+  color: $primary-darkgrey;
+  composes: fontMedium from '../../../fonts.scss';
+  display: flex;
+  margin-left: auto;
+  padding-bottom: 2px;
 
   &:hover {
-    cursor: pointer;
     color: $primary-blue;
+    cursor: pointer;
   }
 
   &_text {
@@ -168,17 +168,17 @@
 
 .topCardHeader {
   display: flex;
-  width: 100%;
   flex-direction: row;
   justify-content: flex-end;
+  width: 100%;
 }
 
 .editButton {
-  position: absolute;
-  top: 10%;
-  right: 17px;
-  width: 25px;
   height: 25px;
+  position: absolute;
+  right: 17px;
+  top: 10%;
+  width: 25px;
 
   .cardTitle,
   .textHeader_text {
@@ -186,9 +186,9 @@
   }
 
   & > button {
+    line-height: 25px;
     padding: 0;
     text-align: center;
-    line-height: 25px;
 
     & > div {
       z-index: 2;
@@ -201,14 +201,14 @@
   }
 
   &:before {
-    display: block;
-    content: '';
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
     background-color: $empty-grey;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 25px;
     position: absolute;
     top: 0;
+    width: 25px;
     z-index: 1;
   }
 }
@@ -220,17 +220,17 @@
 
 .notesForm {
   textarea {
-    padding: 10px;
     background-color: $primary-lightgrey !important;
     color: black;
-    height: 100px;
     font-size: 14px;
+    height: 100px;
     line-height: 1.5em;
+    padding: 10px;
   }
 
   span[class*='error'] {
-    top: unset;
     bottom: 5px;
+    top: unset;
   }
 
   > div[class*='toggleWrapper'] {

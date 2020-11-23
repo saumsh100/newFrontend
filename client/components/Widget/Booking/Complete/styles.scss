@@ -1,8 +1,8 @@
 @import '../styles';
 
 .heading {
-  font-size: 1rem;
   color: var(--primaryColor);
+  font-size: 1rem;
   margin-bottom: var(--widget-spacer);
 }
 
@@ -25,8 +25,8 @@
 }
 .requestPatient {
   @extend .title;
-  text-align: center;
   margin-bottom: 12px;
+  text-align: center;
 }
 .requestCard {
   background: $widget-grey-lightest;
@@ -40,21 +40,21 @@
     margin-bottom: 0;
   }
   > strong {
+    color: $widget-grey;
     display: block;
     font-size: 13px;
-    color: $widget-grey;
   }
 }
 .afterCardMessage {
   @extend .subtitle;
-  margin-top: var(--widget-spacer);
   margin-bottom: 4px;
+  margin-top: var(--widget-spacer);
   padding: 0 var(--widget-spacer);
 }
 
 .svgWrapper {
-  text-align: center;
   margin-bottom: 20px;
+  text-align: center;
   width: 100%;
 }
 .bookingType {
@@ -71,8 +71,8 @@
 }
 
 hr {
-  border: 0;
-  margin: var(--widget-spacer) 0;
   background: $widget-grey-lighter;
+  border: 0;
   height: 1px;
+  margin: var(--widget-spacer) 0;
 }

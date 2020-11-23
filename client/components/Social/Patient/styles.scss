@@ -10,44 +10,40 @@
 }
 
 .padding {
-  padding: 0 5px;
+  padding: 10px 5px 0 5px;
   @media screen and (max-width: 900px) {
     margin-bottom: 15px;
   }
 }
 
-.padding {
-	padding-top: 10px;
-}
-
 .calendar {
-    overflow-x: auto;
+    background-color: #fafafa;
     border-top: $card-border-size $primary-dark-blue;
     margin-top: 10px;
-    background-color: #fafafa;
+    overflow-x: auto;
 }
 
 .googleMapsRespond {
+  align-items: center;
   display: flex;
   flex-direction: row;
   height: 168px;
-  align-items: center;
   padding-left: 20px;
 
   &__video {
-    width: 20%;
     height: 120px;
     margin-right: 40px;
     min-width: 250px;
+    width: 20%;
   }
 
   &__descr {
-    width: 80%;
-    height: 120px;
+    align-items: space-around;
     display: flex;
     flex-direction: column;
-    align-items: space-around;
+    height: 120px;
     justify-content: center;
+    width: 80%;
     div:first-child {
       font-weight: $large-weight;
       margin-bottom: 20px;
@@ -60,15 +56,15 @@
 
 
 .stats {
-  min-height: 168px;
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  width: 80%;
-  min-width: 250px;
   margin: 0 auto;
+  min-height: 168px;
+  min-width: 250px;
   padding: 10px 0;
+  width: 80%;
   &__count {
     font-size: $x-large-size;
     font-weight: $small-weight;
@@ -85,76 +81,76 @@
   }
 
   &__bottom {
-    width: 100%;
-    margin: 5px 0 0;
-    box-shadow: border-box;
-    padding-top: 15px;
-    text-align: center;
     border-top: 1px solid $primary-darkgrey;
+    box-shadow: border-box;
     color: $primary-darkgrey;
     font-size: $medium-size;
+    margin: 5px 0 0;
+    padding-top: 15px;
+    text-align: center;
+    width: 100%;
   }
 }
 
 .content {
-  width: 100%;
-  height: 16px;
-  display: flex;
   align-items: center;
+  display: flex;
+  height: 16px;
   justify-content: center;
+  width: 100%;
   &__stars {
-    width: 50%;
-    text-align: right;
     display: inline-block;
+    text-align: right;
+    width: 50%;
   }
 
   &__bar {
-    width: 50%;
-    text-align: left;
-    display: flex;
     align-items: center;
     color: $primary-blue;
+    display: flex;
+    text-align: left;
+    width: 50%;
     &__percent {
-      height: 16px;
-      margin-right: 4px;
       background-color: $primary-blue;
       display: inline-block;
+      height: 16px;
+      margin-right: 4px;
     }
   }
 }
 
 
 .tags {
-  width: 100%;
   height: 168px;
+  width: 100%;
   &__left {
-    width: 25%;
-    min-width: 250px;
-    height: 168px;
-    position: relative;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    height: 168px;
     justify-content: center;
+    min-width: 250px;
+    position: relative;
+    width: 25%;
 
     &__update {
-      margin-top: 10px;
       color: $primary-darkgrey;
+      margin-top: 10px;
     }
   }
 }
 
 .reviewsComments {
-
-	width: 100%;
 	margin-top: 20px;
-	min-height: 168px;
 	max-height: 745px;
+	min-height: 168px;
 	overflow: auto;
 
+	width: 100%;
+
 	&__container {
-		border-top: 2px solid $primary-lightgrey;
 		border-right: 2px solid $primary-lightgrey;
+		border-top: 2px solid $primary-lightgrey;
 		padding: 10px 10px 0 0;
 	}
   &__comment {

@@ -3,21 +3,21 @@
 
 .button {
   @extend .ui-kit-smoother;
-  width: 100%;
-  min-width: 120px;
-  border-radius: $rounded;
   background-color: $teal-dark;
-  padding: 16px;
+  border: none;
+  border-radius: $rounded;
   box-shadow: $shadow;
-  font-weight: 500;
+  color: $white;
+  cursor: pointer;
   font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.02px;
   line-height: 10px;
-  color: $white;
-  text-align: center;
+  min-width: 120px;
   outline: none;
-  border: none;
-  cursor: pointer;
+  padding: 16px;
+  text-align: center;
+  width: 100%;
 
   &:hover {
     background: $teal;

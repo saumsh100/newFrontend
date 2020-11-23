@@ -2,25 +2,25 @@
 
 .patients {
   display: flex;
-  padding: 10px;
   height: 100%;
+  padding: 10px;
 }
 
 .topRow {
   background: #f7f7f7;
-  min-height: 96px;
   max-height: 96px;
+  min-height: 96px;
 }
 
 .header {
-  width: 100%;
   margin-bottom: 10px;
   padding-left: 15px;
+  width: 100%;
 }
 
 .input {
-  margin-right: 5%;
   margin-left: 5%;
+  margin-right: 5%;
   width: 90%;
 }
 
@@ -30,13 +30,13 @@
 }
 
 .sendButton {
-  padding: 20px 0 0;
   opacity: 0.6;
+  padding: 20px 0 0;
 }
 
 .sendButtonOff {
-  padding: 20px 0 0;
   opacity: 0.2;
+  padding: 20px 0 0;
 }
 
 .button {
@@ -60,37 +60,37 @@
 }
 
 .users {
-  height: 85px;
-  position: relative;
-  display: flex;
-  padding: 20px;
   border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  height: 85px;
+  padding: 20px;
+  position: relative;
 
   &__active {
     background: lighten(#e7e7e7, 2.6%);
   }
 
   &__photo {
-    width: 100%;
-    max-width: 50px;
-    height: auto;
-    max-height: 50px;
-    margin-right: 10px;
     border-radius: 50%;
+    height: auto;
+    margin-right: 10px;
+    max-height: 50px;
+    max-width: 50px;
+    width: 100%;
   }
 
   &__header {
-    display: flex;
     align-items: center;
+    display: flex;
     height: 40px;
   }
 
   &__name {
     color: #2e3845;
-    font-size: 14px;
     composes: listItemHeader from '../../../fonts.scss';
-    max-width: 90%;
     display: flex;
+    font-size: 14px;
+    max-width: 90%;
 
     span {
       white-space: nowrap;
@@ -99,8 +99,8 @@
     span:first-child {
       -ms-flex-negative: 1;
       flex-shrink: 1;
-      text-overflow: ellipsis;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -110,18 +110,18 @@
   }
 
   &__text {
+    composes: subHeaderSmall from '../../../fonts.scss';
+    padding-bottom: 10px;
     //padding-top: 10px;
     padding-right: 40px;
-    padding-bottom: 10px;
-    composes: subHeaderSmall from '../../../fonts.scss';
     word-break: break-all;
   }
 
   &__appointment {
-    padding-top: 10px;
-    padding-bottom: 10px;
     color: #969696;
     font-size: 12px;
+    padding-bottom: 10px;
+    padding-top: 10px;
   }
 
   span {
@@ -130,78 +130,78 @@
 }
 
 .messageNote {
-  position: absolute;
-  right: 10px;
-  top: 35%;
-  padding: 2px 6px 0;
   background-color: $primary-light-blue;
   border-radius: 4px;
   color: #fafafa;
+  padding: 2px 6px 0;
+  position: absolute;
+  right: 10px;
+  top: 35%;
 }
 
 .topInfo {
-  min-width: 100%;
   border-bottom: 1.5px solid rgba(211, 211, 211, 0.5);
-  height: 10vh;
+  border-top: 5px solid $primary-darkgrey;
+  color: #b4b4b5;
   font-family: 'Gotham-Book';
   font-size: 16px;
-  color: #b4b4b5;
-  min-height: 94px;
-  max-height: 94px;
-  border-top: 5px solid $primary-darkgrey;
   font-weight: 900;
+  height: 10vh;
+  max-height: 94px;
+  min-height: 94px;
+  min-width: 100%;
 
   span {
     color: #2e3845;
   }
 
   div {
+    margin-left: 30px;
     position: relative;
     top: 50%;
     transform: translate(0, -50%);
-    margin-left: 30px;
   }
 }
 
 .time {
+  color: $inactive-color;
   flex: 1 0 100%;
-  text-align: center;
-  margin-top: 10px;
   font-family: 'Gotham-Medium';
   font-size: 12px;
-  color: $inactive-color;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .timeChat {
+  color: lighten($inactive-color, 10%);
+  font-family: 'Gotham-Medium';
+  font-size: 0.8em;
   position: absolute;
   right: 10px;
   top: 15px;
-  font-size: 0.8em;
-  font-family: 'Gotham-Medium';
-  color: lighten($inactive-color, 10%);
 }
 
 .main {
-  flex: 1;
-  display: flex;
   background-color: #fafafa;
+  display: flex;
+  flex: 1;
   flex-wrap: wrap;
   min-width: 100%;
 }
 
 .patientName {
-  font-family: 'Gotham-Book';
   color: #2e3845;
+  font-family: 'Gotham-Book';
   font-size: 16px;
-  text-align: center;
-  margin: 15px auto;
   font-weight: 900;
+  margin: 15px auto;
+  text-align: center;
 }
 
 .allMessages {
   align-items: center;
-  overflow-y: auto;
   flex-direction: column;
+  overflow-y: auto;
   position: relative;
   width: 100%;
 }
@@ -222,22 +222,21 @@
 .sendMessage {
   background-color: #fafafa;
   border-top: 1px solid #e6e6e6;
-  position: absolute;
   bottom: 0;
-  width: 96%;
   padding: 0 2%;
+  position: absolute;
+  width: 96%;
 }
 
 .text {
-  padding: 20px;
-  border-radius: 15px;
   background-color: #ff715a;
+  border-radius: 15px;
   color: #fafafa;
-  font-size: 14px;
   font-family: 'Gotham-Book';
-  text-space: 2px;
-  width: 50%;
+  font-size: 14px;
   margin: 10px 0;
+  padding: 20px;
+  width: 50%;
 }
 
 .margin {
@@ -249,61 +248,60 @@
 }
 
 .marginText {
-  margin: 20px;
-  width: 14%;
+  color: $inactive-color;
   font-family: 'Gotham-Medium';
   font-size: 12px;
-  color: $inactive-color;
+  margin: 20px;
+  width: 14%;
 }
 
 .textTime {
-  width: 80%;
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: center;
   margin: 0 auto;
+  width: 80%;
 }
 
 .textFrom {
-  padding: 20px;
+  background-color: $primary-grey;
   border-radius: 15px;
   color: darken($primary-darkgrey, 20%);
-  font-size: 16px;
   font-family: 'Gotham-Book';
-  text-space: 2px;
-  background-color: $primary-grey;
-  width: 50%;
+  font-size: 16px;
   margin: 10px 0;
+  padding: 20px;
+  width: 50%;
 }
 
 .messages {
+  background-clip: content-box;
+  background-color: #fafafa;
   display: flex;
   flex-direction: column;
   padding-left: 10px;
-  background-clip: content-box;
-  background-color: #fafafa;
 }
 
 .rightInfo {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
 }
 
 .fullName {
+  //font-weight: 900;
+  composes: header from '../../../fonts.scss';
   //font-family: "Gotham-Book";
   //font-size: 18px;
   margin: 10px 0;
-  //font-weight: 900;
-  composes: header from '../../../fonts.scss';
 }
 
 .fullName2 {
   font-family: 'Gotham-Book';
   font-size: 18px;
-  margin: 10px 0;
   font-weight: 900;
+  margin: 10px 0;
 }
 
 .fullName:hover {
@@ -312,47 +310,47 @@
 }
 
 .contact {
-  margin-top: 10px;
+  color: #bfbfbf;
   font-family: 'Gotham-Medium';
   font-size: 14px;
-  color: #bfbfbf;
   font-weight: 200;
+  margin-top: 10px;
 }
 
 .fonts {
-  composes: subHeaderSmall from '../../../fonts.scss';
   color: #bfbfbf;
+  composes: subHeaderSmall from '../../../fonts.scss';
   font-weight: bold;
 }
 
 .patInfo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  border-left: 1.5px solid rgba(lightgrey, 0.5);
   border-bottom: 1.5px solid rgba(lightgrey, 0.5);
+  border-left: 1.5px solid rgba(lightgrey, 0.5);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
 
 .infoAvatar {
-  margin-top: 20px;
   height: 90px;
+  margin-top: 20px;
   width: 90px;
 }
 
 .bottomInfo {
-  flex: 1;
   border-left: 1.5px solid rgba(lightgrey, 0.5);
+  flex: 1;
 }
 
 .chatsList {
-  position: relative;
-  z-index: 0;
-  overflow-y: auto;
-  margin: 0;
-  padding: 0;
-  width: 100%;
   height: 100%;
+  margin: 0;
+  overflow-y: auto;
+  padding: 0;
+  position: relative;
+  width: 100%;
+  z-index: 0;
 }
 
 .patientsList {
@@ -362,49 +360,49 @@
   height: 100%;
 
   &_title {
-    padding-top: 20px;
-    padding-left: 30px;
     font-size: 18px;
     font-weight: $large-weight;
+    padding-left: 30px;
+    padding-top: 20px;
   }
 
   &__search {
+    align-items: center;
+    border-bottom: 1px solid #e6e6e6;
     display: flex;
     height: 70px;
+    justify-content: center;
     padding-left: 20px;
     padding-right: 20px;
-    border-bottom: 1px solid #e6e6e6;
-    justify-content: center;
-    align-items: center;
 
     .search {
-      display: flex;
       align-items: center;
+      display: flex;
       justify-content: center;
       &__label {
-        position: relative;
-        left: 15px;
-        top: -10px;
-        cursor: pointer;
         color: #b3b2b1;
+        cursor: pointer;
+        left: 15px;
+        position: relative;
+        top: -10px;
       }
 
       &__input {
-        width: 100%;
-        height: 30px;
-        font-size: 12px;
+        background-color: inherit;
         border: none;
         border-bottom: 2px solid #8cbcd6;
-        background-color: inherit;
+        font-size: 12px;
+        height: 30px;
+        width: 100%;
         &:focus {
           outline: none;
         }
       }
 
       &__edit {
-        margin-left: auto;
-        cursor: pointer;
         color: #b3b2b1;
+        cursor: pointer;
+        margin-left: auto;
       }
     }
   }
@@ -415,8 +413,8 @@
 }
 
 .tab {
-  height: 20px;
   border-right: 1px solid lighten($primary-gray, 10%);
+  height: 20px;
   &:last-child {
     border-right: none;
   }

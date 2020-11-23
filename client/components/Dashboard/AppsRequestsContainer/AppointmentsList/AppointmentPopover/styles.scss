@@ -1,32 +1,32 @@
 @import '../../../../../ui';
 
 .card {
-  width: auto;
   box-shadow: 0 5px 25px 2px rgba(209, 209, 209, 0.6);
   min-width: 300px;
+  width: auto;
 }
 
 .header {
-  display: flex;
   align-items: center;
-  height: 40px;
   background-color: #313843;
   color: $primary-white;
+  display: flex;
+  height: 40px;
   padding-left: 15px;
   padding-right: 15px;
 
   &_text {
-    padding-left: 5px;
+    composes: fontDefault from '../../../../../fonts.scss';
     font-size: 15px;
     margin-right: 10px;
-    composes: fontDefault from '../../../../../fonts.scss';
+    padding-left: 5px;
   }
 }
 
 .closeIcon {
-  margin-left: auto;
-  composes: fontMediumSize from '../../../../../fonts.scss';
   color: $primary-grey;
+  composes: fontMediumSize from '../../../../../fonts.scss';
+  margin-left: auto;
 
   &:hover {
     cursor: pointer;
@@ -35,11 +35,11 @@
 
 .body {
   background-color: $primary-white;
-  padding: 15px 15px 0;
   height: auto;
-  min-height: 200px;
   max-height: 290px;
   max-width: 285px;
+  min-height: 200px;
+  padding: 15px 15px 0;
 }
 
 .container {
@@ -58,23 +58,23 @@
 }
 
 .data {
-  display: flex;
   align-items: center;
-  font-size: 13px;
   composes: fontMedium from '../../../../../fonts.scss';
+  display: flex;
+  font-size: 13px;
   padding-bottom: 2px;
 
   &_note {
-    width: 100%;
     max-height: 88px;
     overflow: auto;
+    width: 100%;
 
     textarea {
+      border-bottom: 0;
       color: black;
       font-family: $medium-font;
-      border-bottom: 0;
-      padding: 0;
       height: auto;
+      padding: 0;
     }
   }
 
@@ -89,12 +89,12 @@
 }
 
 .footer {
+  align-items: center;
   box-sizing: border-box;
   display: flex;
+  justify-content: flex-end;
   padding: 15px;
   width: 100%;
-  justify-content: flex-end;
-  align-items: center;
 }
 
 .editButton {

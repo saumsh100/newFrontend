@@ -37,12 +37,12 @@
 }
 
 .enter {
-  animation-name: enter;
   animation-duration: 400ms;
   animation-fill-mode: forwards;
+  animation-name: enter;
 }
 .exit {
-  animation-name: exit;
   animation-duration: 400ms;
   animation-fill-mode: forwards;
+  animation-name: exit;
 }

@@ -1,54 +1,54 @@
 @import '../../ui.scss';
 
 .backDrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background-color: $primary-dark;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
   z-index: 199;
 }
 
 .loginForm,
 .location {
-  width: 400px;
-  padding: 30px 50px;
-  margin: 0 auto;
-  z-index: 200;
-  box-sizing: border-box;
   border-top: $card-border-size $primary-color;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 30px 50px;
+  width: 400px;
+  z-index: 200;
   @media screen and (min-height: 720px) {
     transform: translateY(-150px);
   }
   @media screen and (max-width: $medium-screen-width) {
-    width: 80%;
     padding-left: 25px;
     padding-right: 25px;
+    width: 80%;
   }
 }
 .location {
-  border: 0;
-  margin-bottom: 10px;
-  text-align: center;
-  border-radius: 4px;
   background: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
+  border: 0;
+  border-radius: 4px;
   color: $primary-dark;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 0;
+  text-align: center;
   transition: 0.2s ease all;
   vertical-align: middle;
-  padding: 0;
   a {
+    color: $primary-dark;
+    display: block;
     font-size: 11.5px;
     line-height: 14px;
     padding: 10px;
     text-decoration: none;
-    color: $primary-dark;
-    display: block;
   }
   &:hover {
-    transition: 0.2s ease all;
     background: rgba(255, 255, 255, 1);
+    transition: 0.2s ease all;
   }
   .flag {
     font-size: 13px;
@@ -69,8 +69,8 @@
 }
 
 .signInSubmitButton {
-  width: 100%;
   margin-top: 20px;
+  width: 100%;
 }
 
 .fbLoginButton {
@@ -78,8 +78,8 @@
 }
 
 .forgotPassword {
-  padding-top: 15px;
   display: flex;
+  padding-top: 15px;
   width: 100%;
 
   &_text {

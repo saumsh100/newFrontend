@@ -18,21 +18,21 @@
   }
 
   &_readOnly{
-    margin-left: 10px;
     color: $primary-darkgrey;
+    margin-left: 10px;
   }
 
   &_allDay{
-    margin-left: auto;
     color: $primary-darkgrey;
+    margin-left: auto;
   }
   &_delete {
     justify-content: center;
   }
   &_addTimeOffText {
-    padding-left: 10px;
-    margin-left: auto;
     font-weight: $large-weight;
+    margin-left: auto;
+    padding-left: 10px;
   }
 }
 
@@ -42,8 +42,8 @@
 }
 
 .allDay {
-  display: flex;
   align-items: center;
+  display: flex;
   &_text {
     padding-right: 5px;
   }
@@ -52,15 +52,15 @@
   cursor: pointer;
   text-align: end;
   &_icon {
-    padding-left: 5px;
     color: $primary-darkgrey;
+    padding-left: 5px;
   }
 }
 
 
 .inlineBlock {
-  padding-left: 10px;
   padding-bottom: 1px;
+  padding-left: 10px;
 }
 
 .modal {
@@ -68,17 +68,17 @@
 }
 
 .displayTimeOff {
+  background-color: $primary-grey;
   border: 1px solid;
   border-color: $primary-grey;
-  background-color: $primary-grey;
-  text-align: center;
   margin-bottom: 5px;
   margin-top: 5px;
-  padding-top: 5px;
   padding-left: 2px;
+  padding-top: 5px;
+  text-align: center;
 }
 
 .flexCenter {
-  display: flex;
   align-items: center;
+  display: flex;
 }

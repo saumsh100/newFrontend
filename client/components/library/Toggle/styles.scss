@@ -10,28 +10,28 @@
 
     .react-toggle-track {
       background-color: $primary-darkgrey;
-      width: 26px;
       height: 12px;
+      width: 26px;
     }
 
     .react-toggle-thumb {
       border: 0;
-      top: 1px;
-      left: 1px;
-      width: 10px;
       height: 10px;
+      left: 1px;
+      top: 1px;
+      width: 10px;
     }
 
     &.react-toggle--checked {
       .react-toggle-track {
-        width: 26px;
         height: 12px;
+        width: 26px;
       }
 
       .react-toggle-thumb {
-        width: 10px;
         height: 10px;
         left: 15px;
+        width: 10px;
       }
     }
 
@@ -108,8 +108,8 @@
 }
 
 .toggleWrapper {
-  display: flex;
   align-items: center;
+  display: flex;
   height: auto;
 }
 

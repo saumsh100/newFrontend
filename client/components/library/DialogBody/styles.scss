@@ -7,11 +7,11 @@
 .dialogBody {
   display: flex;
   flex: 1;
-  padding: 20px;
-  min-width: 250px;
-  max-height: 96%;
   flex-direction: column;
+  max-height: 96%;
+  min-width: 250px;
   overflow: unset;
+  padding: 20px;
   @media screen and (max-width: 700px) {
     @include dialogBodyMobile-mixin();
   }
@@ -22,44 +22,44 @@
 }
 
 .header {
+  align-items: center;
+  background-color: #313843;
+  border-bottom: 0;
+  color: $primary-white;
   display: flex;
   flex: 0 0 auto;
-  align-items: center;
-  border-bottom: 0;
-  background-color: #313843;
-  height: 45px;
-  color: $primary-white;
-  padding: 0 20px;
   font-size: 18px;
+  height: 45px;
+  padding: 0 20px;
 }
 
 .title {
   composes: fontMedium from '../../../fonts.scss';
 }
 .cardHeader {
-  padding-top: 0 !important;
   color: $primary-white !important;
+  padding-top: 0 !important;
 }
 
 .closeIcon {
-  font-size: 1rem;
+  background: none;
   color: $primary-white;
+  cursor: pointer;
+  font-size: 1rem;
   font-weight: 900;
   margin-left: auto;
-  cursor: pointer;
   padding: 0;
-  background: none;
 }
 
 .footer {
-  width: 100%;
-  display: flex;
-  flex: 0 0 auto;
-  padding: 20px;
+  background: #fff;
   border-top: 1px solid $primary-grey;
   box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
   justify-content: flex-end;
-  background: #fff;
+  padding: 20px;
+  width: 100%;
 }
 
 .action {

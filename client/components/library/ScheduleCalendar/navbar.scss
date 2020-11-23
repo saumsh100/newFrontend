@@ -9,32 +9,32 @@
 }
 
 .container {
-  width: 250px;
   height: 30px;
-  position: relative;
   margin: 0 auto;
+  position: relative;
+  width: 250px;
 }
 
 .nav {
-  width: 100%;
   position: absolute;
+  width: 100%;
 }
 
 .baseNavButton {
-  height: 20px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  outline: none;
-  top: 1px;
-  border: 0;
-  width: 40px;
-  padding: 0;
-  cursor: pointer;
-  position: absolute;
-  color: $calendar-grey-lighter;
-  transition: all 0.2s ease-in;
   background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: 0;
+  color: $calendar-grey-lighter;
+  cursor: pointer;
+  height: 20px;
+  outline: none;
+  padding: 0;
+  position: absolute;
+  top: 1px;
+  transition: all 0.2s ease-in;
+  width: 40px;
 
   &:hover {
     color: $grey-dark;
@@ -63,35 +63,35 @@
 }
 
 .schedule {
+  bottom: 0;
   position: absolute;
   right: 0;
-  bottom: 0;
 }
 
 .showDrawer {
   background: $white;
   border: 1px solid $grey-lighter;
-  box-shadow: $shadow;
   border-radius: 4px;
-  padding: 8px 10px;
+  box-shadow: $shadow;
   color: $calendar-grey;
-  line-height: 1;
-  font-size: 11px;
-  transition: all 0.2s ease-in;
-  outline: none;
   cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  outline: none;
+  padding: 8px 10px;
+  transition: all 0.2s ease-in;
 
   &.active {
-    transition: all 0.2s ease-in;
     background: $teal-dark;
     color: $white;
+    transition: all 0.2s ease-in;
   }
 }
 
 .month {
-  font-size: 20px;
   color: $calendar-grey;
-  text-align: center;
-  margin: 0;
+  font-size: 20px;
   line-height: 1;
+  margin: 0;
+  text-align: center;
 }

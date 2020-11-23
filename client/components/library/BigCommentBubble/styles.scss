@@ -1,36 +1,36 @@
 @import '../../../ui';
 
 .bigComment {
-  width: 36px;
-  height: 38px;
-  display: flex;
   align-items: flex-end;
+  display: flex;
   font-size: 35px;
+  height: 38px;
+  width: 36px;
 }
 .bigCommentBubble {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  padding: 30px 30px 20px;
   margin-right: 10px;
+  padding: 30px 30px 20px;
 
   @media screen and (max-width: 500px) {
     padding: 10px;
   }
   &__commentBody {
-    width: 95%;
-    margin-left: 20px;
     border-radius: $card-border-radius;
     box-shadow: $box-shadow;
+    margin-left: 20px;
+    width: 95%;
   }
   &__mainContent {
-    position: relative;
-    padding: 20px 40px 10px 25px;
     background-color: #fff;
-    font-size: 14px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     box-shadow: 0 2px 0 -4px rgba(0, 0, 0, 0.33);
+    font-size: 14px;
+    padding: 20px 40px 10px 25px;
+    position: relative;
 
     &__header {
       composes: fontMedium from '../../../fonts.scss';
@@ -54,38 +54,38 @@
       }
     }
     &::before {
-      position: absolute;
-      width: 0;
+      border-bottom: 12px solid transparent;
+      border-right: 12px solid #ffffff;
+      border-top: 12px solid transparent;
+      content: '';
+      display: block;
       height: 0;
       left: -12px;
+      position: absolute;
       top: 10px;
-      border-top: 12px solid transparent;
-      border-right: 12px solid #ffffff;
-      border-bottom: 12px solid transparent;
-      display: block;
-      content: '';
+      width: 0;
     }
     &__requirements {
-      text-transform: uppercase;
+      color: lighten($primary-color, 5%);
       font-size: 12px;
       font-weight: $large-weight;
-      color: lighten($primary-color, 5%);
       margin: 10px 0;
+      text-transform: uppercase;
     }
     &__title {
       color: $primary-green;
-      margin-bottom: 15px;
       composes: fontMedium from '../../../fonts.scss';
+      margin-bottom: 15px;
     }
     &__rating {
       color: $primary-star;
       margin: 10px 0;
     }
     &__preview {
-      letter-spacing: 0;
-      line-height: 20px;
       color: $primary-dark;
       composes: letterSpacing from '../../../fonts.scss';
+      letter-spacing: 0;
+      line-height: 20px;
       &__toggleButton {
         color: $primary-blue;
         cursor: pointer;
@@ -106,59 +106,59 @@
 
   &__comments {
     border-top: 2px solid $primary-grey;
-    padding: 10px 0 0 10px;
     margin-bottom: 10px;
     margin-top: 20px;
+    padding: 10px 0 0 10px;
   }
 
   &__attachments {
-    width: 100%;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    width: 100%;
     img {
-      max-width: 100%;
-      display: flex;
       align-self: flex-start;
+      display: flex;
       max-height: 400px;
+      max-width: 100%;
     }
   }
 
   &__respondBlock {
-    height: 35px;
-    box-sizing: border-box;
-    padding: 10px 20px;
     background-color: $primary-blue;
     border-bottom: 2px solid $primary-blue;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     box-shadow: 0 11px 16px -10px rgba(0, 0, 0, 0.33);
+    box-sizing: border-box;
     color: $primary-white;
     display: flex;
     flex-direction: row;
+    height: 35px;
     justify-content: flex-end;
+    padding: 10px 20px;
     &__respondButton {
-      width: 50%;
-      display: flex;
       align-items: center;
-      justify-content: flex-end;
+      color: $primary-white;
+      display: flex;
       flex-direction: row;
       font-size: $medium-size;
       font-weight: $large-weight;
+      justify-content: flex-end;
       text-decoration: none;
-      color: $primary-white;
+      width: 50%;
       &:hover {
         color: darken($primary-white, 10%);
       }
     }
     &__actions {
-      width: 50%;
+      align-items: center;
       display: flex;
       flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
       font-size: $medium-size;
+      justify-content: flex-start;
+      width: 50%;
       span {
         cursor: pointer;
       }
@@ -174,39 +174,39 @@
 }
 
 .comment {
+  align-items: flex-start;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
   &__avatar {
+    align-items: center;
     border-radius: 50%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    height: 40px;
     justify-content: flex-start;
     width: 40px;
-    height: 40px;
     img {
-      width: 100%;
       border-radius: 50%;
+      width: 100%;
     }
   }
 
   &__message {
+    align-items: flex-start;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     justify-content: flex-start;
     margin-left: 10px;
     &__username {
+      display: inline-block;
       font-size: $medium-size;
       font-weight: $large-weight;
       margin-bottom: 10px;
-      display: inline-block;
     }
 
     &__text {
-      font-size: $medium-size;
       display: inline-block;
+      font-size: $medium-size;
       margin-bottom: 5px;
     }
 
@@ -218,11 +218,11 @@
 }
 
 .howToWrapper {
-  height: 30px;
+  align-items: center;
   background-color: $primary-grey;
   display: flex;
-  align-items: center;
   flex-direction: row;
+  height: 30px;
   padding: 0 25px;
 }
 

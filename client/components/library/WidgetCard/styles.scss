@@ -1,51 +1,51 @@
 @import '../../../ui';
 
 .cardLink {
-  width: 50%;
-  padding: 4px;
   box-sizing: border-box;
+  padding: 4px;
+  width: 50%;
 }
 
 .card {
+  align-items: center;
+  background: white;
   border: 1px solid $widget-grey-lighter;
   border-radius: 4px;
-  width: 100%;
-  min-height: 80px;
-  padding: 12px;
+  box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
   cursor: pointer;
-  text-align: center;
-  transition: all 0.5s ease;
-  background: white;
   display: flex;
-  align-items: center;
+  font-family: inherit;
   height: auto;
   margin: 0 4px 8px !important;
-  box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
-  font-family: inherit;
+  min-height: 80px;
+  padding: 12px;
+  text-align: center;
+  transition: all 0.5s ease;
+  width: 100%;
   &:focus {
     outline: none;
   }
   &:hover {
+    border-color: $widget-grey-light;
     box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
     transition: all 0.3s ease;
-    border-color: $widget-grey-light;
     .cardArrow {
       background: var(--primaryColor);
-      color: #fff;
       border-radius: 50%;
+      color: #fff;
       transition: all 0.5s ease;
     }
   }
   .cardArrow {
-    margin-left: var(--widget-spacer);
-    color: $widget-grey;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    transition: all 0.5s ease;
     border-radius: 50%;
+    color: $widget-grey;
+    display: flex;
+    height: 16px;
+    justify-content: center;
+    margin-left: var(--widget-spacer);
+    transition: all 0.5s ease;
+    width: 16px;
     svg {
       fill: currentColor;
     }
@@ -54,22 +54,22 @@
     flex: 1;
   }
   .title {
-    font-size: 16px;
     color: $widget-grey;
-    margin: 0;
-    line-height: 18px;
+    font-size: 16px;
     font-weight: 500;
+    line-height: 18px;
+    margin: 0;
   }
   .centeredTitle {
     @extend .title;
     text-align: center;
   }
   .description {
-    font-size: 13px;
     color: $widget-grey-light;
+    display: block;
+    font-size: 13px;
     line-height: 16px;
     margin-top: 4px;
-    display: block;
   }
 }
 .selectedCard {

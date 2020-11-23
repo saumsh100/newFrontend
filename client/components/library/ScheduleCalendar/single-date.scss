@@ -3,11 +3,11 @@
 @import './color';
 
 .scheduleWrapper {
+  cursor: pointer;
   display: flex;
   flex-wrap: wrap;
-  padding: 16px;
   margin-bottom: 4px;
-  cursor: pointer;
+  padding: 16px;
   transition: all 0.2s ease-in;
 
   &:focus {
@@ -15,8 +15,8 @@
   }
 
   &:hover {
-    transition: all 0.2s ease-in;
     background: $calendar-background;
+    transition: all 0.2s ease-in;
   }
 
   &.scheduleFeatured {
@@ -34,16 +34,16 @@
 }
 
 .schedule {
-  width: 100%;
   display: flex;
+  width: 100%;
 }
 
 .times {
-  flex: 4;
-  text-align: right;
-  font-size: 12px;
   color: $calendar-grey;
+  flex: 4;
+  font-size: 12px;
   font-weight: 600;
+  text-align: right;
 
   span {
     margin: 0 4px;
@@ -51,26 +51,26 @@
 }
 
 .date {
+  color: $calendar-grey;
   flex: 0;
   font-size: 12px;
-  color: $calendar-grey;
   font-weight: 600;
 }
 
 .breakTitle {
-  font-size: 11px;
   color: $grey-dark;
-  font-weight: 500;
   flex: 0;
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .breaks {
+  color: $grey-dark;
   display: flex;
   font-size: 11px;
-  color: $grey-dark;
   font-weight: 500;
-  width: 100%;
   margin: 8px 0 0;
+  width: 100%;
 
   li {
     margin-bottom: 8px;
@@ -83,10 +83,10 @@
 
 .breakList {
   flex: 4;
-  text-align: right;
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  text-align: right;
 }
 
 .spacer {
@@ -94,13 +94,13 @@
 }
 
 .settings {
-  padding: 0;
-  flex: 0;
-  color: $grey-dark;
   background: transparent;
+  color: $grey-dark;
+  flex: 0;
   margin: 0;
-  transition: all 0.2s ease-in;
+  padding: 0;
   text-align: right;
+  transition: all 0.2s ease-in;
 
   &:hover {
     color: $calendar-grey;
@@ -109,16 +109,16 @@
 }
 
 .edit {
-  justify-content: center;
   align-items: flex-start;
   color: $grey-dark;
+  justify-content: center;
   transition: all 0.2s ease-in;
   svg {
-    width: 12px;
     height: 12px;
+    width: 12px;
   }
   &:hover {
-    transition: all 0.2s ease-in;
     color: $grey-dark;
+    transition: all 0.2s ease-in;
   }
 }

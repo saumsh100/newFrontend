@@ -2,8 +2,8 @@
 
 .tbStyle {
   background: $primary-white;
-  height: 100%;
   border: 0;
+  height: 100%;
 }
 
 .mainTableStyle {
@@ -16,25 +16,25 @@
 
 .headerStyle {
   background: $primary-white;
-  padding-top: 20px;
-  padding-bottom: 10px;
   border-bottom: 1px solid #efefef;
   font-size: 12px;
+  padding-bottom: 10px;
+  padding-top: 20px;
 }
 
 .bodyStyle {
-  height: 100%;
   background: $primary-white;
+  height: 100%;
 }
 
 .columnHeaderStyle {
+  align-items: center;
   background: $primary-white;
+  border-right: 0;
+  box-shadow: none;
+  color: #a7a9ac;
   display: flex;
   justify-content: flex-start;
-  box-shadow: none;
-  align-items: center;
-  border-right: 0;
-  color: #a7a9ac;
   outline: none;
 }
 
@@ -52,14 +52,14 @@ $width: 6px;
 $height: 6px;
 
 .caretButton {
-  width: 0;
-  height: 0;
-  cursor: pointer;
-  border-top: $height/2 solid transparent;
   border-bottom: $height/2 solid transparent;
   border-left: $width/2 solid transparent;
   border-right: $width/2 solid transparent;
+  border-top: $height/2 solid transparent;
   content: '';
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 .bottomCaretButton {

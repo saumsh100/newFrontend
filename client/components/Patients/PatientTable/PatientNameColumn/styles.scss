@@ -1,16 +1,16 @@
 @import '../../../../ui';
 
 .patientRow {
+  align-items: center;
   background: inherit;
   display: flex;
-  align-items: center;
+  justify-content: flex-start;
 
   width: 100%;
-  justify-content: flex-start;
 }
 .name {
-  composes: subHeader from '../../../../fonts.scss';
   color: lighten($primary-blue, 10%);
+  composes: subHeader from '../../../../fonts.scss';
   overflow: hidden;
   text-overflow: ellipsis;
   &:hover {
@@ -20,7 +20,7 @@
 }
 
 .avatarContainer {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: flex-start;
 }

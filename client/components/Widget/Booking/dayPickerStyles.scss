@@ -1,9 +1,9 @@
 @import '../../../ui';
 
 .outside {
-  cursor: default;
-  color: #dce0e0;
   background: transparent;
+  color: #dce0e0;
+  cursor: default;
 }
 
 .start {
@@ -25,21 +25,21 @@
 }
 .weekDay,
 .month {
-  font-size: 10px;
   flex: 1 0 49%;
+  font-size: 10px;
 }
 .weekday {
   display: block;
   flex: 1;
 }
 .month {
-  width: 50%;
-  padding-right: var(--widget-spacer) !important;
   box-sizing: border-box;
   display: block;
+  padding-right: var(--widget-spacer) !important;
+  width: 50%;
   + .month {
-    padding-left: var(--widget-spacer);
     border-left: 1px solid $widget-grey-lighter;
+    padding-left: var(--widget-spacer);
   }
 }
 .outWrapper {
@@ -47,8 +47,8 @@
 }
 
 .months {
-  margin: 0;
   justify-content: space-between;
+  margin: 0;
 }
 
 .navButtonPrev {
@@ -66,16 +66,16 @@
   margin: var(--widget-spacer) 0;
 }
 .day {
+  align-items: center;
+  color: $widget-grey;
+  display: flex;
+  flex: 1;
   font-family: 'Roboto', sans-serif;
   font-size: 12px;
   font-weight: 500;
-  line-height: 14px;
-  color: $widget-grey;
   height: 35px;
-  flex: 1;
-  display: flex;
   justify-content: center;
-  align-items: center;
+  line-height: 14px;
   &:hover:not(.outside):not(.disabled):not(.selected) {
     background-color: $widget-grey-lightest !important;
     color: var(--primaryColor);
@@ -93,21 +93,21 @@
 }
 
 .caption {
-  font-family: 'Roboto', sans-serif;
   color: $widget-grey;
-  font-weight: 500;
-  font-size: 16px;
-  margin: 0 !important;
   display: block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 !important;
 }
 
 .selected:not(.outside) {
-  color: white;
   background: var(--primaryColor);
+  color: white;
 
   &:hover:not(.outside) {
-    opacity: 0.9;
     background: var(--primaryColor);
+    opacity: 0.9;
   }
 }
 .navButtonInteractionDisabled {

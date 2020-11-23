@@ -1,70 +1,70 @@
 @import '../../../../ui-kit.scss';
 
 .toggleWrapper {
-  display: flex;
   align-items: center;
-  padding-top: 20px;
+  display: flex;
   margin-bottom: 20px;
+  padding-top: 20px;
 }
 
 .toggleTitle {
-  font-family: $inter;
-  font-weight: 500;
-  font-size: 14px;
   color: $grey;
-  text-align: left;
+  font-family: $inter;
+  font-size: 14px;
+  font-weight: 500;
   margin: 0 32px 0 0;
+  text-align: left;
 }
 
 .wrapper {
   border: 1px solid $grey-lighter;
   border-bottom: 0;
-  box-shadow: $shadow;
   border-radius: 4px;
+  box-shadow: $shadow;
   display: flex;
   flex-wrap: wrap;
 }
 
 .header {
-  padding-left: 72px;
   display: flex;
+  padding-left: 72px;
   width: 100%;
 }
 
 .weekDayWrapper {
-  min-height: 96px;
-  flex: 1;
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
+  flex: 1;
   flex-direction: column;
+  justify-content: center;
+  min-height: 96px;
 }
 
 .weekDay {
-  font-family: $inter;
-  font-weight: 500;
-  font-size: 14px;
   color: $grey;
+  font-family: $inter;
+  font-size: 14px;
+  font-weight: 500;
   margin: 0 0 8px;
 }
 .edit {
-  font-family: $inter;
-  font-weight: 500;
-  font-size: 12px;
+  background-color: transparent;
   color: $grey-light;
+  display: flex;
+  font-family: $inter;
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0;
   margin: 0;
   padding: 0;
-  background-color: transparent;
-  display: flex;
   transition: all 0.2s ease;
   svg {
-    width: 12px;
+    bottom: 1px;
+    fill: currentColor;
     height: 12px;
     margin-right: 4px;
-    fill: currentColor;
     position: relative;
-    bottom: 1px;
+    width: 12px;
   }
   &:hover {
     color: $grey;
@@ -72,12 +72,12 @@
   }
 }
 .body {
-  width: 100%;
-  display: flex;
   border-top: 1px solid $grey-lightest;
+  display: flex;
+  flex-wrap: wrap;
   max-height: 775px;
   overflow: scroll;
-  flex-wrap: wrap;
+  width: 100%;
 }
 .daysWrapper {
   display: block;
@@ -86,18 +86,18 @@
 .hours {
   width: 72px;
   .hour {
-    min-height: 75px;
-    box-sizing: border-box;
-    border-bottom: 1px solid transparent;
-    text-align: center;
-    font-family: $inter;
-    font-weight: 500;
-    font-size: 12px;
-    color: $grey-light;
-    line-height: 12px;
-    display: flex;
-    justify-content: center;
     align-items: flex-start;
+    border-bottom: 1px solid transparent;
+    box-sizing: border-box;
+    color: $grey-light;
+    display: flex;
+    font-family: $inter;
+    font-size: 12px;
+    font-weight: 500;
+    justify-content: center;
+    line-height: 12px;
+    min-height: 75px;
+    text-align: center;
     &:first-of-type {
       color: transparent;
     }
@@ -108,31 +108,31 @@
   }
 }
 .subHeader {
-  width: 100%;
   display: flex;
+  width: 100%;
   .availabilityTitle {
-    width: 72px;
-    font-family: $inter;
-    font-weight: 500;
-    font-size: 10px;
-    color: #808080;
-    letter-spacing: 0;
-    display: flex;
-    justify-content: center;
     align-items: center;
     border-bottom: 1px solid $grey-lightest;
+    color: #808080;
+    display: flex;
+    font-family: $inter;
+    font-size: 10px;
+    font-weight: 500;
+    justify-content: center;
+    letter-spacing: 0;
+    width: 72px;
   }
   .available {
-    flex: 1;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    line-height: 28px;
-    color: $green-light;
-    font-family: $inter;
-    font-size: 12px;
     border-bottom: 1px solid $grey-lightest;
     border-left: 1px solid $grey-lightest;
+    color: $green-light;
+    display: flex;
+    flex: 1;
+    font-family: $inter;
+    font-size: 12px;
+    justify-content: center;
+    line-height: 28px;
   }
   .notAvailable {
     color: $grey-light;
@@ -142,46 +142,46 @@
   display: flex;
   flex: 1;
   .column {
-    flex: 1;
-    display: flex;
     align-items: center;
     border-left: 1px solid $grey-lightest;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: flex;
+    flex: 1;
     flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
     position: relative;
     .modifiers {
-      width: 100%;
-      position: absolute;
+      bottom: 0;
       height: 100%;
       left: 0;
-      top: 0;
+      position: absolute;
       right: 0;
-      bottom: 0;
+      top: 0;
+      width: 100%;
     }
     .slot {
-      position: absolute;
-      left: 2px;
-      width: calc(100% - 4px);
       border: 1px solid;
-      box-sizing: border-box;
-      padding: 8px;
       border-radius: 4px;
+      box-sizing: border-box;
+      left: 2px;
+      padding: 8px;
+      position: absolute;
+      width: calc(100% - 4px);
       .value {
-        font-family: $inter;
-        font-weight: 600;
-        font-size: 9px;
         color: #6e6e6e;
+        font-family: $inter;
+        font-size: 9px;
+        font-weight: 600;
         margin: 0;
       }
       .label {
-        font-family: $inter;
-        font-weight: 400;
-        font-size: 12px;
         color: #6e6e6e;
-        margin-bottom: 4px;
         display: block;
+        font-family: $inter;
+        font-size: 12px;
+        font-weight: 400;
         line-height: 1;
+        margin-bottom: 4px;
       }
       &.availabilities {
         background: #f4f7f8;
@@ -194,27 +194,27 @@
     }
     .closedColumn {
       @extend .slot;
-      font-family: $inter;
-      font-weight: 500;
-      font-size: 12px;
-      color: $grey-light;
-      background: $grey-lightest;
-      display: flex;
-      justify-content: center;
       align-items: center;
-      width: calc(100% - 4px);
-      left: 2px;
-      height: calc(100% - 4px);
-      top: 2px;
-      z-index: 10;
+      background: $grey-lightest;
+      border: 1px solid $grey-lightest;
       border-radius: 4px;
       box-sizing: border-box;
-      border: 1px solid $grey-lightest;
+      color: $grey-light;
+      display: flex;
+      font-family: $inter;
+      font-size: 12px;
+      font-weight: 500;
+      height: calc(100% - 4px);
+      justify-content: center;
+      left: 2px;
+      top: 2px;
+      width: calc(100% - 4px);
+      z-index: 10;
     }
     .row {
       border-top: 1px solid $grey-lightest;
-      min-height: 75px;
       box-sizing: border-box;
+      min-height: 75px;
       width: 100%;
       &:first-of-type {
         border-color: transparent;

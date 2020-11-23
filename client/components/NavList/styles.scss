@@ -5,13 +5,13 @@
 }
 
 .navItem {
+  align-items: center;
+  color: $inactive-color !important;
   display: flex;
   height: 65px;
+  justify-content: center;
   padding: 0;
   text-decoration: none;
-  color: $inactive-color !important;
-  align-items: center;
-  justify-content: center;
 
   &:hover {
     background-color: #41464c;
@@ -24,9 +24,9 @@
 }
 
 .activeItem {
-  color: $primary-white !important;
-  border-left: $selection-border $primary-color;
   background-color: darken(#59616b, 5%);
+  border-left: $selection-border $primary-color;
+  color: $primary-white !important;
 }
 
 .disabledItem {
@@ -46,20 +46,20 @@
 }
 
 .label {
-  width: 95px;
-  text-align: left;
-  margin-top: 5px;
   margin-left: 20px;
+  margin-top: 5px;
+  text-align: left;
+  width: 95px;
 }
 
 .ulSubNav {
-  margin-top: 10px;
   list-style-type: disc;
+  margin-top: 10px;
 }
 
 .liSubNavItem {
-  height: 25px;
   color: $inactive-color;
+  height: 25px;
 
   &:hover {
     border-bottom: 1px solid;
@@ -79,58 +79,58 @@
 }
 
 .multiple_nav {
-  position: relative;
   list-style: none;
   margin-bottom: 10px;
   padding-left: 55px;
+  position: relative;
 
   &__item {
+    background: #fff;
+    list-style-type: none;
+    padding-top: 20px;
     position: relative;
     width: 2px;
-    padding-top: 20px;
-    list-style-type: none;
-    background: #fff;
 
     &::after {
-      position: absolute;
+      background: inherit;
+      border-radius: 50%;
       bottom: 0;
-      width: 6px;
+      content: '';
       height: 6px;
       margin-left: 1px;
-      content: '';
+      position: absolute;
       transform: translateX(-50%);
-      border-radius: 50%;
-      background: inherit;
+      width: 6px;
     }
   }
 
   &__wrapper {
-    width: 150px;
-    margin-left: 15px;
     color: $primary-white;
+    margin-left: 15px;
+    width: 150px;
   }
 
   &__active {
     border-bottom: 1px solid;
 
     &::after {
-      position: absolute;
-      z-index: 1;
-      bottom: 0;
-      left: 0;
-      width: 6px;
-      height: 6px;
-      margin-left: 1px;
-      content: '';
-      transform: translateX(-50%);
-      border-radius: 50%;
       background: $primary-color !important;
+      border-radius: 50%;
+      bottom: 0;
+      content: '';
+      height: 6px;
+      left: 0;
+      margin-left: 1px;
+      position: absolute;
+      transform: translateX(-50%);
+      width: 6px;
+      z-index: 1;
     }
   }
 }
 
 .comingSoon {
-  fontsize: 1.2em;
+  font-size: 1.2em;
 }
 
 .hiddenLabel {

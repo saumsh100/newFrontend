@@ -1,52 +1,52 @@
 @import '../../../ui.scss';
 
 .backDrop {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
+  align-items: center;
   background-color: $primary-dark;
-  z-index: 199;
+  bottom: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: flex-start;
+  left: 0;
   padding-top: 60px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 199;
 }
 
 .loginForm {
-  padding: 60px 30px 20px;
-  flex: 0 1 auto;
   border-top: 3px solid $primary-blue;
+  flex: 0 1 auto;
+  padding: 60px 30px 20px;
   transition: all 0.1s ease, color 0.1s ease;
 
   .formTitle {
-    text-align: center;
-    margin: 35px 0 25px;
     font-size: 2em;
+    margin: 35px 0 25px;
+    text-align: center;
   }
 
   .formWrapper {
-    width: 350px;
     padding: 0 150px;
+    width: 350px;
     button {
-      text-transform: uppercase;
-      font-size: 14px;
       background: $primary-blue;
+      font-size: 14px;
+      text-transform: uppercase;
     }
   }
 }
 
 .footer {
   color: $primary-darkgrey;
-  position: relative;
   flex: 1;
+  position: relative;
   & > div {
-    position: static;
-    width: 100%;
     color: $primary-darkgrey;
+    position: static;
     text-align: center;
+    width: 100%;
   }
 }
 
@@ -59,8 +59,8 @@
 }
 
 .signInSubmitButton {
-  width: 100%;
   margin-top: 20px;
+  width: 100%;
 }
 
 .fbLoginButton {
@@ -68,16 +68,16 @@
 }
 
 .secondaryLink {
-  display: flex;
-  width: 100%;
-  padding: 60px 0;
   align-items: center;
+  display: flex;
   justify-content: center;
+  padding: 60px 0;
+  width: 100%;
   &_text {
+    background: none;
+    color: $primary-darkgrey;
     composes: subHeaderExtraSmall from '../../../fonts.scss';
     padding: 0;
-    color: $primary-darkgrey;
-    background: none;
 
     &:hover {
       color: $primary-color;
@@ -87,6 +87,6 @@
 }
 
 .versionFooter {
-  text-align: center;
   color: $primary-darkgrey;
+  text-align: center;
 }

@@ -5,13 +5,13 @@
 }
 
 .addSegmentName {
-  width: 400px;
   position: relative;
+  width: 400px;
 }
 
 .addSegmentNameInput {
-  padding: 0;
   margin: 0 0 0 20px;
+  padding: 0;
 }
 
 .addSegmentNameRow {
@@ -19,22 +19,22 @@
 }
 
 .gauge {
+  left: 0;
   position: absolute;
   top: 0;
-  left: 0;
   width: 100%;
 }
 
 .info {
-  position: absolute;
   color: $clr-dark-grey;
-  width: 100%;
-  margin-top: 40px;
   font-size: 10px;
+  margin-top: 40px;
+  position: absolute;
+  width: 100%;
 
   h2 {
-    font-size: 24px;
     color: $primary-color;
+    font-size: 24px;
     margin: 5px;
   }
 }
@@ -52,10 +52,10 @@
 
 .nav {
   border-right: 1px solid $clr-bg-dark-grey;
-  width: 25%;
   box-sizing: border-box;
   display: inline-block;
   height: 365px;
+  width: 25%;
 }
 
 .tab {
@@ -64,64 +64,64 @@
 }
 
 .buttons {
-  position: absolute;
   bottom: 15px;
+  position: absolute;
   right: 15px;
 }
 
 .formSection {
-  position: relative;
   height: 470px;
+  position: relative;
 }
 
 .activeTab {
+    background: $clr-bg-dark-grey;
     border-bottom: none;
     font-weight: bold;
-    position: relative;
-    background: $clr-bg-dark-grey;
     padding: 18px 30px;
+    position: relative;
 
     &:before {
-      position: absolute;
-      content: " ";
-      width: 0;
-      height: 0;
-      border-top: 5px solid transparent;
       border-bottom: 5px solid transparent;
       border-left: 5px solid $clr-bg-dark-grey;
+      border-top: 5px solid transparent;
+      content: " ";
+      height: 0;
+      position: absolute;
       right: -6px;
+      width: 0;
     }
   }
 
 .tabContent {
-  float: right;
-  width: 75%;
-  padding: 12px 40px;
   box-sizing: border-box;
+  float: right;
+  padding: 12px 40px;
+  width: 75%;
 }
 
 .rightPane {
   background: $primary-grey;
   height: 100%;
-  padding-top: 49px;
   height: 551px;
-  text-align: center;
+  padding-top: 49px;
   position: relative;
+  text-align: center;
 }
 
 .formContainer {
-  position: relative;
   // border: .5px solid #ff715a;
   background: $primary-white;
   border-radius: .5rem;
-  width: 1000px;
   height: 460px;
+  position: relative;
+  width: 1000px;
 }
 
 .title {
-  padding: 40px 0 30px 45px;
   font-size: $extra-medium-size;
   font-weight: $jumbo-weight;
+  padding: 40px 0 30px 45px;
   // color: $primary-color;
 }
 
@@ -137,32 +137,32 @@
 }
 
 .trashIcon {
+  color: $primary-color;
+  font-size: 1.4em;
   position: absolute;
   right: 5px;
   top: 5px;
-  font-size: 1.4em;
-  color: $primary-color;
 }
 
 .addNewSegment {
   border-radius: .5rem;
-  width: 1000px;
   height: 545px;
+  width: 1000px;
 
   &_mainContainer {
     min-width: 200px;
     &_left {
-      width: 450px;
       padding-left: 60px;
+      width: 450px;
     }
 
     &_right {
-      padding-top: 49px;
       background-color: #ff755e;
-      height: 551px;
-      width: 301px;
       border-bottom-right-radius: .3rem;
       border-top-right-radius: .3rem;
+      height: 551px;
+      padding-top: 49px;
+      width: 301px;
       &_row {
         height: auto;
         padding-left: 20px;
@@ -189,23 +189,23 @@
   }
 
   &_col {
-    display: flex;
     align-items: center;
+    display: flex;
 
     &_nearFields {
       width: 100%;
     }
 
     &_unit {
-      display: flex;
       align-items: center;
+      display: flex;
       padding-left: 10px;
       padding-right: 10px;
     }
 
     &_select {
-      display: flex;
       align-items: center;
+      display: flex;
       height: 80px;
     }
 
@@ -214,37 +214,37 @@
     }
 
     &_confirmCancel {
-      display: inline-block;
       align-items: center;
+      display: inline-block;
       &_label {
         color: $empty-grey;
-        font-weight: normal;
         font-size: 16px;
+        font-weight: normal;
         padding-bottom: 5px;
       }
     }
   }
 
   &_comment {
-    width: 235px;
-    max-width: 235px;
-    max-height: 145px;
     background-color: $primary-color;
     border-color: $primary-grey;
     color: $primary-grey;
+    max-height: 145px;
+    max-width: 235px;
+    width: 235px;
     &_label {
       color: $primary-grey;
-      font-weight: normal;
-      pointer-events: none;
       font-size: 16px;
+      font-weight: normal;
       padding-bottom: 5px;
+      pointer-events: none;
     }
   }
 }
 
 .suggestionContainer {
-  display: flex;
   align-items: center;
+  display: flex;
 
   &_fullName {
     padding-left: 15px;
@@ -252,30 +252,30 @@
 }
 
 .patientSearch {
-  display: inline-block;
-  border: 0 solid $primary-white;
-  width: 100%;
-  height: 145px;
   align-items: center;
+  border: 0 solid $primary-white;
+  display: inline-block;
+  height: 145px;
   padding-bottom: 15px;
+  width: 100%;
 
   &_avatar {
     display: flex;
+    height: 90px;
     margin: 0 auto;
     width: 90px;
-    height: 90px;
   }
 
   &_searchIcon {
-    display: flex;
-    padding-bottom: 15px;
     color: $primary-white;
-    text-align: center;
+    display: flex;
     justify-content: center;
+    padding-bottom: 15px;
+    text-align: center;
   }
   &_name {
-    padding-top: 15px;
     color: $primary-white;
+    padding-top: 15px;
     text-align: center;
   }
 

@@ -7,20 +7,20 @@ $large-size: 5rem;
 $extra-Large-size: 7.75rem;
 
 .avatar {
-  display: inline-flex;
-  width: $medium-size;
-  height: $medium-size;
-  min-width: $medium-size;
-  min-height: $medium-size;
-  font-size: 20px;
-  border-radius: 50%;
-  overflow: hidden;
   align-items: center;
-  justify-content: center;
-  vertical-align: middle;
-  text-align: center;
   background: linear-gradient(#bebebe, #a2a2a2);
+  border-radius: 50%;
+  display: inline-flex;
+  font-size: 20px;
+  height: $medium-size;
+  justify-content: center;
+  min-height: $medium-size;
+  min-width: $medium-size;
   outline: none;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
+  width: $medium-size;
 }
 
 .male {
@@ -38,48 +38,48 @@ $extra-Large-size: 7.75rem;
 }
 
 .img {
-  width: 100%;
   height: auto;
+  width: 100%;
 }
 
 .xs {
-  width: $extraSmall-size;
-  height: $extraSmall-size;
-  min-width: $extraSmall-size;
-  min-height: $extraSmall-size;
   font-size: 10px;
+  height: $extraSmall-size;
+  min-height: $extraSmall-size;
+  min-width: $extraSmall-size;
+  width: $extraSmall-size;
 }
 
 .sm {
-  width: $small-size;
-  height: $small-size;
-  min-width: $small-size;
-  min-height: $small-size;
   font-size: 14px;
+  height: $small-size;
+  min-height: $small-size;
+  min-width: $small-size;
+  width: $small-size;
 }
 
 .md {
-  width: $medium-size;
-  height: $medium-size;
-  min-width: $medium-size;
-  min-height: $medium-size;
   font-size: 18px;
+  height: $medium-size;
+  min-height: $medium-size;
+  min-width: $medium-size;
+  width: $medium-size;
 }
 
 .lg {
-  width: $large-size;
-  height: $large-size;
-  min-width: $large-size;
-  min-height: $large-size;
   font-size: 32px;
+  height: $large-size;
+  min-height: $large-size;
+  min-width: $large-size;
+  width: $large-size;
 }
 
 .xl {
-  width: $extra-Large-size;
-  height: $extra-Large-size;
-  min-width: $extra-Large-size;
-  min-height: $extra-Large-size;
   font-size: 45px;
+  height: $extra-Large-size;
+  min-height: $extra-Large-size;
+  min-width: $extra-Large-size;
+  width: $extra-Large-size;
 }
 
 .text {
@@ -88,10 +88,10 @@ $extra-Large-size: 7.75rem;
 }
 
 .gradientBackground {
+  background-color: transparent;
   box-sizing: border-box;
   margin: 0;
   padding: 3px;
-  background-color: transparent;
 }
 
 .gradientPadding {

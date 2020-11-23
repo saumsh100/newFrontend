@@ -3,19 +3,19 @@
 $default-table-space: 1.5em;
 
 .mainContainer {
-  padding: $container-padding;
   min-height: calc(100vh - 75px);
+  padding: $container-padding;
 }
 
 .card {
+  margin: auto;
   overflow: inherit;
   padding-bottom: $default-table-space;
-  margin: auto;
 }
 
 .cardHeader {
-  padding: $default-table-space $default-table-space 0 $default-table-space;
   margin-bottom: $default-table-space;
+  padding: $default-table-space $default-table-space 0 $default-table-space;
 }
 
 .cardContent {
@@ -30,7 +30,7 @@ $default-table-space: 1.5em;
   max-width: 400px;
   position: relative;
   button {
-    margin-top: 10px;
-    margin-left: auto
+    margin-left: auto;
+    margin-top: 10px
   }
 }

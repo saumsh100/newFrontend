@@ -6,12 +6,12 @@
 
 .revenueDisplay {
   background-color: darken($primary-dark, 5%);
-  height: 100%;
+  box-sizing: border-box;
   color: $primary-white;
   display: flex;
   flex-direction: column;
+  height: 100%;
   padding-top: 25px;
-  box-sizing: border-box;
   width: 210px;
 
   @media screen and (max-width: 1266px) {
@@ -24,18 +24,18 @@
 }
 
 .revenueDisplayTop {
+  box-sizing: border-box;
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: space-between;
-  flex: 1;
   padding-bottom: 10px;
-  box-sizing: border-box;
 }
 
 .todaysProductionText {
-  width: 100%;
-  text-align: center;
   font-size: 19px;
+  text-align: center;
+  width: 100%;
   @extend .fontMedium;
   @media screen and (max-width: 768px) {
     margin-bottom: 10px;
@@ -45,8 +45,8 @@
 .todaysProductionValue {
   @extend .fontMedium;
   display: flex;
-  justify-content: center;
   font-size: 50px;
+  justify-content: center;
   text-align: center;
   width: 100%;
 
@@ -61,20 +61,20 @@
   color: #4f5966;
   display: flex;
   flex-direction: row;
-  width: 100%;
   font-size: 13px;
+  width: 100%;
 }
 
 .yesterdayLeft {
   @extend .fontMedium;
-  padding-left: 10px;
-  padding-right: 8px;
+  align-items: center;
+  border-right: 1px solid #4f5966;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  padding-left: 10px;
+  padding-right: 8px;
   width: 70%;
-  border-right: 1px solid #4f5966;
 
   &_text {
     margin-right: 3px;
@@ -82,25 +82,25 @@
 }
 
 .yesterdayRight {
-  margin-left: 8px;
-  margin-right: 8px;
-  @extend .fontMedium;
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
+  margin-left: 8px;
+  margin-right: 8px;
   width: 30%;
+  @extend .fontMedium;
 }
 
 .percentageBox {
   @extend .fontMedium;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  color: $primary-green;
   border: 1px solid $primary-green;
-  min-width: 35px;
+  color: $primary-green;
+  display: flex;
+  justify-content: center;
   min-height: 18px;
+  min-width: 35px;
   padding: 3px;
 
   &_icon {
@@ -109,39 +109,39 @@
 }
 
 .negative {
-  color: $primary-color;
   border: 1px solid $primary-color;
+  color: $primary-color;
 }
 
 .average {
-  height: 80px;
+  align-items: center;
   background-color: #4f5966;
   display: flex;
-  width: 100%;
   flex-direction: column;
+  height: 80px;
   justify-content: center;
-  align-items: center;
+  width: 100%;
   @extend .fontMedium;
 
   &_value {
-    width: 100%;
-    text-align: center;
-    font-size: 15px;
-    margin-bottom: 15px;
     display: flex;
+    font-size: 15px;
     justify-content: center;
+    margin-bottom: 15px;
+    text-align: center;
+    width: 100%;
   }
 
   &_text {
-    width: 100%;
-    text-align: center;
-    font-size: $extra-small-size;
     font-family: $dashboard-font;
+    font-size: $extra-small-size;
+    text-align: center;
+    width: 100%;
   }
 
   &_dollar {
-    font-size: $extra-small-size;
     color: black;
+    font-size: $extra-small-size;
     margin-right: 2px;
   }
 }

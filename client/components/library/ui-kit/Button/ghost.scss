@@ -4,20 +4,20 @@
 .button {
   @extend .ui-kit-smoother;
   @extend .fx;
-  width: 100%;
-  min-width: 120px;
-  border-radius: $rounded;
   background-color: $white;
-  padding: 11px 16px;
-  box-shadow: $shadow;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 12px;
-  color: $grey-dark;
-  text-align: center;
-  outline: none;
-  cursor: pointer;
   border: 1px solid $grey-lighter;
+  border-radius: $rounded;
+  box-shadow: $shadow;
+  color: $grey-dark;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 12px;
+  min-width: 120px;
+  outline: none;
+  padding: 11px 16px;
+  text-align: center;
+  width: 100%;
 
   &:hover,
   &:focus {

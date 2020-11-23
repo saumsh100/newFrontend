@@ -1,45 +1,45 @@
 @import '../../ui.scss';
 
 .blurBg {
-  overflow: hidden;
-  position: fixed;
-  top: 50px;
   bottom: 0;
   left: 0;
+  overflow: hidden;
+  position: fixed;
   right: 0;
+  top: 50px;
 
   &:before {
     background: gray;
-    opacity: 0.6;
-    display: block;
+    bottom: 0;
     content: '';
-    position: absolute;
+    display: block;
     left: 0;
+    opacity: 0.6;
+    position: absolute;
     right: 0;
     top: 0;
-    bottom: 0;
     z-index: 1;
   }
 
   .blurredContent {
     @include blurred-mixin();
-    position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
     bottom: 0;
+    left: 0;
     pointer-events: none;
+    position: relative;
+    right: 0;
+    top: 0;
   }
 }
 
 .actionButton {
-  height: auto;
-  font-size: 20px;
-  padding: 12px 13px;
-  composes: fontDefault from '../../fonts.scss';
-  position: fixed;
   bottom: 15px;
+  composes: fontDefault from '../../fonts.scss';
+  font-size: 20px;
+  height: auto;
   left: 15px;
+  padding: 12px 13px;
+  position: fixed;
   z-index: 3;
 }
 
@@ -49,27 +49,27 @@
 }
 
 .optionsWrapper {
-  position: fixed;
-  left: 15px;
   bottom: 60px;
+  left: 15px;
+  position: fixed;
   z-index: 3;
 }
 
 .actionOverlayButton {
-  color: $primary-white;
-  background: none;
-  text-transform: uppercase;
-  padding: 0 0.5em;
-  display: flex;
   align-items: center;
+  background: none;
+  color: $primary-white;
+  display: flex;
   margin-bottom: 10px;
+  padding: 0 0.5em;
+  text-transform: uppercase;
 
   .actionOverlayButtonIcon {
-    padding: 7px;
     background: $primary-white;
-    color: $primary-blue-green;
     border-radius: 20px;
+    color: $primary-blue-green;
     margin-right: 10px;
+    padding: 7px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {

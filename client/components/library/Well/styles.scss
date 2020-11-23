@@ -2,10 +2,10 @@
 @import '../../../ui.scss';
 
 .well {
-  width: 100%;
-  padding: 15px 10px;
   background-color: $primary-lightgray;
   border: 1px solid darken($primary-lightgray, 10%);
-  margin-bottom: 10px;
   box-sizing: border-box;
+  margin-bottom: 10px;
+  padding: 15px 10px;
+  width: 100%;
 }

@@ -1,40 +1,40 @@
 @import '../../../ui';
 
 .card {
-  width: auto;
   box-shadow: 0 5px 25px 2px rgba(209, 209, 209, 0.6);
   min-width: 270px;
+  width: auto;
   z-index: 5001;
 }
 
 .cardMobile {
   @extend .card;
-  position: absolute;
+  bottom: 0;
   box-shadow: none;
   display: flex;
   flex-direction: column;
-  z-index: 299;
-  top: 0;
-  right: 0;
   left: 0;
-  bottom: 0;
   overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 299;
 }
 
 .header {
-  display: flex;
   align-items: center;
-  height: 45px;
   background-color: #313843;
   color: $primary-white;
+  display: flex;
+  height: 45px;
   padding-left: 15px;
   padding-right: 15px;
 
   &_text {
-    padding-left: 5px;
+    composes: fontDefault from '../../../fonts.scss';
     font-size: 15px;
     margin-right: 10px;
-    composes: fontDefault from '../../../fonts.scss';
+    padding-left: 5px;
   }
 }
 
@@ -44,11 +44,11 @@
 }
 
 .closeIcon {
-  margin-left: auto;
-  composes: fontMediumSize from '../../../fonts.scss';
-  color: $primary-grey;
   background: none;
+  color: $primary-grey;
+  composes: fontMediumSize from '../../../fonts.scss';
   font-size: 14px;
+  margin-left: auto;
   padding: 1px 7px 2px;
   &:hover {
     cursor: pointer;
@@ -65,11 +65,11 @@
 }
 
 .body {
-  padding: 15px;
   height: auto;
-  min-height: 200px;
   max-height: 350px;
   max-width: 285px;
+  min-height: 200px;
+  padding: 15px;
 }
 
 .bodyMobile {
@@ -99,9 +99,9 @@
 
 .subHeaderMobile {
   @extend .header;
-  z-index: 1;
-  justify-content: center;
   background-color: $primary-grey;
+  justify-content: center;
+  z-index: 1;
   &_text {
     @extend .header_text;
     background: none;
@@ -111,10 +111,10 @@
 }
 
 .data {
-  display: flex;
   align-items: center;
-  font-size: 13px;
   composes: fontMedium from '../../../fonts.scss';
+  display: flex;
+  font-size: 13px;
   padding-bottom: 8px;
 
   &_note {
@@ -136,29 +136,29 @@
 }
 
 .subData {
-  composes: fontExtraSmall from '../../../fonts.scss';
   color: $primary-dark-grey;
+  composes: fontExtraSmall from '../../../fonts.scss';
 }
 
 .footer {
+  align-items: center;
   border-top: 1px solid $primary-grey;
   box-sizing: border-box;
   display: flex;
+  justify-content: flex-end;
   padding: 15px;
   width: 100%;
-  justify-content: flex-end;
-  align-items: center;
 }
 
 .footerMobile {
   @extend .footer;
-  width: auto;
-  justify-content: flex-start;
   border-top: none;
+  justify-content: flex-start;
+  width: auto;
   &_actions {
-    position: absolute;
     bottom: 0;
     left: 0;
+    position: absolute;
     @extend .actionsOverlay;
   }
 }
@@ -174,35 +174,35 @@
 }
 
 .actionButtonMobile {
-  height: auto;
-  font-size: 20px;
-  padding: 12px 13px;
   composes: fontDefault from '../../../fonts.scss';
+  font-size: 20px;
+  height: auto;
+  padding: 12px 13px;
 }
 
 .actionsOverlay {
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-start;
 }
 
 .actionOverlayButtonMobile {
-  color: $primary-white;
-  background: none;
-  text-transform: uppercase;
-  padding: 0 0.5em;
-  display: flex;
   align-items: center;
+  background: none;
+  color: $primary-white;
+  display: flex;
   margin-bottom: 10px;
+  padding: 0 0.5em;
+  text-transform: uppercase;
 }
 
 .actionOverlayButtonIconMobile {
-  padding: 7px;
   background: $primary-white;
-  color: $primary-blue-green;
   border-radius: 20px;
+  color: $primary-blue-green;
   margin-right: 10px;
+  padding: 7px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
@@ -216,23 +216,23 @@
 }
 
 .requestedAt {
-  font-size: $extra-small-size;
-  composes: fontDefault from '../../../fonts.scss';
   color: #808081;
+  composes: fontDefault from '../../../fonts.scss';
+  font-size: $extra-small-size;
 
   &_diffUserContainer {
     margin-bottom: 5px;
   }
 
   &_byDiffUser {
-    composes: fontDefault from '../../../fonts.scss';
-    opacity: 1;
-    font-size: $extra-small-size;
     color: $primary-dark;
+    composes: fontDefault from '../../../fonts.scss';
+    font-size: $extra-small-size;
+    opacity: 1;
   }
 
   &_on {
-    padding-right: 5px;
     opacity: 0.6;
+    padding-right: 5px;
   }
 }

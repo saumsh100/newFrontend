@@ -5,19 +5,19 @@
   width: 100%;
 
   & ul {
+    background-color: $white !important;
     border: 1px solid $primary-grey;
     border-radius: $rounded;
-    background-color: $white !important;
     box-shadow: $shadow !important;
 
     & > li {
-      height: 36px;
-      font-family: $inter;
       color: $grey-dark;
+      font-family: $inter;
       font-size: 13px;
+      -webkit-font-smoothing: antialiased;
+      height: 36px;
       letter-spacing: 0.02px;
       line-height: 13px;
-      -webkit-font-smoothing: antialiased;
       transition: all 0.2s ease;
 
       &:hover {
@@ -27,9 +27,9 @@
       }
 
       & > button {
-        text-align: left !important;
         cursor: pointer;
         padding: 8px 12px;
+        text-align: left !important;
 
         &:focus {
           background: transparent !important;
@@ -40,26 +40,26 @@
 }
 
 .triggerButton {
-  max-height: 40px;
-  line-height: 40px;
-  width: 100%;
+  align-items: center;
+  background-color: $white;
   border: 1px solid $primary-grey;
   border-radius: $rounded;
-  background-color: $white;
   box-shadow: $shadow;
-  cursor: pointer;
-  outline: none !important;
-  text-align: left;
-  font-family: $inter;
-  color: $grey-dark;
-  font-size: 13px;
-  letter-spacing: 0.02px;
-  padding: 0 15px;
   box-sizing: border-box;
+  color: $grey-dark;
+  cursor: pointer;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  font-family: $inter;
+  font-size: 13px;
   -webkit-font-smoothing: antialiased;
+  justify-content: space-between;
+  letter-spacing: 0.02px;
+  line-height: 40px;
+  max-height: 40px;
+  outline: none !important;
+  padding: 0 15px;
+  text-align: left;
+  width: 100%;
   @extend .fx;
 
   &.active,

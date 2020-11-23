@@ -1,20 +1,20 @@
 @import '../../../ui';
 
 .pill {
-  padding: 7px 20px;
+  background: transparent;
   border: 1px solid $clr-bg-dark-grey;
-  color: $clr-table-grey;
   border-radius: 16px;
-  font-size: 16px;
+  box-sizing: border-box;
+  color: $clr-table-grey;
   // font-weight: bold;
   cursor: pointer;
-  margin: 0 9px 9px 0;
-  background: transparent;
-  outline: none;
-  min-width: 90px;
-  text-align: center;
-  box-sizing: border-box;
   display: inline-block;
+  font-size: 16px;
+  margin: 0 9px 9px 0;
+  min-width: 90px;
+  outline: none;
+  padding: 7px 20px;
+  text-align: center;
 
   &:last-child {
     margin-right: 0;

@@ -17,32 +17,32 @@
 }
 
 .secondaryLinesBox {
-  margin-left: auto;
-  width: 85%;
-  height: 51px;
-  border-top: 1px solid $primary-gray;
-  border-left: 1px solid $primary-gray;
   border-bottom: 1px solid $primary-gray;
+  border-left: 1px solid $primary-gray;
+  border-top: 1px solid $primary-gray;
+  height: 51px;
+  margin-left: auto;
   position: relative;
   top: -39px;
+  width: 85%;
 }
 
 .linesBoxSelected {
-  boreder-top: 1px solid $primary-yellow;
+  border-top: 1px solid $primary-yellow;
 }
 
 .secondaryLinesBoxSelected {
   @extend .secondaryLinesBox;
-  border-top: 1px solid $primary-yellow;
-  border-left: 1px solid $primary-yellow;
   border-bottom: 1px solid $primary-yellow;
+  border-left: 1px solid $primary-yellow;
+  border-top: 1px solid $primary-yellow;
 }
 
 .dropdownsWrapper {
   margin-left: auto;
-  width: 91%;
   position: relative;
   top: -10px;
+  width: 91%;
 }
 
 .inputFont {
@@ -60,27 +60,27 @@ $dheight: 30px;
 .dropdownSelect {
   background-color: white;
   border: 1px solid $primary-gray;
-  padding: 0;
   height: $dheight;
+  padding: 0;
   // For inputs
   > input {
     @extend .inputFont;
-    padding: 10px;
-    box-sizing: border-box;
     border-bottom: none;
-    height: $dheight;
+    box-sizing: border-box;
     font-size: 12px;
+    height: $dheight;
+    padding: 10px;
   }
 
   // For dropdowns
   > div:not(:last-child) {
     @extend .inputFont;
     border-bottom: none;
-    padding-left: 8px;
-    padding-right: 8px;
+    box-sizing: border-box;
     font-size: 12px;
     height: 100%;
-    box-sizing: border-box;
+    padding-left: 8px;
+    padding-right: 8px;
   }
 
   > :global(.dd-menu-items) {
@@ -106,9 +106,9 @@ $dheight: 30px;
 }
 
 .bottomRow {
+  bottom: 14px;
   display: flex;
   position: relative;
-  bottom: 14px;
 }
 
 .bottomRowLeft {
@@ -129,28 +129,28 @@ $width: 26px;
 $wrapper-thickness: 6px;
 
 .reviewIconContainer {
+  left: -($width + 2 * $wrapper-thickness) / 2;
   position: relative;
   top: -($width + 2 * $wrapper-thickness) / 2;
-  left: -($width + 2 * $wrapper-thickness) / 2;
 }
 
 .smallIconContainer {
+  left: -11px;
   position: relative;
   top: 41px;
-  left: -11px;
 }
 
 $small-icon-width: 20px;
 
 .smallReviewSelectWrapperCircle {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: $small-icon-width + 1;
-  height: $small-icon-width;
+  background-color: $primary-gray;
   border-radius: $small-icon-width / 2;
   color: white;
-  background-color: $primary-gray;
+  display: flex;
+  height: $small-icon-width;
+  justify-content: center;
+  width: $small-icon-width + 1;
   > i {
     font-size: 0.8em !important;
   }
@@ -170,9 +170,9 @@ $small-icon-width: 20px;
 }
 
 .downIconWrapper {
-  position: relative;
   bottom: -14px;
   left: -7px;
+  position: relative;
   > i {
     color: $primary-gray;
   }

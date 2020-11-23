@@ -1,14 +1,12 @@
 .dropzone {
-	padding: 10px;
-	text-align: center;
-	overflow: hidden;
-	position: relative;
-	width: 200px;
-	height: 200px;
-	border-radius: 5px;
 	border: 1px #666 dashed;
+	border-radius: 5px;
+	height: 200px;
+	overflow: hidden;
+	padding: 10px;
+	position: relative;
 	text-align: center;
-
+	width: 200px;
 	:global .loader {
 		height: 100% !important;
 	}

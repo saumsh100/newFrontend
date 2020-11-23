@@ -3,28 +3,28 @@
 $empty-grey: darken(lightgrey, 5%);
 
 .wrapper {
+  padding: 20px 0;
   position: relative;
   width: 100%;
-  padding: 20px 0;
 }
 
 .toggleDiv {
-  position: relative;
-  font-size: $medium-size;
-  font-family: $dashboard-font;
-  height: 30px;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  color: initial;
+  align-items: center;
   background: transparent;
+  border: 0;
+  border-bottom: 1px solid $disabled-color;
+  box-sizing: border-box;
+  color: initial;
   //padding: 5px 5px 5px 0px;
   cursor: pointer;
-  border-bottom: 1px solid $disabled-color;
   display: flex;
-  align-items: center;
+  font-family: $dashboard-font;
+  font-size: $medium-size;
+  height: 30px;
+  padding: 0;
+  position: relative;
   transition: border 500ms ease-out;
-  box-sizing: border-box;
+  width: 100%;
 }
 
 .primaryColorBorder {
@@ -54,45 +54,45 @@ $empty-grey: darken(lightgrey, 5%);
 
 .toggleDivDisabled {
   @extend .toggleDiv;
+  border-bottom: 1px solid $disabled-color;
   color: $disabled-color;
   cursor: not-allowed;
-  border-bottom: 1px solid $disabled-color;
   .caretIconWrapper {
     color: $disabled-color;
   }
 }
 
 .optionDiv {
-  padding: 0 !important;
   font-family: $dashboard-font !important;
+  padding: 0 !important;
   white-space: normal !important;
 }
 
 .optionListItem {
-  font-size: $small-size;
-  cursor: pointer;
-  padding-left: 20px;
-  padding-right: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  display: flex;
   align-items: center;
-  height: 2.5rem;
   background-color: $primary-white;
   border: 0;
-  width: 100%;
   border-bottom: 1px solid;
   border-bottom-color: $primary-grey;
-  text-align: center;
   color: $primary-dark;
+  cursor: pointer;
+
+  display: flex;
+  font-size: $small-size;
+  height: 2.5rem;
   justify-content: center;
   letter-spacing: 0;
+  overflow: hidden;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+  text-overflow: ellipsis;
+  width: 100%;
   &:hover {
-    cursor: pointer;
     background-color: lighten($primary-grey, 5%);
     background-color: $primary-lightgrey !important;
     color: $primary-dark !important;
+    cursor: pointer;
   }
 }
 
@@ -102,34 +102,34 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .selectedListItem {
-  padding-left: 15px;
   border-left: $selection-border $primary-color;
+  padding-left: 15px;
 }
 
 .toggleValueDiv {
-  user-select: none;
-  display: flex;
   align-items: center;
-  width: 100%;
+  display: flex;
   height: 100%;
+  user-select: none;
+  width: 100%;
 }
 
 .caretIconWrapper {
-  margin-left: auto;
-  z-index: 1;
   color: $primary-darkgrey;
+  margin-left: auto;
   transition: color 500ms ease-out;
+  z-index: 1;
 }
 
 .timesIconWrapper {
-  padding: 0;
-  border: 0;
-  z-index: 1;
-  color: $primary-darkgrey;
-  transition: color 500ms ease-out;
-  margin-left: auto;
   background: transparent;
+  border: 0;
+  color: $primary-darkgrey;
   cursor: pointer;
+  margin-left: auto;
+  padding: 0;
+  transition: color 500ms ease-out;
+  z-index: 1;
   &:hover {
     color: $primary-dark;
   }
@@ -145,20 +145,20 @@ $empty-grey: darken(lightgrey, 5%);
 
 .label {
   color: $empty-grey;
-  font-weight: normal;
-  position: absolute;
-  pointer-events: none;
-  left: 0;
-  transition: 0.2s ease all;
-  top: 6px;
   font-size: $medium-size;
+  font-weight: normal;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 6px;
+  transition: 0.2s ease all;
 }
 
 .filled {
+  font-size: $extra-small-size !important;
+  left: 0 !important;
   position: absolute;
   top: -10px !important;
-  left: 0 !important;
-  font-size: $extra-small-size !important;
 }
 
 .hideLabel {
@@ -175,20 +175,20 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .error {
-  position: absolute;
+  bottom: -16px;
   color: red;
   font-size: 11px;
-  bottom: -16px;
   font-weight: normal;
-  pointer-events: none;
   letter-spacing: 0.5px;
+  pointer-events: none;
+  position: absolute;
 }
 
 .hiddenInput {
-  position: absolute;
-  width: 0;
   height: 0;
   opacity: 0;
+  position: absolute;
+  width: 0;
 }
 
 .errorIcon {
@@ -204,32 +204,32 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .inputToggler {
-  width: 100%;
   border: 0;
   font-family: $dashboard-font;
+  width: 100%;
   &:focus {
     outline: none;
   }
   &::placeholder {
-    font-style: italic;
     color: $inactive-color;
+    font-style: italic;
     font-weight: 200;
   }
 }
 .groupFull {
-  width: 100%;
   padding: 0;
+  width: 100%;
 }
 
 .hiddenSelect {
-  position: absolute;
   left: -9999999px;
+  position: absolute;
   z-index: -1;
 }
 .selectLabel {
-  width: 100%;
-  height: 100%;
-  display: flex;
   align-items: center;
   cursor: pointer;
+  display: flex;
+  height: 100%;
+  width: 100%;
 }

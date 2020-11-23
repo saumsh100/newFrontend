@@ -15,10 +15,10 @@
 
 .mainRowWrapper {
   @extend .row;
-  padding: 0 20px;
   background: $primary-lightgray;
   border-radius: 0 0 4px 4px;
   box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
+  padding: 0 20px;
 
   & > div {
     padding-left: 10px;
@@ -34,18 +34,18 @@
   }
 
   .col {
-    padding-top: 20px;
-    padding-bottom: 20px;
     align-self: flex-end;
     flex: 3;
     max-width: 460px;
+    padding-bottom: 20px;
+    padding-top: 20px;
   }
 }
 
 .navDropdownListWrapper {
-  margin-bottom: 1px;
-  border-radius: 4px 4px 0 0;
   background-color: $primary-white;
+  border-radius: 4px 4px 0 0;
   box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
+  margin-bottom: 1px;
   padding: 22px 24px;
 }

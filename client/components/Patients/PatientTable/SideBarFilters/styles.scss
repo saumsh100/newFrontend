@@ -1,31 +1,31 @@
 @import '../../../../ui';
 
 .sideBar {
-  margin-left: 15px;
-  height: auto;
   background: $primary-white;
-  padding: 25px 15px 15px;
+  height: auto;
   margin-bottom: 20px;
+  margin-left: 15px;
+  padding: 25px 15px 15px;
 }
 
 .header {
-  width: 100%;
-  display: flex;
   align-items: center;
+  display: flex;
+  width: 100%;
 
   &_text {
+    composes: fontMedium from '../../../../fonts.scss';
     font-size: 19px;
     padding-left: 10px;
-    composes: fontMedium from '../../../../fonts.scss';
   }
 
   &_clearText {
-    composes: fontSmall from '../../../../fonts.scss';
-    color: darken($primary-grey, 10%);
     background: initial;
-    padding: 0;
-    margin: 0 0 0 auto;
+    color: darken($primary-grey, 10%);
+    composes: fontSmall from '../../../../fonts.scss';
     cursor: pointer;
+    margin: 0 0 0 auto;
+    padding: 0;
     &:hover {
       color: $primary-blue;
     }
@@ -48,27 +48,27 @@
 }
 
 .filterHeader {
-  box-sizing: border-box;
-  display: flex;
   align-items: center;
-  width: 100%;
-  height: 40px;
   background: #efefef;
-  padding: 10px;
-  composes: fontMedium from '../../../../fonts.scss';
-  justify-content: space-between;
+  box-sizing: border-box;
   color: initial;
+  composes: fontMedium from '../../../../fonts.scss';
   cursor: pointer;
+  display: flex;
+  height: 40px;
+  justify-content: space-between;
+  padding: 10px;
+  width: 100%;
   &_icon {
     padding-right: 10px;
   }
 }
 
 .collapsible {
-  padding: 25px 15px 15px;
   animation: fadein 0.5s ease;
-  opacity: 1;
   background-color: #fafafa;
+  opacity: 1;
+  padding: 25px 15px 15px;
 }
 
 @keyframes fadein {
@@ -81,8 +81,8 @@
 }
 
 .formContainer {
-  padding-bottom: 15px;
   background-color: #fafafa;
+  padding-bottom: 15px;
 
   &_flex {
     @extend .formContainer;
@@ -95,12 +95,12 @@
   }
 
   &_row {
-    display: flex;
-    width: 100%;
     align-items: center;
+    display: flex;
+    height: 40px;
     justify-content: space-between;
     padding-bottom: 25px;
-    height: 40px;
+    width: 100%;
     &:last-child {
       padding-bottom: 0;
     }
@@ -121,28 +121,28 @@
 }
 
 .formHeader {
-  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-blue;
+  composes: fontMedium from '../../../../fonts.scss';
 }
 
 .formHeaderInput {
-  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-blue;
+  composes: fontMedium from '../../../../fonts.scss';
 }
 
 .formSubHeader {
-  padding-top: 5px;
-  composes: fontExtraSmall from '../../../../fonts.scss';
   color: $primary-darkgrey;
+  composes: fontExtraSmall from '../../../../fonts.scss';
+  padding-top: 5px;
 }
 .ddSelect {
-  width: 100%;
   padding-right: 5px;
+  width: 100%;
 }
 
 .searchContainer {
-  width: 100%;
   padding-top: 10px;
+  width: 100%;
 }
 
 .searchBar {
@@ -171,18 +171,18 @@
 }
 
 .input {
-  border: 1px solid $primary-grey;
   background-color: white;
-  width: 100%;
+  border: 1px solid $primary-grey;
   padding-left: 4px;
+  width: 100%;
 }
 
 .group {
   box-sizing: border-box;
   input::placeholder {
-    padding-left: 16px;
-    font-size: 12px;
     font-family: $medium-font;
+    font-size: 12px;
+    padding-left: 16px;
   }
 }
 

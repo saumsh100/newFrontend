@@ -2,62 +2,62 @@
 @import '../../../fonts.scss';
 
 .container {
-  position: absolute;
-  top: 0;
+  background: $primary-lightgray;
   bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
   flex-direction: column;
-  background: $primary-lightgray;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .searchIcon {
-  position: absolute;
-  padding: 20px;
   box-sizing: border-box;
-  width: 30px;
+  color: $search-border-color;
   display: flex;
   justify-content: flex-start;
+  padding: 20px;
+  position: absolute;
+  width: 30px;
   z-index: 2;
-  color: $search-border-color;
 }
 
 .group {
+  background-color: $search-bg;
   composes: fontDefault from '../../../fonts.scss';
   height: 50px;
-  background-color: $search-bg;
   padding: 0;
 
   input {
-    font-size: 13px;
+    border: none;
     color: $primary-dark;
+    font-size: 13px;
     height: 100%;
     padding-left: 40px;
-    border: none;
   }
 
   input::placeholder {
-    font-style: normal;
     color: $search-border-color;
+    font-style: normal;
   }
 }
 
 .suggestionsWrapper {
-  margin: 0;
   box-shadow: none;
   display: flex;
   flex-direction: column;
+  margin: 0;
 }
 
 .suggestionsContainerOpen {
+  background: $primary-white;
   box-sizing: border-box;
+  flex: 1 1 auto;
+  max-height: 460px;
   outline: none;
   overflow: auto;
-  flex: 1 1 auto;
   padding-top: 5px;
-  max-height: 460px;
-  background: $primary-white;
 }
 
 .suggestionContainer {
@@ -96,7 +96,7 @@
 }
 
 .recentPatientsWrapper {
+  background: $primary-white;
   height: 100%;
   overflow: auto;
-  background: $primary-white;
 }

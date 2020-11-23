@@ -1,13 +1,13 @@
 
 .headerWrapper {
-  padding: 20px;
-  height: 80px;
   box-sizing: border-box;
+  height: 80px;
+  padding: 20px;
 }
 
 .mainHeader {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .subHeader {

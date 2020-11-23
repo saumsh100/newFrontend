@@ -1,15 +1,15 @@
 @import '../../../../../ui';
 
 .list {
-  padding: 5px 20px 0;
   box-sizing: border-box;
+  padding: 5px 20px 0;
 }
 
 .listItem {
+  border-bottom: none;
+  color: $primary-dark-grey !important;
   display: flex;
   flex-direction: column;
-  color: $primary-dark-grey !important;
-  border-bottom: none;
   height: auto;
   padding: 10px 0 0;
 
@@ -33,18 +33,18 @@
 
 .listItemWrapper {
   display: flex;
-  width: 100%;
-  padding: 10px 0px;
   height: 1rem;
+  padding: 10px 0px;
+  width: 100%;
   &.single {
     height: 2rem;
   }
 }
 
 .muted {
+  color: $inactive-color;
   font-size: 10px;
   line-height: 20px;
-  color: $inactive-color;
 }
 
 .lowercase {
@@ -53,10 +53,10 @@
 
 .iconContainer {
   border-radius: 50%;
-  margin: 0 0 0 10px;
-  height: 10px;
-  width: 10px;
   font-size: 10px;
+  height: 10px;
+  margin: 0 0 0 10px;
+  width: 10px;
   &.iconActive {
     background-color: $primary-grey;
     color: $primary-blue;

@@ -1,9 +1,9 @@
 @import '../../../ui.scss';
 
 @mixin formContainer-mixin() {
-  width: auto;
-  min-width: 0;
   height: 100%;
+  min-width: 0;
+  width: auto;
 }
 
 .body {
@@ -11,10 +11,10 @@
 }
 
 .formContainer {
+  height: 540px;
+  min-width: 443px;
   position: relative;
   width: 443px;
-  min-width: 443px;
-  height: 540px;
   @media screen and (max-width: 700px) {
     @include formContainer-mixin();
   }
@@ -29,25 +29,25 @@
 }
 
 .header {
-  display: flex;
-  box-sizing: border-box;
   align-items: center;
-  border-bottom: 0;
-  height: 43px;
-  padding: 10px 20px;
   background-color: #313843;
-  font-size: 18px;
+  border-bottom: 0;
+  box-sizing: border-box;
   color: $primary-white;
-  width: 100%;
-  justify-content: space-between;
   composes: fontMedium from '../../../fonts.scss';
+  display: flex;
+  font-size: 18px;
+  height: 43px;
+  justify-content: space-between;
+  padding: 10px 20px;
+  width: 100%;
 }
 
 .footer {
+  border-top: 1px solid $primary-grey;
   display: flex;
   justify-content: flex-end;
   padding: 20px;
-  border-top: 1px solid $primary-grey;
 }
 
 .searchContainer {
@@ -58,20 +58,20 @@
   composes: fontDefault from '../../../fonts.scss';
 
   > input {
-    width: 100%;
     box-sizing: border-box;
+    width: 100%;
   }
 
   input::placeholder {
     color: #a7a9ac;
-    font-size: 15px;
     font-family: $dashboard-font;
+    font-size: 15px;
   }
 }
 
 .searchDropDownBar {
-  padding: 0 20px;
   box-sizing: border-box;
+  padding: 0 20px;
 }
 
 .inputStyle {
@@ -96,23 +96,23 @@
 }
 
 .suggestionContainer {
-  display: flex;
   align-items: center;
   color: $primary-dark;
+  display: flex;
   padding: 10px;
 
   &_details {
-    padding-left: 10px;
+    color: #a7a9ac;
+    composes: fontDefault from '../../../fonts.scss';
     display: flex;
     flex-direction: column;
-    composes: fontDefault from '../../../fonts.scss';
-    color: #a7a9ac;
     line-height: 1.3;
+    padding-left: 10px;
   }
 
   &_fullName {
-    font-size: 12px;
     color: $primary-dark;
+    font-size: 12px;
   }
 
   &_date {
@@ -121,11 +121,11 @@
 }
 
 .iconAuto {
+  color: #2f3844;
   font-size: 1em !important;
   margin-right: 20px;
-  padding-bottom: 3px;
-  color: #2f3844;
   opacity: 1;
+  padding-bottom: 3px;
 }
 
 .labelAuto {
@@ -142,13 +142,13 @@
 }
 
 .grid {
-  padding: 10px 20px 0;
   box-sizing: border-box;
+  padding: 10px 20px 0;
 }
 
 .row {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .rowTextArea {
@@ -159,8 +159,8 @@
   margin-bottom: 5px;
 }
 .col {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .colConfirmCancel {
@@ -185,23 +185,23 @@
 }
 
 .displayCenterFlex {
-  justify-content: center;
   align-items: center;
   display: flex;
+  justify-content: center;
 }
 
 .colDropDown {
 }
 
 .confirmCancel {
-  display: inline-block;
   align-items: center;
   composes: fontMedium from '../../../fonts.scss';
+  display: inline-block;
   font-size: 10px;
 
   &_label {
-    composes: fontMedium from '../../../fonts.scss';
     color: #3d4956;
+    composes: fontMedium from '../../../fonts.scss';
     font-size: 12px;
     padding-bottom: 1px;
 
@@ -226,11 +226,11 @@
 
 .textArea {
   > textarea {
-    padding: 10px;
-    height: 80px;
-    color: black;
     background-color: #f4f4f4;
     border-bottom: 0;
+    color: black;
+    height: 80px;
+    padding: 10px;
   }
 
   label {
@@ -240,47 +240,47 @@
 
 .checkBox {
   &:before {
-    border-radius: 3px !important;
-    width: 10px !important;
-    height: 10px !important;
     border-color: $primary-dark !important;
+    border-radius: 3px !important;
+    height: 10px !important;
+    width: 10px !important;
   }
 }
 
 .patientContainer {
-  padding: 10px 20px;
-  display: flex;
   align-items: center;
-  width: 100%;
-  box-sizing: border-box;
   border-bottom: 1px solid $primary-grey;
+  box-sizing: border-box;
   cursor: pointer;
+  display: flex;
+  padding: 10px 20px;
+  width: 100%;
 
   &_name {
-    padding-left: 10px;
     composes: fontMedium from '../../../fonts.scss';
     font-size: 15px;
+    padding-left: 10px;
   }
 
   &_icon {
-    margin-left: auto;
-    font-size: 1em !important;
     color: #2f3844;
+    font-size: 1em !important;
+    margin-left: auto;
   }
 }
 
 .addNewPatient {
-  width: 100%;
+  align-items: center;
   background-color: #efefef;
-  padding: 10px 20px;
+  border: none;
   box-sizing: border-box;
   color: #929293;
   composes: fontMedium from '../../../fonts.scss';
-  display: flex;
-  align-items: center;
-  height: 35px;
   cursor: pointer;
-  border: none;
+  display: flex;
+  height: 35px;
+  padding: 10px 20px;
+  width: 100%;
 }
 
 .noPatient {
@@ -288,10 +288,10 @@
 }
 
 .close {
-  margin-left: auto;
-  cursor: pointer;
-  padding: 0;
   background: none;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 0;
 }
 
 .hideLabel {

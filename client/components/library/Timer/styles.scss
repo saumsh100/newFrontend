@@ -2,8 +2,8 @@
 .CircularProgressbar {
   width: 50px;
   &_path {
-    transition: stroke-dashoffset .5s ease 0s;
     stroke-linecap: round;
+    transition: stroke-dashoffset .5s ease 0s;
   }
 
   &_trail {
@@ -11,9 +11,9 @@
   }
 
   &_text {
+    dominant-baseline: middle;
     font-size: 30px;
     font-weight: 500;
-    dominant-baseline: middle;
     text-anchor: middle;
   }
 }

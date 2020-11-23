@@ -8,20 +8,20 @@
 
 .servicesListContainer {
   display: inline-block;
-  width: 270px;
+  margin-right: 15px;
   max-width: 270px;
   min-width: 270px;
   padding-top: 20px;
-  margin-right: 15px;
+  width: 270px;
 }
 
 .modalContainer {
-  display: inline-block;
-  justify-content: center;
   align-items: center;
+  background: $primary-white;
   border-bottom: 1px solid;
   border-bottom-color: $primary-grey;
-  background: $primary-white;
+  display: inline-block;
+  justify-content: center;
   width: 100%;
 }
 
@@ -42,8 +42,8 @@
 }
 
 .displayFlexCenter {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 
@@ -54,13 +54,13 @@
   &_text {
     composes: listItemHeader from '../../../fonts.scss';
     overflow: hidden;
-    white-space: normal;
     text-overflow: ellipsis;
+    white-space: normal;
   }
 
   &_duration {
-    padding-top: 10px;
     composes: subHeaderExtraSmall from '../../../fonts.scss';
+    padding-top: 10px;
 
     &_text {
       color: $primary-dark;
@@ -73,9 +73,9 @@
 }
 
 .servicesDataContainer {
+  display: inline-block;
   height: 100%;
   width: 100%;
-  display: inline-block;
 }
 
 .serviceDataBody {
@@ -83,26 +83,26 @@
 }
 
 .serviceDataHeader {
-  padding-bottom: 0 !important;
   height: auto !important;
+  padding-bottom: 0 !important;
 }
 
 .servicesPractForm {
   display: inline-block;
-  width: 100%;
   height: 100%;
-  padding-top: 15px;
   margin-bottom: 15px;
+  padding-top: 15px;
+  width: 100%;
 
   &_serviceList {
     padding-bottom: 15px;
   }
 
   &_all {
-    display: flex;
     align-items: center;
-    width: 230px;
+    display: flex;
     margin-bottom: 10px;
+    width: 230px;
 
     &_text {
       font-family: $medium-font;
@@ -116,17 +116,17 @@
   }
 
   &_service {
-    display: flex;
     align-items: center;
-    width: 230px;
+    display: flex;
     padding-top: 5px;
+    width: 230px;
 
     &_text {
-      padding-bottom: 5px;
       max-width: 200px;
       overflow: hidden;
-      white-space: nowrap;
+      padding-bottom: 5px;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     &_toggle {
@@ -137,15 +137,15 @@
 }
 
 .content {
-  overflow: unset;
   max-height: none;
+  overflow: unset;
 }
 
 .serviceHeaderContainer {
-  display: flex;
   align-items: center;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
+  display: flex;
   margin-left: 15px;
 }
 
@@ -163,17 +163,17 @@
 }
 
 .servicesFormRow {
-  width: 40%;
-  min-width: 100px;
   display: inline-block;
+  min-width: 100px;
+  width: 40%;
 
   &__createRow {
   }
 
   &_hiddenText {
-    display: flex;
-    align-items: center;
     align-content: center;
+    align-items: center;
+    display: flex;
     padding-bottom: 25px;
     width: 230px;
 
@@ -205,10 +205,10 @@
 }
 
 .scheduleWrapper {
-  width: 100%;
   border: 1px solid #efefef;
-  min-height: 300px;
   border-radius: 4px;
+  min-height: 300px;
+  width: 100%;
 }
 
 .saveButton {

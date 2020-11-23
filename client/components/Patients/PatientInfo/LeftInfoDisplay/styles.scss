@@ -1,17 +1,17 @@
 @import '../../../../ui';
 
 .mainContainer {
-  width: 100%;
   background: white;
   box-sizing: border-box;
   height: 100%;
   overflow: hidden;
+  width: 100%;
 
   @media screen and (max-width: 576px) {
     border-top: none;
-    padding-top: 10px;
     min-height: unset;
     overflow-y: auto;
+    padding-top: 10px;
 
     nav {
       display: none;
@@ -20,16 +20,16 @@
 }
 
 .subHeader {
+  color: $primary-dark;
   composes: fontMedium from '../../../../fonts.scss';
   font-size: 15px !important;
-  color: $primary-dark;
   padding-top: 20px;
 
   @media screen and (max-width: 576px) {
-    font-size: 13px !important;
-    padding-bottom: 8px;
     font-family: $dashboard-font;
+    font-size: 13px !important;
     font-weight: 700;
+    padding-bottom: 8px;
   }
 }
 
@@ -54,19 +54,19 @@
 }
 
 .continuingCareSection {
-  margin-bottom: 20px;
   border-bottom: 1px solid $primary-grey;
+  margin-bottom: 20px;
 }
 
 .infoRow {
   @media screen and (max-width: 576px) {
-    width: 100%;
     display: flex;
     flex-direction: row;
+    width: 100%;
 
     & > div {
-      margin: 0;
       font-size: 11px;
+      margin: 0;
       padding-top: 10px;
 
       &:first-child {
@@ -75,10 +75,10 @@
       }
 
       &:last-child {
-        text-align: right;
-        font-family: $dashboard-font !important;
         color: #616b75;
         flex: 1;
+        font-family: $dashboard-font !important;
+        text-align: right;
       }
     }
   }
@@ -94,8 +94,8 @@
 
 .row {
   border-bottom: 1px solid $primary-grey;
-  padding-top: 15px;
   padding-bottom: 20px;
+  padding-top: 15px;
 }
 .row:first-child {
   padding-top: 0;
@@ -105,8 +105,8 @@
 }
 
 .appointmentsRow {
-  padding-top: 15px;
   padding-bottom: 20px;
+  padding-top: 15px;
 }
 
 .remindersRow,
@@ -139,16 +139,16 @@
 }
 
 .tab {
-  display: inline-flex;
-  box-sizing: border-box;
-  width: 50%;
-  justify-content: center;
-  padding-top: 12px;
   background-color: $primary-grey;
-  height: 50px;
   border-right: 1px solid #e3e3e3;
+  box-sizing: border-box;
   color: $primary-dark;
   composes: fontMedium from '../../../../fonts.scss';
+  display: inline-flex;
+  height: 50px;
+  justify-content: center;
+  padding-top: 12px;
+  width: 50%;
 
   &:last-child {
     border-right: 0;
@@ -157,14 +157,14 @@
 
 .activeTab {
   background-color: $primary-white;
-  transition: ease 0.2s all;
   border-bottom: none;
+  transition: ease 0.2s all;
 }
 
 .recallContainer {
+  align-items: center;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   width: 80%;
 }
 
@@ -174,11 +174,11 @@
   }
 
   color: $primary-darkgrey;
+  cursor: pointer;
 
   &_caret {
     color: $primary-dark;
   }
-  cursor: pointer;
 }
 
 .ddList {
@@ -205,15 +205,15 @@
 }
 
 .textEdit {
-  padding-top: 10px;
-  display: flex;
   align-items: center;
-  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-darkgrey;
+  composes: fontMedium from '../../../../fonts.scss';
+  display: flex;
+  padding-top: 10px;
 
   &:hover {
-    cursor: pointer;
     color: $primary-blue;
+    cursor: pointer;
   }
 
   &_text {
@@ -225,28 +225,28 @@
 }
 
 .noData {
-  width: 100%;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-dark-grey;
+  composes: fontMedium from '../../../../fonts.scss';
+  display: flex;
   font-size: $extra-small-size;
   height: 652px;
+  justify-content: center;
   opacity: 0.6;
+  width: 100%;
 
   @media screen and (max-width: 576px) {
     display: block;
-    width: auto;
-    text-align: center;
     height: 100%;
     padding-bottom: 25px !important;
+    text-align: center;
+    width: auto;
   }
 }
 
 .content {
-  max-height: unset;
   height: 100%;
+  max-height: unset;
   overflow: auto;
 }
 

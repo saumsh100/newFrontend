@@ -3,12 +3,12 @@ $primary-color: #FF715A;
 
 
 .label {
-  display: flex;
   color: $empty-grey;
-  font-weight: normal;
-  pointer-events: none;
+  display: flex;
   font-size: 16px;
+  font-weight: normal;
   padding-bottom: 5px;
+  pointer-events: none;
 
   &_labelBuffer{
     color: $empty-grey;
@@ -16,8 +16,8 @@ $primary-color: #FF715A;
   }
 
   &_valueUnit {
-    display: flex;
     color: $primary-color;
+    display: flex;
     padding-left: 10px;
     &_duration {
       padding-right: 20px;
@@ -32,8 +32,8 @@ $primary-color: #FF715A;
 }
 
 .inputContainer {
-  display: flex;
   align-items: center;
+  display: flex;
   width: 70%;
 
   &_firstLabel {

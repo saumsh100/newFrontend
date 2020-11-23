@@ -15,45 +15,45 @@
 }
 
 .container {
-  padding: 0 var(--widget-spacer);
   display: flex;
   flex-wrap: wrap;
   margin: 0;
+  padding: 0 var(--widget-spacer);
 }
 
 .content {
   background: $widget-white;
   border: 1px solid $widget-grey-lighter;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: var(--widget-spacer);
   padding: var(--widget-spacer);
   width: 100%;
-  border-radius: 4px;
-  margin-bottom: var(--widget-spacer);
-  box-sizing: border-box;
 }
 
 .title {
-  font-size: 14px;
   color: $widget-blue-grey;
-  font-weight: 500;
-  margin: 0;
-  line-height: 20px;
-  text-align: center;
   display: block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin: 0;
+  text-align: center;
 }
 
 .subtitle {
+  color: $widget-grey;
+  display: block;
   font-family: 'Roboto', sans-serif;
   font-size: 12px;
-  color: $widget-grey;
   line-height: 18px;
   margin: 4px 0 var(--widget-spacer);
-  display: block;
   text-align: center;
 }
 
 .contentWrapper {
-  width: 100%;
   transform: translate3d(0, 0, 0);
+  width: 100%;
 
   + .contentWrapper {
     margin-top: var(--widget-spacer);
@@ -66,8 +66,8 @@
 
 .subCard {
   @extend .content;
-  flex-wrap: wrap;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 }
 
@@ -77,31 +77,31 @@
 
 .subCardTitle {
   @extend .title;
-  width: 100%;
   margin: 0;
+  width: 100%;
 }
 
 .subCardSubtitle {
   @extend .subtitle;
   flex: 1;
-  padding-right: 8px;
   margin-bottom: 0;
+  padding-right: 8px;
 }
 
 .subCardLink {
-  color: $widget-blue;
-  border-bottom: 1px solid;
   align-self: center;
-  display: inline-block;
   background: transparent;
+  border-bottom: 1px solid;
+  color: $widget-blue;
+  display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1;
   padding: 0 0 2px;
   transition: all 0.2s ease;
-  line-height: 1;
-  font-family: 'Roboto', sans-serif;
 
   &:hover {
-    color: $widget-blue-dark;
     border-bottom: 1px solid $widget-blue-dark;
+    color: $widget-blue-dark;
     transition: all 0.2s ease;
   }
 }
@@ -113,24 +113,24 @@
 }
 
 .input {
-  border: 1px solid $widget-grey-lighter;
-  width: 100%;
-  color: $widget-grey;
-  font-weight: 500;
-  border-radius: 4px;
-  font-size: 14px;
-  padding: 16px var(--widget-spacer) 0;
-  box-sizing: border-box;
-  min-height: 56px;
-  font-family: 'Roboto', sans-serif;
-  background: $widget-white;
   -webkit-appearance: none;
+  background: $widget-white;
+  border: 1px solid $widget-grey-lighter;
+  border-radius: 4px;
   box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
+  box-sizing: border-box;
+  color: $widget-grey;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 56px;
+  padding: 16px var(--widget-spacer) 0;
   transition: all 0.2s ease;
+  width: 100%;
 
   &:focus {
-    transition: all 0.2s ease;
     border-color: var(--primaryColor);
+    transition: all 0.2s ease;
   }
 
   &:focus ~ .label {
@@ -139,8 +139,8 @@
 }
 
 .inputActive {
-  transition: all 0.2s ease;
   border-color: var(--primaryColor);
+  transition: all 0.2s ease;
 }
 
 .textarea {
@@ -150,20 +150,20 @@
 }
 
 .group {
+  margin-bottom: 12px;
   padding: 0 0 12px;
   width: 100%;
-  margin-bottom: 12px;
 }
 
 .error {
-  left: var(--widget-spacer);
-  color: $widget-red;
-  font-size: 12px;
-  top: auto;
-  font-weight: 500;
-  display: block;
-  padding-left: 0;
   bottom: -5px;
+  color: $widget-red;
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  left: var(--widget-spacer);
+  padding-left: 0;
+  top: auto;
 }
 
 .erroredInput {
@@ -184,22 +184,22 @@
 }
 
 .label {
+  color: $widget-grey-light;
+  font-size: 14px;
   left: var(--widget-spacer);
   top: 21px;
-  font-size: 14px;
-  color: $widget-grey-light;
 }
 
 .filled {
+  color: $widget-grey-light;
+  font-size: 11px !important;
   left: var(--widget-spacer) !important;
   top: 12px !important;
-  font-size: 11px !important;
-  color: $widget-grey-light;
 }
 
 .signInTop {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
   margin-bottom: var(--widget-spacer);
 }
@@ -208,27 +208,27 @@
   background: $widget-white;
   border: 1px solid $widget-grey-lighter;
   border-radius: 4px;
-  cursor: pointer;
-  padding: 16px 0;
-  transition: all 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
   box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
+  color: $widget-grey;
+  cursor: pointer;
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
-  color: $widget-grey;
-  line-height: 16px;
   font-weight: 500;
-  width: 100%;
+  line-height: 16px;
   margin: 0 calc(var(--widget-spacer) / 4) calc(var(--widget-spacer) / 2) !important;
-  vertical-align: middle;
   outline: none;
-  text-decoration: none;
+  padding: 16px 0;
+  -webkit-tap-highlight-color: transparent;
   text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  vertical-align: middle;
+  width: 100%;
 
   &:hover {
-    transition: all 0.2s ease;
-    color: var(--primaryColor);
     border-color: var(--primaryColor);
+    color: var(--primaryColor);
+    transition: all 0.2s ease;
   }
 }
 
@@ -239,43 +239,43 @@
   color: $widget-white;
 
   &:hover {
-    opacity: 0.9;
     color: $widget-white;
+    opacity: 0.9;
   }
 }
 
 .slotsTitle {
-  width: 100%;
-  font-size: 13px;
   color: $widget-grey-light;
+  font-size: 13px;
   font-weight: 500;
   margin: 0 calc(var(--widget-spacer) / 4) calc(var(--widget-spacer) / 2) !important;
+  width: 100%;
 }
 
 .fullWidthButton {
   border-radius: 4px;
-  width: 100%;
   min-height: 40px;
   transition: all 0.2s ease;
+  width: 100%;
 
   &:hover {
-    transition: all 0.2s ease;
     opacity: 0.9;
+    transition: all 0.2s ease;
   }
 }
 
 .editLink {
+  align-items: center;
   background: $widget-grey-lightest;
   border-radius: 50%;
-  width: 24px;
-  min-width: 24px;
-  height: 24px;
   color: $widget-grey-light;
-  margin-left: 8px;
   display: flex;
+  height: 24px;
   justify-content: center;
-  align-items: center;
+  margin-left: 8px;
+  min-width: 24px;
   padding: 0;
+  width: 24px;
 
   svg {
     fill: currentColor;
@@ -312,54 +312,54 @@
 }
 
 .customDialog {
-  padding: 20px;
-  width: 90%;
   border-radius: 4px;
-  text-align: center;
   box-sizing: border-box;
+  padding: 20px;
   position: relative;
+  text-align: center;
+  width: 90%;
 }
 
 .buttonsWrapper {
   display: flex;
-  margin-top: 20px;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .negation {
-  margin-left: 8px;
-  color: $widget-grey-light;
-  box-sizing: border-box;
   background: transparent;
-  padding: 12px 8px;
-  width: 50%;
+  box-sizing: border-box;
+  color: $widget-grey-light;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
+  margin-left: 8px;
+  padding: 12px 8px;
   transition: all 0.2s ease;
-  font-family: inherit;
+  width: 50%;
 
   &:hover {
-    transition: all 0.2s ease;
     color: $widget-grey-dark;
+    transition: all 0.2s ease;
   }
 }
 
 .confirmation {
-  margin-right: 8px;
-  color: $widget-white;
   background: var(--primaryButtonColor);
-  box-sizing: border-box;
-  padding: 12px 8px;
-  width: 50%;
   border-radius: 4px;
-  font-size: 13px;
-  transition: all 0.2s ease;
-  font-weight: 600;
+  box-sizing: border-box;
+  color: $widget-white;
   font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 8px;
+  padding: 12px 8px;
+  transition: all 0.2s ease;
+  width: 50%;
 
   &:hover {
-    transition: all 0.2s ease;
     opacity: 0.9;
+    transition: all 0.2s ease;
   }
 }
 
@@ -371,33 +371,33 @@
 }
 
 .waitlistIndex {
-  font-size: 13px;
   color: $widget-grey;
   display: flex;
   flex-wrap: wrap;
+  font-size: 13px;
   margin: 0 0 8px;
 }
 
 .waitlistKey {
-  width: 100%;
-  display: block;
-  font-weight: 500;
-  font-size: 14px;
   color: $widget-grey;
+  display: block;
   font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
 }
 
 .waitlistValue {
-  width: 100%;
   display: block;
   font-size: 12px;
   line-height: 18px;
+  width: 100%;
 
   p {
-    word-break: break-word;
-    white-space: pre-line;
-    margin: 0;
     font-weight: 500;
+    margin: 0;
+    white-space: pre-line;
+    word-break: break-word;
   }
 }
 
@@ -406,13 +406,13 @@
 }
 
 .helper {
-  font-size: 11px;
   color: $widget-grey-light;
-  letter-spacing: 0;
-  text-transform: uppercase;
   display: block;
+  font-size: 11px;
+  letter-spacing: 0;
   margin: 8px 0;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .timeFrameButton {
@@ -420,13 +420,13 @@
 }
 
 .heading {
-  font-weight: 500;
-  font-size: 18px;
   color: $widget-grey-dark;
+  display: block;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: calc(var(--widget-spacer) / 2);
   margin-top: 0;
   text-align: center;
-  margin-bottom: calc(var(--widget-spacer) / 2);
-  display: block;
   width: 100%;
 
   + .cardsWrapper {
@@ -435,14 +435,14 @@
 }
 
 .description {
-  font-weight: 400;
-  font-size: 13px;
   color: $widget-grey;
-  text-align: center;
-  line-height: 18px;
-  margin-top: 0;
-  margin-bottom: 0;
   display: block;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  margin-bottom: 0;
+  margin-top: 0;
+  text-align: center;
   width: 100%;
 }
 
@@ -453,11 +453,11 @@
 }
 
 .cardWrapper {
+  display: flex;
   flex: 0 100%;
   @media (min-width: 460px) {
     flex: 0 50%;
   }
-  display: flex;
 
   .card {
     margin: 0 4px 8px !important;
@@ -465,14 +465,14 @@
 }
 
 .rowCard {
-  width: 100%;
+  background: $widget-white;
   border: 1px solid $widget-grey-lighter;
-  border-right: 0;
   border-left: 0;
+  border-right: 0;
+  box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
   margin-bottom: var(--widget-spacer);
   padding: var(--widget-spacer) 0;
-  background: $widget-white;
-  box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
+  width: 100%;
 }
 
 .today {
@@ -480,19 +480,19 @@
 }
 
 .selectedDay {
-  color: white;
   background: var(--primaryColor);
+  color: white;
 
   &:hover:not(.outside) {
-    opacity: 0.9;
     background: var(--primaryColor);
+    opacity: 0.9;
   }
 }
 
 .outside {
-  cursor: default;
-  color: #dce0e0;
   background: transparent;
+  color: #dce0e0;
+  cursor: default;
 }
 
 .start {
@@ -515,9 +515,9 @@
 }
 
 .scrollableContainer {
-  padding-top: calc(var(--widget-spacer) * 2);
-  height: 100%;
   box-sizing: border-box;
+  height: 100%;
+  padding-top: calc(var(--widget-spacer) * 2);
 }
 
 .modalContainerStyles {

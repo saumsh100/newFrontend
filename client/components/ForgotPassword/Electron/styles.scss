@@ -2,18 +2,18 @@
 @import '../../Login/Electron/styles.scss';
 
 .text {
-  padding-top: 20px;
   padding-bottom: 20px;
+  padding-top: 20px;
 }
 
 .email {
-  font-weight: $large-weight;
   color: $primary-darkgrey;
+  font-weight: $large-weight;
 }
 
 .displayCenter {
-  width: 100%;
   margin-top: 10px;
+  width: 100%;
 }
 
 .text_only_bot_padding {
@@ -22,6 +22,6 @@
 
 .textError {
   @extend .text;
-  text-align: center;
   color: $danger-color;
+  text-align: center;
 }

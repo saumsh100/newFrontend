@@ -5,12 +5,12 @@
 }
 
 .th {
-  white-space: nowrap;
-  text-align: left;
-  padding: 15px 20px;
-  border-right: 1px solid $clr-table-border;
   border-bottom: 2px solid $clr-table-border;
+  border-right: 1px solid $clr-table-border;
+  padding: 15px 20px;
   position: relative;
+  text-align: left;
+  white-space: nowrap;
 
   &:last-child {
     border-right: 0;
@@ -18,24 +18,24 @@
 }
 
 .th-icon {
-  position: absolute;
   bottom: 0;
-  right: 20px;
   color: $clr-table-header-icons;
   font-size: 60px;
+  position: absolute;
+  right: 20px;
 }
 
 .th-title {
-  font-size: 14px;
   color: $clr-dark-blue;
+  font-size: 14px;
   font-weight: bold;
   margin: 10px 0;
 }
 
 .th-total {
-  margin: 0 0 13px;
-  font-size: 19px;
   color: $clr-table-grey;
+  font-size: 19px;
+  margin: 0 0 13px;
 }
 
 .tr {
@@ -64,32 +64,32 @@
 }
 
 .col-content {
-  white-space: nowrap;
-  padding: 12px 20px;
   color: $clr-table-grey;
+  padding: 12px 20px;
   text-align: right;
+  white-space: nowrap;
 }
 
 .order-number {
   display: inline-block;
-  vertical-align: middle;
-  width: 100px;
-  text-align: center;
   height: 35px;
   line-height: 35px;
+  text-align: center;
+  vertical-align: middle;
+  width: 100px;
 }
 
 .col-title-base {
+  color: $clr-table-light-grey;
+  display: inline-block;
   height: 38px;
   line-height: 38px;
-  display: inline-block;
-  color: $clr-table-light-grey;
 }
 
 .order-number-title {
   composes: col-title-base;
-  width: 100px;
   text-align: center;
+  width: 100px;
 }
 
 .col-title {
@@ -112,9 +112,9 @@
 
 .col-numbers {
   display: inline-block;
+  font-weight: bold;
+  line-height: 35px;
+  text-align: right;
   vertical-align: middle;
   width: 80px;
-  font-weight: bold;
-  text-align: right;
-  line-height: 35px;
 }

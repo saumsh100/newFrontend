@@ -13,8 +13,8 @@
 }
 
 .leftSection {
-  width: 175px;
   display: flex;
+  width: 175px;
 }
 
 .flexSection {
@@ -22,14 +22,14 @@
 }
 
 .rightSection {
-  width: 10%;
   min-width: 25px;
+  width: 10%;
 }
 
 .linesBox {
-  margin: 10px 0;
-  height: 120px;
   border-top: 1px solid $primary-gray;
+  height: 120px;
+  margin: 10px 0;
 }
 
 .boxSelected_green {
@@ -51,8 +51,8 @@
   @extend .linesBox;
   background-image: linear-gradient(to bottom, $primary-gray 50%, transparent 0%);
   background-position: left;
-  background-size: 1px 14px;
   background-repeat: repeat-y;
+  background-size: 1px 14px;
 }
 
 .linesBoxSelected_green {
@@ -76,33 +76,33 @@
 }
 
 .labelCol {
-  padding-top: 3px;
-  padding-right: 10px;
   flex: 1;
+  padding-right: 10px;
+  padding-top: 3px;
 }
 
 .reminderLabel {
-  text-align: center;
+  color: black;
   composes: cardHeaderTitle from '../../../../fonts.scss';
   font-size: 14px;
-  color: black;
+  text-align: center;
   text-transform: capitalize;
 }
 
 .downIconWrapper {
-  position: relative;
   bottom: -14px;
   left: -7px;
+  position: relative;
   > i {
     color: $primary-gray;
   }
 }
 
 .connectionLine {
-  margin-top: 10px;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
-  box-sizing: border-box;
+  margin-top: 10px;
 }
 
 .connectionLineSelected_green {

@@ -3,35 +3,35 @@
 
 
 .tags {
-  display: flex;
   align-items: baseline;
+  background: $inactive-color;
+  color: $primary-dark;
+  display: flex;
   line-height: 1;
-  position: relative;
-  padding: 2px 5px;
   margin: 0 5px;
+  padding: 2px 5px;
+  position: relative;
   &:first-child {
     margin-left: 0;
   }
   &:last-child {
     margin-right: 0;
   }
-  color: $primary-dark;
-  background: $inactive-color;
   &_icon {
     margin-right: 5px;
   }
   &_text {
     color: $color-white;
-    @extend .font-small;
     margin-left: 5px;
     margin-right: 20px;
+    @extend .font-small;
   }
   &_close {
-    margin-right: 0!important;
     color: $color-white;
+    cursor: pointer;
+    margin-right: 0!important;
     position: absolute;
     right: 5px;
-    cursor: pointer;
     &:hover {
       color: $primary-color;
     }

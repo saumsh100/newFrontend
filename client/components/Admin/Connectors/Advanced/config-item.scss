@@ -2,11 +2,11 @@
 @import '../../../../ui.scss';
 
 .configWrapper {
+  background-color: $primary-grey;
+  border: 1px solid $primary-darkgrey;
+  border-radius: 10px;
   margin: 20px;
   padding: 20px;
-  background-color: $primary-grey;
-  border-radius: 10px;
-  border: 1px solid $primary-darkgrey;
 }
 
 .name {

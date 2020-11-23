@@ -1,43 +1,43 @@
 @import '../../../ui';
 
 .callInfoModal {
-  height: auto;
-  width: 600px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  box-sizing: border-box;
+  height: auto;
   padding: 10px;
+  width: 600px;
 }
 
 .leftPanel {
-  width: 100%;
+  border-right: 0 solid $primary-grey;
+  box-sizing: border-box;
   height: 100%;
   padding-right: 0;
-  box-sizing: border-box;
-  border-right: 0 solid $primary-grey;
+  width: 100%;
 }
 
 .rightPanel {
-  width: 40%;
-  height: 100%;
   box-sizing: border-box;
+  height: 100%;
   padding-left: 20px;
+  width: 40%;
 }
 
 .row {
-  width: 100%;
+  align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
   padding-bottom: 30px;
+  width: 100%;
 }
 
 .map {
-  width: 100%;
-  height: 168px;
-  box-sizing: border-box;
   border: 1px solid $primary-grey;
+  box-sizing: border-box;
+  height: 168px;
+  width: 100%;
 }
 
 .title {
@@ -49,25 +49,25 @@
 .marker {
   border: 3px solid $primary-color;
   border-radius: 50%;
-  width: 15px;
   height: 15px;
+  width: 15px;
 }
 
 .playerWrapper {
-  display: flex;
   align-items: center;
+  display: flex;
   margin-bottom: 20px;
-  width: 100%;
   overflow: hidden;
+  width: 100%;
   audio {
     width: 100%;
   }
 }
 
 .reactPlayer {
+  left: 0;
   position: absolute;
   top: 0;
-  left: 0;
 }
 
 .appBooked {

@@ -2,13 +2,13 @@
 @import '../../../ui';
 
 .link {
-  text-decoration: none;
-  cursor: pointer;
   color: $primary-blue;
+  cursor: pointer;
+  text-decoration: none;
 
 }
 
 .disabled {
+  color: $primary-grey;
   cursor: not-allowed;
-  text-color: $primary-grey;
 }

@@ -2,21 +2,21 @@
 @import '../../../../ui-kit';
 
 .main {
-  padding: 20px;
+  box-sizing: border-box;
   display: flex;
   flex: 1;
   flex-direction: column;
   height: 100%;
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 420px;
-  max-width: 500px;
   margin: 0 auto;
+  max-width: 500px;
+  min-height: 420px;
+  padding: 20px;
+  width: 100%;
 }
 
 .row {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 
@@ -26,30 +26,30 @@
 }
 
 .textAreaWrapper {
-  width: 100%;
-  max-width: 400px;
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
+  max-width: 400px;
   padding: 40px 0 20px;
+  width: 100%;
 }
 
 .avatar {
-  width: 4rem;
   height: 4rem;
+  width: 4rem;
 }
 
 .messageWrapper {
+  margin: 0 auto;
+  max-width: 400px;
   text-align: center;
   width: 75%;
-  max-width: 400px;
-  margin: 0 auto;
 }
 
 .starsWrapper {
-  padding: 40px 0 10px;
   box-sizing: border-box;
+  padding: 40px 0 10px;
 }
 
 .text-centered {
@@ -60,48 +60,48 @@
   @extend .text-centered;
   @extend .row;
   box-sizing: border-box;
-  padding: 20px 10px 10px;
-  margin: 0 auto; // when you add max-width you need this
-  font-size: 26px;
   color: $grey-darker;
-  font-weight: 400;
   font-family: Roboto, sans-serif;
+  font-size: 26px;
+  font-weight: 400;
   letter-spacing: 0.04px;
+  margin: 0 auto; // when you add max-width you need this
+  padding: 20px 10px 10px;
 }
 
 .message {
   @extend .text-centered;
-  padding: 5px 10px;
-  line-height: 20px;
-  font-size: 14px;
   color: $grey-dark;
-  max-width: 360px;
-  margin: 0 auto;
   font-family: Roboto, sans-serif;
+  font-size: 14px;
   font-weight: 300;
+  line-height: 20px;
+  margin: 0 auto;
+  max-width: 360px;
+  padding: 5px 10px;
 }
 .poorShare {
   background-color: transparent;
-  color: $grey;
   border-bottom: 1px solid $grey-light;
+  color: $grey;
   font-family: Roboto, sans-serif;
-  margin-top: 16px;
   font-size: 12px;
+  margin-top: 16px;
   padding: 0 0 2px;
 }
 
 .button {
   @extend .fx;
-  width: 100%;
-  max-width: 300px;
-  font-size: 14px;
-  color: $white;
+  background: var(--primaryColor);
   border-radius: $rounded;
   box-shadow: $shadow;
-  font-weight: 500;
+  color: $white;
   font-family: Roboto, sans-serif;
-  background: var(--primaryColor);
+  font-size: 14px;
+  font-weight: 500;
   margin-right: 0;
+  max-width: 300px;
+  width: 100%;
 
   &[disabled] {
     background: $grey-lighter !important;
@@ -115,10 +115,10 @@
 
 .googleButton {
   @extend .button;
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row;
   align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
   padding-left: 1.75em;
   padding-right: 1.75em;
 
@@ -133,45 +133,45 @@
 }
 
 .blurBackground {
+  align-items: center;
   background: linear-gradient(var(--primaryColor), white 70%);
   border-radius: 50%;
+  display: flex;
+  height: 4.4rem;
+  justify-content: center;
   // border-color: $primary-color;
   //transition-timing-function: ease-in;
   width: 4.4rem;
-  height: 4.4rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .label {
   color: $grey;
+  font-family: Roboto, sans-serif;
   font-size: 13px !important;
   font-weight: 300;
-  font-family: Roboto, sans-serif;
 }
 
 .textArea {
-  width: 100%;
   padding-top: 0;
+  width: 100%;
 
   > div {
-    font-size: 12px;
     color: $primary-darkgrey;
+    font-size: 12px;
     top: -20px;
   }
 
   > textarea {
-    box-sizing: border-box;
-    height: 80px;
-    padding: 10px;
-    border: 1px solid $grey-lighter;
     background: $white;
-    box-shadow: $shadow;
+    border: 1px solid $grey-lighter;
     border-radius: $rounded;
+    box-shadow: $shadow;
+    box-sizing: border-box;
     color: $grey-dark;
     font-family: Roboto, sans-serif;
     font-size: 13px;
+    height: 80px;
     line-height: 16px;
+    padding: 10px;
   }
 }

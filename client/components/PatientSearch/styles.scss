@@ -5,17 +5,17 @@
 }
 
 .toInput {
-  padding: 0;
   box-sizing: border-box;
   height: 100%;
+  padding: 0;
   > input::placeholder {
     color: $primary-gray;
   }
 
   > input {
+    border-bottom: none;
     height: 100%;
     padding-left: 20px;
-    border-bottom: none;
   }
 }
 
@@ -27,23 +27,23 @@
 }
 
 .suggestionContainer {
-  display: flex;
   align-items: center;
   color: $primary-dark;
+  display: flex;
   padding: 10px;
 
   &_details {
-    padding-left: 10px;
+    color: #a7a9ac;
+    composes: fontDefault from '../../fonts.scss';
     display: flex;
     flex-direction: column;
-    composes: fontDefault from '../../fonts.scss';
-    color: #a7a9ac;
     line-height: 1.3;
+    padding-left: 10px;
   }
 
   &_fullName {
-    font-size: 12px;
     color: $primary-dark;
+    font-size: 12px;
   }
 
   &_date {

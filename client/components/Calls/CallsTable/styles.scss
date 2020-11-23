@@ -1,18 +1,18 @@
 @import '../../../ui.scss';
 
 .callTableContainer {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   max-height: 900px;
   overflow: auto;
   overflow-x: hidden;
-  box-sizing: border-box;
 }
 
 .title {
-  font-size: 25px;
-  composes: fontMedium from '../../../fonts.scss';
   color: $primary-dark;
+  composes: fontMedium from '../../../fonts.scss';
+  font-size: 25px;
   padding: 30px;
 }
 
@@ -38,33 +38,33 @@
 }
 
 .rowHeader {
+  color: $primary-dark-grey;
   display: flex;
   flex-direction: row;
-  width: 100%;
-  padding-bottom: 20px;
-  color: $primary-dark-grey;
-  text-transform: uppercase;
   font-size: 12px;
+  padding-bottom: 20px;
   padding-left: 30px;
+  text-transform: uppercase;
+  width: 100%;
 }
 
 .row {
+  border-bottom: 1px solid $primary-grey;
+  color: $primary-dark;
   display: flex;
   flex-direction: row;
-  width: 100%;
-  height: 55px;
-  color: $primary-dark;
   font-size: 12px;
-  border-bottom: 1px solid $primary-grey;
+  height: 55px;
   padding-left: 30px;
+  width: 100%;
 }
 
 .colStyling {
-  display: flex;
   align-items: center;
+  composes: fontMedium from '../../../fonts.scss';
+  display: flex;
   justify-content: flex-start;
   text-align: left;
-  composes: fontMedium from '../../../fonts.scss';
   text-transform: capitalize;
 }
 
@@ -98,16 +98,16 @@
 }
 
 .appBooked {
-  width: 30%;
-  min-width: 50px;
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
+  min-width: 50px;
+  width: 30%;
 }
 
 .volumeIcon {
-  width: 60%;
   text-align: center;
+  width: 60%;
 }
 
 .playIcon {
@@ -119,8 +119,8 @@
 }
 
 .patientStyle {
-  display: flex;
   align-items: center;
+  display: flex;
 
   div {
     margin-right: 5px;
@@ -132,8 +132,8 @@
 }
 
 .callerName {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

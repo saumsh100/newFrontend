@@ -6,40 +6,40 @@
 
 .containerList {
   border-top: 5px solid $inactive-color;
+  height: 450px;
   margin: 0 5px 20px;
   min-width: 250px;
-  height: 450px;
   &__header {
-    display: flex;
     align-items: center;
+    display: flex;
     height: 40px;
     margin-left: 12px;
   }
 }
 .data {
-  //border-top: 1px solid $primary-grey;
-  padding: 0;
-  margin: 0;
   color: $primary-dark;
+  margin: 0;
   max-height: 400px;
   overflow-y: auto;
+  //border-top: 1px solid $primary-grey;
+  padding: 0;
   &__item {
-    min-width: 250px;
-    padding: 0 40px 0 15px;
-    display: flex;
     align-items: center;
-    position: relative;
+
+    border-bottom: 1px solid $primary-lightgrey;
+    display: flex;
+    font-size: $medium-size;
     height: 80px;
     list-style: none;
     margin: 0;
-    font-size: $medium-size;
-
-    border-bottom: 1px solid $primary-lightgrey;
+    min-width: 250px;
+    padding: 0 40px 0 15px;
+    position: relative;
     &_wrapper {
       display: flex;
-      width: 100%;
       flex-direction: row;
       justify-content: space-between;
+      width: 100%;
     }
     &_left {
       text-align: left;

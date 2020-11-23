@@ -3,11 +3,11 @@
 $background: #eeeeee;
 
 .topHeader {
-  height: 20px;
-  padding: 20px;
-  display: flex;
   align-items: center;
   border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  height: 20px;
+  padding: 20px;
 }
 
 .previewSBody {
@@ -28,14 +28,14 @@ $background: #eeeeee;
 
 .smsPreviewWrapper {
   @extend .previewBody;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .smsPreviewWrapperFull {
   @extend .smsPreviewWrapper;
-  padding: 0;
   overflow: hidden;
+  padding: 0;
 }

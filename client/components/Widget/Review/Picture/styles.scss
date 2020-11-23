@@ -2,12 +2,12 @@
 @import '../../../../ui';
 
 .blurBackground {
+  align-items: center;
   background: linear-gradient(var(--primaryColor), white 70%);
   border-radius: 50%;
   // border-color: $primary-color;
   //transition-timing-function: ease-in;
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 

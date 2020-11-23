@@ -1,12 +1,12 @@
 @import '../../../../../ui';
 
 .section {
-  padding: 60px 60px 0;
+  align-items: center;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
+  padding: 60px 60px 0;
   @media screen and (max-width: $medium-screen-width) {
     padding: 30px 20px 0;
   }

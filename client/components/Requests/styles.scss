@@ -25,11 +25,11 @@
 }
 
 .requestCard {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
-  box-sizing: border-box;
   @media screen and (max-width: 700px) {
     @include requestCardMobile-mixin();
   }
@@ -45,47 +45,47 @@
 }
 
 .requestList {
-  width: 100%;
-  height: 100px;
   flex: 1;
+  height: 100px;
   min-height: 314px;
   overflow: auto;
   overflow-x: hidden;
+  width: 100%;
 }
 
 .emptyList {
   background-color: lighten($primary-lightgrey, 2%);
-  text-align: center;
   color: lighten($primary-darkgrey, 5%);
+  font-family: $medium-font;
   font-size: $medium-size;
   font-weight: $large-weight;
-  font-family: $medium-font;
+  text-align: center;
 }
 
 .noRequests {
+  align-items: center;
+  color: $primary-dark-grey;
   display: flex;
   height: 100%;
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  color: $primary-dark-grey;
   opacity: 0.6;
+  text-align: center;
 }
 
 .requestBody {
-  width: 100%;
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   overflow: auto;
+  width: 100%;
 }
 
 .requestListItem {
-  height: auto;
+  box-sizing: border-box;
   color: #2e3845;
   cursor: pointer;
+  height: auto;
   padding: 20px;
-  box-sizing: border-box;
 
   transition: all 0.1s ease-in-out;
   &:hover {
@@ -94,22 +94,22 @@
 }
 
 .requestData {
-  padding-left: 1em;
   border-left: 1px solid #e4e4e4;
-  text-align: left;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  font-size: $extra-small-size;
   justify-content: space-between;
-  box-sizing: border-box;
-  padding-top: 5px;
   padding-bottom: 5px;
+  padding-left: 1em;
+  padding-top: 5px;
+  text-align: left;
 
   @media screen and (max-width: 350px) {
     max-width: 170px;
   }
 
   @extend .defaultFont;
-  font-size: $extra-small-size;
 
   &__details {
     display: flex;
@@ -133,10 +133,10 @@
 
   &__name {
     color: $primary-dark-grey;
-    width: 100%;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
   }
 
   &__age {
@@ -152,12 +152,12 @@
   }
 
   &__service {
-    white-space: nowrap;
+    color: $primary-dark-grey;
+    opacity: 0.6;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: $primary-dark-grey;
+    white-space: nowrap;
     @extend .fontDefault;
-    opacity: 0.6;
   }
 
   &__icon {
@@ -173,17 +173,17 @@
   }
 
   &__createdAt {
-    font-size: $extra-small-size;
-    @extend .fontDefault;
     color: #a7a9ac;
+    font-size: $extra-small-size;
     opacity: 0.6;
+    @extend .fontDefault;
   }
 
   &__requestedBy {
-    font-size: $extra-small-size;
-    @extend .fontDefault;
     color: $primary-dark-grey;
+    font-size: $extra-small-size;
     opacity: 1;
+    @extend .fontDefault;
   }
 }
 
@@ -199,8 +199,8 @@
   }
 
   &_day {
-    font-weight: $medium-weight;
     font-size: 19px;
+    font-weight: $medium-weight;
     padding-bottom: 3px;
     padding-top: 3px;
   }
@@ -211,15 +211,15 @@
 }
 
 .clickHandlers {
-  display: flex;
-  width: 64px;
-  position: absolute;
-  color: #b5b5b5;
-  font-size: 22px;
-  top: 50%;
   align-items: center;
-  transform: translateY(-50%);
+  color: #b5b5b5;
+  display: flex;
+  font-size: 22px;
+  position: absolute;
   right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64px;
 
   @media screen and (max-width: 1250px) {
     flex-direction: column;
@@ -228,25 +228,25 @@
 
   &__newreqText {
     @extend .font-small-dark;
-    position: absolute;
     color: #b5b5b5;
     font-size: 0.9rem;
+    position: absolute;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
-    right: 20px;
   }
 
   &__remove {
-    font-size: 22px;
     color: $inactive-color;
+    font-size: 22px;
     margin-right: 15px;
     &:hover {
       color: darken($inactive-color, 10%);
     }
     @media screen and (max-width: 1250px) {
-      margin-right: 0;
       flex-direction: column;
       margin-bottom: 10px;
+      margin-right: 0;
     }
   }
 

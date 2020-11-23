@@ -1,9 +1,9 @@
 @import '../../../ui.scss';
 
 .vcard {
+  background-color: $color-white;
   border-top: 5px solid $clr-bg-dark-grey;
   padding: $padding-card-base;
-  background-color: $color-white;
 }
 
 .no-padding {

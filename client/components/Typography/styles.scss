@@ -2,12 +2,12 @@
 @import '../../fonts';
 
 .mainContainer {
-  position: relative;
   box-sizing: border-box;
-  width: 100%;
   height: calc(100vh - 68px);
-  padding: 30px;
   overflow: auto;
+  padding: 30px;
+  position: relative;
+  width: 100%;
 }
 
 .padding {
@@ -19,14 +19,14 @@
   margin-top: 5px;
 
   span {
+    background: darken($primary-grey,10%);
     border: 1px solid $primary-darkgrey;
     border-radius: 10px;
-    width: auto;
-    padding-top: 5px;
-    padding-left: 10px;
     padding-bottom: 5px;
+    padding-left: 10px;
     padding-right: 10px;
-    background: darken($primary-grey,10%);
+    padding-top: 5px;
+    width: auto;
     &:hover {
       background: darken($primary-grey, 20%);
       cursor: pointer;
@@ -34,12 +34,12 @@
   }
 }
 .legend {
-  position: absolute;
-  padding: 20px;
-  top: 100px;
-  right: 350px;
   border: 1px solid $primary-dark;
   height: auto;
+  padding: 20px;
+  position: absolute;
+  right: 350px;
+  top: 100px;
   width: 300px;
 }
 

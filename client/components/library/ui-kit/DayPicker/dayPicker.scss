@@ -1,18 +1,18 @@
 @import '../../../../ui-kit';
 
 .dayPickerContainer {
-  flex: 2;
   box-sizing: border-box;
+  flex: 2;
   padding: 16px;
   position: relative;
 
   div[role='heading'] {
     div {
+      color: $grey-dark;
       font-family: $inter;
       font-size: 13px;
-      font-weight: 500;
-      color: $grey-dark;
       -webkit-font-smoothing: antialiased;
+      font-weight: 500;
       margin-bottom: 20px;
     }
   }
@@ -26,27 +26,27 @@
         text-align: center;
 
         abbr[title] {
+          color: $grey-dark;
           font-family: $inter;
           font-size: 10px;
           font-weight: 400;
-          color: $grey-dark;
           text-decoration: none;
         }
       }
 
       .day,
       > div {
-        flex: 1;
-        text-align: center;
-        font-family: $inter;
+        border-radius: $rounded;
         color: $grey-dark;
+        cursor: pointer;
+        flex: 1;
+        font-family: $inter;
         font-size: 12px;
         -webkit-font-smoothing: antialiased;
-        min-height: 26px;
         line-height: 26px;
-        cursor: pointer;
         margin-bottom: 4px;
-        border-radius: $rounded;
+        min-height: 26px;
+        text-align: center;
         @extend .fx;
 
         &:focus {
@@ -65,6 +65,16 @@
           border-radius: 0;
         }
 
+        &.start {
+          border-bottom-left-radius: $rounded;
+          border-top-left-radius: $rounded;
+        }
+
+        &.end {
+          border-bottom-right-radius: $rounded;
+          border-top-right-radius: $rounded;
+        }
+
         &.start,
         &.end {
           background: $teal;
@@ -74,16 +84,6 @@
             @extend .fx;
             background: $teal-dark;
           }
-        }
-
-        &.start {
-          border-top-left-radius: $rounded;
-          border-bottom-left-radius: $rounded;
-        }
-
-        &.end {
-          border-top-right-radius: $rounded;
-          border-bottom-right-radius: $rounded;
         }
       }
 
@@ -99,20 +99,19 @@
 
   .navButtonNext,
   .navButtonPrev {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    left: auto;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
     background: url("data:image/svg+xml,%3Csvg width='7' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.635.59A.275.275 0 0 1 .838.514c.085 0 .16.025.228.076l5.307 5.332c.068.05.102.118.102.203a.241.241 0 0 1-.102.203L1.066 11.66a.371.371 0 0 1-.228.076.275.275 0 0 1-.203-.076l-.508-.508a.241.241 0 0 1-.102-.203c0-.084.034-.16.102-.228l4.596-4.596L.127 1.529a.316.316 0 0 1-.102-.228c0-.085.034-.153.102-.203L.635.59z' fill='%23AAA' fill-rule='evenodd'/%3E%3C/svg%3E%0A")
       no-repeat center 0;
     background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 16px;
+    left: auto;
     opacity: 0.65;
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    width: 16px;
     @extend .fx;
-
     &:hover {
       opacity: 1;
       @extend .fx;

@@ -1,11 +1,11 @@
 @import '../../../ui.scss';
 
 .container {
-  height: 100%;
-  overflow: auto;
   display: flex;
   flex-direction: column;
+  height: 100%;
   justify-content: space-between;
+  overflow: auto;
 }
 
 .subHeader {
@@ -20,8 +20,8 @@
 }
 
 .text {
-  text-align: left;
   flex: 0 0 auto;
+  text-align: left;
 }
 
 .bold {
@@ -30,50 +30,50 @@
 }
 
 .dataContainer {
-  display: flex;
   align-items: center;
-  height: auto;
-  color: $primary-blue;
   background: none;
-  text-align: left;
   border: 1px solid $primary-blue;
-  margin-bottom: 10px;
   border-radius: 4px;
+  color: $primary-blue;
+  display: flex;
+  height: auto;
+  margin-bottom: 10px;
+  text-align: left;
 
   @media screen and (max-width: 1300px) {
     padding-top: 10px;
   }
 
   &_body {
+    align-items: flex-end;
     display: flex;
     flex-direction: row;
     line-height: 1.5em;
     padding-left: 15px;
     width: 100%;
-    align-items: flex-end;
     @media screen and (max-width: 1300px) {
-      flex-direction: column;
       align-items: flex-start;
+      flex-direction: column;
     }
   }
 
   &_bodyEmail {
-    margin-top: 20px;
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
   }
 
   &_contactInfo {
-    display: flex;
     align-items: flex-end;
+    display: flex;
     flex-direction: column;
     margin-left: auto;
     padding-left: 20px;
     @extend .subHeader;
     @media screen and (max-width: 1300px) {
       align-items: flex-start;
-      padding-left: 0;
       margin-left: 0;
+      padding-left: 0;
     }
     &_email {
       overflow: hidden;
@@ -82,10 +82,10 @@
   }
 
   &_contactInfoEmail {
-    margin-left: 0;
-    display: flex;
     align-items: center;
+    display: flex;
     flex-direction: column;
+    margin-left: 0;
     @extend .subHeader;
   }
 
@@ -127,16 +127,16 @@
 }
 
 .containerApp {
-  margin-top: 20px;
+  align-items: flex-start;
   display: flex;
   flex: 1 0 auto;
-  align-items: flex-start;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .sameAppList {
-  width: 100%;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
 
   .appointmentIsSelected {
     border: none;
@@ -144,22 +144,22 @@
 }
 
 .singleItem {
-  display: flex;
   align-items: center;
-  justify-content: center;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
   width: 100%;
 }
 
 .singleItemEmail {
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   flex-direction: column;
-  width: 100%;
-  padding-top: 10px;
+  justify-content: center;
   line-height: 1.5;
+  padding-top: 10px;
   text-align: center;
+  width: 100%;
 }
 
 .selected {
@@ -169,10 +169,10 @@
 }
 
 .buttonContainer {
-  margin-top: 20px;
   display: flex;
-  width: 100%;
   justify-content: flex-end;
+  margin-top: 20px;
+  width: 100%;
 
   &_yes {
     margin-left: 5px;
@@ -185,18 +185,18 @@
 
 .userCard {
   .header {
-    padding: 10px 0 5px;
-    margin-bottom: 5px;
-    display: flex;
     align-items: center;
+    display: flex;
     font-size: 16px;
+    margin-bottom: 5px;
+    padding: 10px 0 5px;
   }
   .container {
     padding: 5px;
 
     .data {
-      display: flex;
       align-items: center;
+      display: flex;
       font-size: 13px;
       padding-bottom: 4px;
 

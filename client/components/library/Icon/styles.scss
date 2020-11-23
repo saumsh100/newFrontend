@@ -12,26 +12,26 @@
 }
 
 .badgeWrapper {
-  position: absolute;
-  right: -13px;
-  top: -13px;
+  background-color: $badge-notification-background;
   border-radius: 1em;
   color: #fff;
-  background-color: $badge-notification-background;
   height: 1.5em;
   line-height: 1;
   max-width: 5em;
   min-width: 1.5em;
   overflow: hidden;
   padding: 0.25em;
+  position: absolute;
+  right: -13px;
+  text-align: center;
   text-overflow: ellipsis;
+  top: -13px;
   transform: scale(0.8);
   transform-origin: top right;
-  text-align: center;
 
   .badge {
     color: white;
-    line-height: 18px;
     font-size: 11px;
+    line-height: 18px;
   }
 }

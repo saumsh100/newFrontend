@@ -1,10 +1,10 @@
 @import '../../../../../ui';
 
 .formContainer {
-  min-height: 460px;
   background: $primary-white;
-  padding: 35px 0 25px;
+  min-height: 460px;
   overflow: auto;
+  padding: 35px 0 25px;
 
   @media screen and (max-width: 576px) {
     height: auto;
@@ -25,15 +25,15 @@
 }
 
 .patientSearchClass {
-  height: 50px;
-  box-sizing: border-box;
   border-bottom: 1px solid $primary-darkgrey;
+  box-sizing: border-box;
+  height: 50px;
   width: 100%;
 }
 
 .patientSearchInput {
-  height: 100%;
   background-color: $color-white;
+  height: 100%;
 
   > span::before,
   span::after {
@@ -49,15 +49,15 @@
 }
 
 .patientInfoWrapper {
+  align-items: center;
+  background: $color-white;
+  border: none;
   cursor: pointer;
   display: flex;
   flex: 10;
-  align-items: center;
+  font-size: $medium-plus-size;
   height: 100%;
   justify-content: center;
-  font-size: $medium-plus-size;
-  background: $color-white;
-  border: none;
 
   @media (max-width: 576px) {
     margin-left: -35px;

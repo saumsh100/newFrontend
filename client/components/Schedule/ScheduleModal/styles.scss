@@ -9,14 +9,14 @@
 }
 
 .pill {
-  padding: 8px 12px;
-  font-size: 10px;
-  border: 1px solid $widget-grey-lighter;
-  margin: 0 5px 10px 0;
-  display: inline-block;
   background: #f1f1f1;
+  border: 1px solid $widget-grey-lighter;
   border-radius: 99px;
   box-shadow: 1px 2px 3px 0 hsla(0, 0%, 50%, 0.15);
+  display: inline-block;
+  font-size: 10px;
+  margin: 0 5px 10px 0;
+  padding: 8px 12px;
 }
 
 .practitionerBlock {
@@ -25,8 +25,8 @@
 
 .practitionerDebugWrapper {
   .practitionerDebug {
-    padding: 24px 0;
     border-bottom: 1px solid $widget-grey-lighter;
+    padding: 24px 0;
     &:first-of-type {
       padding-top: 0;
     }
@@ -34,21 +34,21 @@
 }
 
 .debuggingModal {
-  position: relative;
-  min-width: 800px;
   height: 600px;
+  min-width: 800px;
+  position: relative;
   @media screen and (max-width: 700px) {
-    width: auto;
-    min-width: 0;
     height: 100%;
+    min-width: 0;
+    width: auto;
   }
 }
 .practitionerTitle {
-  text-align: center;
-  margin-bottom: 10px;
   background: $widget-grey-lightest;
   border: 1px solid $widget-grey-light;
+  margin-bottom: 10px;
   padding: 8px 0;
+  text-align: center;
   .extraInfo {
     color: #aaaaaa;
     margin-left: 10px;
@@ -60,13 +60,13 @@
   flex-direction: column;
   .scheduleHeader {
     display: flex;
-    width: 100%;
     justify-content: space-between;
     margin-bottom: 8px;
+    width: 100%;
     .baseHeader {
       color: #aaa;
-      font-weight: 700;
       flex: 1;
+      font-weight: 700;
       padding: 0 5px;
     }
     .oneHalf {
@@ -84,16 +84,16 @@
   }
   .scheduleBody {
     display: flex;
-    width: 100%;
     justify-content: space-between;
+    width: 100%;
     .baseBody {
       color: #666;
       flex: 1;
       padding: 0 5px;
       .block {
-        margin: 4px 0;
         display: flex;
         font-size: 11px;
+        margin: 4px 0;
         span {
           flex: 1;
         }

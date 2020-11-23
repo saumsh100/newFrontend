@@ -4,14 +4,14 @@
 $tiny: 14px;
 
 .tinyDeleteButton {
-  padding-top: 2px;
-  box-sizing: border-box;
-  width: $tiny;
-  height: $tiny;
-  border-radius: $tiny / 2;
-  display: flex;
   align-items: center;
-  justify-content: center;
   background-color: $primary-red;
+  border-radius: $tiny / 2;
+  box-sizing: border-box;
   color: white;
+  display: flex;
+  height: $tiny;
+  justify-content: center;
+  padding-top: 2px;
+  width: $tiny;
 }

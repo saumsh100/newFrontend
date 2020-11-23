@@ -9,15 +9,15 @@
 
 .tabs {
   display: flex;
-  flex-direction: column;
   flex: 1;
+  flex-direction: column;
   > div {
     display: flex;
     flex: 1;
     > div {
-      width: 100%;
       display: flex;
       flex: 1;
+      width: 100%;
     }
   }
 }
@@ -33,9 +33,10 @@
 $diameter: 10px;
 
 .label {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
+
   /*&:after {
     width: $diameter;
     height: $diameter;
@@ -45,11 +46,11 @@ $diameter: 10px;
 }
 
 .dot {
-  width: $diameter;
-  height: $diameter;
   border-radius: $diameter / 2;
-  margin-left: 10px;
+  height: $diameter;
   margin-bottom: 3px;
+  margin-left: 10px;
+  width: $diameter;
 }
 
 .on {

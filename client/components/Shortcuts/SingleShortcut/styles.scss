@@ -1,8 +1,8 @@
 @import '../../../ui';
 
 .wrapper {
-  padding-right: 20px;
   padding-left: 20px;
+  padding-right: 20px;
   width: 100%;
 
   span {
@@ -11,10 +11,10 @@
 }
 
 .icon {
-  float: right;
-  padding-right: 20px;
   color: $electron-external-link-icon;
   cursor: pointer;
+  float: right;
+  padding-right: 20px;
 }
 
 .wrapper > span,

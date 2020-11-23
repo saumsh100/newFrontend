@@ -11,36 +11,36 @@
   }
 
   &__body {
-    min-height: 180px;
-    display: flex;
     align-items: center;
+    display: flex;
     flex-wrap: wrap;
+    min-height: 180px;
     overflow: hidden;
   }
 
   &__leftCol {
-    display: flex;
     align-items: flex-start;
+    display: flex;
     justify-content: center;
 
   }
 
   &__icon {
-    margin-right: 10px;
-    font-size: $jumbo-size;
     color: #8CBCD6;
+    font-size: $jumbo-size;
+    margin-right: 10px;
   }
 
   &__count {
     @extend .font-jumbo;
-    text-align: center;
-    font-weight: 600;
     color: #2e3845;
+    font-weight: 600;
+    text-align: center;
   }
 
   &__small {
-    font-size: $small-size;
     color: #2e3845;
+    font-size: $small-size;
     font-weight: $normall-weight;
   }
 
@@ -48,9 +48,9 @@
     border-right: 1px solid #606060;
   }
   &__item {
-    min-width: 300px;
     flex: 1 1;
     max-width: none;
+    min-width: 300px;
   }
 
   &__vote_icons_block {
@@ -58,9 +58,9 @@
   }
 
   &__vote_icons {
-    margin-right: 20px;
-    font-size: $extra-medium-size;
     color: $primary-blue;
+    font-size: $extra-medium-size;
+    margin-right: 20px;
   }
 
   &__vote_icons_text {
@@ -70,17 +70,17 @@
   }
 
   &__split {
-    width: 100%;
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: center;
     margin-bottom: 20px;
+    width: 100%;
     @media screen and (max-width: 800px){
+      align-items: center;
+      border: none;
+      flex-direction: column;
       justify-content: space-between;
       margin: 0;
-      align-items: center;
-      flex-direction: column;
-      border: none;
 
     }
     .sideByside__item:not(:last-child) {
@@ -118,8 +118,8 @@
 
     &__vote_icons {
       display: flex;
-      width: 100%;
       justify-content: center;
+      width: 100%;
     }
   }
 }

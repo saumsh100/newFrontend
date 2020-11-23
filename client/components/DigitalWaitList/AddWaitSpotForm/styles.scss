@@ -2,11 +2,11 @@
 @import '../../../ui';
 
 .label {
+  align-items: center;
+  display: flex;
+  font-family: $medium-font;
+  font-size: 12px;
+  height: 30px;
   text-align: left;
   text-transform: uppercase;
-  font-size: 12px;
-  font-family: $medium-font;
-  height: 30px;
-  display: flex;
-  align-items: center;
 }

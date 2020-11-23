@@ -1,83 +1,83 @@
 @import '../../../../ui.scss';
 
 .patientSub {
-  width: 100%;
-  height: 100%;
   //padding-left: 35px;
   background: #fafafa;
   border-top: 1px solid $primary-lightgrey;
-  min-width: 550px;
   box-sizing: border-box;
+  height: 100%;
+  min-width: 550px;
+  width: 100%;
 }
 
 .content {
-  width: 100%;
   display: flex;
   flex-direction: row;
   height: 650px;
+  width: 100%;
 }
 
 .dataTable {
   display: flex;
   flex-direction: column;
-  width: 40%;
+  height: 100%;
   min-width: 460px;
   padding-bottom: 15px;
-  height: 100%;
   padding-left: 35px;
+  width: 40%;
 }
 
 .timeLineTable {
-  height: 100%;
   display: flex;
-  flex-direction: column;
   flex: 1;
+  flex-direction: column;
+  height: 100%;
   padding-bottom: 15px;
   padding-left: 8px;
 }
 
 .card {
-  margin-right: 7.5px;
-  margin-left: 35px;
-  height: 450px;
   border-top: 0;
+  height: 450px;
+  margin-left: 35px;
+  margin-right: 7.5px;
 }
 
 .eventsCard {
-  margin-right: 35px;
-  margin-left: 7.5px;
-  overflow: auto;
-  height: 100%;
   border-top: 0;
+  height: 100%;
+  margin-left: 7.5px;
+  margin-right: 35px;
+  overflow: auto;
 }
 
 .header {
-  display: flex;
   align-items: center;
+  display: flex;
   height: 60px;
 }
 
 .headerText {
-  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-dark;
+  composes: fontMedium from '../../../../fonts.scss';
   font-size: 16px;
 }
 
 .timeLineHeader {
   @extend .header;
   @extend .headerText;
-  padding-top: 20px;
   margin-left: 7.5px;
   padding-bottom: 10px;
+  padding-top: 20px;
 }
 
 .patientInfoHeader {
   @extend .header;
-  padding-top: 20px;
-  padding-left: 0px;
-  padding-bottom: 10px;
-  padding-right: 0px;
   justify-content: space-between;
+  padding-bottom: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 20px;
 
   &_title {
     @extend .headerText;
@@ -85,8 +85,8 @@
 }
 
 .eventsContainer {
-  width: 100%;
   height: 100%;
+  width: 100%;
 }
 
 .lineEventContainer {
@@ -100,29 +100,29 @@
 }
 
 .verticalLine {
-  position: absolute;
-  left: 14px;
-  top: 24px;
-  height: 100%;
-  z-index: 0;
   border-left: 1px dashed darken($primary-grey, 10%);
+  height: 100%;
+  left: 14px;
+  position: absolute;
+  top: 24px;
+  z-index: 0;
 }
 
 .eventsList {
-  z-index: 2;
-  width: 100%;
   padding: 20px 35px 35px;
+  width: 100%;
+  z-index: 2;
 }
 
 .subHeader {
-  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-darkgrey;
+  composes: fontMedium from '../../../../fonts.scss';
   padding-top: 20px;
 }
 
 .subHeaderSmall {
-  composes: fontExtraSmall from '../../../../fonts.scss';
   color: $primary-darkgrey;
+  composes: fontExtraSmall from '../../../../fonts.scss';
   font-style: italic;
   padding-top: 10px;
 }
@@ -133,24 +133,24 @@
 
 .grid {
   box-sizing: border-box;
-  padding: 20px 35px 10px;
-  margin-top: 10px;
-  width: 100%;
   height: 100%;
+  margin-top: 10px;
+  padding: 20px 35px 10px;
+  width: 100%;
 }
 
 .row {
-  padding-top: 25px;
-  padding-bottom: 20px;
   display: flex;
   justify-content: space-between;
+  padding-bottom: 20px;
+  padding-top: 25px;
 }
 
 .col {
-  padding-top: 25px;
-  padding-bottom: 20px;
   display: flex;
   flex-direction: column;
+  padding-bottom: 20px;
+  padding-top: 25px;
 }
 
 .row:first-child {
@@ -167,34 +167,37 @@
 
 .disclaimer {
   height: 100%;
-  position: relative;
   overflow: hidden;
+  position: relative;
 
   &_text {
-    font-size: 12px;
-    line-height: 1.5em;
     color: $inactive-color;
-    text-align: center;
-    margin: 0;
-    position: absolute;
-    top: 50%;
+    font-size: 12px;
     left: 50%;
+    line-height: 1.5em;
+    margin: 0;
     margin-right: -50%;
+    position: absolute;
+    text-align: center;
+    top: 50%;
     transform: translate(-50%, -50%);
   }
 }
 
 .loadingBox {
-  width: 100%;
-  height: 100%;
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  height: 100%;
   justify-content: center;
   position: relative;
+  width: 100%;
 }
 
 .signal {
+
+  animation: pulsate 0.7s ease-out;
+  animation-iteration-count: infinite;
   border: 5px solid $primary-dark;
   border-radius: 30px;
   height: 30px;
@@ -204,22 +207,19 @@
   //position: absolute;
   //top: 50%;
   width: 30px;
-
-  animation: pulsate 0.7s ease-out;
-  animation-iteration-count: infinite;
 }
 
 @keyframes pulsate {
   0% {
-    transform: scale(0.1);
     opacity: 0;
+    transform: scale(0.1);
   }
   50% {
     opacity: 1;
   }
   100% {
-    transform: scale(1.2);
     opacity: 0;
+    transform: scale(1.2);
   }
 }
 
@@ -236,13 +236,13 @@
 }
 
 .actionsButton {
-  margin-left: 0;
-  margin-top: 5px;
-  margin-right: 0;
-  width: 170px;
-  padding: 12px 18px;
-  display: flex;
   align-items: center;
+  display: flex;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 5px;
+  padding: 12px 18px;
+  width: 170px;
 
   > i {
     margin-left: auto;
@@ -250,18 +250,18 @@
 }
 
 .actionsButtonNormal {
-  margin-top: 0;
   font-size: 12px !important;
+  margin-top: 0;
   padding: 8px 12px !important;
   width: 120px;
 }
 
 .actionsButtonSmall {
-  margin-top: 0;
+  background: none;
   font-size: 12px;
+  margin-top: 0;
   padding: 8px 12px;
   width: 40px;
-  background: none;
 }
 
 .actionText {

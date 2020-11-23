@@ -6,23 +6,23 @@
 
 .rowMainContainer {
   box-sizing: border-box;
-  padding: 10px;
-  height: 100%;
-  width: 100%;
   display: flex;
+  height: 100%;
   min-width: 1200px;
+  padding: 10px;
+  width: 100%;
 }
 
 .dayViewContainer {
-  height: 100%;
   box-sizing: border-box;
-  overflow: hidden;
   flex: 1;
+  height: 100%;
+  overflow: hidden;
 }
 
 .calendarContainer {
-  width: 200px;
   height: 200px;
+  width: 200px;
 }
 
 .card {
@@ -30,10 +30,10 @@
 }
 
 .sidebar {
-  padding-left: 10px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  padding-left: 10px;
   width: 320px;
 
   &_rowCalendar {
@@ -57,15 +57,15 @@
 }
 
 .header {
-  display: flex;
-  margin-left: auto;
-  align-items: center;
   align-content: center;
-  text-align: center;
-  font-size: $small-size;
+  align-items: center;
   color: $primary-darkgrey;
+  display: flex;
+  font-size: $small-size;
   justify-content: space-between;
+  margin-left: auto;
   margin-right: 10px;
+  text-align: center;
 
   &_text {
     padding-right: 35px;
@@ -73,17 +73,17 @@
 }
 
 .headerLinks {
-  display: flex;
-  align-items: center;
   align-content: center;
-  font-weight: 600;
-  color: $primary-dark;
-  margin-right: 20px;
+  align-items: center;
   box-sizing: border-box;
+  color: $primary-dark;
+  display: flex;
+  font-weight: 600;
+  margin-right: 20px;
 
   &:hover {
-    cursor: pointer;
     color: $primary-color-hover;
+    cursor: pointer;
   }
 
   &_icon {
@@ -100,12 +100,12 @@
 }
 
 .changeDay {
-  display: flex;
   align-items: center;
-  width: 35px;
+  color: $primary-dark;
+  display: flex;
   justify-content: space-between;
   padding-right: 10px;
-  color: $primary-dark;
+  width: 35px;
 
   &_left {
     color: inherit;
@@ -122,10 +122,10 @@
 }
 
 .appointment {
+  background: $primary-color;
+  padding: 5px;
   position: absolute;
   width: 99%;
-  padding: 5px;
-  background: $primary-color;
 
   &__username {
     color: white;
@@ -145,10 +145,10 @@
   flex-direction: column;
 
   &_footer {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
     border-top: 1px solid $primary-grey;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
   }
 
   &_button {
@@ -158,6 +158,6 @@
 
 .hubWrapper {
   background: $primary-white;
-  height: 100%;
   box-sizing: border-box;
+  height: 100%;
 }

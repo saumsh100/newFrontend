@@ -1,29 +1,29 @@
 @import '../../../ui';
 
 .patientPage {
+  align-items: center;
+  background-color: $primary-grey;
+  display: flex;
   // position: fixed;
   height: 100%;
-  width: 100%;
+  justify-content: center;
   min-height: 600px;
   min-width: 375px;
-  background-color: $primary-grey;
-  z-index: 199;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: auto;
+  width: 100%;
+  z-index: 199;
 }
 
 .centerWrapper {
+  // border-top: $card-border-size $primary-color;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: 650px;
   z-index: 200;
-  // border-top: $card-border-size $primary-color;
-  box-sizing: border-box;
   @media screen and (max-width: $medium-screen-width) {
-    width: 100%;
     height: 100%;
+    width: 100%;
   }
 }
 

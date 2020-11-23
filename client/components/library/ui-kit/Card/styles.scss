@@ -4,19 +4,19 @@ $border-radius: 4px;
 
 .card {
   background-color: $primary-white;
-  border-top: 3px solid $card-border-color;
   border-radius: $border-radius;
+  border-top: 3px solid $card-border-color;
 
   &.loadedCard {
-    border-top-color: transparent;
     background: transparent;
+    border-top-color: transparent;
   }
 }
 
 .contentStyle {
-  padding: 15px;
-  height: 100%;
   box-sizing: border-box;
+  height: 100%;
+  padding: 15px;
 
   > div {
     height: 100%;

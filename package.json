@@ -15,6 +15,7 @@
     "client:widget:watch": "npm run client:widget:build -- --watch --progress",
     "client:widget:build": "dotenv -- webpack --config ./client/webpack/webpack.widget.config.js",
     "client:publish": "dotenv -- node scripts/publish.js",
+    "start": "npm run client:dev:server",
     "ngrok": "ngrok http localhost:5100",
     "twilio:watch": "twilio-run --live --port=5101",
     "twilio:ngrok": "twilio-run --live --port=5101 --ngrok",

@@ -5,9 +5,9 @@
 }
 
 .familyMemberContainer {
-  padding: 50px 25px 0;
-  overflow: visible;
   box-sizing: border-box;
+  overflow: visible;
+  padding: 50px 25px 0;
 
   @media screen and (max-width: 576px) {
     @include familyMemberContainerMobile-mobile;

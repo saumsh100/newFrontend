@@ -2,22 +2,22 @@
 @import '../../../fonts';
 
 .patientLink {
-  transition: all 0.1s ease-in-out;
-  cursor: pointer;
   color: $primary-blue;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
   &:focus {
     outline: none;
   }
   &:hover {
-    transform: scale(1.02);
     color: lighten($primary-blue, 10%);
+    transform: scale(1.02);
   }
 }
 
 .requestLink {
-  transition: all 0.1s ease-in-out;
-  cursor: pointer;
   color: $primary-blue;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
   &:hover {
     color: lighten($primary-blue, 10%);
   }
@@ -34,9 +34,9 @@
 }
 
 .card {
-  width: auto;
   box-shadow: -2px 0 45px -12px rgba(0, 0, 0, 0.75);
   min-width: 300px;
+  width: auto;
 }
 
 .dataLink {
@@ -52,8 +52,8 @@
     &,
     &:active,
     &:focus {
-      outline: none;
       border: none;
+      outline: none;
     }
 
     &:hover {
@@ -64,21 +64,21 @@
 }
 
 .header {
-  display: flex;
   align-items: center;
-  height: 40px;
   background-color: #313843;
   color: $primary-white;
+  display: flex;
+  font-size: 15px;
+  height: 40px;
   padding-left: 15px;
   padding-right: 15px;
-  font-size: 15px;
 
   &_text {
     @extend .fontDefault;
-    padding: 0 5px;
-    overflow: hidden;
-    text-overflow: ellipsis;
     max-width: 250px;
+    overflow: hidden;
+    padding: 0 5px;
+    text-overflow: ellipsis;
     white-space: nowrap;
   }
 
@@ -89,8 +89,8 @@
 
 .closeIcon {
   @extend .fontMediumSize;
-  margin-left: auto;
   color: $primary-grey;
+  margin-left: auto;
 
   button {
     display: flex;
@@ -104,11 +104,11 @@
 
 .body {
   background-color: $primary-white;
-  padding: 15px 15px 10px;
   height: auto;
-  min-height: 200px;
   max-height: 290px;
   max-width: 285px;
+  min-height: 200px;
+  padding: 15px 15px 10px;
 }
 
 .container {
@@ -129,22 +129,22 @@
 
 .data {
   @extend .fontMedium;
-  display: flex;
   align-items: center;
+  display: flex;
   font-size: 13px;
   padding: 0 0 2px;
 
   &_note {
-    width: 100%;
     max-height: 88px;
     overflow: auto;
+    width: 100%;
 
     textarea {
+      border-bottom: 0;
       color: black;
       font-family: $medium-font;
-      border-bottom: 0;
-      padding: 0;
       height: auto;
+      padding: 0;
     }
   }
 
@@ -159,22 +159,22 @@
 }
 
 .footer {
+  align-items: center;
   border-top: 1px solid $primary-grey;
   box-sizing: border-box;
   display: flex;
+  justify-content: flex-end;
   padding: 15px;
   width: 100%;
-  justify-content: flex-end;
-  align-items: center;
 }
 
 .chatButton {
-  padding: 5px !important;
   color: $primary-blue;
+  padding: 5px !important;
 
   &:hover {
-    color: $primary-white;
     background-color: $primary-blue !important;
+    color: $primary-white;
     transition: color 0.3s ease;
   }
 }
@@ -190,7 +190,7 @@
 .textWhite {
   color: white;
   &:hover {
-    transform: scale(1.02);
     color: lighten(white, 10%);
+    transform: scale(1.02);
   }
 }

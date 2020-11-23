@@ -1,14 +1,14 @@
 @import '../../../../ui.scss';
 
 .header {
+  color: $primary-dark;
   composes: header from '../../../../fonts.scss';
   text-align: center;
-  color: $primary-dark;
 }
 
 .text {
-  font-size: 14px;
   color: $primary-darkgrey;
+  font-size: 14px;
   padding: 10px;
   text-align: center;
 }

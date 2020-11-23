@@ -3,8 +3,8 @@
 
 .buttons {
   display: flex;
-  width: 100%;
   margin-top: 15px;
+  width: 100%;
 }
 
 .rightButtons {
@@ -12,14 +12,14 @@
 }
 
 .applyButton {
-  font-size: 18px;
   font-family: $medium-font;
+  font-size: 18px;
 }
 
 .dashCol {
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .inputsWrapper {

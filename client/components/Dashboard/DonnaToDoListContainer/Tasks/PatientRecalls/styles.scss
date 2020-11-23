@@ -1,27 +1,27 @@
 @import '../../../../../ui';
 
 .list {
-  padding: 5px 20px 0;
   box-sizing: border-box;
+  padding: 5px 20px 0;
 }
 
 .listItem {
+  color: $primary-dark-grey !important;
   display: flex;
   flex-direction: row;
-  padding-top: 10px;
   padding-bottom: 10px;
+  padding-top: 10px;
 
   &:hover {
     background-color: unset;
     cursor: default;
   }
-  color: $primary-dark-grey !important;
 }
 
 .muted {
+  color: $inactive-color;
   font-size: 10px;
   line-height: 20px;
-  color: $inactive-color;
 }
 
 .lowercase {

@@ -7,26 +7,26 @@ $p: 2px;
 $br-bar: ($h - $p) / 2;
 
 .wrapper {
-	height: $h;
-  border-radius: $br;
-  width: 100%;
   background-color: $primary-dark;
-  overflow: hidden;
+  border-radius: $br;
   box-sizing: border-box;
+	height: $h;
+  overflow: hidden;
   padding: 3px;
+  width: 100%;
 }
 
 .bar {
-  transition: width 0.5s;
-  box-sizing: border-box;
-  padding-top: 2px;
-  min-width: 5%;
-  height: 100%;
-  display: flex;
   align-items: center;
-  justify-content: center;
-	color: $primary-dark;
-  font-family: $medium-font;
   background-color: white;
   border-radius: $br-bar;
+  box-sizing: border-box;
+	color: $primary-dark;
+  display: flex;
+  font-family: $medium-font;
+  height: 100%;
+  justify-content: center;
+  min-width: 5%;
+  padding-top: 2px;
+  transition: width 0.5s;
 }

@@ -1,10 +1,10 @@
 @import '../../../../ui';
 
 .chart {
-  flex: 1;
   background-color: #3b4552;
-  position: relative;
+  flex: 1;
   height: 100%;
+  position: relative;
   width: 300px;
 
   @media screen and (max-width: 1266px) {
@@ -16,8 +16,8 @@
   }
 
   canvas {
-    padding: 20px 20px 0;
     box-sizing: border-box;
+    padding: 20px 20px 0;
 
     @media screen and (max-width: 2500px) {
       padding: 20px;
@@ -26,13 +26,13 @@
 }
 
 .noRevenue {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  text-align: center;
   align-items: center;
-  justify-content: center;
   color: $primary-white;
-  opacity: 0.6;
+  display: flex;
   font-size: $extra-small-size;
+  height: 100%;
+  justify-content: center;
+  opacity: 0.6;
+  text-align: center;
+  width: 100%;
 }

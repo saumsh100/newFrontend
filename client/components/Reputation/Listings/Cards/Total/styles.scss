@@ -2,46 +2,46 @@
 @import "../../../../../fonts";
 
 .total {
-  height: 210px;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  display: flex;
   flex-direction: column;
+  height: 210px;
+  justify-content: center;
   &__item {
     display: flex;
   }
   &__header {
+    border-bottom: 1px solid $primary-lightgrey;
     display: flex;
     flex-direction: column;
     width: 80%;
-    border-bottom: 1px solid $primary-lightgrey;
     &_item {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      position: relative;
       margin-bottom: 10px;
+      position: relative;
     }
     &_wrapper {
-      width: 10px;
-      height: 10px;
-      display: flex;
       align-items: center;
+      display: flex;
+      height: 10px;
       justify-content: center;
+      width: 10px;
     }
     &_text {
-      padding-left: 20px;
       color: $primary-dark;
       font-size: 18px;
+      padding-left: 20px;
     }
   }
   &__body {
-    width: 80%;
     padding-top: 10px;
+    width: 80%;
     &_total {
+      color: $primary-blue;
       display: flex;
       justify-content: space-between;
-      color: $primary-blue;
     }
   }
 }

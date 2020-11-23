@@ -1,25 +1,25 @@
 @import '../styles';
 
 .wrapper {
-  padding: 0;
   box-sizing: border-box;
+  padding: 0;
   > div {
-    margin: -4px 0 0 !important;
-    left: 0 !important;
-    transform: translateX(0) !important;
     box-sizing: border-box;
+    left: 0 !important;
+    margin: -4px 0 0 !important;
+    transform: translateX(0) !important;
     > ul {
-      box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15) !important;
       background: $widget-white !important;
-      border-bottom-right-radius: 4px;
-      border-bottom-left-radius: 4px;
       border: 1px solid var(--primaryColor);
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
       border-top: 0;
+      box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15) !important;
       > div {
-        padding: 0 var(--widget-spacer) !important;
-        box-shadow: none !important;
         background: $widget-white !important;
+        box-shadow: none !important;
         max-height: 170px;
+        padding: 0 var(--widget-spacer) !important;
       }
     }
   }
@@ -30,20 +30,20 @@
 }
 
 .addNewPatient {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  border: 0;
   background: $chat-lightgrey;
-  text-transform: uppercase;
+  border: 0;
+  bottom: 0;
   color: $primary-dark;
-  line-height: 40px;
-  text-align: left;
-  font-family: 'Roboto', sans-serif;
   cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  height: 40px;
+  left: 0;
+  line-height: 40px;
   padding: 0 0 0 12px;
+  position: fixed;
+  right: 0;
+  text-align: left;
+  text-transform: uppercase;
   &:hover {
     background: $primary-lightgrey;
   }
@@ -52,8 +52,8 @@
 .dropDownList {
   max-height: 220px;
   overflow-y: auto;
-  position: relative;
   padding-bottom: 40px;
+  position: relative;
 }
 
 .slotButton {
@@ -64,13 +64,13 @@
 .dataSlot {
   background: $widget-white;
   border: 0;
-  text-align: left;
+  border-top: 1px solid $widget-grey-lighter;
+  box-sizing: border-box;
+  height: auto;
   justify-content: flex-start;
   padding: calc(var(--widget-spacer) * 1.25) 4px;
-  height: auto;
-  box-sizing: border-box;
+  text-align: left;
   transition: all 0.2s ease-out;
-  border-top: 1px solid $widget-grey-lighter;
   &:hover {
     background: $widget-white !important;
     transform: translateX(10px);
@@ -78,8 +78,8 @@
   }
   > div {
     color: $widget-grey-light;
-    font-size: 14px;
     font-family: 'Roboto' !important;
+    font-size: 14px;
     font-weight: 500;
   }
 }
@@ -104,9 +104,9 @@
 
 .erroredLabelDropdown {
   @extend .error;
-  position: absolute;
   bottom: -20px;
   left: 0;
+  position: absolute;
 }
 
 .erroredDropdown ~ div {
@@ -126,8 +126,8 @@ form {
 }
 
 .disabled {
-  pointer-events: none;
   background: $widget-grey-lighter;
+  pointer-events: none;
 }
 .disabledGroup {
   cursor: not-allowed;

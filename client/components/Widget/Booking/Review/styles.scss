@@ -20,10 +20,10 @@
 
 .editLink {
   @extend .editLink;
-  width: auto;
-  padding: 4px 8px;
   border-radius: 999px;
   box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
+  padding: 4px 8px;
+  width: auto;
   svg {
     margin-right: 4px;
   }
@@ -31,10 +31,10 @@
 
 .content {
   hr {
-    border: 0;
-    margin: var(--widget-spacer) 0;
     background: $widget-grey-lighter;
+    border: 0;
     height: 1px;
+    margin: var(--widget-spacer) 0;
   }
 }
 .emptyWaitlistTitle {

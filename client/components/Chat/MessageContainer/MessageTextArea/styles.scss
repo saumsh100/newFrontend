@@ -16,33 +16,33 @@
 }
 
 .pocButton {
+  align-self: flex-start;
   background: $primary-blue;
+  border-radius: 4px;
   font-size: 12px;
   padding: 12px 24px;
-  border-radius: 4px;
-  align-self: flex-start;
 }
 
 .textAreaPoC {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  animation: fadeIn 0.5s ease;
   background: $color-white;
   border: 2px solid $info;
   border-radius: 4px;
+  bottom: 0;
   display: flex;
-  z-index: 10;
-  overflow: hidden;
   justify-content: center;
-  animation: fadeIn 0.5s ease;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
   .notPoC {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 10px;
     max-width: 315px;
+    padding: 0 10px;
     p {
       line-height: 1.5;
       margin-top: 0;
@@ -52,15 +52,15 @@
     }
   }
   .pocHelper {
-    font-family: $medium-font;
     border-bottom: 1px solid;
     cursor: pointer;
+    font-family: $medium-font;
   }
   .donnaImg {
+    display: none;
+    margin-right: -10px;
     max-height: 120%;
     width: auto;
-    margin-right: -10px;
-    display: none;
     @media (min-width: 1220px) {
       display: block;
     }
@@ -110,8 +110,8 @@
 
 .emojiDropdown {
   & > div {
-    right: auto;
     left: 0;
+    right: auto;
     & > ul {
       box-shadow: none !important;
     }
@@ -129,15 +129,15 @@
 
   .emoji-mart-anchors {
     background: $chat-tabs-color;
+    border-radius: 0;
+    border-top-left-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    color: #2a3843 !important;
+    margin-bottom: -1px;
     margin-left: -18px;
     margin-right: -18px;
     margin-top: -12px;
-    margin-bottom: -1px;
     padding: 0 !important;
-    border-radius: 0;
-    border-top-right-radius: 4px !important;
-    border-top-left-radius: 4px !important;
-    color: #2a3843 !important;
     svg {
       fill: currentColor !important;
     }
@@ -166,20 +166,20 @@
   }
 
   .emoji-mart-search input {
-    font-size: 14px !important;
-    padding-left: 20px !important;
-    font-family: Gotham-Book;
-    height: 30px;
-    box-sizing: border-box;
-    border-radius: 0 !important;
-    border: none !important;
     background-color: $primary-grey !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-sizing: border-box;
+    font-family: Gotham-Book;
+    font-size: 14px !important;
+    height: 30px;
+    padding-left: 20px !important;
   }
 
   .emoji-mart-category-label span {
+    color: $primary-dark;
     font-family: Gotham-Medium;
     font-weight: bolder;
-    color: $primary-dark;
   }
 }
 
@@ -187,8 +187,8 @@
   background-color: transparent !important;
 
   > div {
-    white-space: normal !important;
     text-align: left !important;
+    white-space: normal !important;
   }
 }
 
@@ -198,9 +198,9 @@
     height: 100%;
     padding: 0;
     > textarea {
+      border-bottom: 1px solid $chat-border-color;
       color: $primary-dark;
       height: 100%;
-      border-bottom: 1px solid $chat-border-color;
       padding: 15px;
       &::placeholder {
         color: $primary-gray;
@@ -210,20 +210,20 @@
 }
 
 .sendIconWrapper {
-  width: 100%;
-  height: 40px;
-  padding: 10px;
+  align-items: center;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  height: 40px;
+  padding: 10px;
+  width: 100%;
 }
 
 .sendIcon {
-  margin-left: auto;
-  color: darken($primary-blue, 10%);
-  display: flex;
   align-items: center;
+  color: darken($primary-blue, 10%);
   cursor: pointer;
+  display: flex;
+  margin-left: auto;
 
   > i {
     cursor: pointer;
@@ -232,9 +232,9 @@
 
   > label {
     cursor: pointer;
-    margin-left: 5px;
-    font-size: 12px;
     font-family: $medium-font;
+    font-size: 12px;
+    margin-left: 5px;
   }
 
   &:hover {

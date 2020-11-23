@@ -12,9 +12,9 @@
 }
 
 .listCardStyles {
-  width: 270px;
   max-width: 270px;
   min-width: 270px;
+  width: 270px;
 }
 
 .practListContainer {
@@ -34,19 +34,19 @@
   }
 }
 .modalContainer {
-  width: 100%;
-  display: inline-block;
-  justify-content: center;
   align-items: center;
+  background: $primary-white;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
+  display: inline-block;
+  justify-content: center;
   padding-bottom: 5px;
-  background: $primary-white;
+  width: 100%;
 }
 
 .displayFlexCenter {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 .addPractitionerButton {
@@ -58,19 +58,19 @@
 }
 
 .practListItem {
-  height: 100x !important;
-  min-height: 100px !important;
-  text-transform: capitalize;
+  align-items: center;
   background: $primary-white;
   display: flex;
-  align-items: center;
+  height: 100px !important;
   justify-content: center;
+  min-height: 100px !important;
+  text-transform: capitalize;
 
   &_container {
     display: flex;
     flex-direction: row;
-    width: 100%;
     margin-left: 30px;
+    width: 100%;
   }
   &_textContainer {
     height: 100%;
@@ -79,13 +79,13 @@
   }
   &_name {
     composes: listItemHeader from '../../../fonts.scss';
-    padding-top: 5px;
     padding-left: 5px;
+    padding-top: 5px;
   }
 
   &_type {
-    composes: subHeaderExtraSmall from '../../../fonts.scss';
     align-items: flex-end;
+    composes: subHeaderExtraSmall from '../../../fonts.scss';
     padding-left: 5px;
     padding-top: 10px;
   }
@@ -97,9 +97,9 @@
 
 .sizingThisAvatar {
   height: 3rem;
-  width: 3rem;
-  min-width: 3rem;
   min-height: 3rem;
+  min-width: 3rem;
+  width: 3rem;
 }
 
 .subHeader {
@@ -109,10 +109,10 @@
 }
 .orSpacer {
   border-top: outset #b4b4b5;
-  margin: 30px auto 0;
-  width: 90%;
-  position: relative;
   border-width: thin;
+  margin: 30px auto 0;
+  position: relative;
+  width: 90%;
 }
 
 .flexHeader {
@@ -128,20 +128,20 @@
 
 .practDataContainer {
   box-sizing: border-box;
-  margin-left: 15px;
-  height: 100%;
-  width: 100%;
   display: inline-block;
+  height: 100%;
+  margin-left: 15px;
+  width: 100%;
 }
 
 .pracHeaderContainer {
-  display: flex;
   align-items: center;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
+  display: flex;
+  margin-bottom: 10px;
   margin-left: 10px;
   padding-bottom: 10px;
-  margin-bottom: 10px;
 }
 
 .trashButton {
@@ -149,15 +149,15 @@
 }
 
 .toggleContainer {
+  align-items: center;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
-  padding-top: 15px;
-  padding-left: 10px;
   padding-bottom: 40px;
+  padding-left: 10px;
+  padding-top: 15px;
   &_hours {
-    padding-left: 10px;
     padding-bottom: 15px;
+    padding-left: 10px;
   }
 
   &__toggle {
@@ -175,15 +175,15 @@
 }
 
 .practFormContainer {
-  width: 100%;
   display: flex;
-  padding-top: 20px;
   padding-bottom: 10px;
+  padding-top: 20px;
+  width: 100%;
 
   &_basicForm {
     display: inline-block;
-    width: 90%;
     padding-right: 20px;
+    width: 90%;
   }
 
   &_avatarContainer {
@@ -196,25 +196,25 @@
   }
 
   &_type {
-    padding-top: 10px;
     padding-bottom: 25px;
+    padding-top: 10px;
   }
 
   &_practActive {
-    display: flex;
-    padding-top: 5px;
-    padding-bottom: 10px;
     align-content: center;
     align-items: center;
+    display: flex;
+    padding-bottom: 10px;
+    padding-top: 5px;
     &_toggle {
       padding-left: 5px;
     }
   }
 
   &_practHidden {
-    display: flex;
     align-content: center;
     align-items: center;
+    display: flex;
     padding-bottom: 25px;
 
     &_text {
@@ -228,8 +228,8 @@
 }
 
 .practitionerActive {
-  display: flex;
   align-items: center;
+  display: flex;
   margin-left: auto;
   padding-right: 20px;
 
@@ -239,28 +239,28 @@
   }
 }
 .deleteAvatar {
-  width: 100%;
   margin-top: 20px;
+  width: 100%;
 }
 
 .chairsContainer {
-  padding: 10px;
   max-height: 300px;
   overflow: auto;
+  padding: 10px;
   &_all {
-    display: flex;
     align-items: center;
+    display: flex;
     padding-bottom: 10px;
 
     &_text {
-      width: 120px;
       font-weight: $large-weight;
+      width: 120px;
     }
   }
 
   &_fields {
-    display: flex;
     align-items: center;
+    display: flex;
     padding-bottom: 5px;
   }
 
@@ -274,13 +274,13 @@
 }
 
 .rightActions {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .pracHeaderClass {
-  padding-bottom: 0;
   height: auto !important;
+  padding-bottom: 0;
 }
 
 .pracBodyClass {

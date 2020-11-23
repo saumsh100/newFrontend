@@ -1,14 +1,14 @@
 @import '../../../../ui';
 
 .userWrapper {
-  display: flex;
   align-items: center;
   cursor: pointer;
+  display: flex;
 }
 
 .userContainer {
-  display: flex;
   align-items: center;
+  display: flex;
   &:hover {
     color: var(--primaryColor) !important;
     .greeting {
@@ -25,14 +25,14 @@
 }
 
 .userMenuButton {
-  display: flex;
   align-items: center;
   color: $primary-darkgrey;
+  display: flex;
 }
 
 .userMenuGreeting {
-  display: inline-block;
   align-items: center;
+  display: inline-block;
   padding-right: 10px;
   text-align: right;
   @media screen and (max-width: $widget-mobile-width) {
@@ -41,28 +41,29 @@
 }
 
 .greeting {
-  font-family: 'Roboto', sans-serif;
   color: black;
+  font-family: 'Roboto', sans-serif;
 }
 
 .userRole {
-  text-transform: uppercase;
-  font-size: 10px;
   color: $primary-darkgrey;
+  font-size: 10px;
+  text-transform: uppercase;
 }
 
 .businessName {
-  font-size: 10px;
   color: $primary-darkgrey;
+  font-size: 10px;
 }
 
 .userAvatar {
-  margin-right: 2px;
   background: var(--primaryColor);
   font-weight: bold;
+  margin-right: 2px;
 }
 
 .dropdownUserMenu {
+
   /* used to target div.dd-menu-items */
   > div:last-child {
     width: 150px;

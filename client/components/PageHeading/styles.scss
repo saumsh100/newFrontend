@@ -1,24 +1,24 @@
 @import '../../ui';
 
 .pageHeading {
+  background: $electron-content-heading-bg;
+  box-sizing: border-box;
+  height: 50px;
+  padding-left: 20px;
   position: relative;
   width: 100%;
-  height: 50px;
-  background: $electron-content-heading-bg;
-  padding-left: 20px;
-  box-sizing: border-box;
 
   p,
   .backButton {
     display: inline-block;
     font-size: 18px;
-    padding: 0;
     line-height: 50px;
+    padding: 0;
   }
 
   p {
-    margin: 0;
     color: $primary-white;
+    margin: 0;
   }
 
   .backButton {

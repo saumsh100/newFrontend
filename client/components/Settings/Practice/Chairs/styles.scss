@@ -11,27 +11,27 @@
 }
 
 .headerContainer {
-  width: 100%;
+  border-bottom: 1px solid #efefef;
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  border-bottom: 1px solid #efefef;
   margin-right: 15px;
+  width: 100%;
 }
 
 .formContainer {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  width: 350px;
   min-width: 350px;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  width: 350px;
 }
 .chairContainer {
+  align-items: center;
+  border: 1px solid lightgray;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  margin-bottom: 10px;
-  border: 1px solid lightgray;
   justify-content: space-between;
+  margin-bottom: 10px;
   padding: 10px;
 
   span {
@@ -39,22 +39,22 @@
   }
 
   &_name {
-    padding-right: 20px;
     padding-bottom: 5px;
+    padding-right: 20px;
   }
 
   &_id {
-    padding-right: 20px;
-    font-size: 10px;
     color: $primary-darkgrey;
+    font-size: 10px;
+    padding-right: 20px;
     width: 250px;
   }
 }
 
 .allChairs {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
   margin-bottom: 15px;
   span {
     width: 180px;

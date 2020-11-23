@@ -1,35 +1,35 @@
 @import '../../../../ui.scss';
 
 .header {
+  color: $primary-dark;
   composes: header from '../../../../fonts.scss';
   text-align: center;
-  color: $primary-dark;
 }
 
 .text {
-  font-size: 14px;
   color: $primary-darkgrey;
+  font-size: 14px;
   padding: 10px;
   text-align: center;
 }
 
 .wellHeader {
-  text-transform: uppercase;
-  text-align: left;
-  font-size: 10px;
-  letter-spacing: 0.9px;
-  height: 30px;
-  display: flex;
   align-items: center;
   color: #313131;
+  display: flex;
+  font-size: 10px;
+  height: 30px;
+  letter-spacing: 0.9px;
+  text-align: left;
+  text-transform: uppercase;
   width: 100%;
 }
 
 .wellItem {
-  padding: 5px 0;
-  font-size: 12px;
-  display: flex;
   align-items: center;
+  display: flex;
+  font-size: 12px;
+  padding: 5px 0;
 }
 
 .tinyIcon {

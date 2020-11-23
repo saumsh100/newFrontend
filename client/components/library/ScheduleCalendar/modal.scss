@@ -3,33 +3,33 @@
 @import './color';
 
 .backDrop {
+  animation: none;
   background: $calendar-backdrop;
   border: 1px solid $calendar-grey;
   opacity: 0.7;
-  animation: none;
 }
 
 .modal {
   background: $calendar-background;
   border: 1px solid $grey-lighter;
-  box-shadow: $shadow;
   border-radius: 4px;
+  box-shadow: $shadow;
 }
 
 .header {
   padding: 24px 24px 0;
 
   .title {
-    font-size: 16px;
     color: $teal;
+    font-size: 16px;
     letter-spacing: 0;
-    padding: 0;
     margin: 0 0 10px;
+    padding: 0;
   }
 
   .helper {
-    font-size: 11px;
     color: $calendar-grey;
+    font-size: 11px;
     line-height: 1.5;
     margin: 0 0 16px;
   }
@@ -39,15 +39,15 @@
   padding: 0 24px 24px;
 
   .groupWrapper {
-    margin-bottom: 16px;
     color: $calendar-grey;
+    margin-bottom: 16px;
   }
 
   .group {
-    display: flex;
     align-items: center;
-    margin-top: 4px;
+    display: flex;
     flex-wrap: wrap;
+    margin-top: 4px;
 
     &:last-of-type {
       margin-bottom: 16px;
@@ -55,18 +55,18 @@
   }
 
   .inputGroup {
-    width: 100%;
+    align-items: center;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    width: 100%;
 
     .inputs {
-      width: 100%;
-      display: flex;
       align-items: center;
-      font-size: 11px;
       color: $calendar-grey;
+      display: flex;
+      font-size: 11px;
       line-height: 1.5;
+      width: 100%;
     }
   }
 
@@ -75,10 +75,10 @@
   }
 
   .delete {
-    margin-left: 10px;
-    padding: 8px 10px;
     background: transparent;
     color: $grey-dark;
+    margin-left: 10px;
+    padding: 8px 10px;
 
     &.disabled {
       display: none;
@@ -94,64 +94,64 @@
   }
 
   .spacer {
-    margin: 0 12px;
-    font-size: 11px;
     color: $calendar-grey;
+    font-size: 11px;
+    margin: 0 12px;
     text-align: center;
     text-transform: uppercase;
   }
 
   .label {
-    margin-bottom: 8px;
-    font-size: 12px;
     color: $calendar-grey;
     display: flex;
+    font-size: 12px;
+    margin-bottom: 8px;
   }
 
   .addBreak {
     background: $white;
     border: 1px solid $grey-lighter;
-    box-shadow: $shadow;
-    font-size: 12px;
-    color: $grey-dark;
     border-radius: 4px;
+    box-shadow: $shadow;
+    color: $grey-dark;
+    font-size: 12px;
     text-align: center;
   }
 }
 
 .errorMessage {
   color: $red;
-  margin-top: 8px;
   font-size: 11px;
+  margin: 8px 0 0 0;
 }
 
 .labelButton {
-  font-weight: bold;
-  font-size: 11px;
-  padding: 0;
-  color: $grey-dark;
   background: transparent;
+  color: $grey-dark;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 0;
 }
 
 .optionButton {
-  display: block;
-  color: $grey-dark;
   background: $white;
-  padding: 10px;
+  color: $grey-dark;
+  display: block;
   font-size: 10px;
-  width: 100%;
-  text-align: left;
   margin: 0;
+  padding: 10px;
+  text-align: left;
+  width: 100%;
 
   &:hover {
-    color: $teal-dark;
     background: $calendar-background;
+    color: $teal-dark;
   }
 }
 
 .closeMessage {
-  font-size: 12px;
   color: $grey-dark;
+  font-size: 12px;
   font-style: italic;
   margin: 4px 0 16px;
 }
@@ -159,14 +159,14 @@
 .optionMenu {
   > div {
     background: $white;
-    box-shadow: $shadow;
     border-radius: 4px;
-    padding: 0;
+    box-shadow: $shadow;
     overflow: hidden;
+    padding: 0;
 
     > ul {
-      box-shadow: none !important;
       background: $white;
+      box-shadow: none !important;
     }
   }
 }
@@ -180,38 +180,38 @@
 }
 
 .footer {
-  padding: 12px 24px;
   border-top: 1px solid $grey-lighter;
+  padding: 12px 24px;
   text-align: right;
 
   .save {
     background: $teal;
-    box-shadow: $shadow;
     border-radius: 4px;
-    transition: all 0.2s ease-in;
+    box-shadow: $shadow;
     margin-left: 8px;
+    transition: all 0.2s ease-in;
 
     &:hover {
-      transition: all 0.2s ease-in;
       background: $teal-dark;
+      transition: all 0.2s ease-in;
     }
   }
 
   .cancel {
     background: transparent;
-    color: $grey-dark;
     border-radius: 4px;
+    color: $grey-dark;
     transition: all 0.2s ease-in;
 
     &:hover {
+      background: $white;
       box-shadow: $shadow;
       transition: all 0.2s ease-in;
-      background: $white;
     }
   }
 }
 
 .selectWrapper {
-  width: 100%;
   position: relative;
+  width: 100%;
 }

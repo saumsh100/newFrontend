@@ -2,16 +2,16 @@
 @import '../../../../ui.scss';
 
 .advancedWrapper {
-  border-top: 1px solid $primary-darkgrey;
   background-color: $primary-grey;
-  padding: 20px;
+  border-top: 1px solid $primary-darkgrey;
   max-height: 500px;
   overflow: auto;
+  padding: 20px;
 }
 
 .outboxDialog {
-  min-width: 900px;
   min-height: 900px;
+  min-width: 900px;
 }
 
 .col {

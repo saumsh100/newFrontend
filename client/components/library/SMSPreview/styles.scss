@@ -1,34 +1,34 @@
 @import '../../../ui.scss';
 
 .flex {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .smsWrapper {
-  border-radius: 10px;
   background-color: white;
+  border-radius: 10px;
   box-shadow: 0 2px 8px 0 rgba(35, 47, 53, 0.09);
-  width: 100%;
   max-width: 400px;
   min-width: 300px;
+  width: 100%;
 }
 
 $width: 30px;
 
 .smsIcon {
   @extend .flex;
-  justify-content: center;
   background: -webkit-linear-gradient(#86fe65 0%, #06d315 100%);
   background: -moz-linear-gradient(#86fe65 0%, #06d315 100%);
   background: -ms-linear-gradient(#86fe65 0%, #06d315 100%);
   background: -o-linear-gradient(#86fe65 0%, #06d315 100%);
   background: linear-gradient(#86fe65 0%, #06d315 100%);
+  border-radius: 5px;
   box-shadow: 0 0 0 1px rgba(134, 254, 101, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05) inset;
   color: white;
-  border-radius: 5px;
-  width: $width;
   height: $width;
+  justify-content: center;
+  width: $width;
 }
 
 .titleText {
@@ -42,10 +42,10 @@ $width: 30px;
 
 .headerSection {
   @extend .flex;
-  padding: 10px 20px;
-  font-size: 13px;
-  color: lighten(black, 30%);
   box-shadow: 0 1px 4px 0 rgba(128, 128, 128, 0.11);
+  color: lighten(black, 30%);
+  font-size: 13px;
+  padding: 10px 20px;
 }
 
 .leftSection {
@@ -58,22 +58,22 @@ $width: 30px;
 }
 
 .body {
-  padding: 28px;
   line-height: 20px;
+  padding: 28px;
 }
 
 .from {
-  font-family: $medium-font;
-  margin-bottom: 3px;
   color: rgb(46, 56, 69);
+  font-family: $medium-font;
   font-size: 12px;
   font-weight: 500;
+  margin-bottom: 3px;
   text-align: left;
 }
 
 .message {
-  font-family: $book-font;
   color: rgb(46, 56, 69);
+  font-family: $book-font;
   font-size: 12px;
   font-weight: 300;
   line-height: 19px;

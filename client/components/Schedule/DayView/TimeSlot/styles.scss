@@ -1,31 +1,31 @@
 @import '../../../../ui.scss';
 
 .appointmentContainer {
+  align-items: stretch;
+  background: none;
+  border: none;
+  box-sizing: border-box;
+  color: inherit;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
-  position: absolute;
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0;
   font: inherit;
-  cursor: pointer;
   outline: inherit;
-  align-items: stretch;
+  padding: 0;
+  position: absolute;
   text-align: left;
-  box-sizing: border-box;
 }
 
 .showAppointment {
-  box-sizing: border-box;
-  overflow: hidden;
-  width: 100%;
-  padding: 4px;
-  margin-bottom: 2px;
-  transition: 300ms all cubic-bezier(0.4, 0, 0.2, 1);
-  border-style: solid;
   border-color: $primary-white;
+  border-style: solid;
   border-width: 1px 1px 0;
+  box-sizing: border-box;
+  margin-bottom: 2px;
+  overflow: hidden;
+  padding: 4px;
+  transition: 300ms all cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
 }
 
 .showMark {
@@ -33,9 +33,9 @@
 }
 
 .mark {
+  cursor: default;
   font-size: $extra-small-size;
   letter-spacing: 0.5px;
-  cursor: default;
   overflow: auto;
   &_note {
     white-space: normal;
@@ -43,32 +43,31 @@
 }
 
 .note {
-  display: flex;
-  padding-top: 2px;
-  padding-left: 5px;
-  composes: subHeaderExtraSmall from '../../../../fonts.scss';
   box-sizing: border-box;
+  composes: subHeaderExtraSmall from '../../../../fonts.scss';
+  display: flex;
+  padding-left: 5px;
+  padding-top: 2px;
   width: 100%;
   &_text {
     color: $primary-dark;
-    width: inherit;
     white-space: normal;
+    width: inherit;
     word-wrap: break-word;
   }
 }
 
 .box {
-  overflow: hidden;
-  white-space: nowrap;
+  color: $primary-white;
   overflow: hidden;
   text-overflow: clip;
-  color: $primary-white;
+  white-space: nowrap;
 }
 
 .nameContainer {
   display: flex;
-  justify-content: flex-start;
   flex-wrap: nowrap;
+  justify-content: flex-start;
 
   &_name {
     @extend .box;
@@ -79,18 +78,18 @@
   &_hours {
     @extend .box;
     composes: subHeaderExtraSmall from '../../../../fonts.scss';
-    min-width: 56px;
     flex: 1;
+    min-width: 56px;
   }
 }
 
 .icon {
-  display: flex;
   color: $primary-white;
-  opacity: 0.6;
+  display: flex;
   float: right;
-  padding-left: 2px;
   font-size: $extra-small-size;
+  opacity: 0.6;
+  padding-left: 2px;
 }
 
 .paddingText {

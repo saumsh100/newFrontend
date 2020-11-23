@@ -5,8 +5,8 @@
 }
 
 .formContainer {
-  width: 40%;
   margin-bottom: 35px;
+  width: 40%;
 
   &_contact {
     margin-left: 35px;
@@ -21,10 +21,10 @@
   padding-bottom: 15px;
 
   &_flex {
-    width: 40%;
-    padding-top: 10px;
-    display: flex;
     align-items: center;
+    display: flex;
+    padding-top: 10px;
+    width: 40%;
   }
 
   &_toggle {
@@ -51,39 +51,39 @@
 }
 
 .orderDropdown {
-  padding: 0;
   height: 100%;
+  padding: 0;
   > div:not(:last-child) {
+    border-bottom: none;
+    box-sizing: border-box;
     color: black;
     font-size: 11px;
-    border-bottom: none;
+    height: 100%;
     padding-left: 6px;
     padding-right: 6px;
-    height: 100%;
-    box-sizing: border-box;
     > div > label {
+      color: $primary-darkgrey;
+      font-size: 9px !important;
+      text-transform: uppercase;
       // font-family: $medium-font;
       top: -15px !important;
-      color: $primary-darkgrey;
-      text-transform: uppercase;
-      font-size: 9px !important;
     }
   }
 }
 
 .descriptionMessage {
-  margin: 0 0 20px;
-  line-height: 1.35;
   color: $clr-dark-grey;
+  line-height: 1.35;
+  margin: 0 0 20px;
 }
 
 .buttonsWrapper {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
   .inlineButton {
-    margin-left: 5px;
     height: 40px;
+    margin-left: 5px;
   }
 }

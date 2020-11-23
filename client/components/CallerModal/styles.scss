@@ -1,18 +1,18 @@
 @import '../../ui.scss';
 
 .callDisplayContainer {
-  position: relative;
-  width: 450px;
-  height: auto;
   background: $primary-white;
   box-sizing: border-box;
+  height: auto;
   padding: 15px;
+  position: relative;
+  width: 450px;
 
   button {
-    width: 100%;
     border-radius: 0;
-    height: 50px;
     box-shadow: none;
+    height: 50px;
+    width: 100%;
   }
 }
 
@@ -29,42 +29,42 @@
 }
 
 .headerContainer {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
   margin-bottom: 70px;
 }
 
 .headerContainerUnknown {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   margin-bottom: 50px;
 }
 
 .callerAvatar {
-  position: absolute;
   padding-bottom: 35px;
+  position: absolute;
 
   > div > div {
-    min-width: 8rem;
-    min-height: 8rem;
     height: 8rem;
+    min-height: 8rem;
+    min-width: 8rem;
     width: 8rem;
   }
 }
 
 .callerAvatarUnknown {
-  border-radius: 50%;
-  width: 110px;
-  height: 110px;
-  position: absolute;
-  background: lighten($primary-darkgrey, 10%);
-  display: flex;
   align-items: center;
+  background: lighten($primary-darkgrey, 10%);
+  border-radius: 50%;
+  display: flex;
+  height: 110px;
   justify-content: center;
+  position: absolute;
   top: -58px;
+  width: 110px;
 
   span {
     color: #fafafa;
@@ -72,15 +72,15 @@
   }
 
   img {
-    width: 145px;
     height: 145px;
+    width: 145px;
   }
 }
 
 .patientInfoContainer {
   display: inline-block;
-  width: 100%;
   padding-bottom: 30px;
+  width: 100%;
 }
 
 .patientInfoContainerUnknown {
@@ -89,26 +89,26 @@
 }
 
 .patientNameAge {
+  composes: header from '../../fonts.scss';
   display: flex;
   justify-content: center;
-  text-transform: capitalize;
-  composes: header from '../../fonts.scss';
   padding-bottom: 10px;
+  text-transform: capitalize;
 }
 
 .patientBirthday {
+  composes: subHeaderMedium from '../../fonts.scss';
   display: flex;
   justify-content: center;
-  composes: subHeaderMedium from '../../fonts.scss';
 }
 
 .iconContainer {
+  animation: pulse 1s ease infinite;
+  color: $primary-dark;
   //disabled for now!
   display: none;
   position: absolute;
   top: 0;
-  color: $primary-dark;
-  animation: pulse 1s ease infinite;
 }
 
 .callBody {
@@ -122,14 +122,14 @@
   padding-left: 10px;
   padding-right: 10px;
   &_last {
+    padding-bottom: 5px;
     text-align: center;
     width: 160px;
-    padding-bottom: 5px;
   }
   &_next {
+    margin-left: auto;
     text-align: center;
     width: 160px;
-    margin-left: auto;
   }
 
   &_date {
@@ -155,31 +155,31 @@
 }
 
 .callInfo {
-  padding-bottom: 15px;
   display: flex;
+  padding-bottom: 15px;
   &_header {
-    composes: header from '../../fonts.scss';
     border-top: 1px solid #efefef;
-    margin-bottom: 10px;
+    composes: header from '../../fonts.scss';
     font-size: 18px;
+    margin-bottom: 10px;
     margin-top: 10px;
-    padding-top: 20px;
     padding-left: 10px;
+    padding-top: 20px;
   }
   &_content {
     height: 100%;
   }
 
   &_content2 {
-    padding-left: 35px;
     height: 100%;
+    padding-left: 35px;
   }
 
   &_body {
+    align-items: center;
     display: flex;
     padding-left: 10px;
     padding-top: 10px;
-    align-items: center;
   }
 
   &_desc {
@@ -193,30 +193,30 @@
 }
 
 .toggleContainer {
-  display: flex;
   align-items: center;
-  width: 100%;
-  justify-content: center;
-  padding-top: 20px;
-  padding-bottom: 10px;
   border-top: 1px solid $primary-grey;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+  padding-top: 20px;
+  width: 100%;
   &_text {
+    composes: font-medium from '../../fonts.scss';
     margin-left: auto;
     padding-right: 5px;
-    composes: font-medium from '../../fonts.scss';
   }
 }
 
 .closeIcon {
-  font-size: 1rem;
   color: grey;
-  font-weight: 900;
   //margin-left: auto;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: 900;
   padding-right: 10px;
   position: absolute;
-  top: 5px;
   right: 0;
+  top: 5px;
 }
 
 @keyframes pulse {

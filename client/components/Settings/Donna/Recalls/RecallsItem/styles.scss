@@ -10,20 +10,20 @@
 }
 
 .typeWrapper {
-  position: absolute;
-  top: 0;
-  right: -19px;
-  display: flex;
-  width: 100%;
-  padding-left: 74px;
   box-sizing: border-box;
+  display: flex;
+  padding-left: 74px;
+  position: absolute;
+  right: -19px;
+  top: 0;
+  width: 100%;
   .primaryType {
-    padding: 10px;
     background: white;
-    width: 100%;
     border: 1px solid $primary-gray;
     color: $primary-darkgrey;
+    padding: 10px;
     text-align: center;
+    width: 100%;
     &_green {
       border-color: $primary-green;
       color: $primary-darker;
@@ -48,26 +48,26 @@
 }
 
 .secondaryLinesBox {
-  margin-left: auto;
-  width: 80%;
-  height: 54px;
-  border-left: 1px solid $primary-gray;
   border-bottom: 1px solid $primary-gray;
+  border-left: 1px solid $primary-gray;
+  height: 54px;
+  margin-left: auto;
   position: relative;
   top: -53px;
+  width: 80%;
 }
 
 .secondaryLinesBoxSelected {
   @extend .secondaryLinesBox;
-  border-left: 1px solid $primary-green;
   border-bottom: 1px solid $primary-green;
+  border-left: 1px solid $primary-green;
 }
 
 .dropdownWrapper {
   margin-left: auto;
-  width: 80%;
   position: relative;
   top: -56px;
+  width: 80%;
 }
 
 .inputFont {
@@ -85,25 +85,25 @@ $dheight: 30px;
 .dropdownSelect {
   background-color: white;
   border: 1px solid $primary-gray;
-  padding: 0;
   height: $dheight;
+  padding: 0;
   // For inputs
   > input {
     @extend .inputFont;
-    padding: 10px;
-    box-sizing: border-box;
     border-bottom: none;
+    box-sizing: border-box;
     height: $dheight;
+    padding: 10px;
   }
 
   // For dropdowns
   > div:not(:last-child) {
     @extend .inputFont;
     border-bottom: none;
-    padding-left: 10px;
-    padding-right: 10px;
     box-sizing: border-box;
     height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   > :global(.dd-menu-items) {
@@ -128,8 +128,8 @@ $dheight: 30px;
 }
 
 .bottomRow {
-  position: relative;
   bottom: 12px;
+  position: relative;
 }
 
 .rightDropdown {
@@ -141,28 +141,28 @@ $width: 26px;
 $wrapper-thickness: 6px;
 
 .reminderIconContainer {
+  left: -($width + 2 * $wrapper-thickness) / 2;
   position: relative;
   top: -($width + 2 * $wrapper-thickness) / 2;
-  left: -($width + 2 * $wrapper-thickness) / 2;
 }
 
 .smallIconContainer {
+  left: -12px;
   position: relative;
   top: 44px;
-  left: -12px;
 }
 
 $small-icon-width: 24px;
 
 .smallReminderSelectWrapperCircle {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: $small-icon-width + 1;
-  height: $small-icon-width;
+  background-color: $primary-gray;
   border-radius: $small-icon-width / 2;
   color: white;
-  background-color: $primary-gray;
+  display: flex;
+  height: $small-icon-width;
+  justify-content: center;
+  width: $small-icon-width + 1;
 }
 
 .smallReminderSelectWrapperCircleSelected {
@@ -179,26 +179,26 @@ $small-icon-width: 24px;
 }
 
 .downIconWrapper {
-  position: relative;
   bottom: -14px;
   left: -7px;
+  position: relative;
   > i {
     color: $primary-gray;
   }
 }
 
 .recallLabel {
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .beforeAfterLabel {
-  text-transform: uppercase;
   color: $primary-darkgrey;
   font-size: 9px;
   margin-top: 5px;
+  text-transform: uppercase;
 }
 
 .linesBoxClass {

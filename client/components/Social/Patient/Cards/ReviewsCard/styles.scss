@@ -9,23 +9,23 @@
 }
 
 .modal {
-  border-radius: $card-border-radius;
   border: 2px solid $primary-light-blue;
+  border-radius: $card-border-radius;
 }
 
 .cardHeader {
-	padding: 20px 20px 0;
-	margin-bottom: 20px;
   align-items: center;
+	margin-bottom: 20px;
+	padding: 20px 20px 0;
   text-align: center;
 	&__menu {
 		display: flex;
 		flex-direction: row;
-    text-transform: none;
 		font-size: $small-size;
+    text-transform: none;
 		span:first-child {
-			margin-right: 10px;
 			cursor: pointer;
+			margin-right: 10px;
 		}
 		span:last-child {
 			cursor: pointer;

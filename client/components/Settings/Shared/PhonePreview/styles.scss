@@ -4,11 +4,11 @@
 $background: #eeeeee;
 
 .topHeader {
-  height: 20px;
-  padding: 20px;
-  display: flex;
   align-items: center;
   border-bottom: 1px solid $grey-dark;
+  display: flex;
+  height: 20px;
+  padding: 20px;
 }
 
 .previewSBody {
@@ -29,70 +29,70 @@ $background: #eeeeee;
 
 .smsPreviewWrapper {
   @extend .previewBody;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .smsPreviewWrapperFull {
   @extend .smsPreviewWrapper;
-  padding: 0;
   overflow: hidden;
+  padding: 0;
 }
 
 .phoneArtboard {
   background: $white;
   border-radius: $rounded-lg;
-  width: 294px;
-  height: 520px;
   box-shadow: $shadow;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  height: 520px;
+  width: 294px;
 }
 
 .phoneIcon {
-  display: flex;
   align-items: center;
-  justify-content: center;
   background: linear-gradient(180deg, #86fe65 0%, #06d315 100%);
+  border-radius: 5px;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.01), 0 0 1px 0 rgba(134, 254, 101, 0.01);
   color: white;
-  border-radius: 5px;
-  width: 30px;
+  display: flex;
   font-size: 14px;
   height: 30px;
+  justify-content: center;
   margin-right: 12px;
+  width: 30px;
 }
 
 .header {
-  box-shadow: inset 0 -1px 0px 0 hsla(0, 0%, 50%, 0.11);
+  align-items: center;
   border-top-left-radius: $rounded-lg;
   border-top-right-radius: $rounded-lg;
-  min-height: 54px;
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
+  box-shadow: inset 0 -1px 0px 0 hsla(0, 0%, 50%, 0.11);
   box-sizing: border-box;
-  font-weight: 300;
   color: $grey-darker;
+  display: flex;
   font-size: 13px;
-  line-height: 13px;
   -webkit-font-smoothing: antialiased;
+  font-weight: 300;
+  line-height: 13px;
+  min-height: 54px;
+  padding: 10px 20px;
 }
 
 .body {
-  padding: 30px 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
+  padding: 30px 20px;
 
   audio {
-    max-width: 100%;
     margin-top: 8px;
+    max-width: 100%;
 
     &:focus {
       outline: none;
@@ -101,18 +101,18 @@ $background: #eeeeee;
 }
 
 .transcript {
-  height: 18px;
-  width: 51px;
   color: $grey;
   font-size: 10px;
   font-weight: 300;
+  height: 18px;
   line-height: 18px;
+  width: 51px;
 }
 
 .message {
   color: $grey-dark;
-  -webkit-font-smoothing: antialiased;
   font-size: 12px;
+  -webkit-font-smoothing: antialiased;
   line-height: 18px;
   margin-top: 4px;
 
@@ -124,33 +124,33 @@ $background: #eeeeee;
 
 .caller {
   color: $grey;
+  display: block;
   font-size: 11px;
   font-weight: 500;
-  text-align: center;
-  display: block;
-  margin-top: 0;
   margin-bottom: 12px;
+  margin-top: 0;
+  text-align: center;
 }
 
 .phoneNumber {
   color: $grey-darkest;
+  display: block;
   font-size: 24px;
+  -webkit-font-smoothing: antialiased;
   font-weight: 300;
   line-height: 19px;
-  -webkit-font-smoothing: antialiased;
-  display: block;
   text-align: center;
 }
 
 .location {
   color: $grey-darkest;
+  display: block;
   font-size: 12px;
+  -webkit-font-smoothing: antialiased;
   font-weight: 300;
   line-height: 19px;
-  -webkit-font-smoothing: antialiased;
-  display: block;
-  text-align: center;
   margin-top: 8px;
+  text-align: center;
 }
 
 .modalLink {

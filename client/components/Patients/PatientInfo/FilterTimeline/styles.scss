@@ -1,33 +1,33 @@
 @import '../../../../ui';
 
 .filterContainer {
-  width: 300px;
-  height: auto;
   background: white;
   border: 1px solid $primary-grey;
   box-shadow: 0 0 25px 1px rgba(209, 209, 209, 0.5) !important;
+  height: auto;
+  width: 300px;
 }
 
 .header {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  padding: 15px;
   box-sizing: border-box;
   composes: fontMedium from '../../../../fonts.scss';
+  display: flex;
+  flex-direction: row;
   font-size: 13px;
+  padding: 15px;
+  width: 100%;
 }
 
 .headerOptions {
-  margin-left: auto;
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: flex-end;
+  margin-left: auto;
 }
 
 .selectClear {
-  font-size: $extra-small-size;
   color: $primary-dark-grey;
+  font-size: $extra-small-size;
   outline: none;
 }
 
@@ -35,29 +35,29 @@
   @extend .selectClear;
   margin-right: 10px;
   &:hover {
-    cursor: pointer;
     color: $primary-blue;
+    cursor: pointer;
   }
 }
 
 .clearText {
   @extend .selectClear;
   &:hover {
-    cursor: pointer;
     color: $primary-blue;
+    cursor: pointer;
   }
 }
 
 .body {
-  padding: 20px 20px 5px 20px;
   display: flex;
   flex-direction: column;
+  padding: 20px 20px 5px 20px;
 }
 
 .subHeader {
+  color: $primary-dark-grey;
   composes: fontMedium from '../../../../fonts.scss';
   font-size: 10px;
-  color: $primary-dark-grey;
   margin-bottom: 15px;
 }
 
@@ -69,26 +69,26 @@
 }
 
 .singleEvent {
+  align-items: center;
+  cursor: pointer;
   display: flex;
+  flex: 1 0 50%;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   margin-bottom: 20px;
-  outline: none;
-  cursor: pointer;
-  flex: 1 0 50%;
   margin-right: 0px;
+  outline: none;
 }
 
 .iconEvent {
+  align-items: center;
   border: 2px solid white;
   border-radius: 50%;
-  height: 26px;
-  width: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: $primary-dark-grey;
+  display: flex;
+  height: 26px;
+  justify-content: center;
+  width: 26px;
 }
 
 .filterIcon {
@@ -98,9 +98,9 @@
 .textEvent {
   composes: fontMedium from '../../../../fonts.scss';
   font-size: 10px;
-  text-transform: capitalize;
   margin-top: 10px;
   text-align: center;
+  text-transform: capitalize;
 }
 
 .selectedBlue {

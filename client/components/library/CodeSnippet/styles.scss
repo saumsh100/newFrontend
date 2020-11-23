@@ -1,12 +1,12 @@
 @import '../../../ui';
 
 .codeSnippet {
-  height: auto;
   background-color: #fefbf3;
   border: 1px solid;
   border-color: $primary-darkgrey;
-  padding: 10px;
   border-radius: 8px;
+  height: auto;
+  padding: 10px;
 
   &_code {
     font-size: 12px;

@@ -3,25 +3,25 @@
 
 .confirm {
   @extend .ui-kit-smoother;
-  width: 100%;
-  border-radius: 4px;
   background-color: $teal;
-  padding: 7px 12px;
-  box-shadow: $shadow;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 10px;
-  color: $white;
-  text-align: center;
-  outline: none;
   border: none;
-  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: $shadow;
   box-sizing: border-box;
+  color: $white;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 10px;
+  outline: none;
+  padding: 7px 12px;
+  text-align: center;
   transition: 0.2s ease all;
+  width: 100%;
 
   &:hover {
-    transition: 0.2s ease all;
     background: $teal-dark;
+    transition: 0.2s ease all;
   }
 
   &[disabled] {
@@ -33,26 +33,26 @@
 
 .cancel {
   @extend .ui-kit-smoother;
-  width: 100%;
-  border-radius: 4px;
   background-color: transparent;
-  padding: 7px 12px;
-  box-shadow: none;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 10px;
-  color: $grey-dark;
-  text-align: center;
-  outline: none;
   border: none;
-  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: none;
   box-sizing: border-box;
+  color: $grey-dark;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 10px;
+  outline: none;
+  padding: 7px 12px;
+  text-align: center;
   transition: 0.2s ease all;
+  width: 100%;
 
   &:hover {
-    transition: 0.2s ease all;
     background: $grey-lighter;
     color: $grey-darker;
+    transition: 0.2s ease all;
   }
 
   &[disabled] {

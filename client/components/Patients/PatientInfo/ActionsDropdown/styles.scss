@@ -1,45 +1,45 @@
 .patientActions {
   margin-right: 3px;
   > div[class*='dd-menu-items'] {
-    width: 150px;
     margin-right: 5px;
+    width: 150px;
   }
 }
 
 .actionsButton {
+  align-items: center;
+  display: flex;
   margin-left: 0;
   margin-top: 5px;
-  width: 170px;
   padding: 12px 18px;
-  display: flex;
-  align-items: center;
+  width: 170px;
   > i {
     margin-left: auto;
   }
 }
 
 .actionsButtonNormal {
-  margin-top: 0;
   font-size: 12px;
+  margin-top: 0;
   padding: 8px 12px;
   width: 120px;
 }
 
 .actionsButtonSmall {
-  margin-top: 0;
+  background: none;
   font-size: 12px;
+  margin-top: 0;
   padding: 8px 12px;
   width: 40px;
-  background: none;
 }
 
 .actionsButtonSmallBlack {
-  margin-top: 0;
-  font-size: 12px;
-  padding: 8px 12px;
-  width: 40px;
   background: none;
   color: #000000;
+  font-size: 12px;
+  margin-top: 0;
+  padding: 8px 12px;
+  width: 40px;
 }
 
 .actionText {

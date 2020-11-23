@@ -1,15 +1,15 @@
 @import '../../ui';
 
 .rightSectionContainer {
-  padding-top: $top-nav-height;
+  background-color: $background-color;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   height: 100%;
   overflow: auto;
-  background-color: $background-color;
-  width: 100%;
+  padding-top: $top-nav-height;
   transition: ease 0.3s all;
+  width: 100%;
 }
 
 .fullWidth {

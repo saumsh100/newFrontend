@@ -1,17 +1,17 @@
 @import '../../../ui.scss';
 
 .modalContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  z-index: 9999;
-  flex-direction: column;
   align-content: center;
   align-items: center;
+  display: none;
+  flex-direction: column;
+  height: 100%;
   justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
 
   @media screen and (max-width: 576px) {
     position: static;
@@ -43,14 +43,14 @@
 }
 
 .backDropDefault {
+  animation: fadein 0.5s;
+  background-color: $primary-dark;
+  height: 100%;
+  left: 0;
+  opacity: 0.6;
   position: absolute;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  background-color: $primary-dark;
-  animation: fadein 0.5s;
-  opacity: 0.6;
 }
 
 @keyframes fadein {
@@ -63,40 +63,40 @@
 }
 
 @mixin modalBodyMobile-mixin() {
-  box-shadow: none;
-  min-width: 0;
-  max-height: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   bottom: 0;
+  box-shadow: none;
+  left: 0;
+  max-height: none;
+  min-width: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .modalBody {
-  display: flex;
-  min-width: 400px;
-  max-height: 96%;
-  flex-direction: column;
-  z-index: 301;
+  animation: slidein 0.5s;
   //border-radius: .5rem;
   box-shadow: 0 19px 60px rgba(0, 0, 0, 0.3), 0 15px 20px rgba(0, 0, 0, 0.22);
-  animation: slidein 0.5s;
+  display: flex;
+  flex-direction: column;
+  max-height: 96%;
+  min-width: 400px;
+  z-index: 301;
 
   @media screen and (max-width: 700px) {
     @include modalBodyMobile-mixin();
   }
 
   &__modalHeader {
-    display: flex;
     align-items: center;
+    display: flex;
   }
   &__closeIcon {
-    font-size: 1rem;
     color: grey;
+    cursor: pointer;
+    font-size: 1rem;
     font-weight: 900;
     margin-left: auto;
-    cursor: pointer;
   }
   &__footer {
     margin-left: auto;
@@ -123,15 +123,15 @@
 }
 
 .modalCloseIcon {
-  font-size: 60px;
-  position: fixed;
-  top: 2%;
-  right: 1%;
-  visibility: visible;
-  cursor: pointer;
-  z-index: 10;
   color: white;
+  cursor: pointer;
+  font-size: 60px;
   line-height: 1rem;
+  position: fixed;
+  right: 1%;
+  top: 2%;
+  visibility: visible;
+  z-index: 10;
   @media screen and (max-width: 1000px) {
     display: none;
   }
@@ -141,8 +141,8 @@
     @media screen and (max-width: 1000px) {
       display: flex;
       justify-content: flex-end;
-      width: 100%;
       padding: 0 22px;
+      width: 100%;
     }
   }
 }

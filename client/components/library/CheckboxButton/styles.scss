@@ -1,24 +1,24 @@
 @import '../../../ui';
 
 .buttonLabel {
-  composes: fontDefault from '../../../fonts.scss';
-  display: inline-block;
-  cursor: pointer;
-  color: $primary-dark-grey;
+  background: transparent;
   border: 1px solid $primary-dark-grey;
   border-radius: 0.25em;
-  background: transparent;
+  color: $primary-dark-grey;
+  composes: fontDefault from '../../../fonts.scss';
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1em;
+  margin: 0 em(5px) 0 0;
+  min-width: 100px;
 
   outline: none;
-  text-decoration: none;
 
   padding: em(12px) 1.5em;
-  margin: 0 em(5px) 0 0;
-  line-height: 1em;
   text-align: center;
+  text-decoration: none;
 
   transition: background-color 0.1s ease, color 0.1s ease;
-  min-width: 100px;
 }
 
 .checkboxButton input {

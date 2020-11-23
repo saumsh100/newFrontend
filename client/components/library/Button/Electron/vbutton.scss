@@ -7,25 +7,25 @@
 }
 
 .baseline {
-  font-size: 12px;
+  background-color: var(--primaryButtonColor);
+  border: none;
+  color: white;
+  composes: letterSpacing from '../../../../fonts.scss';
+  cursor: pointer;
 
   font-family: $dashboard-font;
-  background-color: var(--primaryButtonColor);
-  color: white;
-
-  vertical-align: middle;
-  cursor: pointer;
+  font-size: 12px;
+  line-height: 1em;
+  margin: 0 em(5px) 0 0;
   outline: none;
-  text-decoration: none;
-  border: none;
 
   padding: em(12px) 1.5em;
-  margin: 0 em(5px) 0 0;
-  line-height: 1em;
   text-align: center;
+  text-decoration: none;
 
   transition: background-color 0.1s ease, color 0.1s ease;
-  composes: letterSpacing from '../../../../fonts.scss';
+
+  vertical-align: middle;
 
   &:last-child {
     margin-right: 0;
@@ -39,112 +39,112 @@
 }
 
 .secondary {
-  color: white;
   background-color: var(--secondaryButtonColor);
+  color: white;
 }
 .secondary:hover {
-  color: white;
   background-color: darken($clr-dark-blue, 5%);
+  color: white;
 }
 
 .tertiary {
-  color: white;
   background-color: var(--tertiaryButtonColor);
+  color: white;
 }
 .tertiary:hover {
-  color: white;
   background-color: darken($primary-green, 5%);
+  color: white;
 }
 
 .color-red {
-  color: white;
   background-color: $primary-color;
+  color: white;
 }
 .color-red:hover {
-  color: white;
   background-color: $primary-color-hover;
+  color: white;
 }
 
 .color-green {
-  color: white;
   background-color: $primary-green;
+  color: white;
 }
 .color-green:hover {
-  color: white;
   background-color: darken($primary-green, 5%);
+  color: white;
 }
 
 .color-blue {
-  color: white;
   background-color: $primary-blue;
+  color: white;
 }
 .color-blue:hover {
-  color: white;
   background-color: darken($primary-blue, 5%);
+  color: white;
 }
 
 .color-darkblue {
-  color: white;
   background-color: $clr-dark-blue;
+  color: white;
 }
 .color-darkblue:hover {
-  color: white-white;
   background-color: darken($clr-dark-blue, 5%);
+  color: white-white;
 }
 
 .color-yellow {
-  color: white;
   background-color: $primary-yellow;
+  color: white;
 }
 .color-yellow:hover {
-  color: white;
   background-color: darken($primary-yellow, 5%);
+  color: white;
 }
 
 .color-dark {
-  color: white;
   background-color: $primary-dark;
+  color: white;
 }
 .color-dark:hover {
-  color: white;
   background-color: darken($primary-dark, 5%);
+  color: white;
 }
 
 .color-grey {
-  color: $primary-white;
   background-color: $background-color;
+  color: $primary-white;
 }
 .color-grey:hover {
-  color: $primary-white;
   background-color: darken($background-color, 5%);
+  color: $primary-white;
 }
 
 .color-darkgrey {
-  color: $clr-dark-grey;
   background-color: $clr-bg-dark-grey;
+  color: $clr-dark-grey;
 }
 .color-darkgrey:hover {
-  color: darken($clr-dark-grey, 5%);
   background-color: darken($clr-bg-dark-grey, 5%);
+  color: darken($clr-dark-grey, 5%);
 }
 
 .color-white {
-  color: $clr-dark-grey;
   background-color: $primary-white;
+  color: $clr-dark-grey;
 }
 .color-white:hover {
-  color: darken($clr-dark-grey, 5%);
   background-color: darken($primary-white, 5%);
+  color: darken($clr-dark-grey, 5%);
 }
 
 .border-blue {
+  background-color: transparent;
   border: 1px solid $primary-blue;
   color: $primary-blue;
-  background-color: transparent;
 }
 .border-blue:hover {
-  color: white;
   background: $primary-blue;
+  color: white;
 }
 
 .positive {
@@ -174,12 +174,12 @@
 }
 
 .dense {
-  text-transform: capitalize;
-  padding-top: 0.65em;
-  padding-bottom: 0.6em;
-  height: 28px;
-  font-size: 11px;
   composes: fontMedium from '../../../../fonts.scss';
+  font-size: 11px;
+  height: 28px;
+  padding-bottom: 0.6em;
+  padding-top: 0.65em;
+  text-transform: capitalize;
 }
 
 .size-sm {
@@ -201,8 +201,8 @@
 
 .fluid {
   display: block;
-  width: 100%;
   text-align: center;
+  width: 100%;
 }
 
 .upper-case {
@@ -210,24 +210,24 @@
 }
 
 .disabled {
-  cursor: not-allowed;
-  color: $inactive-color;
   background-color: $background-color !important;
+  color: $inactive-color;
+  cursor: not-allowed;
   &:hover {
-    color: $inactive-color !important;
     background-color: $background-color !important;
+    color: $inactive-color !important;
   }
 }
 
 .flat {
-  display: flex;
   background-color: transparent;
-  color: $primary-dark;
   box-shadow: none;
+  color: $primary-dark;
+  display: flex;
   &:not(.disabled) {
     &:hover {
-      color: $primary-color-hover;
       background-color: transparent;
+      color: $primary-color-hover;
     }
   }
 

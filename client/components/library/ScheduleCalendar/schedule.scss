@@ -3,16 +3,16 @@
 @import './color';
 
 .contentWrapper {
-  width: 100%;
   display: flex;
-  position: relative;
   padding-top: 45px;
+  position: relative;
+  width: 100%;
 
   .content {
-    width: 100%;
-    position: relative;
     display: flex;
     height: 100%;
+    position: relative;
+    width: 100%;
 
     > div {
       height: auto;
@@ -30,20 +30,20 @@
 }
 
 .legend {
-  display: flex;
-  margin-right: 20px;
   align-items: center;
   color: $calendar-grey-lighter;
-  line-height: 1;
+  display: flex;
   font-size: 10px;
+  line-height: 1;
+  margin-right: 20px;
 }
 
 .toggleDivDisabled {
   background: $grey-lighter;
-  padding: 0 16px;
-  min-height: 40px;
-  border-radius: 4px;
   border: 0;
+  border-radius: 4px;
+  min-height: 40px;
+  padding: 0 16px;
 
   .caretIconWrapper {
     color: $grey-dark;
@@ -51,74 +51,74 @@
 }
 
 .baseLegend {
-  width: 36px;
-  height: 20px;
   border-radius: 4px;
   display: block;
+  height: 20px;
   margin-right: 4px;
+  width: 36px;
 }
 
 .defaultLegend {
   @extend .baseLegend;
-  box-shadow: inset 0 0 0 1px $grey-lighter;
   background: $white;
+  box-shadow: inset 0 0 0 1px $grey-lighter;
 }
 
 .overrideLegend {
   @extend .baseLegend;
-  box-shadow: inset 0 0 0 1px $calendar-override;
   background: $calendar-override;
+  box-shadow: inset 0 0 0 1px $calendar-override;
 }
 
 .closedLegend {
   @extend .baseLegend;
-  box-shadow: inset 0 0 0 1px $calendar-closed;
   background: $calendar-closed;
+  box-shadow: inset 0 0 0 1px $calendar-closed;
 }
 
 .loading {
-  position: absolute;
   background: transparentize($white, 0.25);
+  bottom: 0;
   font-size: 34px;
   left: 0;
+  opacity: 0;
+  position: absolute;
   right: 0;
   top: 0;
-  bottom: 0;
-  visibility: hidden;
   transition: all 0.2s ease;
-  opacity: 0;
+  visibility: hidden;
 
   &.active {
-    z-index: 100;
+    opacity: 1;
     transition: all 0.2s ease;
     visibility: visible;
-    opacity: 1;
+    z-index: 100;
   }
 }
 
 .calendarWrapper {
-  position: relative;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .input {
-  border: 1px solid $grey-lighter;
-  width: 100%;
-  color: $calendar-grey;
-  font-weight: 500;
-  border-radius: 4px;
-  font-size: 14px;
-  padding: 0 10px;
-  box-sizing: border-box;
-  min-height: 40px;
-  background: $white;
   -webkit-appearance: none;
+  background: $white;
+  border: 1px solid $grey-lighter;
+  border-radius: 4px;
   box-shadow: $shadow;
+  box-sizing: border-box;
+  color: $calendar-grey;
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 40px;
+  padding: 0 10px;
   transition: border-color 0.2s ease;
+  width: 100%;
 
   &:focus {
-    transition: border-color 0.2s ease;
     border-color: $grey-dark;
+    transition: border-color 0.2s ease;
   }
 
   &:focus ~ .label {
@@ -128,13 +128,13 @@
 
 .inputToggler {
   color: $calendar-grey;
-  line-height: 1.4;
   font-size: 13px;
+  line-height: 1.4;
 }
 
 .inputActive {
-  transition: all 0.2s ease;
   border-color: $grey-dark;
+  transition: all 0.2s ease;
 }
 
 .textarea {
@@ -144,20 +144,20 @@
 }
 
 .group {
+  margin-bottom: 12px;
   padding: 0 0 12px;
   width: 100%;
-  margin-bottom: 12px;
 }
 
 .error {
-  left: 16px;
-  color: $red;
-  font-size: 12px;
-  top: auto;
-  font-weight: 500;
-  display: block;
-  padding-left: 0;
   bottom: -5px;
+  color: $red;
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  left: 16px;
+  padding-left: 0;
+  top: auto;
 }
 
 .erroredInput {
@@ -182,48 +182,48 @@
 }
 
 .label {
+  color: $calendar-grey-lighter;
+  font-size: 14px;
   left: 16px;
   top: 21px;
-  font-size: 14px;
-  color: $calendar-grey-lighter;
 }
 
 .filled {
+  font-size: 11px;
   left: 16px;
   top: 12px;
-  font-size: 11px;
 }
 
 .wrapper {
-  padding: 8px 0;
   box-sizing: border-box;
+  padding: 8px 0;
 
   > div {
-    margin: -4px 0 0;
-    left: 0;
-    transform: translateX(0);
     box-sizing: border-box;
+    left: 0;
+    margin: -4px 0 0;
+    transform: translateX(0);
 
     > ul {
-      box-shadow: $shadow;
       background: $white;
-      border-bottom-right-radius: 4px;
-      border-bottom-left-radius: 4px;
       border: 1px solid $grey-dark;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
       border-top: 0;
+      box-shadow: $shadow;
 
       > div {
-        padding: 0;
-        box-shadow: none;
         background: $white;
+        box-shadow: none;
         max-height: 170px;
+        padding: 0;
       }
     }
   }
 }
 
 .outside {
-  cursor: default;
-  color: $calendar-outside;
   background: transparent;
+  color: $calendar-outside;
+  cursor: default;
 }

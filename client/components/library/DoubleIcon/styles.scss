@@ -1,21 +1,21 @@
 .containter {
-	max-width: 100px;
-	position: relative;
 	height: 70px;
 	margin-right: 20px;
+	max-width: 100px;
+	position: relative;
 	&__bigIcon {
 		position: relative;
 		width: 100%;
 	}
 
-	img { 
+	img {
+		border-radius: 50%; 
 		width: 100%;
-		border-radius: 50%;
 	}
 
 	&__smallIcon {
-		position: absolute;
     bottom: -24px;
+		position: absolute;
     right: -7px;
 	}
 }

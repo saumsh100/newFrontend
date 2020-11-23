@@ -1,17 +1,17 @@
 @import '../styles';
 
 .daySlot {
-  flex: 1;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  margin: 0;
   background-color: $widget-white;
-  padding: 8px 0;
   border-right: 1px solid $widget-grey-lighter;
   color: $widget-grey;
+  display: flex;
+  flex: 1;
   flex-wrap: wrap;
+  justify-content: center;
+  margin: 0;
+  padding: 8px 0;
+  text-align: center;
+  text-transform: uppercase;
   &:hover {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.15);
     color: var(--primaryColor) !important;
@@ -31,8 +31,8 @@
 }
 .topWrapper {
   display: flex;
-  width: 100%;
   margin-bottom: var(--widget-spacer);
+  width: 100%;
 }
 
 .datesContainer {
@@ -40,9 +40,9 @@
   flex: 1;
 }
 .datesWrapper {
-  display: flex;
   border: 1px solid $widget-grey-lighter;
   border-radius: 4px;
+  display: flex;
   flex: 1;
   margin-right: 8px;
   @media (min-width: 576px) {
@@ -50,9 +50,26 @@
   }
 }
 .datePicker {
-  margin: 0 0 0 var(--widget-spacer);
+  background: $widget-white;
+  border: 1px solid $widget-grey-lighter;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: $widget-grey-dark;
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  height: 100%;
+  justify-content: center;
   line-height: 1.15em;
+  margin: 0 0 0 var(--widget-spacer);
+  padding: var(--widget-spacer);
+  text-align: center;
+  text-transform: uppercase;
   transition: all 0.2s ease;
+  svg {
+    fill: currentColor;
+    margin: 0 auto 4px;
+  }
   &:hover {
     border-color: var(--primaryColor);
     color: var(--primaryColor);
@@ -62,12 +79,12 @@
 
 .availabilitiesWrapper {
   @extend .container;
-  margin: var(--widget-spacer) 0 0;
-  flex-wrap: wrap;
   display: flex;
+  flex-wrap: wrap;
+  margin: var(--widget-spacer) 0 0;
+  min-height: 45px;
   padding: 0 12px;
   position: relative;
-  min-height: 45px;
 }
 
 .cardWrapper {
@@ -78,75 +95,56 @@
   }
 }
 .nextAvailabilityButton {
-  width: 100%;
   border-radius: 4px;
-  font-size: 15px;
-  padding: var(--widget-spacer) 0;
-  margin-top: calc(50px - var(--widget-spacer));
-  margin-bottom: 50px;
   font-family: 'Roboto', sans-serif;
+  font-size: 15px;
   font-weight: 500;
-}
-.datePicker {
-  border: 1px solid $widget-grey-lighter;
-  background: $widget-white;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 10px;
-  color: $widget-grey-dark;
-  padding: var(--widget-spacer);
-  box-sizing: border-box;
-  justify-content: center;
-  svg {
-    margin: 0 auto 4px;
-    fill: currentColor;
-  }
+  margin-bottom: 50px;
+  margin-top: calc(50px - var(--widget-spacer));
+  padding: var(--widget-spacer) 0;
+  width: 100%;
 }
 
 .arrows {
   background: white !important;
-  color: $widget-grey-dark;
   border: 1px solid $widget-grey-lighter;
   border-radius: 4px !important;
+  color: $widget-grey-dark;
   margin-right: 8px;
-  width: 32px !important;
   transition: all 0.35s ease;
+  width: 32px !important;
   @media (min-width: 576px) {
-    width: 50px !important;
     margin-right: var(--widget-spacer);
+    width: 50px !important;
   }
   &[disabled] {
     background: $widget-grey-lighter !important;
     border-color: $widget-grey-lighter !important;
     &:hover {
-      border-color: $widget-grey-lighter !important;
       background: $widget-grey-lighter !important;
+      border-color: $widget-grey-lighter !important;
       color: $widget-grey-dark !important;
     }
   }
   &:hover {
-    transition: all 0.35s ease;
     background: white !important;
     border-color: var(--primaryColor) !important;
     color: var(--primaryColor) !important;
+    transition: all 0.35s ease;
   }
 }
 
 .regularText {
-  color: $widget-grey-light;
-  text-align: center;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  top: 0;
-  right: 0;
   background: $widget-grey-lightest;
+  bottom: 0;
+  color: $widget-grey-light;
   display: flex;
   justify-content: center;
+  left: 0;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
 }
 
 .spinnerWrapper {
@@ -156,11 +154,11 @@
   visibility: hidden;
   h3 {
     span {
-      font-size: 23px;
-      animation-name: blink;
       animation-duration: 1.4s;
-      animation-iteration-count: infinite;
       animation-fill-mode: both;
+      animation-iteration-count: infinite;
+      animation-name: blink;
+      font-size: 23px;
       line-height: 12px;
       &:nth-child(1) {
         margin-left: 2px;

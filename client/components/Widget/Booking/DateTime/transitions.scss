@@ -8,8 +8,8 @@
 
 .enter {
   opacity: 1 !important;
-  visibility: visible !important;
   transition: all 0.5s ease;
+  visibility: visible !important;
 }
 
 .enter-active {
@@ -18,8 +18,8 @@
 }
 
 .enter-done {
-  transition: all 0.5s ease;
   opacity: 1 !important;
+  transition: all 0.5s ease;
 }
 
 .exit {

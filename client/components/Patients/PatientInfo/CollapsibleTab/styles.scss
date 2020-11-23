@@ -2,24 +2,24 @@
 
 $collapsible-horizontal-padding: 20px;
 .collapsibleWrapper {
+  border-bottom: 1px solid $electron-border-bottom-color;
   padding-left: $collapsible-horizontal-padding;
   padding-right: $collapsible-horizontal-padding;
-  border-bottom: 1px solid $electron-border-bottom-color;
 
   &:last-child {
     border-bottom: none;
   }
 
   .collapsibleTitle {
-    line-height: 55px;
-    font-size: 14px;
     cursor: pointer;
+    font-size: 14px;
+    line-height: 55px;
 
     & > i {
       float: right;
-      line-height: 55px;
       font-size: 1.4em !important;
       font-weight: bold;
+      line-height: 55px;
     }
   }
 
@@ -28,16 +28,16 @@ $collapsible-horizontal-padding: 20px;
     margin-right: -$collapsible-horizontal-padding;
 
     & > div > div {
-      padding: 25px 20px 10px;
       border-top: 1px solid $electron-border-bottom-color;
+      padding: 25px 20px 10px;
     }
   }
 
   .collapsibleExpanded {
     background: $electron-active-collapsible-bg;
     margin-left: -$collapsible-horizontal-padding;
-    padding-left: $collapsible-horizontal-padding;
     margin-right: -$collapsible-horizontal-padding;
+    padding-left: $collapsible-horizontal-padding;
     padding-right: $collapsible-horizontal-padding;
   }
 }

@@ -2,16 +2,16 @@
 @import '../../../../../fonts';
 
 .score {
-  height: 210px;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  display: flex;
   flex-direction: column;
+  height: 210px;
+  justify-content: center;
   text-align: center;
   &__header {
-    width: 80%;
     border-bottom: 1px solid $primary-lightgrey;
     padding-bottom: 10px;
+    width: 80%;
     &_count {
       color: $primary-blue;
       composes: fontExtraLarge from '../../../../../fonts.scss';
@@ -22,11 +22,11 @@
     }
   }
   &__body {
-    width: 80%;
     padding-top: 10px;
+    width: 80%;
     &_listing {
-      composes: subHeaderSmall from '../../../../../fonts.scss';
       color: lighten($primary-darkgrey, 20%);
+      composes: subHeaderSmall from '../../../../../fonts.scss';
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;

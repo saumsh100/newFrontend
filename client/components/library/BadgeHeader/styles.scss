@@ -1,22 +1,22 @@
 @import '../../../ui.scss';
 
 .badgeHeader {
+  align-items: center;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
   padding-top: 0.5rem;
   position: relative;
-  justify-content: space-between;
-  flex-wrap: wrap;
   @media (max-width: 496px) {
-    flex-direction: column;
     align-items: flex-start;
+    flex-direction: column;
   }
 }
 
 .displayFlex {
-  display: flex;
   align-items: center;
+  display: flex;
   width: 100%;
 }
 
@@ -24,21 +24,21 @@
   margin-left: auto;
 }
 .badgeCount {
-  display: flex;
   align-items: center;
+  background-color: $primary-dark-grey;
+  border-radius: 12px;
+  color: #fff;
+  display: flex;
   font-size: 12px;
   height: 12px;
-  width: 12px;
-  color: #fff;
-  border-radius: 12px;
-  background-color: $primary-dark-grey;
   justify-content: center;
-  text-align: center;
   padding: 5px;
+  text-align: center;
+  width: 12px;
 }
 
 .title {
   display: inline-block;
-  font-size: $font-size;
   font-family: $medium-font;
+  font-size: $font-size;
 }

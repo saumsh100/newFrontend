@@ -5,18 +5,18 @@
 }
 
 .subHeader {
+  border-bottom: 1px solid $primary-grey;
   margin-bottom: 30px;
   //margin-left: 15px;
   margin-right: 15px;
-  border-bottom: 1px solid $primary-grey;
   div {
     font-size: 26px;
   }
 }
 
 .day {
-  text-transform: capitalize;
   composes: listItemHeader from '../../../../fonts.scss';
+  text-transform: capitalize;
 }
 
 .breaksDay {
@@ -35,20 +35,20 @@
 }
 
 .flexCentered {
-  display: flex;
   align-items: center;
+  display: flex;
   //padding-left: 15px;
 }
 
 .inlineBlock {
   display: inline-block;
-  margin-top: 7px;
   margin-bottom: 14px;
+  margin-top: 7px;
 }
 
 .toDiv {
-  width: 50px;
   text-align: center;
+  width: 50px;
 }
 
 .toDivDisabled {
@@ -57,12 +57,12 @@
 }
 
 .flexHeader {
+  border-bottom: 1px solid $primary-grey;
   //display: flex;
   //justify-content: space-between;
   margin-bottom: 30px;
   //margin-left: 15px;
   margin-right: 15px;
-  border-bottom: 1px solid $primary-grey;
 }
 
 .button {
@@ -72,10 +72,10 @@
 
 .orSpacer {
   border-top: outset #b4b4b5;
-  margin: 30px auto 0;
-  width: 90%;
-  position: relative;
   border-width: thin;
+  margin: 30px auto 0;
+  position: relative;
+  width: 90%;
 }
 
 .formContainer {
@@ -83,10 +83,10 @@
 }
 
 .dayGrid {
-  padding: 5px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  padding: 5px;
 }
 
 .paddingBottom {
@@ -95,18 +95,18 @@
 
 .dayRow {
   align-items: center;
-  margin-top: 7px;
-  margin-bottom: 9px;
   height: 40px;
+  margin-bottom: 9px;
+  margin-top: 7px;
 }
 
 .icon {
-  cursor: pointer;
   color: #b4b4b4;
+  cursor: pointer;
   font-size: 2em !important;
   left: 40px;
-  position: relative;
   padding: 10px;
+  position: relative;
 }
 
 .trashButton {

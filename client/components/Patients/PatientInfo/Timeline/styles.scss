@@ -1,40 +1,40 @@
 @import '../../../../ui';
 
 .card {
-  position: relative;
   background: white;
-  min-height: 700px;
-  height: 700px;
-  flex: 1;
-  overflow: hidden;
   box-sizing: border-box;
+  flex: 1;
+  height: 700px;
+  min-height: 700px;
+  overflow: hidden;
+  position: relative;
 
   @media screen and (max-width: 576px) {
-    min-height: unset;
     border-top: none;
     height: 100%;
+    min-height: unset;
   }
 }
 
 .header {
-  composes: fontMedium from '../../../../fonts.scss';
   color: $primary-dark;
+  composes: fontMedium from '../../../../fonts.scss';
   font-size: 23px;
   padding: 20px 0 10px 20px;
 }
 
 .eventsContainer {
-  padding: 30px 30px 10px;
+  box-sizing: border-box;
   display: flex;
   max-height: 100%;
-  overflow: scroll;
-  box-sizing: border-box;
   min-height: 100%;
+  overflow: scroll;
+  padding: 30px 30px 10px;
 
   @media screen and (max-width: 576px) {
-    padding: 20px 20px 10px;
-    overflow-y: auto;
     overflow-x: hidden;
+    overflow-y: auto;
+    padding: 20px 20px 10px;
   }
 }
 
@@ -47,27 +47,27 @@
 }
 
 .verticalLine {
-  position: absolute;
-  margin-top: 70px;
-  left: 16px;
-  height: 100%;
-  z-index: 1;
   border-left: 1px dashed darken($primary-grey, 10%);
+  height: 100%;
+  left: 16px;
+  margin-top: 70px;
+  position: absolute;
+  z-index: 1;
 }
 
 .loader {
-  position: absolute;
-  top: 0;
-  right: 0;
+  background: white;
   bottom: 0;
   left: 0;
-  background: white;
+  position: absolute;
+  right: 0;
+  top: 0;
   z-index: 9999;
 }
 
 .eventSection {
-  position: relative;
   padding-bottom: 30px;
+  position: relative;
 }
 
 .eventSection:last-child {
@@ -79,15 +79,15 @@
 }
 
 .dateHeader {
+  color: $primary-dark-grey;
   font-family: $medium-font;
   font-size: 10px;
-  color: $primary-dark-grey;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  margin-left: 3px;
   padding-left: 55px;
   padding-top: 10px;
-  margin-bottom: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-left: 3px;
 
   @media screen and (max-width: 576px) {
     font-size: 10px;
@@ -101,28 +101,28 @@
   font-size: 10px;
 
   @media screen and (max-width: 576px) {
+    font-size: 16px;
+    padding-bottom: 20px;
     padding-left: 0;
     padding-top: 5px;
-    padding-bottom: 20px;
-    font-size: 16px;
   }
 }
 
 .disclaimer {
   height: 100%;
-  width: 100%;
-  position: relative;
   overflow: hidden;
+  position: relative;
+  width: 100%;
   &_text {
-    font-size: 14px;
-    line-height: 1.5em;
     color: $inactive-color;
-    text-align: center;
-    margin: 0;
-    position: absolute;
-    top: 50%;
+    font-size: 14px;
     left: 50%;
+    line-height: 1.5em;
+    margin: 0;
     margin-right: -50%;
+    position: absolute;
+    text-align: center;
+    top: 50%;
     transform: translate(-50%, -50%);
   }
 }

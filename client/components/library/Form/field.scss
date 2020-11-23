@@ -1,21 +1,21 @@
 @import '../../../ui.scss';
 
 .toggle {
+  background: hsl(0, 0%, 27%);
+  border-radius: 0.3rem;
+  color: white;
   display: inline-flex;
   flex-direction: column;
   max-width: 200px;
   padding: 0.4rem 0.8rem;
-  background: hsl(0, 0%, 27%);
-  color: white;
-  border-radius: 0.3rem;
 }
 
 input:-webkit-autofill {
   + span {
     + span {
-      top: 10px !important;
-      left: 0 !important;
       font-size: 10px !important;
+      left: 0 !important;
+      top: 10px !important;
     }
   }
 }

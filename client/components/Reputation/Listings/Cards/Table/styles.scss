@@ -3,24 +3,24 @@
 .showDetails {
   display: flex;
   flex-direction: column;
-  padding-top: 5px;
   padding-left: 12px;
+  padding-top: 5px;
 
   &_info {
   }
 
   &_text {
-    composes: fontMedium from '../../../../../fonts.scss';
     color: darken($primary-darkgrey, 5%);
+    composes: fontMedium from '../../../../../fonts.scss';
     line-height: 1.3em;
   }
 
   &_website {
-    text-decoration: none;
     color: $primary-blue;
+    text-decoration: none;
     &:hover {
-      text-decoration: underline;
       color: darken($primary-blue, 5%);
+      text-decoration: underline;
     }
   }
 
@@ -28,12 +28,12 @@
     display: flex;
   }
   &_view {
+    color: lighten($primary-blue, 5%);
     padding-top: 5px;
     text-decoration: none;
-    color: lighten($primary-blue, 5%);
     &:hover {
-      text-decoration: underline;
       color: darken($primary-blue, 5%);
+      text-decoration: underline;
     }
   }
 }
@@ -41,69 +41,69 @@
 .mostLoyal {
   overflow: inherit;
   &__wrapper {
+    box-sizing: border-box;
     display: block;
-    width: 100%;
+    height: calc(100vh - 330px);
     //max-height: 700px;
     overflow: auto;
-    height: calc(100vh - 330px);
     overflow-x: hidden;
-    box-sizing: border-box;
     position: relative;
+    width: 100%;
   }
   &__header {
-    display: flex;
     align-items: center;
+    border-bottom: 2px solid $primary-lightgrey;
+    display: flex;
     height: 60px;
+    overflow: inherit;
     padding: 0 10px 0 15px;
     text-transform: uppercase;
-    border-bottom: 2px solid $primary-lightgrey;
-    overflow: inherit;
     &_item {
       width: 100%;
     }
     &_title {
-      display: flex;
       align-items: center;
-      width: 205px;
-      height: 100%;
-      font-size: $title-size;
-      color: $primary-dark;
-      font-weight: 600;
       border-right: 2px solid $primary-lightgrey;
+      color: $primary-dark;
+      display: flex;
+      font-size: $title-size;
+      font-weight: 600;
+      height: 100%;
+      width: 205px;
     }
     &_link {
+      cursor: pointer;
       font-size: $small-size;
       text-transform: none;
-      cursor: pointer;
     }
     &_cell {
-      width: 120px;
-      height: 100%;
       border-right: 2px solid $primary-lightgrey;
+      height: 100%;
+      width: 120px;
     }
   }
   &__subheader {
-    display: flex;
     align-items: center;
-    padding-left: 15px;
-    height: 60px;
     border-right: 2px solid $primary-lightgrey;
-    text-transform: uppercase;
     color: $primary-dark;
+    display: flex;
     font-family: $medium-font;
     font-size: 16px;
+    height: 60px;
+    padding-left: 15px;
+    text-transform: uppercase;
     @media screen and (max-width: 950px) {
       border-right: none;
     }
   }
 }
 .data {
-  display: block;
-  padding: 0;
-  color: $primary-dark;
-  font-weight: $large-weight;
   border-right: 2px solid $primary-lightgrey;
+  color: $primary-dark;
+  display: block;
+  font-weight: $large-weight;
   min-width: 800px;
+  padding: 0;
   @media screen and (max-width: 950px) {
     border-right: none;
   }
@@ -111,18 +111,18 @@
     border-top: 2px solid $primary-grey;
   }
   &__item {
-    min-width: 250px;
+    border-bottom: 2px solid $primary-lightgrey;
     display: table;
-    width: 100%;
-    position: relative;
     height: 60px;
     list-style: none;
     margin: 0;
-    border-bottom: 2px solid $primary-lightgrey;
+    min-width: 250px;
+    position: relative;
+    width: 100%;
 
     &_phone {
-      font-size: $small-size;
       color: $primary-light-blue;
+      font-size: $small-size;
     }
 
     &_email {
@@ -133,31 +133,31 @@
       height: 85px;
     }
     &_wrapper {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      flex-direction: row;
       align-items: center;
+      display: flex;
+      flex-direction: row;
+      height: 100%;
       justify-content: space-between;
       padding: 15px;
+      width: 100%;
     }
     &_left {
+      align-items: center;
+      border-right: 2px solid $primary-lightgrey;
       display: flex;
       flex-direction: row;
-      align-items: center;
       height: 100%;
-      width: 205px;
       padding-left: 5px;
       padding-right: 30px;
-      border-right: 2px solid $primary-lightgrey;
+      width: 205px;
     }
     &_center {
-      height: 100%;
-      display: flex;
       align-items: center;
       border-right: 2px solid $primary-lightgrey;
-      width: 80px;
+      display: flex;
+      height: 100%;
       justify-content: center;
+      width: 80px;
     }
 
     &_personal {
@@ -165,12 +165,12 @@
     }
 
     &_right {
-      display: flex;
       align-items: center;
+      display: flex;
       //text-align: right;
       height: 100%;
-      width: 100%;
       justify-content: flex-start;
+      width: 100%;
     }
     &_status {
       text-align: center;
@@ -191,14 +191,14 @@
     }
 
     &_table {
-      //text-align: center;
-      padding: 0 25px;
-      min-width: 200px;
-      height: 100%;
       display: flex;
       //align-items: center;
       flex-direction: column;
+      height: 100%;
       justify-content: center;
+      min-width: 200px;
+      //text-align: center;
+      padding: 0 25px;
     }
     .table {
       &__text {
@@ -209,10 +209,10 @@
       }
       &__button {
         color: $primary-blue;
-        font-size: $small-size;
-        text-decoration: none;
         display: flex;
+        font-size: $small-size;
         padding-top: 5px;
+        text-decoration: none;
         //justify-content: center;
         //align-items: center;
         i {
@@ -231,15 +231,15 @@
       }
     }
     &_img {
-      width: 44px;
       height: 44px;
       margin-right: 10px;
+      width: 44px;
     }
     &_icon {
+      align-items: center;
       cursor: pointer;
       display: flex;
       position: relative;
-      align-items: center;
       right: -20px;
       &:hover {
         color: #ff715a;
@@ -249,15 +249,15 @@
 }
 
 .clearedListings {
-  font-size: 20px;
-  line-height: 1.5em;
-  width: 700px;
   color: $inactive-color;
-  text-align: center;
-  margin: 0;
-  position: absolute;
-  top: 50%;
+  font-size: 20px;
   left: 50%;
+  line-height: 1.5em;
+  margin: 0;
   margin-right: -50%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
   transform: translate(-50%, -50%);
+  width: 700px;
 }

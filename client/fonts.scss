@@ -5,14 +5,14 @@
 }
 
 .font-header-title {
+  color: $primary-dark;
   font-family: $medium-font;
   font-size: $title-size;
-  color: $primary-dark;
   @extend .letterSpacing;
 }
 .font-header-title-white {
-  font-size: $title-size;
   color: $primary-white;
+  font-size: $title-size;
   @extend .letterSpacing;
 }
 
@@ -43,10 +43,10 @@
 }
 
 .font-medium {
+  color: $primary-dark;
   font-family: $medium-font;
   font-size: $medium-size;
   font-weight: $medium-weight;
-  color: $primary-dark;
   @extend .letterSpacing;
 }
 
@@ -175,8 +175,8 @@
 }
 
 .cardHeaderTitle {
-  font-size: $title-size;
   color: $primary-dark;
+  font-size: $title-size;
   @extend .letterSpacing;
   @extend .fontMedium;
 }
@@ -227,8 +227,8 @@
   @extend .fontMedium;
 }
 .subHeaderMediumSmall {
-  font-size: $small-size;
   color: $primary-darkgrey;
+  font-size: $small-size;
   @extend .letterSpacing;
   @extend .fontMedium;
 }

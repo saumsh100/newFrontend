@@ -1,12 +1,12 @@
 @import '../../../ui.scss';
 
 .tab {
-  padding: 10px;
-  cursor: pointer;
-  composes: tab from '../../../fonts.scss';
-  display: flex;
   align-items: center;
+  composes: tab from '../../../fonts.scss';
+  cursor: pointer;
+  display: flex;
   justify-content: center;
+  padding: 10px;
 }
 
 .noUnderLine {
@@ -45,18 +45,18 @@
 }
 
 .tabCard {
-  display: inline-flex;
-  box-sizing: border-box;
-  width: 50%;
-  justify-content: center;
+  align-items: center;
   background-color: $primary-grey;
-  height: 50px;
-  border-right: 1px solid $primary-light-grey;
   border-bottom: 1px solid $primary-light-grey;
+  border-right: 1px solid $primary-light-grey;
+  box-sizing: border-box;
   color: $primary-dark;
   composes: fontMedium from '../../../fonts.scss';
-  align-items: center;
   cursor: pointer;
+  display: inline-flex;
+  height: 50px;
+  justify-content: center;
+  width: 50%;
 
   &:last-child {
     border-right: 0;
@@ -64,9 +64,9 @@
 }
 
 .activeTabCard {
+  background-color: white;
   border-bottom: none;
   color: black;
   composes: fontMedium from '../../../fonts.scss';
-  background-color: white;
   transition: ease 0.2s all;
 }

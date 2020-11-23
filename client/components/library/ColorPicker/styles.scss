@@ -3,15 +3,15 @@
 }
 
 .colorPickerContainer {
-  position: relative;
-  display: flex;
   align-items: center;
+  display: flex;
+  position: relative;
 }
 
 .colorSwatch {
-  position: absolute;
-  left: 172px;
   border: 1px solid;
-  width: 15px;
   height: 15px;
+  left: 172px;
+  position: absolute;
+  width: 15px;
 }

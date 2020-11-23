@@ -1,11 +1,11 @@
 @import '../../../../ui';
 
 @mixin withBorder {
+  border-bottom: 1px solid #efefef;
   content: '';
   display: block;
   margin: 0 auto;
   padding-top: 15px;
-  border-bottom: 1px solid #efefef;
 }
 
 .familyMember {
@@ -27,11 +27,11 @@
   }
 
   &_fontStyle {
-    composes: fontMedium from '../../../../fonts.scss';
     color: $primary-dark !important;
+    composes: fontMedium from '../../../../fonts.scss';
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
   }
 
   &_head {
@@ -73,14 +73,14 @@
   }
 
   &_button {
-    composes: fontMedium from '../../../../fonts.scss';
-    color: $primary-blue-green;
-    font-size: $extra-small-size;
-    border: none;
     background: none;
+    border: none;
+    color: $primary-blue-green;
+    composes: fontMedium from '../../../../fonts.scss';
     cursor: pointer;
-    padding: 0;
     display: inline-block;
+    font-size: $extra-small-size;
+    padding: 0;
     &:hover {
       text-decoration: underline;
     }
@@ -92,12 +92,12 @@
 }
 
 .patientLink {
-  transition: all 0.1s ease-in-out;
-  cursor: pointer;
   color: $primary-blue;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
   &:hover {
-    transform: scale(1.02);
     color: lighten($primary-blue, 10%);
+    transform: scale(1.02);
   }
   &:focus {
     outline: none;

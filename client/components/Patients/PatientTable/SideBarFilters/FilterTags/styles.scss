@@ -1,29 +1,29 @@
 @import '../../../../../ui';
 
 .tagsContainer {
-  margin-top: 15px;
-  height: auto;
   display: flex;
   flex-direction: row;
-  list-style: none;
   flex-wrap: wrap;
+  height: auto;
+  list-style: none;
+  margin-top: 15px;
 }
 
 .tagBody {
-  display: flex;
+  align-items: center;
   background: $primary-blue;
   box-sizing: border-box;
-  padding: 8px;
-  margin: 5px 5px 5px 0;
-  align-items: center;
+  display: flex;
   flex: 0 0 1;
   justify-content: space-between;
+  margin: 5px 5px 5px 0;
+  padding: 8px;
   width: auto;
 }
 
 .tagText {
-  composes: fontMedium from '../../../../../fonts.scss';
   color: $primary-white;
+  composes: fontMedium from '../../../../../fonts.scss';
   padding-right: 10px;
 }
 

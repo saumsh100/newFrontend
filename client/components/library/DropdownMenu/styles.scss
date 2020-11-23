@@ -6,11 +6,11 @@
 }
 
 .menuItemLi {
-  cursor: pointer;
-  padding: 0 1rem;
-  height: 3rem;
-  font-size: 14px;
   color: $primary-dark;
+  cursor: pointer;
+  font-size: 14px;
+  height: 3rem;
+  padding: 0 1rem;
   &:hover {
     background-color: $primary-lightgrey !important;
     color: $primary-dark !important;
@@ -18,15 +18,15 @@
 }
 
 .menuItemContent {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .menuIcon {
+  color: #B4B4B5;
   display: inline-block;
-  width: 2.5rem;
+  margin-right: 10px;
   // font-size: 1.5rem;
   text-align: center;
-  margin-right: 10px;
-  color: #B4B4B5;
+  width: 2.5rem;
 }

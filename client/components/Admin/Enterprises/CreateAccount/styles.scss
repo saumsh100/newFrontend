@@ -1,8 +1,8 @@
 @import '../../../../ui';
 
 .mainContainer {
-  background: $primary-white;
   animation: fadeinform 0.9s;
+  background: $primary-white;
   position: relative;
 }
 
@@ -10,11 +10,11 @@
 }
 
 .header {
-  box-sizing: border-box;
-  display: flex;
   align-items: center;
+  box-sizing: border-box;
   color: $primary-dark;
   composes: fontMedium from '../../../../fonts.scss';
+  display: flex;
   font-size: 19px;
 
   &_text {
@@ -22,14 +22,14 @@
   }
 
   &_icon {
-    margin-left: auto;
+    cursor: pointer;
     font-size: 1rem;
+    margin-left: auto;
     padding-right: 15px;
     padding-top: 15px;
-    cursor: pointer;
     position: absolute;
-    top: 0;
     right: 0;
+    top: 0;
   }
 }
 
@@ -39,11 +39,11 @@
 }
 
 .buttonContainer {
-  display: flex;
   align-items: center;
-  width: 100%;
   box-sizing: border-box;
+  display: flex;
   margin-top: 15px;
+  width: 100%;
 }
 
 .nextButton {
@@ -66,33 +66,33 @@
 }
 
 .selectEnterprise {
-  display: flex;
-  width: 100%;
   align-items: center;
-  justify-content: center;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  width: 100%;
 
   &_dd {
     width: 45%;
   }
 
   &_icon {
-    padding-top: 12px;
     align-items: center;
+    padding-top: 12px;
   }
 }
 
 .accountOptions {
-  padding-top: 10px;
-  display: flex;
   align-items: center;
-  width: 100%;
+  display: flex;
   min-width: 300px;
+  padding-top: 10px;
+  width: 100%;
 
   &_text {
-    width: 210px;
     color: $primary-darkgrey;
     font-weight: $large-weight;
+    width: 210px;
   }
 
   &_icon {
@@ -105,16 +105,16 @@
   }
 
   &_column {
+    align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
   }
 }
 
 .displayFlex {
-  display: flex;
   align-items: center;
+  display: flex;
   padding-bottom: 15px;
 }
 

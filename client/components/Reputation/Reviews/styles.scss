@@ -7,8 +7,8 @@
 }
 
 .padding {
-  padding: 0 10px 5px;
   margin-bottom: 10px;
+  padding: 0 10px 5px;
   @media screen and (max-width: 900px) {
     margin-bottom: 15px;
   }
@@ -18,10 +18,10 @@
 }
 
 .googleMapsRespond {
+  align-items: center;
   display: flex;
   flex-direction: row;
   height: 168px;
-  align-items: center;
   padding-left: 20px;
   @media (max-width: 484px) {
     flex-direction: column;
@@ -29,23 +29,23 @@
   }
 
   &__video {
-    width: 20%;
     height: 120px;
     margin-right: 40px;
     min-width: 250px;
+    width: 20%;
   }
 }
 
 .googleMapsRespondDescr {
-  width: 80%;
-  height: 120px;
+  align-items: space-around;
   display: flex;
   flex-direction: column;
-  align-items: space-around;
+  height: 120px;
   justify-content: center;
+  width: 80%;
   &_header {
-    margin-bottom: 10px;
     composes: font-header-title from '../../../fonts.scss';
+    margin-bottom: 10px;
   }
   &_subHeader {
     composes: subHeader from '../../../fonts.scss';
@@ -53,16 +53,16 @@
 }
 
 .stats {
-  min-height: 180px;
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  width: 80%;
-  min-width: 250px;
   margin: 0 auto;
+  min-height: 180px;
+  min-width: 250px;
   padding: 15px 0;
   position: relative;
+  width: 80%;
 
   &__count {
     composes: fontExtraMediumLarge from '../../../fonts.scss';
@@ -79,75 +79,75 @@
   }
 
   &__bottom {
-    width: 100%;
-    margin: 5px 0 0;
+    border-top: 2px solid $primary-grey;
     box-sizing: border-box;
+    color: lighten($primary-darkgrey, 20%);
+    composes: subHeaderSmall from '../../../fonts.scss';
+    font-size: $medium-size;
+    margin: 5px 0 0;
     padding-top: 15px;
     text-align: center;
-    border-top: 2px solid $primary-grey;
-    color: lighten($primary-darkgrey, 20%);
-    font-size: $medium-size;
-    composes: subHeaderSmall from '../../../fonts.scss';
+    width: 100%;
   }
 
   &_noReviews {
-    font-size: $medium-size;
     color: $inactive-color;
-    text-align: center;
-    margin: 0;
-    position: absolute;
-    top: 50%;
+    font-size: $medium-size;
     left: 50%;
+    margin: 0;
     margin-right: -50%;
+    position: absolute;
+    text-align: center;
+    top: 50%;
     transform: translate(-50%, -50%);
   }
 }
 
 .content {
-  width: 100%;
-  height: 30px;
-  display: flex;
   align-items: center;
-  justify-content: center;
   color: $primary-blue;
+  display: flex;
+  height: 30px;
+  justify-content: center;
+  width: 100%;
   &__stars {
-    width: 90%;
-    text-align: right;
     display: inline-block;
     padding-right: 15px;
+    text-align: right;
+    width: 90%;
   }
 
   &__bar {
-    width: 50%;
-    text-align: left;
-    display: flex;
     align-items: center;
     color: $primary-blue;
+    display: flex;
+    text-align: left;
+    width: 50%;
     &__percent {
-      height: 16px;
-      padding-top: 10px;
-      margin-right: 4px;
       background-color: $primary-blue;
       display: inline-block;
+      height: 16px;
+      margin-right: 4px;
+      padding-top: 10px;
     }
   }
 }
 
 .tags {
   border-top: $card-border-size $primary-darkgrey;
-
-  width: 100%;
   height: 168px;
   padding: 20px;
+
+  width: 100%;
   &__left {
-    width: 25%;
-    min-width: 250px;
     height: 168px;
+    min-width: 250px;
+    width: 25%;
     &__update {
-      margin-top: 10px;
       color: lighten($primary-darkgrey, 20%);
-      font-size: $medium-size;
       composes: subHeaderSmall from '../../../fonts.scss';
+      font-size: $medium-size;
+      margin-top: 10px;
     }
   }
 }
@@ -158,19 +158,19 @@
 }
 
 .reviewsComments {
-  width: 100%;
-  min-height: 168px;
   max-height: 745px;
+  min-height: 168px;
   overflow: auto;
   //margin-bottom: 15px;
   //height: calc(100vh - 385px);
   position: relative;
+  width: 100%;
 
   &__cardHeader {
+    justify-content: flex-start;
+    margin-right: 10px;
     //padding-top: 15px;
     padding-left: 15px;
-    margin-right: 10px;
-    justify-content: flex-start;
   }
 
   &__container {
@@ -183,8 +183,8 @@
 }
 
 .dateRangeContainer {
-  display: flex;
   align-items: center;
+  display: flex;
   &_date {
     padding-left: 5px;
     padding-right: 5px;
@@ -196,22 +196,22 @@
 }
 
 .clearedReviews {
-  font-size: 20px;
-  line-height: 1.5em;
-  width: 700px;
   color: $inactive-color;
-  text-align: center;
-  margin: 0;
-  position: absolute;
-  top: 50%;
+  font-size: 20px;
   left: 50%;
+  line-height: 1.5em;
+  margin: 0;
   margin-right: -50%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
   transform: translate(-50%, -50%);
+  width: 700px;
 }
 
 .ccReviews {
-  margin-left: 20px;
-  font-family: $medium-font;
   color: $primary-darkgrey;
+  font-family: $medium-font;
   font-size: 12px;
+  margin-left: 20px;
 }

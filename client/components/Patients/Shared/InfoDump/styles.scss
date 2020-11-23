@@ -8,27 +8,27 @@
 
 .label {
   color: $primary-dark-grey;
-  opacity: 1;
-  font-size: $extra-small-size;
-  padding-bottom: 10px;
   composes: fontExtraSmall from '../../../../fonts.scss';
   font-family: $medium-font;
+  font-size: $extra-small-size;
+  opacity: 1;
+  padding-bottom: 10px;
   text-transform: uppercase;
 }
 
 .data {
   color: $primary-dark;
   composes: fontMedium from '../../../../fonts.scss';
-  word-wrap: break-word;
   margin-right: 15px;
-  text-transform: capitalize;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-transform: capitalize;
+  word-wrap: break-word;
 }
 
 .email {
-  white-space: normal;
   text-transform: none;
+  white-space: normal;
 }
 
 .noData {

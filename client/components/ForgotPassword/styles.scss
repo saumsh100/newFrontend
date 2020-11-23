@@ -1,21 +1,21 @@
 @import '../../ui.scss';
 
 .backDrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background-color: $primary-dark;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
   z-index: 199;
 }
 
 .loginForm {
-  width: 300px;
-  padding: 30px 50px;
-  margin: 100px auto 0;
-  z-index: 200;
   border-top: $card-border-size $primary-color;
+  margin: 100px auto 0;
+  padding: 30px 50px;
+  width: 300px;
+  z-index: 200;
   @media screen and (min-height: 720px) {
     transform: translateY(-150px);
   }
@@ -25,8 +25,8 @@
 }
 
 .logoContainer {
-  text-align: center;
   margin-bottom: 30px;
+  text-align: center;
 }
 
 .loginLogo {
@@ -38,20 +38,20 @@
 }
 
 .header {
-  text-align: center;
   font-size: $header-size;
+  text-align: center;
 }
 
 .text {
-  text-align: center;
   padding-bottom: 10px;
+  text-align: center;
 }
 
 .textLogin {
-  padding-top: 15px;
-  text-align: center;
   composes: subHeaderExtraSmall from '../../fonts.scss';
   cursor: pointer;
+  padding-top: 15px;
+  text-align: center;
   &:hover {
     color: $primary-color;
   }
@@ -63,14 +63,14 @@
 }
 
 .textSuccess {
-  padding: 10px;
   background-color: lighten($primary-green, 10%);
+  padding: 10px;
 }
 
 .textSuccess2 {
   composes: fontMedium from '../../fonts.scss';
-  text-align: center;
   padding: 10px;
+  text-align: center;
 }
 
 .submitText {
@@ -78,11 +78,11 @@
 }
 
 .displayCenter {
-  width: 100%;
   margin-top: 10px;
+  width: 100%;
 }
 
 .email {
-  font-weight: $large-weight;
   color: $primary-darkgrey;
+  font-weight: $large-weight;
 }
