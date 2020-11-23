@@ -1,9 +1,8 @@
 
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import { Card, Button } from '../library';
 import styles from './styles.scss';
-import CopyrightFooter from '../Login/CopyrightFooter/index';
 
 export default function EmailSuccess(props) {
   const { email, push } = props;
@@ -12,20 +11,15 @@ export default function EmailSuccess(props) {
     <div className={styles.backDrop}>
       <Card className={styles.loginForm}>
         <div className={styles.logoContainer}>
-          <img
-            className={styles.loginLogo}
-            src="/images/logo_black.png"
-            alt="CareCru Logo"
-          />
+          <img className={styles.loginLogo} src="/images/logo_black.png" alt="CareCru Logo" />
         </div>
         <p>
-          We've sent an email to <span className={styles.email}>{email}</span>{' '}
-          with password reset instructions.
+          We&apos;ve sent an email to <span className={styles.email}>{email}</span> with password
+          reset instructions.
         </p>
         <p>
-          If the email doesn't show up soon, please check your spam folder. We
-          sent the email from{' '}
-          <span className={styles.email}>noreply@carecru.com</span>.
+          If the email doesn&apos;t show up soon, please check your spam folder. We sent the email
+          from <span className={styles.email}>noreply@carecru.com</span>.
         </p>
         <Button
           onClick={() => {
@@ -36,11 +30,11 @@ export default function EmailSuccess(props) {
           Return to Login
         </Button>
       </Card>
-      <CopyrightFooter />
     </div>
   );
 }
 
 EmailSuccess.propTypes = {
+  email: PropTypes.string.isRequired,
   push: PropTypes.func.isRequired,
 };
