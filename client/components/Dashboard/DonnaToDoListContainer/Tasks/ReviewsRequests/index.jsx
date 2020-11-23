@@ -12,6 +12,7 @@ import PatientPopover from '../../../../library/PatientPopover';
 import AppointmentPopover from '../../../../library/AppointmentPopover';
 
 export default function ReviewRequests({ reviews, timezone, reviewsChannels }) {
+  const channelText = reviewsChannels.join(' & ');
   return (
     <List className={styles.list}>
       {orderBy(reviews, 'sendDate').map((review) => {
@@ -38,7 +39,7 @@ export default function ReviewRequests({ reviews, timezone, reviewsChannels }) {
                 </div>
               </span>
             </div>
-            <div className={styles2.smallCol}>{reviewsChannels.toJS().join(' & ')}</div>
+            <div className={styles2.smallCol}>{channelText}</div>
             <div className={styles2.col}>
               <AppointmentPopover patient={patient} appointment={appointment}>
                 <span>{dateFormatter(appointment.startDate, timezone, 'MMM Do - h:mm A')}</span>
