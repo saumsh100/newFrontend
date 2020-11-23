@@ -219,12 +219,16 @@ class DropdownTimeSuggestion extends Component {
    *
    */
   selectBeforeClose() {
-    const { value, onChange, formatValue } = this.props;
+    const { value, onChange, formatValue, renderValue } = this.props;
     const { currentValue } = this.state;
-    const formatedValue = formatValue(currentValue);
+    const formattedValue = formatValue(currentValue);
 
-    if (formatedValue !== value) {
-      onChange(formatedValue);
+    this.setState({
+      currentValue: renderValue(value),
+    });
+
+    if (formattedValue !== value) {
+      onChange(formattedValue);
     }
   }
 
@@ -281,7 +285,10 @@ class DropdownTimeSuggestion extends Component {
           value={matchingValue || currentValue}
         />
       ),
-      close: this.close,
+      close: () => {
+        this.selectBeforeClose();
+        this.close();
+      },
       animAlign: 'right',
       className: classNames(className, theme.wrapper),
       closeOnInsideClick: false,

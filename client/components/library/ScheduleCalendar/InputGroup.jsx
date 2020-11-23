@@ -10,6 +10,11 @@ import styles from './modal.scss';
 import schedule from './schedule.scss';
 import { Button } from '../index';
 
+export const isTimeValid = (value, timezone) => {
+  const time = moment.tz(value, ['LT', 'HH:mm:ss.SSS[Z]'], true, timezone);
+  return time.isValid();
+};
+
 /**
  * The default format for the value key must be
  * ISOString ("YYYY-MM-DDTHH:mm:ss.sssZ")
@@ -19,7 +24,7 @@ import { Button } from '../index';
  */
 const formatTimeField = (value, timezone) => {
   const time = moment.tz(value, ['LT', 'HH:mm:ss.SSS[Z]'], true, timezone);
-  return time.isValid() && time.format('HH:mm:ss.SSS[Z]');
+  return isTimeValid(value, timezone) ? time.format('HH:mm:ss.SSS[Z]') : value;
 };
 /**
  * The default format for the label kry must be
@@ -28,7 +33,7 @@ const formatTimeField = (value, timezone) => {
  */
 const renderTimeValue = (value, timezone) => {
   const time = moment.tz(value, 'HH:mm:ss.SSS[Z]', true, timezone);
-  return time.isValid() && time.format('LT');
+  return isTimeValid(value, timezone) ? time.format('LT') : value;
 };
 
 const InputGroup = ({
@@ -55,7 +60,7 @@ const InputGroup = ({
         renderValue={value => renderTimeValue(value, timezone)}
         formatValue={value => formatTimeField(value, timezone)}
         disabled={!isAllow}
-        error={error}
+        error={error.inputStart}
         strict={false}
         renderList={renderList}
         theme={theme}
@@ -72,7 +77,7 @@ const InputGroup = ({
           formatValue={value => formatTimeField(value, timezone)}
           strict={false}
           disabled={!isAllow}
-          error={error}
+          error={error.inputEnd}
           theme={theme}
         />,
       ]}
@@ -86,9 +91,7 @@ const InputGroup = ({
         </Button>
       )}
     </div>
-    {error && (
-      <span className={styles.errorMessage}>The Start Time must be before the End Time</span>
-    )}
+    {error.inputGroup && <span className={styles.errorMessage}>{error.inputGroup}</span>}
   </div>
 );
 
@@ -109,7 +112,11 @@ InputGroup.propTypes = {
   ).isRequired,
   renderList: PropTypes.func.isRequired,
   theme: PropTypes.objectOf(PropTypes.string),
-  error: PropTypes.bool,
+  error: PropTypes.shape({
+    inputGroup: PropTypes.oneOf([PropTypes.bool, PropTypes.string]),
+    inputStart: PropTypes.oneOf([PropTypes.bool, PropTypes.string]),
+    inputEnd: PropTypes.oneOf([PropTypes.bool, PropTypes.string]),
+  }),
   showEndTime: PropTypes.bool,
   timezone: PropTypes.string.isRequired,
 };

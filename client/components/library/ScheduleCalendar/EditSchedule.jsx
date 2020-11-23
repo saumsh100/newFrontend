@@ -11,7 +11,7 @@ import EnabledFeature from '../EnabledFeature';
 import MultiSelect from '../MultiSelect';
 import List from '../MultiSelect/List';
 import Selector from '../MultiSelect/Selector';
-import InputGroup from './InputGroup';
+import InputGroup, { isTimeValid } from './InputGroup';
 import styles from './modal.scss';
 
 const PMS_MAP = {
@@ -32,7 +32,27 @@ const getAdapterType = (adapterType) => {
   return PMS_MAP[sanitizeAdapter];
 };
 
-const hasError = ({ startTime, endTime }) => startTime > endTime;
+export const hasError = ({ startTime, endTime }, timezone) => {
+  const error = {
+    inputGroup: false,
+    inputStart: false,
+    inputEnd: false,
+  };
+
+  if (startTime > endTime) {
+    error.inputGroup = 'The Start Time must be before the End Time';
+  }
+
+  if (!isTimeValid(startTime, timezone)) {
+    error.inputStart = 'Please enter a valid time';
+  }
+
+  if (!isTimeValid(endTime, timezone)) {
+    error.inputEnd = 'Please enter a valid time';
+  }
+
+  return error;
+};
 
 const getFormattedTime = (time, timezone) => dateFormatter(time, timezone, 'HH:mm:ss.SSS[Z]');
 
@@ -310,7 +330,7 @@ class EditSchedule extends Component {
                             timeOptions={times}
                             timezone={timezone}
                             isAllow={isAllow}
-                            error={hasError(this.state)}
+                            error={hasError(this.state, timezone)}
                             startTime={this.state.startTime}
                             endTime={this.state.endTime}
                             onChange={update => this.setState(update)}
@@ -334,7 +354,7 @@ class EditSchedule extends Component {
                         <div className={styles.group} key={b.id}>
                           <InputGroup
                             isRemovable
-                            error={hasError(b)}
+                            error={hasError(b, timezone)}
                             onClick={() => this.removeBreak(index)}
                             timeOptions={times}
                             timezone={timezone}

@@ -6,6 +6,7 @@ import DropdownSuggestion from '../../../library/DropdownSuggestion';
 import InputGroup from '../../../library/ScheduleCalendar/InputGroup';
 import renderList from './renderList';
 import ActiveScheduleModifiers from './ActiveScheduleModifiers';
+import { hasError } from '../../../library/ScheduleCalendar/EditSchedule';
 import styles from '../../../library/ScheduleCalendar/modal.scss';
 import ui from '../../../../ui-kit.scss';
 
@@ -69,7 +70,7 @@ const EditReasonWeeklyHours = props => (
                 <InputGroup
                   isAllow
                   isRemovable
-                  error={props.validate(option)}
+                  error={hasError(option, props.timezone)}
                   onClick={() => props.removeBreak(index)}
                   timeOptions={props.timeOptions}
                   timezone={props.timezone}
