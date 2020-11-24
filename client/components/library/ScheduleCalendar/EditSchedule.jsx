@@ -183,7 +183,11 @@ class EditSchedule extends Component {
         : []),
       ...this.state.breaks,
     ];
-    return toValidate.map(validate => hasError(validate)).filter(d => d).length > 0;
+    // true = has error, false = no error
+    const ErrorStateArr = toValidate.map(
+      validate => Object.values(hasError(validate, this.props.timezone)).filter(v => v).length > 0,
+    );
+    return ErrorStateArr.filter(d => d).length > 0;
   }
 
   render() {
