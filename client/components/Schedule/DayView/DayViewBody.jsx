@@ -47,7 +47,9 @@ class DayViewBody extends Component {
 
     if (
       (this.props.scheduleView !== prevProps.scheduleView || currentDate !== previousDate) &&
-      allFetched
+      allFetched &&
+      this.headerComponent.current &&
+      this.timeComponent.current
     ) {
       this.headerComponent.current.scrollLeft = 0;
       this.timeComponent.current.scrollTop = 0;
