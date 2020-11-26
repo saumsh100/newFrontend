@@ -12,6 +12,13 @@ import ModalFooter from './ModalFooter';
 import ReasonHours from './';
 
 /**
+ * Valid time format when handling with time values.
+ *
+ * @type {string}
+ */
+const allowedTimeFormat = 'HH:mm:ss.SSS[Z]';
+
+/**
  * Return a moment instance for a time value.
  *
  * @param time
@@ -64,13 +71,6 @@ const genericTimeRange = (
     endTime: startTime.add(minutesBetween, 'minutes').format(allowedTimeFormat),
   };
 };
-
-/**
- * Valid time format when handling with time values.
- *
- * @type {string}
- */
-const allowedTimeFormat = 'HH:mm:ss.SSS[Z]';
 
 /**
  * Initial data structure for a ReasonWeeklyHours
@@ -303,12 +303,18 @@ class ReasonWeeklyHoursWrapper extends Component {
 
   render() {
     const timeOpts = timeOptions();
+    const removeOffSet = time => time.replace('+00', '.000Z');
     const momentBreaksData = {
       ...this.state.data,
+      availabilities: this.state.data.availabilities.map(({ startTime, endTime, ...rest }) => ({
+        ...rest,
+        startTime: removeOffSet(startTime),
+        endTime: removeOffSet(endTime),
+      })),
       breaks: this.state.data.breaks.map(({ startTime, endTime, ...rest }) => ({
         ...rest,
-        startTime: timeToMoment(startTime, this.props.timezone),
-        endTime: timeToMoment(endTime, this.props.timezone),
+        startTime: timeToMoment(removeOffSet(startTime), this.props.timezone),
+        endTime: timeToMoment(removeOffSet(endTime), this.props.timezone),
       })),
     };
     return (
