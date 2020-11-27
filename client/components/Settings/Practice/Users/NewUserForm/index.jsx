@@ -9,6 +9,7 @@ import {
   passwordStrength,
   passwordsValidate,
 } from '../../../../library/Form/validate';
+import { USER_ROLE_OPTIONS } from '../user-role-constants';
 
 const NewUserForm = ({ sendNewUser, formName, formStyle }) => (
   <Form
@@ -26,7 +27,7 @@ const NewUserForm = ({ sendNewUser, formName, formStyle }) => (
       name="role"
       label="Role"
       component="DropdownSelect"
-      options={[{ value: 'OWNER' }, { value: 'ADMIN' }, { value: 'MANAGER' }]}
+      options={USER_ROLE_OPTIONS}
     />
     <Field name="isSSO" label="Is SSO user?" component="Toggle" />
     <Field

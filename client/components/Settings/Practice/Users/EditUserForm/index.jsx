@@ -2,8 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../../../library';
-
-const roleOptions = [{ value: 'OWNER' }, { value: 'ADMIN' }, { value: 'MANAGER' }];
+import { USER_ROLE_OPTIONS } from '../user-role-constants';
 
 const EditUserForm = ({ user, role, onSubmit }) => (
   <Form
@@ -22,7 +21,7 @@ const EditUserForm = ({ user, role, onSubmit }) => (
       label="Receive Appointment Request Emails"
       component="Toggle"
     />
-    <Field name="role" component="DropdownSelect" options={roleOptions} />
+    <Field name="role" component="DropdownSelect" options={USER_ROLE_OPTIONS} />
     <Field name="isSSO" label="Is SSO user?" component="Toggle" />
   </Form>
 );

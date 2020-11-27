@@ -7,12 +7,27 @@ import User from '../../../../../entities/models/User';
 import { Avatar, ListItem, IconButton } from '../../../../library';
 import { deleteEntityRequest } from '../../../../../thunks/fetchEntities';
 import styles from '../styles.scss';
+import { MANAGER_ROLE } from '../user-role-constants';
 
 class ActiveUsersList extends Component {
   constructor(props) {
     super(props);
 
     this.deleteUser = this.deleteUser.bind(this);
+  }
+
+  /*
+    CRU-1644
+    This overrides MANAGER and re-labels it to user. The backend is still using MANAGER, however.
+    The constants should also be imported, but they are currently found hardcoded everywhere.
+  */
+  get roleDisplay() {
+    switch (this.props.role) {
+      case MANAGER_ROLE:
+        return 'USER';
+      default:
+        return this.props.role;
+    }
   }
 
   deleteUser(id, name) {
@@ -25,7 +40,7 @@ class ActiveUsersList extends Component {
       },
     };
 
-    if (confirm(`Are you sure you want to delete ${name}?`)) {
+    if (window.confirm(`Are you sure you want to delete ${name}?`)) {
       this.props.deleteEntityRequest({
         key: 'users',
         id,
@@ -86,7 +101,7 @@ class ActiveUsersList extends Component {
               </p>
             </div>
             <p className={styles.email}>
-              {activeUser.getUsername()} - {role}
+              {activeUser.getUsername()} - {this.roleDisplay}
             </p>
           </div>
         </div>
