@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 
 import { createEntityRequest } from '../../../../../thunks/fetchEntities';
 import { Button, ListItem } from '../../../../library';
+import { MANAGER_ROLE } from '../user-role-constants';
 
 class InviteUsersList extends Component {
   constructor(props) {
@@ -47,7 +48,7 @@ class InviteUsersList extends Component {
       userIsSSO,
     } = this.props;
     const button =
-      currentUserRole !== 'MANAGER' && !userIsSSO ? (
+      currentUserRole !== MANAGER_ROLE && !userIsSSO ? (
         <Button onClick={onDelete} className={editStyles}>
           Cancel Invitation
         </Button>

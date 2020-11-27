@@ -21,12 +21,13 @@ import EditUserForm from './EditUserForm';
 import InviteUserForm from './InviteUserForm';
 import InviteUsersList from './InviteUsersList';
 import NewUserForm from './NewUserForm';
+import { ADMIN_ROLE, OWNER_ROLE, SUPERADMIN_ROLE } from './user-role-constants';
 import styles from './styles.scss';
 
 const getUsersWithPermissions = usr => (permissions, editPermissionId) => {
   const usrPermission = permissions.get(usr.permissionId);
   return (
-    usrPermission && editPermissionId === usrPermission && usrPermission.get('role') === 'OWNER'
+    usrPermission && editPermissionId === usrPermission && usrPermission.get('role') === OWNER_ROLE
   );
 };
 
@@ -60,6 +61,21 @@ class Users extends Component {
     this.props.fetchEntities({ url: urlInvites });
 
     this.setState({ role });
+  }
+
+  get addUserButton() {
+    return this.props.role === SUPERADMIN_ROLE ||
+      this.props.role === OWNER_ROLE ||
+      this.props.role === ADMIN_ROLE ? (
+      <Button
+        className={styles.inviteUser}
+        onClick={this.addNewUser}
+        data-test-id="addUserButton"
+        secondary
+      >
+        Add a User
+      </Button>
+      ) : null;
   }
 
   deleteInvite(id) {
@@ -219,7 +235,7 @@ class Users extends Component {
 
   render() {
     const formName = 'emailInvite';
-    const { users, permissions, invites, practiceName, userIsSSO } = this.props;
+    const { users, permissions, role, invites, practiceName, userIsSSO } = this.props;
     const { active, editActive, newActive } = this.state;
 
     let usersInvited = (
@@ -304,18 +320,6 @@ class Users extends Component {
       },
     ];
 
-    const addUserButton =
-      this.props.role === 'SUPERADMIN' ? (
-        <Button
-          className={styles.inviteUser}
-          onClick={this.addNewUser}
-          data-test-id="addUserButton"
-          secondary
-        >
-          Add a User
-        </Button>
-      ) : null;
-
     return (
       <SettingsCard title="Users" bodyClass={styles.usersBodyClass}>
         <DialogBox
@@ -332,6 +336,7 @@ class Users extends Component {
             formStyle={styles.form}
             sendInvite={this.sendInvite}
             formName={formName}
+            currentUserRole={role}
           />
         </DialogBox>
         <DialogBox
@@ -348,6 +353,7 @@ class Users extends Component {
             formStyle={styles.form}
             sendNewUser={this.sendNewUser}
             formName="newUser"
+            currentUserRole={role}
           />
         </DialogBox>
         <DialogBox
@@ -363,13 +369,14 @@ class Users extends Component {
               user={users.get(this.state.editUserId)}
               role={permissions.get(this.state.editPermissionId).get('role')}
               onSubmit={this.sendEdit}
+              currentUserRole={role}
             />
           )}
         </DialogBox>
         <Row className={styles.mainHead}>
           <Header className={styles.header} contentHeader title={`Users in ${practiceName}`} />
           <div className={styles.buttonContainer}>
-            {addUserButton}
+            {this.addUserButton}
             {!userIsSSO && (
               <Button
                 className={styles.inviteUser}

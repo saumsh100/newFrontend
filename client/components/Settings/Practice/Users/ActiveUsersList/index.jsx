@@ -7,13 +7,76 @@ import User from '../../../../../entities/models/User';
 import { Avatar, ListItem, IconButton } from '../../../../library';
 import { deleteEntityRequest } from '../../../../../thunks/fetchEntities';
 import styles from '../styles.scss';
-import { MANAGER_ROLE } from '../user-role-constants';
+import { MANAGER_ROLE, SUPERADMIN_ROLE, OWNER_ROLE, ADMIN_ROLE } from '../user-role-constants';
 
 class ActiveUsersList extends Component {
   constructor(props) {
     super(props);
 
     this.deleteUser = this.deleteUser.bind(this);
+  }
+
+  get editButton() {
+    const { currentUserId, userId, currentUserRole, edit, userIsSSO } = this.props;
+
+    let allowEdit = false;
+
+    if (currentUserRole === SUPERADMIN_ROLE) {
+      allowEdit = true;
+    }
+
+    if (currentUserRole === OWNER_ROLE) {
+      allowEdit = true;
+    }
+
+    // CRU-1644 - in future, add ability to edit Admin + User emails (only)
+    // if (currentUserRole === 'ADMIN') {
+    //   if (role !== 'OWNER') {
+    //     allowEdit = true;
+    //   }
+    // }
+
+    allowEdit = allowEdit && !userIsSSO && userId !== currentUserId;
+
+    return (
+      allowEdit && (
+        <div className={styles.paddingRight}>
+          <IconButton icon="pencil" className={styles.edit} onClick={edit}>
+            Edit
+          </IconButton>
+        </div>
+      )
+    );
+  }
+
+  get deleteButton() {
+    const { activeUser, role, currentUserRole, userIsSSO } = this.props;
+
+    let allowDelete = false;
+
+    if (currentUserRole === SUPERADMIN_ROLE) {
+      allowDelete = true;
+    }
+
+    if (currentUserRole === OWNER_ROLE || currentUserRole === ADMIN_ROLE) {
+      if (role !== OWNER_ROLE) {
+        allowDelete = true;
+      }
+    }
+
+    allowDelete = allowDelete && !userIsSSO;
+
+    return (
+      allowDelete && (
+        <IconButton
+          icon="trash"
+          className={styles.delete}
+          onClick={() => this.deleteUser(activeUser.id, activeUser.firstName)}
+        >
+          Delete
+        </IconButton>
+      )
+    );
   }
 
   /*
@@ -50,45 +113,8 @@ class ActiveUsersList extends Component {
   }
 
   render() {
-    const {
-      activeUser,
-      role,
-      currentUserId,
-      userId,
-      currentUserRole,
-      edit,
-      userIsSSO,
-    } = this.props;
-    const allowEdit =
-      (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') &&
-      role !== 'SUPERADMIN' &&
-      !userIsSSO;
-    const allowDelete =
-      (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') &&
-      (role !== 'SUPERADMIN' && role !== 'OWNER') &&
-      !userIsSSO;
+    const { activeUser, currentUserId, userId } = this.props;
     const badge = userId === currentUserId ? <span className={styles.badge}>You</span> : null;
-    let button = null;
-    if (allowEdit) {
-      button =
-        userId !== currentUserId ? (
-          <div className={styles.paddingRight}>
-            <IconButton icon="pencil" className={styles.edit} onClick={edit}>
-              Edit
-            </IconButton>
-          </div>
-        ) : null;
-    }
-
-    const deleteMe = allowDelete ? (
-      <IconButton
-        icon="trash"
-        className={styles.delete}
-        onClick={() => this.deleteUser(activeUser.id, activeUser.firstName)}
-      >
-        Delete
-      </IconButton>
-    ) : null;
 
     return (
       <ListItem className={styles.userListItem} data-test-id={activeUser.getName()}>
@@ -105,8 +131,8 @@ class ActiveUsersList extends Component {
             </p>
           </div>
         </div>
-        {deleteMe}
-        {button}
+        {this.deleteButton}
+        {this.editButton}
       </ListItem>
     );
   }
