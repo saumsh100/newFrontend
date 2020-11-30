@@ -158,6 +158,10 @@ class SideBarFilters extends Component {
     if (Object.keys(this.props.filters).length === 0) return;
 
     this.props.removeAllFilters();
+    this.props.addFilter({
+      segment: this.props.filters.segment,
+      order: this.props.filters.order,
+    });
     Object.keys(this.props.filterForms).map(form => this.props.reset(form));
     this.props.setFilterCallback();
   }
@@ -195,6 +199,7 @@ class SideBarFilters extends Component {
     const { filters, flags, timezone } = this.props;
     const { expandedForm } = this.state;
     const hasFiltersOn = filters && filters.size > 0;
+
     return (
       <Card className={styles.sideBar}>
         <div className={styles.header}>
@@ -271,8 +276,8 @@ const mapStateToProps = ({ patientTable, form, featureFlags, auth }) => {
       {},
     );
 
-  // eslint-disable-next-line no-unused-vars
-  const { limit, page, order, segment, ...filters } = patientTable.get('filters').toJS();
+  const { ...filters } = patientTable.get('filters').toJS();
+
   return {
     timezone: auth.get('timezone'),
     filterForms,
