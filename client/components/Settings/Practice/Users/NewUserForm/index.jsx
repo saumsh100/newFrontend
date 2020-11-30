@@ -35,7 +35,9 @@ const NewUserForm = ({ sendNewUser, formName, formStyle, currentUserRole }) => {
         component="DropdownSelect"
         options={FILTERED_ROLE_OPTIONS}
       />
-      <Field name="isSSO" label="Is SSO user?" component="Toggle" />
+      {currentUserRole === SUPERADMIN_ROLE && (
+        <Field name="isSSO" label="Is SSO user?" component="Toggle" />
+      )}
       <Field
         required
         type="password"

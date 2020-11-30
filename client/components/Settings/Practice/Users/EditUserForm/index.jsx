@@ -1,43 +1,110 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../../../library';
-import { USER_ROLE_OPTIONS, OWNER_ROLE, SUPERADMIN_ROLE } from '../user-role-constants';
+import { USER_ROLE_OPTIONS, OWNER_ROLE, SUPERADMIN_ROLE, ADMIN_ROLE } from '../user-role-constants';
+import styles from '../styles.scss';
 
-const EditUserForm = ({ user, role, onSubmit, currentUserRole }) => {
-  const FILTERED_ROLE_OPTIONS = USER_ROLE_OPTIONS.filter((roleOption) => {
-    if (currentUserRole === SUPERADMIN_ROLE || currentUserRole === OWNER_ROLE) return true;
+class EditUserForm extends Component {
+  get currentUserIsAdmin() {
+    return this.props.currentUserRole === ADMIN_ROLE;
+  }
 
-    return roleOption.value !== OWNER_ROLE;
-  });
-  return (
-    <Form
-      enableReinitialize
-      ignoreSaveButton
-      onSubmit={onSubmit}
-      form={`${user.get('id')}_editUserForm`}
-      initialValues={{
-        sendBookingRequestEmail: user.get('sendBookingRequestEmail'),
-        role,
-        isSSO: user.get('isSSO'),
-      }}
-    >
-      <Field
-        name="sendBookingRequestEmail"
-        label="Receive Appointment Request Emails"
-        component="Toggle"
-      />
-      <Field name="role" component="DropdownSelect" options={FILTERED_ROLE_OPTIONS} />
-      <Field name="isSSO" label="Is SSO user?" component="Toggle" />
-    </Form>
-  );
-};
+  get currentUserIsSuperAdmin() {
+    return this.props.currentUserRole === SUPERADMIN_ROLE;
+  }
+
+  get currentUserIsOwner() {
+    return this.props.currentUserRole === OWNER_ROLE;
+  }
+
+  get usernameInput() {
+    const canEditUsername =
+      this.currentUserIsSuperAdmin || this.currentUserIsOwner || this.currentUserIsAdmin;
+
+    return (
+      canEditUsername && (
+        <div
+          // only adds margin when needed
+          className={
+            this.currentUserIsSuperAdmin || this.currentUserIsOwner ? styles.usernameInput : ''
+          }
+        >
+          <Field name="username" label="Email/Username" component="Input" />
+        </div>
+      )
+    );
+  }
+
+  get sendBookingRequestEmailToggle() {
+    const canEditBookingRequestEmail = this.currentUserIsSuperAdmin || this.currentUserIsOwner;
+
+    return (
+      canEditBookingRequestEmail && (
+        <Field
+          name="sendBookingRequestEmail"
+          label="Receive Appointment Request Emails"
+          component="Toggle"
+        />
+      )
+    );
+  }
+
+  get roleDropdown() {
+    const FILTERED_ROLE_OPTIONS = USER_ROLE_OPTIONS.filter((roleOption) => {
+      if (this.currentUserIsSuperAdmin || this.currentUserIsOwner) return true;
+
+      return roleOption.value !== OWNER_ROLE;
+    });
+
+    const canEditUserRole = this.currentUserIsSuperAdmin || this.currentUserIsOwner;
+
+    return (
+      canEditUserRole && (
+        <Field
+          name="role"
+          label="Role"
+          component="DropdownSelect"
+          options={FILTERED_ROLE_OPTIONS}
+        />
+      )
+    );
+  }
+
+  get ssoToggle() {
+    const canEditSso = this.currentUserIsSuperAdmin;
+    return canEditSso && <Field name="isSSO" label="Is SSO user?" component="Toggle" />;
+  }
+
+  render() {
+    const { user, role, onSubmit } = this.props;
+    return (
+      <Form
+        enableReinitialize
+        ignoreSaveButton
+        onSubmit={onSubmit}
+        form={`${user.get('id')}_editUserForm`}
+        initialValues={{
+          sendBookingRequestEmail: user.get('sendBookingRequestEmail'),
+          username: user.get('username'),
+          role,
+          isSSO: user.get('isSSO'),
+        }}
+      >
+        {this.sendBookingRequestEmailToggle}
+        {this.usernameInput}
+        {this.roleDropdown}
+        {this.ssoToggle}
+      </Form>
+    );
+  }
+}
 
 EditUserForm.propTypes = {
   user: PropTypes.instanceOf(Map).isRequired,
   role: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
   currentUserRole: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default EditUserForm;

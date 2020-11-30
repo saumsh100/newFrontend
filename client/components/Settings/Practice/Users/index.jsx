@@ -143,14 +143,15 @@ class Users extends Component {
       .then(() => this.props.reset('emailInvite'));
   }
 
-  sendEdit({ role, sendBookingRequestEmail, isSSO }) {
+  sendEdit({ role, sendBookingRequestEmail, isSSO, username }) {
     this.setState({ editActive: false });
     const selectedUser = this.props.users.get(this.state.editUserId);
     const selectedUserPermission = this.props.permissions.get(selectedUser.get('permissionId'));
 
     if (
       selectedUser.get('sendBookingRequestEmail') !== sendBookingRequestEmail ||
-      selectedUser.get('isSSO') !== isSSO
+      selectedUser.get('isSSO') !== isSSO ||
+      selectedUser.get('username') !== username
     ) {
       const alert = {
         success: { body: 'Updated User.' },
@@ -160,7 +161,8 @@ class Users extends Component {
       this.props.updateEntityRequest({
         key: 'user',
         values: { sendBookingRequestEmail,
-          isSSO },
+          isSSO,
+          username },
         url: `/api/users/${this.state.editUserId}/preferences`,
         alert,
       });
@@ -368,8 +370,8 @@ class Users extends Component {
             <EditUserForm
               user={users.get(this.state.editUserId)}
               role={permissions.get(this.state.editPermissionId).get('role')}
-              onSubmit={this.sendEdit}
               currentUserRole={role}
+              onSubmit={this.sendEdit}
             />
           )}
         </DialogBox>

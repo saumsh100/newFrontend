@@ -17,7 +17,7 @@ class ActiveUsersList extends Component {
   }
 
   get editButton() {
-    const { currentUserId, userId, currentUserRole, edit, userIsSSO } = this.props;
+    const { currentUserId, userId, role, currentUserRole, edit, userIsSSO } = this.props;
 
     let allowEdit = false;
 
@@ -29,12 +29,11 @@ class ActiveUsersList extends Component {
       allowEdit = true;
     }
 
-    // CRU-1644 - in future, add ability to edit Admin + User emails (only)
-    // if (currentUserRole === 'ADMIN') {
-    //   if (role !== 'OWNER') {
-    //     allowEdit = true;
-    //   }
-    // }
+    if (currentUserRole === ADMIN_ROLE) {
+      if (role !== OWNER_ROLE) {
+        allowEdit = true;
+      }
+    }
 
     allowEdit = allowEdit && !userIsSSO && userId !== currentUserId;
 
