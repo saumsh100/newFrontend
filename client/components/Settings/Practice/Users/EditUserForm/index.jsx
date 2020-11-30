@@ -83,12 +83,12 @@ class EditUserForm extends Component {
         enableReinitialize
         ignoreSaveButton
         onSubmit={onSubmit}
-        form={`${user.get('id')}_editUserForm`}
+        form={`${user && user.get('id')}_editUserForm`}
         initialValues={{
-          sendBookingRequestEmail: user.get('sendBookingRequestEmail'),
-          username: user.get('username'),
+          sendBookingRequestEmail: user && user.get('sendBookingRequestEmail'),
+          username: user && user.get('username'),
           role,
-          isSSO: user.get('isSSO'),
+          isSSO: user && user.get('isSSO'),
         }}
       >
         {this.sendBookingRequestEmailToggle}
