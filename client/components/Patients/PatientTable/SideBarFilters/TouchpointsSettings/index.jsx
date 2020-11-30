@@ -6,11 +6,11 @@ import styles from '../styles.scss';
 
 const booleanOptions = [
   {
-    label: 'Received',
+    label: 'Sent',
     value: 'true',
   },
   {
-    label: 'Not Received',
+    label: 'Not Sent',
     value: 'false',
   },
 ];
