@@ -30,7 +30,7 @@ class EditUserForm extends Component {
             this.currentUserIsSuperAdmin || this.currentUserIsOwner ? styles.usernameInput : ''
           }
         >
-          <Field name="username" label="Email/Username" component="Input" />
+          <Field name="username" label="Email/Username" autocomplete="off" component="Input" />
         </div>
       )
     );

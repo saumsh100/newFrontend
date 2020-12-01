@@ -13,7 +13,7 @@ import { USER_ROLE_OPTIONS, OWNER_ROLE, SUPERADMIN_ROLE } from '../user-role-con
 
 const NewUserForm = ({ sendNewUser, formName, formStyle, currentUserRole }) => {
   const FILTERED_ROLE_OPTIONS = USER_ROLE_OPTIONS.filter((roleOption) => {
-    if (currentUserRole === SUPERADMIN_ROLE) return true;
+    if (currentUserRole === SUPERADMIN_ROLE || currentUserRole === OWNER_ROLE) return true;
 
     return roleOption.value !== OWNER_ROLE;
   });

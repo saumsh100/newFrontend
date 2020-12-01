@@ -53,11 +53,11 @@ class ActiveUsersList extends Component {
 
     let allowDelete = false;
 
-    if (currentUserRole === SUPERADMIN_ROLE) {
+    if (currentUserRole === SUPERADMIN_ROLE || currentUserRole === OWNER_ROLE) {
       allowDelete = true;
     }
 
-    if (currentUserRole === OWNER_ROLE || currentUserRole === ADMIN_ROLE) {
+    if (currentUserRole === ADMIN_ROLE) {
       if (role !== OWNER_ROLE) {
         allowDelete = true;
       }

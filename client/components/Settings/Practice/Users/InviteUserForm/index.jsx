@@ -8,7 +8,7 @@ import styles from '../styles.scss';
 
 const InviteUserForm = ({ sendInvite, formName, formStyle, currentUserRole }) => {
   const FILTERED_ROLE_OPTIONS = USER_ROLE_OPTIONS.filter((roleOption) => {
-    if (currentUserRole === SUPERADMIN_ROLE) return true;
+    if (currentUserRole === SUPERADMIN_ROLE || currentUserRole === OWNER_ROLE) return true;
 
     return roleOption.value !== OWNER_ROLE;
   });
