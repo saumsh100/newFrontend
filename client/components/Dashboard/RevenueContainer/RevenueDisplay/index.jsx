@@ -1,10 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import classnames from 'classnames';
-import { dateFormatter } from '@carecru/isomorphic';
-import { Icon } from '../../../library';
+import { Icon, getFormattedDate, getTodaysDate } from '../../../library';
 import styles from './styles.scss';
 
 const convertToLocaleString = number => (number ? number.toLocaleString('en') : '0');
@@ -13,8 +11,7 @@ export default function RevenueDisplay(props) {
   const { billedData, average, timezone, dates, estimatedData } = props;
 
   const lastDate = dates[dates.length - 1];
-  const currentDate = moment()
-    .tz(timezone)
+  const currentDate = getTodaysDate(timezone)
     .endOf('day')
     .toISOString();
 
@@ -28,17 +25,17 @@ export default function RevenueDisplay(props) {
   const avg = Math.floor(average);
 
   if (!isCurrentDay && avg) {
-    const isSameWeek = moment()
-      .tz(timezone)
-      .isSame(lastDate, 'week');
+    const isSameWeek = getTodaysDate(timezone).isSame(lastDate, 'week');
     todayText = isSameWeek
-      ? `${dateFormatter(lastDate, timezone, 'ddd')}.`
-      : `${dateFormatter(lastDate, timezone, 'MMM Do')}`;
+      ? `${getFormattedDate(lastDate, 'ddd', timezone)}.`
+      : `${getFormattedDate(lastDate, 'MMM Do', timezone)}`;
   }
 
+  // eslint-disable-next-line no-mixed-operators
   let percentage = todaysData && avg ? Math.floor((todaysData / avg) * 100 - 100) : 0;
 
   if (estimatedData.length && avg) {
+    // eslint-disable-next-line no-mixed-operators
     percentage = Math.floor((estimatedData[estimatedData.length - 1] / avg) * 100 - 100);
     showYestText = false;
     yestData = isCurrentDay ? estimatedData[0] : estimatedData[estimatedData.length - 1];

@@ -1,51 +1,22 @@
+
 import PropTypes from 'prop-types';
-import React from 'react';
-import moment from 'moment-timezone';
+import React, { useMemo, useState } from 'react';
 import { isHub } from '../../../util/hub';
-import { Grid, Row, Col, Field } from '../../library';
+import {
+  Grid,
+  Row,
+  Col,
+  Field,
+  isDateValid,
+  getUTCDate,
+  generateTimeOptions,
+  DateTimeObj,
+} from '../../library';
 import { parseNum, notNegative } from '../../library/Form/validate';
 import styles from './styles.scss';
 import SuggestionTimeSelect from '../../library/DropdownTimeSuggestion/SuggestionTimeSelect';
 
-/**
- * The default format for the value key must be
- * ISOString ("YYYY-MM-DDTHH:mm:ss.sssZ")
- *
- * @param {string} val
- */
-const formatTimeField = (val) => {
-  let data;
-  if (moment(val, 'LT', true).isValid()) {
-    data = moment(`1970-01-31 ${val}`, 'YYYY-MM-DD LT').toISOString();
-  } else if (moment(val, 'YYYY-MM-DDTHH:mm:ss.sssZ', true).isValid()) {
-    data = val;
-  }
-  return data;
-};
-/**
- * The default format for the label kry must be
- * LT ("HH:MM A|PM").
- *
- */
-const renderTimeValue = (val) => {
-  let data;
-  if (moment(val, 'LT', true).isValid()) {
-    data = val.toUpperCase();
-  } else if (moment(val, 'YYYY-MM-DDTHH:mm:ss.sssZ', true).isValid()) {
-    data = moment(val).format('LT');
-  }
-  return data;
-};
-/**
- * Validate if the given string is a valid time input
- *
- * @param {string} val
- */
-const validateTimeField = val =>
-  moment(val, ['YYYY-MM-DDTHH:mm:ss.sssZ', 'LT'], true).isValid() &&
-  new RegExp('^((0?[0-9]|1[0-2]):[0-5][0-9] ([AP][M]))$', 'i').test(val);
-
-export default function AppointmentForm(props) {
+function AppointmentForm(props) {
   const {
     practitionerOptions,
     chairOptions,
@@ -54,8 +25,57 @@ export default function AppointmentForm(props) {
     handleUnitChange,
     handleEndTimeChange,
     handleStartTimeChange,
-    timeOptions,
+    timezone,
+    date,
   } = props;
+
+  const [actualDate, setActualDate] = useState(
+    typeof date === 'string' ? date : date.toISOString(),
+  );
+  const timeOptions = useMemo(
+    () =>
+      generateTimeOptions({
+        timezone,
+        date: actualDate,
+      }),
+    [actualDate, timezone],
+  );
+
+  /**
+   * The default format for the value key must be
+   * ISOString ("YYYY-MM-DDTHH:mm:ss.sssZ")
+   *
+   * @param {string} val
+   */
+  const formatTimeField = (val) => {
+    let data;
+    if (isDateValid(val, 'LT', true)) {
+      data = timeOptions.find(t => t.label === val);
+    } else if (isDateValid(val, 'YYYY-MM-DDTHH:mm:ss.sssZ', true)) {
+      data = timeOptions.find(t => t.value === val);
+    }
+
+    return data ? data.value : getUTCDate(val, timezone).toISOString();
+  };
+
+  /**
+   * The default format for the label kry must be
+   * LT ("HH:MM A|PM").
+   *
+   */
+  const renderTimeValue = (val) => {
+    const time = timeOptions.find(t => t.value === val);
+    return time ? time.label : undefined;
+  };
+
+  /**
+   * Validate if the given string is a valid time input
+   *
+   * @param {string} val
+   */
+  const validateTimeField = val =>
+    isDateValid(val, ['YYYY-MM-DDTHH:mm:ss.sssZ', 'LT']) &&
+    new RegExp('^((0?[0-9]|1[0-2]):[0-5][0-9] ([AP][M]))$', 'i').test(val);
 
   const inputTheme = {
     input: styles.inputStyle,
@@ -65,6 +85,9 @@ export default function AppointmentForm(props) {
     input: styles.inputStyle,
     dropDownList: styles.dropDownList,
   };
+
+  const onChange = val => val !== actualDate && setActualDate(val);
+
   return (
     <Grid className={styles.grid}>
       <Row className={styles.row}>
@@ -78,6 +101,8 @@ export default function AppointmentForm(props) {
             data-test-id="date"
             tipSize={0.01}
             theme={inputTheme}
+            timezone={timezone}
+            onChange={onChange}
           />
         </Col>
         {!isHub() && (
@@ -95,9 +120,7 @@ export default function AppointmentForm(props) {
                 renderValue={renderTimeValue}
                 formatValue={formatTimeField}
                 validateValue={validateTimeField}
-                onChange={(e, value) =>
-                  handleStartTimeChange(formatTimeField(value))
-                }
+                onChange={(e, value) => handleStartTimeChange(formatTimeField(value))}
                 theme={dropDownTheme}
               />
             </Col>
@@ -114,9 +137,7 @@ export default function AppointmentForm(props) {
                 renderValue={renderTimeValue}
                 formatValue={formatTimeField}
                 validateValue={validateTimeField}
-                onChange={(e, value) =>
-                  handleEndTimeChange(formatTimeField(value))
-                }
+                onChange={(e, value) => handleEndTimeChange(formatTimeField(value))}
                 theme={dropDownTheme}
               />
             </Col>
@@ -137,9 +158,7 @@ export default function AppointmentForm(props) {
               renderValue={renderTimeValue}
               formatValue={formatTimeField}
               validateValue={validateTimeField}
-              onChange={(e, value) =>
-                handleStartTimeChange(formatTimeField(value))
-              }
+              onChange={(e, value) => handleStartTimeChange(formatTimeField(value))}
               theme={dropDownTheme}
             />
           </Col>
@@ -157,9 +176,7 @@ export default function AppointmentForm(props) {
                 renderValue={renderTimeValue}
                 formatValue={formatTimeField}
                 validateValue={validateTimeField}
-                onChange={(e, value) =>
-                  handleEndTimeChange(formatTimeField(value))
-                }
+                onChange={(e, value) => handleEndTimeChange(formatTimeField(value))}
                 theme={dropDownTheme}
               />
             </Col>
@@ -231,6 +248,7 @@ export default function AppointmentForm(props) {
                 label="Confirmed"
                 className={styles.confirmCancel_label}
                 data-test-id="isPatientConfirmed"
+                id="isPatientConfirmed"
                 labelClassNames={styles.checkBox}
               />
               <Field
@@ -239,6 +257,7 @@ export default function AppointmentForm(props) {
                 label="Cancelled"
                 className={styles.confirmCancel_label}
                 data-test-id="isCancelled"
+                id="isCancelled"
                 labelClassNames={styles.checkBox}
               />
             </div>
@@ -294,6 +313,8 @@ const arrayPropShape = PropTypes.shape({
   value: PropTypes.string,
 });
 
+export default React.memo(AppointmentForm);
+
 AppointmentForm.propTypes = {
   chairOptions: PropTypes.arrayOf(arrayPropShape).isRequired,
   handleDurationChange: PropTypes.func.isRequired,
@@ -302,7 +323,8 @@ AppointmentForm.propTypes = {
   handleUnitChange: PropTypes.func.isRequired,
   practitionerOptions: PropTypes.arrayOf(arrayPropShape).isRequired,
   unit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  timeOptions: PropTypes.arrayOf(arrayPropShape).isRequired,
+  date: PropTypes.oneOfType([PropTypes.instanceOf(DateTimeObj), PropTypes.string]).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 AppointmentForm.defaultProps = {

@@ -106,15 +106,15 @@ export default SuggestionInput;
 
 SuggestionInput.propTypes = {
   handleKeydown: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
+  handleBlur: PropTypes.func,
   handleChange: PropTypes.func.isRequired,
   toggleView: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  theme: PropTypes.shape(PropTypes.instanceOf(Object)).isRequired,
+  placeholder: PropTypes.string,
+  theme: PropTypes.objectOf(PropTypes.string).isRequired,
   error: PropTypes.string,
   value: PropTypes.string,
 };
@@ -122,4 +122,6 @@ SuggestionInput.propTypes = {
 SuggestionInput.defaultProps = {
   error: '',
   value: '',
+  placeholder: null,
+  handleBlur: () => {},
 };

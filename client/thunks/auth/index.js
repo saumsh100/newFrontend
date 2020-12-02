@@ -10,6 +10,7 @@ import connectSocketToStoreLogin from '../../socket/connectSocketToStoreLogin';
 import SubscriptionManager from '../../util/graphqlSubscriptions';
 import { httpClient, bookingWidgetHttpClient } from '../../util/httpClient';
 import socket from '../../socket';
+import { getTodaysDate } from '../../components/library';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   localStorage.setItem('token', token);
@@ -67,7 +68,8 @@ const loginHttp = (url, body, redirectedFrom) => (dispatch, getState) =>
   httpClient()
     .post(url, body)
     .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
-    .then(({ accountId }) => {
+    .then((session) => {
+      const { accountId, timezone } = session;
       SubscriptionManager.accountId = accountId;
       connectSocketToStoreLogin(
         {
@@ -78,8 +80,8 @@ const loginHttp = (url, body, redirectedFrom) => (dispatch, getState) =>
       );
 
       // set dates
-      dispatch(setDashboardDate(new Date().toISOString()));
-      dispatch(setScheduleDate({ scheduleDate: new Date().toISOString() }));
+      dispatch(setDashboardDate(getTodaysDate(timezone).toISOString()));
+      dispatch(setScheduleDate({ scheduleDate: getTodaysDate(timezone).toISOString() }));
 
       dispatch(push(redirectedFrom));
     });

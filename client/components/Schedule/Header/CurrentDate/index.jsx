@@ -1,17 +1,20 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import styles from './styles.scss';
+import { getUTCDate } from '../../../library';
 
-const getDateValues = (value, mDate = moment(value)) => ({
-  weekday: mDate.format('dddd'),
-  date: mDate.format('DD'),
-  month: mDate.format('MMM'),
-});
+const getDateValues = (value, timezone) => {
+  const mDate = getUTCDate(value, timezone);
+  return {
+    weekday: mDate.format('dddd'),
+    date: mDate.format('DD'),
+    month: mDate.format('MMM'),
+  };
+};
 
-const CurrentDate = ({ currentDate, leftColumnWidth, children }) => {
-  const { date, month, weekday } = getDateValues(currentDate);
+const CurrentDate = ({ currentDate, leftColumnWidth, timezone, children }) => {
+  const { date, month, weekday } = getDateValues(currentDate, timezone);
   return (
     <div className={styles.container}>
       <div
@@ -32,6 +35,7 @@ const CurrentDate = ({ currentDate, leftColumnWidth, children }) => {
 
 CurrentDate.propTypes = {
   currentDate: PropTypes.string.isRequired,
+  timezone: PropTypes.string.isRequired,
   leftColumnWidth: PropTypes.number.isRequired,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 };

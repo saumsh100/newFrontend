@@ -24,6 +24,7 @@ export default function ChairsSlot(props) {
     appointments,
     selectAppointment,
     scrollComponentDidMountChair,
+    timezone,
   } = props;
 
   const filteredPractitionerIds = schedule.get('practitionersFilter');
@@ -33,7 +34,7 @@ export default function ChairsSlot(props) {
       <div className={styles.timeSlot}>
         {chairsArray.length > 0 &&
           chairsArray.map((chair, i) => {
-            const filteredApps = appointments
+            const filteredAppointments = appointments
               .filter((app) => {
                 if (app.get('mark') && app.chairId === chair.id) {
                   return app;
@@ -73,13 +74,14 @@ export default function ChairsSlot(props) {
                 minWidth={schedule.get('columnWidth')}
                 startHour={startHour}
                 endHour={endHour}
-                items={filteredApps.concat(events.filter(e => e.chairId === chair.id))}
+                items={filteredAppointments.concat(events.filter(e => e.chairId === chair.id))}
                 selectAppointment={selectAppointment}
                 scheduleView={schedule.get('scheduleView')}
                 selectedAppointment={schedule.get('selectedAppointment')}
                 numOfColumns={chairsArray.length}
                 columnIndex={i}
                 unit={schedule.get('appointmentMinUnit')}
+                timezone={timezone}
               />
             );
           })}
@@ -108,6 +110,7 @@ ChairsSlot.propTypes = {
     height: PropTypes.number,
   }).isRequired,
   scrollComponentDidMountChair: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 ChairsSlot.defaultProps = {};

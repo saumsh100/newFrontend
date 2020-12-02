@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Query } from 'react-apollo';
+import { connect } from 'react-redux';
 import MultiSelect from '../../../library/MultiSelect';
 import { familyDataSelector } from '../../Shared/helpers';
 import SentRecallList from './SentRecallList';
@@ -151,7 +152,7 @@ class LogRecallForm extends Component {
   }
 
   render() {
-    const { initialValues, formName, className, patientId } = this.props;
+    const { initialValues, formName, className, patientId, timezone } = this.props;
     return (
       <Form
         key={formName}
@@ -172,6 +173,7 @@ class LogRecallForm extends Component {
           label="Date Sent"
           date-test-id="createdAt"
           component="DayPicker"
+          timezone={timezone}
         />
         <Field
           required
@@ -188,8 +190,6 @@ class LogRecallForm extends Component {
   }
 }
 
-export default LogRecallForm;
-
 LogRecallForm.propTypes = {
   patientId: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -197,8 +197,12 @@ LogRecallForm.propTypes = {
   isUpdate: PropTypes.bool.isRequired,
   className: PropTypes.string,
   initialValues: PropTypes.shape({}).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 LogRecallForm.defaultProps = {
   className: null,
 };
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(mapStateToProps, null)(LogRecallForm);

@@ -33,7 +33,7 @@ const defaultComponents = {
   [DROPDOWN]: DropdownSelect,
 };
 
-const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt }) => {
+const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt }, timezone) => {
   if (component === MULTI_SELECT_ACCOUNT && defaultValue === undefined) {
     return [accountId];
   }
@@ -41,7 +41,7 @@ const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt
   const dateKey = Object.keys(compt.name).find(key => compt.name[key] === name);
   if (component === DATE_RANGE && typeof defaultValue === 'string') {
     const [defaultRange] = getRangeFromList([defaultValue]);
-    return setDateToTimezone(defaultRange[dateKey]).format('YYYY-MM-DD');
+    return setDateToTimezone(defaultRange[dateKey], timezone).format('YYYY-MM-DD');
   }
 
   const nullIfUndefined = defaultValue === undefined ? null : defaultValue;
@@ -121,7 +121,7 @@ class ReportParametersForm extends Component {
     const { reports, active } = this.props;
     const items = reports.get(active);
     const valuesToUpdate = Object.entries(param).reduce((acc, [key, value]) => {
-      const sanitizedDate = setDateToTimezone(data[key]).format('YYYY-MM-DD');
+      const sanitizedDate = setDateToTimezone(data[key], this.props.timezone).format('YYYY-MM-DD');
       if (items[value] !== sanitizedDate) {
         return {
           ...acc,
@@ -143,10 +143,14 @@ class ReportParametersForm extends Component {
       name.map(n => ({
         [n]:
           obj[n] ||
-          handleDefaultValue(n, {
-            ...curr,
-            accountId: this.props.account.get('id'),
-          }),
+          handleDefaultValue(
+            n,
+            {
+              ...curr,
+              accountId: this.props.account.get('id'),
+            },
+            this.props.timezone,
+          ),
       })));
     this.setQueryUrl(page, Object.assign(...defaultParams));
   }
@@ -342,6 +346,7 @@ const mapStateToProps = ({ entities, auth, intelligenceReports, featureFlags }) 
     account: entities.getIn(['accounts', 'models', auth.get('accountId')]),
     reportsJson,
     shouldHideMultiAccount: !(multiSelectOptions && multiSelectOptions.size > 1),
+    timezone: auth.get('timezone'),
   };
 };
 

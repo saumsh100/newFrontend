@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Map, List } from 'immutable';
 import Popover from 'react-popover';
-import moment from 'moment';
 import { connect } from 'react-redux';
-import { IconButton, Button, SHeader, Modal } from '../../library/index';
+import { IconButton, Button, SHeader, Modal, getUTCDate } from '../../library/index';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
 import CurrentDate from './CurrentDate';
@@ -94,14 +93,20 @@ class Header extends Component {
       chairsFetched,
       appointments,
       newWaitlist,
+      timezone,
     } = this.props;
 
     const leftColumnWidth = schedule.get('leftColumnWidth');
     const scheduleDate = schedule.get('scheduleDate');
-    const currentDate = moment(scheduleDate);
+    const currentDate = getUTCDate(scheduleDate, timezone);
+
     return (
       <SHeader className={styles.headerContainer}>
-        <CurrentDate currentDate={scheduleDate} leftColumnWidth={leftColumnWidth}>
+        <CurrentDate
+          timezone={timezone}
+          currentDate={scheduleDate}
+          leftColumnWidth={leftColumnWidth}
+        >
           <div className={styles.changeDay}>
             <IconButton
               icon="angle-left"
@@ -246,6 +251,7 @@ Header.propTypes = {
   nextDay: PropTypes.func.isRequired,
   setCurrentDay: PropTypes.func.isRequired,
   newWaitlist: PropTypes.bool.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({ setScheduleView }, dispatch);
@@ -256,9 +262,7 @@ const mapStateToProps = ({ auth, schedule, apiRequests, featureFlags }) => ({
   pracsFetched: apiRequests.getIn(['pracSchedule', 'wasFetched'], false),
   chairsFetched: apiRequests.getIn(['chairsSchedule', 'wasFetched'], false),
   newWaitlist: featureFlags.getIn(['flags', 'waitlist-2-0']),
+  timezone: auth.get('timezone'),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

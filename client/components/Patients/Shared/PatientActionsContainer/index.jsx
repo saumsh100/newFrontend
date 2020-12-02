@@ -428,10 +428,20 @@ PatientActionsContainer.propTypes = {
   selectedFollowUp: PropTypes.shape({
     id: PropTypes.string.isRequired,
     note: PropTypes.string,
+    completedAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+    patientFollowUpTypeId: PropTypes.string,
+    patientFollowUpType: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+    isCompleted: PropTypes.bool,
   }),
   selectedRecall: PropTypes.shape({
     id: PropTypes.string.isRequired,
     note: PropTypes.string,
+    sentRecallOutcomeId: PropTypes.string,
+    sentRecallOutcome: PropTypes.shape({
+      id: PropTypes.string,
+    }),
   }),
   isNoteFormActive: PropTypes.bool,
   isFollowUpsFormActive: PropTypes.bool,
@@ -502,9 +512,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(PatientActionsContainer);

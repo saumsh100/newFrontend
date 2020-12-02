@@ -27,11 +27,12 @@ TimeList.propTypes = {
   ).isRequired,
   selectedValue: PropTypes.string,
   handleSelect: PropTypes.func.isRequired,
-  callback: PropTypes.func.isRequired,
+  callback: PropTypes.shape({ actual: PropTypes.string }),
 };
 
 TimeList.defaultProps = {
   selectedValue: null,
+  callback: null,
 };
 
 export default TimeList;

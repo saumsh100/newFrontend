@@ -1,7 +1,6 @@
 
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import Appointment from '../../../entities/models/Appointments';
@@ -12,7 +11,7 @@ import ColumnHeader from './ColumnHeader/index';
 import ChairsSlot from './ChairsSlot';
 import styles from './styles.scss';
 import { SortByFirstName, SortByName } from '../../library/util/SortEntities';
-import { SBody, SContainer, SHeader } from '../../library';
+import { parseDate, SBody, SContainer, SHeader } from '../../library';
 
 class DayViewBody extends Component {
   constructor(props) {
@@ -42,8 +41,14 @@ class DayViewBody extends Component {
   componentDidUpdate(prevProps) {
     const { appsFetched, chairsFetched, pracsFetched } = prevProps;
     const allFetched = appsFetched && chairsFetched && pracsFetched;
-    const previousDate = moment(prevProps.schedule.get('scheduleDate')).toISOString();
-    const currentDate = moment(this.props.schedule.get('scheduleDate')).toISOString();
+    const previousDate = parseDate(
+      prevProps.schedule.get('scheduleDate'),
+      this.props.timezone,
+    ).toISOString();
+    const currentDate = parseDate(
+      this.props.schedule.get('scheduleDate'),
+      this.props.timezone,
+    ).toISOString();
 
     if (
       (this.props.scheduleView !== prevProps.scheduleView || currentDate !== previousDate) &&
@@ -94,6 +99,7 @@ class DayViewBody extends Component {
       eventsFetched,
       chairsFetched,
       pracsFetched,
+      timezone,
     } = this.props;
 
     const allFetched = appsFetched && eventsFetched && chairsFetched && pracsFetched;
@@ -145,6 +151,7 @@ class DayViewBody extends Component {
     const slotProps = {
       timeSlots,
       timeSlotHeight,
+      timezone,
       startHour,
       endHour,
       schedule,
@@ -192,7 +199,7 @@ class DayViewBody extends Component {
   }
 }
 
-function mapStateToProps({ schedule, apiRequests }) {
+function mapStateToProps({ schedule, apiRequests, auth }) {
   const scheduleView = schedule.get('scheduleView');
 
   const appsFetched = apiRequests.get('appSchedule')
@@ -207,6 +214,7 @@ function mapStateToProps({ schedule, apiRequests }) {
   const chairsFetched = apiRequests.get('chairsSchedule')
     ? apiRequests.get('chairsSchedule').wasFetched
     : null;
+  const timezone = auth.get('timezone');
 
   return {
     scheduleView,
@@ -214,6 +222,7 @@ function mapStateToProps({ schedule, apiRequests }) {
     eventsFetched,
     pracsFetched,
     chairsFetched,
+    timezone,
   };
 }
 
@@ -234,6 +243,7 @@ DayViewBody.propTypes = {
   eventsFetched: PropTypes.bool,
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
+  timezone: PropTypes.string.isRequired,
 };
 
 DayViewBody.defaultProps = {

@@ -1,16 +1,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import moment from 'moment-timezone';
+import { connect } from 'react-redux';
 import { Grid, Row, Col } from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';
 import { patientShape } from '../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
-const prettyApptDate = date => (date ? moment(date).format('MMM DD, YYYY') : 'n/a');
-
-export default function Appointments({ patient }) {
+function Appointments({ patient, timezone }) {
+  const prettyDate = date => (date ? moment.tz(date, timezone).format('MMM DD, YYYY') : 'n/a');
   return (
     <div>
       <PatientAvatarTitle patient={patient} />
@@ -18,16 +18,13 @@ export default function Appointments({ patient }) {
         <Grid>
           <Row>
             <Col xs={6}>
-              <Content title="Last Appt" value={prettyApptDate(patient.lastApptDate)} />
-              <Content title="Last Hygiene" value={prettyApptDate(patient.lastHygieneDate)} />
-              <Content title="Last Recall" value={prettyApptDate(patient.lastRecallDate)} />
+              <Content title="Last Appt" value={prettyDate(patient.lastApptDate)} />
+              <Content title="Last Hygiene" value={prettyDate(patient.lastHygieneDate)} />
+              <Content title="Last Recall" value={prettyDate(patient.lastRecallDate)} />
             </Col>
             <Col xs={6}>
-              <Content title="Next Appt" value={prettyApptDate(patient.nextApptDate)} />
-              <Content
-                title="Last Restorative"
-                value={prettyApptDate(patient.lastRestorativeDate)}
-              />
+              <Content title="Next Appt" value={prettyDate(patient.nextApptDate)} />
+              <Content title="Last Restorative" value={prettyDate(patient.lastRestorativeDate)} />
             </Col>
           </Row>
         </Grid>
@@ -38,4 +35,8 @@ export default function Appointments({ patient }) {
 
 Appointments.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(mapStateToProps, null)(Appointments);

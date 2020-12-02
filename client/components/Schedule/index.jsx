@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import moment from 'moment';
 import { Map, List } from 'immutable';
 import { isHub, isResponsive } from '../../util/hub';
 import { setBackHandler, setTitle } from '../../reducers/electron';
@@ -18,6 +17,8 @@ import {
   DialogBox,
   DialogBody,
   DayPicker,
+  getUTCDate,
+  getUTCDateObj,
 } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
@@ -29,7 +30,7 @@ import Header from './Header';
 import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 import AssignPatientToChatDialog from '../Patients/AssignPatientToChatDialog';
-import { selectAppointmentShape } from '../library/PropTypeShapes';
+import { selectAppointmentShape, practitionerShape } from '../library/PropTypeShapes';
 import styles from './styles.scss';
 
 class ScheduleComponent extends Component {
@@ -94,7 +95,7 @@ class ScheduleComponent extends Component {
   }
 
   setCurrentDay(day) {
-    this.props.setScheduleDate({ scheduleDate: moment(day).toISOString() });
+    this.props.setScheduleDate({ scheduleDate: getUTCDate(day).toISOString() });
   }
 
   openAssignPatientToChatModal(patient) {
@@ -106,7 +107,7 @@ class ScheduleComponent extends Component {
 
   nextDay(currentDay) {
     this.props.setScheduleDate({
-      scheduleDate: moment(currentDay)
+      scheduleDate: getUTCDate(currentDay)
         .add(1, 'days')
         .toISOString(),
     });
@@ -114,7 +115,7 @@ class ScheduleComponent extends Component {
 
   previousDay(currentDay) {
     this.props.setScheduleDate({
-      scheduleDate: moment(currentDay)
+      scheduleDate: getUTCDate(currentDay)
         .subtract(1, 'days')
         .toISOString(),
     });
@@ -206,7 +207,7 @@ class ScheduleComponent extends Component {
       if (patient.foundChatId) {
         return this.openAssignPatientToChatModal(patient);
       }
-      this.reinitializeState();
+      return this.reinitializeState();
     });
   }
 
@@ -228,6 +229,7 @@ class ScheduleComponent extends Component {
         if (patient.foundChatId) {
           return this.openAssignPatientToChatModal(patient);
         }
+        return true;
       });
   }
 
@@ -263,7 +265,7 @@ class ScheduleComponent extends Component {
     const mergingPatientData = schedule.get('mergingPatientData');
     const createNewPatient = schedule.get('createNewPatient');
     const leftColumnWidth = schedule.get('leftColumnWidth');
-    const currentDate = moment(schedule.get('scheduleDate'));
+    const currentDate = getUTCDate(schedule.get('scheduleDate'), this.props.timezone);
 
     const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
     const filterChairs = chairs.get('models').filter(chair => chair.get('isActive'));
@@ -397,6 +399,7 @@ class ScheduleComponent extends Component {
             selectedAppointment={this.props.selectedAppointment}
             setCreatingPatient={this.props.setCreatingPatient}
             redirect={isHub() && hubRedirect}
+            timezone={this.props.timezone}
           />
         )}
         {allFetched && showDialog && (
@@ -459,6 +462,7 @@ class ScheduleComponent extends Component {
                       setShowInput={this.setShowInput}
                       selectedAppointment={this.props.selectedAppointment}
                       setCreatingPatient={this.props.setCreatingPatient}
+                      timezone={this.props.timezone}
                     />
                   </Modal>
                 ) : null}
@@ -484,10 +488,11 @@ class ScheduleComponent extends Component {
           <div className={styles.sidebar_rowCalendar}>
             <Card>
               <DayPicker
-                month={new Date(moment(currentDate).year(), moment(currentDate).month())}
-                selectedDays={new Date(currentDate)}
-                onDayClick={this.setCurrentDay}
+                month={new Date(currentDate.year(), currentDate.month())}
+                selectedDays={getUTCDateObj(currentDate)}
+                onChange={this.setCurrentDay}
                 className={styles.sidebar_calendar}
+                timezone={this.props.timezone}
                 noTarget
               />
             </Card>
@@ -522,12 +527,13 @@ ScheduleComponent.propTypes = {
   setMergingPatient: PropTypes.func.isRequired,
   setScheduleDate: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
-  practitioners: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  practitioners: PropTypes.shape(practitionerShape).isRequired,
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)),
   events: PropTypes.objectOf(PropTypes.instanceOf(List)),
   services: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   patients: PropTypes.objectOf(PropTypes.instanceOf(List)),
   chairs: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 ScheduleComponent.defaultProps = {
@@ -542,7 +548,10 @@ ScheduleComponent.defaultProps = {
   patients: null,
 };
 
-const mapStateToProps = ({ router }) => ({ router });
+const mapStateToProps = ({ router, auth }) => ({
+  router,
+  timezone: auth.get('timezone'),
+});
 
 const mapActionsToProps = dispatch =>
   bindActionCreators(
@@ -554,9 +563,6 @@ const mapActionsToProps = dispatch =>
     dispatch,
   );
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(ScheduleComponent);

@@ -2,9 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { dateFormatter } from '@carecru/isomorphic';
 import orderBy from 'lodash/orderBy';
-import { List, ListItem, Avatar } from '../../../../library';
+import { List, ListItem, Avatar, getFormattedDate } from '../../../../library';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
 import styles2 from '../styles.scss';
@@ -41,7 +40,7 @@ export default function PatientRecalls({ recalls, timezone }) {
                   <div>{`${patient.firstName} ${patient.lastName}`}</div>
                 </PatientPopover>
                 <div className={classnames(styles.muted, styles.lowercase)}>
-                  {`at ${dateFormatter(sendDate, timezone, 'h:mm a')}`}
+                  {`at ${getFormattedDate(sendDate, 'h:mm a', timezone)}`}
                 </div>
               </span>
             </div>
@@ -55,12 +54,12 @@ export default function PatientRecalls({ recalls, timezone }) {
             </div>
             <div className={styles2.col}>
               {dueForHygieneDate
-                ? dateFormatter(dueForHygieneDate, timezone, 'MMM Do, YYYY')
+                ? getFormattedDate(dueForHygieneDate, 'MMM Do, YYYY', timezone)
                 : 'n/a'}
             </div>
             <div className={styles2.col}>
               {dueForRecallExamDate
-                ? dateFormatter(dueForRecallExamDate, timezone, 'MMM Do, YYYY')
+                ? getFormattedDate(dueForRecallExamDate, 'MMM Do, YYYY', timezone)
                 : 'n/a'}
             </div>
           </ListItem>

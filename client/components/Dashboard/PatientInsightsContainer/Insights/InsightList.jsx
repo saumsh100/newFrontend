@@ -1,10 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import { formatPhoneNumber } from '@carecru/isomorphic';
 import { patientShape, appointmentShape } from '../../../library/PropTypeShapes';
-import { PatientPopover, Avatar, AppointmentPopover } from '../../../library';
+import {
+  PatientPopover,
+  Avatar,
+  AppointmentPopover,
+  getFormattedDate,
+  isDateValid,
+} from '../../../library';
 import styles from './styles.scss';
 
 /**
@@ -62,11 +67,11 @@ function buildFamilyData(insightObj, patient, gender, timezone) {
   const subHeader = (
     <div>
       {insightObj.value.map((famMember, index) => {
-        if (moment(famMember.dateDue).isValid()) {
+        if (isDateValid(famMember.dateDue)) {
           const subHeaderDiv = (
             <div>
               {famMember.firstName} {famMember.lastName} was due for{' '}
-              {moment.tz(famMember.dateDue, timezone).format('MMM Do YYYY')}
+              {getFormattedDate(famMember.dateDue, 'MMM Do YYYY', timezone)}
             </div>
           );
           return displaySubHeaderDiv(subHeaderDiv, index);
@@ -208,10 +213,10 @@ export default function InsightList(props) {
             <AppointmentPopover scrollId={scrollId} appointment={appointment} patient={patient}>
               <div className={styles.apptData}>
                 <div className={styles.apptData_time}>
-                  {moment(appointment.startDate).format('h:mm a')}
+                  {getFormattedDate(appointment.startDate, 'h:mm a', timezone)}
                 </div>
                 <div className={styles.apptData_date}>
-                  {moment(appointment.startDate).format('MMM DD')}
+                  {getFormattedDate(appointment.startDate, 'MMM DD', timezone)}
                 </div>
               </div>
             </AppointmentPopover>
@@ -255,7 +260,7 @@ InsightList.propTypes = {
     insights: PropTypes.arrayOf(
       PropTypes.shape({
         type: PropTypes.string,
-        value: PropTypes.any,
+        value: PropTypes.arrayOf(PropTypes.any),
       }),
     ),
   }).isRequired,

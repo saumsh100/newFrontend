@@ -9,14 +9,15 @@ export default function InsightsHeader({ insightCount }) {
       <div className={styles.header_count}>
         <span>{insightCount}</span>
       </div>
-      <span>
-        {' '}
-        {insightCount === 1 ? 'Patient Insight' : 'Patient Insights'}{' '}
-      </span>
+      <span> {insightCount === 1 ? 'Patient Insight' : 'Patient Insights'} </span>
     </div>
   );
 }
 
 InsightsHeader.propTypes = {
   insightCount: PropTypes.number,
+};
+
+InsightsHeader.defaultProps = {
+  insightCount: 0,
 };

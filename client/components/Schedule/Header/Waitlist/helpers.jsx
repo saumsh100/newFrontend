@@ -9,6 +9,7 @@ import {
 import moment from 'moment';
 import PatientUserPopover from '../../../library/PatientUserPopover';
 import PatientPopover from '../../../library/PatientPopover';
+import { generateTimeOptions } from '../../../library';
 
 /**
  * Factory to format a date value.
@@ -178,20 +179,13 @@ export const mergeData = (data, dataset) =>
     patientData: dataset[v.waitSpotId][0].patientData,
   }));
 
-export const generateWaitlistHours = (timezone, start = 7, end = 21, hourInterval = 0.5) => {
-  const baseTime = new Date(1970, 0, 1, 0, 0, 0, 0);
-
-  const result = [];
-  for (let hours = start; hours <= end; hours += hourInterval) {
-    const value = setDateToTimezone(baseTime, timezone).set({
-      hours: Math.floor(hours),
-      minutes: Math.round(60 * (hours % 1)),
-    });
-    result.push({ value: value.toString(),
-      label: value.format('LT') });
-  }
-  return result;
-};
+export const generateWaitlistHours = (timezone, start = 7, end = 21, hourInterval = 0.5) =>
+  generateTimeOptions({
+    timezone,
+    start,
+    end,
+    hourInterval,
+  });
 
 export const generateTimesFilter = (timezone, start = 7, end = 21, hourInterval = 0.5) => {
   const times = generateWaitlistHours(timezone, start, end, hourInterval);

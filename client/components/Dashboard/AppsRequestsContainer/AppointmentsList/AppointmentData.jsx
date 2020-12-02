@@ -1,24 +1,32 @@
 
 import React from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getFormattedDate } from '../../../library';
 import styles from '../styles.scss';
+import { appointmentShape } from '../../../library/PropTypeShapes';
 
-export default function AppointmentData(props) {
-  const { appointment } = props;
-
+function AppointmentData(props) {
+  const { appointment, timezone } = props;
   return (
     <div className={styles.appData}>
       <div className={styles.appData_startDate}>
-        {moment(appointment.startDate).format('h:mm A')}
+        {getFormattedDate(appointment.startDate, 'h:mm A', timezone)}
       </div>
-      <div className={styles.appData_endDate}>
-        {moment(appointment.endDate).format('h:mm A')}
-      </div>
+      <div>{getFormattedDate(appointment.endDate, 'h:mm A', timezone)}</div>
     </div>
   );
 }
 
 AppointmentData.propTypes = {
-  appointment: PropTypes.object,
+  appointment: PropTypes.shape(appointmentShape),
+  timezone: PropTypes.string.isRequired,
 };
+
+AppointmentData.defaultProps = {
+  appointment: null,
+};
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+
+export default connect(mapStateToProps, null)(AppointmentData);

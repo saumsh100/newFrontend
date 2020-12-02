@@ -1,14 +1,13 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { push } from 'connected-react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { FilterAppointments, FilterPatients } from '../Shared/filters';
-import { Card, Tabs, Tab } from '../../library';
+import { Card, Tabs, Tab, getISODate, getDate } from '../../library';
 import { selectedRequestBuilder } from '../../../components/Utils';
 import Requests from '../../../components/Requests';
 import DashboardWaitingRoomContainer from '../../WaitingRoom/DashboardWaitingRoomContainer';
@@ -30,7 +29,7 @@ class AppsRequestsContainer extends Component {
   }
 
   componentDidMount() {
-    const currentDate = moment(this.props.dashboardDate);
+    const currentDate = getDate(this.props.dashboardDate);
     const startDate = currentDate.startOf('day').toISOString();
     const endDate = currentDate.endOf('day').toISOString();
 
@@ -72,8 +71,8 @@ class AppsRequestsContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const currentDate = moment(this.props.dashboardDate);
-    const previousDate = moment(prevProps.dashboardDate);
+    const currentDate = getDate(this.props.dashboardDate);
+    const previousDate = getDate(prevProps.dashboardDate);
     if (
       !previousDate.isSame(currentDate, 'month') ||
       !previousDate.isSame(currentDate, 'day') ||
@@ -114,7 +113,7 @@ class AppsRequestsContainer extends Component {
     const { appointments } = this.props;
 
     this.props.setScheduleDate({
-      scheduleDate: moment(this.props.dashboardDate).toISOString(),
+      scheduleDate: getISODate(this.props.dashboardDate),
     });
 
     this.props.push('/schedule');
@@ -226,7 +225,7 @@ class AppsRequestsContainer extends Component {
 const dateFilter = (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate);
 
 function mapStateToProps(
-  { apiRequests, entities, router, featureFlags, waitingRoom },
+  { apiRequests, entities, router, featureFlags, waitingRoom, auth },
   { dashboardDate, ...ownProps },
 ) {
   const dashAppointments =
@@ -245,11 +244,12 @@ function mapStateToProps(
   const practitioners = entities.getIn(['practitioners', 'models']);
   const chairs = entities.getIn(['chairs', 'models']);
   const appointments = entities.getIn(['appointments', 'models']);
-
+  const timezone = auth.get('timezone');
   const filteredAppointments = FilterAppointments(
     appointments,
     practitioners,
-    moment(dashboardDate),
+    dashboardDate,
+    timezone,
   );
 
   const appPatientIds = filteredAppointments.map(app => app.get('patientId')).toArray();
@@ -292,6 +292,7 @@ function mapStateToProps(
     ...selectedRequestBuilder(nextProps),
     waitingRoomQueueLength: waitingRoomQueue ? waitingRoomQueue.length : 0,
     canSeeVirtualWaitingRoom,
+    timezone,
   };
 }
 
@@ -344,7 +345,4 @@ AppsRequestsContainer.defaultProps = {
   requestId: '',
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AppsRequestsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(AppsRequestsContainer);
