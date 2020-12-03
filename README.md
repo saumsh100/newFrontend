@@ -65,7 +65,6 @@ INTERCOM_APP_ID=enpxykhl
 REGION="CA"
 NODE_OPTIONS=--max-old-space-size=8192
 SERVER_PATH=
-LIVESESSION_ID=
 EXECUTION_ENVIRONMENT= LOCAL | DEVELOPMENT | TEST | DEMO | PRODUCTION
 # Time in seconds
 POLLING_FOLLOWUP_INTERVAL=300
@@ -74,6 +73,7 @@ POLLING_REVENUE_INTERVAL=300
 POLLING_VWR_INTERVAL=60
 POLLING_UNREAD_CHAT_INTERVAL=300
  ```
+
 **Note**: Ask a team member for the keys to the `.env` file
 
 3. Change `SERVER_PATH` env var with the path to your `backend` repo. `Hint:` run `pwd` while in your backend dir and use that path.

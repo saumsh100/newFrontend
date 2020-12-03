@@ -5,7 +5,6 @@ import { push } from 'connected-react-router';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
-import ls from '@livesession/sdk';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
 import App from './Reviews';
@@ -16,12 +15,6 @@ import { initializeFeatureFlags } from '../thunks/featureFlags';
 import { setOnlineBookingUserVars } from '../util/fullStory';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { browserHistory } from '../store/factory';
-import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
-
-if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
-  ls.init(process.env.LIVESESSION_ID);
-  ls.newPageView();
-}
 
 const store = configure({
   initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle
@@ -45,20 +38,11 @@ store.dispatch(
 connectStoreToHost(store);
 
 loadPatient()(store.dispatch).then(() => {
-  const { auth, availabilities } = store.getState();
+  const { availabilities } = store.getState();
   const account = availabilities.get('account').toJS();
 
   if (process.env.NODE_ENV === 'production') {
     setOnlineBookingUserVars({ account });
-    if (auth.get('isAuthenticated')) {
-      const patientUser = auth.get('patientUser').toJS();
-      if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
-        identifyLiveSession({
-          account,
-          patientUser,
-        });
-      }
-    }
   }
 
   console.log('loadPatient completed successfully');

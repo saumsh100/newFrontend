@@ -5,7 +5,6 @@ import { AppContainer } from 'react-hot-loader';
 import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
 import _ from 'lodash';
-import ls from '@livesession/sdk';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
@@ -36,7 +35,6 @@ import { setApiUrl } from '../util/hub';
 import SubscriptionManager from '../util/graphqlSubscriptions';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import { browserHistory } from '../store/factory';
-import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
 
 electron.send(REQUEST_HOST);
 
@@ -51,11 +49,6 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
     app_id: process.env.INTERCOM_APP_ID,
     hide_default_launcher: true,
   });
-
-  if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
-    ls.init(process.env.LIVESESSION_ID);
-    ls.newPageView();
-  }
 
   const store = configure();
 
@@ -90,21 +83,11 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
     const { auth } = store.getState();
     if (auth.get('isAuthenticated')) {
       const user = auth.get('user').toJS();
-      const account = auth.get('account').toJS();
-      const enterprise = auth.get('enterprise').toJS();
       const fullName = `${user.firstName} ${user.lastName}`;
       const userId = user.id;
       const email = user.username;
 
       if (process.env.NODE_ENV === 'production') {
-        if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
-          identifyLiveSession({
-            account,
-            enterprise,
-            user,
-          });
-        }
-
         window.Intercom('update', {
           user_id: userId,
           name: fullName,

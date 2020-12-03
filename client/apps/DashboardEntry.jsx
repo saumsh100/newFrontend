@@ -4,11 +4,9 @@ import { render } from 'react-dom';
 import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
 import _ from 'lodash';
-import ls from '@livesession/sdk';
 import Immutable from 'immutable';
 import nlp from 'compromise';
 import * as time from '@carecru/isomorphic';
-import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import socket from '../socket';
 import App from './Dashboard';
@@ -27,11 +25,6 @@ import ErrorBoundary from '../components/ErrorBoundary';
 
 if (process.env.NODE_ENV === 'production') {
   window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
-}
-
-if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
-  ls.init(process.env.LIVESESSION_ID);
-  ls.newPageView();
 }
 
 const store = configure();
@@ -61,14 +54,6 @@ load()(store.dispatch).then(() => {
         enterprise,
         user,
       });
-
-      if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
-        identifyLiveSession({
-          account,
-          enterprise,
-          user,
-        });
-      }
 
       window.Intercom('update', {
         user_id: userId,
