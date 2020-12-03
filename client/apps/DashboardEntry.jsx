@@ -4,12 +4,10 @@ import { render } from 'react-dom';
 import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
 import _ from 'lodash';
-import LogRocket from 'logrocket';
 import ls from '@livesession/sdk';
 import Immutable from 'immutable';
 import nlp from 'compromise';
 import * as time from '@carecru/isomorphic';
-import './logrocketSetup';
 import identifyLiveSession from '../util/LiveSession/identifyLiveSession';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import socket from '../socket';
@@ -62,13 +60,6 @@ load()(store.dispatch).then(() => {
         account,
         enterprise,
         user,
-      });
-
-      LogRocket.identify(userId, {
-        app: 'CCRU_DASHBOARD',
-        name: fullName,
-        email,
-        env: process.env.NODE_ENV,
       });
 
       if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {

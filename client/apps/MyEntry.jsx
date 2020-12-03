@@ -5,10 +5,8 @@ import { AppContainer } from 'react-hot-loader';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
-import LogRocket from 'logrocket';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
-import './logrocketSetup';
 import App from './My';
 import configure from '../store/myStore';
 import { loadPatient } from '../thunks/patientAuth';
@@ -23,22 +21,6 @@ const store = configure({
 store.dispatch(initializeFeatureFlags());
 
 loadPatient()(store.dispatch).then(() => {
-  const { auth } = store.getState();
-
-  if (process.env.NODE_ENV === 'production') {
-    if (auth.get('isAuthenticated')) {
-      const patientUser = auth.get('patientUser').toJS();
-      LogRocket.identify(patientUser.id, {
-        app: 'CCRU_MY',
-        name: `${patientUser.firstName} ${patientUser.lastName}`,
-        email: patientUser.email,
-        env: process.env.NODE_ENV,
-      });
-    }
-  }
-
-  console.log('loadPatient completed successfully');
-
   // TODO: define globals with webpack ProvidePlugin
   window.store = store;
   window.moment = extendMoment(moment);

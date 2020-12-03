@@ -5,11 +5,9 @@ import { AppContainer } from 'react-hot-loader';
 import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
 import _ from 'lodash';
-import LogRocket from 'logrocket';
 import ls from '@livesession/sdk';
 import Immutable from 'immutable';
 import * as time from '@carecru/isomorphic';
-import './logrocketSetup';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import { socketInstance } from '../socket';
 import App from './Hub';
@@ -99,13 +97,6 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
       const email = user.username;
 
       if (process.env.NODE_ENV === 'production') {
-        LogRocket.identify(userId, {
-          app: 'CCRU_HUB',
-          name: fullName,
-          email,
-          env: process.env.NODE_ENV,
-        });
-
         if (process.env.EXECUTION_ENVIRONMENT === 'PRODUCTION') {
           identifyLiveSession({
             account,
