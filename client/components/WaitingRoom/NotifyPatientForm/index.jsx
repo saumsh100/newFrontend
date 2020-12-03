@@ -1,7 +1,7 @@
 
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Field } from '../../library';
+import { Form, Field, Button } from '../../library';
 import styles from './styles.scss';
 
 export default function NotifyPatientForm({
@@ -10,6 +10,7 @@ export default function NotifyPatientForm({
   defaultTemplate,
   formName,
   onSubmit,
+  onRefresh,
 }) {
   const getPatientName = useCallback((patient, option) => {
     if (option === 'prefName') {
@@ -45,6 +46,7 @@ export default function NotifyPatientForm({
       ignoreSaveButton
     >
       <div className={styles.heading}>Make any final changes to the text before you send</div>
+
       <Field
         required
         name="message"
@@ -54,6 +56,21 @@ export default function NotifyPatientForm({
         classStyles={styles.messageContainer}
         className={styles.messageTextArea}
       />
+
+      {!message && (
+        <div className={styles.errorFetchingTemplateContainer}>
+          We could not fetch your template. Please refresh or enter your text above.
+          <Button
+            onClick={onRefresh}
+            iconRight="sync-alt"
+            size="sm"
+            border="blue"
+            className={styles.refreshTemplateButton}
+          >
+            Refresh
+          </Button>
+        </div>
+      )}
     </Form>
   );
 }
@@ -64,4 +81,5 @@ NotifyPatientForm.propTypes = {
   defaultTemplate: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   formName: PropTypes.string.isRequired,
+  onRefresh: PropTypes.func.isRequired,
 };

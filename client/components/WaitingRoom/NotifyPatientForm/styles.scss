@@ -1,4 +1,3 @@
-
 @import '../../../ui.scss';
 
 .heading {
@@ -30,4 +29,26 @@
   padding: 16px 20px;
   resize: none;
   width: 100%;
+}
+
+.refreshTemplateButton {
+  align-items: center;
+  display: inline-block;
+  justify-content: center;
+  padding: 0;
+  font-size: 10px;
+  border: none;
+  margin-left: 10px;
+  &:hover {
+    background-color: transparent;
+    color: initial;
+  }
+  > i {
+    font-size: 10px;
+  }
+}
+
+.errorFetchingTemplateContainer {
+  margin-top: 10px;
+  color: $danger-color;
 }

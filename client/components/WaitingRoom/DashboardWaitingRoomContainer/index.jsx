@@ -15,7 +15,12 @@ import WaitingRoomList from '../WaitingRoomList';
 class DashboardWaitingRoomContainer extends Component {
   componentDidMount() {
     const { accountId } = this.props;
-    this.props.fetchWaitingRoomNotificationTemplate({ accountId });
+    this.props.fetchWaitingRoomNotificationTemplate({
+      accountId,
+      errorCallback: () => {
+        this.props.fetchWaitingRoomNotificationTemplate({ accountId });
+      },
+    });
     this.props.fetchWaitingRoomQueue({ accountId });
   }
 

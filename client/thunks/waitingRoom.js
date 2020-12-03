@@ -41,7 +41,11 @@ export function fetchWaitingRoomQueue({ accountId }) {
  * @param accountId
  * @returns async function
  */
-export function fetchWaitingRoomNotificationTemplate({ accountId }) {
+export function fetchWaitingRoomNotificationTemplate({
+  accountId,
+  successCallback = () => {},
+  errorCallback = () => {},
+}) {
   return async (dispatch) => {
     try {
       const url =
@@ -51,9 +55,11 @@ export function fetchWaitingRoomNotificationTemplate({ accountId }) {
       const { data } = await httpClient().get(url);
 
       dispatch(setDefaultTemplate(data));
+      successCallback(data);
     } catch (err) {
       console.error(`Error fetching waiting room notification template ${err}`);
-      dispatch(setDefaultTemplate('ERROR FETCHING TEMPLATE'));
+      dispatch(setDefaultTemplate(''));
+      errorCallback();
     }
   };
 }

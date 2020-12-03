@@ -1,9 +1,12 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Button, DialogBox, List, RemoteSubmitButton } from '../../library';
 import NotifyPatientForm from '../NotifyPatientForm';
 import WaitingRoomListItem from './WaitingRoomListItem';
+import { fetchWaitingRoomNotificationTemplate as fetchWaitingRoomNotificationTemplateAction } from '../../../thunks/waitingRoom';
 
 const notifyAlert = ({ waitingRoomPatient: { patient, sentWaitingRoomNotifications } }) => ({
   success: {
@@ -54,6 +57,8 @@ function WaitingRoomList(props) {
     onClean,
     onComplete,
     displayNameOption,
+    fetchWaitingRoomNotificationTemplate,
+    accountId,
   } = props;
   const [selectedWaitingRoomPatient, setSelectedWaitingRoomPatient] = useState(null);
   const toggleNotifying = () => setSelectedWaitingRoomPatient(null);
@@ -119,6 +124,22 @@ function WaitingRoomList(props) {
           <NotifyPatientForm
             formName={formName}
             defaultTemplate={defaultTemplate}
+            // On Refresh, we close the modal and re-open after the template call,
+            // to allow redux form to repopulate.
+            onRefresh={() => {
+              const selectedWaitingRoomPatientCache = selectedWaitingRoomPatient;
+              setSelectedWaitingRoomPatient(null);
+
+              const reOpenPatientModal = () => {
+                setSelectedWaitingRoomPatient(selectedWaitingRoomPatientCache);
+              };
+
+              fetchWaitingRoomNotificationTemplate({
+                accountId,
+                successCallback: reOpenPatientModal,
+                errorCallback: reOpenPatientModal,
+              });
+            }}
             displayNameOption={displayNameOption}
             waitingRoomPatient={selectedWaitingRoomPatient}
             onSubmit={({ message }) =>
@@ -146,6 +167,29 @@ WaitingRoomList.propTypes = {
   onNotify: PropTypes.func.isRequired,
   onClean: PropTypes.func.isRequired,
   onComplete: PropTypes.func.isRequired,
+  fetchWaitingRoomNotificationTemplate: PropTypes.func.isRequired,
+  accountId: PropTypes.func.isRequired,
 };
 
-export default WaitingRoomList;
+function mapStateToProps({ auth, waitingRoom }) {
+  return {
+    accountId: auth.get('accountId'),
+    defaultTemplate: waitingRoom.get('defaultTemplate'),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      fetchWaitingRoomNotificationTemplate: fetchWaitingRoomNotificationTemplateAction,
+    },
+    dispatch,
+  );
+}
+
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default enhance(WaitingRoomList);
