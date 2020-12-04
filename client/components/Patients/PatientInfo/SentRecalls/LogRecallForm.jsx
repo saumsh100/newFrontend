@@ -183,7 +183,7 @@ class LogRecallForm extends Component {
           component="DropdownSelect"
           options={contactOptions}
         />
-        <FetchOutcomeTypes>{({ data }) => this.OutcomeField(data)}</FetchOutcomeTypes>
+        <FetchOutcomeTypes>{({ data }) => this.OutcomeField(data || {})}</FetchOutcomeTypes>
         <Field name="note" label="Note" data-test-id="note" component="TextArea" />
       </Form>
     );
