@@ -25,11 +25,22 @@ class Unsubscribe extends Component {
 
   updatePreferences(values) {
     const patientId = this.props.params.patient.id;
+
+    const alert = {
+      success: {
+        body: 'Updated Preferences',
+      },
+      error: {
+        body: 'Preferences Update Failed',
+      },
+    };
+
     this.props.updateEntityRequest({
       id: 'updatePatientPreferences',
       key: 'patients',
       url: `/my/patients/${patientId}/preferences`,
       values,
+      alert,
     });
   }
 
