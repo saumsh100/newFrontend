@@ -136,7 +136,7 @@ class LogRecallForm extends Component {
     );
   }
 
-  OutcomeField({ sentRecallOutcomes }) {
+  OutcomeField({ sentRecallOutcomes = null } = {}) {
     if (!sentRecallOutcomes) return null;
 
     return (

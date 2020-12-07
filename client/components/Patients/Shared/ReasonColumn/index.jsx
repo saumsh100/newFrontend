@@ -8,7 +8,11 @@ import styles from '../../PatientTable/styles.scss';
 export default function ReasonColumn({ patient, className, showTable }) {
   const { patientFollowUps } = patient;
 
-  if (!patientFollowUps || patientFollowUps.length === 0) {
+  if (
+    !patientFollowUps ||
+    patientFollowUps.length === 0 ||
+    typeof patientFollowUps[0] === 'undefined'
+  ) {
     return <div className={styles.displayFlex_text}>{showTable ? '-' : 'n/a'}</div>;
   }
 
