@@ -11,7 +11,6 @@ import getParameterByName from '../components/My/PatientPage/Shared/getParameter
 import Unsubscribe from '../components/My/PatientPage/Unsubscribe';
 import ConfirmedEmail from '../components/My/PatientPage/ConfirmedEmail';
 import withAuthProps from '../hocs/withAuthProps';
-import AlertContainer from '../containers/AlertContainer';
 
 const MyRouter = ({ history }) => {
   // These routes are for the static patient-facing pages
@@ -37,7 +36,6 @@ const MyRouter = ({ history }) => {
           />
           <Route component={FourZeroFour} />
         </Switch>
-        <AlertContainer />
       </PatientPage>
     );
   };
