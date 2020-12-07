@@ -121,13 +121,13 @@ const renderAddFamily = ({ family, patientNode }) => (
                 input: {
                   ...(family
                     ? {
-                        id: patient.id,
-                        accountId: patient.accountId,
+                        id: patient.ccId,
                         firstName: patient.firstName,
                         lastName: patient.lastName,
-                        omitRecallIds: patient.omitRecallIds,
-                        omitReminderIds: patient.omitReminderIds,
                         familyId: family.ccId,
+                        accountId: patient.accountId || family.head.accountId,
+                        omitRecallIds: patient.omitRecallIds || [],
+                        omitReminderIds: patient.omitReminderIds || [],
                       }
                     : { members: [patient.id, patientNode.ccId] }),
                   clientMutationId: patientNode.id,
