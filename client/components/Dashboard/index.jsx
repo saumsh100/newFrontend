@@ -109,4 +109,7 @@ Dashboard.propTypes = {
     recalls: PropTypes.arrayOf(PropTypes.any),
   }).isRequired,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Dashboard);

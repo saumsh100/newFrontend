@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import classNames from 'classnames';
 import { formatPhoneNumber, setDateToTimezone } from '@carecru/isomorphic';
 import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
@@ -21,7 +22,6 @@ import Appointments from '../../../entities/models/Appointments';
 import ChairModel from '../../../entities/models/Chair';
 import EnabledFeature from '../EnabledFeature';
 import styles from './styles.scss';
-import { getFormattedDate } from '../util/datetime';
 
 const popoverDataSections = (subHeaderText, data) => (
   <div className={styles.container} key={subHeaderText}>
@@ -39,21 +39,12 @@ const popoverDataSections = (subHeaderText, data) => (
 );
 
 export default function AppointmentInfo(props) {
-  const {
-    patient,
-    appointment,
-    practitioner,
-    chair,
-    editPatient,
-    title,
-    extraStyles,
-    timezone,
-  } = props;
+  const { patient, appointment, practitioner, chair, editPatient, title, extraStyles } = props;
   const { startDate, endDate, note, reason, description } = appointment;
   const age = patient?.birthDate
     ? setDateToTimezone(Date.now(), null).diff(patient.birthDate, 'years')
     : null;
-  const appointmentDate = getFormattedDate(startDate, 'dddd LL', timezone);
+  const appointmentDate = moment(startDate).format('dddd LL');
   const textAreaTheme = { group: styles.textAreaGroup };
   const notes = description || note || '';
 
@@ -106,11 +97,7 @@ export default function AppointmentInfo(props) {
           {popoverDataSections(
             'Time',
             <div className={styles.data} key="time">
-              {`${getFormattedDate(startDate, 'h:mm a', timezone)} - ${getFormattedDate(
-                endDate,
-                'h:mm a',
-                timezone,
-              )}`}
+              {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
             </div>,
           )}
 
@@ -210,5 +197,4 @@ AppointmentInfo.propTypes = {
   ]).isRequired,
   title: PropTypes.string,
   extraStyles: PropTypes.objectOf(PropTypes.string),
-  timezone: PropTypes.string.isRequired,
 };

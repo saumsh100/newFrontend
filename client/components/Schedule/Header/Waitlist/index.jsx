@@ -17,7 +17,7 @@ const WaitlistGQLEnhanced = ({ newWaitlist, accountId, ...props }) => {
   return (
     <FetchWaitlist newWaitlist={newWaitlist}>
       {({ data: waitSpotData, subscribeToMore, refetch }) => {
-        if (waitSpotData && waitSpotData.accountViewer) {
+        if (waitSpotData.accountViewer) {
           setLoadingState(false);
         }
 
@@ -70,11 +70,7 @@ const WaitlistGQLEnhanced = ({ newWaitlist, accountId, ...props }) => {
 WaitlistGQLEnhanced.propTypes = {
   accountId: PropTypes.string.isRequired,
   newWaitlist: PropTypes.bool.isRequired,
-  toggleWaitlist: PropTypes.func,
-};
-
-WaitlistGQLEnhanced.defaultProps = {
-  toggleWaitlist: () => {},
+  toggleWaitlist: PropTypes.func.isRequired,
 };
 
 export default memo(WaitlistGQLEnhanced);

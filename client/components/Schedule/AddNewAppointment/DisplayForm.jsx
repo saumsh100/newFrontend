@@ -1,16 +1,10 @@
 
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
+import moment from 'moment';
 import { Map } from 'immutable';
 import { sortAsc, dateFormatter } from '@carecru/isomorphic';
-import {
-  Form,
-  Field,
-  generateTimeOptions,
-  getTodaysDate,
-  getUTCDate,
-  DateTimeObj,
-} from '../../library';
+import { Form, Field } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import DisplaySearchedPatient from './DisplaySearchedPatient';
 import { setTime, getDuration } from '../../library/util/TimeOptions';
@@ -42,6 +36,59 @@ const generatePractitionerOptions = practitioners =>
   );
 
 /**
+ * Generate an array containing valid time-slots,
+ * incrementing the provided amount.
+ *
+ * @param {string|null} timeInput
+ * @param {number} unitIncrement
+ */
+const generateTimeOptions = (timeInput = null, unitIncrement = 30) => {
+  const timeOptions = [];
+  const totalHours = 24;
+  const increment = unitIncrement;
+  const increments = 60 / increment;
+
+  if (timeInput) {
+    const minutes = moment(timeInput).minute();
+    const remainder = minutes % increment;
+    const label = moment(timeInput).format('LT');
+    if (remainder) {
+      timeOptions.push({
+        value: timeInput,
+        label,
+      });
+    }
+  }
+  let i;
+  for (i = 6; i < totalHours; i += 1) {
+    let j;
+    for (j = 0; j < increments; j += 1) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const value = time.toISOString();
+      const label = time.format('LT');
+      timeOptions.push({
+        value,
+        label,
+      });
+    }
+  }
+
+  for (i = 0; i < 6; i += 1) {
+    let j;
+    for (j = 0; j < increments; j += 1) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const value = time.toISOString();
+      const label = time.format('LT');
+      timeOptions.push({
+        value,
+        label,
+      });
+    }
+  }
+  return timeOptions;
+};
+
+/**
  * Check if the current patientSelected value
  * is a valid object containing an ID.
  *
@@ -53,15 +100,12 @@ const validatePatient = value =>
 /**
  * Sets the defaultStartTime using the next time after the currentHour + 1hour.
  */
-const defaultStartTime = (timezone, date) => {
-  const now = getTodaysDate(timezone).add(60, 'minutes');
-  const sortedTimes = generateTimeOptions({ timezone,
-    date }).sort((a, b) =>
-    sortAsc(a.value, b.value));
+const defaultStartTime = () => {
+  const now = moment().add(60, 'minutes');
+  const sortedTimes = generateTimeOptions().sort((a, b) => sortAsc(a.value, b.value));
   const nextAvailable =
-    sortedTimes.find(opt => dateFormatter(opt.value, timezone, 'HH:mm') > now.format('HH:mm')) ||
+    sortedTimes.find(opt => dateFormatter(opt.value, '', 'HH:mm') > now.format('HH:mm')) ||
     sortedTimes[0];
-
   return nextAvailable.value;
 };
 
@@ -99,17 +143,16 @@ class DisplayForm extends Component {
       getSuggestions,
       currentDate,
       patientSearched,
-      timezone,
     } = this.props;
 
     const initDuration = 60;
-    const initStartTime = defaultStartTime(timezone, currentDate);
-    const initEndTime = getUTCDate(initStartTime, timezone)
+    const initStartTime = defaultStartTime();
+    const initEndTime = moment(initStartTime)
       .add(initDuration, 'minutes')
       .toISOString();
     const initUnit = getDuration(initStartTime, initEndTime, 0) / unit;
     let initialValues = {
-      date: getUTCDate(currentDate, timezone),
+      date: moment(currentDate),
       startTime: initStartTime,
       duration: initDuration,
       endTime: initEndTime,
@@ -120,7 +163,6 @@ class DisplayForm extends Component {
     let startTime = null;
     let endTime = null;
     let patient = null;
-    let date = currentDate;
 
     if (selectedAppointment) {
       const {
@@ -138,7 +180,6 @@ class DisplayForm extends Component {
 
       patient = patients.get(patientId);
       const durationTime = getDuration(startDate, endDate, customBufferTime);
-      date = startDate;
 
       startTime = setTime(startDate);
       time = setTime(startDate);
@@ -148,7 +189,7 @@ class DisplayForm extends Component {
       initialValues = {
         startTime,
         endTime,
-        date: getUTCDate(startDate, timezone).toISOString(),
+        date: moment(startDate).format('L'),
         serviceId,
         practitionerId: practitionerId || '',
         chairId: chairId || '',
@@ -248,24 +289,22 @@ class DisplayForm extends Component {
           chairOptions={chairOptions}
           selectedAppointment={selectedAppointment}
           time={time}
-          date={date}
           unit={unit}
+          timeOptions={generateTimeOptions()}
           handleDurationChange={handleDurationChange}
           handleUnitChange={handleUnitChange}
           handleStartTimeChange={this.props.handleStartTimeChange}
           handleEndTimeChange={this.props.handleEndTimeChange}
-          timezone={timezone}
         />
       </Form>
     );
   }
 }
-
-export default React.memo(DisplayForm);
+export default DisplayForm;
 
 DisplayForm.propTypes = {
   chairs: PropTypes.instanceOf(Map).isRequired,
-  currentDate: PropTypes.instanceOf(DateTimeObj).isRequired,
+  currentDate: PropTypes.instanceOf(moment).isRequired,
   formName: PropTypes.string.isRequired,
   getSuggestions: PropTypes.func.isRequired,
   handleAutoSuggest: PropTypes.func.isRequired,
@@ -274,19 +313,14 @@ DisplayForm.propTypes = {
   handleStartTimeChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleUnitChange: PropTypes.func.isRequired,
-  patientSearched: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.any), PropTypes.string]),
+  patientSearched: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.any), PropTypes.string])
+    .isRequired,
   patients: PropTypes.instanceOf(Map).isRequired,
   practitioners: PropTypes.instanceOf(Map).isRequired,
-  selectedAppointment: PropTypes.string,
+  selectedAppointment: PropTypes.string.isRequired,
   setCreatingPatient: PropTypes.func.isRequired,
   setPatientSearched: PropTypes.func.isRequired,
   setShowInput: PropTypes.func.isRequired,
   showInput: PropTypes.bool.isRequired,
   unit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  timezone: PropTypes.string.isRequired,
-};
-
-DisplayForm.defaultProps = {
-  selectedAppointment: null,
-  patientSearched: '',
 };

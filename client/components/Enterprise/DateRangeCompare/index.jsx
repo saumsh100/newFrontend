@@ -2,10 +2,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styles from './styles.scss';
-import { Form, FormSection, Field, Button, Grid, Row, Col } from '../../library';
+import {
+  Form,
+  FormSection,
+  Field,
+  Button,
+  Grid,
+  Row,
+  Col,
+} from '../../library';
 
 export default function CompareRangeForm(props) {
-  const { onSubmit, onClear, onCancel, timezone } = props;
+  const { onSubmit, onClear, onCancel } = props;
 
   const initialValues = {
     from: {
@@ -36,7 +44,6 @@ export default function CompareRangeForm(props) {
                 component="DayPicker"
                 name="startDate"
                 data-test-id="startDate"
-                timezone={timezone}
               />
             </Col>
             <Col className={styles.dashCol} xs={2}>
@@ -48,7 +55,6 @@ export default function CompareRangeForm(props) {
                 component="DayPicker"
                 name="endDate"
                 data-test-id="endDate"
-                timezone={timezone}
               />
             </Col>
           </Row>
@@ -68,7 +74,6 @@ export default function CompareRangeForm(props) {
                 component="DayPicker"
                 name="startDate"
                 data-test-id="startDate"
-                timezone={timezone}
               />
             </Col>
             <Col className={styles.dashCol} xs={2}>
@@ -79,7 +84,6 @@ export default function CompareRangeForm(props) {
                 component="DayPicker"
                 name="endDate"
                 data-test-id="endDate"
-                timezone={timezone}
               />
             </Col>
           </Row>
@@ -113,10 +117,4 @@ CompareRangeForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onClear: PropTypes.func,
   onCancel: PropTypes.func,
-  timezone: PropTypes.string.isRequired,
-};
-
-CompareRangeForm.defaultProps = {
-  onClear: () => {},
-  onCancel: () => {},
 };

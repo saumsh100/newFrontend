@@ -10,7 +10,7 @@ import Loader from '../components/Loader';
 import ScheduleComponent from '../components/Schedule';
 import { createEntityRequest, fetchEntities, fetchEntitiesRequest } from '../thunks/fetchEntities';
 import { deleteAllEntity } from '../reducers/entities';
-import { appointmentShape, practitionerShape } from '../components/library/PropTypeShapes';
+import { appointmentShape } from '../components/library/PropTypeShapes';
 import Account from '../entities/models/Account';
 import Appointment from '../entities/models/Appointments';
 import {
@@ -283,7 +283,7 @@ function mapDispatchToProps(dispatch) {
 
 ScheduleContainer.propTypes = {
   schedule: PropTypes.instanceOf(Map).isRequired,
-  practitioners: PropTypes.shape(practitionerShape).isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
   currentDate: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.instanceOf(Date),

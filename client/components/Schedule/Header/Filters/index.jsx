@@ -5,10 +5,11 @@ import { Map, List } from 'immutable';
 import moment from 'moment';
 import styles from './styles.scss';
 import FiltersAll from './FiltersAll';
-import { getDate } from '../../../library';
 
 export default function Filters(props) {
-  const { practitioners, schedule, chairs, appointments, currentDate } = props;
+  const {
+    practitioners, schedule, chairs, appointments, currentDate,
+  } = props;
 
   const pracColumns = {};
   const chairColumns = {};
@@ -17,7 +18,7 @@ export default function Filters(props) {
     .get('models')
     .toArray()
     .filter((app) => {
-      const startDate = getDate(app.startDate);
+      const startDate = moment(app.startDate);
       const isSameDate = startDate.isSame(currentDate, 'day');
 
       if (!app.isDeleted && isSameDate && !app.isCancelled && !app.isPending) {

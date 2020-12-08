@@ -1,12 +1,24 @@
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { compose } from 'recompose';
 import { connect } from 'react-redux';
-import { Form, FormSection, Field, Grid, Row, Col, Header } from '../../library';
+import {
+  Form,
+  FormSection,
+  Field,
+  Grid,
+  Row,
+  Col,
+  Header,
+} from '../../library';
 import styles from './styles.scss';
 
 function validatePatient(value) {
-  return value && typeof value !== 'object' ? 'No Patient With That Name' : undefined;
+  return value && typeof value !== 'object'
+    ? 'No Patient With That Name'
+    : undefined;
 }
 
 function AddWaitSpotForm({
@@ -14,7 +26,6 @@ function AddWaitSpotForm({
   getSuggestions,
   formName,
   selectedWaitSpot,
-  timezone,
   patientUsers,
   patients,
 }) {
@@ -44,8 +55,7 @@ function AddWaitSpotForm({
 
   // Dealing with patientId and patientUserId
   if (selectedWaitSpot) {
-    // If unavailabledays is set to null then set it to an empty array otherwise
-    // the daypicker throws an error.
+    // If unavailabledays is set to null then set it to an empty array otherwise the daypicker throws an error.
     if (selectedWaitSpot.unavailableDays === null) {
       initialValues = selectedWaitSpot;
       initialValues.unavailableDays = [];
@@ -54,7 +64,10 @@ function AddWaitSpotForm({
     }
 
     if (!selectedWaitSpot.patientId && selectedWaitSpot.patientUserId) {
-      const patientUser = patientUsers.getIn(['models', selectedWaitSpot.patientUserId]);
+      const patientUser = patientUsers.getIn([
+        'models',
+        selectedWaitSpot.patientUserId,
+      ]);
       displayField = <Header title={patientUser.getFullName()} />;
     } else if (selectedWaitSpot.patientId) {
       const patient = patients.getIn(['models', selectedWaitSpot.patientId]);
@@ -64,7 +77,12 @@ function AddWaitSpotForm({
   }
 
   return (
-    <Form form={formName} onSubmit={onSubmit} initialValues={initialValues} ignoreSaveButton>
+    <Form
+      form={formName}
+      onSubmit={onSubmit}
+      initialValues={initialValues}
+      ignoreSaveButton
+    >
       {displayField}
       <Grid>
         <Row>
@@ -77,13 +95,33 @@ function AddWaitSpotForm({
             <FormSection name="preferences">
               <Row>
                 <Col xs={12} md={6}>
-                  <Field name="mornings" component="Checkbox" label="Mornings" />
-                  <Field name="afternoons" component="Checkbox" label="Afternoons" />
-                  <Field name="evenings" component="Checkbox" label="Evenings" />
+                  <Field
+                    name="mornings"
+                    component="Checkbox"
+                    label="Mornings"
+                  />
+                  <Field
+                    name="afternoons"
+                    component="Checkbox"
+                    label="Afternoons"
+                  />
+                  <Field
+                    name="evenings"
+                    component="Checkbox"
+                    label="Evenings"
+                  />
                 </Col>
                 <Col xs={12} md={6}>
-                  <Field name="weekdays" component="Checkbox" label="Weekdays" />
-                  <Field name="weekends" component="Checkbox" label="Weekends" />
+                  <Field
+                    name="weekdays"
+                    component="Checkbox"
+                    label="Weekdays"
+                  />
+                  <Field
+                    name="weekends"
+                    component="Checkbox"
+                    label="Weekends"
+                  />
                 </Col>
               </Row>
             </FormSection>
@@ -98,7 +136,6 @@ function AddWaitSpotForm({
                     name="unavailableDays"
                     target="icon"
                     component="DayPicker"
-                    timezone={timezone}
                   />
                 </div>
               </Col>
@@ -114,22 +151,7 @@ AddWaitSpotForm.propTypes = {
   formName: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   getSuggestions: PropTypes.func.isRequired,
-  selectedWaitSpot: PropTypes.objectOf(PropTypes.any),
-  timezone: PropTypes.string.isRequired,
-  patientUsers: PropTypes.objectOf(PropTypes.any),
-  patients: PropTypes.objectOf(PropTypes.any),
+  selectedWaitSpot: PropTypes.object,
 };
 
-AddWaitSpotForm.defaultProps = {
-  formName: null,
-  selectedWaitSpot: null,
-  patientUsers: null,
-  patients: null,
-};
-
-const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-
-export default connect(
-  mapStateToProps,
-  null,
-)(AddWaitSpotForm);
+export default AddWaitSpotForm;

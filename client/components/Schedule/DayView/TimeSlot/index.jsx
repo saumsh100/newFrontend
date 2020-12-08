@@ -29,10 +29,9 @@ const renderDisplayComponent = params => (item, index, array) => {
     columnIndex,
     scheduleView,
     unit,
-    timezone,
   } = params;
 
-  const intersectingApps = intersectingAppointments(array, item.startDate, item.endDate, timezone);
+  const intersectingApps = intersectingAppointments(array, item.startDate, item.endDate);
   const rowSort = intersectingApps.sort(sortAppsByStartDate);
   const defaultApptParams = {
     appointment: item,
@@ -50,7 +49,6 @@ const renderDisplayComponent = params => (item, index, array) => {
       key={index}
       appointment={item}
       timeSlotHeight={timeSlotHeight}
-      timezone={timezone}
       {...buildAppointmentProps({
         ...defaultApptParams,
         backgroundColor: hexToRgbA('#d8d8d8', 1),
@@ -63,14 +61,13 @@ const renderDisplayComponent = params => (item, index, array) => {
       selectAppointment={selectAppointment}
       selectedAppointment={selectedAppointment}
       scheduleView={scheduleView}
-      timezone={timezone}
       {...buildAppointmentProps(defaultApptParams)}
     />
   );
 };
 
 export default function TimeSlot(props) {
-  const { timeSlots, timeSlotHeight, items, minWidth, startHour, unit, entityId, timezone } = props;
+  const { timeSlots, timeSlotHeight, items, minWidth, startHour, unit, entityId } = props;
 
   const timeSlotContentStyle = {
     minWidth: `${minWidth}px`,
@@ -88,7 +85,6 @@ export default function TimeSlot(props) {
               startHour,
               timeSlotHeight,
               unit,
-              timezone,
             }),
           )
           .map(renderDisplayComponent(props))}
@@ -110,5 +106,4 @@ TimeSlot.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   unit: PropTypes.number.isRequired,
   entityId: PropTypes.string.isRequired,
-  timezone: PropTypes.string.isRequired,
 };

@@ -46,11 +46,13 @@ class DisplayForm extends Component {
     if (total === 0) {
       return 100;
     }
-    return round((num / total) * 100, 2);
+    return round(num / total * 100, 2);
   }
 
   render() {
-    const { formName, handleSubmit, segments, edit } = this.props;
+    const {
+      formName, handleSubmit, segments, edit,
+    } = this.props;
 
     const title = edit ? 'Edit Segment' : 'Create New Segment';
     return (
@@ -206,6 +208,7 @@ DisplayForm.propTypes = {
   formName: PropTypes.string.isRequired,
   handleAgeChange: PropTypes.func,
   handleGenderChange: PropTypes.func,
+  handleCityChange: PropTypes.func,
   age: PropTypes.arrayOf(PropTypes.string),
   gender: PropTypes.string,
   city: PropTypes.string,
@@ -216,24 +219,12 @@ DisplayForm.propTypes = {
   segments: PropTypes.shape({
     preview: PropTypes.shape({}),
     loading: PropTypes.bool,
-    cities: PropTypes.arrayOf(
-      PropTypes.shape({
-        city: PropTypes.string,
-      }),
-    ),
+    cities: PropTypes.arrayOf(PropTypes.shape({
+      city: PropTypes.string,
+    })),
   }).isRequired,
   enterpriseId: PropTypes.string.isRequired,
   fetchCities: PropTypes.func,
-};
-
-DisplayForm.defaultProps = {
-  handleAgeChange: () => {},
-  handleGenderChange: () => {},
-  age: null,
-  gender: null,
-  city: null,
-  edit: null,
-  fetchCities: null,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -252,9 +243,6 @@ function mapStateToProps(state) {
   };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(DisplayForm);

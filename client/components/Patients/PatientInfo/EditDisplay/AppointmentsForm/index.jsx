@@ -1,14 +1,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import { isResponsive } from '../../../../../util/hub';
 import PatientModel from '../../../../../entities/models/Patient';
 import styles from '../styles.scss';
 
-function AppointmentsForm(props) {
-  const { handleSubmit, inputStyle, patient, timezone } = props;
+export default function AppointmentsForm(props) {
+  const { handleSubmit, inputStyle, patient } = props;
 
   const {
     dueForHygieneDate,
@@ -35,13 +34,7 @@ function AppointmentsForm(props) {
         <div className={styles.formHeader}>Last Appointment</div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
-            <Field
-              name="lastRecallDate"
-              label="Recall"
-              component="DayPicker"
-              theme={inputStyle}
-              timezone={timezone}
-            />
+            <Field name="lastRecallDate" label="Recall" component="DayPicker" theme={inputStyle} />
           </Col>
           <Col xs={6}>
             <Field
@@ -49,7 +42,6 @@ function AppointmentsForm(props) {
               name="lastHygieneDate"
               label="Hygiene"
               theme={inputStyle}
-              timezone={timezone}
             />
           </Col>
         </Row>
@@ -61,7 +53,6 @@ function AppointmentsForm(props) {
               label="Due for Hygiene"
               component="DayPicker"
               theme={inputStyle}
-              timezone={timezone}
             />
           </Col>
           <Col xs={6}>
@@ -70,7 +61,6 @@ function AppointmentsForm(props) {
               name="dueForRecallExamDate"
               label={isResponsive() ? 'Due for Recall' : 'Due for Recall Exam'}
               theme={inputStyle}
-              timezone={timezone}
             />
           </Col>
         </Row>
@@ -83,17 +73,9 @@ AppointmentsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   inputStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
   patient: PropTypes.instanceOf(PatientModel),
-  timezone: PropTypes.string.isRequired,
 };
 
 AppointmentsForm.defaultProps = {
   patient: null,
   inputStyle: '',
 };
-
-const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-
-export default connect(
-  mapStateToProps,
-  null,
-)(AppointmentsForm);

@@ -39,7 +39,6 @@ const TimesSegment = ({ account, timesRule, updateSelectedTimes }) => {
   );
 
   const timezone = useMemo(() => account.get('timezone'), [account]);
-  // TODO: use office hours instead of fixed time
   const timeOptions = useMemo(() => generateWaitlistHours(timezone).concat(NOT_SET_OPTION), [
     timezone,
   ]);

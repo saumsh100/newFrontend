@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
 import classnames from 'classnames';
-import { sortAsc } from '@carecru/isomorphic';
+import { dateFormatter, sortAsc } from '@carecru/isomorphic';
 import patientShape from '../../../../library/PropTypeShapes/patient';
-import { List, ListItem, Icon, Avatar, getFormattedDate } from '../../../../library';
+import { List, ListItem, Icon, Avatar } from '../../../../library';
 import PatientPopover from '../../../../library/PatientPopover';
 import AppointmentPopover from '../../../../library/AppointmentPopover';
 import styles from './styles.scss';
@@ -42,7 +42,7 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
                     <div>{`${poc.firstName} ${poc.lastName}`}</div>
                   </PatientPopover>
                   <div className={classnames(styles.muted, styles.lowercase)}>
-                    {`at ${getFormattedDate(sendDate, 'h:mm a', timezone)}`}
+                    {`at ${dateFormatter(sendDate, timezone, 'h:mm a')}`}
                   </div>
                 </span>
               )}
@@ -64,9 +64,7 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
             </div>
             <div className={classnames(styles2.col, styles.flexStart)}>
               <AppointmentPopover patient={pat} appointment={pat.appointment}>
-                <span>
-                  {getFormattedDate(pat.appointment.startDate, 'MMM Do - h:mm A', timezone)}
-                </span>
+                <span>{dateFormatter(pat.appointment.startDate, timezone, 'MMM Do - h:mm A')}</span>
               </AppointmentPopover>
               <span className={iconClass}>
                 {pat.appointment.isPatientConfirmed && <Icon icon="check" />}

@@ -1,10 +1,11 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Card, getISODate } from '../../library';
+import { Card } from '../../library';
 import Insights from './Insights';
 import InsightsHeader from './Insights/InsightsHeader';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
@@ -19,8 +20,8 @@ class PatientInsightsContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const currentDate = getISODate(this.props.dashboardDate, this.props.timezone);
-    const previousDate = getISODate(prevProps.dashboardDate, this.props.timezone);
+    const currentDate = moment(this.props.dashboardDate).toISOString();
+    const previousDate = moment(prevProps.dashboardDate).toISOString();
 
     if (currentDate !== previousDate) {
       this.props.fetchInsights();
@@ -56,7 +57,11 @@ class PatientInsightsContainer extends Component {
 
 function mapStateToProps({ apiRequests, dashboard, entities, auth }) {
   const dash = dashboard.toJS();
-  const { dashboardDate, loadingInsights, insights, insightCount } = dash;
+  const { dashboardDate } = dash;
+
+  const { loadingInsights } = dash;
+  const { insights } = dash;
+  const { insightCount } = dash;
 
   const wasAccountFetched =
     apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
@@ -66,16 +71,15 @@ function mapStateToProps({ apiRequests, dashboard, entities, auth }) {
 
   const appointments = entities.getIn(['appointments', 'models']);
   const practitioners = entities.getIn(['practitioners', 'models']);
-  const timezone = auth.get('timezone');
   const filteredAppointments = FilterAppointments(
     appointments,
     practitioners,
-    dashboardDate,
-    timezone,
+    moment(dashboardDate),
   );
 
   const appPatientIds = filteredAppointments.map(app => app.get('patientId')).toArray();
   const patients = FilterPatients(entities.getIn(['patients', 'models']), appPatientIds);
+
   const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
   return {
@@ -88,7 +92,6 @@ function mapStateToProps({ apiRequests, dashboard, entities, auth }) {
     dashAppointmentsFetched,
     insightCount,
     wasAccountFetched,
-    timezone,
   };
 }
 
@@ -113,7 +116,6 @@ PatientInsightsContainer.propTypes = {
   dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
   wasAccountFetched: PropTypes.bool,
   account: PropTypes.shape(accountShape),
-  timezone: PropTypes.string.isRequired,
 };
 
 PatientInsightsContainer.defaultProps = {
@@ -127,4 +129,7 @@ PatientInsightsContainer.defaultProps = {
   account: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientInsightsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientInsightsContainer);

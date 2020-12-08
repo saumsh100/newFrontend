@@ -1,4 +1,3 @@
-
 import moment from 'moment';
 
 const generateTimeOptions = () => {
@@ -8,16 +7,13 @@ const generateTimeOptions = () => {
   const increments = 60 / increment;
 
   let i;
-  for (i = 0; i < totalHours; i += 1) {
+  for (i = 0; i < totalHours; i++) {
     let j;
-    for (j = 0; j < increments; j += 1) {
-      const time = moment(new Date(1970, 0, 1, i, j * increment));
+    for (j = 0; j < increments; j++) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
       const value = time.toISOString();
       const label = time.format('LT');
-      timeOptions.push({
-        value,
-        label,
-      });
+      timeOptions.push({ value, label });
     }
   }
 
@@ -28,7 +24,7 @@ export const timeOptions = generateTimeOptions();
 
 export const setTime = (time) => {
   const tempTime = new Date(time);
-  const mergeTime = new Date(1970, 0, 1);
+  const mergeTime = new Date(1970, 1, 0);
   mergeTime.setDate(mergeTime.getDate());
   mergeTime.setHours(tempTime.getHours());
   mergeTime.setMinutes(tempTime.getMinutes());

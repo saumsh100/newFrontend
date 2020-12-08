@@ -1,9 +1,10 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
-import { Card, getISODate } from '../../library';
+import { Card } from '../../library';
 import DonnaToDoTabs from './DonnaToDoTabs';
 import accountShape from '../../library/PropTypeShapes/accountShape';
 import Tasks from './Tasks';
@@ -23,8 +24,8 @@ class DonnaToDoListContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const currentDate = getISODate(this.props.dashboardDate, this.props.account.timezone);
-    const previousDate = getISODate(prevProps.dashboardDate, this.props.account.timezone);
+    const currentDate = moment(this.props.dashboardDate).toISOString();
+    const previousDate = moment(prevProps.dashboardDate).toISOString();
     if (currentDate !== previousDate) {
       this.props.fetchDonnasToDos(this.state.toDoIndex);
     }
@@ -76,7 +77,6 @@ function mapStateToProps({ entities, auth, apiRequests, dashboard }) {
     recalls: dashboard.get('recalls'),
     reviews: dashboard.get('reviews'),
     dashboardDate: dashboard.get('dashboardDate'),
-    timezone: auth.get('timezone'),
   };
 }
 

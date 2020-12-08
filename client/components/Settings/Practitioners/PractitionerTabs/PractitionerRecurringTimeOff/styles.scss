@@ -7,6 +7,9 @@
     height: 50px;
     padding-left: 10px;
   }
+  &_date {
+
+  }
   &_note {
     color: $primary-darkgrey;
     max-width: 750px;
@@ -14,25 +17,28 @@
     text-overflow: ellipsis;
   }
 
-  &_readOnly {
+  &_readOnly{
     color: $primary-darkgrey;
     margin-left: 10px;
   }
 
-  &_allDay {
+  &_allDay{
     color: $primary-darkgrey;
     margin-left: auto;
   }
-
   &_delete {
     justify-content: center;
   }
-
   &_addTimeOffText {
     font-weight: $large-weight;
     margin-left: auto;
     padding-left: 10px;
   }
+}
+
+.minHeight {
+  //padding-top: 15px;
+  //padding-bottom: 15px;
 }
 
 .allDay {
@@ -42,21 +48,19 @@
     padding-right: 5px;
   }
 }
-
 .moreOptions {
   cursor: pointer;
   text-align: end;
-
   &_icon {
     color: $primary-darkgrey;
     padding-left: 5px;
   }
 }
 
+
 .inlineBlock {
   padding-bottom: 1px;
   padding-left: 10px;
-  padding-top: 2px;
 }
 
 .modal {

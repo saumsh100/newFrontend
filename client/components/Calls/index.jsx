@@ -162,7 +162,7 @@ class Calls extends Component {
   }
 }
 
-function mapStateToProps({ entities, apiRequests, auth }) {
+function mapStateToProps({ entities, apiRequests }) {
   const callGraphStats = apiRequests.get('callGraphStats') || null;
   const wasStatsFetched =
     (apiRequests.get('callGraphStats') && apiRequests.get('callGraphStats').wasFetched) || null;
@@ -175,7 +175,6 @@ function mapStateToProps({ entities, apiRequests, auth }) {
     patients: entities.getIn(['patients', 'models']),
     wasCallsFetched,
     wasStatsFetched,
-    timezone: auth.get('timezone'),
   };
 }
 
@@ -211,4 +210,7 @@ Calls.defaultProps = {
   callGraphStats: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Calls);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Calls);

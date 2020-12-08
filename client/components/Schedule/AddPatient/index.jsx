@@ -1,8 +1,9 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import moment from 'moment';
 import PatientUser from '../../../entities/models/PatientUser';
-import { Form, Field, getFormattedDate } from '../../library';
+import { Form, Field } from '../../library';
 import {
   maxLength,
   emailValidate,
@@ -34,7 +35,7 @@ export default function AddPatient({ onSubmit, formName, mergingPatientData }) {
       lastName,
       email,
       mobilePhoneNumber: phoneNumber,
-      birthDate: birthDate ? getFormattedDate(birthDate, 'MM/DD/YYYY') : null,
+      birthDate: birthDate ? moment(birthDate).format('MM/DD/YYYY') : null,
       gender,
     };
   }

@@ -1,10 +1,10 @@
 
+import moment from 'moment';
 import {
   APPOITMENT_POSITION_LEFT_PADDING,
   APPOITMENT_WIDTH_LEFT_PADDING,
   APPOITMENT_POPOVER_DEFAULT_PLACEMENT,
 } from '../../../../constants/schedule';
-import { getUTCDate, getDateDurantion } from '../../../library';
 
 /**
  * Returns an array of appointments
@@ -12,15 +12,14 @@ import { getUTCDate, getDateDurantion } from '../../../library';
  * @param {*} appointments
  * @param {*} startDate
  * @param {*} endDate
- * @param {*} timezone
  */
-export const intersectingAppointments = (appointments, startDate, endDate, timezone) => {
-  const sDate = getUTCDate(startDate, timezone);
-  const eDate = getUTCDate(endDate, timezone);
+export const intersectingAppointments = (appointments, startDate, endDate) => {
+  const sDate = moment(startDate);
+  const eDate = moment(endDate);
 
   return appointments.filter((app) => {
-    const appStartDate = getUTCDate(app.startDate, timezone);
-    const appEndDate = getUTCDate(app.endDate, timezone);
+    const appStartDate = moment(app.startDate);
+    const appEndDate = moment(app.endDate);
 
     const dateIntersectsApp =
       sDate.isBetween(appStartDate, appEndDate, null, '[)') ||
@@ -51,9 +50,9 @@ export const sortAppsByStartDate = (a, b) => (a.startDate > b.startDate ? 1 : -1
  */
 export const calculateHeight = (duration, timeSlotHeight) => (duration / 60) * timeSlotHeight;
 
-export const getDuration = (startDate, endDate, customBufferTime, timezone = null) => {
-  const end = getUTCDate(endDate, timezone);
-  const duration = getDateDurantion(end.diff(startDate));
+export const getDuration = (startDate, endDate, customBufferTime) => {
+  const end = moment(endDate);
+  const duration = moment.duration(end.diff(startDate));
   return duration.asMinutes() - customBufferTime;
 };
 
@@ -87,13 +86,13 @@ export const setPopoverPlacement = (columnIndex, numOfColumns, minWidth) => {
  * @returns {appoitment} a new appointment with height and top positioning properties
  */
 export const calculateAppointmentTop = params => (appointment) => {
-  const { startHour, timeSlotHeight, unit, timezone } = params;
+  const { startHour, timeSlotHeight, unit } = params;
 
   const { startDate, endDate, customBufferTime } = appointment;
 
-  const durationTime = getDuration(startDate, endDate, customBufferTime || 0, timezone);
-  const startDateHours = getUTCDate(startDate, timezone).hours();
-  const startDateMinutes = getUTCDate(startDate, timezone).minutes();
+  const durationTime = getDuration(startDate, endDate, customBufferTime || 0);
+  const startDateHours = moment(startDate).hours();
+  const startDateMinutes = moment(startDate).minutes();
   const positionTopPadding = 0.05;
 
   const startDateMinutesDived = startDateMinutes / 60;

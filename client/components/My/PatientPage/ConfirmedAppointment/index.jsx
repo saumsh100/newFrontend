@@ -56,7 +56,7 @@ const tinyIconFactory = bookingWidgetPrimaryColor => props => (
 
 export default function ConfirmedAppointment({
   params: {
-    account: { address, phoneNumber, contactEmail, bookingWidgetPrimaryColor, website },
+    account: { address, phoneNumber, contactEmail, bookingWidgetPrimaryColor, website, timezone },
     appointments,
     isCustomConfirm,
   },
@@ -75,7 +75,7 @@ export default function ConfirmedAppointment({
           }.`}
         </div>
       </Section>
-      <AppointmentsList appointments={appointments} />
+      <AppointmentsList appointments={appointments} timezone={timezone} />
       <Section>
         <WellHeader>Practice Information</WellHeader>
         <Well>

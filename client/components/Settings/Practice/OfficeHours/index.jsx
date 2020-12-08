@@ -10,6 +10,7 @@ import { Header, Button, DialogBox, Form, Field } from '../../../library';
 import EnabledFeature from '../../../library/EnabledFeature';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
+import accountShape from '../../../library/PropTypeShapes/accountShape';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 import OfficeHoursCalendar from './OfficeHoursCalendar';
@@ -35,7 +36,7 @@ class OfficeHours extends Component {
   }
 
   delete(i) {
-    const deleteSche = window.confirm('Delete Schedule?');
+    const deleteSche = confirm('Delete Schedule?');
 
     if (!deleteSche) {
       return null;
@@ -71,7 +72,7 @@ class OfficeHours extends Component {
       if (values[key].breaks) {
         weeklySchedule.weeklySchedules[i][key].breaks = values[key].breaks;
       } else {
-        const { breaks } = weeklySchedule.weeklySchedules[i][key];
+        const breaks = weeklySchedule.weeklySchedules[i][key].breaks;
         weeklySchedule.weeklySchedules[i][key] = values[key];
         weeklySchedule.weeklySchedules[i][key].breaks = breaks;
       }
@@ -113,7 +114,7 @@ class OfficeHours extends Component {
   }
 
   createPattern() {
-    const createPattern = window.confirm('Are you sure you want to create a pattern?');
+    const createPattern = confirm('Are you sure you want to create a pattern?');
 
     if (!createPattern) {
       return null;
@@ -160,7 +161,7 @@ class OfficeHours extends Component {
   }
 
   render() {
-    const { weeklySchedule, timezone } = this.props;
+    const { weeklySchedule, activeAccount } = this.props;
     const handleSubmit = (index, values) => {
       const alert = {
         success: { body: 'Clinic Office Hours Updated' },
@@ -258,7 +259,6 @@ class OfficeHours extends Component {
                     name="startDate"
                     label="Start Date"
                     data-test-id="input_startDateDayPicker"
-                    timezone={timezone}
                   />
                 </Form>
               </DialogBox>
@@ -307,22 +307,16 @@ class OfficeHours extends Component {
 }
 
 OfficeHours.propTypes = {
+  activeAccount: PropTypes.shape(accountShape),
   weeklySchedule: PropTypes.shape(weeklyScheduleShape),
   updateEntityRequest: PropTypes.func,
-  timezone: PropTypes.string.isRequired,
-};
-
-OfficeHours.defaultProps = {
-  weeklySchedule: null,
-  updateEntityRequest: null,
 };
 
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  const timezone = auth.get('timezone');
 
   if (!activeAccount) {
-    return { timezone };
+    return {};
   }
 
   const weeklySchedule = entities.getIn([
@@ -334,7 +328,6 @@ function mapStateToProps({ entities, auth }) {
   return {
     weeklySchedule,
     activeAccount,
-    timezone,
   };
 }
 

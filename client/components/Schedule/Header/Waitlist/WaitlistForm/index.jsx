@@ -2,7 +2,8 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { week, capitalize, setDateToTimezone } from '@carecru/isomorphic';
-import { Button, getDate, Icon, Input } from '../../../../library';
+import moment from 'moment';
+import { Button, Icon, Input } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';
 import PatientSearch from '../../../../PatientSearch';
@@ -134,7 +135,6 @@ const WaitlistForm = ({
     });
   };
 
-  // TODO: use office hours instead of fixed time
   const timeOptions = useMemo(() => generateWaitlistHours(timezone), [timezone]);
 
   const onDaysOfTheWeekChange = (values) => {
@@ -272,7 +272,6 @@ const WaitlistForm = ({
               disabledDays={{ before: new Date() }}
               label="Remove from Waitlist (date)"
               onChange={handleDayOnChange}
-              timezone={timezone}
               value={formValues.endDate || ''}
             />
             <MultiSelect
@@ -287,7 +286,7 @@ const WaitlistForm = ({
                   selected={selectedTimes}
                   placeholder="Preferred Times"
                   formatValue={v =>
-                    timeOptions.find(option => option.value === getDate(v).toISOString())?.label
+                    timeOptions.find(option => option.value === moment(v).toLocaleString())?.label
                   }
                   error={error}
                   selectorProps={getToggleButtonProps()}

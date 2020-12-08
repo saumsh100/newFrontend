@@ -21,8 +21,8 @@ const SegmentButton = ({ children, buttonState, count, ...rest }) => {
 
 SegmentButton.propTypes = {
   children: PropTypes.node,
-  buttonState: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  count: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  buttonState: 'active',
+  count: PropTypes.number,
 };
 
 SegmentButton.defaultProps = {

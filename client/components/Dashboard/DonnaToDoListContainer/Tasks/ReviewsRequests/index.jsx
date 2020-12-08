@@ -3,7 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
 import classnames from 'classnames';
-import { List, ListItem, Avatar, Icon, getFormattedDate } from '../../../../library';
+import { dateFormatter } from '@carecru/isomorphic';
+import { List, ListItem, Avatar, Icon } from '../../../../library';
 import patientShape from '../../../../library/PropTypeShapes/patient';
 import styles from './styles.scss';
 import styles2 from '../styles.scss';
@@ -16,6 +17,7 @@ export default function ReviewRequests({ reviews, timezone, reviewsChannels }) {
     <List className={styles.list}>
       {orderBy(reviews, 'sendDate').map((review) => {
         const { patient, sendDate } = review;
+
         const { appointment } = patient;
 
         return (
@@ -33,14 +35,14 @@ export default function ReviewRequests({ reviews, timezone, reviewsChannels }) {
                   <div>{`${patient.firstName} ${patient.lastName}`}</div>
                 </PatientPopover>
                 <div className={classnames(styles.muted, styles.lowercase)}>
-                  {`at ${getFormattedDate(sendDate, 'h:mm a', timezone)}`}
+                  {`at ${dateFormatter(sendDate, timezone, 'h:mm a')}`}
                 </div>
               </span>
             </div>
             <div className={styles2.smallCol}>{channelText}</div>
             <div className={styles2.col}>
               <AppointmentPopover patient={patient} appointment={appointment}>
-                <span>{getFormattedDate(appointment.startDate, 'MMM Do - h:mm A', timezone)}</span>
+                <span>{dateFormatter(appointment.startDate, timezone, 'MMM Do - h:mm A')}</span>
               </AppointmentPopover>
               <span
                 className={classnames(styles.iconContainer, {

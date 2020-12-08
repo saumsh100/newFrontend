@@ -43,7 +43,6 @@ const FilterBar = ({
       showNotSet: false,
     },
     times: {
-      // TODO: use office hours instead of fixed time
       rule: generateTimesFilter(timezone),
       isActive: false,
       showNotSet: true,
@@ -138,7 +137,6 @@ const mapStateToProps = ({ auth, entities }) => ({
       id: practitioner.get('id'),
       label: practitioner.getPrettyName(),
     })),
-  timezone: auth.get('timezone'),
 });
 
 export default memo(connect(mapStateToProps)(FilterBar));
@@ -148,7 +146,7 @@ FilterBar.propTypes = {
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
   segmentedWaitList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
   timezone: PropTypes.string.isRequired,
-  practitioners: PropTypes.arrayOf(PropTypes.instanceOf(Map)),
+  practitioners: PropTypes.instanceOf(Map),
   setIsFilterActive: PropTypes.func.isRequired,
 };
 

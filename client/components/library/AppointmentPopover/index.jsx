@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { createBrowserHistory } from 'history';
@@ -12,7 +13,6 @@ import { selectAppointment, setScheduleDate } from '../../../actions/schedule';
 import { appointmentShape, patientShape, practitionerShape, chairShape } from '../PropTypeShapes';
 import Appointments from '../../../entities/models/Appointments';
 import styles from './styles.scss';
-import { getISODate } from '../util/datetime';
 
 class AppointmentPopover extends Component {
   constructor(props) {
@@ -50,9 +50,7 @@ class AppointmentPopover extends Component {
     const location = browserHistory.location.pathname;
 
     if (location === '/') {
-      this.props.setScheduleDate({
-        scheduleDate: getISODate(this.props.dashboardDate, this.props.timezone),
-      });
+      this.props.setScheduleDate({ scheduleDate: moment(this.props.dashboardDate).toISOString() });
     }
     const mergeApp = {
       ...(appointment instanceof Appointments ? appointment.toJS() : appointment),
@@ -81,10 +79,8 @@ class AppointmentPopover extends Component {
       isNoteFormActive,
       isFollowUpsFormActive,
       isRecallsFormActive,
-      timezone,
     } = this.props;
     const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
-
     return (
       <Popover
         className={styles.appPopover}
@@ -102,7 +98,6 @@ class AppointmentPopover extends Component {
             }}
             chair={chair}
             practitioner={practitioner}
-            timezone={timezone}
           />,
         ]}
         preferPlace={placement || 'right'}
@@ -124,8 +119,8 @@ AppointmentPopover.propTypes = {
     PropTypes.instanceOf(Appointments),
     PropTypes.shape(appointmentShape),
   ]).isRequired,
-  practitioner: PropTypes.shape(practitionerShape),
-  chair: PropTypes.shape(chairShape),
+  practitioner: PropTypes.arrayOf(PropTypes.shape(practitionerShape)),
+  chair: PropTypes.arrayOf(PropTypes.shape(chairShape)),
   placement: PropTypes.string,
   scrollId: PropTypes.string,
   push: PropTypes.func.isRequired,
@@ -138,7 +133,6 @@ AppointmentPopover.propTypes = {
   isNoteFormActive: PropTypes.bool.isRequired,
   isFollowUpsFormActive: PropTypes.bool.isRequired,
   isRecallsFormActive: PropTypes.bool.isRequired,
-  timezone: PropTypes.string.isRequired,
 };
 
 AppointmentPopover.defaultProps = {
@@ -149,7 +143,7 @@ AppointmentPopover.defaultProps = {
   patientChat: null,
 };
 
-function mapStateToProps({ entities, dashboard, chat, patientTable, auth }, { appointment }) {
+function mapStateToProps({ entities, dashboard, chat, patientTable }, { appointment }) {
   const practitioner = entities
     .getIn(['practitioners', 'models'])
     .toArray()
@@ -167,7 +161,6 @@ function mapStateToProps({ entities, dashboard, chat, patientTable, auth }, { ap
     isRecallsFormActive: patientTable.get('isRecallsFormActive'),
     dashboardDate: dashboard.get('dashboardDate'),
     patientChat: chat.get('patientChat'),
-    timezone: auth.get('timezone'),
   };
 }
 
@@ -183,4 +176,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppointmentPopover);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AppointmentPopover);

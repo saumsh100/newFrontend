@@ -8,6 +8,7 @@ import { Map } from 'immutable';
 import { change, reset } from 'redux-form';
 import { push } from 'connected-react-router';
 import { isHub } from '../../../util/hub';
+import Requests from '../../../entities/models/Request';
 import { setTime, getDuration } from '../../library/util/TimeOptions';
 import DisplayForm from './DisplayForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
@@ -18,21 +19,7 @@ import {
   deleteEntityRequest,
   fetchEntitiesRequest,
 } from '../../../thunks/fetchEntities';
-import {
-  Button,
-  Avatar,
-  Card,
-  SContainer,
-  SFooter,
-  SHeader,
-  SBody,
-  Icon,
-  parseDate,
-  getTodaysDate,
-  getUTCDate,
-  getDate,
-} from '../../library';
-import { selectAppointmentShape } from '../../library/PropTypeShapes';
+import { Button, Avatar, Card, SContainer, SFooter, SHeader, SBody, Icon } from '../../library';
 import styles from './styles.scss';
 
 const mergeTime = (date, time) => {
@@ -58,8 +45,8 @@ class AddNewAppointment extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const previousDate = parseDate(prevProps.currentDate, this.props.timezone);
-    const currentDate = parseDate(this.props.currentDate, this.props.timezone);
+    const previousDate = moment(prevProps.currentDate);
+    const currentDate = moment(this.props.currentDate);
 
     if (!currentDate.isSame(previousDate)) {
       this.props.changeForm(this.props.formName, 'date', currentDate);
@@ -85,16 +72,12 @@ class AddNewAppointment extends Component {
               <div className={styles.suggestionContainer_details}>
                 <div className={styles.suggestionContainer_fullName}>
                   {`${patient.firstName} ${patient.lastName}${
-                    patient.birthDate
-                      ? `, ${getTodaysDate(this.props.timezone).diff(patient.birthDate, 'years')}`
-                      : ''
+                    patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
                   }`}
                 </div>
                 <div className={styles.suggestionContainer_date}>
                   Last Appointment:{' '}
-                  {patient.lastApptDate
-                    ? getUTCDate(patient.lastApptDate, this.props.timezone).format('MMM D YYYY')
-                    : 'n/a'}
+                  {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
                 </div>
               </div>
             </div>
@@ -107,7 +90,7 @@ class AddNewAppointment extends Component {
   handleStartTimeChange(value) {
     const { appFormValues, formName, unit, changeForm } = this.props;
     const defaultDuration = appFormValues ? appFormValues.duration : 60;
-    const endTime = getDate(value).add(defaultDuration, 'minutes');
+    const endTime = moment(value).add(defaultDuration, 'minutes');
     changeForm(formName, 'endTime', setTime(endTime));
     const duration = getDuration(value, endTime, 0);
     const unitValue = unit ? Number((duration / unit).toFixed(2)) : 0;
@@ -130,17 +113,17 @@ class AddNewAppointment extends Component {
     const { changeForm, formName, unit, appFormValues } = this.props;
 
     if (appFormValues && appFormValues.startTime) {
-      const time = getDate(appFormValues.startTime).add(value, 'minutes');
+      const time = moment(appFormValues.startTime).add(value, 'minutes');
       changeForm(formName, 'endTime', setTime(time));
     } else {
-      let startTime = getDate();
+      let startTime = moment();
       startTime.seconds(0);
 
       if (startTime.minutes() % unit) {
         startTime = startTime.minutes(Math.floor(startTime.minutes() / unit) * unit);
       }
 
-      const endTime = getDate(startTime).add(value, 'minutes');
+      const endTime = moment(startTime).add(value, 'minutes');
 
       if (!value % unit) {
         changeForm(formName, 'endTime', setTime(endTime));
@@ -162,17 +145,17 @@ class AddNewAppointment extends Component {
 
     if (duration >= unit) {
       if (appFormValues && appFormValues.startTime) {
-        const time = getDate(appFormValues.startTime).add(duration, 'minutes');
+        const time = moment(appFormValues.startTime).add(duration, 'minutes');
         changeForm(formName, 'endTime', setTime(time));
       } else {
-        let startTime = getDate();
+        let startTime = moment();
         startTime.seconds(0);
 
         if (startTime.minutes() % unit) {
           startTime = startTime.minutes(Math.floor(startTime.minutes() / unit) * unit);
         }
 
-        const endTime = getDate(startTime).add(duration, 'minutes');
+        const endTime = moment(startTime).add(duration, 'minutes');
 
         changeForm(formName, 'startTime', setTime(startTime));
         changeForm(formName, 'endTime', setTime(endTime));
@@ -207,11 +190,11 @@ class AddNewAppointment extends Component {
     } = values;
 
     const startDate = mergeTime(new Date(date), new Date(startTime));
-    const endDate = getDate(startDate).add(duration, 'minutes');
+    const endDate = moment(startDate).add(duration, 'minutes');
 
     const newAppointment = {
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
+      startDate,
+      endDate,
       patientId: patientSelected.id,
       practitionerId,
       chairId,
@@ -397,7 +380,6 @@ class AddNewAppointment extends Component {
               setPatientSearched={this.props.setPatientSearched}
               change={this.props.changeForm}
               reset={this.props.reset}
-              timezone={this.props.timezone}
             />
           </SBody>
           <SFooter className={styles.footer}>
@@ -456,15 +438,13 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-const mapStateToProps = ({ form, auth }, { formName }) =>
+const mapStateToProps = ({ form }, { formName }) =>
   (!form[formName]
     ? {
       values: {},
-      timezone: auth.get('timezone'),
     }
     : {
       appFormValues: form[formName].values,
-      timezone: auth.get('timezone'),
     });
 
 AddNewAppointment.propTypes = {
@@ -494,13 +474,25 @@ AddNewAppointment.propTypes = {
   redirect: PropTypes.shape({ pathname: PropTypes.string }),
   reinitializeState: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  selectedAppointment: PropTypes.shape(selectAppointmentShape),
+  selectedAppointment: PropTypes.shape({
+    createdAt: PropTypes.string,
+    customBufferTime: PropTypes.number,
+    endDate: PropTypes.string,
+    isSyncedWithPms: PropTypes.bool,
+    note: PropTypes.string,
+    patientId: PropTypes.string,
+    practitionerId: PropTypes.string,
+    request: PropTypes.bool,
+    requestId: PropTypes.string,
+    requestModel: PropTypes.instanceOf(Requests),
+    serviceId: PropTypes.string,
+    startDate: PropTypes.string,
+  }),
   setCreatingPatient: PropTypes.func.isRequired,
   setPatientSearched: PropTypes.func.isRequired,
   setShowInput: PropTypes.func.isRequired,
   setLocation: PropTypes.func.isRequired,
   showInput: PropTypes.bool,
-  timezone: PropTypes.string.isRequired,
   unit: PropTypes.number,
   updateEntityRequest: PropTypes.func.isRequired,
 };

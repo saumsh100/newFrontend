@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Field, FormSection } from '../../../../library';
 import { parseNum, notNegative } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
@@ -21,20 +20,20 @@ const mathSymbols = [
   },
 ];
 
-function Appointments({ theme: { input, date }, timezone }) {
+export default function Appointments({ theme: { input, date } }) {
   return (
     <div className={styles.formContainer}>
       <div className={styles.formHeaderInput}>First Appointment</div>
       <FormSection name="firstApptDate" className={styles.formContainer_row}>
-        <Field component="DayPicker" timezone={timezone} name="0" theme={date} label="Date" />
+        <Field component="DayPicker" name="0" theme={date} label="Date" />
         <span className={styles.formContainer_middleText}> to </span>
-        <Field component="DayPicker" timezone={timezone} name="1" theme={date} label="Date" />
+        <Field component="DayPicker" name="1" theme={date} label="Date" />
       </FormSection>
       <div className={styles.formHeaderInput}>Last Appointment</div>
       <FormSection name="lastApptDate" className={styles.formContainer_row}>
-        <Field component="DayPicker" timezone={timezone} name="0" theme={date} label="Date" />
+        <Field component="DayPicker" name="0" theme={date} label="Date" />
         <span className={styles.formContainer_middleText}> to </span>
-        <Field component="DayPicker" timezone={timezone} name="1" theme={date} label="Date" />
+        <Field component="DayPicker" name="1" theme={date} label="Date" />
       </FormSection>
       <div className={styles.formHeader}> Production </div>
       <FormSection name="production" className={styles.formContainer_row}>
@@ -115,7 +114,6 @@ Appointments.propTypes = {
     input: PropTypes.objectOf(PropTypes.string),
     date: PropTypes.objectOf(PropTypes.string),
   }),
-  timezone: PropTypes.string.isRequired,
 };
 
 Appointments.defaultProps = {
@@ -131,10 +129,3 @@ Appointments.defaultProps = {
     },
   },
 };
-
-const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-
-export default connect(
-  mapStateToProps,
-  null,
-)(Appointments);

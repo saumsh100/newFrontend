@@ -1,10 +1,10 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import moment from 'moment-timezone';
 import { Map, List } from 'immutable';
 import { setDateToTimezone } from '@carecru/isomorphic';
 import DayViewBody from './DayViewBody';
-import { DateTimeObj } from '../../library';
 
 function DayView(props) {
   const {
@@ -86,8 +86,8 @@ DayView.propTypes = {
   patients: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   services: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   chairs: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
-  practitioners: PropTypes.instanceOf(Map).isRequired,
-  currentDate: PropTypes.instanceOf(DateTimeObj).isRequired,
+  practitioners: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  currentDate: PropTypes.instanceOf(moment).isRequired,
   schedule: PropTypes.instanceOf(Map).isRequired,
   selectAppointment: PropTypes.func.isRequired,
   leftColumnWidth: PropTypes.number.isRequired,

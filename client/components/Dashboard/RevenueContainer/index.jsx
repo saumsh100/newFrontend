@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,8 +10,7 @@ import RevenueDisplay from './RevenueDisplay';
 import RevenueChart from './RevenueChart';
 import AccountModel from '../../../entities/models/Account';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
-import { Card, getTodaysDate, getISODate } from '../../library';
-
+import { Card } from '../../library';
 import styles from './styles.scss';
 
 const filterBooked = (startOfCurrentDay, endOfCurrentDay) => key =>
@@ -58,7 +58,7 @@ function renderDisplay(revenueData, account) {
 
   const timezone = account.get('timezone');
 
-  const currentDay = getTodaysDate(timezone);
+  const currentDay = moment().tz(timezone);
   const startOfCurrentDay = currentDay.startOf('day').toISOString();
   const endOfCurrentDay = currentDay.endOf('day').toISOString();
 
@@ -90,7 +90,7 @@ function renderChart(revenueData, account) {
   const timezone = account.get('timezone');
   const isValid = revenue.average;
 
-  const currentDay = getTodaysDate(timezone);
+  const currentDay = moment().tz(timezone);
   const endOfCurrentDay = currentDay.endOf('day').toISOString();
   const startOfCurrentDay = currentDay.startOf('day').toISOString();
 
@@ -137,8 +137,8 @@ class RevenueContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const currentDate = getISODate(this.props.dashboardDate);
-    const previousDate = getISODate(prevProps.dashboardDate);
+    const currentDate = moment(this.props.dashboardDate).toISOString();
+    const previousDate = moment(prevProps.dashboardDate).toISOString();
 
     if (currentDate !== previousDate) {
       this.fetchRevenueData(this.props.dashboardDate);

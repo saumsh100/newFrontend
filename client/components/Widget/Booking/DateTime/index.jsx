@@ -353,7 +353,6 @@ class DateTime extends PureComponent {
                 showPreviousMonth={false}
                 theme={dayPickerStyles}
                 onChange={this.changeSelectedDate}
-                timezone={accountTimezone}
               />
             </div>
           </div>

@@ -216,7 +216,7 @@ class PractitionerOfficeHours extends Component {
       if (values[key].breaks) {
         weeklySchedule.weeklySchedules[i][key].breaks = values[key].breaks;
       } else {
-        const { breaks } = weeklySchedule.weeklySchedules[i][key];
+        const breaks = weeklySchedule.weeklySchedules[i][key].breaks;
         weeklySchedule.weeklySchedules[i][key] = values[key];
         weeklySchedule.weeklySchedules[i][key].breaks = breaks;
       }
@@ -329,7 +329,7 @@ class PractitionerOfficeHours extends Component {
         .sort(SortByName);
 
       const chairFields = filteredChairs.map((chair) => {
-        const { modalChairDay } = this.state;
+        const modalChairDay = this.state.modalChairDay;
         initialValuesChairs[chair.id] = weeklySchedule[modalChairDay].chairIds.includes(chair.id);
         return (
           <div className={styles.chairsContainer_fields} key={chair.id}>
@@ -500,13 +500,7 @@ class PractitionerOfficeHours extends Component {
                 onSubmit={this.changeStartDate}
                 initialValues={weeklySchedule}
               >
-                <Field
-                  required
-                  timezone={this.props.timezone}
-                  component="DayPicker"
-                  name="startDate"
-                  label="Start Date"
-                />
+                <Field required component="DayPicker" name="startDate" label="Start Date" />
               </Form>
             </DialogBox>
             {dialogShow}
@@ -524,7 +518,6 @@ PractitionerOfficeHours.propTypes = {
   chairs: PropTypes.instanceOf(Map),
   weeklySchedule: PropTypes.instanceOf(WeeklyScheduleModel),
   practitioner: PropTypes.instanceOf(Practitioner).isRequired,
-  timezone: PropTypes.string.isRequired,
 };
 
 PractitionerOfficeHours.defaultProps = {
@@ -536,7 +529,6 @@ PractitionerOfficeHours.defaultProps = {
 const mapStateToProps = ({ form, auth }) => ({
   accountId: auth.get('accountId'),
   allChairs: form.chairs ? checkValues(form.chairs.values) : null,
-  timezone: auth.get('timezone'),
 });
 
 const mapActionsToProps = dispatch => bindActionCreators({ batchActions }, dispatch);

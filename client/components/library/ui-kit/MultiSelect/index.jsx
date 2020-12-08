@@ -195,7 +195,7 @@ MultiSelect.propTypes = {
   ).isRequired,
   label: PropTypes.node,
   placeholder: PropTypes.string,
-  selector: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  selector: PropTypes.node,
   theme: PropTypes.objectOf(PropTypes.string),
   selected: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
   defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),

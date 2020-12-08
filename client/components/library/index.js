@@ -154,23 +154,3 @@ export { Grid, Row, Col } from './Grid';
 export { SContainer, SHeader, SBody, SFooter } from './Layout';
 export { List, ListItem } from './List';
 export { Nav, NavItem } from './Nav';
-export {
-  DateTimeObj,
-  generateTimeOptions,
-  getDateDurantion,
-  getFormattedDate,
-  getISODate,
-  getISODateParsedWithFormat,
-  getISODateWithFormat,
-  getDate,
-  getTodaysDate,
-  getUTCDate,
-  getUTCDateWithFormat,
-  isDateValid,
-  parseDate,
-  parseDateWithFormat,
-  getFixedDate,
-  getUTCDateObj,
-  getFormattedTime,
-  getWeeklySchedule,
-} from './util/datetime';

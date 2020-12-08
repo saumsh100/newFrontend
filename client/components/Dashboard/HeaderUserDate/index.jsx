@@ -1,7 +1,7 @@
 
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import moment from 'moment-timezone';
 import { Form, Field, IconButton } from '../../library';
 import styles from '../styles.scss';
 
@@ -18,7 +18,8 @@ class HeaderUserDate extends Component {
   }
 
   handleChange(value) {
-    this.props.setDashboardDate(value);
+    const newDate = moment(value).toISOString();
+    this.props.setDashboardDate(newDate);
   }
 
   render() {
@@ -52,7 +53,6 @@ class HeaderUserDate extends Component {
               onChange={(event, newValue) => {
                 this.handleChange(newValue);
               }}
-              timezone={this.props.timezone}
             />
           </Form>
           <div className={styles.dateIconContainer}>
@@ -73,12 +73,10 @@ HeaderUserDate.propTypes = {
   user: PropTypes.string,
   dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
   setDashboardDate: PropTypes.func.isRequired,
-  timezone: PropTypes.string.isRequired,
 };
 
 HeaderUserDate.defaultProps = {
   user: '',
 };
 
-const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(mapStateToProps, null)(HeaderUserDate);
+export default HeaderUserDate;

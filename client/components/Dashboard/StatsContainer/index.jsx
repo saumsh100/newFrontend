@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { setDateToTimezone } from '@carecru/isomorphic';
 import { IconCard } from '../../library';
 import { FilterAppointments } from '../Shared/filters';
 import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
@@ -89,14 +90,12 @@ StatsContainer.defaultProps = {
   overrideStatClassName: null,
 };
 
-function mapStateToProps(
-  { dashboard, entities, waitingRoom, featureFlags, auth },
-  { dashboardDate },
-) {
-  const practitioners = entities.getIn(['practitioners', 'models']);
-  const allAppointments = entities.getIn(['appointments', 'models']);
-  const timezone = auth.get('timezone');
-  const appointments = FilterAppointments(allAppointments, practitioners, dashboardDate, timezone);
+function mapStateToProps({ dashboard, entities, waitingRoom, featureFlags }, { dashboardDate }) {
+  const appointments = FilterAppointments(
+    entities.getIn(['appointments', 'models']),
+    entities.getIn(['practitioners', 'models']),
+    setDateToTimezone(dashboardDate),
+  );
 
   const canSeeVirtualWaitingRoom = isFeatureEnabledSelector(
     featureFlags.get('flags'),
@@ -104,6 +103,7 @@ function mapStateToProps(
   );
 
   const waitingRoomQueue = waitingRoom.get('waitingRoomQueue');
+
   return {
     appointmentsCount: appointments.size,
     insightCount: dashboard.get('insightCount'),
@@ -116,4 +116,7 @@ function mapStateToProps(
   };
 }
 
-export default connect(mapStateToProps, null)(StatsContainer);
+export default connect(
+  mapStateToProps,
+  null,
+)(StatsContainer);

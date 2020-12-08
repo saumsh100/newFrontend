@@ -1,6 +1,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import moment from 'moment';
 import omit from 'lodash/omit';
 import DayPicker from '../../DayPicker';
 
@@ -14,13 +15,9 @@ export default function RFDayPicker(props) {
   return <DayPicker {...newProps} {...input} error={finalError} />;
 }
 
-RFDayPicker.defaultProps = {
-  error: '',
-};
+/* eslint react/forbid-prop-types: 0 */
 RFDayPicker.propTypes = {
-  input: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.func]))
-    .isRequired,
-  meta: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.func]))
-    .isRequired,
+  input: PropTypes.object,
+  meta: PropTypes.object,
   error: PropTypes.string,
 };

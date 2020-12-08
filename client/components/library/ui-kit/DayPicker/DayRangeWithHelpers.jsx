@@ -173,7 +173,7 @@ class DayRangeWithHelpers extends Component {
     }
 
     const isFromInput = this.state.activeElement === 'fromInput';
-    if (isInvalidRange(day, isFromInput, this.state)) return false;
+    if (isInvalidRange(day, isFromInput, this.state)) return;
 
     const key = isFromInput ? 'start' : 'end';
     this[this.state.activeElement].value = dateFormatter(day, null, 'll');
@@ -285,7 +285,6 @@ class DayRangeWithHelpers extends Component {
                   }
                   return this.setState({ isOpen: true });
                 }
-                return false;
               }}
               onClick={this.handleClickWrapper}
             >
@@ -366,7 +365,6 @@ class DayRangeWithHelpers extends Component {
                     [dayPicker.end]: valueToDate(this.state.end),
                   }}
                   month={this.state.visibleMonth}
-                  timezone={this.props.timezone}
                 />
               </div>
               <div className={styles.footer}>
@@ -401,7 +399,6 @@ DayRangeWithHelpers.propTypes = {
   placeholderStart: PropTypes.string,
   showOutsideDays: PropTypes.bool,
   end: PropTypes.string,
-  timezone: PropTypes.string,
 };
 
 DayRangeWithHelpers.defaultProps = {
@@ -415,7 +412,6 @@ DayRangeWithHelpers.defaultProps = {
   placeholderStart: 'Start Date',
   showOutsideDays: true,
   end: null,
-  timezone: null,
 };
 
 export default DayRangeWithHelpers;
