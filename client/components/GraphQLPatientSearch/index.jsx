@@ -236,8 +236,8 @@ class PatientSearch extends Component {
   /**
    * render the options list
    * based on the current state of the dropdown represented on the params below
-   * @param {bool} displayList typed something and state is already updated
-   * @param {bool} displaySearching typed something but relay ain't updated the state yet
+   * @param {boolean} displayList typed something and state is already updated
+   * @param {boolean} displaySearching typed something but relay ain't updated the state yet
    * @param {*} suggestionsListProps args needed for this.renderList
    */
   renderSuggestionList({ displayList, displaySearching, ...suggestionsListProps }) {

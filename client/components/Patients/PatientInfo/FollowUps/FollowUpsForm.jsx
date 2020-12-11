@@ -87,7 +87,7 @@ export default function FollowUpsForm({
               label="Reason"
               data-test-id="reason"
               component="DropdownSelect"
-              options={patientFollowUpTypes}
+              options={patientFollowUpTypes || {}}
             />
           );
         }}

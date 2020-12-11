@@ -64,7 +64,7 @@ const FollowUps = ({ theme, timezone, accountUsers }) => (
               <Field
                 component="DropdownSelect"
                 name="4"
-                options={patientFollowUpTypes}
+                options={patientFollowUpTypes || {}}
                 theme={theme}
               />
             );

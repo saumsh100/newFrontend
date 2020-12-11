@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import moment from 'moment';
 import { Map, Record } from 'immutable';
 import CallsGraph from './CallsGraph';
@@ -88,11 +89,7 @@ class CallsBody extends Component {
 
     return (
       <div className={styles.callsContainer} id="callsContainer">
-        <Card
-          runAnimation
-          loaded={wasStatsFetched}
-          className={styles.cardGraph}
-        >
+        <Card runAnimation loaded={wasStatsFetched} className={styles.cardGraph}>
           <div className={styles.headerGraph}>
             <div className={styles.headerGraph_title}>Calls</div>
             <div>
@@ -104,15 +101,12 @@ class CallsBody extends Component {
                 onChange={handleDateRange}
                 monthsToShow={2}
                 maxDays={60}
+                timezone={this.props.timezone}
               />
             </div>
           </div>
           {wasStatsFetched && (
-            <CallsGraph
-              callGraphStats={callGraphStats}
-              startDate={startDate}
-              endDate={endDate}
-            />
+            <CallsGraph callGraphStats={callGraphStats} startDate={startDate} endDate={endDate} />
           )}
         </Card>
         <Card
@@ -145,10 +139,7 @@ class CallsBody extends Component {
               custom
             >
               {this.state.selectedCall && (
-                <CallInfo
-                  call={this.state.selectedCall}
-                  handleCallUpdate={handleCallUpdate}
-                />
+                <CallInfo call={this.state.selectedCall} handleCallUpdate={handleCallUpdate} />
               )}
             </DialogBox>
           )}
@@ -172,6 +163,23 @@ CallsBody.propTypes = {
   callsLength: PropTypes.number,
   handleCallUpdate: PropTypes.func.isRequired,
   fetchingCalls: PropTypes.bool,
+  timezone: PropTypes.string.isRequired,
 };
 
-export default CallsBody;
+CallsBody.defaultProps = {
+  callGraphStats: null,
+  startDate: null,
+  endDate: null,
+  handleDateRange: null,
+  wasStatsFetched: null,
+  wasCallsFetched: null,
+  moreData: null,
+  loadMore: null,
+  patients: null,
+  calls: null,
+  callsLength: null,
+  fetchingCalls: null,
+};
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(mapStateToProps, null)(CallsBody);

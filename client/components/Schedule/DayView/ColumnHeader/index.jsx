@@ -26,28 +26,22 @@ export default function ShowColumnHeader(props) {
 
   return (
     <div className={styles.columnHeader}>
-      <div className={styles.columnHeader_empty} style={emptyStyle}>
-        {''}
-      </div>
+      <div className={styles.columnHeader_empty} style={emptyStyle} />
       <div className={styles.scrollDiv}>
         {allFetched ? (
-          <div
-            className={styles.columnHeader_body}
-            ref={headerComponentDidMount}
-          >
-            {entities.map((entity, i) => (
-              <div
-                key={i + Math.random()}
-                className={styles.columnHeader_item}
-                style={timeSlotContentStyle}
-              >
-                {scheduleView === 'chair' ? (
-                  <ChairHeader chair={entity} />
-                ) : (
-                  <PractitionerHeader practitioner={entity} />
-                )}
-              </div>
-            ))}
+          <div className={styles.columnHeader_body} ref={headerComponentDidMount}>
+            {entities.map((entity, i) => {
+              const key = i + Math.random();
+              return (
+                <div key={key} className={styles.columnHeader_item} style={timeSlotContentStyle}>
+                  {scheduleView === 'chair' ? (
+                    <ChairHeader chair={entity} />
+                  ) : (
+                    <PractitionerHeader practitioner={entity} />
+                  )}
+                </div>
+              );
+            })}
           </div>
         ) : null}
         <div className={styles.blank} />
@@ -59,8 +53,15 @@ export default function ShowColumnHeader(props) {
 ShowColumnHeader.propTypes = {
   scheduleView: PropTypes.string,
   entities: PropTypes.instanceOf(Array),
-  headerComponentDidMount: PropTypes.func,
-  leftColumnWidth: PropTypes.number,
-  minWidth: PropTypes.number,
+  headerComponentDidMount: PropTypes.shape({ current: PropTypes.any }),
+  leftColumnWidth: PropTypes.number.isRequired,
+  minWidth: PropTypes.number.isRequired,
   allFetched: PropTypes.bool,
+};
+
+ShowColumnHeader.defaultProps = {
+  scheduleView: null,
+  entities: [],
+  headerComponentDidMount: {},
+  allFetched: false,
 };

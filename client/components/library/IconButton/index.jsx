@@ -26,7 +26,7 @@ export default function IconButton(props) {
 }
 
 IconButton.propTypes = {
-  badgeText: PropTypes.string,
+  badgeText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   className: PropTypes.string,
   icon: PropTypes.string.isRequired,
   iconClassName: PropTypes.string,

@@ -10,7 +10,6 @@ function Checkbox(props) {
     id,
     value,
     label,
-    checked,
     onChange,
     hidden,
     labelClassNames,
@@ -19,6 +18,10 @@ function Checkbox(props) {
     showIndeterminate,
     className,
   } = props;
+
+  let { checked } = props;
+
+  checked = typeof checked === 'string' ? checked === 'true' : checked;
 
   const labelClasses = classNames(theme.label, {
     [labelClassNames]: labelClassNames,
@@ -81,7 +84,7 @@ Checkbox.propTypes = {
   onChange: PropTypes.func.isRequired,
   showIndeterminate: PropTypes.bool,
   theme: PropTypes.objectOf(PropTypes.string),
-  checked: PropTypes.bool,
+  checked: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   hidden: PropTypes.bool,
   labelClassNames: PropTypes.string,
   value: PropTypes.string,

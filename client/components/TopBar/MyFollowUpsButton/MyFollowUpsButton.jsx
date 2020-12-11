@@ -15,8 +15,12 @@ const MyFollowUpsButton = ({ count, onClick }) => (
 );
 
 MyFollowUpsButton.propTypes = {
-  count: PropTypes.number.isRequired,
+  count: PropTypes.number,
   onClick: PropTypes.func.isRequired,
+};
+
+MyFollowUpsButton.defaultProps = {
+  count: 0,
 };
 
 export default MyFollowUpsButton;

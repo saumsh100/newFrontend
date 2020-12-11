@@ -93,6 +93,7 @@ class ShowAppointment extends Component {
       isNoteFormActive,
       isFollowUpsFormActive,
       isRecallsFormActive,
+      timezone,
     } = this.props;
     const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
     const { isOpened, nameContainerOffsetWidth, nameContainerOffset } = this.state;
@@ -126,6 +127,8 @@ class ShowAppointment extends Component {
             }}
             chair={chair}
             practitioner={practitioner}
+            timezone={timezone}
+            key="AppointmentInfo"
           />,
         ]}
         preferPlace={placement}
@@ -157,12 +160,17 @@ class ShowAppointment extends Component {
               </div>
 
               {canInlineAppointment() && (
-                <AppointmentHours startDate={startDate} endDate={endDate} inline />
+                <AppointmentHours
+                  timezone={timezone}
+                  startDate={startDate}
+                  endDate={endDate}
+                  inline
+                />
               )}
             </div>
 
             {canShowAppointmentBelow() && (
-              <AppointmentHours startDate={startDate} endDate={endDate} />
+              <AppointmentHours timezone={timezone} startDate={startDate} endDate={endDate} />
             )}
           </div>
         </Button>
@@ -197,11 +205,12 @@ ShowAppointment.propTypes = {
   getOrCreateChatForPatient: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   patientChat: PropTypes.string,
-  practitioner: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
-  chair: PropTypes.arrayOf(PropTypes.shape(chairShape)).isRequired,
+  practitioner: PropTypes.shape(practitionerShape).isRequired,
+  chair: PropTypes.shape(chairShape).isRequired,
   isNoteFormActive: PropTypes.bool.isRequired,
   isFollowUpsFormActive: PropTypes.bool.isRequired,
   isRecallsFormActive: PropTypes.bool.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 ShowAppointment.defaultProps = {
@@ -216,7 +225,7 @@ ShowAppointment.defaultProps = {
   patientChat: null,
 };
 
-const mapStateToProps = ({ chat, entities, dashboard, patientTable }, { appointment }) => {
+const mapStateToProps = ({ chat, entities, dashboard, patientTable, auth }, { appointment }) => {
   const practitioner = entities
     .getIn(['practitioners', 'models'])
     .toArray()
@@ -234,6 +243,7 @@ const mapStateToProps = ({ chat, entities, dashboard, patientTable }, { appointm
     isRecallsFormActive: patientTable.get('isRecallsFormActive'),
     dashboardDate: dashboard.get('dashboardDate'),
     patientChat: chat.get('patientChat'),
+    timezone: auth.get('timezone'),
   };
 };
 
@@ -246,7 +256,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ShowAppointment);
+export default connect(mapStateToProps, mapDispatchToProps)(ShowAppointment);

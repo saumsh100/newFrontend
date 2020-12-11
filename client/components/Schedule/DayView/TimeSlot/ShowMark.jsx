@@ -19,6 +19,7 @@ const ShowMark = (props) => {
     isRecallsFormActive,
     placement,
     practitioner,
+    timezone,
   } = props;
   const { note, description } = appointment;
   const [isOpened, setIsOpened] = useState(false);
@@ -35,6 +36,7 @@ const ShowMark = (props) => {
           title="Reserve
           Time"
           closePopover={closePopover}
+          timezone={timezone}
           extraStyles={{
             note: {
               maxHeight: '120px',
@@ -94,6 +96,7 @@ ShowMark.propTypes = {
   isRecallsFormActive: PropTypes.bool.isRequired,
   placement: PropTypes.string,
   practitioner: PropTypes.shape(practitionerShape).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 ShowMark.defaultProps = {
@@ -113,7 +116,4 @@ const mapStateToProps = ({ entities, patientTable }, { appointment }) => ({
     .find(practitioner => practitioner.id === appointment.practitionerId),
 });
 
-export default connect(
-  mapStateToProps,
-  null,
-)(ShowMark);
+export default connect(mapStateToProps, null)(ShowMark);

@@ -20,7 +20,7 @@ const WaitListTableFooter = ({ waitlistCount, goToSendMassMessage, removeMultipl
 };
 
 WaitListTableFooter.propTypes = {
-  waitlistCount: PropTypes.bool.isRequired,
+  waitlistCount: PropTypes.number.isRequired,
   goToSendMassMessage: PropTypes.func.isRequired,
   removeMultipleWaitSpots: PropTypes.func.isRequired,
 };

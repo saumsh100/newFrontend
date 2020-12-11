@@ -247,7 +247,4 @@ function mapStateToProps({ form }, { formName }) {
 
 const enhance = withState('showOption', 'setOption', false);
 
-export default enhance(connect(
-  mapStateToProps,
-  null,
-)(RecurringTimeOffForm));
+export default enhance(connect(mapStateToProps, null)(RecurringTimeOffForm));

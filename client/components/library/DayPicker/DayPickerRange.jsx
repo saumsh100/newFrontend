@@ -180,7 +180,8 @@ class DayPickerRange extends Component {
     if (
       from &&
       to &&
-      (DateUtils.isDayAfter(pickedDay, from) && DateUtils.isDayBefore(pickedDay, to))
+      DateUtils.isDayAfter(pickedDay, from) &&
+      DateUtils.isDayBefore(pickedDay, to)
     ) {
       this.setState(
         {
@@ -280,7 +281,15 @@ class DayPickerRange extends Component {
 
   render() {
     const { from, to, enteredTo } = this.state;
-    const { monthsToShow, popover, disabledDays, readOnly, fieldsWrapper, theme } = this.props;
+    const {
+      monthsToShow,
+      popover,
+      disabledDays,
+      readOnly,
+      fieldsWrapper,
+      theme,
+      timezone,
+    } = this.props;
 
     const modifiers = {
       [styles.start]: from,
@@ -307,6 +316,7 @@ class DayPickerRange extends Component {
           onDayMouseEnter={this.handleDayMouseEnter}
           initialMonth={from || new Date()}
           classNames={StyleExtender(theme, rangePickerTheme)}
+          timezone={timezone}
         />
         {popover && (
           <div className={styles.buttonContainer}>
@@ -419,6 +429,7 @@ DayPickerRange.propTypes = {
   readOnly: PropTypes.bool,
   to: PropTypes.oneOfType(dateShape),
   theme: PropTypes.objectOf(PropTypes.string),
+  timezone: PropTypes.string.isRequired,
 };
 
 DayPickerRange.defaultProps = {

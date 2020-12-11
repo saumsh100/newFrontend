@@ -13,7 +13,8 @@ export default class Bundle extends Component {
     this.mounted = false;
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillMount() {
     this.mounted = true;
     this.load(this.props);
   }

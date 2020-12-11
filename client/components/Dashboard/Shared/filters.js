@@ -1,9 +1,10 @@
 
-import moment from 'moment';
+import { getUTCDate } from '../../library';
 
-export const FilterAppointments = (appointments, practitioners, date) =>
+export const FilterAppointments = (appointments, practitioners, dashboardDate, timezone) =>
   appointments.filter((app) => {
-    const sDate = moment(app.startDate);
+    const sDate = getUTCDate(app.startDate, timezone);
+    const date = getUTCDate(dashboardDate, timezone);
     const isSameDate =
       date.isSame(sDate, 'day') && date.isSame(sDate, 'month') && date.isSame(sDate, 'year');
     const activePractitioner = practitioners

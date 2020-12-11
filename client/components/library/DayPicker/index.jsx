@@ -2,7 +2,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Popover from 'react-popover';
-import moment from 'moment-timezone';
 import 'react-day-picker/lib/style.css';
 import isArray from 'lodash/isArray';
 import omit from 'lodash/omit';
@@ -12,17 +11,18 @@ import IconButton from '../IconButton';
 import { dayPickerTheme } from './defaultTheme';
 import { StyleExtender } from '../../Utils/Themer';
 import styles from './styles.scss';
-
-const getUTCDate = (value) => {
-  const { years, months, date, hours } = moment(value).toObject();
-  return new Date(years, months, date, hours);
-};
+import { getDate, getTodaysDate, getUTCDate, parseDate } from '../util/datetime';
 
 const convertValueToDate = (value) => {
+  const toDateObject = (d) => {
+    const { years, months, date, hours } = getUTCDate(d).toObject();
+    return new Date(years, months, date, hours);
+  };
+
   if (isArray(value)) {
-    return value.map(v => getUTCDate(v));
+    return value.map(v => toDateObject(v));
   }
-  return getUTCDate(value);
+  return toDateObject(value);
 };
 
 class DayPicker extends Component {
@@ -36,15 +36,13 @@ class DayPicker extends Component {
 
   handleDayClick(day, { disabled }) {
     const { multiple, value, onChange, timezone } = this.props;
-
-    const dates = moment(day).format('YYYY-MM-DD');
+    const dates = getDate(day).format('YYYY-MM-DD');
 
     day = timezone
-      ? moment
-        .tz(dates, timezone)
+      ? parseDate(dates, timezone)
         .add(12, 'hours')
         .toISOString()
-      : moment(day)
+      : getDate(day)
         .subtract(12, 'hours')
         .toISOString();
     if (disabled) {
@@ -52,11 +50,11 @@ class DayPicker extends Component {
     }
 
     if (!multiple) {
-      this.props.onChange(day);
+      onChange(day);
       this.setState({ isOpen: false });
     } else {
       const selectedIndex = value.findIndex((v) => {
-        const date = moment(new Date(v)).toDate();
+        const date = getDate(new Date(v)).toDate();
         return DateUtils.isSameDay(new Date(date), new Date(day));
       });
 
@@ -74,12 +72,9 @@ class DayPicker extends Component {
 
   handleInputChange(e) {
     const { value } = e.target;
-    const momentDay = moment(value, 'L', true);
-
+    const momentDay = getDate(value, 'L', true);
     if (momentDay.isValid() && this.props.handleThisInput) {
-      this.props.onChange(value);
-    } else {
-      this.props.onChange(value);
+      this.props.onChange(momentDay.toISOString());
     }
   }
 
@@ -91,9 +86,18 @@ class DayPicker extends Component {
   }
 
   render() {
-    const { target, TargetComponent, tipSize, iconClassName, value, noTarget, theme } = this.props;
+    const {
+      target,
+      TargetComponent,
+      tipSize,
+      iconClassName,
+      value,
+      noTarget,
+      theme,
+      timezone,
+    } = this.props;
     // If value is defined, format to 10/8/2017 style
-    const displayValue = value ? moment(value).format('l') : value;
+    const displayValue = value ? getUTCDate(value, timezone).format('l') : value;
 
     const newPickerProps = omit(this.props, [
       'iconClassName',
@@ -102,6 +106,9 @@ class DayPicker extends Component {
       'noTarget',
       'TargetComponent',
       'disabledDays',
+      'onChange',
+      'onClick',
+      'onBlur',
     ]);
 
     let dayPickerTargetComponent = (
@@ -132,6 +139,7 @@ class DayPicker extends Component {
         dayPickerTargetComponent = <TargetComponent onClick={this.togglePopOver} />;
       }
     }
+
     const body = (
       <div className={styles.outerContainer} key="body">
         <RDayPicker
@@ -141,6 +149,7 @@ class DayPicker extends Component {
           initialMonth={value ? new Date(convertValueToDate(value)) : new Date()}
           classNames={StyleExtender(dayPickerTheme, theme)}
           {...this.props}
+          month={value ? new Date(convertValueToDate(value)) : this.props.month}
         />
       </div>
     );
@@ -166,7 +175,7 @@ DayPicker.propTypes = {
   target: PropTypes.string,
   onChange: PropTypes.func,
   iconClassName: PropTypes.string,
-  timezone: PropTypes.string,
+  timezone: PropTypes.string.isRequired,
   multiple: PropTypes.bool,
   TargetComponent: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
   'data-test-id': PropTypes.string,
@@ -175,13 +184,13 @@ DayPicker.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.any)]),
   handleThisInput: PropTypes.func,
   theme: PropTypes.objectOf(PropTypes.string),
+  month: PropTypes.instanceOf(Date),
 };
 
 DayPicker.defaultProps = {
   onChange: e => e,
   target: null,
   iconClassName: '',
-  timezone: '',
   multiple: false,
   TargetComponent: null,
   'data-test-id': '',
@@ -190,6 +199,7 @@ DayPicker.defaultProps = {
   handleThisInput: e => e,
   value: '',
   theme: {},
+  month: new Date(getTodaysDate().year(), getTodaysDate().month()),
 };
 
 export default DayPicker;

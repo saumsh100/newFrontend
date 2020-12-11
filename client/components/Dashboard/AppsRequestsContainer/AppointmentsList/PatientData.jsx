@@ -1,16 +1,18 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { Icon } from '../../../library';
+import { connect } from 'react-redux';
 import styles from '../styles.scss';
+import Patient from '../../../../entities/collections/patients';
+import Appointment from '../../../../entities/collections/appointments';
+import Practitioner from '../../../../entities/collections/practitioners';
+import { Icon, getTodaysDate, getFormattedDate } from '../../../library';
 
-export default function PatientData(props) {
-  const { patient, appointment, practitioner } = props;
+function PatientData(props) {
+  const { patient, appointment, practitioner, timezone } = props;
 
-  const age = moment().diff(patient.birthDate, 'years') || '';
+  const age = getTodaysDate(timezone).diff(patient.birthDate, 'years') || '';
   const lastName = age ? `${patient.lastName},` : patient.lastName;
-
   return (
     <div className={styles.appPatientContainer}>
       <div className={styles.appPatientData}>
@@ -24,15 +26,11 @@ export default function PatientData(props) {
         <div className={styles.patientDetails}>
           <span className={styles.patientDetails_lastAppt}>Last Appt:&nbsp;</span>
           <span className={styles.patientDetails_date}>
-            {patient.lastApptDate ? moment(patient.lastApptDate).format(' MMM D, YYYY') : ' n/a'}
+            {patient.lastApptDate
+              ? getFormattedDate(patient.lastApptDate, ' MMM D, YYYY', timezone)
+              : ' n/a'}
           </span>
         </div>
-
-        {/* <div className={styles.patientDetails}>
-        <div className={styles.patientDetails_created}>
-          Created: {moment(appointment.createdAt).format('MMM D, h:mm A')}
-        </div>
-      </div> */}
       </div>
 
       <div className={styles.appPatientConfirmed}>
@@ -45,3 +43,14 @@ export default function PatientData(props) {
     </div>
   );
 }
+
+PatientData.propTypes = {
+  patient: PropTypes.shape(Patient).isRequired,
+  appointment: PropTypes.shape(Appointment).isRequired,
+  practitioner: PropTypes.shape(Practitioner).isRequired,
+  timezone: PropTypes.string.isRequired,
+};
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+
+export default connect(mapStateToProps, null)(PatientData);

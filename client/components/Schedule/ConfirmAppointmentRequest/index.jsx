@@ -89,7 +89,14 @@ class ConfirmAppointmentRequest extends Component {
   }
 
   render() {
-    const { patients, selectedAppointment, setCurrentDay, setSendEmail, sendEmail } = this.props;
+    const {
+      patients,
+      selectedAppointment,
+      setCurrentDay,
+      setSendEmail,
+      sendEmail,
+      timezone,
+    } = this.props;
 
     if (!selectedAppointment) {
       return null;
@@ -165,6 +172,7 @@ class ConfirmAppointmentRequest extends Component {
                 setSelected={this.setSelected}
                 selectedApp={this.state.selectedApp}
                 length={appointments.length}
+                timezone={timezone}
               />
             ))}
           </div>
@@ -213,12 +221,19 @@ ConfirmAppointmentRequest.propTypes = {
   setLocation: PropTypes.func.isRequired,
   setSendEmail: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 ConfirmAppointmentRequest.defaultProps = {
   redirect: null,
   selectedAppointment: null,
 };
+
+function mapStateToProps({ auth }) {
+  return {
+    timezone: auth.get('timezone'),
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
@@ -230,9 +245,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  null,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(ConfirmAppointmentRequest);

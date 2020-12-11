@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Popover from 'react-popover';
-import { ListItem } from '../library';
+import { ListItem, getFormattedTime } from '../library';
 import { checkIfUsersEqual } from '../Utils';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
@@ -57,6 +57,7 @@ class RequestListItem extends Component {
       requestId,
       popoverRight,
       requestingUser,
+      timezone,
     } = this.props;
 
     if (!request || !patientUser) {
@@ -66,9 +67,11 @@ class RequestListItem extends Component {
     const serviceName = service ? service.name : '';
 
     const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
+    const startDate = request.get('startDate');
+    const endDate = request.get('endDate');
 
     const data = {
-      time: request.getFormattedTime(),
+      time: getFormattedTime(startDate, endDate, timezone),
       age: '',
       name: fullName,
       nameAge: '',
@@ -134,6 +137,7 @@ RequestListItem.propTypes = {
   confirmAppointment: PropTypes.func.isRequired,
   removeRequest: PropTypes.func.isRequired,
   openRequest: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 RequestListItem.defaultProps = {

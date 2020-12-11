@@ -101,7 +101,8 @@ class DateTime extends PureComponent {
 
     if (
       this.props.selectedAvailability !== null &&
-      (!!this.props.availabilities.total && !!this.props.selectedAvailability)
+      !!this.props.availabilities.total &&
+      !!this.props.selectedAvailability
     ) {
       this.props.showButton();
     }
@@ -353,6 +354,7 @@ class DateTime extends PureComponent {
                 showPreviousMonth={false}
                 theme={dayPickerStyles}
                 onChange={this.changeSelectedDate}
+                timezone={accountTimezone}
               />
             </div>
           </div>
@@ -428,10 +430,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DateTime);
+export default connect(mapStateToProps, mapDispatchToProps)(DateTime);
 
 DateTime.propTypes = {
   accountTimezone: PropTypes.string.isRequired,

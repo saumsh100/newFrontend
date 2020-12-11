@@ -8,7 +8,6 @@
     padding-left: 10px;
   }
   &_date {
-
   }
   &_note {
     color: $primary-darkgrey;
@@ -16,7 +15,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  &_allDay{
+  &_allDay {
     color: $primary-darkgrey;
     margin-left: auto;
   }
@@ -46,10 +45,10 @@
   }
 }
 
-
 .inlineBlock {
   padding-bottom: 1px;
   padding-left: 10px;
+  padding-top: 2px;
 }
 
 .displayTimeOff {
@@ -58,9 +57,8 @@
   border-color: $primary-grey;
   border-radius: 5px;
   margin-bottom: 5px;
-  margin-top: 5px;
-  padding-left: 2px;
-  padding-top: 5px;
+  margin-top: 10px;
+  padding: 5px 2px;
   text-align: center;
 }
 
@@ -68,4 +66,3 @@
   align-items: center;
   display: flex;
 }
-

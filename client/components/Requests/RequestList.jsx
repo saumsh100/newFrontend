@@ -9,7 +9,7 @@ import { Map } from 'immutable';
 import RequestListItem from './RequestListItem';
 import RequestPopover from './RequestPopover';
 import Requests from '../../entities/models/Request';
-import { List, Media, Icon } from '../library';
+import { List, Media, Icon, getFormattedTime } from '../library';
 import { checkIfUsersEqual } from '../Utils';
 import { isHub } from '../../util/hub';
 import styles from './styles.scss';
@@ -106,7 +106,7 @@ class RequestList extends Component {
   }
 
   renderSelectedRequest() {
-    const { services, patientUsers, practitioners, selectedRequest } = this.props;
+    const { services, patientUsers, practitioners, selectedRequest, timezone } = this.props;
 
     const patientUser = patientUsers.get(selectedRequest.get('patientUserId'));
     const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
@@ -115,8 +115,12 @@ class RequestList extends Component {
     const practitionerId = selectedRequest.get('practitionerId');
     const practitioner = practitionerId ? practitioners.get(practitionerId) : null;
     const requestingUser = patientUsers.get(selectedRequest.get('requestingPatientUserId'));
+
+    const startDate = selectedRequest.get('startDate');
+    const endDate = selectedRequest.get('endDate');
+
     const data = {
-      time: selectedRequest.getFormattedTime(),
+      time: getFormattedTime(startDate, endDate, timezone),
       age: '',
       name: fullName,
       nameAge: '',
@@ -175,6 +179,7 @@ class RequestList extends Component {
               requestId={this.props.requestId}
               openRequest={this.openRequest}
               popoverRight={popoverRight}
+              timezone={this.props.timezone}
             />
           );
         })}
@@ -216,6 +221,7 @@ RequestList.propTypes = {
   updateEntityRequest: PropTypes.func.isRequired,
   setBackHandler: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 RequestList.defaultProps = {
@@ -226,7 +232,10 @@ RequestList.defaultProps = {
   sortedRequests: [],
 };
 
-const mapStateToProps = ({ router: { location } }) => ({ location });
+const mapStateToProps = ({ auth, router: { location } }) => ({
+  location,
+  timezone: auth.get('timezone'),
+});
 
 const mapActionsToProps = dispatch =>
   bindActionCreators(
@@ -245,9 +254,6 @@ const mapActionsToProps = dispatch =>
     dispatch,
   );
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(RequestList);
