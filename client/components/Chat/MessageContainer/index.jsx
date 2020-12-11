@@ -58,12 +58,14 @@ class MessageContainer extends Component {
       loadingMessages: false,
       offset: DEFAULT_OFFSET,
       loadedMessages: 0,
+      scrolled: false,
     };
     this.scrollContainer = createRef();
     this.optionsWrapper = createRef();
     this.failedMessageWrapper = createRef();
     this.sendMessageHandler = this.sendMessageHandler.bind(this);
     this.loadMoreMessages = this.loadMoreMessages.bind(this);
+    this.renderMessagesTree = this.renderMessagesTree.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -90,14 +92,10 @@ class MessageContainer extends Component {
     return null;
   }
 
-  componentDidMount() {
-    this.scrollContainer.current.scrollTop = this.scrollContainer.current.scrollHeight;
-  }
-
   componentDidUpdate() {
     // Scroll down on component
     const node = this.scrollContainer.current;
-    if (node && node.scrollTop !== node.scrollHeight) {
+    if (node && node.scrollTop !== node.scrollHeight && !this.state.scrolled) {
       node.scrollTop = node.scrollHeight;
     }
   }
@@ -308,6 +306,9 @@ class MessageContainer extends Component {
           id="careCruChatScrollIntoView"
           className={styles.allMessages}
           refCallback={this.scrollContainer}
+          onScroll={() => {
+            this.setState({ scrolled: true });
+          }}
         >
           <InfiniteScroll
             isReverse
@@ -412,9 +413,6 @@ MessageContainer.defaultProps = {
   pendingMessages: [],
 };
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(MessageContainer);
