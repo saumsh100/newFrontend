@@ -21,10 +21,10 @@ function Login(props) {
    * @param {object} values
    */
   const handleLogin = values =>
-    props.login(values).catch(({ data }) => {
+    props.login(values).catch(({ response }) => {
       throw new SubmissionError({
-        email: data,
-        password: data,
+        email: response.data,
+        password: response.data,
       });
     });
 
