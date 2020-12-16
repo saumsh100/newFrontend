@@ -11,6 +11,7 @@ import PreferencesForm from './PreferencesForm';
 import IntervalForm from './IntervalForm';
 import ChairSchedulingForm from './ChairSchedulingForm';
 import SchedulingUrlForm from './SchedulingUrlForm';
+import SchedulingPreviewForm from './SchedulingPreviewForm';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
@@ -75,6 +76,10 @@ class OnlineBooking extends Component {
         <div className={styles.formContainer}>
           <Header title="Online Scheduling URL" contentHeader />
           <SchedulingUrlForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
+        </div>
+        <div className={styles.formContainer}>
+          <Header title="Online Scheduling Widget Preview" contentHeader />
+          <SchedulingPreviewForm activeAccount={activeAccount} />
         </div>
       </SettingsCard>
     );
