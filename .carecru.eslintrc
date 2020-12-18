@@ -1,7 +1,0 @@
-{
-  "extends": ["./.eslintrc"],
-  "plugins": ["bof-newline"],
-    "rules": {
-      "bof-newline/bof-newline": ["error", "always"]
-    }
-}

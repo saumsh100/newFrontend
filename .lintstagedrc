@@ -7,7 +7,7 @@
   "client/**/*.{js,jsx}": [
     "npm run format",
     "prettier --write",
-    "eslint --fix -c .carecru.eslintrc",
+    "eslint --fix -c .eslintrc",
     "git add"
   ]
 }
