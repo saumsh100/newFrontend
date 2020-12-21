@@ -1,40 +1,45 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Row, Col } from '../../../../library';
+import patientShape from '../../../../library/PropTypeShapes/patient';
 import InfoDump from '../../../Shared/InfoDump';
 import { validDateValue } from '../../../Shared/helpers';
 import styles from '../styles.scss';
 
-export default function LastAppointmentSection(props) {
-  const { patient, className } = props;
-  return (
-    <div className={className}>
-      <div className={styles.lastAppointmentHeader}>Last Appointment</div>
-      <Row className={styles.appointmentsRow}>
-        <Col xs={6}>
-          <InfoDump label="HYGIENE" data={validDateValue(patient.lastHygieneDate)} />
-        </Col>
-        <Col xs={6}>
-          <InfoDump label="RECALL" data={validDateValue(patient.lastRecallDate)} />
-        </Col>
-      </Row>
-      <Row className={styles.appointmentsRow}>
-        <Col xs={6}>
-          <InfoDump label="RESTORATIVE" data={validDateValue(patient.lastRestorativeDate)} />
-        </Col>
-      </Row>
-    </div>
-  );
-}
+const LastAppointmentSection = ({ patient, className, timezone }) => (
+  <div className={className}>
+    <div className={styles.lastAppointmentHeader}>Last Appointment</div>
+    <Row className={styles.appointmentsRow}>
+      <Col xs={6}>
+        <InfoDump label="HYGIENE" data={validDateValue(patient.lastHygieneDate, timezone)} />
+      </Col>
+      <Col xs={6}>
+        <InfoDump label="RECALL" data={validDateValue(patient.lastRecallDate, timezone)} />
+      </Col>
+    </Row>
+    <Row className={styles.appointmentsRow}>
+      <Col xs={6}>
+        <InfoDump
+          label="RESTORATIVE"
+          data={validDateValue(patient.lastRestorativeDate, timezone)}
+        />
+      </Col>
+    </Row>
+  </div>
+);
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(
+  mapStateToProps,
+  null,
+)(LastAppointmentSection);
 
 LastAppointmentSection.propTypes = {
-  patient: PropTypes.shape({
-    lastRestorativeDate: PropTypes.string,
-    lastRecallDate: PropTypes.string,
-    lastHygieneDate: PropTypes.string,
-  }).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
   className: PropTypes.string,
+  timezone: PropTypes.string.isRequired,
 };
 
 LastAppointmentSection.defaultProps = {

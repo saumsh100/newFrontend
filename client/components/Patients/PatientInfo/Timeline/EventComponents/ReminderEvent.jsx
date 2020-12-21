@@ -6,37 +6,7 @@ import EventContainer from './Shared/EventContainer';
 import { PatientPopover } from '../../../../library';
 import styles from './styles.scss';
 
-export default function ReminderEvent({ data }) {
-  const contactMethodHash = {
-    email: 'Email',
-    sms: 'SMS',
-    'sms/email': 'Email & SMS',
-    smart_follow_up: 'Smart Follow Up',
-  };
-  const contactMethod = contactMethodHash[data.primaryType];
-  const intervalText = <span className={styles.reminder_interval}>{data.reminder.interval}</span>;
-
-  const { sentRemindersPatients } = data;
-  const {
-    appointment: { startDate },
-    appointmentStartDate,
-  } = sentRemindersPatients[0];
-
-  const appDate = dateFormatter(appointmentStartDate || startDate, '', 'MMMM Do, YYYY h:mma');
-
-  const component = (
-    <div className={styles.body_header}>
-      Sent {"'"}
-      {intervalText} Before
-      {"'"} {contactMethod}{' '}
-      {data.isFamily ? renderFamilyDetails(data) : `Reminder for the appointment on ${appDate}`}
-    </div>
-  );
-
-  return <EventContainer key={data.id} component={component} />;
-}
-
-const renderFamilyDetails = (data) => {
+const renderFamilyDetails = (data, timezone) => {
   const { contactedPatientId, sentRemindersPatients } = data;
 
   const patientFullName = ({ firstName, lastName }) => <span>{` ${firstName} ${lastName} `}</span>; // eslint-disable-line react/prop-types
@@ -46,7 +16,7 @@ const renderFamilyDetails = (data) => {
       patient,
       appointment: { startDate },
     } = sentRemindersPatients[0];
-    const appDateTime = dateFormatter(startDate, '', 'MMMM Do, YYYY h:mma');
+    const appDateTime = dateFormatter(startDate, timezone, 'MMMM Do, YYYY h:mma');
     return (
       <span>
         Family Reminder for{' '}
@@ -63,8 +33,8 @@ const renderFamilyDetails = (data) => {
       Family Reminder for these appointments:
       <div className={styles.reminder_container}>
         {sentRemindersPatients.map(({ patient, appointment: { startDate } }) => {
-          const appDate = dateFormatter(startDate, '', 'MMMM Do, YYYY');
-          const appTime = dateFormatter(startDate, '', 'h:mma');
+          const appDate = dateFormatter(startDate, timezone, 'MMMM Do, YYYY');
+          const appTime = dateFormatter(startDate, timezone, 'h:mma');
 
           return (
             <div className={styles.reminder_body}>
@@ -99,6 +69,38 @@ const renderFamilyDetails = (data) => {
   );
 };
 
+export default function ReminderEvent({ data, timezone }) {
+  const contactMethodHash = {
+    email: 'Email',
+    sms: 'SMS',
+    'sms/email': 'Email & SMS',
+    smart_follow_up: 'Smart Follow Up',
+  };
+  const contactMethod = contactMethodHash[data.primaryType];
+  const intervalText = <span className={styles.reminder_interval}>{data.reminder.interval}</span>;
+
+  const { sentRemindersPatients } = data;
+  const {
+    appointment: { startDate },
+    appointmentStartDate,
+  } = sentRemindersPatients[0];
+
+  const appDate = dateFormatter(appointmentStartDate || startDate, timezone, 'MMMM Do, YYYY h:mma');
+
+  const component = (
+    <div className={styles.body_header}>
+      Sent {"'"}
+      {intervalText} Before
+      {"'"} {contactMethod}{' '}
+      {data.isFamily
+        ? renderFamilyDetails(data, timezone)
+        : `Reminder for the appointment on ${appDate}`}
+    </div>
+  );
+
+  return <EventContainer key={data.id} component={component} />;
+}
+
 ReminderEvent.propTypes = {
   data: PropTypes.shape({
     id: PropTypes.string,
@@ -114,4 +116,5 @@ ReminderEvent.propTypes = {
       }),
     }),
   }).isRequired,
+  timezone: PropTypes.string.isRequired,
 };

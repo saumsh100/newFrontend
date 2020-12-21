@@ -1,12 +1,11 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { touch } from 'redux-form';
 import { dateFormatter, isValidEmail } from '@carecru/isomorphic';
-import { Grid, Row, Col, Form, Field } from '../../../../library';
+import { Grid, Row, Col, Form, Field, isDateValid } from '../../../../library';
 import { usStates, caProv } from '../../../../Settings/Practice/General/Address/selectConstants';
 import { isResponsive } from '../../../../../util/hub';
 import PatientModel from '../../../../../entities/models/Patient';
@@ -20,9 +19,7 @@ const validateBirthdate = (value) => {
   if (!pattern.test(value)) {
     return format;
   }
-  const date = moment(value, format);
-  const isValid = date.isValid();
-  if (!isValid) {
+  if (!isDateValid(value, format)) {
     return format;
   }
   return undefined;
@@ -102,11 +99,11 @@ class PersonalForm extends PureComponent {
   }
 
   render() {
-    const { patient, country, setCountry, inputStyle, dropDownStyle } = this.props;
+    const { patient, country, setCountry, inputStyle, dropDownStyle, timezone } = this.props;
 
     const birthDate = patient.get('birthDate');
-    const isValidBirthDate = moment(birthDate).isValid()
-      ? dateFormatter(birthDate, '', 'MM/DD/YYYY')
+    const isValidBirthDate = isDateValid(birthDate)
+      ? dateFormatter(birthDate, timezone, 'MM/DD/YYYY')
       : '';
 
     const initialValues = {
@@ -249,6 +246,7 @@ PersonalForm.propTypes = {
   inputStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
   dropDownStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
   touch: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 PersonalForm.defaultProps = {
@@ -258,9 +256,10 @@ PersonalForm.defaultProps = {
   dropDownStyle: '',
 };
 
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 const mapDispatchToProps = dispatch => bindActionCreators({ touch }, dispatch);
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(PersonalForm);

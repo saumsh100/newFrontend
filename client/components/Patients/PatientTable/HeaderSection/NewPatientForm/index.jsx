@@ -1,14 +1,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { Form, Field } from '../../../../library';
+import { Form, Field, isDateValid } from '../../../../library';
 import styles from '../../styles.scss';
 
-import {
-  maxLength,
-  emailValidate,
-} from '../../../../library/Form/validate';
+import { maxLength, emailValidate } from '../../../../library/Form/validate';
 
 const normalizeBirthdate = value => value.trim();
 
@@ -18,23 +14,17 @@ const validateBirthdate = (value) => {
   if (!pattern.test(value) && value !== undefined) {
     return format;
   }
-  const date = moment(value, format);
-  const isValid = date.isValid();
-  if (!isValid && value !== undefined) {
+  if (!isDateValid(value, format) && value !== undefined) {
     return format;
   }
+  return undefined;
 };
 
 const options = [{ value: 'Male' }, { value: 'Female' }];
 
 export default function NewPatientForm({ onSubmit, formName }) {
   return (
-    <Form
-      form={formName}
-      onSubmit={onSubmit}
-      ignoreSaveButton
-      data-test-id={formName}
-    >
+    <Form form={formName} onSubmit={onSubmit} ignoreSaveButton data-test-id={formName}>
       <Field
         required
         name="firstName"
@@ -83,8 +73,6 @@ export default function NewPatientForm({ onSubmit, formName }) {
 }
 
 NewPatientForm.propTypes = {
-  formName: PropTypes.string,
-  birthday: PropTypes.instanceOf(Date),
-  saveBirthday: PropTypes.func,
+  formName: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };

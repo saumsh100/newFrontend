@@ -96,12 +96,14 @@ id: this.props.node.ccId }}
       className,
       activeAccount,
       avatarSize,
+      timezone,
     } = props;
 
     const recallHygieneData = {
       patient,
       className,
       activeAccount,
+      timezone,
     };
 
     return (
@@ -166,12 +168,13 @@ id: this.props.node.ccId }}
   }
 
   render() {
-    const { withBorder, handleMakeHead } = this.props;
+    const { withBorder, handleMakeHead, timezone } = this.props;
 
     const avatarSize = isResponsive() ? 'sm' : 'md';
 
     const finalProps = {
       ...this.props,
+      timezone,
       avatarSize,
     };
 
@@ -204,6 +207,7 @@ FamilyMember.propTypes = {
   handleRemoveFromFamily: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   node: PropTypes.shape(patientShape).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 FamilyMember.defaultProps = {
@@ -211,7 +215,7 @@ FamilyMember.defaultProps = {
   isHead: false,
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

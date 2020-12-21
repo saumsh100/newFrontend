@@ -37,10 +37,10 @@ const recallIntervalHash = {
   '-18 months': '18 Months After',
 };
 
-export default function RecallEvent({ data, patient }) {
+export default function RecallEvent({ data, patient, timezone }) {
   if (!data.isAutomated) return <ManualRecallEvent data={data} patient={patient} />;
 
-  const sentDate = dateFormatter(data.createdAt, '', 'MMMM Do, YYYY h:mma');
+  const sentDate = dateFormatter(data.createdAt, timezone, 'MMMM Do, YYYY h:mma');
   const typeOfRecall = data.isHygiene ? 'hygiene' : 'recall';
   const intervalText = recallIntervalHash[data.recall.interval];
   const contactMethod = contactMethodHash[data.primaryType];
@@ -65,4 +65,5 @@ RecallEvent.propTypes = {
     id: PropTypes.string,
     firstName: PropTypes.string,
   }).isRequired,
+  timezone: PropTypes.string.isRequired,
 };

@@ -53,9 +53,9 @@ class ManualRecallEvent extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, timezone } = this.props;
     const { id, note, primaryType, createdAt } = data;
-    const sentDate = dateFormatter(createdAt, '', 'MMMM Do, YYYY h:mma');
+    const sentDate = dateFormatter(createdAt, timezone, 'MMMM Do, YYYY h:mma');
     const headerComponent = (
       <div className={styles.recallHeader}>
         Logged a recall sent via {primaryType} on {sentDate}
@@ -109,6 +109,7 @@ ManualRecallEvent.propTypes = {
   showAlertTimeout: PropTypes.func.isRequired,
   setSelectedRecall: PropTypes.func.isRequired,
   setActivePatient: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 export default enhance(ManualRecallEvent);

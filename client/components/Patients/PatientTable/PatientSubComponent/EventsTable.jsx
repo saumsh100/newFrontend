@@ -1,13 +1,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { connect } from 'react-redux';
 import EventDateSections from '../../PatientInfo/Timeline/EventDateSections';
 import EventModel from '../../../../entities/models/Event';
 import { sortEvents } from '../../Shared/helpers';
 import styles from './styles.scss';
+import { getTodaysDate, getUTCDate, parseDateWithFormat } from '../../../library';
 
-export default function EventsTable({ events, patient }) {
+function EventsTable({ events, patient, timezone }) {
   if (!events || !events.length) {
     return (
       <div className={styles.eventsList}>
@@ -19,7 +20,8 @@ export default function EventsTable({ events, patient }) {
   }
 
   const eventsUpToToday = events.filter(
-    ev => moment(ev.get('metaData').createdAt).diff(moment(), 'days') < 1,
+    ev =>
+      getUTCDate(ev.get('metaData', timezone).createdAt).diff(getTodaysDate(timezone), 'days') < 1,
   );
   // Only displaying the latest five events
   const sortedEvents = sortEvents(eventsUpToToday).slice(0, 5);
@@ -27,7 +29,7 @@ export default function EventsTable({ events, patient }) {
 
   sortedEvents.forEach((ev) => {
     const meta = ev.get('metaData');
-    const key = moment(meta.timelineDate).format('MMMM Do YYYY');
+    const key = getUTCDate(meta.timelineDate, timezone).format('MMMM Do YYYY');
 
     if (key in dateObj) {
       dateObj[key].push(ev);
@@ -38,9 +40,9 @@ export default function EventsTable({ events, patient }) {
 
   // sort date sections by date descending
   const dateSections = Object.keys(dateObj)
-    .map(date => moment(date, 'MMMM Do YYYY'))
+    .map(date => parseDateWithFormat(date, 'MMMM Do YYYY', timezone))
     .sort((a, b) => b.diff(a))
-    .map(date => moment(date).format('MMMM Do YYYY'));
+    .map(date => date.format('MMMM Do YYYY'));
 
   return (
     <div className={styles.eventsList}>
@@ -57,7 +59,14 @@ export default function EventsTable({ events, patient }) {
   );
 }
 
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(
+  mapStateToProps,
+  null,
+)(EventsTable);
+
 EventsTable.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)).isRequired,
   patient: PropTypes.shape({}).isRequired,
+  timezone: PropTypes.string.isRequired,
 };

@@ -1,16 +1,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import classnames from 'classnames';
 import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
 import getEventText from './Shared/textBuilder';
 import styles from './styles.scss';
+import { getUTCDate, getTodaysDate } from '../../../../library';
 
-const calcDotStyling = (date) => {
-  const hygieneDueDate = moment(date);
-  const monthsDiff = moment()
+const calcDotStyling = (date, timezone) => {
+  const hygieneDueDate = getUTCDate(date, timezone);
+  const monthsDiff = getTodaysDate(timezone)
     .startOf('day')
     .diff(hygieneDueDate, 'months', true);
 
@@ -33,14 +33,14 @@ const calcDotStyling = (date) => {
   };
 };
 
-export default function DueDateEvent({ data }) {
-  const { dotStyle, upcomingDueDate } = calcDotStyling(data.dueDate);
+export default function DueDateEvent({ data, timezone }) {
+  const { dotStyle, upcomingDueDate } = calcDotStyling(data.dueDate, timezone);
 
   const dueDateText = upcomingDueDate ? 'upcoming' : 'pastDue';
   const tense = upcomingDueDate ? 'futureTense' : 'pastTense';
 
   const dateTypeText = data.dateType === 'same' ? 'hygiene and recall' : data.dateType;
-  const upcomingDateText = dateFormatter(data.dueDate, '', 'MMMM Do, YYYY');
+  const upcomingDateText = dateFormatter(data.dueDate, timezone, 'MMMM Do, YYYY');
 
   const headerText = `${data.firstName} ${getEventText(
     'english',
@@ -67,4 +67,5 @@ DueDateEvent.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
   }).isRequired,
+  timezone: PropTypes.string.isRequired,
 };

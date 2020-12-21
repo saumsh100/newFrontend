@@ -1,17 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { dateFormatter } from '@carecru/isomorphic';
-import { Grid, Row, Col } from '../../../../library';
+import { connect } from 'react-redux';
+import { Grid, Row, Col, isDateValid } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import ContactSection from './ContactSection';
 import styles from '../styles.scss';
 
-export default function PersonalTab(props) {
-  const { patient } = props;
-
+function PersonalTab({ patient, timezone }) {
   const componentAddress = patient && patient.address && Object.keys(patient.address).length && (
     <div className={styles.text}>
       <div>{patient.address.street} </div>
@@ -22,7 +20,7 @@ export default function PersonalTab(props) {
   );
 
   const birthDateData =
-    moment(patient.birthDate).isValid() && dateFormatter(patient.birthDate, '', 'MMMM Do, YYYY');
+    isDateValid(patient.birthDate) && dateFormatter(patient.birthDate, timezone, 'MMMM Do, YYYY');
 
   return (
     <Grid className={styles.grid}>
@@ -50,4 +48,13 @@ export default function PersonalTab(props) {
   );
 }
 
-PersonalTab.propTypes = { patient: PropTypes.shape(patientShape).isRequired };
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(
+  mapStateToProps,
+  null,
+)(PersonalTab);
+
+PersonalTab.propTypes = {
+  patient: PropTypes.shape(patientShape).isRequired,
+  timezone: PropTypes.string.isRequired,
+};

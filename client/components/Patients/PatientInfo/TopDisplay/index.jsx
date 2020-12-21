@@ -1,12 +1,12 @@
 
 import React from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import isNumber from 'lodash/isNumber';
 import { formatPhoneNumber } from '@carecru/isomorphic';
 import classNames from 'classnames';
-import { Card, Avatar, Icon, Grid, Row, Col, Button } from '../../../library';
+import { connect } from 'react-redux';
+import { Card, Avatar, Icon, Grid, Row, Col, Button, getFormattedDate } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';
 import RecallData from '../../Shared/RecallColumn';
@@ -33,8 +33,15 @@ function getRandomIntInclusive(min, max) {
 
 const randomNum = getRandomIntInclusive(0, 4);
 
-export default function TopDisplay(props) {
-  const { patient, wasStatsFetched, patientStats, activeAccount, wasPatientFetched } = props;
+function TopDisplay(props) {
+  const {
+    patient,
+    wasStatsFetched,
+    patientStats,
+    activeAccount,
+    wasPatientFetched,
+    timezone,
+  } = props;
 
   if (!patient) {
     return null;
@@ -127,7 +134,7 @@ export default function TopDisplay(props) {
                     label="Last Appt"
                     data={
                       patient.lastApptDate
-                        ? moment(patient.lastApptDate).format('MMM DD YYYY')
+                        ? getFormattedDate(patient.lastApptDate, 'MMM DD YYYY', timezone)
                         : null
                     }
                   />
@@ -137,7 +144,7 @@ export default function TopDisplay(props) {
                     label="Last Hygiene"
                     data={
                       patient.lastHygieneDate
-                        ? moment(patient.lastHygieneDate).format('MMM DD YYYY')
+                        ? getFormattedDate(patient.lastHygieneDate, 'MMM DD YYYY', timezone)
                         : null
                     }
                   />
@@ -162,7 +169,7 @@ export default function TopDisplay(props) {
                     label="Next Appt"
                     data={
                       patient.nextApptDate
-                        ? moment(patient.nextApptDate).format('MMM DD YYYY')
+                        ? getFormattedDate(patient.nextApptDate, 'MMM DD YYYY', timezone)
                         : null
                     }
                   />
@@ -172,7 +179,7 @@ export default function TopDisplay(props) {
                     label="Last Recall"
                     data={
                       patient.lastRecallDate
-                        ? moment(patient.lastRecallDate).format('MMM DD YYYY')
+                        ? getFormattedDate(patient.lastRecallDate, 'MMM DD YYYY', timezone)
                         : null
                     }
                   />
@@ -199,12 +206,19 @@ export default function TopDisplay(props) {
   );
 }
 
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(
+  mapStateToProps,
+  null,
+)(TopDisplay);
+
 TopDisplay.propTypes = {
   wasStatsFetched: PropTypes.bool,
   wasPatientFetched: PropTypes.bool,
   patientStats: PropTypes.instanceOf(Map),
   activeAccount: PropTypes.oneOfType([PropTypes.shape(accountShape), PropTypes.func]),
   patient: PropTypes.oneOfType([PropTypes.instanceOf(PatientModel), PropTypes.func]),
+  timezone: PropTypes.string.isRequired,
 };
 
 TopDisplay.defaultProps = {

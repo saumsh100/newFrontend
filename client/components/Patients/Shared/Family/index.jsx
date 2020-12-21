@@ -1,9 +1,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { connect } from 'react-redux';
 import { isResponsive } from '../../../../util/hub';
 import styles from './styles.scss';
+import { getTodaysDate, getUTCDate } from '../../../library';
 
 const isMemberHead = (member, head) => head && member.ccId === head.ccId;
 
@@ -12,15 +13,17 @@ const sortFamilyMembers = head => (a, b) => {
   return isMemberHead(b, head) ? 1 : 0;
 };
 
-const renderFamilyMembers = head => (node, i, arr) => {
+const renderFamilyMembers = (head, timezone) => (node, i, arr) => {
   const patient = {
     avatarUrl: node.avatarUrl,
     firstName: node.firstName,
     lastName: node.lastName,
     birthDate: node.birthDate,
-    age: moment().diff(moment(node.birthDate), 'years'),
-    lastApptDate: node.lastApptDate && moment(node.lastApptDate).format('MMM D, YYYY'),
-    nextApptDate: node.nextApptDate && moment(node.nextApptDate).format('MMM D, YYYY'),
+    age: getTodaysDate(timezone).diff(getUTCDate(node.birthDate, timezone), 'years'),
+    lastApptDate:
+      node.lastApptDate && getUTCDate(node.lastApptDate, timezone).format('MMM D, YYYY'),
+    nextApptDate:
+      node.nextApptDate && getUTCDate(node.nextApptDate, timezone).format('MMM D, YYYY'),
     dueForHygieneDate: node.dueForHygieneDate,
     dueForRecallExamDate: node.dueForRecallExamDate,
   };
@@ -46,38 +49,45 @@ const renderFamilyMembers = head => (node, i, arr) => {
   };
 };
 
-const Family = ({ family, render }) => {
-  const head = family.head;
+const Family = ({ family, render, timezone }) => {
+  const { head } = family;
   const members = family.members.edges.map(v => v.node);
 
   return (
     <div
       className={isResponsive() ? styles.familyMemberContainerMobile : styles.familyMemberContainer}
     >
-      {render(members.sort(sortFamilyMembers(head)).map(renderFamilyMembers(head)))}
+      {render(members.sort(sortFamilyMembers(head)).map(renderFamilyMembers(head, timezone)))}
     </div>
   );
 };
 
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(
+  mapStateToProps,
+  null,
+)(Family);
+
 Family.propTypes = {
   family: PropTypes.shape({
     id: PropTypes.string,
-    head: PropTypes.shape({ accountId: PropTypes.string  }),
+    head: PropTypes.shape({ accountId: PropTypes.string }),
     members: PropTypes.shape({
-      edges: PropTypes.arrayOf(PropTypes.shape({
-        fullName: PropTypes.string,
-        age: PropTypes.number,
-        patient: PropTypes.shape({
-          avatarUrl: PropTypes.string,
-          firstName: PropTypes.string,
-          lastName: PropTypes.string,
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          fullName: PropTypes.string,
+          age: PropTypes.number,
+          patient: PropTypes.shape({
+            avatarUrl: PropTypes.string,
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+          }),
+          lastApp: PropTypes.string,
+          nextApp: PropTypes.string,
         }),
-        lastApp: PropTypes.string,
-        nextApp: PropTypes.string,
-      })),
+      ),
     }),
   }).isRequired,
   render: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
-
-export default Family;

@@ -1,17 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { formatPhoneNumber } from '@carecru/isomorphic';
-import { PointOfContactBadge } from '../../../library';
+import { connect } from 'react-redux';
+import { getFormattedDate, PointOfContactBadge } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import { validDateValue } from '../../Shared/helpers';
 import { patientShape } from '../../../library/PropTypeShapes/index';
 import styles from './styles.scss';
 
-export default function DataTable(props) {
-  const { patient } = props;
-
+function DataTable({ patient, timezone }) {
   const secondaryNumber =
     patient.homePhoneNumber || patient.prefPhoneNumber || patient.workPhoneNumber;
 
@@ -46,18 +44,20 @@ export default function DataTable(props) {
       <div className={styles.col}>
         <div className={styles.subHeaderSmall}>
           Next Appointment:{' '}
-          {patient.nextApptDate ? moment(patient.nextApptDate).format('MMMM Do YYYY') : 'n/a'}
+          {patient.nextApptDate
+            ? getFormattedDate(patient.nextApptDate, 'MMMM Do YYYY', timezone)
+            : 'n/a'}
         </div>
       </div>
       <div className={styles.row}>
         <InfoDump
           label="LAST RECALL VISIT"
-          data={validDateValue(patient.lastRecallDate)}
+          data={validDateValue(patient.lastRecallDate, timezone)}
           className={styles.infoDump}
         />
         <InfoDump
           label="LAST HYGIENE VISIT"
-          data={validDateValue(patient.lastHygieneDate)}
+          data={validDateValue(patient.lastHygieneDate, timezone)}
           className={styles.infoDump}
         />
         <InfoDump label="LAST X-RAY" className={styles.infoDump} />
@@ -66,4 +66,13 @@ export default function DataTable(props) {
   );
 }
 
-DataTable.propTypes = { patient: PropTypes.shape(patientShape).isRequired };
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(
+  mapStateToProps,
+  null,
+)(DataTable);
+
+DataTable.propTypes = {
+  patient: PropTypes.shape(patientShape).isRequired,
+  timezone: PropTypes.string.isRequired,
+};

@@ -1,15 +1,16 @@
 
-import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
 import styles from '../../PatientTable/styles.scss';
+import { getTodaysDate, getUTCDate } from '../../../library';
 
-export default function HygieneRecallColumn(props) {
-  const { patient, className, activeAccount } = props;
+function HygieneRecallColumn(props) {
+  const { patient, className, activeAccount, timezone } = props;
 
-  const lastHygieneDate = moment(patient.lastHygieneDate);
-  const lastRecallDate = moment(patient.lastRecallDate);
+  const lastHygieneDate = getUTCDate(patient.lastHygieneDate, timezone);
+  const lastRecallDate = getUTCDate(patient.lastRecallDate, timezone);
 
   let intervalNum = null;
   let hygieneIntervalNum = null;
@@ -32,15 +33,12 @@ export default function HygieneRecallColumn(props) {
     recallIntervalNum = Number(recallInterval[0]);
   }
 
-  const hygieneDueDate = moment(lastHygieneDate).add(
-    hygieneIntervalNum,
-    'months',
-  );
-  const recallDueDate = moment(lastRecallDate).add(recallIntervalNum, 'months');
+  const hygieneDueDate = getUTCDate(lastHygieneDate, timezone).add(hygieneIntervalNum, 'months');
+  const recallDueDate = getUTCDate(lastRecallDate, timezone).add(recallIntervalNum, 'months');
   let showDate = null;
 
-  const monthsDiffHygiene = moment().diff(hygieneDueDate, 'months');
-  const monthsDiffRecall = moment().diff(recallDueDate, 'months');
+  const monthsDiffHygiene = getTodaysDate(timezone).diff(hygieneDueDate, 'months');
+  const monthsDiffRecall = getTodaysDate(timezone).diff(recallDueDate, 'months');
   let monthsDiff = null;
 
   if (monthsDiffHygiene && monthsDiffRecall) {
@@ -71,16 +69,26 @@ export default function HygieneRecallColumn(props) {
 
   return (
     <div className={styles.displayFlex}>
-      <div className={`${styles.date} ${className}`}>
-        {showDate.format('MMM DD YYYY')}
-      </div>
+      <div className={`${styles.date} ${className}`}>{showDate.format('MMM DD YYYY')}</div>
       <div className={dotStyle}>&nbsp;</div>
     </div>
   );
 }
 
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(
+  mapStateToProps,
+  null,
+)(HygieneRecallColumn);
+
 HygieneRecallColumn.propTypes = {
-  patient: PropTypes.object,
+  patient: PropTypes.shape({}).isRequired,
   className: PropTypes.string,
-  activeAccount: PropTypes.object,
+  activeAccount: PropTypes.shape({}),
+  timezone: PropTypes.string.isRequired,
+};
+
+HygieneRecallColumn.defaultProps = {
+  className: null,
+  activeAccount: null,
 };

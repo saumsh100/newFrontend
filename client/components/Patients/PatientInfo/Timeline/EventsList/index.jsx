@@ -1,14 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { List } from 'immutable';
+import { connect } from 'react-redux';
 import PatientTimelineEvent from '../../../../../entities/models/PatientTimelineEvent';
 import EventDateSections from '../EventDateSections';
 import { sortEvents } from '../../../Shared/helpers';
 import styles from '../styles.scss';
+import { getTodaysDate, getUTCDate, parseDateWithFormat } from '../../../../library';
 
-export default function EventsList({ events, filters, patient }) {
+function EventsList({ events, filters, patient, timezone }) {
   if (events && events.length === 0) {
     return (
       <div className={styles.disclaimer}>
@@ -23,10 +24,14 @@ export default function EventsList({ events, filters, patient }) {
   const dateObj = {};
 
   sortedEvents
-    .filter(ev => moment(ev.get('metaData').createdAt).diff(moment(), 'days') < 1)
+    .filter(
+      ev =>
+        getUTCDate(ev.get('metaData').createdAt, timezone).diff(getTodaysDate(timezone), 'days') <
+        1,
+    )
     .forEach((ev) => {
       const meta = ev.get('metaData');
-      const key = moment(meta.timelineDate).format('MMMM Do YYYY');
+      const key = getUTCDate(meta.timelineDate, timezone).format('MMMM Do YYYY');
 
       if (key in dateObj) {
         dateObj[key].push(ev);
@@ -37,9 +42,9 @@ export default function EventsList({ events, filters, patient }) {
 
   // sort date sections by date descending
   const dateSections = Object.keys(dateObj)
-    .map(date => moment(date, 'MMMM Do YYYY'))
+    .map(date => parseDateWithFormat(date, 'MMMM Do YYYY', timezone))
     .sort((a, b) => b.diff(a))
-    .map(date => moment(date).format('MMMM Do YYYY'));
+    .map(date => date.format('MMMM Do YYYY'));
 
   return (
     <div className={styles.eventsList}>
@@ -50,16 +55,24 @@ export default function EventsList({ events, filters, patient }) {
             dateHeader={date}
             events={dateObj[date]}
             patient={patient}
+            timezone={timezone}
           />
         ))}
     </div>
   );
 }
 
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(
+  mapStateToProps,
+  null,
+)(EventsList);
+
 EventsList.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(PatientTimelineEvent)),
   filters: PropTypes.instanceOf(List),
   patient: PropTypes.shape({}).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 EventsList.defaultProps = {

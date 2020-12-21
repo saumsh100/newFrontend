@@ -1,14 +1,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { destroy } from 'redux-form';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { Grid, Row, Col, Card } from '../../library';
+import { Grid, Row, Col, Card, getFormattedDate } from '../../library';
 import {
   fetchEntities,
   fetchEntitiesRequest,
@@ -147,6 +146,7 @@ class PatientTable extends React.PureComponent {
   render() {
     const patientTable = this.props.patientTable.toJS();
     const { patientIds } = this.state;
+    const { timezone } = this.props;
     const columns = [
       {
         ...baseColumn,
@@ -248,7 +248,7 @@ class PatientTable extends React.PureComponent {
         Header: 'Last Appt',
         id: 'lastApptDate',
         accessor: ({ lastApptDate }) =>
-          (lastApptDate ? moment(lastApptDate).format('MMM DD YYYY') : '-'),
+          (lastApptDate ? getFormattedDate(lastApptDate, 'MMM DD YYYY', timezone) : '-'),
         Cell: ({ value }) => (
           <div className={styles.displayFlex}>
             <div className={styles.cellText_lastAppt}>{value}</div>
@@ -260,7 +260,7 @@ class PatientTable extends React.PureComponent {
         Header: 'Next Appt',
         id: 'nextApptDate',
         accessor: ({ nextApptDate }) =>
-          (nextApptDate ? moment(nextApptDate).format('MMM DD YYYY') : '-'),
+          (nextApptDate ? getFormattedDate(nextApptDate, 'MMM DD YYYY', timezone) : '-'),
         Cell: ({ value }) => (
           <div className={styles.displayFlex}>
             <div className={styles.cellText_lastAppt}>{value}</div>
@@ -380,11 +380,13 @@ PatientTable.propTypes = {
   patientTable: PropTypes.objectOf(PropTypes.any).isRequired,
   push: PropTypes.func.isRequired,
   removeFilter: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ entities, patientTable }) => ({
+const mapStateToProps = ({ entities, patientTable, auth }) => ({
   practitioners: entities.getIn(['practitioners', 'models']),
   patientTable,
+  timezone: auth.get('timezone'),
 });
 
 const mapDispatchToProps = dispatch =>

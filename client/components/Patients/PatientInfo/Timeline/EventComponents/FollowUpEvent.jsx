@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import EventContainer from './Shared/EventContainer';
 import { showAlertTimeout } from '../../../../../thunks/alerts';
 import { deleteEntity } from '../../../../../reducers/entities';
@@ -11,6 +10,7 @@ import { setSelectedFollowUp, setActivePatient } from '../../../../../reducers/p
 import UserModel from '../../../../../entities/models/User';
 import DeletePatientFollowUpMutation from '../../FollowUps/DeletePatientFollowUpMutation';
 import styles from './styles.scss';
+import { getUTCDate } from '../../../../library';
 
 class FollowUpEvent extends Component {
   constructor(props) {
@@ -49,7 +49,7 @@ class FollowUpEvent extends Component {
   }
 
   render() {
-    const { data, assignedUser } = this.props;
+    const { data, assignedUser, timezone } = this.props;
     const {
       note,
       dueAt,
@@ -59,7 +59,7 @@ class FollowUpEvent extends Component {
 
     const headerComponent = (
       <div className={styles.followUpHeaderWrapper}>
-        {`${name} on ${moment(dueAt).format('MMMM Do, YYYY')}`}
+        {`${name} on ${getUTCDate(dueAt, timezone).format('MMMM Do, YYYY')}`}
       </div>
     );
 
@@ -135,6 +135,7 @@ FollowUpEvent.propTypes = {
   showAlertTimeout: PropTypes.func.isRequired,
   setSelectedFollowUp: PropTypes.func.isRequired,
   setActivePatient: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 export default enhance(FollowUpEvent);

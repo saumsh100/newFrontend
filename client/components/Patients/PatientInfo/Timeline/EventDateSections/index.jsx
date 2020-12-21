@@ -1,19 +1,19 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import classnames from 'classnames';
 import Event from '../EventComponents';
 import PatientTimelineEvent from '../../../../../entities/models/PatientTimelineEvent';
 import styles from '../styles.scss';
+import { getTodaysDate } from '../../../../library';
 
 export default function EventDateSections(props) {
-  const { events, dateHeader, patient } = props;
+  const { events, dateHeader, patient, timezone } = props;
 
   let showHeader = dateHeader;
   let dateHeaderClass = styles.dateHeader;
 
-  if (moment().format('MMMM Do YYYY') === dateHeader) {
+  if (getTodaysDate(timezone).format('MMMM Do YYYY') === dateHeader) {
     showHeader = 'Today';
     dateHeaderClass = classnames(dateHeaderClass, styles.today);
   }
@@ -39,4 +39,5 @@ EventDateSections.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(PatientTimelineEvent)).isRequired,
   dateHeader: PropTypes.string.isRequired,
   patient: PropTypes.shape({}).isRequired,
+  timezone: PropTypes.string.isRequired,
 };

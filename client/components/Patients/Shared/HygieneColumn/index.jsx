@@ -1,21 +1,21 @@
 
-import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import patientShape from '../../../library/PropTypeShapes/patient';
 import { buildDotStyles } from '../helpers';
 import styles from '../../PatientTable/styles.scss';
+import { getUTCDate } from '../../../library';
 
 export default function HygieneColumn(props) {
-  const { patient, className, showTable } = props;
+  const { patient, className, showTable, timezone } = props;
 
-  const hygieneDueDate = moment(patient.dueForHygieneDate);
+  const hygieneDueDate = getUTCDate(patient.dueForHygieneDate, timezone);
 
   if (!patient.dueForHygieneDate || !hygieneDueDate.isValid()) {
     return <div className={styles.displayFlex_text}>{showTable ? '-' : 'n/a'}</div>;
   }
 
-  const dotStyle = buildDotStyles(hygieneDueDate, styles);
+  const dotStyle = buildDotStyles(hygieneDueDate, styles, timezone);
 
   return (
     <div className={styles.displayFlex}>
@@ -29,6 +29,7 @@ HygieneColumn.propTypes = {
   className: PropTypes.string,
   patient: PropTypes.shape(patientShape).isRequired,
   showTable: PropTypes.bool,
+  timezone: PropTypes.string.isRequired,
 };
 
 HygieneColumn.defaultProps = {

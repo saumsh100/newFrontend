@@ -1,9 +1,9 @@
 
-import moment from 'moment-timezone';
 import classnames from 'classnames';
+import { getTodaysDate, getUTCDate } from '../../library';
 
-export const validDateValue = (date) => {
-  const dateValue = moment(date);
+export const validDateValue = (date, timezone = null) => {
+  const dateValue = getUTCDate(date, timezone);
   return dateValue.isValid() ? dateValue.format('MMM Do, YYYY') : 'n/a';
 };
 
@@ -61,8 +61,8 @@ export const getEventsOffsetLimitObj = (limit = 5) => ({
   },
 });
 
-export const buildDotStyles = (dueForDate, styles) => {
-  const monthsDiff = moment()
+export const buildDotStyles = (dueForDate, styles, timezone = null) => {
+  const monthsDiff = getTodaysDate(timezone)
     .startOf('day')
     .diff(dueForDate, 'months', true);
 

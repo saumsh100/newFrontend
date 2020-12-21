@@ -7,14 +7,14 @@ import EventContainer from './Shared/EventContainer';
 import getEventText from './Shared/textBuilder';
 import styles from './styles.scss';
 
-export default function ReviewEvent({ data }) {
+export default function ReviewEvent({ data, timezone }) {
   const stars = [];
 
   for (let i = 0; i < data.review.stars; i += 1) {
     stars.push(<Star size={1.8} />);
   }
 
-  const apptDate = dateFormatter(data.appointment.startDate, '', 'MMMM Do, YYYY h:mma');
+  const apptDate = dateFormatter(data.appointment.startDate, timezone, 'MMMM Do, YYYY h:mma');
 
   const completedContent = (
     <div className={styles.review}>
@@ -38,4 +38,7 @@ export default function ReviewEvent({ data }) {
   );
 }
 
-ReviewEvent.propTypes = { data: PropTypes.shape({ description: PropTypes.string }).isRequired };
+ReviewEvent.propTypes = {
+  data: PropTypes.shape({ description: PropTypes.string }).isRequired,
+  timezone: PropTypes.string.isRequired,
+};

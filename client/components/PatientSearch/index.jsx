@@ -2,10 +2,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
-import { Avatar, AutoCompleteForm } from '../library';
+import { Avatar, AutoCompleteForm, getUTCDate, getTodaysDate } from '../library';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { StyleExtender } from '../Utils/Themer';
 import FetchPatients from '../GraphQLPatientSearch/fetchPatients';
@@ -14,19 +13,21 @@ import styles from './styles.scss';
 
 const baseTheme = { suggestionsContainerOpen: styles.containerOpen };
 
-function Suggestion(patient) {
+function SuggestionBox(patient, timezone) {
   return (
     <div className={styles.suggestionContainer}>
       <Avatar user={patient} size="xs" />
       <div className={styles.suggestionContainer_details}>
         <div className={styles.suggestionContainer_fullName}>
           {`${patient.firstName} ${patient.lastName}${
-            patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
+            patient.birthDate ? `, ${getTodaysDate(timezone).diff(patient.birthDate, 'years')}` : ''
           }`}
         </div>
         <div className={styles.suggestionContainer_date}>
           Last Appointment:{' '}
-          {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+          {patient.lastApptDate
+            ? getUTCDate(patient.lastApptDate, timezone).format('MMM D YYYY')
+            : 'n/a'}
         </div>
       </div>
     </div>
@@ -62,8 +63,7 @@ class PatientSearch extends Component {
   }
 
   render() {
-    const { inputProps, theme, focusInputOnMount } = this.props;
-
+    const { inputProps, theme, focusInputOnMount, timezone } = this.props;
     const { suggestions, value } = this.state;
 
     const finalInputProps = Object.assign({}, inputProps, {
@@ -73,8 +73,9 @@ class PatientSearch extends Component {
     });
 
     const newTheme = StyleExtender(theme, baseTheme);
-
     const setSearchData = refetch => data => refetch(composeSearchQuery(data));
+    const suggestion = patient => SuggestionBox(patient, timezone);
+
     return (
       <FetchPatients>
         {({ refetch }) => (
@@ -87,7 +88,7 @@ class PatientSearch extends Component {
             inputProps={finalInputProps}
             theme={newTheme}
             focusInputOnMount={focusInputOnMount}
-            renderSuggestion={Suggestion}
+            renderSuggestion={suggestion}
           />
         )}
       </FetchPatients>
@@ -97,6 +98,7 @@ class PatientSearch extends Component {
 
 PatientSearch.propTypes = {
   onSelect: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
   inputProps: PropTypes.objectOf(PropTypes.any),
   theme: PropTypes.objectOf(PropTypes.string),
   focusInputOnMount: PropTypes.bool,
@@ -110,9 +112,10 @@ PatientSearch.defaultProps = {
   'data-test-id': '',
 };
 
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 const mapDispatchToProps = dispatch => bindActionCreators({ fetchEntitiesRequest }, dispatch);
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(PatientSearch);
