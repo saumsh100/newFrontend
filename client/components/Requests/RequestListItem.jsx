@@ -86,7 +86,7 @@ class RequestListItem extends Component {
       day: request.getDay(),
     };
 
-    const requestType = request.sentRecallId ? 'RECALL' : 'NEW';
+    const requestType = request.sentRecallId ? 'RECALL' : 'WEBSITE';
 
     return (
       <Popover

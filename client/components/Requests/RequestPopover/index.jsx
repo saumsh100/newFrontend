@@ -3,13 +3,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
-import { formatPhoneNumber } from '@carecru/isomorphic';
 import { isHub } from '../../../util/hub';
 import PatientUser from '../../../entities/models/PatientUser';
 import Practitioner from '../../../entities/models/Practitioners';
 import { Card, Avatar, Icon, SContainer, SHeader, SBody, SFooter, Button } from '../../library';
-import EnabledFeature from '../../library/EnabledFeature';
 import styles from './styles.scss';
+import Info from './Info';
 
 const renderDesktopHeader = ({ patient, closePopover, age }) => (
   <SHeader className={styles.header}>
@@ -199,58 +198,14 @@ export default class RequestPopover extends Component {
               </div>
             </div>
 
-            {patient.phoneNumber || patient.email || insuranceCarrier || patient.birthDate ? (
-              <div className={styles.container}>
-                <div className={styles.subHeader}>Patient Info</div>
+            <Info
+              patient={patient}
+              insuranceCarrier={insuranceCarrier}
+              insuranceMemberId={insuranceMemberId}
+              insuranceGroupId={insuranceGroupId}
+              title="Patient Info"
+            />
 
-                {patient.birthDate && (
-                  <div className={styles.data}>
-                    <Icon icon="birthday-cake" size={0.9} type="solid" />
-                    <div className={styles.data_text}>
-                      {moment(patient.birthDate).format('MMMM Do, YYYY')}
-                    </div>
-                  </div>
-                )}
-
-                <div className={styles.data}>
-                  {patient.phoneNumber && <Icon icon="phone" size={0.9} type="solid" />}
-                  <div className={styles.data_text}>
-                    {patient.phoneNumber && patient.phoneNumber[0] === '+'
-                      ? formatPhoneNumber(patient.phoneNumber)
-                      : patient.phoneNumber}
-                  </div>
-                </div>
-
-                <div className={styles.data}>
-                  {patient.email ? <Icon icon="envelope" size={0.9} type="solid" /> : null}
-                  <div className={styles.data_text}>{patient.email}</div>
-                </div>
-                <EnabledFeature
-                  predicate={({ flags }) => flags.get('booking-widget-insurance')}
-                  render={() => (
-                    <div className={styles.multilineData}>
-                      {insuranceCarrier && <Icon icon="medkit" size={0.9} type="solid" />}
-                      <div className={styles.data_text}>
-                        {insuranceCarrier || 'n/a'}
-                        {(insuranceMemberId || insuranceGroupId) && (
-                          <span className={styles.subData}>
-                            <br />
-                            Member ID: {insuranceMemberId || 'n/a'}
-                            <br />
-                            Group ID: {insuranceGroupId || 'n/a'}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                />
-              </div>
-            ) : (
-              <div className={styles.container}>
-                <div className={styles.subHeader}>Patient Info</div>
-                <div className={styles.data}>n/a</div>
-              </div>
-            )}
             {note && (
               <div className={styles.container}>
                 <div className={styles.subHeader}>Note</div>
@@ -260,15 +215,26 @@ export default class RequestPopover extends Component {
               </div>
             )}
 
-            <div className={styles.requestedAt}>
-              {requestingUser && (
-                <div className={styles.requestedAt_diffUserContainer}>
-                  <span className={styles.requestedAt_on}>Requested by:</span>
-                  <span className={styles.requestedAt_byDiffUser}>
-                    {requestingUser.get('firstName')} {requestingUser.get('lastName')}
-                  </span>
+            {requestingUser && (
+              <div className={styles.container}>
+                <div className={styles.subHeader}>Requested By</div>
+                <div className={styles.data}>
+                  {requestingUser.get('firstName')} {requestingUser.get('lastName')}
                 </div>
-              )}
+              </div>
+            )}
+
+            {requestingUser && (
+              <Info
+                requestingUser={requestingUser}
+                insuranceCarrier={insuranceCarrier}
+                insuranceMemberId={insuranceMemberId}
+                insuranceGroupId={insuranceGroupId}
+                title="Requester Info"
+              />
+            )}
+
+            <div className={styles.requestedAt}>
               <span className={styles.requestedAt_on}> Requested on: {requestedAt} </span>
             </div>
           </SBody>
