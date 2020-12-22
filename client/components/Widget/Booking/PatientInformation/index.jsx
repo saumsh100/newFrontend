@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import { List } from 'immutable';
 import PropTypes from 'prop-types';
+import trim from 'lodash/trim';
 import { Element, scroller } from 'react-scroll';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -154,6 +155,8 @@ class PatientInformation extends PureComponent {
      */
     const sanitizedValues = {
       ...values,
+      firstName: trim(values.firstName),
+      lastName: trim(values.lastName),
       email: !values.email ? null : values.email,
     };
 

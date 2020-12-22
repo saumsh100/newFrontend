@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import trim from 'lodash/trim';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import {
@@ -15,7 +16,13 @@ import { inputTheme } from '../../theme';
 import styles from './styles.scss';
 
 function SignUp(props) {
-  const handleSignUp = values => props.createPatient(values);
+  const handleSignUp = (values) => {
+    props.createPatient({
+      ...values,
+      firstName: trim(values.firstName),
+      lastName: trim(values.lastName),
+    });
+  };
 
   return (
     <div className={styles.scrollableContainer}>
