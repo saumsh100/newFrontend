@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import isNumber from 'lodash/isNumber';
 import { formatPhoneNumber } from '@carecru/isomorphic';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -90,7 +89,7 @@ function TopDisplay(props) {
                     {patient.getFullName()}
                   </span>
                   <span className={styles.avatarContainer_data_nameAge_age}>
-                    {isNumber(age) ? `, ${age}` : null}
+                    {typeof age === 'number' ? `, ${age}` : null}
                   </span>
                 </div>
                 <div className={styles.displayFlex}>

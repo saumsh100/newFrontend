@@ -53,7 +53,7 @@ export default function fetchEntities({ key, join, params = {}, url }) {
       .then(handleDispatchingActions(dispatch, key))
       .catch((err) => {
         // TODO: set didInvalidate=true of entity and dispatch alert action
-        console.log(err);
+        console.error(err);
       });
   };
 }

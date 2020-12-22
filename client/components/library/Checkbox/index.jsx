@@ -5,22 +5,19 @@ import classNames from 'classnames/bind';
 import withTheme from '../../../hocs/withTheme';
 import styles from './styles.scss';
 
-function Checkbox(props) {
-  const {
-    id,
-    value,
-    label,
-    onChange,
-    hidden,
-    labelClassNames,
-    theme,
-    customContainer,
-    showIndeterminate,
-    className,
-  } = props;
-
-  let { checked } = props;
-
+const Checkbox = ({
+  id,
+  value,
+  label,
+  onChange,
+  hidden,
+  labelClassNames,
+  theme,
+  customContainer,
+  showIndeterminate,
+  className,
+  checked,
+}) => {
   checked = typeof checked === 'string' ? checked === 'true' : checked;
 
   const labelClasses = classNames(theme.label, {
@@ -75,7 +72,7 @@ function Checkbox(props) {
       </span>
     </div>
   );
-}
+};
 
 Checkbox.propTypes = {
   customContainer: PropTypes.string,

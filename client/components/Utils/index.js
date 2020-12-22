@@ -1,11 +1,8 @@
 
 import PropTypes from 'prop-types';
 import { parse } from 'query-string';
-import lOmit from 'lodash/omit';
-import isArray from 'lodash/isArray';
-import pick from 'lodash/pick';
-import isFunction from 'lodash/isFunction';
 import { capitalize } from '@carecru/isomorphic';
+import { pick, isFunction, isArray, omit as lOmit } from '../library/util/lodash';
 
 /**
  * Conver camelCase names to dashed-names

@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import isArray from 'lodash/isArray';
 import VButton from '../Button';
 import { omitTypes } from '../../Utils';
 import { Icon } from '../../library';
@@ -35,7 +34,7 @@ const getDialogUrl = (appId, scope) => {
     redirect_uri: getUrl('/oauth/facebook'),
     ...(scope && scope.length
       ? {
-        scope: isArray(scope) ? scope.join(',') : scope,
+        scope: Array.isArray(scope) ? scope.join(',') : scope,
       }
       : {}),
   });
@@ -43,9 +42,7 @@ const getDialogUrl = (appId, scope) => {
   return `${DIALOG_URL}?${options}`;
 };
 
-const openLoginDialog = ({
-  appId, width, height, scope,
-}) => () => {
+const openLoginDialog = ({ appId, width, height, scope }) => () => {
   const dialogWindow = window.open(
     getDialogUrl(appId, scope),
     'Login with Facebook',

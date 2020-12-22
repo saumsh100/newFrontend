@@ -1,29 +1,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
-import { Form, Field } from '../../../../library';
+import { Form, Field, getTimezoneList } from '../../../../library';
 import styles from '../styles.scss';
 
 export default function ClinicDetails(props) {
-  const {
-    onSubmit, index, initialValues, formName,
-  } = props;
+  const { onSubmit, index, initialValues, formName } = props;
 
-  const options = moment.tz
-    .names()
-    .map((value) => {
-      const exp = new RegExp(/america/i);
-      if (exp.test(value)) {
-        return {
-          value,
-        };
-      }
-      return {
-        value: null,
-      };
-    })
-    .filter(filterValue => filterValue.value !== null);
+  const options = getTimezoneList();
 
   return (
     <Form

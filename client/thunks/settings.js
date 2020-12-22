@@ -141,7 +141,7 @@ export const sendReminderPreviewCall = ({
           callback();
         });
     } catch (err) {
-      console.log(err);
+      console.error(err);
       dispatch(
         showAlertTimeout({
           alert: { body: 'Test call failed' },

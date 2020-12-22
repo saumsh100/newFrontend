@@ -2,10 +2,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Tab, Tabs } from '../../../library';
-import OutboxReminders from './Reminders';
-import OutboxRecalls from './Recalls';
-import OutboxReviews from './Reviews';
+import OutboxReminders from '../../../Outbox/Reminders';
+import OutboxRecalls from '../../../Outbox/Recalls';
+import OutboxReviews from '../../../Outbox/Reviews';
 import styles from './styles.scss';
+import accountShape from '../../../library/PropTypeShapes/accountShape';
 
 const power = bool => <div className={bool ? styles.on : styles.off} />;
 const label = (title, bool) => (
@@ -53,5 +54,5 @@ export default class Outbox extends Component {
 }
 
 Outbox.propTypes = {
-  account: PropTypes.object.isRequired,
+  account: PropTypes.shape(accountShape).isRequired,
 };

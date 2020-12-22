@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import isString from 'lodash/isString';
 import { getClassMapper, omitTypes } from '../../Utils';
 import styles from './vcard.scss';
 
@@ -19,7 +18,7 @@ const VCard = (props) => {
     >
       {props.title ? (
         <props.headerAs>
-          {isString(props.title) ? (
+          {typeof props.title === 'string' ? (
             <h1 className={styles['default-title']}>{props.title}</h1>
           ) : (
             props.title()
@@ -42,12 +41,17 @@ const asType = PropTypes.oneOfType([PropTypes.string, PropTypes.func]);
 
 VCard.propTypes = {
   ...vcardMapper.types(),
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   as: asType,
   bodyAs: asType,
   headerAs: asType,
   className: PropTypes.string,
   title: PropTypes.node,
+};
+
+VCard.defaultProps = {
+  className: null,
+  title: null,
 };
 
 export default VCard;

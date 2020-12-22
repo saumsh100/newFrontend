@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Popover from 'react-popover';
 import 'react-day-picker/lib/style.css';
-import isArray from 'lodash/isArray';
 import omit from 'lodash/omit';
 import RDayPicker, { DateUtils } from 'react-day-picker';
 import Input from '../Input';
@@ -19,7 +18,7 @@ const convertValueToDate = (value) => {
     return new Date(years, months, date, hours);
   };
 
-  if (isArray(value)) {
+  if (Array.isArray(value)) {
     return value.map(v => toDateObject(v));
   }
   return toDateObject(value);

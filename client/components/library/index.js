@@ -173,4 +173,6 @@ export {
   getUTCDateObj,
   getFormattedTime,
   getWeeklySchedule,
+  getTimezoneList,
+  WeeklyScheduleShape,
 } from './util/datetime';

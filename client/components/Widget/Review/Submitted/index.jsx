@@ -44,7 +44,7 @@ class Submitted extends Component {
     return this.props
       .saveReview()
       .then(() => this.props.history.push('./review/complete'))
-      .catch(err => console.log('error in submitBad', err));
+      .catch(err => console.error('error in submitBad', err));
   }
 
   submitGood() {
@@ -53,7 +53,7 @@ class Submitted extends Component {
     return this.props
       .saveReview()
       .then(() => this.props.history.push('./review/complete'))
-      .catch(err => console.log('error in submitGood', err));
+      .catch(err => console.error('error in submitGood', err));
   }
 
   render() {

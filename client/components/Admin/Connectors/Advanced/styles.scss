@@ -1,4 +1,3 @@
-
 @import '../../../../ui.scss';
 
 .advancedWrapper {
@@ -20,4 +19,12 @@
 
 .listItem {
   cursor: default !important;
+}
+
+.loadingWrapper {
+  align-items: center;
+  display: flex;
+  height: 500px;
+  justify-content: center;
+  width: 100%;
 }

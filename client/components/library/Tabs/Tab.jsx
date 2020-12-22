@@ -6,23 +6,21 @@ import Tooltip from '../../Tooltip';
 import Icon from '../Icon';
 import styles from './styles.scss';
 
-export default function Tab(props) {
-  const {
-    className,
-    index,
-    label,
-    active,
-    fluid,
-    onClick,
-    disabled,
-    noUnderLine,
-    activeClass,
-    inactiveClass,
-    id,
-    tabCard,
-    tooltipBody,
-  } = props;
-
+const Tab = ({
+  className,
+  index,
+  label,
+  active,
+  fluid,
+  onClick,
+  disabled,
+  noUnderLine,
+  activeClass,
+  inactiveClass,
+  id,
+  tabCard,
+  tooltipBody,
+}) => {
   let classes = !tabCard
     ? classNames(className, styles.tab)
     : classNames(className, styles.tabCard);
@@ -64,12 +62,14 @@ export default function Tab(props) {
       )}
     </label>
   );
-}
+};
+
+export default Tab;
 
 Tab.propTypes = {
   className: PropTypes.string,
   index: PropTypes.number,
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({})]),
   active: PropTypes.bool,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,

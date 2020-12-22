@@ -51,8 +51,10 @@ function Button(props) {
   }
 
   const IconRightComponent = props.iconRightComponent || null;
+  const As = props.as;
+
   return (
-    <props.as
+    <As
       type="button"
       disabled={props.disabled}
       {...finalProps}
@@ -69,7 +71,7 @@ function Button(props) {
       {IconRightComponent && <IconRightComponent className={styles.iconRight} />}
 
       {props.iconRight && <i className={`fa fa-${props.iconRight} ${styles.iconRight}`} />}
-    </props.as>
+    </As>
   );
 }
 

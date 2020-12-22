@@ -104,12 +104,11 @@ export const parseDateWithFormat = (date, format, timezone = null, strict = fals
  * @param {moment.MomentInput} date
  * @param {(string|string[])} format
  * @param {string} timezone
- * @param {boolean} localTimezone
+ * @param {boolean} local set if it should use the computer timezone or not
  * @returns {string} A string witth date/time in the requested formatr
  */
-export const getFormattedDate = (date, format, timezone = null, localTimezone = false) => {
-  const hasTimezone = () =>
-    (localTimezone ? parseDate(date, timezone) : getUTCDate(date, timezone));
+export const getFormattedDate = (date, format, timezone = null, local = false) => {
+  const hasTimezone = () => (local ? parseDate(date, timezone) : getUTCDate(date, timezone));
   const dateToUse = timezone ? hasTimezone() : getDate(date);
   return dateToUse.format(format);
 };
@@ -299,6 +298,15 @@ export const WeeklyScheduleShape = {
     start: PropTypes.number.isRequired,
     end: PropTypes.number.isRequired,
   }),
+};
+
+/**
+ * @param {RegExp|false} [filter]
+ * @returns {{value:string}[]} an array with the list of all desired timezones
+ */
+export const getTimezoneList = (filter = /america/gi) => {
+  const names = filter ? moment.tz.names().filter(name => filter.test(name)) : moment.tz.names();
+  return names.map(value => ({ value }));
 };
 
 export { moment as DateTimeObj };

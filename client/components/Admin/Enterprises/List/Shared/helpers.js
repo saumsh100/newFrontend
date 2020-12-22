@@ -1,13 +1,15 @@
 
-import moment from 'moment';
-import each from 'lodash/each';
+import { getFormattedDate } from '../../../../library';
+import { forEach } from '../../../../library/util/lodash';
 
-export const formatedDate = date => moment(date).format('MMM DD, YYYY');
+export const formattedDate = (date, timezone = null) =>
+  getFormattedDate(date, 'MMM DD, YYYY', timezone);
 
 export function getEntities(entities) {
   const data = [];
-  each(entities, (collectionMap) => {
-    each(collectionMap, (modelData) => {
+
+  forEach(entities, (collectionMap) => {
+    forEach(collectionMap, (modelData) => {
       data.push(modelData);
     });
   });

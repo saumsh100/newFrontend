@@ -1,13 +1,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import isFunction from 'lodash/isFunction';
 import { List, ListItem, VButton, Row, Col } from '../../library';
 import styles from './editable-list.scss';
 
-const EditableListItem = ({
-  children, item, onDelete, onEdit,
-}) => (
+const EditableListItem = ({ children, item, onDelete, onEdit }) => (
   <ListItem className={styles.item}>
     <Row middle="md" className={styles.row}>
       <Col md={8}>{children}</Col>
@@ -39,18 +36,15 @@ const EditableListItem = ({
 );
 
 EditableListItem.propTypes = {
-  isHovered: PropTypes.bool,
   children: PropTypes.node.isRequired,
   item: PropTypes.shape({}).isRequired,
   onDelete: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
 };
 
-const EditableList = ({
-  items, onEdit, onDelete, render, confirm,
-}) => {
+const EditableList = ({ items, onEdit, onDelete, render, confirm }) => {
   const confirmAndDelete = (item) => {
-    const confirmMessage = isFunction(confirm) ? confirm(item) : confirm;
+    const confirmMessage = typeof confirm === 'function' ? confirm(item) : confirm;
 
     if (confirmMessage && window.confirm(confirmMessage)) {
       onDelete(item);
@@ -67,13 +61,19 @@ const EditableList = ({
 };
 
 EditableList.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-  })),
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  ),
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   render: PropTypes.func.isRequired,
-  confirm: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  confirm: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
+};
+
+EditableList.defaultProps = {
+  items: null,
 };
 
 export default EditableList;

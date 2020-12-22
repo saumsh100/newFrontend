@@ -21,6 +21,7 @@
     "react-hooks/exhaustive-deps": "warn",
     "new-cap": "off",
     "linebreak-style": "off",
+    "implicit-arrow-linebreak": "off",
     "no-mixed-operators": ["error", { "allowSamePrecedence": true }],
     "no-trailing-spaces": ["warn", { "skipBlankLines": true }],
     "class-methods-use-this": "off",

@@ -3,7 +3,6 @@ import React, { useMemo, memo, useCallback } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { cloneDeep } from 'lodash';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';
 import { generateWaitlistHours, getAllTimeSlots, getTimePickers, getTimeSlot } from '../../helpers';
 import Account from '../../../../../../entities/models/Account';
@@ -66,7 +65,7 @@ const TimesSegment = ({ account, timesRule, updateSelectedTimes }) => {
   );
 
   const timeSlots = useMemo(() => {
-    const timeOptionsCopy = cloneDeep(timeOptions);
+    const timeOptionsCopy = [...timeOptions];
     const options = timeOptionsCopy.map((option) => {
       option.slot = getTimeSlot(option.label);
       if (option.label === NOT_SET_LABEL) {

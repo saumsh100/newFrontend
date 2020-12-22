@@ -29,6 +29,6 @@ export default function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
           }),
         );
       })
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   };
 }

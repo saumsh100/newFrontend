@@ -1,6 +1,5 @@
 
 import React from 'react';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -10,7 +9,7 @@ import {
   createEntityRequest,
   updateEntityRequest,
 } from '../../../../thunks/fetchEntities';
-import { Form, Field } from '../../../library/index';
+import { Form, Field, getTimezoneList } from '../../../library/index';
 import PageContainer from '../../General/PageContainer';
 import { getModel } from '../../../Utils';
 import styles from '../../General/page-container.scss';
@@ -18,15 +17,12 @@ import styles from '../../General/page-container.scss';
 const enterprisesPath = (path = '') => `/admin/enterprises${path}`;
 
 const EnterpriseForm = (props) => {
-  const {
-    enterprise, isCreate, navigate, account,
-  } = props;
+  const { enterprise, isCreate, navigate, account } = props;
   if (!enterprise) {
     return null;
   }
 
-  const accountsPath = (path = '') =>
-    enterprisesPath(`/${enterprise.id}${path}`);
+  const accountsPath = (path = '') => enterprisesPath(`/${enterprise.id}${path}`);
 
   const onSubmit = (entityData) => {
     const key = 'accounts';
@@ -50,7 +46,10 @@ const EnterpriseForm = (props) => {
 
   const breadcrumbs = () => [
     {
-      icon: 'home', key: 'home', home: true, link: '/admin',
+      icon: 'home',
+      key: 'home',
+      home: true,
+      link: '/admin',
     },
     {
       title: 'Enterprises',
@@ -62,13 +61,14 @@ const EnterpriseForm = (props) => {
       key: enterprise.id,
       link: accountsPath('/accounts'),
     },
-    { title: pageTitle(), key: isCreate ? 'add' : account.id },
+    {
+      title: pageTitle(),
+      key: isCreate ? 'add' : account.id,
+    },
   ];
 
   // TODO do we need all timezones and the overlap
-  const options = moment.tz.names().map(value => ({
-    value,
-  }));
+  const options = getTimezoneList(false);
 
   return account || isCreate ? (
     <PageContainer title={pageTitle()} breadcrumbs={breadcrumbs()}>
@@ -89,12 +89,7 @@ const EnterpriseForm = (props) => {
           options={options}
           search
         />
-        <Field
-          required
-          name="destinationPhoneNumber"
-          label="Destination Phone Number"
-          type="tel"
-        />
+        <Field required name="destinationPhoneNumber" label="Destination Phone Number" type="tel" />
       </Form>
     </PageContainer>
   ) : (
@@ -109,14 +104,15 @@ const modelType = PropTypes.shape({
 
 EnterpriseForm.propTypes = {
   isCreate: PropTypes.bool.isRequired,
-  enterprise: modelType,
+  enterprise: modelType.isRequired,
   account: modelType,
-  fetchEntities: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
-  enterpriseId: PropTypes.string.isRequired,
-  accountId: PropTypes.string,
+};
+
+EnterpriseForm.defaultProps = {
+  account: null,
 };
 
 const stateToProps = (

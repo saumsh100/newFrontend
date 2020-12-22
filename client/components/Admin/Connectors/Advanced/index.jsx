@@ -1,13 +1,13 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import findIndex from 'lodash/findIndex';
-import { Button, DialogBox } from '../../../library';
+import { Button, DialogBox, Loading } from '../../../library';
 import ConfigurationItem from './ConfigurationItem';
 import Outbox from '../Outbox';
 import DonnasOutbox from '../../../DonnasOutbox';
 import styles from './styles.scss';
 import { httpClient } from '../../../../util/httpClient';
+import accountShape from '../../../library/PropTypeShapes/accountShape';
 
 const headersConfig = {
   headers: {
@@ -23,10 +23,6 @@ export default class Advanced extends Component {
     this.state = {
       isLoading: false,
       configurations: [],
-      recalls: [],
-      reminders: [],
-      reviews: null,
-
       isDonnaOutboxOpen: false,
       isDonnaTODOListOpen: false,
     };
@@ -59,8 +55,7 @@ export default class Advanced extends Component {
       .then(({ data }) => {
         const newConfig = data.data;
         const { configurations } = this.state;
-        const index = findIndex(
-          configurations,
+        const index = configurations.findIndex(
           c => c.attributes.name === newConfig.attributes.name,
         );
         const newConfigurations = this.state.configurations.slice();
@@ -84,10 +79,19 @@ export default class Advanced extends Component {
 
   render() {
     const { account } = this.props;
-    const { configurations } = this.state;
+    const { configurations, isLoading } = this.state;
+
+    if (isLoading) {
+      return (
+        <div className={styles.loadingWrapper}>
+          <Loading />
+        </div>
+      );
+    }
+
     return (
       <div className={styles.advancedWrapper}>
-        <Button onClick={this.toggleDonnaOutbox}>View Donna's Outbox</Button>
+        <Button onClick={this.toggleDonnaOutbox}>View Donna&apos;s Outbox</Button>
         {this.state.isDonnaOutboxOpen ? (
           <DialogBox
             className={styles.outboxDialog}
@@ -108,7 +112,7 @@ export default class Advanced extends Component {
           </DialogBox>
         ) : null}
 
-        <Button onClick={this.toggleDonnaTODOList}>View Donna's TODO List</Button>
+        <Button onClick={this.toggleDonnaTODOList}>View Donna&apos;s TODO List</Button>
         {this.state.isDonnaTODOListOpen ? (
           <DialogBox
             className={styles.outboxDialog}
@@ -144,5 +148,5 @@ export default class Advanced extends Component {
 }
 
 Advanced.propTypes = {
-  account: PropTypes.object.isRequired,
+  account: PropTypes.shape(accountShape).isRequired,
 };

@@ -32,7 +32,7 @@ export default function deleteEntityRequest({ key, id, url, values, alert }) {
         return data;
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         dispatch(
           showAlertTimeout({
             alert: errorText,

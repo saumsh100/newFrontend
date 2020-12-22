@@ -49,7 +49,7 @@ class Tabs extends Component {
     return headers.map((item, idx) =>
       React.cloneElement(item, {
         fluid,
-        key: idx,
+        key: idx.toString(),
         index: idx,
         active: this.props.index === idx,
         onClick: (event, index) => {
@@ -65,7 +65,7 @@ class Tabs extends Component {
   renderContents(contents) {
     const contentElements = contents.map((item, idx) =>
       React.cloneElement(item, {
-        key: idx,
+        key: idx.toString(),
         active: this.props.index === idx,
         tabIndex: idx,
         noUnderLine: this.props.noUnderLine,
@@ -75,9 +75,7 @@ class Tabs extends Component {
   }
 
   render() {
-    const {
-      children, className, contentClass, navClass, noHeaders, fluid,
-    } = this.props;
+    const { children, className, contentClass, navClass, noHeaders, fluid } = this.props;
 
     const newProps = omit(this.props, [
       'index',
