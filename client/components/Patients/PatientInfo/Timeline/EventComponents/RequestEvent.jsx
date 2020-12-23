@@ -1,9 +1,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateFormatter } from '@carecru/isomorphic';
 import RequestEventContainer from './Shared/RequestEventContainer';
 import getEventText from './Shared/textBuilder';
+import { getFormattedDate } from '../../../../library';
 
 export default function RequestEvent({ data, timezone }) {
   const eventTextKey = data.isCancelled ? 'rejected' : 'confirmed';
@@ -11,10 +11,10 @@ export default function RequestEvent({ data, timezone }) {
     <RequestEventContainer
       key={data.id}
       data={data}
-      headerData={`${getEventText('english', 'requests', eventTextKey)} ${dateFormatter(
+      headerData={`${getEventText('english', 'requests', eventTextKey)} ${getFormattedDate(
         data.startDate,
-        timezone,
         'MMMM Do, YYYY h:mma',
+        timezone,
       )}`}
       subHeaderItalicData={data.note || ''}
     />

@@ -1,9 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateFormatter } from '@carecru/isomorphic';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, isDateValid } from '../../../../library';
+import { Grid, Row, Col, isDateValid, getFormattedDate } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import ContactSection from './ContactSection';
@@ -19,8 +18,8 @@ function PersonalTab({ patient, timezone }) {
     </div>
   );
 
-  const birthDateData =
-    isDateValid(patient.birthDate) && dateFormatter(patient.birthDate, timezone, 'MMMM Do, YYYY');
+  const birthDateData = isDateValid(patient.birthDate)
+    && getFormattedDate(patient.birthDate, 'MMMM Do, YYYY', timezone);
 
   return (
     <Grid className={styles.grid}>
@@ -49,10 +48,7 @@ function PersonalTab({ patient, timezone }) {
 }
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(PersonalTab);
+export default connect(mapStateToProps, null)(PersonalTab);
 
 PersonalTab.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,

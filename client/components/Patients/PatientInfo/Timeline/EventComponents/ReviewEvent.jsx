@@ -1,8 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateFormatter } from '@carecru/isomorphic';
-import { Star } from '../../../../library';
+import { getFormattedDate, Star } from '../../../../library';
 import EventContainer from './Shared/EventContainer';
 import getEventText from './Shared/textBuilder';
 import styles from './styles.scss';
@@ -14,7 +13,7 @@ export default function ReviewEvent({ data, timezone }) {
     stars.push(<Star size={1.8} />);
   }
 
-  const apptDate = dateFormatter(data.appointment.startDate, timezone, 'MMMM Do, YYYY h:mma');
+  const apptDate = getFormattedDate(data.appointment.startDate, 'MMMM Do, YYYY h:mma', timezone);
 
   const completedContent = (
     <div className={styles.review}>
@@ -39,6 +38,17 @@ export default function ReviewEvent({ data, timezone }) {
 }
 
 ReviewEvent.propTypes = {
-  data: PropTypes.shape({ description: PropTypes.string }).isRequired,
+  data: PropTypes.shape({
+    review: PropTypes.shape({
+      description: PropTypes.string,
+      stars: PropTypes.number,
+    }),
+    appointment: PropTypes.shape({
+      startDate: PropTypes.string,
+    }),
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+    isCompleted: PropTypes.bool,
+  }).isRequired,
   timezone: PropTypes.string.isRequired,
 };

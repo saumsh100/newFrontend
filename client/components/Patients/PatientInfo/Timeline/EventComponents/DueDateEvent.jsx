@@ -2,11 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
 import getEventText from './Shared/textBuilder';
 import styles from './styles.scss';
-import { getUTCDate, getTodaysDate } from '../../../../library';
+import { getUTCDate, getTodaysDate, getFormattedDate } from '../../../../library';
 
 const calcDotStyling = (date, timezone) => {
   const hygieneDueDate = getUTCDate(date, timezone);
@@ -40,13 +39,13 @@ export default function DueDateEvent({ data, timezone }) {
   const tense = upcomingDueDate ? 'futureTense' : 'pastTense';
 
   const dateTypeText = data.dateType === 'same' ? 'hygiene and recall' : data.dateType;
-  const upcomingDateText = dateFormatter(data.dueDate, timezone, 'MMMM Do, YYYY');
+  const upcomingDateText = getFormattedDate(data.dueDate, 'MMMM Do, YYYY', timezone);
 
   const headerText = `${data.firstName} ${getEventText(
     'english',
     'dueDate',
     dueDateText,
-  )} ${dateTypeText} 
+  )} ${dateTypeText}
   ${getEventText('english', 'dueDate', tense)} ${upcomingDateText}.`;
 
   const headerDiv = <div className={styles.body_header}>{headerText}</div>;
@@ -63,9 +62,12 @@ export default function DueDateEvent({ data, timezone }) {
 
 DueDateEvent.propTypes = {
   data: PropTypes.shape({
+    id: PropTypes.string,
     createdAt: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
+    dueDate: PropTypes.string,
+    dateType: PropTypes.string,
   }).isRequired,
   timezone: PropTypes.string.isRequired,
 };

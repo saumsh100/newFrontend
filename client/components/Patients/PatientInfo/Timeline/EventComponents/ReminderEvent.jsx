@@ -1,9 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
-import { PatientPopover } from '../../../../library';
+import { getFormattedDate, PatientPopover } from '../../../../library';
 import styles from './styles.scss';
 
 const renderFamilyDetails = (data, timezone) => {
@@ -16,7 +15,7 @@ const renderFamilyDetails = (data, timezone) => {
       patient,
       appointment: { startDate },
     } = sentRemindersPatients[0];
-    const appDateTime = dateFormatter(startDate, timezone, 'MMMM Do, YYYY h:mma');
+    const appDateTime = getFormattedDate(startDate, 'MMMM Do, YYYY h:mma', timezone);
     return (
       <span>
         Family Reminder for{' '}
@@ -33,8 +32,8 @@ const renderFamilyDetails = (data, timezone) => {
       Family Reminder for these appointments:
       <div className={styles.reminder_container}>
         {sentRemindersPatients.map(({ patient, appointment: { startDate } }) => {
-          const appDate = dateFormatter(startDate, timezone, 'MMMM Do, YYYY');
-          const appTime = dateFormatter(startDate, timezone, 'h:mma');
+          const appDate = getFormattedDate(startDate, 'MMMM Do, YYYY', timezone);
+          const appTime = getFormattedDate(startDate, 'h:mma', timezone);
 
           return (
             <div className={styles.reminder_body}>
@@ -85,7 +84,11 @@ export default function ReminderEvent({ data, timezone }) {
     appointmentStartDate,
   } = sentRemindersPatients[0];
 
-  const appDate = dateFormatter(appointmentStartDate || startDate, timezone, 'MMMM Do, YYYY h:mma');
+  const appDate = getFormattedDate(
+    appointmentStartDate || startDate,
+    'MMMM Do, YYYY h:mma',
+    timezone,
+  );
 
   const component = (
     <div className={styles.body_header}>
@@ -106,6 +109,7 @@ ReminderEvent.propTypes = {
     id: PropTypes.string,
     createdAt: PropTypes.string,
     isConfirmed: PropTypes.bool,
+    isFamily: PropTypes.bool,
     primaryType: PropTypes.string,
     reminder: PropTypes.shape({ interval: PropTypes.string }),
     sentRemindersPatients: PropTypes.shape({

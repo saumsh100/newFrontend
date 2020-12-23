@@ -58,7 +58,7 @@
     "prefer-promise-reject-errors": "warn",
     "function-paren-newline": ["error", "consistent"],
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
-    "camelcase": ["error", { "allow": ["^UNSAFE_"]}],
+    "camelcase": ["error", { "allow": ["^UNSAFE_", "smart_follow_up"]}],
     "bof-newline/bof-newline": ["error", "always"]
   },
   "env": {

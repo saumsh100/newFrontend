@@ -1,10 +1,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
 import ManualRecallEvent from './ManualRecallEvent';
 import getEventText from './Shared/textBuilder';
+import { getFormattedDate } from '../../../../library';
 
 const contactMethodHash = {
   email: 'Email',
@@ -40,11 +40,15 @@ const recallIntervalHash = {
 export default function RecallEvent({ data, patient, timezone }) {
   if (!data.isAutomated) return <ManualRecallEvent data={data} patient={patient} />;
 
-  const sentDate = dateFormatter(data.createdAt, timezone, 'MMMM Do, YYYY h:mma');
+  const sentDate = getFormattedDate(data.createdAt, 'MMMM Do, YYYY h:mma', timezone);
   const typeOfRecall = data.isHygiene ? 'hygiene' : 'recall';
   const intervalText = recallIntervalHash[data.recall.interval];
   const contactMethod = contactMethodHash[data.primaryType];
-  const headerData = getEventText('english', 'recalls', typeOfRecall)({
+  const headerData = getEventText(
+    'english',
+    'recalls',
+    typeOfRecall,
+  )({
     intervalText,
     contactMethod,
     sentDate,
@@ -55,7 +59,9 @@ export default function RecallEvent({ data, patient, timezone }) {
 
 RecallEvent.propTypes = {
   data: PropTypes.shape({
+    id: PropTypes.string,
     createdAt: PropTypes.string,
+    pmsCreatedAt: PropTypes.string,
     isHygiene: PropTypes.bool,
     isAutomated: PropTypes.bool,
     primaryType: PropTypes.string,

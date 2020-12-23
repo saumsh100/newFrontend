@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { touch } from 'redux-form';
-import { dateFormatter, isValidEmail } from '@carecru/isomorphic';
-import { Grid, Row, Col, Form, Field, isDateValid } from '../../../../library';
+import { isValidEmail } from '@carecru/isomorphic';
+import { Grid, Row, Col, Form, Field, isDateValid, getFormattedDate } from '../../../../library';
 import { usStates, caProv } from '../../../../Settings/Practice/General/Address/selectConstants';
 import { isResponsive } from '../../../../../util/hub';
 import PatientModel from '../../../../../entities/models/Patient';
@@ -35,9 +35,11 @@ const validateZipcodePostal = (value, country) => {
 
   if (!country && !usRegex.test(value) && !caRegex.test(value)) {
     return 'This is not a valid postal code.';
-  } else if (country === 'US') {
+  }
+  if (country === 'US') {
     return usRegex.test(value) ? undefined : 'This is not a valid zip code.';
-  } else if (country === 'CA') {
+  }
+  if (country === 'CA') {
     return caRegex.test(value) ? undefined : 'This is not a valid postal code.';
   }
 
@@ -103,7 +105,7 @@ class PersonalForm extends PureComponent {
 
     const birthDate = patient.get('birthDate');
     const isValidBirthDate = isDateValid(birthDate)
-      ? dateFormatter(birthDate, timezone, 'MM/DD/YYYY')
+      ? getFormattedDate(birthDate, 'MM/DD/YYYY', timezone)
       : '';
 
     const initialValues = {
@@ -259,7 +261,4 @@ PersonalForm.defaultProps = {
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 const mapDispatchToProps = dispatch => bindActionCreators({ touch }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PersonalForm);
+export default connect(mapStateToProps, mapDispatchToProps)(PersonalForm);
