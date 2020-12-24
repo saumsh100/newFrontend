@@ -5,13 +5,18 @@ import { Card, CardHeader, BigCommentBubble, Col, Button, DialogBox } from '../.
 import content from '../../howToContent';
 import styles from '../../styles.scss';
 
+const awsUri =
+  process.env.NODE_ENV === 'production'
+    ? 'https://production-carecru-assets.s3.ca-central-1.amazonaws.com/img/logos'
+    : 'https://preproduction-carecru-assets.s3.ca-central-1.amazonaws.com/img/logos';
+
 const companyIcons = {
-  'Rate MDs': '//www.cdnstyles.com/static/images/icon32/sourceId-10450.png',
-  Facebook: '//www.cdnstyles.com/static/images/icon32/sourceId-10050.png',
-  Yelp: '//www.cdnstyles.com/static/images/icon32/sourceId-10000.png',
-  Google: '//www.cdnstyles.com/static/images/icon32/sourceId-10010.png',
-  CareCru: 'https://carecru.com/wp-content/uploads/2017/07/cropped-CareCru-Icon.png',
-  YellowPages: '//www.cdnstyles.com/static/images/icon32/sourceId-10490.png',
+  'Rate MDs': `${awsUri}/ratemds38w.png`,
+  Facebook: `${awsUri}/facebook38w.png`,
+  Yelp: `${awsUri}/yelp38w.png`,
+  Google: `${awsUri}/google38w.png`,
+  CareCru: `${awsUri}/carecru38w.png`,
+  YellowPages: `${awsUri}/yellow-pages38w.png`,
 };
 
 const capitalize = (str) => {
