@@ -50,23 +50,23 @@ const NextWaitlist = ({ account, ...props }) => {
     setSelectedWaitlistMap(batchUpdate());
   }, [batchUpdate]);
 
+  const { timezone, id: accountId, name } = account.toJS();
   const loadDefaultTemplate = useCallback(() => {
-    loadMassTextTemplate(account.toJS()).then(({ data }) => {
+    loadMassTextTemplate({ timezone,
+      id: accountId,
+      name }).then(({ data }) => {
       setTextMessage((prevTextMessage) => {
-        if (!prevTextMessage) {
+        if (prevTextMessage !== data) {
           return data;
         }
-        if (prevTextMessage !== data) {
-          return prevTextMessage;
-        }
-        return data;
+        return prevTextMessage;
       });
     });
-  }, [account]);
+  }, [accountId, name, timezone]);
 
   useEffect(() => {
     loadDefaultTemplate();
-  }, [account, loadDefaultTemplate]);
+  }, [timezone, name, accountId, loadDefaultTemplate]);
 
   const goToSendMassMessage = useCallback(
     (ids) => {
@@ -109,8 +109,8 @@ const NextWaitlist = ({ account, ...props }) => {
     resetEditForm();
   };
 
-  const handleEdit = id => () => {
-    const waitSpot = props.waitlist.find(({ ccId }) => ccId === id);
+  const handleEdit = waitspotId => () => {
+    const waitSpot = props.waitlist.find(({ ccId }) => ccId === waitspotId);
     setSelectedWaitSpot(waitSpot);
     setWaitListState(WAITLIST_STATE.form);
   };
