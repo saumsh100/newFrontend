@@ -157,8 +157,20 @@ class RequestList extends Component {
 
   renderRequestList() {
     const { sortedRequests, services, patientUsers, practitioners, popoverRight } = this.props;
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedRequest = urlParams.get('selectedRequest');
+
     return (
-      <List className={styles.requestList}>
+      <List
+        className={styles.requestList}
+        onScroll={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (selectedRequest) {
+            this.openRequest(null);
+          }
+        }}
+      >
         {sortedRequests.map((request) => {
           const practitionerId = request.get('practitionerId');
           const practitioner = (practitionerId && practitioners.get(practitionerId)) || null;
