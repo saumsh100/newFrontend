@@ -10,7 +10,13 @@ import IconButton from '../IconButton';
 import { dayPickerTheme } from './defaultTheme';
 import { StyleExtender } from '../../Utils/Themer';
 import styles from './styles.scss';
-import { getDate, getTodaysDate, getUTCDate, parseDate } from '../util/datetime';
+import {
+  getDate,
+  getTodaysDate,
+  getUTCDate,
+  parseDate,
+  parseDateWithFormat,
+} from '../util/datetime';
 
 const convertValueToDate = (value) => {
   const toDateObject = (d) => {
@@ -95,8 +101,17 @@ class DayPicker extends Component {
       theme,
       timezone,
     } = this.props;
-    // If value is defined, format to 10/8/2017 style
-    const displayValue = value ? getUTCDate(value, timezone).format('l') : value;
+
+    let displayValue;
+
+    // If the defined value is in the 10/8/2017 style, parse the date
+    const onlyDate = parseDateWithFormat(value, ['L', 'l'], timezone);
+    if (typeof value === 'string' && onlyDate.isValid()) {
+      displayValue = onlyDate.format('l');
+    } else {
+      // If value is defined and it is in UTC, format to 10/8/2017 style
+      displayValue = value ? getUTCDate(value, timezone).format('l') : value;
+    }
 
     const newPickerProps = omit(this.props, [
       'iconClassName',

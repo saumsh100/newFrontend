@@ -1,9 +1,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import moment from 'moment';
-import { dateFormatter } from '@carecru/isomorphic';
-import { ListItem, IconButton } from '../../../../library';
+import { ListItem, IconButton, getFormattedDate } from '../../../../library';
 import styles from './styles.scss';
 
 class RecurringTimeOffListItem extends Component {
@@ -32,12 +30,12 @@ class RecurringTimeOffListItem extends Component {
       dayOfWeek,
       allDay,
       pmsId,
-    } = timeOff;
+    } = timeOff.toJS();
 
-    const startDateFM = moment(startDate).format('MMM Do YYYY');
-    const endDateFM = moment(endDate).format('MMM Do YYYY');
-    const startTimeFM = dateFormatter(startTime, timezone, 'LT');
-    const endTimeFM = dateFormatter(endTime, timezone, 'LT');
+    const startDateFM = getFormattedDate(startDate, 'MMM Do YYYY');
+    const endDateFM = getFormattedDate(endDate, 'MMM Do YYYY');
+    const startTimeFM = getFormattedDate(startTime, 'LT', timezone, true);
+    const endTimeFM = getFormattedDate(endTime, 'LT', timezone, true);
 
     let showData = allDay
       ? `${startDateFM} To: ${endDateFM}`
@@ -47,16 +45,15 @@ class RecurringTimeOffListItem extends Component {
 
     const showNote = note ? `${note}` : 'No Description';
 
-    const button =
-      fromPMS || pmsId ? (
+    const button = fromPMS || pmsId ? (
         <div className={styles.timeOffList_readOnly}>Read Only</div>
-      ) : (
+    ) : (
         <IconButton
           icon="trash"
           className={styles.timeOffList_delete}
           onClick={this.deleteTimeOff}
         />
-      );
+    );
 
     return (
       <ListItem onClick={fromPMS || pmsId ? () => {} : onClick} className={styles.timeOffList_item}>
@@ -72,7 +69,7 @@ class RecurringTimeOffListItem extends Component {
 }
 
 RecurringTimeOffListItem.propTypes = {
-  timeOff: PropTypes.object.isRequired,
+  timeOff: PropTypes.instanceOf(Map).isRequired,
   onClick: PropTypes.func.isRequired,
   deleteTimeOff: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,

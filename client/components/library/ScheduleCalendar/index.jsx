@@ -1,10 +1,9 @@
 
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import RDayPicker, { LocaleUtils } from 'react-day-picker';
 import classNames from 'classnames';
-import { capitalize, dateFormatter } from '@carecru/isomorphic';
+import { capitalize } from '@carecru/isomorphic';
 import { weeklyScheduleShape } from '../PropTypeShapes';
 import Navbar from './Navbar';
 import renderDay from './renderDay';
@@ -13,6 +12,7 @@ import ScheduleDrawer from './ScheduleDrawer';
 import calendar from './calendar.scss';
 import Loader from '../../Loader';
 import styles from './schedule.scss';
+import { parseDateWithFormat, getFormattedDate } from '../util/datetime';
 
 /**
  * Select the short name based on the index
@@ -23,28 +23,25 @@ import styles from './schedule.scss';
 const formatWeekdayShort = i => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i];
 
 /**
- * If it's a closed schedule set always the same value, so we treat it as closed.
- * @param isClosed
- * @return {function(*): string}
- */
-const selectedTimeOrClosedFallback = isClosed => time =>
-  (isClosed ? new Date(1970, 1, 0).toISOString() : time);
-
-/**
- * Get the original date (1970-01-01T00:00:00.000Z) and sets the updateTime,
+ * Get the original date (1970-01-31T12:00:00.000Z) and sets the updateTime,
  * so a 3pm in a +3hr tz will be converted to 12pm, this way we keep the UTC value
  * and we avoid issues with sunlight day savings.
  *
- * @param originalDate
- * @param updatedTime
- * @param timezone
- * @return {string | * | number | null}
+ * @param {string} originalDate
+ * @param {string} timezone
+ * @param {boolean} [isClosed] defaults to false
+ * @return {string | null}
  */
-const setTimeToOriginalDate = (originalDate, updatedTime, timezone) => {
-  const format = 'YYYY-MM-DDTHH:mm:ss.SSS[Z]';
-  const originalTimeAndDate = moment.tz(originalDate, timezone).format(format);
-  const updatedDateAndTime = `${originalTimeAndDate.split('T')[0]}T${updatedTime}`;
-  return moment.tz(updatedDateAndTime, format, timezone).toISOString();
+const setTimeToOriginalDate = (updatedTime, timezone, isClosed = false) => {
+  if (isClosed) return '1970-01-01T12:00:00.000Z';
+
+  const format = ['YYYY-MM-DDTHH:mm:ss.SSS[Z]', 'YYYY-MM-DDTLT]'];
+  const newDateTime = parseDateWithFormat(
+    `1970-01-01T${updatedTime}`,
+    format,
+    timezone,
+  ).toISOString();
+  return newDateTime;
 };
 
 class ScheduleCalendar extends Component {
@@ -105,25 +102,19 @@ class ScheduleCalendar extends Component {
    * @param weekDay
    */
   handleEditSchedule(weekDay) {
-    const weekDayForselectedDay =
-      this.props.selectedDay &&
-      dateFormatter(this.props.selectedDay, this.props.timezone, 'dddd').toLowerCase();
-    const isTheSameDay =
-      weekDayForselectedDay &&
-      weekDayForselectedDay === weekDay &&
-      this.getSelectedSchedule(this.props.selectedDay).isDailySchedule;
+    const { selectedDay, timezone } = this.props;
+    const weekDayForselectedDay = selectedDay && getFormattedDate(selectedDay, 'dddd', timezone, true).toLowerCase();
+    const isTheSameDay = weekDayForselectedDay
+      && weekDayForselectedDay === weekDay
+      && this.getSelectedSchedule(selectedDay).isDailySchedule;
 
     this.setState(
       {
         editSchedule: isTheSameDay
-          ? this.getSelectedSchedule(this.props.selectedDay)
+          ? this.getSelectedSchedule(selectedDay)
           : this.props.baseSchedule.weeklySchedule[weekDay],
         editTitle: isTheSameDay
-          ? `Holiday Hours (${dateFormatter(
-            this.props.selectedDay,
-            this.props.timezone,
-            'MMM. D, YYYY',
-          )})`
+          ? `Holiday Hours (${getFormattedDate(selectedDay, 'MMM. D, YYYY', timezone, true)})`
           : `Default Weekly Schedule (${capitalize(weekDay)})`,
       },
       () => this.handleModalVisibility(),
@@ -140,31 +131,22 @@ class ScheduleCalendar extends Component {
   }
 
   handleUpdateSchedule(schedule) {
-    const { editSchedule } = this.state;
     const { timezone, selectedDay } = this.props;
-    const closedOrTime = selectedTimeOrClosedFallback(schedule.isClosed);
+    const { isClosed, endTime, startTime } = schedule;
     return this.props.handleUpdateSchedule(
       {
         ...schedule,
-        endTime: setTimeToOriginalDate(
-          editSchedule.endTime,
-          closedOrTime(schedule.endTime),
-          timezone,
-        ),
-        startTime: setTimeToOriginalDate(
-          editSchedule.startTime,
-          closedOrTime(schedule.startTime),
-          timezone,
-        ),
+        startTime: setTimeToOriginalDate(startTime, timezone, isClosed),
+        endTime: setTimeToOriginalDate(endTime, timezone, isClosed),
         date: selectedDay,
         breaks:
-          schedule.breaks.length > 0
-            ? schedule.breaks.map(b => ({
+          isClosed || schedule.breaks.length === 0
+            ? []
+            : schedule.breaks.map(b => ({
               ...b,
-              endTime: setTimeToOriginalDate(editSchedule.endTime, b.endTime, timezone),
-              startTime: setTimeToOriginalDate(editSchedule.startTime, b.startTime, timezone),
-            }))
-            : [],
+              endTime: setTimeToOriginalDate(b.endTime, timezone),
+              startTime: setTimeToOriginalDate(b.startTime, timezone),
+            })),
       },
       () => this.handleModalVisibility(false),
     );
@@ -257,10 +239,10 @@ class ScheduleCalendar extends Component {
 
 ScheduleCalendar.propTypes = {
   baseSchedule: PropTypes.shape({
-    schedule: PropTypes.object,
+    schedule: PropTypes.shape({}),
     isCustomSchedule: PropTypes.bool,
-    dailySchedule: PropTypes.array,
-    weeklySchedule: PropTypes.object,
+    dailySchedule: PropTypes.arrayOf(PropTypes.object),
+    weeklySchedule: PropTypes.shape(weeklyScheduleShape),
   }).isRequired,
   weeklySchedule: PropTypes.shape(weeklyScheduleShape).isRequired,
   closedDays: PropTypes.arrayOf(PropTypes.object),

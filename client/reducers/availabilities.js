@@ -1,6 +1,5 @@
 
 import { fromJS, Map, OrderedSet } from 'immutable';
-import moment from 'moment-timezone';
 import { createAction, handleActions } from 'redux-actions';
 import {
   SIX_DAYS_SHIFT,
@@ -27,6 +26,7 @@ import {
   SET_SENTRECALLID,
   SET_DUE_DATE,
 } from '../constants';
+import { parseDate, getUTCDate, getTodaysDate } from '../components/library/util/datetime';
 
 /**
  * In the future this will prefix @availabilities/
@@ -70,16 +70,16 @@ export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_ST
 export const updateDaysOfTheWeek = createAction(UPDATE_DAYS_OF_THE_WEEK);
 
 function getStartTimeForToday(account) {
-  return moment.tz(new Date(), account.timezone).add(1, 'hours');
+  return parseDate(new Date(), account.timezone).add(1, 'hours');
 }
 
 function getFloorDate(date) {
-  return moment(date)
+  return getUTCDate(date)
     .startOf('day')
     .toISOString();
 }
 
-let selectedStartDate = moment()
+let selectedStartDate = getTodaysDate()
   .add(1, 'hours')
   .toISOString();
 
@@ -129,7 +129,6 @@ export const createInitialWidgetState = (state) => {
 
   const floorDate = getFloorDate(selectedStartDate);
 
-  // selectedStartDate = timezone ?
   return fromJS({
     account: null,
     availabilities: [],
@@ -294,16 +293,14 @@ export default handleActions(
       // If same day as today, set it to the 1 hour from now time
       // If not, set it to the beginning of the day
       const account = state.get('account').toJS();
-      const searchedDate = moment(payload).toObject();
+      const searchedDate = getUTCDate(payload, account.timezone).toObject();
       const startDateForToday = getStartTimeForToday(account);
-      const isToday =
-        searchedDate.date === startDateForToday.get('date') &&
-        searchedDate.months === startDateForToday.get('month') &&
-        searchedDate.years === startDateForToday.get('year');
+      const isToday = searchedDate.date === startDateForToday.get('date')
+        && searchedDate.months === startDateForToday.get('month')
+        && searchedDate.years === startDateForToday.get('year');
       const startDate = isToday
         ? startDateForToday.toISOString()
-        : moment
-          .tz(searchedDate, account.timezone)
+        : parseDate(searchedDate, account.timezone)
           .hours(0)
           .minutes(0)
           .seconds(0)
@@ -358,7 +355,9 @@ export default handleActions(
 
     [SET_DUE_DATE](state, { payload }) {
       let newState = state.set('dueDate', payload);
-      if (moment().isBefore(payload)) {
+      const account = state.get('account').toJS();
+
+      if (getTodaysDate(account.timezone).isBefore(payload)) {
         newState = newState.merge({
           selectedStartDate: payload,
           floorDate: getFloorDate(payload),

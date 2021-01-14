@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import classNames from 'classnames';
 import DropdownTimeSuggestion from '../DropdownTimeSuggestion';
 import { dropdownTheme } from '../../Widget/theme';
@@ -9,9 +8,12 @@ import { DeleteIcon } from './Icons';
 import styles from './modal.scss';
 import schedule from './schedule.scss';
 import { Button } from '../index';
+import { parseDateWithFormat } from '../util/datetime';
+
+export const validFormats = ['LT', 'HH:mm:ss.SSS[Z]', 'hh:mm:ssZ'];
 
 export const isTimeValid = (value, timezone) => {
-  const time = moment.tz(value, ['LT', 'HH:mm:ss.SSS[Z]'], true, timezone);
+  const time = parseDateWithFormat(value, validFormats, timezone, true);
   return time.isValid();
 };
 
@@ -23,8 +25,8 @@ export const isTimeValid = (value, timezone) => {
  * @param timezone {String}
  */
 const formatTimeField = (value, timezone) => {
-  const time = moment.tz(value, ['LT', 'HH:mm:ss.SSS[Z]'], true, timezone);
-  return isTimeValid(value, timezone) ? time.format('HH:mm:ss.SSS[Z]') : value;
+  const time = parseDateWithFormat(value, validFormats, timezone, true);
+  return time.isValid() ? time.format(validFormats[1]) : value;
 };
 /**
  * The default format for the label kry must be
@@ -32,8 +34,8 @@ const formatTimeField = (value, timezone) => {
  *
  */
 const renderTimeValue = (value, timezone) => {
-  const time = moment.tz(value, 'HH:mm:ss.SSS[Z]', true, timezone);
-  return isTimeValid(value, timezone) ? time.format('LT') : value;
+  const time = parseDateWithFormat(value, validFormats, timezone, true);
+  return time.isValid() ? time.format(validFormats[0]) : value;
 };
 
 const InputGroup = ({

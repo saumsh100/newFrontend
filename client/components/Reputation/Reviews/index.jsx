@@ -1,12 +1,11 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import { reset, change } from 'redux-form';
 import { bindActionCreators } from 'redux';
-import { Card, Col, Grid, Row, Filters } from '../../library';
+import { Card, Col, Grid, Row, Filters, getUTCDate } from '../../library';
 import Loader from '../../Loader';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { setReputationFilter } from '../../../actions/reputation';
@@ -53,8 +52,8 @@ class Reviews extends Component {
 
   submitDate(values) {
     const params = {
-      startDate: moment(values.startDate).toLocaleString(),
-      endDate: moment(values.endDate).toLocaleString(),
+      startDate: getUTCDate(values.startDate, this.props.timezone).toLocaleString(),
+      endDate: getUTCDate(values.endDate, this.props.timezone).toLocaleString(),
     };
 
     Promise.all([
@@ -65,8 +64,8 @@ class Reviews extends Component {
       }),
     ]).then(() => {
       const newState = {
-        startDate: moment(values.startDate),
-        endDate: moment(values.endDate),
+        startDate: getUTCDate(values.startDate, this.props.timezone),
+        endDate: getUTCDate(values.endDate, this.props.timezone),
         loader: true,
       };
       this.setState(newState);
@@ -211,6 +210,7 @@ Reviews.propTypes = {
   fetchEntitiesRequest: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 Reviews.defaultProps = {
@@ -222,19 +222,20 @@ Reviews.defaultProps = {
 
 function mapStateToProps({ apiRequests, entities, auth, reputation }) {
   const reviews = apiRequests.get('reviews');
-  const reviewsWasFetched =
-    reviews && ((reviews.get('wasFetched') && reputation.get('reviewsData').size > 0) || false);
+  const reviewsWasFetched = reviews && ((reviews.get('wasFetched') && reputation.get('reviewsData').size > 0) || false);
   const reviewsFilter = reviewsWasFetched && reputation.get('reviewsFilter');
   const reviewsData = reviewsWasFetched && reputation.get('reviewsData');
   const reviewsList = reviewsWasFetched && reputation.get('reviewsList');
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const hasAccount = activeAccount && !!activeAccount.get('vendastaId');
+  const timezone = auth.get('timezone');
 
   return {
     reviewsData: reviewsData || null,
     reviewsList: reviewsList || null,
     reviewsFilter: reviewsFilter || null,
     hasAccount,
+    timezone,
   };
 }
 
@@ -251,9 +252,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Reviews);

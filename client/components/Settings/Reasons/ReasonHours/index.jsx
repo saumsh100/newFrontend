@@ -2,12 +2,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
-import moment from 'moment-timezone';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { capitalize, range, week } from '@carecru/isomorphic';
-import { Button, Toggle } from '../../../library';
+import { Button, parseDateWithFormat, Toggle } from '../../../library';
 import EditIcon from '../EditIcon';
 import FetchReasonHours from '../../../GraphQL/ReasonHours/fetchReasonHours';
 import Service from '../../../../entities/models/Service';
@@ -128,7 +127,11 @@ class ReasonHours extends PureComponent {
                       {range(rangeStartTime, rangeEndTime).map(timeSlot => (
                         <div className={styles.hour} key={uuid()}>
                           <span>
-                            {moment.tz(timeSlot.toString(), 'H', this.props.timezone).format('h A')}
+                            {parseDateWithFormat(
+                              timeSlot.toString(),
+                              'H',
+                              this.props.timezone,
+                            ).format('h A')}
                           </span>
                         </div>
                       ))}
@@ -181,7 +184,4 @@ ReasonHours.propTypes = {
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 const mapActionsToProps = dispatch => bindActionCreators({ updateEntity }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapActionsToProps,
-)(ReasonHours);
+export default connect(mapStateToProps, mapActionsToProps)(ReasonHours);

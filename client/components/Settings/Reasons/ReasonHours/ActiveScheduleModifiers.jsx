@@ -31,11 +31,9 @@ ActiveScheduleModifiers.propTypes = {
   addTimeItem: PropTypes.func.isRequired,
   children: PropTypes.func.isRequired,
   data: PropTypes.shape({
-    availabilities: PropTypes.array,
-    breaks: PropTypes.array,
     id: PropTypes.string,
     isClosed: PropTypes.bool,
-  }),
+  }).isRequired,
 };
 
 export default ActiveScheduleModifiers;

@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { timeToVerticalPosition } from '@carecru/isomorphic';
-import moment from 'moment-timezone';
 import ScheduleModifier from './ScheduleModifier';
 import styles from './styles.scss';
+import { parseDateWithFormat } from '../../../library';
 
 const h2px = 75;
 const m2px = h2px / 60;
@@ -38,8 +38,8 @@ const getModifierHeight = (modifierKey, endTime, startTime, { duration, ...props
     : timeToVerticalPositionBuilder({
       ...props,
       time: endTime,
-    }) -
-      timeToVerticalPositionBuilder({
+    })
+      - timeToVerticalPositionBuilder({
         ...props,
         time: startTime,
       }));
@@ -60,7 +60,9 @@ const WeeklyHoursModifiers = ({ modifiers, ...props }) => {
               ...props,
               time: startTime,
             })}
-            value={moment.tz(startTime, props.allowedTimeFormat, props.timezone).format('LT')}
+            value={parseDateWithFormat(startTime, props.allowedTimeFormat, props.timezone).format(
+              'LT',
+            )}
             height={getModifierHeight(modifierKey, endTime, startTime, props)}
             label={modifierKey === AVAILABILITIES ? 'Set Availability' : 'Blocked'}
           />

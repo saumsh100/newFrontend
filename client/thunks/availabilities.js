@@ -1,5 +1,4 @@
 
-import moment from 'moment';
 import { batchActions } from 'redux-batched-actions';
 import {
   setIsFetching,
@@ -19,6 +18,7 @@ import {
 import PatientUser from '../entities/models/PatientUser';
 import { setIsRecall, setSelectedPractitionerId } from '../reducers/availabilities';
 import { bookingWidgetHttpClient } from '../util/httpClient';
+import { getUTCDate } from '../components/library/util/datetime';
 
 export function sixDaysShift(dayObj) {
   return function (dispatch) {
@@ -226,7 +226,7 @@ export function fetchAvailabilities(date) {
     const startDate = date || availabilities.get('selectedStartDate');
 
     // TODO: it should be calculating till end of endDate
-    const endDate = moment(startDate)
+    const endDate = getUTCDate(startDate)
       .add(5, 'days')
       .toISOString();
     const params = {

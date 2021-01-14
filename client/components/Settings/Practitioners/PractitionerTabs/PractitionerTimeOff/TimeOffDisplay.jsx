@@ -1,17 +1,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { dateFormatter } from '@carecru/isomorphic';
 import styles from './styles.scss';
+import { getFormattedDate } from '../../../../library/util/datetime';
 
 export default function TimeOffDisplay({ values, timezone }) {
   const { startDate, endDate, startTime, endTime, allDay } = values;
 
-  const startDateFormatted = moment(startDate).format('l');
-  const endDateFormatted = moment(endDate).format('l');
-  const formattedSt = dateFormatter(startTime, timezone, 'LT');
-  const formattedEt = dateFormatter(endTime, timezone, 'LT');
+  const startDateFormatted = getFormattedDate(startDate, 'l');
+  const endDateFormatted = getFormattedDate(endDate, 'l');
+  const formattedSt = getFormattedDate(startTime, 'LT', timezone, true);
+  const formattedEt = getFormattedDate(endTime, 'LT', timezone, true);
 
   const showDisplayComponent = allDay ? (
     <div>

@@ -2,12 +2,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
 import { Map } from 'immutable';
 import jwt from 'jwt-decode';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import { Header, Button, DialogBox } from '../../../library';
+import { Header, Button, DialogBox, getFormattedDate } from '../../../library';
 import {
   fetchEntities,
   createEntityRequest,
@@ -21,6 +20,7 @@ import SettingsCard from '../../Shared/SettingsCard';
 import SuperAdminForm from './SuperAdminForm';
 import MassEmailDisplay from './MassEmailDisplay';
 import Account from '../../../../entities/models/Account';
+import Address from '../../../../entities/models/Address';
 import ChatSection from '../General/ChatSection';
 import CellPhoneFallback from './CellPhoneFallback';
 import DisplayName from './DisplayName';
@@ -206,11 +206,11 @@ class SuperAdmin extends Component {
   }
 
   openPreviewModal() {
-    this.setState({ previewOpen: !this.state.previewOpen });
+    this.setState(prevState => ({ previewOpen: !prevState.previewOpen }));
   }
 
   render() {
-    const { activeAccount, users } = this.props;
+    const { activeAccount, users, timezone } = this.props;
 
     if (!activeAccount) return null;
 
@@ -225,7 +225,7 @@ class SuperAdmin extends Component {
     });
 
     const massOnlineDate = activeAccount.massOnlineEmailSentDate
-      ? moment(activeAccount.massOnlineEmailSentDate).format('MMM DD, YYYY hh:mm A')
+      ? getFormattedDate(activeAccount.massOnlineEmailSentDate, 'MMM DD, YYYY hh:mm A', timezone)
       : null;
 
     const emailTemplate = 'General Introduction Announcement';
@@ -307,21 +307,31 @@ SuperAdmin.propTypes = {
   sendEmailBlast: PropTypes.func.isRequired,
   getEmailBlastCount: PropTypes.func.isRequired,
   users: PropTypes.instanceOf(Map).isRequired,
+  timezone: PropTypes.string.isRequired,
+  address: PropTypes.instanceOf(Address),
+  reset: PropTypes.func.isRequired,
+};
+
+SuperAdmin.defaultProps = {
+  address: null,
 };
 
 const mapStateToProps = ({ entities, auth }) => {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
   const addresses = entities.getIn(['addresses', 'models']);
+  let timezone = auth.get('timezone');
   let address;
   if (activeAccount && activeAccount.addressId) {
     address = addresses.get(activeAccount.addressId);
+    timezone = activeAccount.get('timezone');
   }
 
   return {
     activeAccount,
     address,
     users: entities.getIn(['users', 'models']),
+    timezone,
   };
 };
 
@@ -340,7 +350,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SuperAdmin);
+export default connect(mapStateToProps, mapDispatchToProps)(SuperAdmin);

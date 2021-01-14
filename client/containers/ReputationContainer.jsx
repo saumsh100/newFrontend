@@ -1,26 +1,10 @@
 
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import moment from 'moment';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import Loader from 'react-loader';
-import { fetchEntitiesRequest } from '../thunks/fetchEntities';
+import React from 'react';
 import Reputation from '../components/Reputation/Reviews';
 
-class ReputationContainer extends Component {
-  render() {
-    return (
-      <div>
-        <Reputation {...this.props} />
-      </div>
-    );
-  }
-}
-
-ReputationContainer.propTypes = {
-  fetchEntitiesRequest: PropTypes.func,
-  openForm: PropTypes.func,
-};
-
+const ReputationContainer = props => (
+  <div>
+    <Reputation {...props} />
+  </div>
+);
 export default ReputationContainer;

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import GeneralForm from './GeneralForm';
@@ -11,6 +10,7 @@ import Address from './Address';
 import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
 import { Dropzone, AccountLogo, Button, Header, Link } from '../../../library';
+import { getTodaysDate, getUTCDate, getDateDurantion } from '../../../library/util/datetime';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
@@ -112,25 +112,24 @@ class General extends Component {
     let button = <Button onClick={this.downloadConnector}>Generate Download Link</Button>;
 
     if (this.state.downloadLink) {
-      const now = moment(this.state.expired);
-      const end = moment(new Date());
-      const duration = moment.duration(now.diff(end)).asSeconds();
+      const now = getUTCDate(this.state.expired, this.props.timezone);
+      const end = getTodaysDate(this.props.timezone);
+      const duration = getDateDurantion(now.diff(end)).asSeconds();
 
-      button =
-        duration > 0 ? (
+      button = duration > 0 ? (
           <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
             Click to Download
             <br /> {Math.floor(duration)} s
           </Link>
-        ) : (
+      ) : (
           <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
             Link Expired
           </Link>
-        );
+      );
 
       setTimeout(() => {
         if (duration > 0) {
-          this.setState({ expired: this.state.expired });
+          this.setState(prevState => ({ expired: prevState.expired }));
         }
       }, 500);
     }
@@ -187,6 +186,7 @@ General.propTypes = {
   uploadLogo: PropTypes.func.isRequired,
   deleteLogo: PropTypes.func.isRequired,
   downloadConnector: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -205,20 +205,17 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const addresses = entities.getIn(['addresses', 'models']);
-
-  const address =
-    activeAccount && activeAccount.addressId ? addresses.get(activeAccount.addressId) : null;
+  const checkAccount = activeAccount && activeAccount.addressId;
+  const address = checkAccount ? addresses.get(activeAccount.addressId) : null;
 
   return {
     users: entities.getIn(['users', 'models']),
     activeAccount,
     address,
+    timezone: activeAccount.timezone,
   };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(General);

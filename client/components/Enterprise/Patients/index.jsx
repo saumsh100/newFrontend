@@ -2,14 +2,13 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Loader from '../../Loader';
 import Page from '../Page';
 import Table from '../Table';
 import Graph from '../Graph';
-import { Grid, Row, Col } from '../../library/';
+import { Grid, Row, Col, getTodaysDate } from '../../library';
 import withAuthProps from '../../../hocs/withAuthProps';
 import { getModel } from '../../Utils';
 import { fetchEntities } from '../../../thunks/fetchEntities';
@@ -17,8 +16,8 @@ import { fetchEntities } from '../../../thunks/fetchEntities';
 import styles from './styles.scss';
 
 const fetchEnterpriseDashboard = (segmentId, rawWhere) => {
-  const from = moment().subtract(1, 'month');
-  const to = moment();
+  const from = getTodaysDate().subtract(1, 'month');
+  const to = getTodaysDate();
 
   const qs = {
     startDate: from.toISOString(),
@@ -101,9 +100,4 @@ const actionsToProps = dispatch =>
     dispatch,
   );
 
-export default withAuthProps(
-  connect(
-    stateToProps,
-    actionsToProps,
-  )(PatientsPage),
-);
+export default withAuthProps(connect(stateToProps, actionsToProps)(PatientsPage));

@@ -1,12 +1,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import classNames from 'classnames';
-import { Avatar, Highlighter } from '../library';
+import { connect } from 'react-redux';
+import { Avatar, getFormattedDate, getTodaysDate, Highlighter } from '../library';
 import { findChunksAtBeginningOfWords } from '../Utils';
 import { StyleExtender } from '../Utils/Themer';
 import styles from './styles.scss';
+import { patientShape } from '../library/PropTypeShapes';
 
 const PatientSuggestion = ({
   patient,
@@ -15,10 +16,13 @@ const PatientSuggestion = ({
   inputValue,
   getItemProps,
   theme,
+  timezone,
 }) => {
   const newTheme = StyleExtender(theme, styles);
   const fullName = `${patient.firstName} ${patient.lastName}`;
-  const age = patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : '';
+  const age = patient.birthDate
+    ? `, ${getTodaysDate(timezone).diff(patient.birthDate, 'years')}`
+    : '';
   const patientString = `${fullName}${age}`;
   const inputSearch = inputValue.split(' ').filter(v => v !== '');
 
@@ -45,7 +49,9 @@ const PatientSuggestion = ({
           </div>
           <div className={newTheme.suggestionContainer_date}>
             Last Appointment:{' '}
-            {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+            {patient.lastApptDate
+              ? getFormattedDate(patient.lastApptDate, 'MMM D YYYY', timezone)
+              : 'n/a'}
           </div>
         </div>
       </div>
@@ -53,20 +59,8 @@ const PatientSuggestion = ({
   );
 };
 
-PatientSuggestion.defaultProps = {
-  inputValue: '',
-  highlightedIndex: -1,
-  theme: {},
-};
-
 PatientSuggestion.propTypes = {
-  patient: PropTypes.shape({
-    id: PropTypes.string,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    birthDate: PropTypes.string,
-    context: PropTypes.string,
-  }).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
   index: PropTypes.number.isRequired,
   inputValue: PropTypes.string,
   highlightedIndex: PropTypes.number,
@@ -75,6 +69,15 @@ PatientSuggestion.propTypes = {
     suggestionsContainerOpen: PropTypes.string,
     suggestionsList: PropTypes.string,
   }),
+  timezone: PropTypes.string.isRequired,
 };
 
-export default PatientSuggestion;
+PatientSuggestion.defaultProps = {
+  inputValue: '',
+  highlightedIndex: -1,
+  theme: {},
+};
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+
+export default connect(mapStateToProps, null)(PatientSuggestion);

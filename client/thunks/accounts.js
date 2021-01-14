@@ -1,9 +1,9 @@
 
-import moment from 'moment';
 import { receiveEntities } from '../reducers/entities';
 import { updateEntityRequest } from './fetchEntities';
-import { showAlertTimeout } from '../thunks/alerts';
+import { showAlertTimeout } from './alerts';
 import { httpClient } from '../util/httpClient';
+import { getTodaysDate } from '../components/library/util/datetime';
 
 export function uploadLogo(accountId, file) {
   return function (dispatch) {
@@ -83,10 +83,10 @@ export function sendEmailBlast(accountId) {
     );
 
     return httpClient().post(`/api/accounts/${accountId}/onlineBookingEmailBlast`, {
-      startDate: moment()
+      startDate: getTodaysDate()
         .subtract(5, 'years')
         .toISOString(),
-      endDate: moment().toISOString(),
+      endDate: getTodaysDate().toISOString(),
     });
   };
 }
@@ -94,10 +94,10 @@ export function sendEmailBlast(accountId) {
 export function getEmailBlastCount(accountId) {
   return function () {
     return httpClient().get(`/api/accounts/${accountId}/onlineBookingEmailBlastCount`, {
-      startDate: moment()
+      startDate: getTodaysDate()
         .subtract(5, 'years')
         .toISOString(),
-      endDate: moment().toISOString(),
+      endDate: getTodaysDate().toISOString(),
     });
   };
 }

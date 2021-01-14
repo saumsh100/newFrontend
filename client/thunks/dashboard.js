@@ -1,5 +1,4 @@
 
-import moment from 'moment-timezone';
 import { convertIntervalStringToObject } from '@carecru/isomorphic';
 import {
   setLoading,
@@ -9,11 +8,14 @@ import {
   setToDoRecalls,
 } from '../reducers/dashboard';
 import { httpClient } from '../util/httpClient';
+import { getUTCDate, parseDate } from '../components/library/util/datetime';
 
 export function fetchInsights() {
   return async function (dispatch, getState) {
     try {
-      const { dashboard } = getState();
+      const { auth, dashboard, entities } = getState();
+      const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+      const timezone = account.get('timezone');
 
       dispatch(
         setLoading({
@@ -22,7 +24,7 @@ export function fetchInsights() {
         }),
       );
 
-      const currentDate = moment(dashboard.get('dashboardDate'));
+      const currentDate = getUTCDate(dashboard.get('dashboardDate'), timezone);
       const startDate = currentDate.startOf('day').toISOString();
       const endDate = currentDate.endOf('day').toISOString();
 
@@ -62,7 +64,7 @@ export function fetchDonnasToDos(index) {
     const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
     const timezone = account.get('timezone');
 
-    const currentDate = moment.tz(dashboard.get('dashboardDate'), timezone);
+    const currentDate = parseDate(dashboard.get('dashboardDate'), timezone);
     const startDate = currentDate.startOf('day').toISOString();
     const endDate = currentDate.endOf('day').toISOString();
 
@@ -126,11 +128,10 @@ async function fetchToDoRecalls(accountId, startDate, endDate, dispatch, recallB
   try {
     let endDateQuery = endDate;
     if (recallBuffer) {
-      endDateQuery = moment(startDate)
+      endDateQuery = getUTCDate(startDate)
         .add(convertIntervalStringToObject(recallBuffer))
         .toISOString();
     }
-
     const params = {
       startDate,
       endDate: endDateQuery,

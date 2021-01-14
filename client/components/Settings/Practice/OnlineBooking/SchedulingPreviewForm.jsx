@@ -1,7 +1,7 @@
 
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { DialogBox, Loading } from '../../../library/';
+import { DialogBox, Loading } from '../../../library';
 import FormButton from '../../../library/Form/FormButton';
 import AccountShape from '../../../library/PropTypeShapes/accountShape';
 import styles from './styles.scss';
@@ -16,9 +16,7 @@ export default function SchedulingPreviewForm({ activeAccount }) {
   return (
     <Fragment>
       <div className={styles.formContainer_pickerField}>
-        <label>
-          Test run your online scheduling widget without it being published on your website
-        </label>
+        Test run your online scheduling widget without it being published on your website
       </div>
       <FormButton
         title="Preview"

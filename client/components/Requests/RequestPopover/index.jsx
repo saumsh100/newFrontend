@@ -1,12 +1,23 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 import { isHub } from '../../../util/hub';
 import PatientUser from '../../../entities/models/PatientUser';
 import Practitioner from '../../../entities/models/Practitioners';
-import { Card, Avatar, Icon, SContainer, SHeader, SBody, SFooter, Button } from '../../library';
+import {
+  Card,
+  Avatar,
+  Icon,
+  SContainer,
+  SHeader,
+  SBody,
+  SFooter,
+  Button,
+  getFormattedDate,
+  getTodaysDate,
+} from '../../library';
 import styles from './styles.scss';
 import Info from './Info';
 
@@ -120,7 +131,7 @@ renderMobileFooter.propTypes = {
   toggleActionDisplay: PropTypes.func.isRequired,
 };
 
-export default class RequestPopover extends Component {
+class RequestPopover extends Component {
   constructor(props) {
     super(props);
 
@@ -147,24 +158,27 @@ export default class RequestPopover extends Component {
       requestingUser,
       isMobile,
       showButton,
+      timezone,
     } = this.props;
 
     const { displayActions } = this.state;
-    const appointmentDate = moment(request.startDate).format('dddd LL');
-    const requestedAt = moment(request.createdAt).format('MMM D, hh:mm A');
-    const age = patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : '';
+    const appointmentDate = getFormattedDate(request.startDate, 'dddd LL', timezone);
+    const requestedAt = getFormattedDate(request.createdAt, 'MMM D, hh:mm A', timezone);
+    const age = patient.birthDate
+      ? `, ${getTodaysDate(timezone).diff(patient.birthDate, 'years')}`
+      : '';
 
     return (
       <Card className={isMobile ? styles.cardMobile : styles.card} noBorder>
-        {!isHub() &&
-          (isMobile
+        {!isHub()
+          && (isMobile
             ? renderMobileHeader(this.props)
             : renderDesktopHeader({
-                ...this.props,
-                age,
-              }))}
-        {isMobile &&
-          renderMobileSubHeader({
+              ...this.props,
+              age,
+            }))}
+        {isMobile
+          && renderMobileSubHeader({
             ...this.props,
             age,
           })}
@@ -204,6 +218,7 @@ export default class RequestPopover extends Component {
               insuranceCarrier={insuranceCarrier}
               insuranceMemberId={insuranceMemberId}
               insuranceGroupId={insuranceGroupId}
+              timezone={timezone}
               title="Patient Info"
             />
 
@@ -249,10 +264,10 @@ export default class RequestPopover extends Component {
         )}
         {isMobile && showButton
           ? renderMobileFooter({
-              toggleActionDisplay: this.toggleActionDisplay,
-              displayActions,
-              ...this.props,
-            })
+            toggleActionDisplay: this.toggleActionDisplay,
+            displayActions,
+            ...this.props,
+          })
           : showButton && renderDesktopFooter(this.props)}
       </Card>
     );
@@ -274,6 +289,7 @@ RequestPopover.propTypes = {
   service: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
   showButton: PropTypes.bool,
+  timezone: PropTypes.string.isRequired,
 };
 
 RequestPopover.defaultProps = {
@@ -286,3 +302,7 @@ RequestPopover.defaultProps = {
   requestingUser: null,
   showButton: true,
 };
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+
+export default connect(mapStateToProps, null)(RequestPopover);

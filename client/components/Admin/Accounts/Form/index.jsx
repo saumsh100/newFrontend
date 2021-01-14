@@ -68,7 +68,7 @@ const EnterpriseForm = (props) => {
   ];
 
   // TODO do we need all timezones and the overlap
-  const options = getTimezoneList(false);
+  const options = getTimezoneList({ filter: false });
 
   return account || isCreate ? (
     <PageContainer title={pageTitle()} breadcrumbs={breadcrumbs()}>
@@ -141,7 +141,4 @@ const dispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  stateToProps,
-  dispatchToProps,
-)(EnterpriseForm);
+export default connect(stateToProps, dispatchToProps)(EnterpriseForm);

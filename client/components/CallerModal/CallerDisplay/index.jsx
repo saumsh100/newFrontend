@@ -2,22 +2,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
-import moment from 'moment';
-import { Avatar, Icon } from '../../library';
+import { connect } from 'react-redux';
+import { Avatar, getFormattedDate, getTodaysDate, Icon } from '../../library';
 import AppointmentBookedToggle from './AppointmentBookedToggle';
 import CallDisplayInfo from '../CallDisplayInfo';
 import styles from '../styles.scss';
+import { callShape, patientShape } from '../../library/PropTypeShapes';
 
-export default function CallerDisplay(props) {
-  const {
-    call,
-    patient,
-    clearSelectedCall,
-    updateEntityRequest,
-    push,
-    setScheduleDate,
-  } = props;
-
+const CallerDisplay = ({
+  call,
+  patient,
+  clearSelectedCall,
+  updateEntityRequest,
+  push,
+  setScheduleDate,
+  timezone,
+}) => {
   if (!patient) {
     return null;
   }
@@ -37,46 +37,48 @@ export default function CallerDisplay(props) {
     borderStyling = styles.missed;
   }
 
-  const callDisplayContainer = classnames(
-    styles.callDisplayContainer,
-    borderStyling,
-  );
+  const callDisplayContainer = classnames(styles.callDisplayContainer, borderStyling);
 
-  const age =
-    patient && patient.birthDate
-      ? moment().diff(patient.birthDate, 'years')
-      : null;
+  const age = patient.birthDate ? getTodaysDate(timezone).diff(patient.birthDate, 'years') : null;
+
   const fullName = `${patient.firstName} ${patient.lastName}`;
   const fullNameDisplay = age ? fullName.concat(', ', age) : fullName;
-  const birthDate =
-    patient && patient.birthDate
-      ? moment(patient.birthDate).format('MMMM Do, YYYY')
-      : null;
+  const birthDate = patient && patient.birthDate
+    ? getFormattedDate(patient.birthDate, 'MMMM Do, YYYY', timezone)
+    : null;
 
-  const lastAppt =
-    patient && patient.lastApptDate
-      ? moment(patient.lastApptDate).format('MMM Do, YYYY h:mm a')
-      : null;
-  const nextAppt =
-    patient && patient.nextApptDate
-      ? moment(patient.nextApptDate).format('MMM Do, YYYY h:mm a')
-      : null;
+  const lastAppt = patient.lastApptDate
+    ? getFormattedDate(patient.lastApptDate, 'MMM Do, YYYY h:mm a', timezone)
+    : null;
+
+  const nextAppt = patient.nextApptDate
+    ? getFormattedDate(patient.nextApptDate, 'MMM Do, YYYY h:mm a', timezone)
+    : null;
 
   let nextApptStyling = styles.appointmentInfoContainer_date;
   let lastApptStyling = styles.appointmentInfoContainer_date;
 
   if (nextAppt) {
-    nextApptStyling = classnames(
-      nextApptStyling,
-      styles.appointmentInfoContainer_date_hover,
-    );
+    nextApptStyling = classnames(nextApptStyling, styles.appointmentInfoContainer_date_hover);
   }
   if (lastAppt) {
-    lastApptStyling = classnames(
-      lastApptStyling,
-      styles.appointmentInfoContainer_date_hover,
-    );
+    lastApptStyling = classnames(lastApptStyling, styles.appointmentInfoContainer_date_hover);
   }
+
+  const onClick = (scheduleDate) => {
+    if (lastAppt) {
+      setScheduleDate({ scheduleDate });
+      clearSelectedCall();
+      push('/schedule');
+    }
+  };
+
+  const onKeyPress = (e, scheduleDate) => {
+    if (e.keyCode === 13 && lastAppt) {
+      e.stopPropagation();
+      onClick(scheduleDate);
+    }
+  };
 
   return (
     <div className={callDisplayContainer}>
@@ -84,7 +86,13 @@ export default function CallerDisplay(props) {
         <div className={styles.callerAvatar}>
           <Avatar user={patient} size="xl" />
         </div>
-        <div className={styles.closeIcon} onClick={clearSelectedCall}>
+        <div
+          className={styles.closeIcon}
+          onClick={clearSelectedCall}
+          role="button"
+          tabIndex={0}
+          onKeyDown={e => e.keyCode === 13 && clearSelectedCall()}
+        >
           <Icon icon="times" />
         </div>
       </div>
@@ -108,13 +116,10 @@ export default function CallerDisplay(props) {
             <span>Last Appointment </span>
             <div
               className={lastApptStyling}
-              onClick={() => {
-                if (lastAppt) {
-                  setScheduleDate({ scheduleDate: lastAppt });
-                  clearSelectedCall();
-                  push('/schedule');
-                }
-              }}
+              onClick={() => onClick(lastAppt)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={e => onKeyPress(e, lastAppt)}
             >
               {lastAppt}
             </div>
@@ -123,13 +128,10 @@ export default function CallerDisplay(props) {
             <span>Next Appointment </span>
             <div
               className={nextApptStyling}
-              onClick={() => {
-                if (nextAppt) {
-                  setScheduleDate({ scheduleDate: nextAppt });
-                  clearSelectedCall();
-                  push('/schedule');
-                }
-              }}
+              onClick={() => onClick(nextAppt)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={e => onKeyPress(e, nextAppt)}
             >
               {nextAppt}
             </div>
@@ -138,20 +140,31 @@ export default function CallerDisplay(props) {
 
         <div className={styles.callInfo_header}>Call Information</div>
         <CallDisplayInfo call={call} />
-        <AppointmentBookedToggle
-          call={call}
-          updateEntityRequest={updateEntityRequest}
-        />
+        <AppointmentBookedToggle call={call} updateEntityRequest={updateEntityRequest} />
       </div>
     </div>
   );
-}
+};
 
 CallerDisplay.propTypes = {
-  call: PropTypes.object,
-  patient: PropTypes.object,
+  call: PropTypes.shape(callShape),
+  patient: PropTypes.shape(patientShape),
   clearSelectedCall: PropTypes.func,
   push: PropTypes.func,
   setScheduleDate: PropTypes.func,
   updateEntityRequest: PropTypes.func,
+  timezone: PropTypes.string.isRequired,
 };
+
+CallerDisplay.defaultProps = {
+  call: null,
+  patient: null,
+  clearSelectedCall: () => {},
+  push: () => {},
+  setScheduleDate: () => {},
+  updateEntityRequest: () => {},
+};
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+
+export default connect(mapStateToProps)(CallerDisplay);

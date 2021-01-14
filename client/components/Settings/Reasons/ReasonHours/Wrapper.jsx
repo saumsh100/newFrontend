@@ -1,15 +1,15 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import { connect } from 'react-redux';
-import { capitalize, setDateToTimezone, timeOptions } from '@carecru/isomorphic';
+import { capitalize } from '@carecru/isomorphic';
 import Service from '../../../../entities/models/Service';
 import UpdateReasonWeeklyHours from '../../../GraphQL/ReasonHours/updateReasonWeeklyHours';
 import EditReasonWeeklyHours from './EditReasonWeeklyHours';
 import ModalHeader from './ModalHeader';
 import ModalFooter from './ModalFooter';
-import ReasonHours from './';
+import ReasonHours from '.';
+import { generateTimeBreaks, parseDate, parseDateWithFormat } from '../../../library/util/datetime';
 
 /**
  * Valid time format when handling with time values.
@@ -23,9 +23,9 @@ const allowedTimeFormat = 'HH:mm:ss.SSS[Z]';
  *
  * @param time
  * @param timezone
- * @return {*|string|number|*|*}
+ * @return {moment}
  */
-const timeToMoment = (time, timezone) => moment.tz(time, allowedTimeFormat, timezone);
+const timeToMoment = (time, timezone) => parseDateWithFormat(time, allowedTimeFormat, timezone);
 
 /**
  * Validate if startTime is before endTime.
@@ -33,7 +33,7 @@ const timeToMoment = (time, timezone) => moment.tz(time, allowedTimeFormat, time
  * @param startTime
  * @param endTime
  * @param timezone
- * @return {boolean | *}
+ * @return {boolean}
  */
 const validate = ({ startTime, endTime }, timezone) =>
   timeToMoment(startTime, timezone).isAfter(timeToMoment(endTime, timezone));
@@ -65,7 +65,7 @@ const genericTimeRange = (
   minutesBetween = 120,
   startDate = new Date(1970, 1, 0, 10, 0),
 ) => {
-  const startTime = setDateToTimezone(startDate, timezone);
+  const startTime = parseDate(startDate, timezone);
   return {
     startTime: startTime.format(allowedTimeFormat),
     endTime: startTime.add(minutesBetween, 'minutes').format(allowedTimeFormat),
@@ -94,6 +94,9 @@ class ReasonWeeklyHoursWrapper extends Component {
       data: defaultData,
       weekDay: '',
       active: '',
+      timeOpts: generateTimeBreaks({
+        timezone: this.props.timezone,
+      }),
     };
 
     this.onEditClick = this.onEditClick.bind(this);
@@ -172,20 +175,23 @@ class ReasonWeeklyHoursWrapper extends Component {
    * @param value
    */
   handleDropdownChange(value) {
-    this.setState({
+    this.setState(prevState => ({
       active: value,
       data: {
-        ...this.state.initialData,
+        ...prevState.initialData,
         isClosed: value === 'isClosed',
       },
-    });
+    }));
   }
 
   /**
    * Set the state to its initial value and hide the modal.
    */
   hideModal() {
-    this.setState({ data: this.state.initialData }, () => this.handleModalVisibility(false));
+    this.setState(
+      prevState => ({ data: prevState.initialData }),
+      () => this.handleModalVisibility(false),
+    );
   }
 
   /**
@@ -208,10 +214,9 @@ class ReasonWeeklyHoursWrapper extends Component {
    * @param key
    */
   addTimeItem(key) {
-    const data =
-      key === 'breaks'
-        ? genericTimeRange(this.props.timezone)
-        : genericTimeRange(this.props.timezone, this.props.reason.get('duration'));
+    const data = key === 'breaks'
+      ? genericTimeRange(this.props.timezone)
+      : genericTimeRange(this.props.timezone, this.props.reason.get('duration'));
     this.setState(prevState => ({
       data: {
         ...prevState.data,
@@ -302,7 +307,7 @@ class ReasonWeeklyHoursWrapper extends Component {
   }
 
   render() {
-    const timeOpts = timeOptions();
+    const { timezone } = this.props;
     const removeOffSet = time => time.replace('+00', '.000Z');
     const momentBreaksData = {
       ...this.state.data,
@@ -313,8 +318,8 @@ class ReasonWeeklyHoursWrapper extends Component {
       })),
       breaks: this.state.data.breaks.map(({ startTime, endTime, ...rest }) => ({
         ...rest,
-        startTime: timeToMoment(removeOffSet(startTime), this.props.timezone),
-        endTime: timeToMoment(removeOffSet(endTime), this.props.timezone),
+        startTime: timeToMoment(removeOffSet(startTime), timezone),
+        endTime: timeToMoment(removeOffSet(endTime), timezone),
       })),
     };
     return (
@@ -329,11 +334,11 @@ class ReasonWeeklyHoursWrapper extends Component {
             <EditReasonWeeklyHours
               data={momentBreaksData}
               active={this.state.active}
-              timeToIsoString={time => timeToMoment(time, this.props.timezone).toISOString()}
-              timeOptions={timeOpts}
+              timeToIsoString={time => timeToMoment(time, timezone).toISOString()}
+              timeOptions={this.state.timeOpts}
               handleOverrideDropdownChange={this.handleDropdownChange}
-              timezone={this.props.timezone}
-              validate={dateRange => validate(dateRange, this.props.timezone)}
+              timezone={timezone}
+              validate={dateRange => validate(dateRange, timezone)}
               addTimeItem={this.addTimeItem}
               removeAvailability={this.removeAvailability}
               removeBreak={this.removeBreak}

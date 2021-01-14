@@ -5,6 +5,7 @@ import TimeOffListItem from './TimeOffListItem';
 import { List } from '../../../../library';
 import { sortByFieldAsc } from '../../../../library/util/SortEntities';
 import styles from './styles.scss';
+import { practitionerShape } from '../../../../library/PropTypeShapes';
 
 class TimeOffList extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class TimeOffList extends Component {
 
   deleteTimeOff(timeOff) {
     const { deleteTimeOff } = this.props;
-    const deleteTf = confirm('Are you sure you want to the delete time off ?');
+    const deleteTf = window.confirm('Are you sure you want to the delete time off ?');
 
     if (deleteTf) {
       deleteTimeOff(timeOff);
@@ -22,14 +23,7 @@ class TimeOffList extends Component {
   }
 
   render() {
-    const {
-      timeOffs,
-      practitioner,
-      onSelectTimeOff,
-      deleteTimeOff,
-      children,
-      timezone,
-    } = this.props;
+    const { timeOffs, practitioner, onSelectTimeOff, children, timezone } = this.props;
 
     return (
       <List className={styles.timeOffList} data-test-id="timeOffList">
@@ -52,12 +46,12 @@ class TimeOffList extends Component {
 }
 
 TimeOffList.propTypes = {
-  // TODO: use Immutable PropTypes
-  timeOffs: PropTypes.object.isRequired,
-  practitioner: PropTypes.object.isRequired,
+  timeOffs: PropTypes.shape({}).isRequired,
+  practitioner: PropTypes.shape(practitionerShape).isRequired,
   onSelectTimeOff: PropTypes.func.isRequired,
   deleteTimeOff: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({})]).isRequired,
 };
 
 export default TimeOffList;

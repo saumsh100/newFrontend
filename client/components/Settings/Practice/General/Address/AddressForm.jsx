@@ -1,8 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
-import { Form, Field } from '../../../../library/index';
+import { Form, Field, getTimezoneList } from '../../../../library/index';
 import { usStates, caProvinces, countrySelector } from './selectConstants';
 import styles from './styles.scss';
 
@@ -42,7 +41,7 @@ class AddressForm extends Component {
     };
   }
 
-  changeCountry(event, newValue) {
+  changeCountry(_event, newValue) {
     this.props.change('addressSettingsForm', 'zipCode', '');
     this.props.change('addressSettingsForm', 'state', '');
 
@@ -60,11 +59,15 @@ class AddressForm extends Component {
     if (!value) {
       return undefined;
     }
-    const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+    const regex = new RegExp(
+      /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i,
+    );
 
     if (this.state.country === 'US') {
       return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'Please enter a proper zipcode.';
-    } else if (!regex.test(value)) {
+    }
+
+    if (!regex.test(value)) {
       return 'Please enter a proper postal code.';
     }
 
@@ -85,21 +88,7 @@ class AddressForm extends Component {
       timezone: address.get('timezone'),
     };
 
-    const options = moment.tz
-      .names()
-      .map((value) => {
-        const exp = new RegExp(/america/i);
-        if (exp.test(value)) {
-          return {
-            value,
-          };
-        }
-        return {
-          value: null,
-        };
-      })
-      .filter(filterValue => filterValue.value !== null);
-
+    const options = getTimezoneList({ showOffset: true });
     return (
       <div className={styles.addressRow}>
         <Form
@@ -148,14 +137,7 @@ class AddressForm extends Component {
 }
 
 AddressForm.propTypes = {
-  address: PropTypes.shape({
-    country: PropTypes.string,
-    street: PropTypes.string,
-    city: PropTypes.string,
-    zipCode: PropTypes.string,
-    state: PropTypes.string,
-    timezone: PropTypes.string,
-  }),
+  address: PropTypes.instanceOf(Map),
   change: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };

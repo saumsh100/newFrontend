@@ -7,7 +7,7 @@ import styles from '../styles.scss';
 export default function ClinicDetails(props) {
   const { onSubmit, index, initialValues, formName } = props;
 
-  const options = getTimezoneList();
+  const options = getTimezoneList({ showOffset: true });
 
   return (
     <Form

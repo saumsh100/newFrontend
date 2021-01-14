@@ -1,14 +1,21 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { connect } from 'react-redux';
 import PatientUser from '../../entities/models/PatientUser';
 import styles from './styles.scss';
+import { getFormattedDate, getTodaysDate } from '../library';
 
-export default function RequestData(props) {
-  const { time, service, name, requestCreatedAt, requestingUser, birthDate } = props;
-
-  const age = birthDate ? `, ${moment().diff(birthDate, 'years')}` : '';
+const RequestData = ({
+  time,
+  service,
+  name,
+  requestCreatedAt,
+  requestingUser,
+  birthDate,
+  timezone,
+}) => {
+  const age = birthDate ? `, ${getTodaysDate(timezone).diff(birthDate, 'years')}` : '';
 
   return (
     <div className={styles.requestData}>
@@ -32,12 +39,12 @@ export default function RequestData(props) {
           </div>
         )}
         <div className={styles.requestedText__createdAt}>
-          Requested on: {moment(requestCreatedAt).format('MMM D, hh:mm A')}
+          Requested on: {getFormattedDate(requestCreatedAt, 'MMM D, hh:mm A', timezone)}
         </div>
       </div>
     </div>
   );
-}
+};
 
 RequestData.propTypes = {
   name: PropTypes.string.isRequired,
@@ -46,6 +53,11 @@ RequestData.propTypes = {
   service: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
   birthDate: PropTypes.string.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 RequestData.defaultProps = { requestingUser: null };
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+
+export default connect(mapStateToProps, null)(RequestData);

@@ -5,14 +5,15 @@ import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import { dateFormatter, sortAsc, timeOptions } from '@carecru/isomorphic';
-import { Modal, Button, DropdownMenu, Icon } from '../';
+import { sortAsc } from '@carecru/isomorphic';
+import { Modal, Button, DropdownMenu, Icon } from '../index';
 import EnabledFeature from '../EnabledFeature';
 import MultiSelect from '../MultiSelect';
 import List from '../MultiSelect/List';
 import Selector from '../MultiSelect/Selector';
 import InputGroup, { isTimeValid } from './InputGroup';
 import styles from './modal.scss';
+import { generateTimeBreaks, getFormattedDate } from '../util/datetime';
 
 const PMS_MAP = {
   OPENDENTAL: 'OpenDental',
@@ -54,7 +55,8 @@ export const hasError = ({ startTime, endTime }, timezone) => {
   return error;
 };
 
-const getFormattedTime = (time, timezone) => dateFormatter(time, timezone, 'HH:mm:ss.SSS[Z]');
+const getFormattedTime = (time, timezone) =>
+  getFormattedDate(time, 'HH:mm:ss.SSS[Z]', timezone, true);
 
 class EditSchedule extends Component {
   constructor(props) {
@@ -65,6 +67,9 @@ class EditSchedule extends Component {
       endTime: null,
       breaks: [],
       chairIds: [],
+      timeOpts: generateTimeBreaks({
+        timezone: this.props.timezone,
+      }),
     };
 
     this.addBreak = this.addBreak.bind(this);
@@ -102,6 +107,7 @@ class EditSchedule extends Component {
     return {
       ...schedule,
       chairIds: selectedChairIds,
+      timeOpts: this.state.timeOpts,
       startTime: getFormattedTime(schedule.startTime, timezone),
       endTime: getFormattedTime(schedule.endTime, timezone),
       breaks:
@@ -192,7 +198,6 @@ class EditSchedule extends Component {
 
   render() {
     const { timezone, isModalVisible, handleUpdateSchedule, selectedDay, chairs } = this.props;
-    const times = timeOptions();
     const items = chairs.toJS();
     const options = Object.values(items)
       .filter(e => e.isActive)
@@ -331,7 +336,7 @@ class EditSchedule extends Component {
                           <p className={styles.closeMessage}>Open Office Hours to edit</p>
                         ) : (
                           <InputGroup
-                            timeOptions={times}
+                            timeOptions={this.state.timeOpts}
                             timezone={timezone}
                             isAllow={isAllow}
                             error={hasError(this.state, timezone)}
@@ -360,7 +365,7 @@ class EditSchedule extends Component {
                             isRemovable
                             error={hasError(b, timezone)}
                             onClick={() => this.removeBreak(index)}
-                            timeOptions={times}
+                            timeOptions={this.state.timeOpts}
                             timezone={timezone}
                             isAllow={isAllow}
                             startTime={b.startTime}
@@ -390,9 +395,9 @@ class EditSchedule extends Component {
             <div className={styles.footer}>
               <EnabledFeature
                 predicate={({ flags }) =>
-                  flags.get('connector-update-practitioner-dailySchedule-chairIds') ||
-                  flags.get('connector-update-practitioner-dailySchedules') ||
-                  flags.get('connector-update-practitioner-weeklySchedule')
+                  flags.get('connector-update-practitioner-dailySchedule-chairIds')
+                  || flags.get('connector-update-practitioner-dailySchedules')
+                  || flags.get('connector-update-practitioner-weeklySchedule')
                 }
                 fallback={() => (
                   <Button className={styles.cancel} onClick={this.hideModal}>
@@ -445,8 +450,8 @@ EditSchedule.propTypes = {
   chairs: PropTypes.instanceOf(Map),
   pmsName: PropTypes.string.isRequired,
   schedule: PropTypes.shape({
-    breaks: PropTypes.array,
-    chairIds: PropTypes.array,
+    breaks: PropTypes.arrayOf(PropTypes.any),
+    chairIds: PropTypes.arrayOf(PropTypes.string),
     endTime: PropTypes.string,
     isClosed: PropTypes.bool,
     isDailySchedule: PropTypes.bool,

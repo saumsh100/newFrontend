@@ -1,11 +1,11 @@
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateFormatter } from '@carecru/isomorphic';
+import { getFormattedDate } from '../../library/util/datetime';
 
 function TimezoneFormatter({ timezone, render, date, format }) {
   return render({
-    formattedDate: dateFormatter(date, timezone, format),
+    formattedDate: getFormattedDate(date, format, timezone),
     timezone,
     format,
   });
@@ -24,7 +24,4 @@ TimezoneFormatter.propTypes = {
 
 TimezoneFormatter.defaultProps = { format: 'LT' };
 
-export default connect(
-  mapStateToProps,
-  null,
-)(TimezoneFormatter);
+export default connect(mapStateToProps, null)(TimezoneFormatter);

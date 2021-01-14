@@ -1,12 +1,20 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
-import { Button, Checkbox, ListItem, PatientPopover, Tooltip } from '../../../library';
+import { connect } from 'react-redux';
+import {
+  Button,
+  Checkbox,
+  getFormattedDate,
+  getFormattedTime,
+  ListItem,
+  PatientPopover,
+  Tooltip,
+} from '../../../library';
 import styles from './styles.scss';
+import { appointmentShape, patientShape } from '../../../library/PropTypeShapes';
 
-function WaitingRoomListItem(props) {
-  const { waitingRoomPatient, onNotify, onClean, onComplete } = props;
+const WaitingRoomListItem = ({ waitingRoomPatient, onNotify, onClean, onComplete, timezone }) => {
   const {
     patient,
     enteredAt,
@@ -31,7 +39,9 @@ function WaitingRoomListItem(props) {
   return (
     <ListItem className={styles.waitingRoomListItem}>
       <div className={styles.leftSection}>
-        <div className={styles.checkinTime}>Checked in at {moment(enteredAt).format('h:mm a')}</div>
+        <div className={styles.checkinTime}>
+          Checked in at {getFormattedDate(enteredAt, 'h:mm a', timezone)}
+        </div>
         <div className={styles.subLeftSection}>
           <div className={styles.completionCircleWrapper}>
             <Checkbox
@@ -58,7 +68,7 @@ function WaitingRoomListItem(props) {
               {practitioner.firstName} {practitioner.lastName}
             </div>
             <div className={styles.appointmentTimes}>
-              {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
+              {getFormattedTime(startDate, endDate, timezone)}
             </div>
           </div>
         </div>
@@ -76,13 +86,24 @@ function WaitingRoomListItem(props) {
       </div>
     </ListItem>
   );
-}
+};
 
 WaitingRoomListItem.propTypes = {
-  waitingRoomPatient: PropTypes.shape({}).isRequired,
+  waitingRoomPatient: PropTypes.shape({
+    patient: PropTypes.shape(patientShape),
+    enteredAt: PropTypes.string,
+    sentWaitingRoomNotifications: PropTypes.arrayOf(PropTypes.any),
+    familyMembers: PropTypes.arrayOf(PropTypes.any),
+    familyMembersCount: PropTypes.number,
+    appointment: PropTypes.shape(appointmentShape),
+    cleanedAt: PropTypes.string,
+  }).isRequired,
   onNotify: PropTypes.func.isRequired,
   onClean: PropTypes.func.isRequired,
   onComplete: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
-export default WaitingRoomListItem;
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+
+export default connect(mapStateToProps, null)(WaitingRoomListItem);

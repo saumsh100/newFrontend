@@ -1,32 +1,30 @@
 
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import moment from 'moment';
+import React from 'react';
 import map from 'lodash/map';
 import some from 'lodash/some';
+import { connect } from 'react-redux';
 import withHoverable from '../../../hocs/withHoverable';
-import { Avatar, ListItem, IconButton, Icon } from '../../library';
+import { Avatar, ListItem, IconButton, Icon, getFormattedDate } from '../../library';
 import styles from './styles.scss';
 
 const notAllTrue = obj => some(obj, val => !val);
 const notAllFalse = obj => some(obj, val => val);
 
-function DigitalWaitListItem(props) {
-  const {
-    patientUser,
-    waitSpot,
-    handlePatientClick,
-    setSelectedWaitSpot,
-    isHovered,
-    removeWaitSpot,
-    index,
-  } = props;
-
+const DigitalWaitListItem = ({
+  patientUser,
+  waitSpot,
+  setSelectedWaitSpot,
+  isHovered,
+  removeWaitSpot,
+  index,
+  timezone,
+}) => {
   if (!patientUser) {
     return null;
   }
 
-  const { preferences, unavailableDays, daysOfTheWeek } = waitSpot.toJS();
+  const { preferences, daysOfTheWeek } = waitSpot.toJS();
 
   // Set Availability to All by default and then list selected if not...
   let availComponent = <span className={styles.data}>All</span>;
@@ -90,49 +88,57 @@ function DigitalWaitListItem(props) {
             e.stopPropagation();
             setSelectedWaitSpot(waitSpotJS);
           }}
+          role="button"
+          tabIndex={index}
+          onKeyDown={(e) => {
+            if (e.keyCode === 13) {
+              e.stopPropagation();
+              setSelectedWaitSpot(waitSpotJS);
+            }
+          }}
         >
-          <Icon
-            icon="pencil"
-            className={styles.patients__item_pencilBorder_pencil}
-            size={0.9}
-          />
+          <Icon icon="pencil" className={styles.patients__item_pencilBorder_pencil} size={0.9} />
         </div>
       </div>
     );
   }
 
   return (
-    <ListItem
-      key={index}
-      className={styles.patients__item}
-      data-test-id={`${index}_waitList`}
-    >
+    <ListItem key={index} className={styles.patients__item} data-test-id={`${index}_waitList`}>
       <Avatar size="md" user={patientUser.toJS()} />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
           <div className={styles.patients__item_endDate}>
-            {moment(waitSpot.get('endDate')).format('MMMM Do YYYY, h:mm a')}
+            {getFormattedDate(waitSpot.get('endDate'), 'MMMM Do YYYY, h:mm a', timezone)}
           </div>
           <div className={styles.patients__item_name}>
             <span className={styles.name}>{name}</span>
           </div>
-          <div className={styles.patients__item_phone}>
-            {patientUser.get('phoneNumber')}
-          </div>
-          <div className={styles.patients__item_email}>
-            {patientUser.get('email')}
-          </div>
+          <div className={styles.patients__item_phone}>{patientUser.get('phoneNumber')}</div>
+          <div className={styles.patients__item_email}>{patientUser.get('email')}</div>
         </div>
       </div>
       {showHoverComponents}
     </ListItem>
   );
-}
-
-DigitalWaitListItem.propTypes = {
-  patientUser: PropTypes.object.isRequired,
-  patient: PropTypes.object,
-  waitSpot: PropTypes.object.isRequired,
 };
 
-export default withHoverable(DigitalWaitListItem);
+DigitalWaitListItem.propTypes = {
+  patientUser: PropTypes.instanceOf(Map).isRequired,
+  waitSpot: PropTypes.instanceOf(Map).isRequired,
+  setSelectedWaitSpot: PropTypes.func.isRequired,
+  isHovered: PropTypes.bool,
+  removeWaitSpot: PropTypes.func.isRequired,
+  index: PropTypes.number,
+  timezone: PropTypes.string.isRequired,
+};
+
+DigitalWaitListItem.defaultProps = {
+  isHovered: false,
+  index: 0,
+};
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+
+const DigitalWaitListItemWrapper = withHoverable(DigitalWaitListItem);
+export default connect(mapStateToProps)(DigitalWaitListItemWrapper);

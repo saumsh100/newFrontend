@@ -1,6 +1,6 @@
 
-import moment from 'moment';
 import createModel from '../createModel';
+import { getUTCDate, getFormattedDate } from '../../components/library/util/datetime';
 
 const RequestsSchema = {
   createdAt: null,
@@ -29,21 +29,21 @@ export default class Requests extends createModel(RequestsSchema) {
 
   getAge(patientBirthday) {
     const currentYear = new Date().getFullYear();
-    const birthday = moment(patientBirthday).year();
+    const birthday = getUTCDate(patientBirthday).year();
     return currentYear - birthday;
   }
 
   getFormattedTime() {
-    const startHourMinute = moment(this.get('startDate')).format('h:mm A');
-    const endHourMinute = moment(this.get('endDate')).format('h:mm A');
+    const startHourMinute = getFormattedDate(this.get('startDate'), 'h:mm A');
+    const endHourMinute = getFormattedDate(this.get('endDate'), 'h:mm A');
     return startHourMinute.concat(' - ', endHourMinute);
   }
 
   getMonth() {
-    return moment(this.get('startDate')).format('MMM');
+    return getFormattedDate(this.get('startDate'), 'MMM');
   }
 
   getDay() {
-    return moment(this.get('startDate')).date();
+    return getFormattedDate(this.get('startDate'), 'D');
   }
 }

@@ -1,7 +1,7 @@
 
-import moment from 'moment';
 import createModel from '../createModel';
 import { httpClient } from '../../util/httpClient';
+import { getUTCDate, getTodaysDate } from '../../components/library/util/datetime';
 
 const PatientSchema = {
   firstName: null,
@@ -67,8 +67,8 @@ export default class Patient extends createModel(PatientSchema) {
 
   getAge() {
     const birthDate = this.get('birthDate');
-    return birthDate && moment(birthDate).isValid()
-      ? moment().diff(this.get('birthDate'), 'years')
+    return birthDate && getUTCDate(birthDate).isValid()
+      ? getTodaysDate().diff(this.get('birthDate'), 'years')
       : '';
   }
 

@@ -111,8 +111,8 @@ export default EditReasonWeeklyHours;
 EditReasonWeeklyHours.propTypes = {
   active: PropTypes.string.isRequired,
   data: PropTypes.shape({
-    availabilities: PropTypes.array,
-    breaks: PropTypes.array,
+    availabilities: PropTypes.arrayOf(PropTypes.any),
+    breaks: PropTypes.arrayOf(PropTypes.any),
     id: PropTypes.string,
     isClosed: PropTypes.bool,
   }),

@@ -1,12 +1,21 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
-import { timeOptionsWithTimezone, setDateToTimezone } from '@carecru/isomorphic';
-import { Grid, Row, Col, Form, FormSection, Field, IconButton } from '../../../library/index';
+import {
+  Grid,
+  Row,
+  Col,
+  Form,
+  FormSection,
+  Field,
+  IconButton,
+  generateTimeBreaks,
+  parseDate,
+} from '../../../library';
 import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';
 
@@ -34,13 +43,21 @@ function OfficeHoursForm({
     'sunday',
   ]);
 
-  const timeOptions = timeOptionsWithTimezone(timezone);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const timeOptions = useMemo(
+    () =>
+      generateTimeBreaks({
+        timezone,
+        timeOnly: false,
+      }),
+    [timezone],
+  );
 
   // Need to do this so editing breaks does not screw up initialValues here
   const initialValues = mapValues(parsedWeeklySchedule, ({ isClosed, startTime, endTime }) => ({
     isClosed,
-    startTime: setDateToTimezone(startTime, timezone).toISOString(),
-    endTime: setDateToTimezone(endTime, timezone).toISOString(),
+    startTime: parseDate(startTime, timezone).toISOString(),
+    endTime: parseDate(endTime, timezone).toISOString(),
   }));
 
   const DayHoursForm = ({ day }) => {
@@ -140,11 +157,13 @@ function OfficeHoursForm({
 }
 
 OfficeHoursForm.propTypes = {
-  values: PropTypes.objectOf(PropTypes.shape({
-    endTime: PropTypes.string,
-    startTime: PropTypes.string,
-    isClosed: PropTypes.bool,
-  })),
+  values: PropTypes.objectOf(
+    PropTypes.shape({
+      endTime: PropTypes.string,
+      startTime: PropTypes.string,
+      isClosed: PropTypes.bool,
+    }),
+  ),
   weeklySchedule: PropTypes.shape(weeklyScheduleShape),
   onSubmit: PropTypes.func.isRequired,
   dataId: PropTypes.string,
@@ -174,7 +193,4 @@ function mapStateToProps({ form, auth }, { formName }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  null,
-)(OfficeHoursForm);
+export default connect(mapStateToProps, null)(OfficeHoursForm);

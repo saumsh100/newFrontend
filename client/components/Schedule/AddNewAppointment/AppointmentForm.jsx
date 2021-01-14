@@ -11,6 +11,7 @@ import {
   getUTCDate,
   generateTimeOptions,
   DateTimeObj,
+  getFormattedDate,
 } from '../../library';
 import { parseNum, notNegative } from '../../library/Form/validate';
 import styles from './styles.scss';
@@ -53,18 +54,25 @@ function AppointmentForm(props) {
       data = timeOptions.find(t => t.label === val);
     } else if (isDateValid(val, 'YYYY-MM-DDTHH:mm:ss.sssZ', true)) {
       data = timeOptions.find(t => t.value === val);
+      if (!data) {
+        const time = getFormattedDate(val, 'LT', timezone);
+        data = timeOptions.find(t => t.label === time);
+      }
     }
 
     return data ? data.value : getUTCDate(val, timezone).toISOString();
   };
 
   /**
-   * The default format for the label kry must be
+   * The default format for the label must be
    * LT ("HH:MM A|PM").
    *
    */
   const renderTimeValue = (val) => {
-    const time = timeOptions.find(t => t.value === val);
+    let time = timeOptions.find(t => t.value === val);
+    if (!time) {
+      time = timeOptions.find(t => t.label === getFormattedDate(val, 'LT', timezone));
+    }
     return time ? time.label : undefined;
   };
 
@@ -74,8 +82,8 @@ function AppointmentForm(props) {
    * @param {string} val
    */
   const validateTimeField = val =>
-    isDateValid(val, ['YYYY-MM-DDTHH:mm:ss.sssZ', 'LT']) &&
-    new RegExp('^((0?[0-9]|1[0-2]):[0-5][0-9] ([AP][M]))$', 'i').test(val);
+    isDateValid(val, ['YYYY-MM-DDTHH:mm:ss.sssZ', 'LT'])
+    && new RegExp('^((0?[0-9]|1[0-2]):[0-5][0-9] ([AP][M]))$', 'i').test(val);
 
   const inputTheme = {
     input: styles.inputStyle,

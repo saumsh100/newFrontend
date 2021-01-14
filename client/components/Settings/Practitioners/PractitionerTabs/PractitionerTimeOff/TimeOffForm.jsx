@@ -1,97 +1,38 @@
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { withState } from 'recompose';
-import moment from 'moment';
-import { connect } from 'react-redux';
-import { Form, Field, Icon, Grid, Row, Col } from '../../../../library';
+import React, { useMemo } from 'react';
+import { Form, Field, Icon, Grid, Row, Col, generateTimeBreaks } from '../../../../library';
 import TimeOffDisplay from './TimeOffDisplay';
 import styles from './styles.scss';
+import {
+  enhanceFormHOC,
+  TimeOffDefaultProps,
+  TimeOffFormPropTypes,
+  setDate,
+  setTime,
+  checkDates,
+} from '../timeOffHelper';
 
-const generateTimeOptions = (timezone) => {
-  const timeOptions = [];
-  const totalHours = 24;
-  const increment = 60;
-  const increments = 60 / increment;
-
-  let i;
-  for (i = 0; i < totalHours; i++) {
-    let j;
-    for (j = 0; j < increments; j++) {
-      const time = moment.tz(`1970-1-31 ${i}:${j * increment}`, 'YYYY-M-D H:mm', timezone);
-      const value = time.format();
-      const label = time.format('LT');
-      timeOptions.push({
-        value,
-        label,
-      });
-    }
-  }
-
-  return timeOptions;
-};
-
-const setDate = (date, timezone) => {
-  const mergeTime = moment.tz(date, 'YYYY-MM-DDThh:mm:ssZ', timezone);
-
-  if (!mergeTime.isValid()) {
-    return moment()
-      .tz(timezone)
-      .format('L');
-  }
-
-  return mergeTime.format('L');
-};
-
-const defaultTimeOptions = {
-  year: 1970,
-  month: 0,
-  date: 31,
-  minutes: 0,
-};
-
-const setTime = (time, timezone) => {
-  const completeTime = moment.tz(time, 'YYYY-MM-DDThh:mm:ssZ', timezone).set(defaultTimeOptions);
-
-  if (!completeTime.isValid()) {
-    return moment
-      .tz(time, timezone)
-      .set({
-        ...defaultTimeOptions,
-        hour: 0,
-      })
-      .format();
-  }
-
-  return completeTime.format();
-};
-
-const checkDates = ({ startDate, endDate }) => {
-  const errors = {};
-  const sDate = new Date(startDate);
-  const eDate = new Date(endDate);
-
-  if (sDate > eDate) {
-    errors.startDate = 'Start date has to be less than end date.';
-  } else if (eDate < sDate) {
-    errors.endDate = 'End date has to be greater than start date.';
-  }
-
-  return errors;
-};
-
-const maxLength = max => value =>
-  (value && (value.length > max || value.length < max)
-    ? 'Please enter a date: DD/MM/YYYY.'
-    : undefined);
-const maxLength10 = maxLength(10);
-
-function TimeOffForm(props) {
-  const { timeOff, formName, handleSubmit, values, showOption, setOption, timezone } = props;
-
+const TimeOffForm = ({
+  timeOff,
+  formName,
+  handleSubmit,
+  values,
+  showOption,
+  setOption,
+  timezone,
+}) => {
   const { startDate, endDate, allDay, note } = timeOff.toJS();
 
-  const timeOptions = generateTimeOptions(timezone);
+  const timeOptions = useMemo(
+    () =>
+      generateTimeBreaks({
+        timezone,
+        timeOnly: false,
+        hourInterval: 1,
+        useISOValue: false,
+      }),
+    [timezone],
+  );
 
   const initialValues = {
     startDate: setDate(startDate, timezone),
@@ -145,6 +86,7 @@ function TimeOffForm(props) {
           <Col xs={12} md={columnSizeDate}>
             <Field
               component="DayPicker"
+              timezone={timezone}
               name="startDate"
               label="Start Date"
               data-test-id="startDate"
@@ -156,7 +98,13 @@ function TimeOffForm(props) {
         </Row>
         <Row>
           <Col xs={12} md={columnSizeDate}>
-            <Field component="DayPicker" name="endDate" label="End Date" data-test-id="endDate" />
+            <Field
+              component="DayPicker"
+              timezone={timezone}
+              name="endDate"
+              label="End Date"
+              data-test-id="endDate"
+            />
           </Col>
           <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
             {endTimeComponent}
@@ -172,6 +120,14 @@ function TimeOffForm(props) {
               onClick={() => setOption(!showOption)}
               className={styles.moreOptions}
               data-test-id="moreOptionsButton"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.keyCode === 13) {
+                  e.stopPropagation();
+                  setOption(!showOption);
+                }
+              }}
             >
               More Options
               <Icon icon={optionsIcon} className={styles.moreOptions_icon} />
@@ -183,24 +139,8 @@ function TimeOffForm(props) {
       <TimeOffDisplay values={values} timezone={timezone} />
     </Form>
   );
-}
-
-TimeOffForm.propTypes = {
-  timeOff: PropTypes.object,
-  formName: PropTypes.string,
-  handleSubmit: PropTypes.func.isRequired,
-  timezone: PropTypes.string.isRequired,
 };
 
-function mapStateToProps({ form }, { formName }) {
-  // form data is populated when component renders
-  if (!form[formName]) {
-    return { values: {} };
-  }
-
-  return { values: form[formName].values };
-}
-
-const enhance = withState('showOption', 'setOption', false);
-
-export default enhance(connect(mapStateToProps, null)(TimeOffForm));
+TimeOffForm.propTypes = TimeOffFormPropTypes;
+TimeOffForm.defaultProps = TimeOffDefaultProps;
+export default enhanceFormHOC(TimeOffForm);

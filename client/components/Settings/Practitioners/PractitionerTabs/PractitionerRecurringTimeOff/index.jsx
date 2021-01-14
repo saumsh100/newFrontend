@@ -4,25 +4,31 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import moment from 'moment';
 import {
   createEntityRequest,
   deleteEntityRequest,
   updateEntityRequest,
 } from '../../../../../thunks/fetchEntities';
-import { IconButton, Button, DialogBox } from '../../../../library';
+import {
+  IconButton,
+  Button,
+  DialogBox,
+  getTodaysDate,
+  parseDateWithFormat,
+} from '../../../../library';
 import RemoteSubmitButton from '../../../../library/Form/RemoteSubmitButton';
 import RecurringTimeOffList from './RecurringTimeOffList';
 import RecurringTimeOffForm from './RecurringTimeOffForm';
+import { practitionerShape } from '../../../../library/PropTypeShapes';
 
 function setDate(date, timezone) {
-  const newTime = moment.tz(date, 'YYYY-MM-DDThh:mm:ssZ', timezone).set({
+  const newTime = parseDateWithFormat(date, 'YYYY-MM-DDThh:mm:ssZ', timezone).set({
     hours: 0,
     minutes: 0,
   });
 
   if (!newTime.isValid()) {
-    return moment.tz(date, 'L', timezone).format();
+    return parseDateWithFormat(date, 'L', timezone).format();
   }
 
   return newTime.format();
@@ -35,7 +41,6 @@ class PractitionerRecurringTimeOff extends Component {
     this.state = {
       isAdding: false,
       selectedTimeOff: null,
-      values: {},
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,7 +51,12 @@ class PractitionerRecurringTimeOff extends Component {
   }
 
   handleSubmit(values) {
-    const { practitioner, createEntityRequest, updateEntityRequest, timezone } = this.props;
+    const {
+      practitioner,
+      createEntityRequest: createEntityRequestLocal,
+      updateEntityRequest: updateEntityRequestLocal,
+      timezone,
+    } = this.props;
 
     const { selectedTimeOff } = this.state;
 
@@ -70,7 +80,7 @@ class PractitionerRecurringTimeOff extends Component {
         error: { body: `${practitioner.get('firstName')} time off could not be added` },
       };
 
-      createEntityRequest({
+      createEntityRequestLocal({
         key: 'practitionerRecurringTimeOffs',
         entityData: trimValues,
         alert,
@@ -84,7 +94,7 @@ class PractitionerRecurringTimeOff extends Component {
 
       const valuesMap = Map(trimValues);
       const modifiedAccount = selectedTimeOff.merge(valuesMap);
-      updateEntityRequest({
+      updateEntityRequestLocal({
         key: 'practitionerRecurringTimeOffs',
         model: modifiedAccount,
         alert,
@@ -160,15 +170,10 @@ class PractitionerRecurringTimeOff extends Component {
       );
     }
 
-    const formTimeOff =
-      selectedTimeOff ||
-      Map({
-        startDate: moment()
-          .tz(timezone)
-          .format('l'),
-        endDate: moment()
-          .tz(timezone)
-          .format('l'),
+    const formTimeOff = selectedTimeOff
+      || Map({
+        startDate: getTodaysDate(timezone, true).format('L'),
+        endDate: getTodaysDate(timezone, true).format('L'),
         allDay: true,
         note: '',
       });
@@ -221,12 +226,17 @@ class PractitionerRecurringTimeOff extends Component {
 }
 
 PractitionerRecurringTimeOff.propTypes = {
-  recurringTimeOffs: PropTypes.object,
-  practitioner: PropTypes.object,
+  recurringTimeOffs: PropTypes.instanceOf(Map),
+  practitioner: PropTypes.shape(practitionerShape),
   createEntityRequest: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
+};
+
+PractitionerRecurringTimeOff.defaultProps = {
+  recurringTimeOffs: null,
+  practitioner: null,
 };
 
 function mapStateToProps({ auth }) {
@@ -244,9 +254,6 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(PractitionerRecurringTimeOff);

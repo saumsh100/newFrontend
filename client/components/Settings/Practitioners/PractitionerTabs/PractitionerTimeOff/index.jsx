@@ -4,20 +4,20 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import moment from 'moment';
 import {
   createEntityRequest,
   deleteEntityRequest,
   updateEntityRequest,
 } from '../../../../../thunks/fetchEntities';
-import { IconButton, Button, DialogBox } from '../../../../library';
+import { IconButton, Button, DialogBox, getTodaysDate, parseDate } from '../../../../library';
 import RemoteSubmitButton from '../../../../library/Form/RemoteSubmitButton';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
+import { practitionerShape } from '../../../../library/PropTypeShapes';
 
 const mergeTime = (date, time, allDay, timezone) => {
-  date = moment(date);
-  time = moment.tz(time, timezone);
+  date = parseDate(date, timezone);
+  time = parseDate(time, timezone);
   time.year(date.year());
   time.month(date.month());
   time.date(date.date());
@@ -31,7 +31,6 @@ class PractitionerTimeOff extends Component {
     this.state = {
       isAdding: false,
       selectedTimeOff: null,
-      values: {},
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -42,15 +41,16 @@ class PractitionerTimeOff extends Component {
   }
 
   handleSubmit(values) {
-    const { practitioner, createEntityRequest, updateEntityRequest, timezone } = this.props;
+    const {
+      practitioner,
+      createEntityRequest: createEntityRequestLocal,
+      updateEntityRequest: updateEntityRequestLocal,
+      timezone,
+    } = this.props;
 
     const { selectedTimeOff } = this.state;
-
     const { startDate, endDate, startTime, endTime, allDay } = values;
-
-    // TODO: is !allDay merge in startTime, endTime into startDate endDate
     const mergedStartDate = mergeTime(startDate, startTime, allDay, timezone);
-
     const mergedEndDate = mergeTime(endDate, endTime, allDay, timezone);
 
     const trimValues = {
@@ -67,7 +67,7 @@ class PractitionerTimeOff extends Component {
         error: { body: `${practitioner.get('firstName')} time off could not be added` },
       };
 
-      createEntityRequest({
+      createEntityRequestLocal({
         key: 'practitionerRecurringTimeOffs',
         entityData: trimValues,
         alert,
@@ -81,7 +81,7 @@ class PractitionerTimeOff extends Component {
 
       const valuesMap = Map(trimValues);
       const modifiedAccount = selectedTimeOff.merge(valuesMap);
-      updateEntityRequest({
+      updateEntityRequestLocal({
         key: 'practitionerRecurringTimeOffs',
         model: modifiedAccount,
         alert,
@@ -123,22 +123,16 @@ class PractitionerTimeOff extends Component {
 
   render() {
     const { timeOffs, practitioner, timezone } = this.props;
-
     const { isAdding, selectedTimeOff } = this.state;
 
     if (!timeOffs && !practitioner) {
       return null;
     }
 
-    const formTimeOff =
-      selectedTimeOff ||
-      Map({
-        startDate: moment()
-          .tz(timezone)
-          .format('L'),
-        endDate: moment()
-          .tz(timezone)
-          .format('L'),
+    const formTimeOff = selectedTimeOff
+      || Map({
+        startDate: getTodaysDate(timezone, true).format('L'),
+        endDate: getTodaysDate(timezone, true).format('L'),
         allDay: true,
         note: '',
       });
@@ -220,12 +214,17 @@ class PractitionerTimeOff extends Component {
 }
 
 PractitionerTimeOff.propTypes = {
-  timeOffs: PropTypes.object,
-  practitioner: PropTypes.object,
+  timeOffs: PropTypes.instanceOf(Map),
+  practitioner: PropTypes.shape(practitionerShape),
   createEntityRequest: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
+};
+
+PractitionerTimeOff.defaultProps = {
+  timeOffs: null,
+  practitioner: null,
 };
 
 function mapStateToProps({ auth }) {
@@ -243,9 +242,6 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(PractitionerTimeOff);

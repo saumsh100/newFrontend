@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Popover from 'react-popover';
-import { ListItem, getFormattedTime } from '../library';
+import { ListItem, getFormattedTime, getUTCDate } from '../library';
 import { checkIfUsersEqual } from '../Utils';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
@@ -69,6 +69,7 @@ class RequestListItem extends Component {
     const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
     const startDate = request.get('startDate');
     const endDate = request.get('endDate');
+    const requestDate = getUTCDate(startDate, timezone);
 
     const data = {
       time: getFormattedTime(startDate, endDate, timezone),
@@ -82,8 +83,8 @@ class RequestListItem extends Component {
       insuranceCarrier: request.insuranceCarrier,
       insuranceMemberId: request.insuranceMemberId,
       insuranceGroupId: request.insuranceGroupId,
-      month: request.getMonth(),
-      day: request.getDay(),
+      month: requestDate.format('MMM'),
+      day: requestDate.format('DD'),
     };
 
     const requestType = request.sentRecallId ? 'RECALL' : 'WEBSITE';

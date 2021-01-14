@@ -2,12 +2,12 @@
 import React from 'react';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
-import { dateFormatter } from '@carecru/isomorphic';
 import classNames from 'classnames';
 import DateSchedule from './DateSchedule';
-import { Button } from '../';
+import { Button } from '../index';
 import EnabledFeature from '../EnabledFeature';
 import styles from './drawer.scss';
+import { getFormattedDate } from '../util/datetime';
 
 const ScheduleDrawer = ({
   schedule,
@@ -22,7 +22,7 @@ const ScheduleDrawer = ({
     <div className={styles.top}>
       <h2 className={styles.title}>
         {isOverride && selectedDay
-          ? `Holiday Hours (${dateFormatter(selectedDay, timezone, 'MMM. D, YYYY')})`
+          ? `Holiday Hours (${getFormattedDate(selectedDay, 'MMM. D, YYYY', timezone, true)})`
           : 'Default Weekly Schedule '}
       </h2>
       <div className={styles.toggle}>
@@ -72,8 +72,8 @@ ScheduleDrawer.propTypes = {
   isOverride: PropTypes.bool.isRequired,
   schedule: PropTypes.objectOf(
     PropTypes.shape({
-      breaks: PropTypes.array,
-      chairIds: PropTypes.array,
+      breaks: PropTypes.arrayOf(PropTypes.any),
+      chairIds: PropTypes.arrayOf(PropTypes.string),
       endTime: PropTypes.string,
       isClosed: PropTypes.bool,
       isDailySchedule: PropTypes.bool,

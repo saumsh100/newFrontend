@@ -2,7 +2,12 @@
 import { connect } from 'react-redux';
 import { withState } from 'recompose';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
+import {
+  getTodaysDate,
+  getUTCDate,
+  getUTCDateWithFormat,
+  parseDateWithFormat,
+} from '../../../library';
 
 function mapStateToProps({ form, auth }, { formName }) {
   // form data is populated when component renders
@@ -32,34 +37,67 @@ export const TimeOffDefaultProps = {
 };
 
 export const TimeOffFormPropTypes = {
-  timeOff: PropTypes.shape(PropTypes.any),
+  timeOff: PropTypes.instanceOf(Map),
   formName: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
-  values: PropTypes.objectOf(PropTypes.any),
+  values: PropTypes.shape({
+    allDay: PropTypes.bool,
+  }),
   showOption: PropTypes.func,
   setOption: PropTypes.func,
 };
 
-export const generateTimeOptions = (timezone) => {
-  const timeOptions = [];
-  const totalHours = 24;
-  const increment = 60;
-  const increments = 60 / increment;
+export const defaultTimeOptions = {
+  year: 1970,
+  month: 0,
+  date: 31,
+  minutes: 0,
+};
 
-  let i;
-  for (i = 0; i < totalHours; i += 1) {
-    let j;
-    for (j = 0; j < increments; j += 1) {
-      const time = moment.tz(`1970-1-31 ${i}:${j * increment}`, 'YYYY-M-D H:mm', timezone);
-      const value = time.format();
-      const label = time.format('LT');
-      timeOptions.push({
-        value,
-        label,
+export const setDate = (date, timezone, resetTime = false) => {
+  const mergeTime = parseDateWithFormat(date, ['YYYY-MM-DDThh:mm:ssZ', 'L'], timezone);
+  if (!mergeTime.isValid()) {
+    const newDate = getTodaysDate(timezone);
+    if (resetTime) {
+      newDate.set({
+        hour: 0,
+        minute: 0,
       });
     }
+    return newDate.format('L');
   }
 
-  return timeOptions;
+  return mergeTime.format('L');
+};
+
+export const setTime = (time, timezone) => {
+  const completeTime = getUTCDateWithFormat(time, 'YYYY-MM-DDThh:mm:ssZ', timezone).set(
+    defaultTimeOptions,
+  );
+
+  if (!completeTime.isValid()) {
+    return getUTCDate(time, timezone)
+      .set({
+        ...defaultTimeOptions,
+        hour: 0,
+      })
+      .format();
+  }
+
+  return completeTime.format();
+};
+
+export const checkDates = ({ startDate, endDate }) => {
+  const errors = {};
+  const sDate = new Date(startDate);
+  const eDate = new Date(endDate);
+
+  if (sDate > eDate) {
+    errors.startDate = 'Start date has to be less than end date.';
+  } else if (eDate < sDate) {
+    errors.endDate = 'End date has to be greater than start date.';
+  }
+
+  return errors;
 };

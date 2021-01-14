@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { List, Map } from 'immutable';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { setDateToTimezone } from '@carecru/isomorphic';
 import Loader from '../components/Loader';
@@ -20,6 +19,7 @@ import {
   setScheduleDate,
 } from '../actions/schedule';
 import { setAllFilters } from '../thunks/schedule';
+import { DateTimeObj } from '../components/library/util/datetime';
 
 class ScheduleContainer extends Component {
   constructor(props) {
@@ -138,9 +138,9 @@ class ScheduleContainer extends Component {
 
   isSameDay(currentDate, updateDate) {
     return (
-      !updateDate.isSame(currentDate, 'month') ||
-      !updateDate.isSame(currentDate, 'day') ||
-      !updateDate.isSame(currentDate, 'year')
+      !updateDate.isSame(currentDate, 'month')
+      || !updateDate.isSame(currentDate, 'day')
+      || !updateDate.isSame(currentDate, 'year')
     );
   }
 
@@ -287,7 +287,7 @@ ScheduleContainer.propTypes = {
   currentDate: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.instanceOf(Date),
-    PropTypes.instanceOf(moment),
+    PropTypes.instanceOf(DateTimeObj),
   ]),
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   events: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,

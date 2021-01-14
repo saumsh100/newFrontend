@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { setDateToTimezone, getRangeFromList } from '@carecru/isomorphic';
+import { getRangeFromList } from '@carecru/isomorphic';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { accountShape } from '../library/PropTypeShapes';
@@ -18,6 +18,7 @@ import ModeReport from '../ModeReport';
 import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 import MultiSelectAccount from '../library/MultiSelectAccount';
 import styles from './style.scss';
+import { parseDate } from '../library';
 
 const DATE_RANGE = 'dateRange';
 const TOGGLE = 'toggle';
@@ -41,7 +42,7 @@ const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt
   const dateKey = Object.keys(compt.name).find(key => compt.name[key] === name);
   if (component === DATE_RANGE && typeof defaultValue === 'string') {
     const [defaultRange] = getRangeFromList([defaultValue]);
-    return setDateToTimezone(defaultRange[dateKey], timezone).format('YYYY-MM-DD');
+    return parseDate(defaultRange[dateKey], timezone).format('YYYY-MM-DD');
   }
 
   const nullIfUndefined = defaultValue === undefined ? null : defaultValue;
@@ -121,7 +122,7 @@ class ReportParametersForm extends Component {
     const { reports, active } = this.props;
     const items = reports.get(active);
     const valuesToUpdate = Object.entries(param).reduce((acc, [key, value]) => {
-      const sanitizedDate = setDateToTimezone(data[key], this.props.timezone).format('YYYY-MM-DD');
+      const sanitizedDate = parseDate(data[key], this.props.timezone).format('YYYY-MM-DD');
       if (items[value] !== sanitizedDate) {
         return {
           ...acc,
@@ -142,8 +143,8 @@ class ReportParametersForm extends Component {
     const defaultParams = this.reduceParams(page, (name, curr) =>
       name.map(n => ({
         [n]:
-          obj[n] ||
-          handleDefaultValue(
+          obj[n]
+          || handleDefaultValue(
             n,
             {
               ...curr,
@@ -223,9 +224,8 @@ class ReportParametersForm extends Component {
     const nextOptions = this.props.reports.get(page);
     this.props.setActiveReport(page);
 
-    const merge =
-      nextOptions &&
-      Object.entries(nextOptions).reduce(
+    const merge = nextOptions
+      && Object.entries(nextOptions).reduce(
         (acc, [key, value]) => ({
           ...acc,
           [key]: currentOptions[key] || value,
@@ -256,8 +256,9 @@ class ReportParametersForm extends Component {
           timezone,
           helpers: helpers && getRangeFromList(helpers),
           defaultValue:
-            defaultValue &&
-            (typeof defaultValue === 'string' ? getRangeFromList([defaultValue])[0] : defaultValue),
+            defaultValue && typeof defaultValue === 'string'
+              ? getRangeFromList([defaultValue])[0]
+              : defaultValue,
           onChange: value => this.setDateValue(name, value),
         },
         dropdown: {
@@ -306,6 +307,7 @@ class ReportParametersForm extends Component {
           reportActionAccountName={account.get('name')}
           parameters={{
             ...params,
+            // eslint-disable-next-line camelcase
             Account_name: params.Account_name || account.get('id'),
           }}
         />

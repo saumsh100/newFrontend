@@ -1,21 +1,20 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { formatPhoneNumber } from '@carecru/isomorphic';
-import { Icon } from '../../library';
+import { getFormattedDate, Icon } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
 import styles from './styles.scss';
 
-const Info = (props) => {
-  const {
-    patient,
-    insuranceCarrier,
-    insuranceMemberId,
-    insuranceGroupId,
-    requestingUser,
-    title,
-  } = props;
+const Info = ({
+  patient,
+  insuranceCarrier,
+  insuranceMemberId,
+  insuranceGroupId,
+  requestingUser,
+  title,
+  timezone,
+}) => {
   const user = patient || requestingUser;
   if (user) {
     const carrier = user.insuranceCarrier || insuranceCarrier;
@@ -29,7 +28,9 @@ const Info = (props) => {
         {user.birthDate && (
           <div className={styles.data}>
             <Icon icon="birthday-cake" size={0.9} type="solid" />
-            <div className={styles.data_text}>{moment(user.birthDate).format('MMMM Do, YYYY')}</div>
+            <div className={styles.data_text}>
+              {getFormattedDate(user.birthDate, 'MMMM Do, YYYY', timezone)}
+            </div>
           </div>
         )}
 
@@ -93,6 +94,7 @@ Info.propTypes = {
   patient: PropTypes.objectOf(PropTypes.any),
   requestingUser: PropTypes.objectOf(PropTypes.any),
   title: PropTypes.string,
+  timezone: PropTypes.string.isRequired,
 };
 
 Info.defaultProps = {

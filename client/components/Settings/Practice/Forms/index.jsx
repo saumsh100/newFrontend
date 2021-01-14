@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { Icon, Tooltip } from '../../../library';
+import { Button, Icon, Tooltip } from '../../../library';
 import LoadingBar from '../../../library/LoadingBar';
 import SettingsCard from '../../Shared/SettingsCard';
 import FetchAvailableForms from './FetchAvailableForms';
@@ -94,14 +94,14 @@ class Forms extends Component {
         accessor: 'compressedUrl',
         Header: () => <div className={styles.linkHeader}>Link</div>,
         Cell: ({ value }) => (
-          <button className={styles.linkCell} onClick={() => this.copyToClipboard(value)}>
+          <Button className={styles.linkCell} onClick={() => this.copyToClipboard(value)}>
             <Tooltip overlay={tooltipOverlay}>
               <div className={styles.linkCellContent}>
                 {value}
                 <Icon icon="clipboard" className={styles.clipboardIcon} />
               </div>
             </Tooltip>
-          </button>
+          </Button>
         ),
       },
     ];
@@ -146,7 +146,4 @@ function mapStateToProps({ auth }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  null,
-)(Forms);
+export default connect(mapStateToProps, null)(Forms);
