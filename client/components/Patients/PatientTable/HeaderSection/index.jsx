@@ -1,6 +1,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import { Button, DialogBox } from '../../../library';
 import NewPatientForm from './NewPatientForm';
 import AssignPatientToChatDialog from '../../AssignPatientToChatDialog';
@@ -12,6 +15,7 @@ const initialState = {
   active: false,
   assignPatientToChatModalActive: false,
   patient: null,
+  formName: 'newPatientForm',
 };
 
 class HeaderSection extends Component {
@@ -35,6 +39,7 @@ class HeaderSection extends Component {
   }
 
   reinitializeState() {
+    this.props.reset(this.state.formName);
     this.setState(initialState);
   }
 
@@ -55,14 +60,14 @@ class HeaderSection extends Component {
         this.props.destroy('newUser');
         const [patient] = Object.values(patients);
         if (patient.foundChatId) {
+          this.props.reset(this.state.formName);
           return this.openAssignPatientToChatModal(patient);
         }
-        this.reinitializeState();
+        return this.reinitializeState();
       });
   }
 
   render() {
-    const formName = 'newPatientForm';
     const actions = [
       {
         label: 'Cancel',
@@ -76,7 +81,7 @@ class HeaderSection extends Component {
         component: RemoteSubmitButton,
         props: {
           color: 'blue',
-          form: formName,
+          form: this.state.formName,
         },
       },
     ];
@@ -97,7 +102,7 @@ class HeaderSection extends Component {
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
         >
-          <NewPatientForm onSubmit={this.handleSubmit} formName={formName} />
+          <NewPatientForm onSubmit={this.handleSubmit} formName={this.state.formName} />
         </DialogBox>
         <AssignPatientToChatDialog
           callback={this.reinitializeState}
@@ -112,6 +117,15 @@ class HeaderSection extends Component {
 HeaderSection.propTypes = {
   createEntityRequest: PropTypes.func.isRequired,
   destroy: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
 };
 
-export default HeaderSection;
+const mapActionsToProps = dispatch =>
+  bindActionCreators(
+    {
+      reset,
+    },
+    dispatch,
+  );
+
+export default connect(null, mapActionsToProps)(HeaderSection);

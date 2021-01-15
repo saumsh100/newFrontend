@@ -48,6 +48,8 @@ class Users extends Component {
     this.addUser = this.addUser.bind(this);
     this.sendNewUser = this.sendNewUser.bind(this);
     this.addNewUser = this.addNewUser.bind(this);
+    this.reinitializeStateInviteUser = this.reinitializeStateInviteUser.bind(this);
+    this.reinitializeStateNewUser = this.reinitializeStateNewUser.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.editUser = this.editUser.bind(this);
     this.editDropdown = this.editDropdown.bind(this);
@@ -64,9 +66,8 @@ class Users extends Component {
   }
 
   get addUserButton() {
-    return this.props.role === SUPERADMIN_ROLE ||
-      this.props.role === OWNER_ROLE ||
-      this.props.role === ADMIN_ROLE ? (
+    return this.props.role
+      === (SUPERADMIN_ROLE || this.props.role === OWNER_ROLE || this.props.role === ADMIN_ROLE) ? (
       <Button
         className={styles.inviteUser}
         onClick={this.addNewUser}
@@ -116,7 +117,9 @@ class Users extends Component {
         url,
         alert,
       })
-      .then(() => this.props.reset('newUser'));
+      .then(() => {
+        this.props.reset('newUser');
+      });
   }
 
   sendInvite(entityData) {
@@ -149,9 +152,9 @@ class Users extends Component {
     const selectedUserPermission = this.props.permissions.get(selectedUser.get('permissionId'));
 
     if (
-      selectedUser.get('sendBookingRequestEmail') !== sendBookingRequestEmail ||
-      selectedUser.get('isSSO') !== isSSO ||
-      selectedUser.get('username') !== username
+      selectedUser.get('sendBookingRequestEmail') !== sendBookingRequestEmail
+      || selectedUser.get('isSSO') !== isSSO
+      || selectedUser.get('username') !== username
     ) {
       const alert = {
         success: { body: 'Updated User.' },
@@ -169,9 +172,7 @@ class Users extends Component {
     }
 
     if (selectedUserPermission.get('role') !== role) {
-      const url = `/api/accounts/${this.props.accountId}/permissions/${
-        this.state.editPermissionId
-      }`;
+      const url = `/api/accounts/${this.props.accountId}/permissions/${this.state.editPermissionId}`;
 
       const usersWithPermissions = this.props.users.filter(
         getUsersWithPermissions(this.props.permissions, this.state.editPermissionId),
@@ -195,6 +196,16 @@ class Users extends Component {
     }
   }
 
+  reinitializeStateNewUser() {
+    this.props.reset('newUser');
+    this.reinitializeState();
+  }
+
+  reinitializeStateInviteUser() {
+    this.props.reset('emailInvite');
+    this.reinitializeState();
+  }
+
   reinitializeState() {
     const newState = {
       active: false,
@@ -205,7 +216,6 @@ class Users extends Component {
     };
 
     newState.roleChange[this.state.userEdit] = this.state.editValue;
-
     this.setState(newState);
   }
 
@@ -221,13 +231,14 @@ class Users extends Component {
     if (this.state.roleChange[i]) {
       role = this.state.roleChange[i];
     }
+    const { roleChange } = this.state;
     this.setState({
       editActive: true,
       editUserId,
       editPermissionId,
       editValue: role,
       userEdit: i,
-      roleChange: this.state.roleChange,
+      roleChange,
     });
   }
 
@@ -269,10 +280,10 @@ class Users extends Component {
         ));
     }
 
-    const actions = [
+    const actionsInviteUser = [
       {
         label: 'Cancel',
-        onClick: this.reinitializeState,
+        onClick: this.reinitializeStateInviteUser,
         component: Button,
         props: { border: 'blue' },
       },
@@ -290,7 +301,7 @@ class Users extends Component {
     const actionsNewUser = [
       {
         label: 'Cancel',
-        onClick: this.reinitializeState,
+        onClick: this.reinitializeStateNewUser,
         component: Button,
         props: { border: 'blue' },
       },
@@ -325,12 +336,12 @@ class Users extends Component {
     return (
       <SettingsCard title="Users" bodyClass={styles.usersBodyClass}>
         <DialogBox
-          actions={actions}
+          actions={actionsInviteUser}
           title="Email Invite"
           type="small"
           active={active}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
+          onEscKeyDown={this.reinitializeStateInviteUser}
+          onOverlayClick={this.reinitializeStateInviteUser}
           data-test-id="inviteUserDialog"
         >
           <InviteUserForm
@@ -346,8 +357,8 @@ class Users extends Component {
           title="Create New User"
           type="small"
           active={newActive}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
+          onEscKeyDown={this.reinitializeStateNewUser}
+          onOverlayClick={this.reinitializeStateNewUser}
           data-test-id="newUserDialog"
         >
           <NewUserForm
@@ -471,9 +482,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Users);

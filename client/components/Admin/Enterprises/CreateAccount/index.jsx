@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { submit, destroy } from 'redux-form';
+import { submit, destroy, reset } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ClinicDetails from './ClinicDetails';
@@ -38,14 +38,26 @@ class CreateAccount extends Component {
       index: 0,
       values: [],
       country: '',
+      isVisible: false,
     };
   }
 
+  componentDidUpdate() {
+    if (!this.props.active) {
+      if (this.state.isVisible) {
+        formNames.forEach(formName => this.props.reset(formName) && this.props.destroy(formName));
+        this.resetIndex();
+      }
+    } else if (!this.state.isVisible) {
+      this.setVisible();
+    }
+  }
+
   setCreate() {
-    this.setState({
-      create: !this.state.create,
+    this.setState(prevState => ({
+      create: !prevState.create,
       index: 0,
-    });
+    }));
   }
 
   setCountry(country) {
@@ -54,38 +66,45 @@ class CreateAccount extends Component {
     });
   }
 
+  setVisible() {
+    this.setState({ isVisible: true });
+  }
+
+  resetIndex() {
+    this.setState({
+      index: 0,
+      isVisible: false,
+    });
+  }
+
   previous() {
-    if (this.state.index === 1 || (!this.state.index && this.state.create)) {
+    const { index } = this.state;
+    if (index === 1 || (!index && this.state.create)) {
       this.setState({
         index: 0,
         create: false,
       });
     } else {
       this.setState({
-        index: this.state.index - 1,
+        index: index - 1,
       });
     }
   }
 
   next(values, index) {
     const newValues = this.state.values;
-
     newValues[index] = values;
 
-    const newIndex =
-      this.state.formLength - 1 > index ? index + 1 : this.state.index;
-    this.setState({
-      index: newIndex,
+    this.setState(prevState => ({
+      index: prevState.formLength - 1 > index ? index + 1 : prevState.index,
       values: newValues,
-    });
+    }));
 
     if (index === this.state.formLength - 1) {
-      this.props
-        .setAllAccountInfo({ formData: newValues })
-        .then((enterpriseId) => {
-          formNames.map(formName => this.props.destroy(formName));
-          this.props.selectEnterprise(enterpriseId);
-        });
+      this.props.setAllAccountInfo({ formData: newValues }).then((enterpriseId) => {
+        formNames.forEach(formName => this.props.reset(formName) && this.props.destroy(formName));
+        this.props.selectEnterprise(enterpriseId);
+      });
     }
   }
 
@@ -158,13 +177,9 @@ class CreateAccount extends Component {
     return (
       <div key={this.state.index} className={styles.mainContainer}>
         <div className={styles.header}>
-          <div className={styles.header_text}>
-            {formList[this.state.index].title}
-          </div>
+          <div className={styles.header_text}>{formList[this.state.index].title}</div>
         </div>
-        <div className={styles.formContainer}>
-          {formList[this.state.index].component}
-        </div>
+        <div className={styles.formContainer}>{formList[this.state.index].component}</div>
         <div className={styles.buttonContainer}>
           {(this.state.index || this.state.create) && (
             <Button onClick={() => this.previous()} color="blue">
@@ -172,8 +187,8 @@ class CreateAccount extends Component {
             </Button>
           )}
 
-          {this.state.formLength - 1 > this.state.index &&
-            (this.state.index >= 1 || this.state.create) && (
+          {this.state.formLength - 1 > this.state.index
+            && (this.state.index >= 1 || this.state.create) && (
               <Button
                 onClick={() => {
                   this.props.submit(formNames[this.state.index]);
@@ -183,7 +198,7 @@ class CreateAccount extends Component {
               >
                 Next
               </Button>
-            )}
+          )}
           {this.state.formLength - 1 === this.state.index && (
             <Button
               onClick={() => {
@@ -203,12 +218,14 @@ class CreateAccount extends Component {
 }
 
 CreateAccount.propTypes = {
-  submit: PropTypes.func,
-  setAllAccountInfo: PropTypes.func,
-  setActive: PropTypes.func,
-  enterprises: PropTypes.arrayOf(Enterprise),
-  selectEnterprise: PropTypes.func,
-  destroy: PropTypes.func,
+  submit: PropTypes.func.isRequired,
+  setAllAccountInfo: PropTypes.func.isRequired,
+  setActive: PropTypes.func.isRequired,
+  active: PropTypes.bool.isRequired,
+  enterprises: PropTypes.arrayOf(Enterprise).isRequired,
+  selectEnterprise: PropTypes.func.isRequired,
+  destroy: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
 };
 
 function mapActionsToProps(dispatch) {
@@ -216,14 +233,12 @@ function mapActionsToProps(dispatch) {
     {
       submit,
       destroy,
+      reset,
       setAllAccountInfo,
     },
     dispatch,
   );
 }
 
-const enhance = connect(
-  null,
-  mapActionsToProps,
-);
+const enhance = connect(null, mapActionsToProps);
 export default enhance(CreateAccount);

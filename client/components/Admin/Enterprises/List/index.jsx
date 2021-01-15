@@ -30,7 +30,10 @@ class Enterprises extends Component {
 
   componentDidMount() {
     this.props
-      .fetchEntitiesRequest({ id: 'fetchingEnterprises', key: 'enterprises' })
+      .fetchEntitiesRequest({
+        id: 'fetchingEnterprises',
+        key: 'enterprises',
+      })
       .then((data) => {
         this.setState({
           loaded: true,
@@ -40,9 +43,9 @@ class Enterprises extends Component {
   }
 
   setActive() {
-    this.setState({
-      active: !this.state.active,
-    });
+    this.setState(prevState => ({
+      active: !prevState.active,
+    }));
   }
 
   selectEnterprise(enterpriseId) {
@@ -116,6 +119,7 @@ class Enterprises extends Component {
               enterprises={enterprises.toArray()}
               setActive={this.setActive}
               selectEnterprise={this.selectEnterprise}
+              active={this.state.active}
             />
           </DialogBox>
         )}
@@ -139,8 +143,7 @@ Enterprises.defaultProps = {
 };
 
 function mapStateToProps({ entities, apiRequests }) {
-  const enterprisesFetched =
-    apiRequests.get('fetchingEnterprises') && apiRequests.get('fetchingEnterprises').wasFetched;
+  const enterprisesFetched = apiRequests.get('fetchingEnterprises') && apiRequests.get('fetchingEnterprises').wasFetched;
 
   return {
     enterprises: entities.getIn(['enterprises', 'models']),

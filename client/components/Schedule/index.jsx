@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import { push } from 'connected-react-router';
 import { Map, List } from 'immutable';
 import { isHub, isResponsive } from '../../util/hub';
@@ -87,7 +88,7 @@ class ScheduleComponent extends Component {
   }
 
   setSendEmail() {
-    this.setState({ sendEmail: !this.state.sendEmail });
+    this.setState(prevState => ({ sendEmail: !prevState.sendEmail }));
   }
 
   setShowInput(showBool) {
@@ -205,6 +206,7 @@ class ScheduleComponent extends Component {
       appointment.patientId = patient.id;
       selectAppointment(appointment);
       if (patient.foundChatId) {
+        this.props.reset('Create New Patient User', {}, false);
         return this.openAssignPatientToChatModal(patient);
       }
       return this.reinitializeState();
@@ -226,6 +228,7 @@ class ScheduleComponent extends Component {
       .then(({ patients }) => {
         const [patient] = Object.values(patients);
         this.props.setCreatingPatient({ createPatientBool: false });
+        this.props.reset('Create New Patient', {}, false);
         if (patient.foundChatId) {
           return this.openAssignPatientToChatModal(patient);
         }
@@ -365,21 +368,18 @@ class ScheduleComponent extends Component {
       );
     }
 
-    const isAddNewAppointment =
-      addNewAppointment || (!!selectedAppointment && !selectedAppointment.nextAppt);
+    const isAddNewAppointment = addNewAppointment || (!!selectedAppointment && !selectedAppointment.nextAppt);
 
     if (isAddNewAppointment) {
       displayTitle = 'Accept Appointment';
     }
 
-    const showDialog =
-      (selectedAppointment && selectedAppointment.nextAppt) ||
-      !!mergingPatientData.patientUser ||
-      createNewPatient;
+    const showDialog = (selectedAppointment && selectedAppointment.nextAppt)
+      || !!mergingPatientData.patientUser
+      || createNewPatient;
 
     this.pageTitle = displayTitle;
-    const allFetched =
-      appsFetched && eventsFetched && accountsFetched && chairsFetched && pracsFetched;
+    const allFetched = appsFetched && eventsFetched && accountsFetched && chairsFetched && pracsFetched;
 
     return isHub() ? (
       <div className={styles.hubWrapper}>
@@ -526,6 +526,7 @@ ScheduleComponent.propTypes = {
   setCreatingPatient: PropTypes.func.isRequired,
   setMergingPatient: PropTypes.func.isRequired,
   setScheduleDate: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
   practitioners: PropTypes.shape(practitionerShape).isRequired,
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)),
@@ -559,6 +560,7 @@ const mapActionsToProps = dispatch =>
       push,
       setBackHandler,
       setTitle,
+      reset,
     },
     dispatch,
   );
