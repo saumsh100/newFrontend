@@ -43,7 +43,7 @@ const CallerDisplay = ({
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
   const fullNameDisplay = age ? fullName.concat(', ', age) : fullName;
-  const birthDate = patient && patient.birthDate
+  const birthDate = patient.birthDate
     ? getFormattedDate(patient.birthDate, 'MMMM Do, YYYY', timezone)
     : null;
 

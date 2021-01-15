@@ -55,12 +55,12 @@ const validatePatient = value =>
  */
 const defaultStartTime = (timezone, date) => {
   const now = getTodaysDate(timezone).add(60, 'minutes');
-  const sortedTimes = generateTimeOptions({ timezone,
-    date }).sort((a, b) =>
-    sortAsc(a.value, b.value));
-  const nextAvailable =
-    sortedTimes.find(opt => dateFormatter(opt.value, timezone, 'HH:mm') > now.format('HH:mm')) ||
-    sortedTimes[0];
+  const sortedTimes = generateTimeOptions({
+    timezone,
+    date,
+  }).sort((a, b) => sortAsc(a.value, b.value));
+  const nextAvailable = sortedTimes.find(opt => dateFormatter(opt.value, timezone, 'HH:mm') > now.format('HH:mm'))
+    || sortedTimes[0];
 
   return nextAvailable.value;
 };
@@ -103,7 +103,7 @@ class DisplayForm extends Component {
     } = this.props;
 
     const initDuration = 60;
-    const initStartTime = defaultStartTime(timezone, currentDate);
+    const initStartTime = defaultStartTime(timezone, currentDate.toISOString());
     const initEndTime = getUTCDate(initStartTime, timezone)
       .add(initDuration, 'minutes')
       .toISOString();
@@ -196,6 +196,7 @@ class DisplayForm extends Component {
       <div {...containerProps}>
         {children}
         <button
+          type="button"
           className={styles.addNewPatient}
           onClick={(e) => {
             e.stopPropagation();
@@ -232,7 +233,7 @@ class DisplayForm extends Component {
             name="patientSelected"
             placeholder="Add Patient"
             getSuggestions={getSuggestions}
-            onChange={(e, newValue) => handleAutoSuggest(newValue)}
+            onChange={(_e, newValue) => handleAutoSuggest(newValue)}
             classStyles={styles.searchInput}
             theme={autoCompleteStyle}
             renderSuggestionsContainer={addNewPatientComponent}

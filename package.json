@@ -91,7 +91,7 @@
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "moment-range": "^3.0.1",
-    "moment-timezone": "^0.5.14",
+    "moment-timezone": "^0.5.32",
     "node-sass": "^4.14.1",
     "normalize.css": "^5.0.0",
     "postcss-loader": "^3.0.0",

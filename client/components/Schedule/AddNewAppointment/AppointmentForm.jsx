@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import React, { useMemo, useState } from 'react';
 import { isHub } from '../../../util/hub';
 import {
-  Grid,
-  Row,
   Col,
-  Field,
-  isDateValid,
-  getUTCDate,
-  generateTimeOptions,
   DateTimeObj,
-  getFormattedDate,
+  Field,
+  generateTimeOptions,
+  getUTCDate,
+  getTimeUsingDST,
+  Grid,
+  isDateValid,
+  Row,
 } from '../../library';
 import { parseNum, notNegative } from '../../library/Form/validate';
 import styles from './styles.scss';
@@ -42,6 +42,11 @@ function AppointmentForm(props) {
     [actualDate, timezone],
   );
 
+  const getTimeWithDST = (val) => {
+    const timeToFind = getTimeUsingDST(val, timezone, actualDate);
+    return timeOptions.find(t => t.label === timeToFind);
+  };
+
   /**
    * The default format for the value key must be
    * ISOString ("YYYY-MM-DDTHH:mm:ss.sssZ")
@@ -55,8 +60,7 @@ function AppointmentForm(props) {
     } else if (isDateValid(val, 'YYYY-MM-DDTHH:mm:ss.sssZ', true)) {
       data = timeOptions.find(t => t.value === val);
       if (!data) {
-        const time = getFormattedDate(val, 'LT', timezone);
-        data = timeOptions.find(t => t.label === time);
+        data = getTimeWithDST(val);
       }
     }
 
@@ -69,11 +73,12 @@ function AppointmentForm(props) {
    *
    */
   const renderTimeValue = (val) => {
-    let time = timeOptions.find(t => t.value === val);
-    if (!time) {
-      time = timeOptions.find(t => t.label === getFormattedDate(val, 'LT', timezone));
+    let data = timeOptions.find(t => t.value === val);
+    if (!data) {
+      data = getTimeWithDST(val);
     }
-    return time ? time.label : undefined;
+
+    return data ? data.label : undefined;
   };
 
   /**
@@ -94,7 +99,10 @@ function AppointmentForm(props) {
     dropDownList: styles.dropDownList,
   };
 
-  const onChange = val => val !== actualDate && setActualDate(val);
+  const onChange = (val) => {
+    const newDate = typeof val === 'string' ? val : val.toISOString();
+    if (newDate !== actualDate) setActualDate(newDate);
+  };
 
   return (
     <Grid className={styles.grid}>

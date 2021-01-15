@@ -156,9 +156,9 @@ const defaultTimeOptionsParams = {
   hourInterval: 0.5,
   timezone: null,
   start: 5,
-  end: 23,
+  end: 22,
   date: null,
-  baseDate: '1970-01-01T12:00:00Z',
+  baseDate: '2020-01-31T12:00:00Z',
   timeOnly: false,
   useISOValue: true,
 };
@@ -177,6 +177,43 @@ const verifyAgainstCache = (options) => {
   });
 
   return isSameAsCache;
+};
+
+/**
+ * Check if should add or substract 1 hour due DST differences
+ * @param {string} date
+ * @param {string} timezone
+ * @returns {string}
+ * Returns 0 if no changes are needed;
+ * Return 1 if need to add 1 hours;
+ * Returns -1 if need to substract 1 hour;
+ */
+export const checkForDST = (date, timezone) => {
+  if (date) {
+    const isLocalDST = moment(date).isDST();
+    const isSystemDST = getUTCDate(date, timezone).isDST();
+
+    if (isSystemDST && !isLocalDST) return 1;
+    if (!isSystemDST && isLocalDST) return -1;
+  }
+  return 0;
+};
+
+/**
+ * Fixes the time output based on DST information
+ * @param {string} date
+ * @param {string} timezone
+ * @param {string | number} dateOrDST
+ * @returns {string} Return time in the LT format
+ */
+export const getTimeUsingDST = (date, timezone, dateOrDST) => {
+  const DST = typeof dateOrDST === 'number' ? dateOrDST : checkForDST(dateOrDST, timezone);
+  const dateUTC = getUTCDate(date, timezone);
+
+  if (DST === 1) return dateUTC.add(1, 'hours').format('LT');
+  if (DST === -1) return dateUTC.subtract(1, 'hours').format('LT');
+
+  return dateUTC.format('LT');
 };
 
 /**
@@ -211,13 +248,17 @@ export const generateTimeOptions = (options) => {
     }
   }
 
-  const local = moment(date);
-  const isDST = date && getUTCDate(date, timezone).isDST() && !local.isDST();
   const initialDate = getUTCDate(baseDate, timezone);
+  const DST = checkForDST(date, timezone);
 
-  if (isDST) {
+  if (DST === 1) {
     start -= 1;
     end -= 1;
+  }
+
+  if (DST === -1) {
+    start += 1;
+    end += 1;
   }
 
   initialDate.set({
@@ -231,10 +272,8 @@ export const generateTimeOptions = (options) => {
     const getIso = () => (useISOValue ? initialDate.toISOString() : initialDate.format());
     const value = timeOnly ? initialDate.format('HH:mm:ss.SSS[Z]') : getIso();
 
-    const label = isDST && !timeOnly
-      ? getUTCDate(initialDate, timezone)
-        .add(1, 'hours')
-        .format('LT')
+    const label = !timeOnly
+      ? getTimeUsingDST(initialDate, timezone, DST)
       : initialDate.format('LT');
 
     timeOptions.push({
