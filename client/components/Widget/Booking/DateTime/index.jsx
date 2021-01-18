@@ -32,6 +32,7 @@ import { isResponsive } from '../../../../util/hub';
 import transitions from './transitions.scss';
 import dayPickerStyles from '../dayPickerStyles.scss';
 import styles from './styles.scss';
+import { getFormattedDate } from '../../../library';
 
 /**
  * Loop a list of Moment object and
@@ -92,17 +93,17 @@ class DateTime extends PureComponent {
     }
     // This can be removed when the new booking widget is released
     if (
-      !this.props.nextAvailability &&
-      this.props.availabilities.total === 0 &&
-      !this.props.dueDate
+      !this.props.nextAvailability
+      && this.props.availabilities.total === 0
+      && !this.props.dueDate
     ) {
       this.props.setSelectedStartDate('');
     }
 
     if (
-      this.props.selectedAvailability !== null &&
-      !!this.props.availabilities.total &&
-      !!this.props.selectedAvailability
+      this.props.selectedAvailability !== null
+      && !!this.props.availabilities.total
+      && !!this.props.selectedAvailability
     ) {
       this.props.showButton();
     }
@@ -269,7 +270,7 @@ class DateTime extends PureComponent {
             }}
             className={availabilityClasses}
           >
-            {genericMoment(availability.startDate, accountTimezone).format('LT')}
+            {getFormattedDate(availability.startDate, 'LT', accountTimezone, true)}
           </Button>
         </div>
       );
@@ -292,8 +293,8 @@ class DateTime extends PureComponent {
         );
       }
       return (
-        selectedStartDate &&
-        !isFetching && (
+        selectedStartDate
+        && !isFetching && (
           <div className={styles.cardsWrapper}>
             {availabilities.morning.length > 0 && (
               <Element className={styles.timeFrameWrapper} name="morning">
@@ -319,13 +320,12 @@ class DateTime extends PureComponent {
     };
     const currentDate = new Date();
     const queryVars = parse(this.props.location.search);
-    const disabledDates =
-      queryVars &&
-      queryVars.dueDate &&
-      this.props.isRecall &&
-      queryVars.dueDate > currentDate.toISOString()
-        ? moment(queryVars.dueDate).toDate()
-        : currentDate;
+    const disabledDates = queryVars
+      && queryVars.dueDate
+      && this.props.isRecall
+      && queryVars.dueDate > currentDate.toISOString()
+      ? moment(queryVars.dueDate).toDate()
+      : currentDate;
     return (
       <Element id="scrollableContainer" className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
@@ -347,8 +347,8 @@ class DateTime extends PureComponent {
                 // selectedStartDate needs to be iso string because of the API needs it
                 // but it can sometimes be a future date depending on the timezone you currently are
                 value={
-                  selectedStartDate &&
-                  dateFormatter(selectedStartDate, accountTimezone, 'YYYY-MM-DD')
+                  selectedStartDate
+                  && dateFormatter(selectedStartDate, accountTimezone, 'YYYY-MM-DD')
                 }
                 tipSize={0.01}
                 showPreviousMonth={false}

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Map } from 'immutable';
 import { dateFormatter } from '@carecru/isomorphic';
-import { Button } from '../../../library';
+import { Button, getFormattedDate } from '../../../library';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
 import Service from '../../../../entities/models/Service';
@@ -100,9 +100,8 @@ class Review extends PureComponent {
      * Generates the availabilities using the office openings,
      * also group them inside the specific time-frame.
      */
-    const availabilities =
-      selectedService &&
-      availabilitiesGroupedByPeriod(
+    const availabilities = selectedService
+      && availabilitiesGroupedByPeriod(
         Object.values(officeHours),
         timezone,
         selectedService.get('duration'),
@@ -117,10 +116,11 @@ class Review extends PureComponent {
     });
 
     const dateTimeSummaryText = dateAndTime
-      ? `${dateFormatter(dateAndTime.startDate, timezone, 'ddd, MMM Do')} at ${dateFormatter(
+      ? `${dateFormatter(dateAndTime.startDate, timezone, 'ddd, MMM Do')} at ${getFormattedDate(
         dateAndTime.startDate,
-        timezone,
         'h:mm a',
+        timezone,
+        true,
       )}`
       : NOT_PROVIDED_TEXT;
 
@@ -247,8 +247,8 @@ class Review extends PureComponent {
             {patientUser && (
               <SummaryItem
                 label="Insurance Member ID & Group ID"
-                value={`${patientUser.insuranceMemberId ||
-                  NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`}
+                value={`${patientUser.insuranceMemberId
+                  || NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`}
                 link={b('patient-information')}
               />
             )}
@@ -268,21 +268,19 @@ class Review extends PureComponent {
 }
 
 function mapStateToProps({ availabilities, entities, auth, widgetNavigation }) {
-  const getPatientUser =
-    availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
-      ? auth
-        .get('familyPatients')
-        .find(patient => patient.id === availabilities.get('familyPatientUser'))
-      : false;
+  const getPatientUser = availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
+    ? auth
+      .get('familyPatients')
+      .find(patient => patient.id === availabilities.get('familyPatientUser'))
+    : false;
 
   const selectedPractitioner = entities.getIn([
     'practitioners',
     'models',
     availabilities.get('selectedPractitionerId'),
   ]);
-  const selectedService =
-    availabilities.get('selectedServiceId') &&
-    entities.getIn(['services', 'models', availabilities.get('selectedServiceId')]);
+  const selectedService = availabilities.get('selectedServiceId')
+    && entities.getIn(['services', 'models', availabilities.get('selectedServiceId')]);
   const selectedDaysOfTheWeek = getSelectedDaysOfTheWeek(availabilities.get('waitSpot'));
 
   return {
@@ -319,12 +317,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(Review),
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));
 
 Review.propTypes = {
   canConfirm: PropTypes.bool,

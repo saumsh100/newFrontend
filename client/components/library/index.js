@@ -104,5 +104,6 @@ export {
   isDateValid,
   parseDate,
   parseDateWithFormat,
+  formatTimeToTz,
   WeeklyScheduleShape,
 } from './util/datetime';

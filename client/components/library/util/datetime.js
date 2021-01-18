@@ -118,6 +118,11 @@ export const parseDateWithFormat = (date, format, timezone = null, strict = fals
 export const getFormattedDate = (date, format, timezone = null, useLocalTime = false) => {
   const hasTimezone = () => (useLocalTime ? parseDate(date, timezone) : getUTCDate(date, timezone));
   const dateToUse = timezone ? hasTimezone() : getDate(date);
+  const DST = checkForDST(date, timezone);
+  console.log(DST);
+  if (DST === 1 && useLocalTime) {
+    dateToUse.subtract('1', 'hours');
+  }
   return dateToUse.format(format);
 };
 
@@ -466,6 +471,17 @@ export const getTimezoneList = ({
     value,
     label: value.replace(/_/gi, ' '),
   }));
+};
+
+export const formatTimeToTz = (date, timezone) => {
+  const DST = checkForDST(date, timezone);
+  const newDate = getUTCDate(date, timezone);
+
+  if (DST === 1 || (DST === 0 && newDate.isDST())) {
+    return newDate.subtract('1', 'hours').format('LT');
+  }
+
+  return newDate.format('LT');
 };
 
 export { moment as DateTimeObj };

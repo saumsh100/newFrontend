@@ -1,10 +1,8 @@
 
 import React from 'react';
-import { dateFormatter } from '@carecru/isomorphic';
 import classNames from 'classnames';
 import styles from './day.scss';
-
-const formatTimeToTz = (value, timezone) => dateFormatter(value, timezone, 'LT');
+import { formatTimeToTz } from '../util/datetime';
 
 const generateHours = (startTime, endTime, breaks, timezone) => {
   const defaultHours = [
