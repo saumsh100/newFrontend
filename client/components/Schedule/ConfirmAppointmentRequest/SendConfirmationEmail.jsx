@@ -12,7 +12,7 @@ const SendConfirmationEmail = (props) => {
     <div className={styles.container}>
       <div className={styles.dataContainer_bodyEmail}>
         Would you like to send an email confirmation to{' '}
-        <span className={styles.bold}>{patient.getFullName()}</span>?
+        <span className={styles.bold}>{patient?.getFullName()}</span>?
       </div>
 
       {/* length > 1 ? <div className={styles.dataContainer_bodyEmail} >
@@ -55,8 +55,8 @@ const SendConfirmationEmail = (props) => {
 };
 
 SendConfirmationEmail.propTypes = {
-  patient: PropTypes.instanceOf(Patient),
-  confirmRequest: PropTypes.func,
+  patient: PropTypes.instanceOf(Patient).isRequired,
+  confirmRequest: PropTypes.func.isRequired,
 };
 
 export default SendConfirmationEmail;

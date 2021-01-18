@@ -188,7 +188,9 @@ class RequestPopover extends Component {
             [styles.blurred]: displayActions && !isHub(),
           })}
           onClick={displayActions && this.toggleActionDisplay}
-          onScroll={(e) => { e.stopPropagation(); }}
+          onScroll={(e) => {
+            e.stopPropagation();
+          }}
         >
           <SBody className={isMobile ? styles.bodyMobile : styles.body}>
             <div className={styles.container}>

@@ -5,25 +5,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Map } from 'immutable';
-import { formatPhoneNumber } from '@carecru/isomorphic';
 import { selectAppointmentShape } from '../../library/PropTypeShapes';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
-import { Icon, Button, Avatar, SHeader } from '../../library';
-import SameAppointment from './SameAppointment';
 import SendConfirmationEmail from './SendConfirmationEmail';
-import styles from './styles.scss';
-
-const pluralMap = quantity => (article) => {
-  const isPlural = quantity > 1;
-
-  const plurals = {
-    an: isPlural ? 'a few' : 'an',
-    was: isPlural ? 'were' : 'was',
-    appointment: isPlural ? 'appointments' : 'appointment',
-  };
-
-  return plurals[article];
-};
+import AppointmentSummary from './AppointmentSummary';
+import AppointmentSuggestions from './AppointmentSuggestions';
 
 class ConfirmAppointmentRequest extends Component {
   constructor(props) {
@@ -33,7 +19,9 @@ class ConfirmAppointmentRequest extends Component {
 
     const appointments = selectedAppointment.nextAppt;
 
-    this.state = { selectedApp: appointments && appointments.length === 1 && appointments[0] };
+    this.state = {
+      selectedApp: appointments && appointments.length === 1 && appointments[0],
+    };
 
     this.confirmRequest = this.confirmRequest.bind(this);
     this.createAppointment = this.createAppointment.bind(this);
@@ -54,8 +42,21 @@ class ConfirmAppointmentRequest extends Component {
   confirmRequest(patient, sendEmail) {
     const { selectedAppointment, reinitializeState, redirect, setLocation } = this.props;
 
+    const { requestModel } = selectedAppointment;
+
     if (redirect) {
       setLocation(redirect);
+    }
+    const patientModel = this.props.patients.get(this.state.selectedApp.patientId);
+    const patientUserId = requestModel.get('patientUserId');
+    if (patientUserId !== patientModel.get('patientUserId')) {
+      const modifiedPatient = patientModel.set('patientUserId', patientUserId);
+
+      this.props.updateEntityRequest({
+        key: 'patients',
+        model: modifiedPatient,
+        url: `/api/patients/${modifiedPatient.get('id')}`,
+      });
     }
 
     if (sendEmail) {
@@ -63,10 +64,9 @@ class ConfirmAppointmentRequest extends Component {
         success: { body: `Email confirmation sent to ${patient.getFullName()}` },
         error: { body: `Request failed for ${patient.getFullName()} Failed` },
       };
-      const { requestModel: requestId } = selectedAppointment;
       this.props
         .updateEntityRequest({
-          url: `/api/requests/${requestId.get('id')}/confirm/${this.state.selectedApp.id}`,
+          url: `/api/requests/${requestModel.get('id')}/confirm/${this.state.selectedApp.id}`,
           values: {},
           alert: alertRequestUpdate,
         })
@@ -89,122 +89,39 @@ class ConfirmAppointmentRequest extends Component {
   }
 
   render() {
-    const {
-      patients,
-      selectedAppointment,
-      setCurrentDay,
-      setSendEmail,
-      sendEmail,
-      timezone,
-    } = this.props;
+    const { patients, selectedAppointment, sendEmail, showApptSummary, apptWrite } = this.props;
+
+    const { selectedApp } = this.state;
+
+    if (showApptSummary && !apptWrite) {
+      return <AppointmentSummary {...this.props} />;
+    }
 
     if (!selectedAppointment) {
       return null;
     }
 
-    const { selectedApp } = this.state;
-
-    const patient = patients.get(selectedAppointment.patientId);
+    const patient = patients.get(selectedAppointment.patientId || selectedApp.patientId);
     const appointments = selectedAppointment.nextAppt;
 
-    const pluralize = pluralMap(appointments.length);
+    if (sendEmail) {
+      return (
+        <SendConfirmationEmail
+          selectedApp={selectedApp}
+          confirmRequest={this.confirmRequest}
+          patient={patient}
+          length={appointments.length}
+        />
+      );
+    }
 
-    return !sendEmail ? (
-      <div className={styles.container}>
-        <div className={styles.text}>
-          <span>
-            {`It seems like
-            ${pluralize('an')}
-            ${pluralize('appointment')}
-            ${pluralize('was')}
-            already created for:`}
-          </span>
-          <div className={styles.userCard}>
-            <SHeader className={styles.header}>
-              <Avatar user={patient} size="xs" />
-              <div className={styles.header_text}>
-                {patient.firstName} {patient.lastName}
-              </div>
-            </SHeader>
-            <div className={styles.container}>
-              {patient.cellPhoneNumber && (
-                <div className={styles.data}>
-                  <Icon icon="phone" size={0.9} type="solid" />
-                  <div className={styles.data_text}>
-                    {formatPhoneNumber(patient.cellPhoneNumber)}
-                  </div>
-                </div>
-              )}
-              {patient.email && (
-                <div className={styles.data}>
-                  <Icon icon="envelope" size={0.9} type="solid" />
-                  <div className={styles.data_text}>{patient.email}</div>
-                </div>
-              )}
-              {!patient.cellPhoneNumber && !patient.email && <div className={styles.data}>n/a</div>}
-            </div>
-          </div>
-
-          {appointments.length > 1 ? (
-            <span>
-              <br />
-              Select one of these appointments to <span className={styles.bold}>Connect</span> with
-              this request or simply <span className={styles.bold}>Create New Appointment</span> to
-              add a new one.
-            </span>
-          ) : (
-            <span>
-              <br />
-              Would you like to connect the appointment request with this appointment?
-            </span>
-          )}
-        </div>
-        <div className={styles.containerApp}>
-          <div className={styles.sameAppList}>
-            {appointments.map(app => (
-              <SameAppointment
-                key={app.id}
-                patient={patient}
-                appointment={app}
-                confirmRequest={this.confirmRequest}
-                createAppointment={this.createAppointment}
-                setCurrentDay={setCurrentDay}
-                setSelected={this.setSelected}
-                selectedApp={this.state.selectedApp}
-                length={appointments.length}
-                timezone={timezone}
-              />
-            ))}
-          </div>
-        </div>
-        <div className={styles.buttonContainer}>
-          <Button border="blue" onClick={this.createAppointment}>
-            Create New Appointment
-          </Button>
-          <Button
-            color={selectedApp ? 'blue' : 'grey'}
-            style={{ cursor: selectedApp ? 'pointer' : 'not-allowed' }}
-            className={styles.buttonContainer_yes}
-            onClick={() => {
-              if (!selectedApp) return null;
-
-              if (window.confirm('Are you sure this is the correct Appointment?')) {
-                this.setSelected(selectedApp);
-                return setSendEmail();
-              }
-              return null;
-            }}
-          >
-            Connect Appointment
-          </Button>
-        </div>
-      </div>
-    ) : (
-      <SendConfirmationEmail
+    return (
+      <AppointmentSuggestions
+        {...this.props}
         selectedApp={selectedApp}
-        confirmRequest={this.confirmRequest}
-        patient={patient}
-        length={appointments.length}
+        setSelected={this.setSelected}
+        apptWrite={apptWrite}
+        createAppointment={this.createAppointment}
       />
     );
   }
@@ -217,11 +134,19 @@ ConfirmAppointmentRequest.propTypes = {
   selectAppointment: PropTypes.func.isRequired,
   selectedAppointment: PropTypes.shape(selectAppointmentShape),
   sendEmail: PropTypes.bool.isRequired,
-  setCurrentDay: PropTypes.func.isRequired,
   setLocation: PropTypes.func.isRequired,
   setSendEmail: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
+  showApptSummary: PropTypes.bool.isRequired,
+  setShowApptSummary: PropTypes.func.isRequired,
+  requests: PropTypes.instanceOf(Map).isRequired,
+  services: PropTypes.instanceOf(Map).isRequired,
+  patientUsers: PropTypes.instanceOf(Map).isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
+  apptWrite: PropTypes.bool.isRequired,
+  setCurrentDay: PropTypes.func.isRequired,
+  lastSummaryRequest: PropTypes.string.isRequired,
 };
 
 ConfirmAppointmentRequest.defaultProps = {
@@ -229,9 +154,23 @@ ConfirmAppointmentRequest.defaultProps = {
   selectedAppointment: null,
 };
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, entities, featureFlags }) {
+  const patientUsers = entities.getIn(['patientUsers', 'models']);
+  const services = entities.getIn(['services', 'models']);
+  const requests = entities.getIn(['requests', 'models']);
+  const practitioners = entities.getIn(['practitioners', 'models']);
+  const apptWrite = featureFlags?.getIn([
+    'flags',
+    'connector-update-practitioner-dailySchedule-chairIds',
+  ]);
+
   return {
     timezone: auth.get('timezone'),
+    patientUsers,
+    services,
+    requests,
+    practitioners,
+    apptWrite,
   };
 }
 

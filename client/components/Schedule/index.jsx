@@ -45,6 +45,8 @@ class ScheduleComponent extends Component {
       patientSearched: null,
       sendEmail: false,
       showInput: false,
+      showApptSummary: false,
+      lastSummaryRequest: null,
     };
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
@@ -99,6 +101,10 @@ class ScheduleComponent extends Component {
     this.props.setScheduleDate({ scheduleDate: getUTCDate(day).toISOString() });
   }
 
+  setShowApptSummary = () => {
+    this.setState({ showApptSummary: true });
+  };
+
   openAssignPatientToChatModal(patient) {
     this.setState({
       patient,
@@ -147,6 +153,12 @@ class ScheduleComponent extends Component {
   }
 
   reinitializeState() {
+    const { selectedAppointment } = this.props;
+    const noNextAppt = !!selectedAppointment && !selectedAppointment.nextAppt;
+    const showApptSummary = this.state.showApptSummary || noNextAppt;
+    if (showApptSummary) {
+      this.setState({ lastSummaryRequest: selectedAppointment?.requestId });
+    }
     this.props.setMergingPatient({
       patientUser: null,
       requestData: null,
@@ -160,6 +172,7 @@ class ScheduleComponent extends Component {
       patientSearched: null,
       sendEmail: false,
       showInput: false,
+      showApptSummary: false,
     });
   }
 
@@ -254,9 +267,10 @@ class ScheduleComponent extends Component {
       pracsFetched,
       chairsFetched,
       accountsFetched,
+      apptWrite,
     } = this.props;
 
-    const { addNewAppointment, showSchedule } = this.state;
+    const { addNewAppointment, showSchedule, lastSummaryRequest } = this.state;
 
     const hubRedirect = { pathname: '/requests' };
 
@@ -278,11 +292,15 @@ class ScheduleComponent extends Component {
       : 'Could this be the same appointment?';
 
     let displayTitle = this.state.sendEmail ? 'Send Confirmation Email?' : sameApptTitle;
-
+    const noNextAppt = !!selectedAppointment && !selectedAppointment.nextAppt;
+    const showApptSummary = this.state.showApptSummary || noNextAppt;
+    if (showApptSummary) {
+      displayTitle = 'Accept Appointment';
+    }
     let displayModalComponent = null;
     let actions = [];
 
-    if (selectedAppointment && selectedAppointment.nextAppt) {
+    if (selectedAppointment && (selectedAppointment.nextAppt || !apptWrite)) {
       displayModalComponent = (
         <ConfirmAppointmentRequest
           patients={patients.get('models')}
@@ -292,6 +310,9 @@ class ScheduleComponent extends Component {
           setCurrentDay={this.setCurrentDay}
           setSendEmail={this.setSendEmail}
           sendEmail={this.state.sendEmail}
+          showApptSummary={showApptSummary}
+          setShowApptSummary={this.setShowApptSummary}
+          lastSummaryRequest={lastSummaryRequest}
           redirect={isHub() && hubRedirect}
         />
       );
@@ -368,7 +389,7 @@ class ScheduleComponent extends Component {
       );
     }
 
-    const isAddNewAppointment = addNewAppointment || (!!selectedAppointment && !selectedAppointment.nextAppt);
+    const isAddNewAppointment = addNewAppointment || (noNextAppt && apptWrite);
 
     if (isAddNewAppointment) {
       displayTitle = 'Accept Appointment';
@@ -376,10 +397,12 @@ class ScheduleComponent extends Component {
 
     const showDialog = (selectedAppointment && selectedAppointment.nextAppt)
       || !!mergingPatientData.patientUser
+      || showApptSummary
       || createNewPatient;
 
     this.pageTitle = displayTitle;
-    const allFetched = appsFetched && eventsFetched && accountsFetched && chairsFetched && pracsFetched;
+    const appsEventsFetched = appsFetched && eventsFetched;
+    const allFetched = appsEventsFetched && accountsFetched && chairsFetched && pracsFetched;
 
     return isHub() ? (
       <div className={styles.hubWrapper}>
@@ -466,7 +489,7 @@ class ScheduleComponent extends Component {
                     />
                   </Modal>
                 ) : null}
-                {allFetched ? (
+                {allFetched && !isAddNewAppointment ? (
                   <DialogBox
                     title={displayTitle}
                     type={createNewPatient ? 'small' : 'medium'}
@@ -535,6 +558,7 @@ ScheduleComponent.propTypes = {
   patients: PropTypes.objectOf(PropTypes.instanceOf(List)),
   chairs: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   timezone: PropTypes.string.isRequired,
+  apptWrite: PropTypes.bool.isRequired,
 };
 
 ScheduleComponent.defaultProps = {
@@ -549,9 +573,10 @@ ScheduleComponent.defaultProps = {
   patients: null,
 };
 
-const mapStateToProps = ({ router, auth }) => ({
+const mapStateToProps = ({ router, auth, featureFlags }) => ({
   router,
   timezone: auth.get('timezone'),
+  apptWrite: featureFlags?.getIn(['flags', 'connector-update-practitioner-dailySchedule-chairIds']),
 });
 
 const mapActionsToProps = dispatch =>

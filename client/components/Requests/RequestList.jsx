@@ -73,6 +73,7 @@ class RequestList extends Component {
       request: true,
       requestModel: modifiedRequest,
       practitionerId: request.get('practitionerId'),
+      requestingPatientUserId: request.get('requestingPatientUserId'),
     };
 
     this.props.checkPatientUser(patientUser, requestData);

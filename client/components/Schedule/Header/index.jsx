@@ -58,7 +58,8 @@ class Header extends Component {
   }
 
   openAddToWaitlist() {
-    this.setState({ showAddToWaitlist: !this.state.showAddToWaitlist });
+    const { showAddToWaitlist } = this.state;
+    this.setState({ showAddToWaitlist: !showAddToWaitlist });
   }
 
   removeMultipleWaitSpots(deleteMutation) {
@@ -183,17 +184,23 @@ class Header extends Component {
             <Button onClick={this.setView} border="blue" iconRight="exchange" dense compact>
               {scheduleView === 'chair' ? 'Practitioner View' : 'Chair View'}
             </Button>
-
-            <Button
-              dense
-              compact
-              color="blue"
-              onClick={addNewAppointment}
-              className={styles.headerLinks_add}
-              data-test-id="button_appointmentQuickAdd"
-            >
-              Quick Add
-            </Button>
+            <EnabledFeature
+              predicate={() => true}
+              render={({ flags }) =>
+                (!flags.get('connector-update-practitioner-dailySchedule-chairIds') ? null : (
+                  <Button
+                    dense
+                    compact
+                    color="blue"
+                    onClick={addNewAppointment}
+                    className={styles.headerLinks_add}
+                    data-test-id="button_appointmentQuickAdd"
+                  >
+                    Quick Add
+                  </Button>
+                ))
+              }
+            />
             <Modal
               title="Waitlist"
               active={this.state.showWaitlist}

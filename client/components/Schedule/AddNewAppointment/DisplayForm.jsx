@@ -157,7 +157,7 @@ class DisplayForm extends Component {
         duration: durationTime,
         unit: unitValue,
         note,
-        patientSelected: patient.toJS(),
+        patientSelected: patient?.toJS(),
       };
     }
 
