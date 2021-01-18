@@ -119,7 +119,6 @@ export const getFormattedDate = (date, format, timezone = null, useLocalTime = f
   const hasTimezone = () => (useLocalTime ? parseDate(date, timezone) : getUTCDate(date, timezone));
   const dateToUse = timezone ? hasTimezone() : getDate(date);
   const DST = checkForDST(date, timezone);
-  console.log(DST);
   if (DST === 1 && useLocalTime) {
     dateToUse.subtract('1', 'hours');
   }
@@ -214,11 +213,16 @@ export const checkForDST = (date, timezone) => {
 export const getTimeUsingDST = (date, timezone, dateOrDST) => {
   const DST = typeof dateOrDST === 'number' ? dateOrDST : checkForDST(dateOrDST, timezone);
   const dateUTC = getUTCDate(date, timezone);
+  const value = dateUTC.toISOString();
+  let label = dateUTC.format('LT');
 
-  if (DST === 1) return dateUTC.add(1, 'hours').format('LT');
+  if (DST === 1) label = dateUTC.add(1, 'hours').format('LT');
   if (DST === -1) return dateUTC.subtract(1, 'hours').format('LT');
 
-  return dateUTC.format('LT');
+  return {
+    label,
+    value,
+  };
 };
 
 /**
@@ -278,7 +282,7 @@ export const generateTimeOptions = (options) => {
     const value = timeOnly ? initialDate.format('HH:mm:ss.SSS[Z]') : getIso();
 
     const label = !timeOnly
-      ? getTimeUsingDST(initialDate, timezone, DST)
+      ? getTimeUsingDST(initialDate, timezone, DST).label
       : initialDate.format('LT');
 
     timeOptions.push({

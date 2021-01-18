@@ -44,7 +44,7 @@ function AppointmentForm(props) {
 
   const getTimeWithDST = (val) => {
     const timeToFind = getTimeUsingDST(val, timezone, actualDate);
-    return timeOptions.find(t => t.label === timeToFind);
+    return timeOptions.find(t => t.label === timeToFind.label) || timeToFind;
   };
 
   /**
