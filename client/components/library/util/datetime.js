@@ -217,7 +217,7 @@ export const getTimeUsingDST = (date, timezone, dateOrDST) => {
   let label = dateUTC.format('LT');
 
   if (DST === 1) label = dateUTC.add(1, 'hours').format('LT');
-  if (DST === -1) return dateUTC.subtract(1, 'hours').format('LT');
+  if (DST === -1) label = dateUTC.subtract(1, 'hours').format('LT');
 
   return {
     label,
