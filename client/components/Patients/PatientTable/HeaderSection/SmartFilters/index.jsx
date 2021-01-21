@@ -36,21 +36,26 @@ class SmartFilters extends Component {
 
   getActiveSmartFilter([segment, ...args], segments = []) {
     const baseSegment = segments.filter(s => s.segment === segment);
-    const selectedSegment =
-      args.length === 0
-        ? baseSegment.find(s => !s.value)
-        : baseSegment.find(s => s.value && s.value.every(v => args.includes(v)));
+    const selectedSegment = args.length === 0
+      ? baseSegment.find(s => !s.value)
+      : baseSegment.find(s => s.value && s.value.every(v => args.includes(v)));
     return selectedSegment && selectedSegment.label;
   }
 
   setSmartFilter({ segment, value = [] }) {
     const params = {};
     if (segment === 'followUps') {
-      params.order = [['patientFollowUps.dueAt', 'asc']];
+      params.order = [
+        ['patientFollowUps.dueAt', 'asc'],
+        ['id', 'asc'],
+      ];
     }
 
     if (segment === 'smartRecare') {
-      params.order = [['dueForHygieneDate', 'desc']];
+      params.order = [
+        ['dueForHygieneDate', 'desc'],
+        ['id', 'asc'],
+      ];
     }
 
     this.props.addFilter({
@@ -85,8 +90,7 @@ class SmartFilters extends Component {
           <div className={styles.filterContainer}>
             <List className={styles.smartFilter} data-test-id="smartFiltersList">
               {segmentsToJS.map(({ label, ...filter }, index) => {
-                const borderStyle =
-                  (label === activeSegmentLabel && { borderLeft: '3px solid #FF715A' }) || {};
+                const borderStyle = (label === activeSegmentLabel && { borderLeft: '3px solid #FF715A' }) || {};
                 return (
                   <ListItem
                     className={styles.filterItem}
@@ -148,7 +152,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SmartFilters);
+export default connect(mapStateToProps, mapDispatchToProps)(SmartFilters);
