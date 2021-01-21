@@ -28,12 +28,9 @@ const PatientSuggestion = ({
 
   return (
     <div
-      key={patient.id}
-      {...getItemProps({
-        id: patient.id,
-        item: patient,
-      })}
-      className={classNames({ [newTheme.highlightedIndex]: highlightedIndex === index })}
+    key={patient.id}
+    {...getItemProps}
+    className={classNames({ [newTheme.highlightedIndex]: highlightedIndex === index })}
     >
       <div className={newTheme.suggestionContainer}>
         <Avatar user={patient} size="xs" />
@@ -64,7 +61,12 @@ PatientSuggestion.propTypes = {
   index: PropTypes.number.isRequired,
   inputValue: PropTypes.string,
   highlightedIndex: PropTypes.number,
-  getItemProps: PropTypes.func.isRequired,
+  getItemProps: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+    onMouseDown: PropTypes.func.isRequired,
+    onMouseMove: PropTypes.func.isRequired,
+  }).isRequired,
   theme: PropTypes.shape({
     suggestionsContainerOpen: PropTypes.string,
     suggestionsList: PropTypes.string,

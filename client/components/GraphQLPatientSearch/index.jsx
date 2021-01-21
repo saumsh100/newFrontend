@@ -214,7 +214,8 @@ class PatientSearch extends Component {
                   index={index}
                   inputValue={currValue}
                   highlightedIndex={highlightedIndex}
-                  getItemProps={getItemProps}
+                  getItemProps={getItemProps({ id: patient.id,
+                    item: patient })}
                   theme={theme}
                 />
               ))}
@@ -224,11 +225,11 @@ class PatientSearch extends Component {
         {isLoading
           ? renderListFooter(currValue, 'Searching...', isLoading)
           : renderListFooter(
-              currValue,
-              totalCount === 0
-                ? 'No results found for'
-                : `${totalCount} Patients found for the search`,
-            )}
+            currValue,
+            totalCount === 0
+              ? 'No results found for'
+              : `${totalCount} Patients found for the search`,
+          )}
       </div>
     );
   }
@@ -289,8 +290,7 @@ class PatientSearch extends Component {
           (patient === null ? '' : `${patient.firstName} ${patient.lastName}`)
         }
         render={({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => {
-          const displayList =
-            isOpen && typeof currValue !== 'undefined' && currValue !== '' && inputValue !== '';
+          const displayList = isOpen && typeof currValue !== 'undefined' && currValue !== '' && inputValue !== '';
           const displaySearching = isOpen && inputValue !== '';
           const suggestionsListProps = {
             newTheme,
@@ -325,7 +325,8 @@ class PatientSearch extends Component {
                         key={patient.id}
                         patient={patient}
                         index={index}
-                        getItemProps={getItemProps}
+                        getItemProps={getItemProps({ id: patient.id,
+                          item: patient })}
                         theme={newTheme}
                       />
                     ))}
