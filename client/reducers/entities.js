@@ -157,21 +157,11 @@ export default handleActions(
       return state.setIn([key, 'isFetching'], true);
     },
 
-    [RECEIVE_ENTITIES](
-      state,
-      {
-        payload: { entities, merge },
-      },
-    ) {
+    [RECEIVE_ENTITIES](state, { payload: { entities, merge } }) {
       return receiveEntitiesState(state, entities, merge);
     },
 
-    [DELETE_ENTITY](
-      state,
-      {
-        payload: { key, id },
-      },
-    ) {
+    [DELETE_ENTITY](state, { payload: { key, id } }) {
       const newState = state;
       const model = newState.getIn([key, 'models', id]);
       if (model) {
@@ -191,12 +181,7 @@ export default handleActions(
       return state;
     },
 
-    [UPDATE_ENTITY](
-      state,
-      {
-        payload: { key, entity },
-      },
-    ) {
+    [UPDATE_ENTITY](state, { payload: { key, entity } }) {
       const [id] = Object.keys(entity.entities[key]);
       const updatedEntity = entity.entities[key][id];
       const updatedModel = new Models[key](updatedEntity);
@@ -214,13 +199,13 @@ function receiveEntitiesState(state, entities, hardMerge) {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
       if (
-        !hardMerge &&
-        (!model ||
-          key === 'weeklySchedules' ||
-          key === 'patients' ||
-          key === 'chats' ||
-          key === 'textMessages' ||
-          key === 'patientTimelineEvents')
+        !hardMerge
+        && (!model
+          || key === 'weeklySchedules'
+          || key === 'patients'
+          || key === 'chats'
+          || key === 'textMessages'
+          || key === 'patientTimelineEvents')
       ) {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);

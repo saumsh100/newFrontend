@@ -50,6 +50,8 @@ const AppointmentInfo = (props) => {
     title,
     extraStyles,
     timezone,
+    errorTitle,
+    errorMessage,
   } = props;
   const { startDate, endDate, note, reason, description } = appointment;
   const age = patient?.birthDate
@@ -58,7 +60,14 @@ const AppointmentInfo = (props) => {
   const appointmentDate = getFormattedDate(startDate, 'dddd LL', timezone);
   const textAreaTheme = { group: styles.textAreaGroup };
   const notes = description || note || '';
-
+  const TitleComponent = errorTitle ? (
+    <React.Fragment>
+      <Icon icon="calendar" size={1.25} className={styles.errorCalendarIcon} />
+      <span className={styles.header_text}>{errorTitle}</span>
+    </React.Fragment>
+  ) : (
+    <span className={styles.header_text}>{title}</span>
+  );
   return (
     <Card className={styles.card} noBorder>
       <SContainer>
@@ -96,13 +105,19 @@ const AppointmentInfo = (props) => {
               </div>
             </React.Fragment>
           ) : (
-            <span className={styles.header_text}>{title}</span>
+            TitleComponent
           )}
           <div className={styles.closeIcon}>
             <IconButton icon="times" onClick={() => props.closePopover()} />
           </div>
         </SHeader>
         <SBody className={styles.body} key="body">
+          {errorMessage && (
+            <div className={styles.popoverErrorMessage}>
+              <Icon icon="exclamation-circle" className={styles.popoverErrorIcon} />
+              {errorMessage}
+            </div>
+          )}
           {popoverDataSections('Date', appointmentDate)}
 
           {popoverDataSections(
@@ -192,6 +207,8 @@ const AppointmentInfo = (props) => {
 
 AppointmentInfo.defaultProps = {
   title: '',
+  errorTitle: '',
+  errorMessage: '',
   editAppointment: null,
   editPatient: null,
   chair: null,
@@ -201,6 +218,8 @@ AppointmentInfo.defaultProps = {
 };
 
 AppointmentInfo.propTypes = {
+  errorTitle: PropTypes.string,
+  errorMessage: PropTypes.string,
   editAppointment: PropTypes.func,
   editPatient: PropTypes.func,
   closePopover: PropTypes.func.isRequired,

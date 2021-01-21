@@ -56,6 +56,23 @@ class ShowAppointment extends Component {
     }
   }
 
+  get appointmentHoursClassName() {
+    return !this.props.patient && styles.patientNotFound;
+  }
+
+  get patientNameDisplay() {
+    const { patient } = this.props;
+    if (!patient) {
+      return (
+        <div className={styles.patientNotFound}>
+          Patient Not Found
+          <Icon type="solid" icon="exclamation-circle" className={styles.patientNotFoundIcon} />
+        </div>
+      );
+    }
+    return `${patient.get('firstName')} ${patient.get('lastName')}`;
+  }
+
   togglePopover() {
     this.setState({ isOpened: !this.state.isOpened });
   }
@@ -95,11 +112,21 @@ class ShowAppointment extends Component {
       isRecallsFormActive,
       timezone,
     } = this.props;
+
     const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
     const { isOpened, nameContainerOffsetWidth, nameContainerOffset } = this.state;
 
+    const patientNotFoundStyle = patient
+      ? {}
+      : {
+        backgroundColor: '#ffffff',
+        border: '1px solid red',
+        color: 'red',
+      };
+
     const applicationStyle = {
       ...appStyle,
+      ...patientNotFoundStyle,
       boxShadow: isOpened
         ? '0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2)'
         : 'none',
@@ -118,6 +145,8 @@ class ShowAppointment extends Component {
           <AppointmentInfo
             appointment={appointment}
             patient={patient}
+            errorTitle={!this.props.patient && 'Patient Not Found'}
+            errorMessage={!this.props.patient && 'Please validate appointment in your PMS.'}
             closePopover={this.closePopover}
             editAppointment={this.editAppointment}
             scheduleView={scheduleView}
@@ -141,7 +170,8 @@ class ShowAppointment extends Component {
           onDoubleClick={this.editAppointment}
           className={styles.appointmentContainer}
           style={containerStyle}
-          data-test-id={`appointment_${patient.get('firstName')}${patient.get('lastName')}`}
+          data-test-id={`appointment_${patient && patient.get('firstName')}${patient
+            && patient.get('lastName')}`}
         >
           <div className={styles.showAppointment} style={applicationStyle}>
             {isPatientConfirmed || isReminderSent ? (
@@ -155,9 +185,7 @@ class ShowAppointment extends Component {
             ) : null}
 
             <div className={styles.nameContainer} ref={this.nameContainer}>
-              <div className={styles.nameContainer_name}>
-                {`${patient.get('firstName')} ${patient.get('lastName')}`}
-              </div>
+              <div className={styles.nameContainer_name}>{this.patientNameDisplay}</div>
 
               {canInlineAppointment() && (
                 <AppointmentHours
@@ -165,12 +193,18 @@ class ShowAppointment extends Component {
                   startDate={startDate}
                   endDate={endDate}
                   inline
+                  className={this.appointmentHoursClassName}
                 />
               )}
             </div>
 
             {canShowAppointmentBelow() && (
-              <AppointmentHours timezone={timezone} startDate={startDate} endDate={endDate} />
+              <AppointmentHours
+                timezone={timezone}
+                startDate={startDate}
+                endDate={endDate}
+                className={this.appointmentHoursClassName}
+              />
             )}
           </div>
         </Button>
