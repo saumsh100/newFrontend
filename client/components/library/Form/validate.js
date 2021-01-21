@@ -68,11 +68,9 @@ const phoneValidate = (value) => {
 };
 
 const emailValidate = (value) => {
-  if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) &&
-    value !== undefined &&
-    value !== null
-  ) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  if (!value || !re.test(String(value).toLowerCase())) {
     return 'Invalid email address';
   }
 };
@@ -114,10 +112,10 @@ const phoneValidateNullOkay = (value) => {
   if (
     !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(
       value,
-    ) &&
-    value !== null &&
-    value !== '' &&
-    value !== undefined
+    )
+    && value !== null
+    && value !== ''
+    && value !== undefined
   ) {
     return 'Invalid phone number';
   }
@@ -156,20 +154,20 @@ const maxLength = max => value =>
   (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 
 const asyncEmailValidateUser = ({ email }) =>
-  email &&
-  httpClient()
+  email
+  && httpClient()
     .post('/userCheck', { email })
     .then(
       response =>
-        response.data.exists !== true ||
-        Promise.reject(
+        response.data.exists !== true
+        || Promise.reject(
           Object.assign(new Error(), { email: `User with ${email} already exists...` }),
         ),
     );
 
 const asyncEmailPasswordReset = ({ email }) =>
-  email &&
-  httpClient()
+  email
+  && httpClient()
     .post('/userCheck', { email })
     .then((response) => {
       if (response.data.exists !== true) {
