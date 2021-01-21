@@ -3,6 +3,7 @@ import { cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
+import { nonApptWritePMS } from '../util/nonApptWritePMS';
 
 /**
  * This component is intended to wrap the necessary logic to render or not a
@@ -92,16 +93,14 @@ function renderFunctionOrComponent(functionOrComponent, newProps = {}) {
     : cloneElement(functionOrComponent, newProps);
 }
 
-function mapStateToProps(
-  { featureFlags, auth },
-  { flags, adapterPermissions, userRole },
-) {
+function mapStateToProps({ featureFlags, auth }, { flags, adapterPermissions, userRole }) {
   return {
     subject: {
       adapterPermissions: adapterPermissions || auth.get('adapterPermissions'),
       flags: flags || featureFlags.get('flags'),
       flagsLoaded: featureFlags.get('flagsLoaded'),
       userRole: userRole || auth.get('role'),
+      noAppointmentWrite: nonApptWritePMS(auth.get('adapterType')),
     },
   };
 }
@@ -111,10 +110,7 @@ const objectOrMapPropType = PropTypes.oneOfType([
   PropTypes.instanceOf(Map),
 ]);
 
-const functionOrNodePropType = PropTypes.oneOfType([
-  PropTypes.func,
-  PropTypes.node,
-]);
+const functionOrNodePropType = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
 
 EnabledFeature.propTypes = {
   adapterPermissions: objectOrMapPropType,
@@ -139,7 +135,4 @@ EnabledFeature.defaultProps = {
   fallback: () => null,
 };
 
-export default connect(
-  mapStateToProps,
-  null,
-)(EnabledFeature);
+export default connect(mapStateToProps, null)(EnabledFeature);

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { formatPhoneNumber, setDateToTimezone } from '@carecru/isomorphic';
 import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
@@ -15,6 +16,7 @@ import {
   TextArea,
   IconButton,
   PointOfContactBadge,
+  nonApptWritePMS,
 } from '..';
 import { patientShape, appointmentShape, practitionerShape } from '../PropTypeShapes/index';
 import Appointments from '../../../entities/models/Appointments';
@@ -38,7 +40,7 @@ const popoverDataSections = (subHeaderText, data) => (
   </div>
 );
 
-export default function AppointmentInfo(props) {
+const AppointmentInfo = (props) => {
   const {
     patient,
     appointment,
@@ -116,16 +118,16 @@ export default function AppointmentInfo(props) {
 
           {!!reason && popoverDataSections('Appointment Type', `${reason}`)}
 
-          {practitioner &&
-            popoverDataSections(
+          {practitioner
+            && popoverDataSections(
               'Practitioner',
               `${practitioner.firstName} ${practitioner.lastName || null}`,
             )}
 
           {chair && popoverDataSections('Chair', chair.name)}
 
-          {(notes &&
-            popoverDataSections(
+          {(notes
+            && popoverDataSections(
               'Notes',
               <div className={styles.data_note} style={{ ...extraStyles?.note }} key="notes">
                 <TextArea
@@ -135,8 +137,8 @@ export default function AppointmentInfo(props) {
                   style={{ ...extraStyles?.note }}
                 />
               </div>,
-            )) ||
-            (title && popoverDataSections('Notes', 'n/a'))}
+            ))
+            || (title && popoverDataSections('Notes', 'n/a'))}
 
           {patient?.cellPhoneNumber || patient?.email ? (
             <div className={styles.container} key="contact">
@@ -175,6 +177,7 @@ export default function AppointmentInfo(props) {
                   compact
                   className={styles.editButton}
                   onClick={() => props.editAppointment()}
+                  disabled={props.nonApptWritePMS}
                 >
                   Edit Appointment
                 </Button>
@@ -185,7 +188,7 @@ export default function AppointmentInfo(props) {
       </SContainer>
     </Card>
   );
-}
+};
 
 AppointmentInfo.defaultProps = {
   title: '',
@@ -211,4 +214,11 @@ AppointmentInfo.propTypes = {
   title: PropTypes.string,
   extraStyles: PropTypes.objectOf(PropTypes.string),
   timezone: PropTypes.string.isRequired,
+  nonApptWritePMS: PropTypes.bool.isRequired,
 };
+
+const mapStateToProps = ({ auth }) => ({
+  nonApptWritePMS: nonApptWritePMS(auth.get('adapterType')),
+});
+
+export default connect(mapStateToProps, null)(AppointmentInfo);

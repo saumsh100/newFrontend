@@ -10,15 +10,12 @@ import { addAllScheduleFilter, selectAppointment, setMergingPatient } from '../a
 import { receiveEntities } from '../reducers/entities';
 import { httpClient } from '../util/httpClient';
 import { updateEntityRequest } from './fetchEntities';
-import { getUTCDate } from '../components/library';
+import { getUTCDate, nonApptWritePMS } from '../components/library';
 
 export function checkPatientUser(patientUser, requestData) {
   return async function (dispatch, getState) {
-    const { featureFlags } = getState();
-    const apptWrite = featureFlags?.getIn([
-      'flags',
-      'connector-update-practitioner-dailySchedule-chairIds',
-    ]);
+    const { auth } = getState();
+    const apptWrite = !nonApptWritePMS(auth.get('adapterType'));
 
     // AccountId passed up in the query
     const query = { patientUserId: patientUser.get('id') };

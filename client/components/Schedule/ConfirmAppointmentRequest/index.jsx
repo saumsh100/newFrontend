@@ -10,6 +10,7 @@ import { updateEntityRequest } from '../../../thunks/fetchEntities';
 import SendConfirmationEmail from './SendConfirmationEmail';
 import AppointmentSummary from './AppointmentSummary';
 import AppointmentSuggestions from './AppointmentSuggestions';
+import { nonApptWritePMS } from '../../library';
 
 class ConfirmAppointmentRequest extends Component {
   constructor(props) {
@@ -154,15 +155,12 @@ ConfirmAppointmentRequest.defaultProps = {
   selectedAppointment: null,
 };
 
-function mapStateToProps({ auth, entities, featureFlags }) {
+function mapStateToProps({ auth, entities }) {
   const patientUsers = entities.getIn(['patientUsers', 'models']);
   const services = entities.getIn(['services', 'models']);
   const requests = entities.getIn(['requests', 'models']);
   const practitioners = entities.getIn(['practitioners', 'models']);
-  const apptWrite = featureFlags?.getIn([
-    'flags',
-    'connector-update-practitioner-dailySchedule-chairIds',
-  ]);
+  const apptWrite = !nonApptWritePMS(auth.get('adapterType'));
 
   return {
     timezone: auth.get('timezone'),

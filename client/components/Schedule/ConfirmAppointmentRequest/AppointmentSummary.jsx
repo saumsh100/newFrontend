@@ -58,6 +58,7 @@ const AppointmentSummary = (props) => {
 
   const { patientUsers, selectedAppointment, timezone, services, practitioners, requests } = props;
   const { requestModel } = selectedAppointment;
+  if (!requestModel) return null;
   const request = requests.get(requestModel.get('id'));
   const patientUser = patientUsers.get(request.get('patientUserId'));
   const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));

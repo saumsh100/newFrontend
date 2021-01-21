@@ -185,21 +185,19 @@ class Header extends Component {
               {scheduleView === 'chair' ? 'Practitioner View' : 'Chair View'}
             </Button>
             <EnabledFeature
-              predicate={() => true}
-              render={({ flags }) =>
-                (!flags.get('connector-update-practitioner-dailySchedule-chairIds') ? null : (
-                  <Button
-                    dense
-                    compact
-                    color="blue"
-                    onClick={addNewAppointment}
-                    className={styles.headerLinks_add}
-                    data-test-id="button_appointmentQuickAdd"
-                  >
-                    Quick Add
-                  </Button>
-                ))
-              }
+              predicate={({ noAppointmentWrite }) => !noAppointmentWrite}
+              render={() => (
+                <Button
+                  dense
+                  compact
+                  color="blue"
+                  onClick={addNewAppointment}
+                  className={styles.headerLinks_add}
+                  data-test-id="button_appointmentQuickAdd"
+                >
+                  Quick Add
+                </Button>
+              )}
             />
             <Modal
               title="Waitlist"

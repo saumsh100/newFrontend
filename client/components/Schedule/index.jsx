@@ -20,6 +20,7 @@ import {
   DayPicker,
   getUTCDate,
   getUTCDateObj,
+  nonApptWritePMS,
 } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
@@ -573,10 +574,10 @@ ScheduleComponent.defaultProps = {
   patients: null,
 };
 
-const mapStateToProps = ({ router, auth, featureFlags }) => ({
+const mapStateToProps = ({ router, auth }) => ({
   router,
   timezone: auth.get('timezone'),
-  apptWrite: featureFlags?.getIn(['flags', 'connector-update-practitioner-dailySchedule-chairIds']),
+  apptWrite: !nonApptWritePMS(auth.get('adapterType')),
 });
 
 const mapActionsToProps = dispatch =>
