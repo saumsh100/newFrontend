@@ -25,6 +25,7 @@ const options = [{ value: 'Male' }, { value: 'Female' }];
 export default function NewPatientForm({ onSubmit, formName }) {
   return (
     <Form form={formName} onSubmit={onSubmit} ignoreSaveButton data-test-id={formName}>
+      <div>*This will create a new patient in your practice software and in CareCru</div>
       <Field
         required
         name="firstName"

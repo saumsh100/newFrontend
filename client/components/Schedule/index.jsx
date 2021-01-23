@@ -330,7 +330,7 @@ class ScheduleComponent extends Component {
         />
       );
     } else if (mergingPatientData.patientUser) {
-      displayTitle = 'Add New Patient';
+      displayTitle = 'Create New Patient';
       const patientFormName = 'Create New Patient User';
 
       actions = [

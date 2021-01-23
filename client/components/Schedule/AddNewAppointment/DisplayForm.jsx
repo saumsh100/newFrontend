@@ -205,7 +205,7 @@ class DisplayForm extends Component {
             this.props.setPatientSearched(null);
           }}
         >
-          Add New Patient
+          Create New Patient
         </button>
       </div>
     );

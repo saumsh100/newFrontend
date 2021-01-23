@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import { Button, DialogBox } from '../../../library';
+import { Button, DialogBox, nonApptWritePMS } from '../../../library';
 import NewPatientForm from './NewPatientForm';
 import AssignPatientToChatDialog from '../../AssignPatientToChatDialog';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
@@ -90,13 +90,15 @@ class HeaderSection extends Component {
       <div className={styles.header}>
         <SmartFilters />
         <div className={styles.buttonContainer}>
-          <Button onClick={this.setActive} color="blue" data-test-id="button_addNewPatient">
-            Add New Patient
-          </Button>
+          {this.props.apptWrite && (
+            <Button onClick={this.setActive} color="blue" data-test-id="button_addNewPatient">
+              Create New Patient
+            </Button>
+          )}
         </div>
         <DialogBox
           actions={actions}
-          title="Add New Patient"
+          title="Create New Patient"
           type="medium"
           active={this.state.active}
           onEscKeyDown={this.reinitializeState}
@@ -118,7 +120,12 @@ HeaderSection.propTypes = {
   createEntityRequest: PropTypes.func.isRequired,
   destroy: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
+  apptWrite: PropTypes.bool.isRequired,
 };
+
+const mapStateToProps = ({ auth }) => ({
+  apptWrite: !nonApptWritePMS(auth.get('adapterType')),
+});
 
 const mapActionsToProps = dispatch =>
   bindActionCreators(
@@ -128,4 +135,4 @@ const mapActionsToProps = dispatch =>
     dispatch,
   );
 
-export default connect(null, mapActionsToProps)(HeaderSection);
+export default connect(mapStateToProps, mapActionsToProps)(HeaderSection);
