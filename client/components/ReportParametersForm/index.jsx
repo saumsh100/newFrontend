@@ -34,6 +34,18 @@ const defaultComponents = {
   [DROPDOWN]: DropdownSelect,
 };
 
+const reportAccessPermissions = {
+  collectionsDashboard: {
+    denyRoles: ['MANAGER'],
+  },
+  productionDashboard: {
+    denyRoles: ['MANAGER'],
+  },
+  'annual-report-procedures': {
+    denyRoles: ['MANAGER'],
+  },
+};
+
 const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt }, timezone) => {
   if (component === MULTI_SELECT_ACCOUNT && defaultValue === undefined) {
     return [accountId];
@@ -170,10 +182,17 @@ class ReportParametersForm extends Component {
    * @return {{label: string, value: string}[]}
    */
   getReportList() {
-    return Object.entries(this.props.reportsJson).map(([pageKey, value]) => ({
-      value: pageKey,
-      label: value.title,
-    }));
+    return Object.entries(this.props.reportsJson).reduce((acc, [pageKey, value]) => {
+      const deniedUserRoles = reportAccessPermissions[pageKey]?.denyRoles;
+      if (deniedUserRoles?.includes(this.props.userRole)) return acc;
+      return [
+        ...acc,
+        {
+          value: pageKey,
+          label: value.title,
+        },
+      ];
+    }, []);
   }
 
   /**
@@ -325,6 +344,7 @@ ReportParametersForm.propTypes = {
   reports: PropTypes.instanceOf(Map).isRequired,
   reportsJson: PropTypes.shape({}).isRequired,
   shouldHideMultiAccount: PropTypes.bool.isRequired,
+  userRole: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = ({ entities, auth, intelligenceReports, featureFlags }) => {
@@ -349,6 +369,7 @@ const mapStateToProps = ({ entities, auth, intelligenceReports, featureFlags }) 
     reportsJson,
     shouldHideMultiAccount: !(multiSelectOptions && multiSelectOptions.size > 1),
     timezone: auth.get('timezone'),
+    userRole: auth.get('role'),
   };
 };
 
