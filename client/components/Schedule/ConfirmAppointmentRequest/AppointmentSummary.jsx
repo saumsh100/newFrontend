@@ -136,7 +136,7 @@ const AppointmentSummary = (props) => {
           className={styles.buttonContainer_yes}
           onClick={() => confirmAppointment(request, patientUser)}
         >
-          Yes, I have created the appt
+          {firstShow ? 'Yes, I have created the appt' : 'Try Again'}
         </Button>
       </div>
     </div>
