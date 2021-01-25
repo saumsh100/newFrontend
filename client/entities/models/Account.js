@@ -60,6 +60,7 @@ const AccountSchema = {
   useNotificationEmails: false,
   onlineBookingUrl: null,
   canSendRemindersToInactivePatients: null,
+  useRecallWithoutOnlineBooking: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

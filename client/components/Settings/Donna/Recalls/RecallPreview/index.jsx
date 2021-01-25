@@ -12,7 +12,10 @@ import EnabledFeature from '../../../../library/EnabledFeature';
 import styles from './styles.scss';
 
 const RecallSMSPreview = ({ account, recall }) => (
-  <SmsPreview account={account} url={`/api/accounts/${account.id}/recalls/${recall.id}/sms`} />
+  <SmsPreview
+    account={account}
+    url={`/api/accounts/${account.id}/recalls/${recall.id}/sms?t=${new Date().getTime()}`}
+  />
 );
 
 RecallSMSPreview.propTypes = {
@@ -56,7 +59,9 @@ class RecallPreview extends Component {
       .reverse()
       .map((type) => {
         let typePreview = null;
-        const url = `/api/accounts/${account.id}/recalls/${recall.id}/preview`;
+        const url = `/api/accounts/${account.id}/recalls/${
+          recall.id
+        }/preview?t=${new Date().getTime()}`;
         if (type === 'smart_follow_up') {
           typePreview =
             this.state.index === 0 ? (

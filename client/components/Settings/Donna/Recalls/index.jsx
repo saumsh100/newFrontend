@@ -65,6 +65,11 @@ const dueDateOptions = [
   },
 ];
 
+const DEFAULT_TEMPLATE_OPTIONS = {
+  ONLINE_BOOKING: 'ONLINE_BOOKING',
+  PHONE_CALL: 'PHONE_CALL',
+};
+
 class Recalls extends Component {
   constructor(props) {
     super(props);
@@ -84,6 +89,7 @@ class Recalls extends Component {
     this.toggleAdvancedSettings = this.toggleAdvancedSettings.bind(this);
     this.changeRecareDate = this.changeRecareDate.bind(this);
     this.changeHygieneDate = this.changeHygieneDate.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
   }
 
   componentDidMount() {
@@ -95,6 +101,7 @@ class Recalls extends Component {
   }
 
   toggleAdvancedSettings() {
+    this.reinitializeState();
     this.setState({ isAdvancedSettingsOpen: !this.state.isAdvancedSettingsOpen });
   }
 
@@ -109,12 +116,19 @@ class Recalls extends Component {
 
   saveAdvancedSettings(values) {
     const { activeAccount } = this.props;
-    const { recallBufferNumber, recallBufferInterval, recallStartTime, recallEndTime } = values;
+    const {
+      recallBufferNumber,
+      recallBufferInterval,
+      recallStartTime,
+      recallEndTime,
+      useRecallWithoutOnlineBooking: recallBaseTemplate,
+    } = values;
 
     const newValues = {
       recallBuffer: `${recallBufferNumber} ${recallBufferInterval}`,
       recallStartTime,
       recallEndTime,
+      useRecallWithoutOnlineBooking: recallBaseTemplate === DEFAULT_TEMPLATE_OPTIONS.PHONE_CALL,
     };
 
     const alert = {
@@ -135,7 +149,8 @@ class Recalls extends Component {
         values: newValues,
         alert,
       })
-      .then(this.toggleAdvancedSettings);
+      .then(this.toggleAdvancedSettings)
+      .then(this.reinitializeState);
   }
 
   revertToDefaultSettings() {
@@ -148,7 +163,7 @@ class Recalls extends Component {
       return;
     }
 
-    return this.props.revertRecallsTouchpoints({
+    this.props.revertRecallsTouchpoints({
       account: this.props.activeAccount,
       alert: {
         success: {
@@ -162,6 +177,13 @@ class Recalls extends Component {
         },
       },
     });
+
+    this.props.fetchEntities({
+      key: 'accounts',
+      url: '/api/accounts',
+    });
+
+    this.reinitializeState();
   }
 
   newRecall(values) {
@@ -252,6 +274,10 @@ class Recalls extends Component {
     });
   }
 
+  reinitializeState() {
+    this.props.reset('recallAdvancedSettings');
+  }
+
   render() {
     const { activeAccount, recalls, role } = this.props;
     const { selectedRecallId } = this.state;
@@ -278,13 +304,29 @@ class Recalls extends Component {
       },
     ];
 
+    const useRecallWithoutOnlineBooking = activeAccount.useRecallWithoutOnlineBooking
+      ? DEFAULT_TEMPLATE_OPTIONS.PHONE_CALL
+      : DEFAULT_TEMPLATE_OPTIONS.ONLINE_BOOKING;
+
     const arr = activeAccount.recallBuffer.split(' ');
     const advancedValues = {
       recallBufferNumber: arr[0],
       recallBufferInterval: arr[1],
       recallStartTime: activeAccount.recallStartTime,
       recallEndTime: activeAccount.recallEndTime,
+      useRecallWithoutOnlineBooking,
     };
+
+    const updateDefaultTemplateOptions = [
+      {
+        value: DEFAULT_TEMPLATE_OPTIONS.ONLINE_BOOKING,
+        label: 'Direct patients to the online scheduler',
+      },
+      {
+        value: DEFAULT_TEMPLATE_OPTIONS.PHONE_CALL,
+        label: 'Direct patients to call the practice',
+      },
+    ];
 
     const addRecallActions = [
       {
@@ -432,6 +474,7 @@ class Recalls extends Component {
           <AdvancedSettingsForm
             initialValues={advancedValues}
             onSubmit={this.saveAdvancedSettings}
+            updateDefaultTemplateOptions={updateDefaultTemplateOptions}
           />
         </DialogBox>
         <DialogBox
@@ -494,9 +537,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Recalls);

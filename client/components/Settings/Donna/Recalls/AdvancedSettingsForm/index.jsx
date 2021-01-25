@@ -45,7 +45,7 @@ const options = [{ value: 'days',
 
 class AdvancedSettingsForm extends Component {
   render() {
-    const { initialValues, onSubmit } = this.props;
+    const { initialValues, onSubmit, updateDefaultTemplateOptions } = this.props;
     return (
       <Form
         form="recallAdvancedSettings"
@@ -53,6 +53,7 @@ class AdvancedSettingsForm extends Component {
         ignoreSaveButton
         initialValues={initialValues}
         data-test-id="recallAdvancedSettings"
+        enableReinitialize={true}
       >
         <Grid>
           <Row className={styles.label}>Recall Buffer</Row>
@@ -98,6 +99,17 @@ class AdvancedSettingsForm extends Component {
             </Col>
           </Row>
         </Grid>
+        <Grid>
+          <Row className={styles.label}>Update default templates</Row>
+          <Row>
+            <Field
+              component="DropdownSelect"
+              options={updateDefaultTemplateOptions}
+              name="useRecallWithoutOnlineBooking"
+              data-test-id="useRecallWithoutOnlineBooking"
+            />
+          </Row>
+        </Grid>
       </Form>
     );
   }
@@ -106,6 +118,7 @@ class AdvancedSettingsForm extends Component {
 AdvancedSettingsForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  updateDefaultTemplateOptions: PropTypes.array.isRequired,
 };
 
 export default AdvancedSettingsForm;
