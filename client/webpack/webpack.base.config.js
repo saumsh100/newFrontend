@@ -17,14 +17,15 @@ const {
   POLLING_REVENUE_INTERVAL,
   POLLING_VWR_INTERVAL,
   POLLING_UNREAD_CHAT_INTERVAL,
+  SOURCE,
 } = process.env;
 
 const localIdentName = '[name]__[local]___[hash:base64:5]';
 const isDevMode = NODE_ENV === 'development';
+const shouldUseSourceMap = SOURCE === 'true';
 
 module.exports = {
   cache: true,
-  devtool: 'cheap-module-source-map',
   resolve: {
     extensions: ['.mjs', '.js', '.jsx'],
     symlinks: false,
@@ -36,6 +37,7 @@ module.exports = {
     path: path.resolve(projectRoot, 'build'),
     publicPath: '/assets/',
     filename: '[name].[contenthash].js',
+    globalObject: 'this',
   },
 
   context: projectRoot,
@@ -65,12 +67,12 @@ module.exports = {
         '!.gitignore',
       ],
     }),
-
-    new webpack.LoaderOptionsPlugin({ debug: isDevMode }),
   ],
 
   module: {
+    strictExportPresence: true,
     rules: [
+      { parser: { requireEnsure: false } },
       {
         test: /\.mjs$/,
         include: /node_modules/,
@@ -98,7 +100,7 @@ module.exports = {
                 localIdentName,
               },
               importLoaders: 2,
-              sourceMap: isDevMode,
+              sourceMap: isDevMode || shouldUseSourceMap,
             },
           },
           {
@@ -117,7 +119,7 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               outputStyle: 'expanded',
-              sourceMap: isDevMode,
+              sourceMap: isDevMode || shouldUseSourceMap,
             },
           },
         ],
@@ -142,7 +144,7 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              sourceMap: isDevMode,
+              sourceMap: isDevMode || shouldUseSourceMap,
               modules: {
                 localIdentName,
               },

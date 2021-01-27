@@ -140,7 +140,7 @@
     "socket.io-client": "^2.2.0",
     "style-loader": "^1.0.0",
     "subscriptions-transport-ws": "^0.9.9",
-    "terser-webpack-plugin": "^2.1.0",
+    "terser-webpack-plugin": "^2.3.6",
     "url-loader": "^2.1.0",
     "uuid": "^2.0.3",
     "webpack": "^4.39.3",

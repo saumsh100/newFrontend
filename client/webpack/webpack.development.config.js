@@ -9,6 +9,7 @@ const { linkFrontEndModule } = require('./utils');
 
 const developmentConfig = merge(baseConfig, {
   mode: 'development',
+  devtool: 'cheap-module-source-map',
   output: {
     filename: '[name].[hash].js',
   },

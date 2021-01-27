@@ -1,18 +1,18 @@
 {
   "presets": [
-    "@babel/preset-react",
     ["@babel/preset-env",
       {
         "modules": false,
         "targets": { "node": "current" }
       }
-    ]
+    ],
+    "@babel/preset-react"
   ],
   "plugins": [
     "react-hot-loader/babel",
+    "add-react-displayname",
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-optional-chaining",
-    "add-react-displayname",
     ["@babel/plugin-proposal-class-properties",
       {
         "loose": true
