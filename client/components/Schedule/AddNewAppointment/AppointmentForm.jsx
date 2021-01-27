@@ -12,6 +12,7 @@ import {
   Grid,
   isDateValid,
   Row,
+  parseDateWithFormat,
 } from '../../library';
 import { parseNum, notNegative } from '../../library/Form/validate';
 import styles from './styles.scss';
@@ -57,6 +58,9 @@ function AppointmentForm(props) {
     let data;
     if (isDateValid(val, 'LT', true)) {
       data = timeOptions.find(t => t.label === val);
+      if (!data) {
+        data = getTimeWithDST(parseDateWithFormat(val, 'LT', timezone));
+      }
     } else if (isDateValid(val, 'YYYY-MM-DDTHH:mm:ss.sssZ', true)) {
       data = timeOptions.find(t => t.value === val);
       if (!data) {
