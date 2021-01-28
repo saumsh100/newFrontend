@@ -90,7 +90,6 @@ const AppointmentSuggestions = (props) => {
                     setSelected={setSelected}
                     selectedApp={selectedApp}
                     timezone={timezone}
-                    apptWrite={apptWrite}
                   />
                 ))}
               </div>

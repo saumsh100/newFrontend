@@ -490,7 +490,7 @@ class ScheduleComponent extends Component {
                     />
                   </Modal>
                 ) : null}
-                {allFetched && !isAddNewAppointment ? (
+                {allFetched && (!isAddNewAppointment || createNewPatient) ? (
                   <DialogBox
                     title={displayTitle}
                     type={createNewPatient ? 'small' : 'medium'}

@@ -27,7 +27,7 @@ export function checkPatientUser(patientUser, requestData) {
       const checkObjEmpty = !values(data.entities.patients).some(x => x !== undefined);
 
       if (!checkObjEmpty) {
-        return connectedPatientUser(dispatch, requestData, data);
+        return connectedPatientUser(dispatch, requestData, data, patientUser);
       }
 
       return suggestedPatients(dispatch, requestData, patientUser, apptWrite);
@@ -37,7 +37,7 @@ export function checkPatientUser(patientUser, requestData) {
   };
 }
 
-async function connectedPatientUser(dispatch, requestData, data) {
+async function connectedPatientUser(dispatch, requestData, data, patientUser) {
   const patient = Object.values(data.entities.patients)[0];
   const patientId = patient.id;
   dispatch(
@@ -55,20 +55,17 @@ async function connectedPatientUser(dispatch, requestData, data) {
   const appInfo = await httpClient().get(`/api/patients/${patientId}/nextAppointment`, {
     params: query,
   });
+  const params = suggestionParams(patientUser, requestData);
+
   if (appInfo.data.entities.appointments) {
     const appList = getEntities(appInfo.data.entities);
     const exactMatch = [];
     const partialMatch = [];
-    // since the patient is connected, only need match appointment
-    // find exact match by only check start time within 4 hours
+
     appList.forEach((appointment) => {
-      if (inRangeOf(4, 'hours', appointment, requestData)) {
-        exactMatch.push({ ...appointment });
-      } else if (inRangeOf(6, 'months', appointment, requestData)) {
-        partialMatch.push({ ...appointment });
-      }
+      matchPatient(patient, params, appointment, requestData, exactMatch, partialMatch);
     });
-    // find partial matches
+
     if (size(exactMatch)) {
       const selectedApp = exactMatch[0];
       const name = `${patient.firstName} ${patient.lastName}`;
@@ -92,16 +89,7 @@ async function connectedPatientUser(dispatch, requestData, data) {
 }
 
 async function suggestedPatients(dispatch, requestData, patientUser, apptWrite) {
-  const firstName = patientUser.get('firstName');
-  const params = {
-    firstName,
-    lastName: patientUser.get('lastName'),
-    email: patientUser.get('email'),
-    mobilePhoneNumber: patientUser.get('phoneNumber'),
-    birthDate: patientUser.get('birthDate'),
-    requestCreatedAt: requestData.createdAt,
-  };
-
+  const params = suggestionParams(patientUser, requestData);
   const searchResponse = await httpClient().get('/api/patients/suggestions', { params });
   const dataSuggest = searchResponse.data;
   dispatch(
@@ -118,28 +106,11 @@ async function suggestedPatients(dispatch, requestData, patientUser, apptWrite) 
   const appointments = flatten(patientsWithAppts.map(item => item.appointments));
 
   if (size(appointments)) {
-    // try to match patient info and appointment info
     const exactMatch = [];
     const partialMatch = [];
     patientsWithAppts.forEach((patient) => {
       patient.appointments.forEach((appointment) => {
-        const score = matchPatientScore(patient, params);
-        if (
-          inRangeOf(4, 'hours', appointment, requestData)
-          && firstName
-          && lower(firstName) === lower(patient.firstName)
-        ) {
-          if (score >= 3) {
-            exactMatch.push({
-              ...appointment,
-              patient,
-            });
-          } else if (score >= 2) {
-            partialMatch.push({ ...appointment });
-          }
-        } else if (inRangeOf(6, 'months', appointment, requestData) && score >= 2) {
-          partialMatch.push({ ...appointment });
-        }
+        matchPatient(patient, params, appointment, requestData, exactMatch, partialMatch);
       });
     });
 
@@ -187,6 +158,15 @@ async function suggestedPatients(dispatch, requestData, patientUser, apptWrite) 
   return patients;
 }
 
+const suggestionParams = (patientUser, requestData) => ({
+  firstName: patientUser.get('firstName'),
+  lastName: patientUser.get('lastName'),
+  email: patientUser.get('email'),
+  mobilePhoneNumber: patientUser.get('phoneNumber'),
+  birthDate: patientUser.get('birthDate'),
+  requestCreatedAt: requestData.createdAt,
+});
+
 function alertRequestUpdate(name) {
   return {
     success: { body: `Request updated and Email confirmation sent to ${name}` },
@@ -196,6 +176,26 @@ function alertRequestUpdate(name) {
 
 function lower(str) {
   return `${str}`.toLowerCase().trim();
+}
+function matchPatient(patient, params, appointment, requestData, exactMatch, partialMatch) {
+  const { firstName } = params;
+  const score = matchPatientScore(patient, params);
+  if (
+    inRangeOf(4, 'hours', appointment, requestData)
+    && firstName
+    && lower(firstName) === lower(patient.firstName)
+  ) {
+    if (score >= 3) {
+      exactMatch.push({
+        ...appointment,
+        patient,
+      });
+    } else if (score >= 2) {
+      partialMatch.push({ ...appointment });
+    }
+  } else if (inRangeOf(6, 'months', appointment, requestData) && score >= 2) {
+    partialMatch.push({ ...appointment });
+  }
 }
 
 function matchPatientScore(patient, params) {
