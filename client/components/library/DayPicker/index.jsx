@@ -105,7 +105,7 @@ class DayPicker extends Component {
     let displayValue;
 
     // If the defined value is in the 10/8/2017 style, parse the date
-    const onlyDate = parseDateWithFormat(value, ['L', 'l'], timezone);
+    const onlyDate = parseDateWithFormat(value, 'l', timezone, true);
     if (typeof value === 'string' && onlyDate.isValid()) {
       displayValue = onlyDate.format('l');
     } else {
