@@ -59,7 +59,8 @@ function AppointmentForm(props) {
     if (isDateValid(val, 'LT', true)) {
       data = timeOptions.find(t => t.label === val);
       if (!data) {
-        data = getTimeWithDST(parseDateWithFormat(val, 'LT', timezone));
+        const newVal = parseDateWithFormat(`2020-01-31 ${val}`, 'YYYY-MM-DD LT', timezone);
+        data = getTimeWithDST(newVal);
       }
     } else if (isDateValid(val, 'YYYY-MM-DDTHH:mm:ss.sssZ', true)) {
       data = timeOptions.find(t => t.value === val);
