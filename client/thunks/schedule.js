@@ -4,7 +4,6 @@ import values from 'lodash/values';
 import each from 'lodash/each';
 import size from 'lodash/size';
 import filter from 'lodash/filter';
-import { formatPhoneNumber } from '@carecru/isomorphic';
 import flatten from 'lodash/flatten';
 import { addAllScheduleFilter, selectAppointment, setMergingPatient } from '../actions/schedule';
 import { receiveEntities } from '../reducers/entities';
@@ -214,8 +213,7 @@ function matchPatientScore(patient, params) {
     patient.cellPhoneNumber,
     patient.phoneNumber,
   ];
-  const requestPhone = formatPhoneNumber(params.mobilePhoneNumber);
-  if (requestPhone && phones.includes(requestPhone)) {
+  if (params.mobilePhoneNumber && phones.includes(params.mobilePhoneNumber)) {
     score += 1;
   }
   const birthday = patient.birthDate?.slice(0, 10);
