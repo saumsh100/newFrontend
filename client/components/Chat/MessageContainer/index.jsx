@@ -1,6 +1,5 @@
 
 import { OrderedMap } from 'immutable';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
@@ -15,7 +14,16 @@ import {
   selectChat,
   sendChatMessage,
 } from '../../../thunks/chat';
-import { Avatar, Icon, InfiniteScroll, SBody, SContainer, SFooter, Tooltip } from '../../library';
+import {
+  Avatar,
+  getUTCDate,
+  Icon,
+  InfiniteScroll,
+  SBody,
+  SContainer,
+  SFooter,
+  Tooltip,
+} from '../../library';
 import chatTabs from '../consts';
 import UnknownPatient from '../unknownPatient';
 import MarkUnreadButton from './MarkUnreadButton/MarkUnreadButton';
@@ -27,8 +35,8 @@ import styles from './styles.scss';
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 15;
 
-const getMessageTime = message =>
-  moment(message).calendar(null, {
+const getMessageTime = (message, timezone) =>
+  getUTCDate(message, timezone).calendar(null, {
     sameDay: '[Today], h:mm a',
     nextDay: '[Tomorrow]',
     nextWeek: 'dddd',
@@ -40,9 +48,12 @@ const getMessageTime = message =>
 const isWithinTimePeriod = (
   startDate,
   testingDate,
+  timezone,
   maxIntervalValue = 1,
   maxIntervalUnit = 'hours',
-) => moment(startDate).diff(moment(testingDate), maxIntervalUnit) > -Math.abs(maxIntervalValue);
+) =>
+  getUTCDate(startDate, timezone).diff(getUTCDate(testingDate, timezone), maxIntervalUnit)
+  > -Math.abs(maxIntervalValue);
 
 const botAvatar = {
   fullAvatarUrl: '/images/donna.png',
@@ -176,7 +187,7 @@ class MessageContainer extends Component {
   }
 
   groupChatMessages() {
-    const { textMessages } = this.props;
+    const { textMessages, timezone } = this.props;
     const group = [];
     let currentGroup = { messages: [] };
 
@@ -190,7 +201,7 @@ class MessageContainer extends Component {
         return currentGroup.messages.push(message);
       }
 
-      if (!isWithinTimePeriod(currentGroup.time, createdAt)) {
+      if (!isWithinTimePeriod(currentGroup.time, createdAt, timezone)) {
         group.push(currentGroup);
         currentGroup = {
           time: createdAt,
@@ -214,8 +225,8 @@ class MessageContainer extends Component {
     }
 
     const isPending = message =>
-      Boolean(message.get('id')) &&
-      !pendingMessages.includes(pending => pending.id === message.get('id'));
+      Boolean(message.get('id'))
+      && !pendingMessages.includes(pending => pending.id === message.get('id'));
 
     return messages.filter(isPending).map((message) => {
       const isFromPatient = message.get('from') !== activeAccount.twilioPhoneNumber;
@@ -281,8 +292,9 @@ class MessageContainer extends Component {
   }
 
   renderMessagesTree() {
+    const { timezone } = this.props;
     return this.groupChatMessages().map(({ messages, time }, index) => {
-      const heading = messages.length !== 0 ? getMessageTime(time) : 'No messages';
+      const heading = messages.length !== 0 ? getMessageTime(time, timezone) : 'No messages';
 
       return (
         <div className={styles.groupWrapper} key={time || index}>
@@ -359,6 +371,7 @@ function mapStateToProps({ entities, auth, chat }) {
     userId: auth.getIn(['user', 'id']),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
     pendingMessages,
+    timezone: auth.get('timezone'),
   };
 }
 
@@ -390,7 +403,10 @@ MessageContainer.propTypes = {
   }).isRequired,
   selectedChat: PropTypes.shape({ id: PropTypes.string }),
   newChat: PropTypes.shape({ id: PropTypes.string }),
-  selectedPatient: PropTypes.shape({ id: PropTypes.string }),
+  selectedPatient: PropTypes.shape({
+    id: PropTypes.string,
+    cellPhoneNumber: PropTypes.string,
+  }),
   userId: PropTypes.string.isRequired,
   totalChatMessages: PropTypes.number.isRequired,
   selectChatOrCreate: PropTypes.func.isRequired,
@@ -404,6 +420,7 @@ MessageContainer.propTypes = {
     PropTypes.arrayOf(ChatTextMessage),
     PropTypes.instanceOf(OrderedMap),
   ]),
+  timezone: PropTypes.string.isRequired,
 };
 
 MessageContainer.defaultProps = {

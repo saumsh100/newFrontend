@@ -1,5 +1,5 @@
 
-import moment from 'moment';
+import { getUTCDate } from './datetime';
 
 export const SortByFirstName = (a, b) => {
   if (!a.firstName || !b.firstName) return -1;
@@ -9,9 +9,9 @@ export const SortByFirstName = (a, b) => {
 };
 
 export const SortByStartDate = (a, b) => {
-  if (moment(a.startDate).isBefore(moment(b.startDate))) return -1;
-  if (moment(a.startDate).isAfter(moment(b.startDate))) return 1;
-  if (moment(a.createdAt).isBefore(moment(b.createdAt))) return 1;
+  if (getUTCDate(a.startDate).isBefore(getUTCDate(b.startDate))) return -1;
+  if (getUTCDate(a.startDate).isAfter(getUTCDate(b.startDate))) return 1;
+  if (getUTCDate(a.createdAt).isBefore(getUTCDate(b.createdAt))) return 1;
   return 0;
 };
 
@@ -22,22 +22,22 @@ export const SortByName = (a, b) => {
 };
 
 export const SortByCreatedAtDesc = (a, b) => {
-  if (moment(b.createdAt).isBefore(moment(a.createdAt))) return -1;
-  if (moment(b.createdAt).isAfter(moment(a.createdAt))) return 1;
+  if (getUTCDate(b.createdAt).isBefore(getUTCDate(a.createdAt))) return -1;
+  if (getUTCDate(b.createdAt).isAfter(getUTCDate(a.createdAt))) return 1;
   return 0;
 };
 
 export const sortByField = (collection, fieldDate) =>
   collection.sort((a, b) => {
-    if (moment(a[fieldDate]).isBefore(moment(b[fieldDate]))) return -1;
-    if (moment(a[fieldDate]).isAfter(moment(b[fieldDate]))) return 1;
+    if (getUTCDate(a[fieldDate]).isBefore(getUTCDate(b[fieldDate]))) return -1;
+    if (getUTCDate(a[fieldDate]).isAfter(getUTCDate(b[fieldDate]))) return 1;
     return 0;
   });
 
 export const sortByFieldAsc = (collection, fieldDate) =>
   collection.sort((a, b) => {
-    if (moment(b[fieldDate]).isBefore(moment(a[fieldDate]))) return -1;
-    if (moment(b[fieldDate]).isAfter(moment(a[fieldDate]))) return 1;
+    if (getUTCDate(b[fieldDate]).isBefore(getUTCDate(a[fieldDate]))) return -1;
+    if (getUTCDate(b[fieldDate]).isAfter(getUTCDate(a[fieldDate]))) return 1;
     return 0;
   });
 

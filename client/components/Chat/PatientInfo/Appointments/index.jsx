@@ -1,16 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import { connect } from 'react-redux';
-import { Grid, Row, Col } from '../../../library';
+import { Grid, Row, Col, getUTCDate } from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';
 import { patientShape } from '../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
 function Appointments({ patient, timezone }) {
-  const prettyDate = date => (date ? moment.tz(date, timezone).format('MMM DD, YYYY') : 'n/a');
+  const prettyDate = date => (date ? getUTCDate(date, timezone).format('MMM DD, YYYY') : 'n/a');
   return (
     <div>
       <PatientAvatarTitle patient={patient} />

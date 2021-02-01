@@ -1,11 +1,10 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { formatPhoneNumber } from '@carecru/isomorphic';
-import { Icon, ListItem, Avatar } from '../../../library';
+import { Icon, ListItem, Avatar, getTodaysDate, getUTCDate } from '../../../library';
 import { toggleFlagged, selectChat, getChatCategoryCounts } from '../../../../thunks/chat';
 import { isHub } from '../../../../util/hub';
 import UnknownPatient from '../../unknownPatient';
@@ -45,7 +44,7 @@ class ChatListItem extends Component {
   }
 
   renderPatient() {
-    const { patient } = this.props;
+    const { patient, timezone } = this.props;
 
     return patient.firstName || patient.lastName ? (
       <div className={styles.nameAgeWrapper}>
@@ -55,7 +54,9 @@ class ChatListItem extends Component {
             : `${patient.firstName} ${patient.lastName}`}
         </div>
         {patient.birthDate && (
-          <div className={styles.age}>{moment().diff(patient.birthDate, 'years')}</div>
+          <div className={styles.age}>
+            {getTodaysDate(timezone).diff(patient.birthDate, 'years')}
+          </div>
         )}
       </div>
     ) : (
@@ -64,10 +65,10 @@ class ChatListItem extends Component {
   }
 
   render() {
-    const { chat, patient, lastTextMessage, selectedChatId } = this.props;
+    const { chat, patient, lastTextMessage, selectedChatId, timezone } = this.props;
 
-    const mDate = moment(lastTextMessage.createdAt || chat.updatedAt);
-    const daysDifference = moment().diff(mDate, 'days');
+    const mDate = getUTCDate(lastTextMessage.createdAt || chat.updatedAt, timezone);
+    const daysDifference = getTodaysDate(timezone).diff(mDate, 'days');
     const isActive = selectedChatId === chat.id && !isHub();
 
     const messageDate = daysDifference ? mDate.format('YY/MM/DD') : mDate.format('h:mma');
@@ -118,23 +119,26 @@ ChatListItem.propTypes = {
     lastTextMessageId: PropTypes.string,
     isFlagged: PropTypes.bool,
     hasUnread: PropTypes.bool,
+    updatedAt: PropTypes.string,
   }).isRequired,
   patient: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     birthDate: PropTypes.string,
+    cellPhoneNumber: PropTypes.string,
+    isUnknown: PropTypes.bool,
   }).isRequired,
   toggleFlagged: PropTypes.func.isRequired,
   selectChat: PropTypes.func.isRequired,
   selectedChatId: PropTypes.string,
   onChatClick: PropTypes.func,
   getChatCategoryCounts: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 ChatListItem.defaultProps = {
   selectedChatId: null,
-  onChatClick: e =>
-    e,
+  onChatClick: e => e,
 };
 
 function mapStateToProps(state, { chat = {} }) {
@@ -150,6 +154,7 @@ function mapStateToProps(state, { chat = {} }) {
     selectedChatId,
     patient: patients.get(chat.patientId) || UnknownPatient(chat.patientPhoneNumber),
     lastTextMessage,
+    timezone: state.auth.get('timezone'),
   };
 }
 
@@ -164,9 +169,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(ChatListItem);
