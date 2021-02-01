@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import moment from 'moment';
+import { connect } from 'react-redux';
 import { formatPhoneNumber, setDateToTimezone } from '@carecru/isomorphic';
 import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
 import {
@@ -16,13 +16,12 @@ import {
   IconButton,
   Button,
   PointOfContactBadge,
-} from '../../library';
+  getUTCDate,
+} from '..';
 import { patientShape } from '../PropTypeShapes';
 import styles from './styles.scss';
 
-export default function PatientProfile(props) {
-  const { patient, closePopover, isPatientUser, editPatient } = props;
-
+const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, timezone }) => {
   const age = patient.birthDate
     ? setDateToTimezone(Date.now(), null).diff(patient.birthDate, 'years')
     : null;
@@ -106,7 +105,7 @@ export default function PatientProfile(props) {
             <div className={styles.container}>
               <div className={styles.subHeader}>Next Appointment</div>
               <div className={styles.data}>
-                {moment(patient.nextApptDate).format('MMM Do, YYYY h:mm A')}
+                {getUTCDate(patient.nextApptDate, timezone).format('MMM Do, YYYY h:mm A')}
               </div>
             </div>
           ) : (
@@ -117,7 +116,7 @@ export default function PatientProfile(props) {
             <div className={styles.container}>
               <div className={styles.subHeader}>Next Appointment</div>
               <div className={styles.data}>
-                {moment(patient.endDate).format('MMM Do, YYYY h:mm A')}
+                {getUTCDate(patient.endDate, timezone).format('MMM Do, YYYY h:mm A')}
               </div>
             </div>
           ) : null}
@@ -126,7 +125,7 @@ export default function PatientProfile(props) {
             <div className={styles.container}>
               <div className={styles.subHeader}>Last Appointment</div>
               <div className={styles.data}>
-                {moment(patient.lastApptDate).format('MMM Do, YYYY h:mm A')}
+                {getUTCDate(patient.lastApptDate, timezone).format('MMM Do, YYYY h:mm A')}
               </div>
             </div>
           ) : (
@@ -149,7 +148,7 @@ export default function PatientProfile(props) {
           {!isPatientUser && (
             <Button
               color="blue"
-              onClick={() => props.editPatient(patient.id)}
+              onClick={() => editPatient(patient.id)}
               dense
               compact
               className={styles.editButton}
@@ -161,15 +160,19 @@ export default function PatientProfile(props) {
       </SContainer>
     </Card>
   );
-}
+};
 
 PatientProfile.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,
   closePopover: PropTypes.func.isRequired,
   editPatient: PropTypes.func.isRequired,
   isPatientUser: PropTypes.bool,
+  timezone: PropTypes.string.isRequired,
 };
 
 PatientProfile.defaultProps = {
   isPatientUser: false,
 };
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(mapStateToProps, null)(PatientProfile);

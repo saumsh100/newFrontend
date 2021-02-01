@@ -1,9 +1,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { formatPhoneNumber } from '@carecru/isomorphic';
-import { Icon } from '../../../library';
+import { connect } from 'react-redux';
+import { getUTCDate, Icon } from '../../../library';
 import PatientPopover from '../../../library/PatientPopover';
 import { patientShape } from '../../../library/PropTypeShapes';
 import styles from '../styles.scss';
@@ -21,7 +21,7 @@ const formatDuration = (answered, duration) => {
   return duration > 60 ? `${Math.round(duration / 60)}min ${duration % 60}sec` : `${duration}s`;
 };
 
-export default function CallListItem(props) {
+const CallListItem = (props) => {
   const {
     callSource,
     startTime,
@@ -33,6 +33,7 @@ export default function CallListItem(props) {
     recording,
     index,
     patient,
+    timezone,
   } = props;
 
   const phoneClass = answered ? styles.phone : styles.phoneMissed;
@@ -71,7 +72,7 @@ export default function CallListItem(props) {
           </div>
         )}
       </div>
-      <div className={styles.col}>{moment(startTime).format('MMM DD, h:mma')}</div>
+      <div className={styles.col}>{getUTCDate(startTime, timezone).format('MMM DD, h:mma')}</div>
       <div className={styles.col}>{durationMissed}</div>
       <div className={styles.col}>{callerCity}</div>
       <div className={styles.col}>
@@ -84,7 +85,7 @@ export default function CallListItem(props) {
       <div className={styles.colEmpty} />
     </div>
   );
-}
+};
 
 CallListItem.propTypes = {
   callSource: PropTypes.string,
@@ -97,6 +98,7 @@ CallListItem.propTypes = {
   answered: PropTypes.bool,
   index: PropTypes.number,
   patient: PropTypes.shape(patientShape).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 CallListItem.defaultProps = {
@@ -110,3 +112,9 @@ CallListItem.defaultProps = {
   answered: false,
   index: 0,
 };
+
+const mapStateToProps = ({ auth }) => ({
+  timezone: auth.get('timezone'),
+});
+
+export default connect(mapStateToProps, null)(CallListItem);

@@ -2,12 +2,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import { Map, Record } from 'immutable';
 import CallsGraph from './CallsGraph';
 import CallsTable from './CallsTable';
 import CallInfo from './CallInfo';
-import { Card, DayPickerRange, DialogBox } from '../library';
+import { Card, DayPickerRange, DialogBox, DateTimeObj } from '../library';
 import styles from './styles.scss';
 
 function adjustTableHeight(callSize, containerHeight) {
@@ -16,11 +15,13 @@ function adjustTableHeight(callSize, containerHeight) {
       maxHeight: `${containerHeight + 30}px`,
       marginBottom: '15px',
     };
-  } else if (callSize > 0 && callSize <= 5) {
+  }
+  if (callSize > 0 && callSize <= 5) {
     return {
       flex: 1,
     };
-  } else if (callSize > 5) {
+  }
+  if (callSize > 5) {
     return {
       marginBottom: '15px',
       flex: 1,
@@ -74,6 +75,7 @@ class CallsBody extends Component {
       callsLength,
       handleCallUpdate,
       fetchingCalls,
+      timezone,
     } = this.props;
 
     const wasAllFetched = wasStatsFetched && wasCallsFetched;
@@ -101,7 +103,7 @@ class CallsBody extends Component {
                 onChange={handleDateRange}
                 monthsToShow={2}
                 maxDays={60}
-                timezone={this.props.timezone}
+                timezone={timezone}
               />
             </div>
           </div>
@@ -139,7 +141,11 @@ class CallsBody extends Component {
               custom
             >
               {this.state.selectedCall && (
-                <CallInfo call={this.state.selectedCall} handleCallUpdate={handleCallUpdate} />
+                <CallInfo
+                  call={this.state.selectedCall}
+                  handleCallUpdate={handleCallUpdate}
+                  timezone={timezone}
+                />
               )}
             </DialogBox>
           )}
@@ -151,8 +157,8 @@ class CallsBody extends Component {
 
 CallsBody.propTypes = {
   callGraphStats: PropTypes.instanceOf(Record),
-  startDate: PropTypes.instanceOf(moment),
-  endDate: PropTypes.instanceOf(moment),
+  startDate: PropTypes.instanceOf(DateTimeObj),
+  endDate: PropTypes.instanceOf(DateTimeObj),
   handleDateRange: PropTypes.func,
   wasStatsFetched: PropTypes.bool,
   wasCallsFetched: PropTypes.bool,

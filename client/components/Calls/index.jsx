@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Map, Record } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,6 +12,7 @@ import {
   updateEntityRequest,
 } from '../../thunks/fetchEntities';
 import { deleteAllEntity } from '../../reducers/entities';
+import { getUTCDate, getTodaysDate } from '../library';
 
 const paramBuilder = (startDate, endDate, accountId, skip, limit) => ({
   startDate: startDate.toDate(),
@@ -26,8 +26,8 @@ class Calls extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      endDate: moment().endOf('day'),
-      startDate: moment().subtract(1, 'months'),
+      endDate: getTodaysDate(props.timezone).endOf('day'),
+      startDate: getTodaysDate(props.timezone).subtract(1, 'months'),
       skip: 0,
       limit: 25,
       moreData: false,
@@ -50,12 +50,12 @@ class Calls extends Component {
     this.fetchCallData(params).then((data) => {
       const dataLength = Object.keys(data[1].calls || {}).length;
       const moreData = dataLength === this.state.limit;
-      this.setState({
-        skip: this.state.skip + dataLength,
+      this.setState(prevState => ({
+        skip: prevState.skip + dataLength,
         moreData,
         callsLength: dataLength,
         accountId: decodedToken.activeAccountId,
-      });
+      }));
     });
   }
 
@@ -64,13 +64,14 @@ class Calls extends Component {
   }
 
   handleDateRange(values) {
-    const startDate = moment(values.from);
-    const endDate = moment(values.to);
+    const { timezone } = this.props;
+    const startDate = getUTCDate(values.from, timezone);
+    const endDate = getUTCDate(values.to, timezone);
 
     if (
-      startDate.isValid() &&
-      endDate.isValid() &&
-      !(startDate.toISOString() === endDate.toISOString())
+      startDate.isValid()
+      && endDate.isValid()
+      && !(startDate.toISOString() === endDate.toISOString())
     ) {
       this.props.deleteAllEntity('calls');
 
@@ -164,8 +165,7 @@ class Calls extends Component {
 
 function mapStateToProps({ entities, apiRequests, auth }) {
   const callGraphStats = apiRequests.get('callGraphStats') || null;
-  const wasStatsFetched =
-    (apiRequests.get('callGraphStats') && apiRequests.get('callGraphStats').wasFetched) || null;
+  const wasStatsFetched = (apiRequests.get('callGraphStats') && apiRequests.get('callGraphStats').wasFetched) || null;
 
   const wasCallsFetched = (apiRequests.get('calls') && apiRequests.get('calls').wasFetched) || null;
 
@@ -201,6 +201,7 @@ Calls.propTypes = {
   deleteAllEntity: PropTypes.func.isRequired,
   wasCallsFetched: PropTypes.bool,
   wasStatsFetched: PropTypes.bool,
+  timezone: PropTypes.string.isRequired,
 };
 
 Calls.defaultProps = {

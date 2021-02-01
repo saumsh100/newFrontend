@@ -1,12 +1,12 @@
 
 import React, { Component } from 'react';
-import moment from 'moment';
 import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
 import { formatPhoneNumber } from '@carecru/isomorphic';
 import InfoDump from '../../Patients/Shared/InfoDump';
 import { callShape } from '../../library/PropTypeShapes';
 import styles from './styles.scss';
+import { getUTCDate } from '../../library';
 
 class CallInfo extends Component {
   constructor(props) {
@@ -42,9 +42,8 @@ class CallInfo extends Component {
   }
 
   render() {
-    const { call } = this.props;
-    const callerId =
-      call.callerCity && call.callerState ? `${call.callerCity}, ${call.callerState}` : null;
+    const { call, timezone } = this.props;
+    const callerId = call.callerCity && call.callerState ? `${call.callerCity}, ${call.callerState}` : null;
 
     return (
       <div className={styles.callInfoModal}>
@@ -68,7 +67,7 @@ class CallInfo extends Component {
           <div className={styles.row}>
             <InfoDump
               label="Received"
-              data={moment(call.startTime).format('MMM DD, YYYY h:mm A')}
+              data={getUTCDate(call.startTime, timezone).format('MMM DD, YYYY h:mm A')}
             />
             <InfoDump label="Phone number" data={formatPhoneNumber(call.callerNum)} />
           </div>
@@ -96,6 +95,7 @@ class CallInfo extends Component {
 
 CallInfo.propTypes = {
   call: PropTypes.shape(callShape).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 export default CallInfo;

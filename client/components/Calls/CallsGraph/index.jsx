@@ -1,9 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Record } from 'immutable';
-import { LineChart } from '../../library';
+import { LineChart, DateTimeObj } from '../../library';
 import styles from './styles.scss';
 
 function CallsGraph(props) {
@@ -29,7 +28,8 @@ function CallsGraph(props) {
       if (typeof value === 'number' && Number.isSafeInteger(value)) {
         if (maxCalls > 10 && value % 5 === 0) {
           return value;
-        } else if (value % 2 === 0) {
+        }
+        if (value % 2 === 0) {
           return value;
         }
       }
@@ -41,11 +41,9 @@ function CallsGraph(props) {
 
       if (index % 2 !== 0 && x.length < 45 && typeof value !== 'number') {
         return value;
-      } else if (
-        x.length > 45 &&
-        typeof value !== 'number' &&
-        index % 5 === 0
-      ) {
+      }
+
+      if (x.length > 45 && typeof value !== 'number' && index % 5 === 0) {
         return value;
       }
 
@@ -99,8 +97,7 @@ function CallsGraph(props) {
   return (
     <div className={styles.callsGraphContainer}>
       <div className={styles.subHeader}>
-        {props.startDate.format('MMMM DD, YYYY')} -{' '}
-        {props.endDate.format('MMMM DD, YYYY')}
+        {props.startDate.format('MMMM DD, YYYY')} - {props.endDate.format('MMMM DD, YYYY')}
       </div>
       <div className={styles.callGraph}>
         <LineChart
@@ -116,9 +113,9 @@ function CallsGraph(props) {
 }
 
 CallsGraph.propTypes = {
-  startDate: PropTypes.instanceOf(moment),
-  endDate: PropTypes.instanceOf(moment),
-  callGraphStats: PropTypes.instanceOf(Record),
+  startDate: PropTypes.instanceOf(DateTimeObj).isRequired,
+  endDate: PropTypes.instanceOf(DateTimeObj).isRequired,
+  callGraphStats: PropTypes.instanceOf(Record).isRequired,
 };
 
 export default CallsGraph;

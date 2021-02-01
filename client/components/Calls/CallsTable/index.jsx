@@ -1,9 +1,8 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import moment from 'moment';
 import { Map, Record } from 'immutable';
-import { InfiniteScroll } from '../../library';
+import { getUTCDate, InfiniteScroll } from '../../library';
 import CallListItem from './CallListItem';
 import styles from './styles.scss';
 
@@ -20,7 +19,7 @@ class CallsTable extends Component {
 
     const sortedCalls = calls
       .toArray()
-      .sort((a, b) => moment(b.startTime).diff(a.startTime))
+      .sort((a, b) => getUTCDate(b.startTime).diff(a.startTime))
       .filter((call, index) => index < callsLength);
 
     const renderHeaderColumns = () => (

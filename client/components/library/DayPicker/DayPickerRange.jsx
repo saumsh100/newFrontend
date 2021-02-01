@@ -1,7 +1,6 @@
 
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import classnames from 'classnames';
 import Popover from 'react-popover';
 import 'react-day-picker/lib/style.css';
@@ -12,6 +11,7 @@ import Button from '../Button';
 import { StyleExtender } from '../../Utils/Themer';
 import { rangePickerTheme } from './defaultTheme';
 import styles from './styles.scss';
+import { getISODate, getUTCDate, isDateValid } from '../util/datetime';
 
 function isSelectingFirstDay(startDate, endDate, day) {
   const isBeforeFirstDay = startDate && DateUtils.isDayBefore(day, startDate);
@@ -19,10 +19,10 @@ function isSelectingFirstDay(startDate, endDate, day) {
   return !startDate || isBeforeFirstDay || isRangeSelected;
 }
 
-function isSameAsInitialDates(initFrom, initTo, startDate, endDate) {
+function isSameAsInitialDates(initFrom, initTo, startDate, endDate, timezone) {
   return (
-    moment(initFrom).toISOString() === moment(startDate).toISOString() &&
-    moment(initTo).toISOString() === moment(endDate).toISOString()
+    getISODate(initFrom, timezone) === getISODate(startDate, timezone)
+    && getISODate(initTo, timezone) === getISODate(endDate, timezone)
   );
 }
 
@@ -48,9 +48,9 @@ class DayPickerRange extends Component {
     const { from, to, maxDays } = this.props;
 
     return {
-      from: moment(from).isValid() ? from : '',
-      to: moment(to).isValid() ? to : '',
-      enteredTo: moment(to).isValid() ? to : '',
+      from: isDateValid(from) ? from : '',
+      to: isDateValid(to) ? to : '',
+      enteredTo: isDateValid(to) ? to : '',
       isOpen: false,
       maxDays,
       toInputFocused: false,
@@ -95,8 +95,8 @@ class DayPickerRange extends Component {
     const { disabledDays } = this.props;
 
     if (
-      (disabledDays.before && DateUtils.isDayBefore(pickedDay, disabledDays.before)) ||
-      (disabledDays.after && DateUtils.isDayAfter(pickedDay, disabledDays.after))
+      (disabledDays.before && DateUtils.isDayBefore(pickedDay, disabledDays.before))
+      || (disabledDays.after && DateUtils.isDayAfter(pickedDay, disabledDays.after))
     ) {
       return null;
     }
@@ -130,7 +130,8 @@ class DayPickerRange extends Component {
         to: this.state.to,
       });
       return this.handleFromInput(pickedDay);
-    } else if (toInputFocused || !to || DateUtils.isDayAfter(pickedDay, from)) {
+    }
+    if (toInputFocused || !to || DateUtils.isDayAfter(pickedDay, from)) {
       this.props.onChange({
         from: this.state.from,
         to: pickedDay,
@@ -155,10 +156,10 @@ class DayPickerRange extends Component {
     }
 
     if (
-      !from ||
-      (from &&
-        to &&
-        (DateUtils.isDayBefore(pickedDay, from) || DateUtils.isDayAfter(pickedDay, to)))
+      !from
+      || (from
+        && to
+        && (DateUtils.isDayBefore(pickedDay, from) || DateUtils.isDayAfter(pickedDay, to)))
     ) {
       this.setState(
         {
@@ -178,10 +179,10 @@ class DayPickerRange extends Component {
 
     // If both dates are set and the user clicks on a date between these dates
     if (
-      from &&
-      to &&
-      DateUtils.isDayAfter(pickedDay, from) &&
-      DateUtils.isDayBefore(pickedDay, to)
+      from
+      && to
+      && DateUtils.isDayAfter(pickedDay, from)
+      && DateUtils.isDayBefore(pickedDay, to)
     ) {
       this.setState(
         {
@@ -205,14 +206,18 @@ class DayPickerRange extends Component {
    */
   handleToInput(day) {
     const { from, maxDays } = this.state;
+    const { timezone } = this.props;
 
     if (!from) {
       return '';
     }
 
     let fromDate = from;
-    if (maxDays && moment(from).diff(moment(day), 'days') * -1 > maxDays) {
-      fromDate = moment(day)
+    if (
+      maxDays
+      && getUTCDate(from, timezone).diff(getUTCDate(day, timezone), 'days') * -1 > maxDays
+    ) {
+      fromDate = getUTCDate(day, timezone)
         .subtract(maxDays, 'days')
         .toDate();
     }
@@ -235,8 +240,8 @@ class DayPickerRange extends Component {
     const { disabledDays } = this.props;
 
     if (
-      (disabledDays.before && DateUtils.isDayBefore(day, disabledDays.before)) ||
-      (disabledDays.after && DateUtils.isDayAfter(day, disabledDays.after))
+      (disabledDays.before && DateUtils.isDayBefore(day, disabledDays.before))
+      || (disabledDays.after && DateUtils.isDayAfter(day, disabledDays.after))
     ) {
       return '';
     }
@@ -268,9 +273,15 @@ class DayPickerRange extends Component {
   applyDateRange() {
     const { from, to } = this.state;
     const initDates = this.getInitialState();
-    const isSameDate = isSameAsInitialDates(initDates.from, initDates.to, from, to);
+    const isSameDate = isSameAsInitialDates(
+      initDates.from,
+      initDates.to,
+      from,
+      to,
+      this.props.timezone,
+    );
 
-    if (moment(from).isValid() && moment(to).isValid() && !isSameDate) {
+    if (isDateValid(from) && isDateValid(to) && !isSameDate) {
       this.props.onChange({
         from,
         to,
@@ -330,8 +341,8 @@ class DayPickerRange extends Component {
 
     const format = 'MMM DD YYYY';
 
-    const fromFormatted = from && moment(from).isValid() && (moment(from).format(format) || '');
-    const toFormatted = to && moment(to).isValid() && (moment(to).format(format) || '');
+    const fromFormatted = from && isDateValid(from) && (getUTCDate(from, timezone).format(format) || '');
+    const toFormatted = to && isDateValid(to) && (getUTCDate(to, timezone).format(format) || '');
 
     const fieldsWrapperImplementation = fieldsWrapper({
       from: {
