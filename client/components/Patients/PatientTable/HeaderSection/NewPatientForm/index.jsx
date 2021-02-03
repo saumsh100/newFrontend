@@ -31,7 +31,7 @@ export default function NewPatientForm({ onSubmit, formName, initialValues = {} 
     const { firstName, lastName, mobilePhoneNumber, birthDate } = values;
     const phoneNumber = mobilePhoneNumber.replace(/\s/g, '');
     if (firstName && lastName && mobilePhoneNumber && birthDate) {
-      const res = await httpClient().get('api/patients/find', {
+      const res = await httpClient().get('/api/patients/find', {
         params: {
           firstName: firstName?.trim(),
           lastName: lastName?.trim(),
