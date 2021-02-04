@@ -29,7 +29,7 @@ export default function NewPatientForm({ onSubmit, formName, initialValues = {} 
 
   const isPatientDuplicate = async (values) => {
     const { firstName, lastName, mobilePhoneNumber, birthDate } = values;
-    const phoneNumber = mobilePhoneNumber.replace(/\s/g, '');
+    const phoneNumber = mobilePhoneNumber?.replace(/\s/g, '');
     if (firstName && lastName && mobilePhoneNumber && birthDate) {
       const res = await httpClient().get('/api/patients/find', {
         params: {

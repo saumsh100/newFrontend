@@ -96,16 +96,18 @@ class HeaderSection extends Component {
             </Button>
           )}
         </div>
-        <DialogBox
-          actions={actions}
-          title="Create New Patient"
-          type="medium"
-          active={this.state.active}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
-        >
-          <NewPatientForm onSubmit={this.handleSubmit} formName={this.state.formName} />
-        </DialogBox>
+        {this.state.active && (
+          <DialogBox
+            actions={actions}
+            title="Create New Patient"
+            type="medium"
+            active={this.state.active}
+            onEscKeyDown={this.reinitializeState}
+            onOverlayClick={this.reinitializeState}
+          >
+            <NewPatientForm onSubmit={this.handleSubmit} formName={this.state.formName} />
+          </DialogBox>
+        )}
         <AssignPatientToChatDialog
           callback={this.reinitializeState}
           active={this.state.assignPatientToChatModalActive}
