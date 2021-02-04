@@ -54,7 +54,7 @@ export default function NewPatientForm({ onSubmit, formName, initialValues = {} 
           onClose={() => {
             setShowWarning(false);
           }}
-          message="A patient already exists with this first name, last name, birthday and phone number. Please check all fields before adding this patient."
+          message="A patient already exists with this first name, last name, phone number and birth date. Please check all fields before adding this patient."
         />
       )}
       <Form
