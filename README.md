@@ -46,6 +46,7 @@ Make sure you have access to CareCru's github repository To run CareCru applicat
 2. Create a `.env` file and copy the following content into it:
 ```
 NODE_ENV=development
+DEBUG=true
 NPM_TOKEN=
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
@@ -130,7 +131,7 @@ You can run different jobs separately.
 * `npm run start:jobs` - runs the CareCru jobs those including:
     - send reminders
     - send recalls
-    - send reviews 
+    - send reviews
     - patient cache jobs - that updates information on the patients table for easier querying on the API. eg. first, next and last appointment dates and hygiene and recalls due dates.
 
 # Hot Reloading

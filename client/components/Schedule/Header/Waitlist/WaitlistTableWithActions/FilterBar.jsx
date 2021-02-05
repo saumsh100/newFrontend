@@ -1,5 +1,5 @@
 
-import React, { memo, useEffect, useState, useCallback, useMemo } from 'react';
+import React, { memo, useEffect, useState, useMemo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DayOfWeekSegment from './FilterSegments/DayOfWeekSegment';
@@ -12,7 +12,9 @@ import TimesSegment from './FilterSegments/TimesSegment';
 import { generatePractitionersFilter, generateTimesFilter } from '../helpers';
 import { sortPractitionersAlphabetical } from '../../../../Utils';
 import styles from './styles.scss';
+import { practitionerShape } from '../../../../library/PropTypeShapes';
 
+/* eslint-disable react-hooks/exhaustive-deps */
 const FilterBar = ({
   updateSegmentedWaitList,
   waitlist,
@@ -50,12 +52,17 @@ const FilterBar = ({
     },
   });
 
-  const updateFilterRule = useCallback((key, val) => {
-    setFilterRules(prev => ({
-      ...prev,
-      [key]: val,
-    }));
-  }, []);
+  const updateFilterRule = (key, val) => {
+    setFilterRules((prev) => {
+      if (!prev[key] || !prev[key] !== val) {
+        return {
+          ...prev,
+          [key]: val,
+        };
+      }
+      return prev;
+    });
+  };
 
   const rowCountByDayOfWeek = useMemo(() => {
     const dayOfWeekKeys = Object.keys(DEFAULT_DAY_OF_WEEK);
@@ -90,38 +97,35 @@ const FilterBar = ({
     updateSegmentedWaitList(filteredWaitList);
   }, [filterRules, waitlist, updateSegmentedWaitList]);
 
+  const updateReasons = useMemo(() => val => updateFilterRule('reasons', val), []);
+  const updatePractitioners = useMemo(() => val => updateFilterRule('practitioners', val), []);
+  const updateUnitsRule = useMemo(() => val => updateFilterRule('units', val), []);
+  const updateDayOfWeek = useMemo(() => val => updateFilterRule('dayOfWeek', val), []);
+  const updateSelectedTimes = useMemo(() => val => updateFilterRule('times', val), []);
+
   return (
     <div className={styles.filterBarWrapper}>
       <div className={styles.segmentWrapper}>
-        <ReasonSegment
-          selectedReasons={filterRules.reasons}
-          updateReasons={val => updateFilterRule('reasons', val)}
-        />
+        <ReasonSegment selectedReasons={filterRules.reasons} updateReasons={updateReasons} />
       </div>
       <div className={styles.segmentWrapper}>
         <PractitionersSegment
           practitionerRule={filterRules.practitioners}
-          updatePractitioners={val => updateFilterRule('practitioners', val)}
+          updatePractitioners={updatePractitioners}
         />
       </div>
       <div className={styles.segmentWrapper}>
-        <UnitSegment
-          unitsRule={filterRules.units}
-          updateUnitsRule={val => updateFilterRule('units', val)}
-        />
+        <UnitSegment unitsRule={filterRules.units} updateUnitsRule={updateUnitsRule} />
       </div>
       <div className={styles.segmentWrapper}>
         <DayOfWeekSegment
           selectedDayOfWeek={filterRules.dayOfWeek}
-          updateDayOfWeek={val => updateFilterRule('dayOfWeek', val)}
+          updateDayOfWeek={updateDayOfWeek}
           rowCountByDayOfWeek={rowCountByDayOfWeek}
         />
       </div>
       <div className={styles.segmentWrapper}>
-        <TimesSegment
-          timesRule={filterRules.times}
-          updateSelectedTimes={val => updateFilterRule('times', val)}
-        />
+        <TimesSegment timesRule={filterRules.times} updateSelectedTimes={updateSelectedTimes} />
       </div>
     </div>
   );
@@ -148,7 +152,7 @@ FilterBar.propTypes = {
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
   segmentedWaitList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
   timezone: PropTypes.string.isRequired,
-  practitioners: PropTypes.arrayOf(PropTypes.instanceOf(Map)),
+  practitioners: PropTypes.arrayOf(PropTypes.shape(practitionerShape)),
   setIsFilterActive: PropTypes.func.isRequired,
 };
 

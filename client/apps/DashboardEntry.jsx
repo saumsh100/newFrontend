@@ -1,4 +1,5 @@
 
+import '../components/library/util/why-did-you-render';
 import React from 'react';
 import { render } from 'react-dom';
 import { extendMoment } from 'moment-range';
@@ -23,6 +24,7 @@ import { identifyPracticeUser } from '../util/fullStory';
 import { receiveEntities } from '../reducers/entities';
 import ErrorBoundary from '../components/ErrorBoundary';
 
+/* eslint-disable camelcase */
 if (process.env.NODE_ENV === 'production') {
   window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
 }
@@ -65,13 +67,13 @@ load()(store.dispatch).then(() => {
     }
 
     SubscriptionManager.accountId = accountId;
+    const accounts = {
+      [accountId]: auth.get('account').toJS(),
+    };
+
     store.dispatch(
       receiveEntities({
-        entities: {
-          accounts: {
-            [accountId]: auth.get('account').toJS(),
-          },
-        },
+        entities: { accounts },
       }),
     );
 

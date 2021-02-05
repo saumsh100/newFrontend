@@ -1,21 +1,18 @@
 
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DialogBox, Modal, Icon } from '../library';
 import { push } from 'connected-react-router';
+import { Modal } from '../library';
 import { unsetSelectedCallId } from '../../actions/caller';
-import CallerDisplay from './CallerDisplay/';
-import CallerDisplayUnknown from './CallerDisplayUnknown/';
+import CallerDisplay from './CallerDisplay';
+import CallerDisplayUnknown from './CallerDisplayUnknown';
 import { setScheduleDate } from '../../actions/schedule';
-import {
-  fetchEntitiesRequest,
-  updateEntityRequest,
-} from '../../thunks/fetchEntities';
-import styles from './styles.scss';
+import { fetchEntitiesRequest, updateEntityRequest } from '../../thunks/fetchEntities';
+import { patientShape } from '../library/PropTypeShapes';
 
-class CallerModal extends Component {
+class CallerModal extends PureComponent {
   constructor(props) {
     super(props);
     this.clearSelectedCall = this.clearSelectedCall.bind(this);
@@ -29,11 +26,13 @@ class CallerModal extends Component {
     const {
       callerId,
       call,
-      patient,
-      updateEntityRequest,
-      push,
-      setScheduleDate,
+      updateEntityRequest: updateEntityRequestLocal,
+      push: pushLocal,
+      setScheduleDate: setScheduleDateLocal,
+      patient: patientMap,
     } = this.props;
+
+    const patient = patientMap?.toJS();
 
     let callDisplay = null;
 
@@ -44,9 +43,9 @@ class CallerModal extends Component {
             call={call}
             patient={patient}
             clearSelectedCall={this.clearSelectedCall}
-            updateEntityRequest={updateEntityRequest}
-            push={push}
-            setScheduleDate={setScheduleDate}
+            updateEntityRequest={updateEntityRequestLocal}
+            push={pushLocal}
+            setScheduleDate={setScheduleDateLocal}
           />
         );
       } else {
@@ -54,7 +53,7 @@ class CallerModal extends Component {
           <CallerDisplayUnknown
             call={call}
             clearSelectedCall={this.clearSelectedCall}
-            updateEntityRequest={updateEntityRequest}
+            updateEntityRequest={updateEntityRequestLocal}
           />
         );
       }
@@ -74,23 +73,23 @@ class CallerModal extends Component {
 }
 
 CallerModal.propTypes = {
-  callerId: PropTypes.string,
-  call: PropTypes.object,
-  patient: PropTypes.object,
-  unsetSelectedCallId: PropTypes.func,
-  updateEntityRequest: PropTypes.func,
-  push: PropTypes.func,
-  setScheduleDate: PropTypes.func,
+  callerId: PropTypes.string.isRequired,
+  call: PropTypes.shape({}).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
+  unsetSelectedCallId: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
+  setScheduleDate: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ entities, caller, apiRequests }) {
+function mapStateToProps({ entities, caller }) {
   const callerId = caller.get('callerId');
   const call = entities.getIn(['calls', 'models', callerId]);
   const patients = entities.getIn(['patients', 'models']);
   let patient = null;
 
   if (callerId && call.patientId) {
-    patient = patients.get(call.patientId).toJS();
+    patient = patients.get(call.patientId) || null;
   }
 
   return {
@@ -113,9 +112,4 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
-
-export default enhance(CallerModal);
+export default connect(mapStateToProps, mapActionsToProps)(CallerModal);

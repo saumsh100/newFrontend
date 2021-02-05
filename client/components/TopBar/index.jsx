@@ -49,7 +49,10 @@ const ActiveAccountButton = ({ account, onClick }) => (
 );
 
 ActiveAccountButton.propTypes = {
-  account: PropTypes.shape({ id: PropTypes.string }).isRequired,
+  account: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }).isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
@@ -102,8 +105,6 @@ class TopBar extends Component {
     const {
       isCollapsed,
       setIsCollapsed,
-      accounts,
-      activeAccount,
       location,
       withEnterprise,
       enterprise,
@@ -111,7 +112,20 @@ class TopBar extends Component {
       role,
       isAuth,
       isSearchCollapsed,
+      isSuperAdmin,
+      accountsFlagMap,
+      enterpriseAccountsMap,
+      activeAccountMap,
     } = this.props;
+
+    const allowedAccounts = accountsFlagMap && accountsFlagMap.toJS().map(a => a.value);
+    const enterpriseAccounts = Object.values(enterpriseAccountsMap.toJS()) || [];
+    const accountsList = allowedAccounts.length > 0
+      ? enterpriseAccounts.filter(a => allowedAccounts.indexOf(a.id) > -1)
+      : enterpriseAccounts;
+    const accounts = isSuperAdmin ? enterpriseAccounts : accountsList;
+
+    const activeAccount = activeAccountMap && activeAccountMap.toJS();
 
     if (!isAuth) return null;
 
@@ -224,7 +238,7 @@ class TopBar extends Component {
               predicate={({ flags, userRole }) => {
                 // I know it is kinda wet but I'd rather keep it more legible for now
                 const shouldShow = (subPredicate = true) =>
-                  subPredicate && (accounts.length > 1 && withEnterprise && !!activeAccount);
+                  subPredicate && accounts.length > 1 && withEnterprise && !!activeAccount;
 
                 const shouldShowOwner = shouldShow(
                   userRole === 'OWNER' && flags.get('show-account-switcher-to-owners'),
@@ -318,19 +332,22 @@ TopBar.propTypes = {
   push: PropTypes.func.isRequired,
   setIsSearchCollapsed: PropTypes.func.isRequired,
   isSearchCollapsed: PropTypes.bool.isRequired,
-  accounts: PropTypes.arrayOf(Object).isRequired,
   enterprise: PropTypes.instanceOf(Map).isRequired,
   user: PropTypes.instanceOf(Map).isRequired,
   role: PropTypes.string.isRequired,
-  activeAccount: PropTypes.shape(accountShape),
   runOnDemandSync: PropTypes.func.isRequired,
   withEnterprise: PropTypes.bool.isRequired,
   isAuth: PropTypes.bool,
+  isSuperAdmin: PropTypes.bool,
+  activeAccountMap: PropTypes.instanceOf(Map),
+  accountsFlagMap: PropTypes.instanceOf(Map).isRequired,
+  enterpriseAccountsMap: PropTypes.instanceOf(Map).isRequired,
 };
 
 TopBar.defaultProps = {
   isAuth: false,
-  activeAccount: {},
+  isSuperAdmin: false,
+  activeAccountMap: null,
 };
 
 export default withAuthProps(withRouter(TopBar));

@@ -29,6 +29,7 @@ export default handleActions(
     },
 
     [SET_WAITING_ROOM_QUEUE](state, { payload }) {
+      if (state.get('waitingRoomQueue')?.length === 0 && payload?.length === 0) return state;
       return state.set('waitingRoomQueue', payload);
     },
 
@@ -36,12 +37,7 @@ export default handleActions(
       return state.set('defaultTemplate', payload);
     },
 
-    [UPDATE_WAITING_ROOM_PATIENT](
-      state,
-      {
-        payload: { id, ...rest },
-      },
-    ) {
+    [UPDATE_WAITING_ROOM_PATIENT](state, { payload: { id, ...rest } }) {
       const waitingRoomQueue = state.get('waitingRoomQueue');
       const index = waitingRoomQueue.findIndex(w => w.id === id);
       const waitingRoomPatient = waitingRoomQueue[index];

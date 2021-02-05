@@ -19,6 +19,7 @@ import {
   getAllTimeSlots,
   generateDaysOfWeek,
 } from '../helpers';
+import { practitionerShape } from '../../../../library/PropTypeShapes';
 
 const reasons = [
   {
@@ -367,7 +368,7 @@ WaitlistForm.propTypes = {
   initialState: PropTypes.objectOf(PropTypes.any),
   isNewWaitSpot: PropTypes.bool.isRequired,
   defaultUnit: PropTypes.number.isRequired,
-  practitioners: PropTypes.instanceOf(Map).isRequired,
+  practitioners: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
 };
 
 WaitlistForm.defaultProps = {

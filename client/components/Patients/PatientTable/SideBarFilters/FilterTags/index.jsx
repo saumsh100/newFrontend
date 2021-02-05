@@ -16,10 +16,12 @@ const filterNameMap = {
   patientFollowUps: 'Follow Ups',
 };
 
-function FilterTags({ filters, removeTag }) {
+const FilterTags = ({ patientTable, removeTag }) => {
+  /* eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
+  const { limit, page, order, segment, ...filters } = patientTable.get('filters').toJS();
   return (
     <div className={styles.tagsContainer}>
-      {Object.keys(filters).map(filter => (
+      {Object.keys(filters || {}).map(filter => (
         <div key={`filterTag_${filter}`} className={styles.tagBody}>
           <div className={styles.tagText}>
             {filter in filterNameMap
@@ -42,19 +44,19 @@ function FilterTags({ filters, removeTag }) {
       ))}
     </div>
   );
-}
+};
 
 FilterTags.propTypes = {
-  filters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
+  patientTable: PropTypes.instanceOf(Map),
   removeTag: PropTypes.func.isRequired,
 };
 
-FilterTags.defaultProps = { filters: {} };
+FilterTags.defaultProps = {
+  patientTable: null,
+};
 
 function mapStateToProps({ patientTable }) {
-  /* eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-  const { limit, page, order, segment, ...filters } = patientTable.get('filters').toJS();
-  return { filters };
+  return { patientTable };
 }
 
 export default connect(mapStateToProps)(FilterTags);

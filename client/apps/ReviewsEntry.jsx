@@ -1,4 +1,5 @@
 
+import '../components/library/util/why-did-you-render';
 import React from 'react';
 import { render } from 'react-dom';
 import { push } from 'connected-react-router';

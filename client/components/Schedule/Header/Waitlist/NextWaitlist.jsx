@@ -2,10 +2,9 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import groupBy from 'lodash/groupBy';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import DialogBox from '../../../library/DialogBox';
 import WaitlistTableWithActions from './WaitlistTableWithActions';
-import Account from '../../../../entities/models/Account';
 import { batchUpdateFactory, mergeData } from './helpers';
 import DraftMessage from './WaitlistMessage/DraftMessage';
 import ResponseMessage from './WaitlistMessage/ResponseMessage';
@@ -27,11 +26,30 @@ export const WAITLIST_STATE = {
   form: 3,
 };
 
-const NextWaitlist = ({ account, ...props }) => {
+const NextWaitlist = (props) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const { account, practitioners } = useCallback(
+    useSelector(({ auth, entities }) => ({
+      account: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+      practitioners: entities
+        .getIn(['practitioners', 'models'])
+        .sort(sortPractitionersAlphabetical)
+        .toArray()
+        .filter(practitioner => practitioner.isActive)
+        .map(practitioner => ({
+          value: practitioner.get('id'),
+          label: practitioner.getPrettyName(),
+        })),
+    })),
+    [],
+  );
   const batchUpdate = useCallback(
     (state = false, waitListIDs) => batchUpdateFactory(props.waitlist)(state, waitListIDs),
     [props.waitlist],
   );
+
+  const { timezone, id: accountId, name, unit } = account.toJS();
+
   const [selectedWaitSpot, setSelectedWaitSpot] = useState({});
   const isNewWaitSpot = Object.keys(selectedWaitSpot).length === 0;
   const [selectedWaitlistMap, setSelectedWaitlistMap] = useState(batchUpdate);
@@ -44,13 +62,10 @@ const NextWaitlist = ({ account, ...props }) => {
 
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
-  const defaultUnit = account.get('unit');
-
   useEffect(() => {
     setSelectedWaitlistMap(batchUpdate());
   }, [batchUpdate]);
 
-  const { timezone, id: accountId, name } = account.toJS();
   const loadDefaultTemplate = useCallback(() => {
     loadMassTextTemplate({ timezone,
       id: accountId,
@@ -109,24 +124,30 @@ const NextWaitlist = ({ account, ...props }) => {
     resetEditForm();
   };
 
-  const handleEdit = waitspotId => () => {
-    const waitSpot = props.waitlist.find(({ ccId }) => ccId === waitspotId);
-    setSelectedWaitSpot(waitSpot);
-    setWaitListState(WAITLIST_STATE.form);
-  };
+  const handleEdit = useCallback(
+    waitspotId => () => {
+      const waitSpot = props.waitlist.find(({ ccId }) => ccId === waitspotId);
+      setSelectedWaitSpot(waitSpot);
+      setWaitListState(WAITLIST_STATE.form);
+    },
+    [props.waitlist],
+  );
 
   const resetEditForm = () => {
     setSelectedWaitSpot({});
     setWaitListState(WAITLIST_STATE.initial);
   };
 
+  const goToAddWaitListForm = useCallback(() => setWaitListState(WAITLIST_STATE.form), []);
+
   return (
     <>
       <WaitlistTableWithActions
         {...props}
+        practitioners={practitioners}
         batchUpdate={batchUpdate}
         onEdit={handleEdit}
-        goToAddWaitListForm={() => setWaitListState(WAITLIST_STATE.form)}
+        goToAddWaitListForm={goToAddWaitListForm}
         goToSendMassMessage={goToSendMassMessage}
         setSelectedWaitlistMap={setSelectedWaitlistMap}
         selectedWaitlistMap={selectedWaitlistMap}
@@ -184,14 +205,14 @@ const NextWaitlist = ({ account, ...props }) => {
                 {createWaitSpotHandler => (
                   <WaitlistForm
                     isNewWaitSpot={isNewWaitSpot}
-                    timezone={account.get('timezone')}
+                    timezone={timezone}
                     initialState={selectedWaitSpot}
                     handleSubmit={handleSubmit(
                       isNewWaitSpot ? createWaitSpotHandler : updateWaitSpotHandler,
                     )}
                     goToWaitlistTable={resetEditForm}
-                    defaultUnit={defaultUnit}
-                    practitioners={props.practitioners}
+                    defaultUnit={unit}
+                    practitioners={practitioners}
                   />
                 )}
               </CreateWaitSpot>
@@ -203,25 +224,10 @@ const NextWaitlist = ({ account, ...props }) => {
   );
 };
 
-const mapStateToProps = ({ auth, entities }) => ({
-  account: entities.getIn(['accounts', 'models', auth.get('accountId')]),
-  practitioners: entities
-    .getIn(['practitioners', 'models'])
-    .sort(sortPractitionersAlphabetical)
-    .toArray()
-    .filter(practitioner => practitioner.isActive)
-    .map(practitioner => ({
-      value: practitioner.get('id'),
-      label: practitioner.getPrettyName(),
-    })),
-});
-
-export default memo(connect(mapStateToProps)(NextWaitlist));
+export default memo(NextWaitlist);
 
 NextWaitlist.propTypes = {
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-  account: PropTypes.instanceOf(Account).isRequired,
-  practitioners: PropTypes.instanceOf(Map).isRequired,
 };
 
 NextWaitlist.defaultProps = {

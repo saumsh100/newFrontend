@@ -30,8 +30,7 @@ class PatientInsightsContainer extends Component {
   render() {
     const { insights, appointments, patients, wasAccountFetched, account } = this.props;
 
-    const allFetched =
-      !this.props.loadingInsights && this.props.dashAppointmentsFetched && wasAccountFetched;
+    const allFetched = !this.props.loadingInsights && this.props.dashAppointmentsFetched && wasAccountFetched;
 
     return (
       <Card className={styles.card} runAnimation loaded={allFetched}>
@@ -55,14 +54,14 @@ class PatientInsightsContainer extends Component {
 }
 
 function mapStateToProps({ apiRequests, dashboard, entities, auth }) {
-  const dash = dashboard.toJS();
-  const { dashboardDate, loadingInsights, insights, insightCount } = dash;
+  const dashboardDate = dashboard.get('dashboardDate');
+  const loadingInsights = dashboard.get('loadingInsights');
+  const insights = dashboard.get('insights');
+  const insightCount = dashboard.get('insightCount');
 
-  const wasAccountFetched =
-    apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
+  const wasAccountFetched = apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
 
-  const dashAppointmentsFetched =
-    apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
+  const dashAppointmentsFetched = apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
 
   const appointments = entities.getIn(['appointments', 'models']);
   const practitioners = entities.getIn(['practitioners', 'models']);

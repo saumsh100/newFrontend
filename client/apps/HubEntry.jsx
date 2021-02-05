@@ -1,4 +1,5 @@
 
+import '../components/library/util/why-did-you-render';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
@@ -36,6 +37,7 @@ import SubscriptionManager from '../util/graphqlSubscriptions';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import { browserHistory } from '../store/factory';
 
+/* eslint-disable camelcase */
 electron.send(REQUEST_HOST);
 
 electron.on(RESPONSE_HOST, (event, { url }) => {

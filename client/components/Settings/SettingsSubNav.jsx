@@ -68,6 +68,7 @@ const PATHS = {
 
 function SettingsSubNav({ location, className, users, featureFlags }) {
   const routes = find(PATHS, (route, key) => location.pathname.indexOf(key) === 0);
+  const { flags } = featureFlags.toJS();
 
   // Workaround for redirects
   return routes ? (
@@ -76,7 +77,7 @@ function SettingsSubNav({ location, className, users, featureFlags }) {
       routes={routes}
       className={className}
       users={users}
-      featureFlags={featureFlags}
+      featureFlags={flags}
     />
   ) : null;
 }
@@ -85,7 +86,7 @@ SettingsSubNav.propTypes = {
   className: PropTypes.string,
   location: PropTypes.objectOf(PropTypes.string).isRequired,
   users: PropTypes.instanceOf(Map).isRequired,
-  featureFlags: PropTypes.shape({}).isRequired,
+  featureFlags: PropTypes.instanceOf(Map).isRequired,
 };
 
 SettingsSubNav.defaultProps = {
@@ -93,12 +94,9 @@ SettingsSubNav.defaultProps = {
 };
 
 function mapStateToProps({ featureFlags }) {
-  return { featureFlags: featureFlags.toJS().flags };
+  return { featureFlags };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  null,
-);
+const enhance = connect(mapStateToProps, null);
 
 export default enhance(SettingsSubNav);

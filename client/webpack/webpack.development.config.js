@@ -16,6 +16,7 @@ const developmentConfig = merge(baseConfig, {
   resolve: {
     alias: {
       'react-dom': '@hot-loader/react-dom',
+      'react-redux': process.env.NODE_ENV === 'development' ? 'react-redux/lib' : 'react-redux',
     },
   },
   plugins: [

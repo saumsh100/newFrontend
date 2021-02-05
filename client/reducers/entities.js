@@ -193,6 +193,7 @@ export default handleActions(
 
 function receiveEntitiesState(state, entities, hardMerge) {
   // TODO: update all appropriate entitites in state
+  if (!entities) return state;
   let newState = state;
   each(entities, (collectionMap, key) => {
     each(collectionMap, (modelData, id) => {

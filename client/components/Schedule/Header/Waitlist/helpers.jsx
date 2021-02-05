@@ -310,7 +310,8 @@ export const getTimeSlot = (
   const value = moment(currentTime, format);
   if (value.isBefore(moment(beforeAfterNoon, format))) {
     return 'morning';
-  } else if (value.isAfter(moment(beforeEvening, format))) {
+  }
+  if (value.isAfter(moment(beforeEvening, format))) {
     return 'evening';
   }
   return 'afternoon';

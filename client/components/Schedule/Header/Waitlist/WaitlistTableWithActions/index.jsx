@@ -5,7 +5,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { capitalize } from '@carecru/isomorphic';
 import ReactTable from 'react-table';
-import { Avatar, Button, Checkbox, DropdownMenu, Icon } from '../../../../library';
+import { Avatar, Checkbox, Icon } from '../../../../library';
 import Tooltip from '../../../../Tooltip';
 import { propsGenerator } from '../helpers';
 import FilterBar from './FilterBar';
@@ -14,9 +14,16 @@ import WaitListTableFooter from './WaitListTableFooter';
 import { theadStyles, colHeaderStyle, tbodyStyles, trStyles } from './tableStyles';
 import tableStyles from '../tableStyles.scss';
 import styles from './styles.scss';
-import EllipsisIcon from '../EllipsisIcon';
+import {
+  FirstNameCell,
+  LastNameCell,
+  ManageCell,
+  TimesCell,
+  WaitSpotCheckboxCell,
+  WaitspotNotesCell,
+} from './cells';
 
-const Index = ({
+const WaitlistTableWithActions = ({
   waitlist,
   selectedWaitlistMap,
   setSelectedWaitlistMap,
@@ -41,8 +48,8 @@ const Index = ({
 
   const segmentedWaitListIds = segmentedWaitList.map(waitSpot => waitSpot.id);
 
-  const isEveryWaitlistSelected =
-    segmentedWaitList?.length > 0 && segmentedWaitList?.length === selectedWaitlistIds?.length;
+  const isEveryWaitlistSelected = segmentedWaitList?.length > 0
+    && segmentedWaitList?.length === selectedWaitlistIds?.length;
 
   useEffect(() => {
     const waitlistIdsInView = selectedWaitlistIds.filter(id => segmentedWaitListIds.includes(id));
@@ -98,14 +105,7 @@ const Index = ({
         />
       ),
       accessor: waitspot => waitspot,
-      // eslint-disable-next-line react/prop-types
-      Cell: ({ value }) => (
-        <Checkbox
-          className={styles.waitSpotCheckboxWrapper}
-          checked={value.checked}
-          onChange={value.onChange}
-        />
-      ),
+      Cell: WaitSpotCheckboxCell,
       sortable: false,
       width: 70,
     },
@@ -127,16 +127,7 @@ const Index = ({
       accessor: waitspot => waitspot,
       sortMethod: (a, b) =>
         sortHelper(a.patient.firstName.toLowerCase(), b.patient.firstName.toLowerCase()),
-      Cell: ({ value }) => {
-        const { PopOverComponent, patient } = value;
-        return (
-          patient && (
-            <PopOverComponent patient={patient} zIndex={9999}>
-              <div>{`${patient.firstName}`}</div>
-            </PopOverComponent>
-          )
-        );
-      },
+      Cell: FirstNameCell,
     },
     {
       id: 'lastName',
@@ -144,16 +135,7 @@ const Index = ({
       accessor: waitspot => waitspot,
       sortMethod: (a, b) =>
         sortHelper(a.patient.lastName.toLowerCase(), b.patient.lastName.toLowerCase()),
-      Cell: ({ value }) => {
-        const { PopOverComponent, patient } = value;
-        return (
-          patient && (
-            <PopOverComponent patient={patient} zIndex={9999}>
-              <div>{`${patient.lastName}`}</div>
-            </PopOverComponent>
-          )
-        );
-      },
+      Cell: LastNameCell,
     },
     {
       id: 'reasonText',
@@ -186,17 +168,7 @@ const Index = ({
       Header: 'Times',
       accessor: waitspot => waitspot,
       sortMethod: (a, b) => sortHelper(a.availableTimes, b.availableTimes),
-      // eslint-disable-next-line react/prop-types
-      Cell: ({ value }) => (
-        <Tooltip
-          body={<div>{value.times}</div>}
-          placement="below"
-          tipSize={0.01}
-          styleOverride={tableStyles.notesTooltip}
-        >
-          <div className={tableStyles.noteTDWrapper}>{value.times}</div>
-        </Tooltip>
-      ),
+      Cell: TimesCell,
     },
     {
       Header: 'Next Appt',
@@ -207,42 +179,14 @@ const Index = ({
       Header: 'Notes',
       sortMethod: (a, b) => sortHelper(a.note.toLowerCase(), b.note.toLowerCase()),
       accessor: waitspot => waitspot,
-      // eslint-disable-next-line react/prop-types
-      Cell: ({ value }) => (
-        <Tooltip
-          body={<div>{value.note}</div>}
-          placement="below"
-          tipSize={0.01}
-          styleOverride={tableStyles.notesTooltip}
-        >
-          <div className={tableStyles.noteTDWrapper}>{value.note}</div>
-        </Tooltip>
-      ),
+      Cell: WaitspotNotesCell,
     },
     {
       id: 'manage',
       Header: 'Manage',
       accessor: waitspot => waitspot,
       className: styles.manageCell,
-      // eslint-disable-next-line react/prop-types
-      Cell: ({ value }) => (
-        <DropdownMenu
-          labelComponent={props => (
-            <Button {...props} className={tableStyles.ellipsisButton}>
-              <EllipsisIcon />
-            </Button>
-          )}
-        >
-          {!value.isPatientUser && (
-            <Button className={tableStyles.actionItem} onClick={value.onEdit(value.id)}>
-              Edit
-            </Button>
-          )}
-          <Button className={tableStyles.actionItem} onClick={value.onRemove}>
-            Delete
-          </Button>
-        </DropdownMenu>
-      ),
+      Cell: ManageCell,
       sortable: false,
     },
   ];
@@ -276,6 +220,7 @@ const Index = ({
               className={styles.addButton}
               onClick={goToAddWaitListForm}
               data-test-id="button_addToWaitlist"
+              type="button"
             >
               <Icon icon="plus" color="#3c444c" />
             </button>
@@ -300,13 +245,13 @@ const Index = ({
           })}
           getTheadThProps={(state, _, { id }) => {
             const { sorted } = state;
-            const sortedStyle =
-              sorted[0].id === id && sorted[0].desc ? styles.theadDesc : styles.theadAsc;
+            const sortedStyle = sorted[0].id === id && sorted[0].desc
+              ? styles.theadDesc
+              : styles.theadAsc;
             const showSortedStyle = id === selectedColumn;
-            const tHeadThStyles =
-              id === 'waitSpotCheckbox'
-                ? colHeaderStyle({ justifyContent: 'flex-end' })
-                : colHeaderStyle();
+            const tHeadThStyles = id === 'waitSpotCheckbox'
+              ? colHeaderStyle({ justifyContent: 'flex-end' })
+              : colHeaderStyle();
             return {
               style: tHeadThStyles,
               className: showSortedStyle ? sortedStyle : null,
@@ -340,9 +285,9 @@ const mapStateToProps = ({ auth, entities }) => ({
   defaultUnit: entities.getIn(['accounts', 'models', auth.get('accountId')]).get('unit'),
 });
 
-export default memo(connect(mapStateToProps)(Index));
+export default memo(connect(mapStateToProps)(WaitlistTableWithActions));
 
-Index.propTypes = {
+WaitlistTableWithActions.propTypes = {
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
   selectedWaitlistMap: PropTypes.objectOf(PropTypes.bool).isRequired,
   removeMultipleWaitSpots: PropTypes.func.isRequired,
@@ -353,6 +298,6 @@ Index.propTypes = {
   defaultUnit: PropTypes.number.isRequired,
 };
 
-Index.defaultProps = {
+WaitlistTableWithActions.defaultProps = {
   waitlist: [],
 };
