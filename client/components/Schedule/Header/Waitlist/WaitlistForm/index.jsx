@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { week, capitalize, setDateToTimezone } from '@carecru/isomorphic';
-import { Button, getDate, Icon, Input } from '../../../../library';
+import { Button, getDate, Icon, Input, parseDate } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';
 import PatientSearch from '../../../../PatientSearch';
@@ -86,7 +86,8 @@ const WaitlistForm = ({
     .filter(([, v]) => v)
     .map(([v]) => v);
 
-  const selectedTimes = formValues.availableTimes;
+  const selectedTimes = formValues.availableTimes.map(time =>
+    parseDate(new Date(time), timezone).toISOString());
 
   const handleAutoSuggest = (newValue) => {
     setFormValues({
