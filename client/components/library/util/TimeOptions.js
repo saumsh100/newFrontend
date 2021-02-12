@@ -37,6 +37,6 @@ export const setTime = (time) => {
 
 export const getDuration = (startDate, endDate, customBufferTime) => {
   const end = getDate(endDate);
-  const duration = getDate.duration(end.diff(startDate));
+  const duration = getDate().duration(end.diff(startDate));
   return duration.asMinutes() - customBufferTime;
 };
