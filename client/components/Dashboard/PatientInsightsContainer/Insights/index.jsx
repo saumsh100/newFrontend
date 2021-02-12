@@ -10,6 +10,7 @@ export default function Insights(props) {
   const { insights, patients, appointments, timezone } = props;
 
   const sortedInsights = insights
+    .toJS()
     .filter(
       insightData =>
         patients.get(insightData.patientId) && appointments.get(insightData.appointmentId),
