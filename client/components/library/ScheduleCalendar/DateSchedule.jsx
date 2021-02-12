@@ -27,7 +27,7 @@ const DateSchedule = ({ day, schedule, timezone, handleEditSchedule, shouldDispl
           <div className={styles.times}>
             {schedule.isClosed
               ? 'CLOSED'
-              : getFormattedTime(schedule.startTime, schedule.endTime, timezone, 'to', true)}
+              : getFormattedTime(schedule.startTime, schedule.endTime, timezone, 'to')}
           </div>
         </div>
         <div className={styles.breaks}>
@@ -35,9 +35,7 @@ const DateSchedule = ({ day, schedule, timezone, handleEditSchedule, shouldDispl
           <ul className={styles.breakList}>
             {schedule.breaks.length > 0
               ? schedule.breaks.map(br => (
-                  <li key={uuid()}>
-                    {getFormattedTime(br.startTime, br.endTime, timezone, 'to', true)}
-                  </li>
+                  <li key={uuid()}>{getFormattedTime(br.startTime, br.endTime, timezone, 'to')}</li>
               ))
               : '--'}
           </ul>

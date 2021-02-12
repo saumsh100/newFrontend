@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
  * @param {boolean} [strict]
  * @returns {moment.Moment} A Moment object
  */
-export const getDate = (date, format = undefined, strict = false) =>
+export const getDate = (date, format = false, strict = false) =>
   (format ? moment(date, format, strict) : moment(date));
 
 /**
@@ -121,6 +121,9 @@ export const getFormattedDate = (date, format, timezone = null, useLocalTime = f
   const DST = checkForDST(date, timezone);
   if (DST === 1 && useLocalTime) {
     dateToUse.subtract('1', 'hours');
+  }
+  if (DST === -1 && useLocalTime) {
+    dateToUse.add('1', 'hours');
   }
   return dateToUse.format(format);
 };
@@ -481,8 +484,12 @@ export const formatTimeToTz = (date, timezone) => {
   const DST = checkForDST(date, timezone);
   const newDate = getUTCDate(date, timezone);
 
-  if (DST === 1 || (DST === 0 && newDate.isDST())) {
-    return newDate.subtract('1', 'hours').format('LT');
+  if (DST === 1) {
+    newDate.subtract('1', 'hours');
+  }
+
+  if (DST === -1) {
+    newDate.add('1', 'hours');
   }
 
   return newDate.format('LT');

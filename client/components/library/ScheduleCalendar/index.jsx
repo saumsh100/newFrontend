@@ -103,7 +103,7 @@ class ScheduleCalendar extends Component {
    */
   handleEditSchedule(weekDay) {
     const { selectedDay, timezone } = this.props;
-    const weekDayForselectedDay = selectedDay && getFormattedDate(selectedDay, 'dddd', timezone, true).toLowerCase();
+    const weekDayForselectedDay = selectedDay && getFormattedDate(selectedDay, 'dddd', timezone).toLowerCase();
     const isTheSameDay = weekDayForselectedDay
       && weekDayForselectedDay === weekDay
       && this.getSelectedSchedule(selectedDay).isDailySchedule;
@@ -114,7 +114,7 @@ class ScheduleCalendar extends Component {
           ? this.getSelectedSchedule(selectedDay)
           : this.props.baseSchedule.weeklySchedule[weekDay],
         editTitle: isTheSameDay
-          ? `Holiday Hours (${getFormattedDate(selectedDay, 'MMM. D, YYYY', timezone, true)})`
+          ? `Holiday Hours (${getFormattedDate(selectedDay, 'MMM. D, YYYY', timezone)})`
           : `Default Weekly Schedule (${capitalize(weekDay)})`,
       },
       () => this.handleModalVisibility(),

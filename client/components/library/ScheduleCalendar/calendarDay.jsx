@@ -2,12 +2,14 @@
 import React from 'react';
 import classNames from 'classnames';
 import styles from './day.scss';
-import { formatTimeToTz } from '../util/datetime';
+import { getUTCDate } from '../util/datetime';
 
 const generateHours = (startTime, endTime, breaks, timezone) => {
   const defaultHours = [
-    { startTime: formatTimeToTz(startTime, timezone),
-      endTime: formatTimeToTz(endTime, timezone) },
+    {
+      startTime: getUTCDate(startTime, timezone).format('LT'),
+      endTime: getUTCDate(endTime, timezone).format('LT'),
+    },
   ];
 
   if (breaks.length === 0) {
@@ -42,8 +44,8 @@ const generateHours = (startTime, endTime, breaks, timezone) => {
         new Date(a) < new Date(endTime) && new Date(b) > new Date(startTime),
     )
     .map(rs => ({
-      startTime: formatTimeToTz(rs.startTime, timezone),
-      endTime: formatTimeToTz(rs.endTime, timezone),
+      startTime: getUTCDate(rs.startTime, timezone).format('LT'),
+      endTime: getUTCDate(rs.endTime, timezone).format('LT'),
     }));
 };
 
