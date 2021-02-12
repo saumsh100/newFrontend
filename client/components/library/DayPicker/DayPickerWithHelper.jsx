@@ -2,7 +2,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Popover from 'react-popover';
-import moment from 'moment-timezone';
 import classNames from 'classnames';
 import 'react-day-picker/lib/style.css';
 import { capitalize } from '@carecru/isomorphic';
@@ -13,6 +12,7 @@ import { StyleExtender } from '../../Utils/Themer';
 import Button from '../Button';
 import { DropdownSelect } from '../index';
 import styles from './styles.scss';
+import { getDate, getTodaysDate, getUTCDate } from '../util/datetime';
 
 const subtractDays = (days) => {
   const result = new Date();
@@ -46,8 +46,7 @@ class DayPickerWithHelper extends Component {
   }
 
   handleRelativeChange() {
-    const dayWithTimezone = moment
-      .tz(new Date(), this.props.timezone)
+    const dayWithTimezone = getTodaysDate(this.props.timezone)
       .add(this.state.relativeValue, this.state.relativeUnit)
       .toISOString();
     this.props.onChange(dayWithTimezone);
@@ -59,8 +58,8 @@ class DayPickerWithHelper extends Component {
     }
 
     this.setState({ isRelative: false });
-    const sanitizedDate = moment(day).toObject();
-    const value = moment.tz(sanitizedDate, this.props.timezone).toISOString();
+    const sanitizedDate = getDate(day).toObject();
+    const value = getUTCDate(sanitizedDate, this.props.timezone).toISOString();
     this.props.onChange(value);
     this.setState({ isOpen: false });
   }
@@ -87,8 +86,8 @@ class DayPickerWithHelper extends Component {
   render() {
     const { tipSize, timezone, value, theme, helpersList } = this.props;
 
-    const sanitizedDate = moment(value).toObject();
-    const displayValue = value && moment.tz(sanitizedDate, this.props.timezone).format('l');
+    const sanitizedDate = getDate(value).toObject();
+    const displayValue = value && getUTCDate(sanitizedDate, this.props.timezone).format('l');
 
     const body = (
       <div className={styles.outerContainer}>
@@ -119,13 +118,13 @@ class DayPickerWithHelper extends Component {
           </div>
           <RDayPicker
             onDayClick={this.handleDayClick}
-            selectedDays={moment.tz(value, timezone).toDate()}
+            selectedDays={getUTCDate(value, timezone).toDate()}
             handleInputChange={this.handleInputChange}
-            initialMonth={value ? moment.tz(value, timezone).toDate() : new Date()}
-            month={value ? moment.tz(value, timezone).toDate() : new Date()}
+            initialMonth={value ? getUTCDate(value, timezone).toDate() : new Date()}
+            month={value ? getUTCDate(value, timezone).toDate() : new Date()}
             classNames={StyleExtender(
               { ...dayPickerTheme,
-container: styles.calendarContainer },
+                container: styles.calendarContainer },
               theme,
             )}
             {...this.props}

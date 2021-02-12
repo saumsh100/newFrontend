@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { sortAsc, dateFormatter } from '@carecru/isomorphic';
+import { sortAsc } from '@carecru/isomorphic';
 import RevenueDisplay from './RevenueDisplay';
 import RevenueChart from './RevenueChart';
 import AccountModel from '../../../entities/models/Account';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
-import { Card, getTodaysDate, getISODate } from '../../library';
+import { Card, getTodaysDate, getISODate, getFormattedDate } from '../../library';
 
 import styles from './styles.scss';
 
@@ -49,7 +49,7 @@ function generateLabels(dataKeys, timezone, startOfCurrentDay) {
   return dataKeys
     .filter(filterStartOfDay(startOfCurrentDay))
     .sort(sortAsc)
-    .map(key => [dateFormatter(key, timezone, 'ddd'), dateFormatter(key, timezone, 'DD')]);
+    .map(key => [getFormattedDate(key, 'ddd', timezone), getFormattedDate(key, 'DD', timezone)]);
 }
 
 function renderDisplay(revenueData, account) {
@@ -192,10 +192,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps({ apiRequests, entities, auth }) {
   const revenueData = apiRequests.get('revenueFetch') && apiRequests.get('revenueFetch').data;
-  const wasAccountFetched =
-    apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
-  const wasRevenueFetched =
-    apiRequests.get('revenueFetch') && apiRequests.get('revenueFetch').wasFetched;
+  const wasAccountFetched = apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
+  const wasRevenueFetched = apiRequests.get('revenueFetch') && apiRequests.get('revenueFetch').wasFetched;
 
   return {
     timezone: auth.get('timezone'),

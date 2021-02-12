@@ -1,5 +1,5 @@
 
-import moment from 'moment';
+import { getDate } from './datetime';
 
 const generateTimeOptions = () => {
   const timeOptions = [];
@@ -11,7 +11,7 @@ const generateTimeOptions = () => {
   for (i = 0; i < totalHours; i += 1) {
     let j;
     for (j = 0; j < increments; j += 1) {
-      const time = moment(new Date(1970, 0, 1, i, j * increment));
+      const time = getDate(new Date(1970, 0, 1, i, j * increment));
       const value = time.toISOString();
       const label = time.format('LT');
       timeOptions.push({
@@ -36,7 +36,7 @@ export const setTime = (time) => {
 };
 
 export const getDuration = (startDate, endDate, customBufferTime) => {
-  const end = moment(endDate);
-  const duration = moment.duration(end.diff(startDate));
+  const end = getDate(endDate);
+  const duration = getDate.duration(end.diff(startDate));
   return duration.asMinutes() - customBufferTime;
 };

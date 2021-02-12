@@ -1,7 +1,7 @@
 
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { week, capitalize, setDateToTimezone } from '@carecru/isomorphic';
+import { week, capitalize } from '@carecru/isomorphic';
 import { Button, getDate, Icon, Input, parseDate } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';
@@ -144,12 +144,12 @@ const WaitlistForm = ({
   };
 
   const handleDayOnChange = (v) => {
-    const startOfDay = setDateToTimezone(new Date(), timezone)
+    const startOfDay = parseDate(new Date(), timezone)
       .startOf('day')
       .toISOString();
 
     if (v >= startOfDay) {
-      onChange('endDate')(setDateToTimezone(v, timezone).toString());
+      onChange('endDate')(parseDate(v, timezone).toString());
     }
   };
 

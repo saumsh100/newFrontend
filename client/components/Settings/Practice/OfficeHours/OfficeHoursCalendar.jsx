@@ -5,12 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import pickBy from 'lodash/pickBy';
 import pick from 'lodash/pick';
-import {
-  dateFormatter,
-  getEndOfTheMonth,
-  getStartOfTheMonth,
-  setDateToTimezone,
-} from '@carecru/isomorphic';
+import { getEndOfTheMonth, getStartOfTheMonth } from '@carecru/isomorphic';
 import ScheduleCalendar from '../../../library/ScheduleCalendar';
 import {
   createDailyHours,
@@ -22,6 +17,7 @@ import { showAlertTimeout } from '../../../../thunks/alerts';
 import calendarDay from '../../../library/ScheduleCalendar/calendarDay';
 
 import defaultDays from './defaultWeeklyTemplate';
+import { getFormattedDate, parseDate } from '../../../library';
 
 class OfficeHoursCalendar extends Component {
   constructor(props) {
@@ -72,7 +68,7 @@ class OfficeHoursCalendar extends Component {
 
   getModifier(modifier) {
     return Object.keys(pickBy(this.state.baseSchedule.schedule, modifier)).map((storedDate) => {
-      const { years, months, date } = setDateToTimezone(storedDate, this.props.timezone).toObject();
+      const { years, months, date } = parseDate(storedDate, this.props.timezone).toObject();
       return new Date(years, months, date);
     });
   }
@@ -104,7 +100,7 @@ class OfficeHoursCalendar extends Component {
   }
 
   getFeaturedDay(date = this.state.selectedDay) {
-    const weekDay = dateFormatter(date, this.props.timezone, 'dddd').toLowerCase();
+    const weekDay = getFormattedDate(date, 'dddd', this.props.timezone).toLowerCase();
     return {
       [weekDay]: {
         ...this.state.baseSchedule.schedule[date.toISOString().split('T')[0]],
@@ -131,13 +127,12 @@ class OfficeHoursCalendar extends Component {
    *
    */
   scheduleMap() {
-    const normalizedSchedule =
-      this.state.selectedDay && this.state.selectedDailySchedule.isDailySchedule
-        ? this.getFeaturedDay()
-        : {
-          ...this.state.baseSchedule.weeklySchedule,
-          ...(this.state.selectedDay ? this.getFeaturedDay() : null),
-        };
+    const normalizedSchedule = this.state.selectedDay && this.state.selectedDailySchedule.isDailySchedule
+      ? this.getFeaturedDay()
+      : {
+        ...this.state.baseSchedule.weeklySchedule,
+        ...(this.state.selectedDay ? this.getFeaturedDay() : null),
+      };
     const parsedWeeklySchedule = pick(normalizedSchedule, [
       'sunday',
       'monday',
@@ -172,8 +167,7 @@ class OfficeHoursCalendar extends Component {
    * @param callback
    */
   handleDayClick(date, callback) {
-    const selectedDay =
-      this.state.selectedDay && this.state.selectedDay.getTime() === date.getTime() ? null : date;
+    const selectedDay = this.state.selectedDay && this.state.selectedDay.getTime() === date.getTime() ? null : date;
     this.setState(
       {
         selectedDay,
@@ -194,24 +188,24 @@ class OfficeHoursCalendar extends Component {
   handleDoubleClick(day, handleEditSchedule) {
     return () =>
       this.handleDayClick(day, () =>
-        handleEditSchedule(dateFormatter(day, this.props.timezone, 'dddd').toLowerCase()));
+        handleEditSchedule(getFormattedDate(day, 'dddd', this.props.timezone).toLowerCase()));
   }
 
   async handleCreateCustomSchedule({ date } = {}) {
     try {
       await createDailyHours(date.toISOString().split('T')[0]);
       await this.getSchedule();
-      this.setState({
-        selectedDailySchedule: this.state.selectedDay
-          ? Object.values(this.getFeaturedDay(this.state.selectedDay))[0]
+      this.setState(prevState => ({
+        selectedDailySchedule: prevState.selectedDay
+          ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
           : null,
-      });
+      }));
       this.props.showAlertTimeout({
         alert: {
-          body: `Created holiday hours for the practice on ${dateFormatter(
+          body: `Created holiday hours for the practice on ${getFormattedDate(
             date,
-            this.props.timezone,
             'dddd, MMMM Do',
+            this.props.timezone,
           )}`,
         },
         type: 'success',
@@ -242,14 +236,13 @@ class OfficeHoursCalendar extends Component {
     })
       .then(() => {
         this.getSchedule(this.state.month);
-        const body =
-          date && isDailySchedule
-            ? `Updated holiday hours for the practice on ${dateFormatter(
-              date,
-              this.props.timezone,
-              'dddd, MMMM Do',
-            )}`
-            : 'Updated default schedule for the practice';
+        const body = date && isDailySchedule
+          ? `Updated holiday hours for the practice on ${getFormattedDate(
+            date,
+            'dddd, MMMM Do',
+            this.props.timezone,
+          )}`
+          : 'Updated default schedule for the practice';
         this.props.showAlertTimeout({
           alert: { body },
           type: 'success',
@@ -262,17 +255,17 @@ class OfficeHoursCalendar extends Component {
     try {
       await deleteDailyHours(scheduleId);
       await this.getSchedule();
-      this.setState({
-        selectedDailySchedule: this.state.selectedDay
-          ? Object.values(this.getFeaturedDay(this.state.selectedDay))[0]
+      this.setState(prevState => ({
+        selectedDailySchedule: prevState.selectedDay
+          ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
           : null,
-      });
+      }));
       this.props.showAlertTimeout({
         alert: {
-          body: `Deleted holiday hours for the practice on ${dateFormatter(
+          body: `Deleted holiday hours for the practice on ${getFormattedDate(
             date,
-            this.props.timezone,
             'dddd, MMMM Do',
+            this.props.timezone,
           )}`,
         },
         type: 'success',
@@ -328,10 +321,7 @@ const mapStateToProps = ({ auth, entities }) => {
 
 const mapActionsToProps = dispatch => bindActionCreators({ showAlertTimeout }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapActionsToProps,
-)(OfficeHoursCalendar);
+export default connect(mapStateToProps, mapActionsToProps)(OfficeHoursCalendar);
 
 OfficeHoursCalendar.propTypes = {
   accountId: PropTypes.string.isRequired,

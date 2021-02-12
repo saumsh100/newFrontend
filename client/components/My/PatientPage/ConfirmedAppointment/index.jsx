@@ -1,8 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateFormatter, dateFormatterFactory } from '@carecru/isomorphic';
-import { Icon, Well } from '../../../library';
+import { Icon, Well, getFormattedDate } from '../../../library';
 import ClassyDiv from '../../../library/util/ClassyDiv';
 import Section from '../Shared/Section';
 import { accountShape, appointmentShape } from '../../../library/PropTypeShapes';
@@ -12,7 +11,7 @@ const WellHeader = ClassyDiv(styles.wellHeader);
 const WellItem = ClassyDiv(styles.wellItem);
 
 const buildAppointmentTime = ({ startDate, endDate, timezone }) => {
-  const apptDateFormat = dateFormatterFactory('h:mma')(timezone);
+  const apptDateFormat = datetime => getFormattedDate(datetime, 'h:mma', timezone);
   return `${apptDateFormat(startDate)} - ${apptDateFormat(endDate)}`;
 };
 
@@ -22,7 +21,7 @@ const AppointmentsList = ({ appointments, timezone }) => (
     {appointments.map(({ id, startDate, endDate, patient: { firstName, lastName } }) => (
       <Well key={id}>
         <WellItem>{`${firstName} ${lastName}`}</WellItem>
-        <WellItem>{dateFormatter(startDate, timezone, 'dddd, MMMM Do YYYY')}</WellItem>
+        <WellItem>{getFormattedDate(startDate, 'dddd, MMMM Do YYYY', timezone)}</WellItem>
         <WellItem>
           {buildAppointmentTime({
             startDate,
@@ -53,14 +52,13 @@ const tinyIconFactory = bookingWidgetPrimaryColor => props => (
     {...props}
   />
 );
-
-export default function ConfirmedAppointment({
+const ConfirmedAppointment = ({
   params: {
     account: { address, phoneNumber, contactEmail, bookingWidgetPrimaryColor, website },
     appointments,
     isCustomConfirm,
   },
-}) {
+}) => {
   const { street, city, state } = address;
 
   const TinyIcon = tinyIconFactory(bookingWidgetPrimaryColor);
@@ -103,12 +101,14 @@ export default function ConfirmedAppointment({
       </Section>
     </div>
   );
-}
+};
 
 ConfirmedAppointment.propTypes = {
   params: PropTypes.shape({
     account: PropTypes.shape(accountShape),
-    appointment: PropTypes.arrayOf(PropTypes.shape(appointmentShape)),
+    appointments: PropTypes.arrayOf(PropTypes.shape(appointmentShape)),
     isCustomConfirm: PropTypes.bool,
   }).isRequired,
 };
+
+export default ConfirmedAppointment;

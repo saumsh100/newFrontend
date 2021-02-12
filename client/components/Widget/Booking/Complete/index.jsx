@@ -4,8 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { dateFormatter } from '@carecru/isomorphic';
-import { Button } from '../../../library';
+import { Button, getFormattedDate } from '../../../library';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
@@ -43,16 +42,15 @@ function Complete({
    * Generates the availabilities using the office openings,
    * also group them inside the specific time-frame.
    */
-  const availabilities =
-    selectedService &&
-    availabilitiesGroupedByPeriod(
+  const availabilities = selectedService
+    && availabilitiesGroupedByPeriod(
       Object.values(officeHours),
       timezone,
       selectedService.get('duration'),
     );
 
-  const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId ||
-    NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`;
+  const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId
+    || NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`;
   return (
     <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
@@ -82,11 +80,11 @@ function Complete({
               )}
               <SummaryItem
                 label="Date"
-                value={`${dateFormatter(
+                value={`${getFormattedDate(
                   dateAndTime.startDate,
-                  timezone,
                   'ddd, MMM Do',
-                )} at ${dateFormatter(dateAndTime.startDate, timezone, 'h:mm a')}`}
+                  timezone,
+                )} at ${getFormattedDate(dateAndTime.startDate, 'h:mm a', timezone)}`}
               />
             </div>
             <hr />
@@ -141,12 +139,11 @@ function Complete({
 }
 
 function mapStateToProps({ auth, availabilities, entities }) {
-  const getPatientUser =
-    availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
-      ? auth
-        .get('familyPatients')
-        .find(patient => patient.id === availabilities.get('familyPatientUser'))
-      : false;
+  const getPatientUser = availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
+    ? auth
+      .get('familyPatients')
+      .find(patient => patient.id === availabilities.get('familyPatientUser'))
+    : false;
 
   const selectedDaysOfTheWeek = getSelectedDaysOfTheWeek(availabilities.get('waitSpot'));
 
@@ -181,10 +178,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Complete);
+export default connect(mapStateToProps, mapDispatchToProps)(Complete);
 
 Complete.propTypes = {
   dateAndTime: PropTypes.shape({

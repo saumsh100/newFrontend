@@ -5,10 +5,10 @@ import {
   dateFormatterFactory,
   groupTimesPerPeriod,
   toHumanCommaSeparated,
-  setDateToTimezone,
   capitalize,
 } from '@carecru/isomorphic';
 import styles from './styles.scss';
+import { parseDate } from '../../../library';
 
 /**
  * Display the dates selected on the waitlist's steps.
@@ -31,8 +31,7 @@ export const waitlistDates = (week) => {
  * Display a linear list of times that were selected from the user on the waitlist's steps.
  */
 export const waitlistTimes = (waitSpot, availabilities, timezone) =>
-  availabilities &&
-  waitSpot.get('times').size > 0 && (
+  availabilities && waitSpot.get('times').size > 0 && (
     <span>
       {Object.keys(availabilities)
         .reduce(
@@ -128,12 +127,11 @@ export const handleAvailabilitiesTimes = (selected, availabilities, timezone) =>
               [],
             );
 
-            const excludedText =
-              excludedTimes.length > 0
-                ? `but ${excludedTimes
-                  .map(el => formatReviewDates(el))
-                  .reduce(toHumanCommaSeparated)}`
-                : '';
+            const excludedText = excludedTimes.length > 0
+              ? `but ${excludedTimes
+                .map(el => formatReviewDates(el))
+                .reduce(toHumanCommaSeparated)}`
+              : '';
             text += ` ${excludedText}`;
           }
         } else {
@@ -169,7 +167,7 @@ export const handleAvailabilitiesTimes = (selected, availabilities, timezone) =>
  * @returns Date
  */
 const setTimeForToday = (date, timezone, today = new Date()) =>
-  setDateToTimezone(date, timezone)
+  parseDate(date, timezone)
     .set({
       year: today.getFullYear(),
       month: today.getMonth() + 1,

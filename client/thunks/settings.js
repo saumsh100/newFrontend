@@ -1,9 +1,10 @@
 
-import { normalizePhone, setDateToTimezone } from '@carecru/isomorphic';
+import { normalizePhone } from '@carecru/isomorphic';
 import { createEntityRequest, deleteEntityRequest } from './fetchEntities';
 import { receiveEntities } from '../reducers/entities';
 import { httpClient } from '../util/httpClient';
 import { showAlertTimeout } from './alerts';
+import { parseDate } from '../components/library';
 
 const generateAlert = field => ({
   success: { body: `Successfully generated ${field}.` },
@@ -126,7 +127,7 @@ export const sendReminderPreviewCall = ({
           params: {
             binName: `reminder-voice-${status}`,
             cellPhoneNumber,
-            startDateTime: setDateToTimezone(new Date(), timezone)
+            startDateTime: parseDate(new Date(), timezone)
               .add(amount, unit)
               .toISOString(),
           },

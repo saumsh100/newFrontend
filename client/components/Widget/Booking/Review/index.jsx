@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Map } from 'immutable';
-import { dateFormatter } from '@carecru/isomorphic';
 import { Button, getFormattedDate } from '../../../library';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
@@ -116,11 +115,11 @@ class Review extends PureComponent {
     });
 
     const dateTimeSummaryText = dateAndTime
-      ? `${dateFormatter(dateAndTime.startDate, timezone, 'ddd, MMM Do')} at ${getFormattedDate(
+      ? `${getFormattedDate(dateAndTime.startDate, 'ddd, MMM Do', timezone)} at ${getFormattedDate(
         dateAndTime.startDate,
         'h:mm a',
-        timezone,
         true,
+        timezone,
       )}`
       : NOT_PROVIDED_TEXT;
 

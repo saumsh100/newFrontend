@@ -2,9 +2,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Map, List } from 'immutable';
-import { setDateToTimezone } from '@carecru/isomorphic';
+import { connect } from 'react-redux';
 import DayViewBody from './DayViewBody';
-import { DateTimeObj } from '../../library';
+import { DateTimeObj, parseDate } from '../../library';
 
 function DayView(props) {
   const {
@@ -18,6 +18,7 @@ function DayView(props) {
     schedule,
     selectAppointment,
     leftColumnWidth,
+    timezone,
   } = props;
 
   const pracColumns = {};
@@ -27,7 +28,7 @@ function DayView(props) {
     .get('models')
     .toArray()
     .filter((app) => {
-      const startDate = setDateToTimezone(app.startDate);
+      const startDate = parseDate(app.startDate, timezone);
       const isSameDate = startDate.isSame(currentDate, 'day');
 
       if (!app.isDeleted && isSameDate && !app.isCancelled && !app.isPending) {
@@ -43,7 +44,7 @@ function DayView(props) {
     .get('models')
     .toArray()
     .filter((evt) => {
-      const startDate = setDateToTimezone(evt.startDate);
+      const startDate = parseDate(evt.startDate, timezone);
       const isSameDate = startDate.isSame(currentDate, 'day');
 
       if (isSameDate) {
@@ -91,6 +92,8 @@ DayView.propTypes = {
   schedule: PropTypes.instanceOf(Map).isRequired,
   selectAppointment: PropTypes.func.isRequired,
   leftColumnWidth: PropTypes.number.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
-export default DayView;
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(mapStateToProps, null)(DayView);

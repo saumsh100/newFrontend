@@ -16,16 +16,16 @@ import { generateTimeBreaks, parseDate, parseDateWithFormat } from '../../../lib
  *
  * @type {string}
  */
-const allowedTimeFormat = 'HH:mm:ss.SSS[Z]';
+const allowedFormat = 'HH:mm:ss.SSS[Z]';
 
 /**
- * Return a moment instance for a time value.
+ * Return a date time instance for a time value.
  *
  * @param time
  * @param timezone
- * @return {moment}
+ * @return DateTimeObj
  */
-const timeToMoment = (time, timezone) => parseDateWithFormat(time, allowedTimeFormat, timezone);
+const timeToDateTimeObj = (time, timezone) => parseDateWithFormat(time, allowedFormat, timezone);
 
 /**
  * Validate if startTime is before endTime.
@@ -36,7 +36,7 @@ const timeToMoment = (time, timezone) => parseDateWithFormat(time, allowedTimeFo
  * @return {boolean}
  */
 const validate = ({ startTime, endTime }, timezone) =>
-  timeToMoment(startTime, timezone).isAfter(timeToMoment(endTime, timezone));
+  timeToDateTimeObj(startTime, timezone).isAfter(timeToDateTimeObj(endTime, timezone));
 
 /**
  * Using the provided data check if the day 'isClosed' (using the flag),
@@ -52,7 +52,7 @@ const getSelectedValue = (data) => {
 };
 
 /**
- * With the provided startDate, adds the amount of minutes to the Moment instance,
+ * With the provided startDate, adds the amount of minutes to the object instance,
  * and format it using the provided timeFormat.
  *
  * @param timezone
@@ -67,8 +67,8 @@ const genericTimeRange = (
 ) => {
   const startTime = parseDate(startDate, timezone);
   return {
-    startTime: startTime.format(allowedTimeFormat),
-    endTime: startTime.add(minutesBetween, 'minutes').format(allowedTimeFormat),
+    startTime: startTime.format(allowedFormat),
+    endTime: startTime.add(minutesBetween, 'minutes').format(allowedFormat),
   };
 };
 
@@ -243,12 +243,10 @@ class ReasonWeeklyHoursWrapper extends Component {
    * @param value
    */
   updateAvailabilities(index, value) {
-    const startTime = timeToMoment(value.startTime, this.props.timezone);
+    const startTime = timeToDateTimeObj(value.startTime, this.props.timezone);
     this.updateTimeItem('availabilities', index, {
-      startTime: startTime.format(allowedTimeFormat),
-      endTime: startTime
-        .add(this.props.reason.get('duration'), 'minutes')
-        .format(allowedTimeFormat),
+      startTime: startTime.format(allowedFormat),
+      endTime: startTime.add(this.props.reason.get('duration'), 'minutes').format(allowedFormat),
     });
   }
 
@@ -309,7 +307,7 @@ class ReasonWeeklyHoursWrapper extends Component {
   render() {
     const { timezone } = this.props;
     const removeOffSet = time => time.replace('+00', '.000Z');
-    const momentBreaksData = {
+    const breaksData = {
       ...this.state.data,
       availabilities: this.state.data.availabilities.map(({ startTime, endTime, ...rest }) => ({
         ...rest,
@@ -318,8 +316,8 @@ class ReasonWeeklyHoursWrapper extends Component {
       })),
       breaks: this.state.data.breaks.map(({ startTime, endTime, ...rest }) => ({
         ...rest,
-        startTime: timeToMoment(removeOffSet(startTime), timezone),
-        endTime: timeToMoment(removeOffSet(endTime), timezone),
+        startTime: timeToDateTimeObj(removeOffSet(startTime), timezone),
+        endTime: timeToDateTimeObj(removeOffSet(endTime), timezone),
       })),
     };
     return (
@@ -327,14 +325,14 @@ class ReasonWeeklyHoursWrapper extends Component {
         <ReasonHours
           reason={this.props.reason}
           onEditClick={this.onEditClick}
-          allowedTimeFormat={allowedTimeFormat}
+          allowedFormat={allowedFormat}
         />
         <UpdateReasonWeeklyHours>
           {commit => (
             <EditReasonWeeklyHours
-              data={momentBreaksData}
+              data={breaksData}
               active={this.state.active}
-              timeToIsoString={time => timeToMoment(time, timezone).toISOString()}
+              timeToIsoString={time => timeToDateTimeObj(time, timezone).toISOString()}
               timeOptions={this.state.timeOpts}
               handleOverrideDropdownChange={this.handleDropdownChange}
               timezone={timezone}

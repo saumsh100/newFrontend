@@ -1,12 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  dateFormatter,
-  getEndOfTheMonth,
-  getStartOfTheMonth,
-  setDateToTimezone,
-} from '@carecru/isomorphic';
+import { getEndOfTheMonth, getStartOfTheMonth } from '@carecru/isomorphic';
 import pick from 'lodash/pick';
 import pickBy from 'lodash/pickBy';
 import { connect } from 'react-redux';
@@ -22,7 +17,7 @@ import {
   getFinalDailyHours,
   updateFinalDailyHours,
 } from './thunks';
-import { Toggle } from '../../../../library';
+import { getFormattedDate, parseDate, Toggle } from '../../../../library';
 import chairShape from '../../../../library/PropTypeShapes/chairShape';
 import EnabledFeature from '../../../../library/EnabledFeature';
 import calendarDay from '../../../../library/ScheduleCalendar/calendarDay';
@@ -77,7 +72,7 @@ class PractitionerHoursCalendar extends Component {
 
   getModifier(modifier) {
     return Object.keys(pickBy(this.state.baseSchedule.schedule, modifier)).map((storedDate) => {
-      const { years, months, date } = setDateToTimezone(storedDate, this.props.timezone).toObject();
+      const { years, months, date } = parseDate(storedDate, this.props.timezone).toObject();
       return new Date(years, months, date);
     });
   }
@@ -98,7 +93,7 @@ class PractitionerHoursCalendar extends Component {
   }
 
   getFeaturedDay(date = this.state.selectedDay) {
-    const weekDay = dateFormatter(date, this.props.timezone, 'dddd').toLowerCase();
+    const weekDay = getFormattedDate(date, 'dddd', this.props.timezone).toLowerCase();
     return {
       [weekDay]: {
         ...this.state.baseSchedule.schedule[date.toISOString().split('T')[0]],
@@ -112,13 +107,13 @@ class PractitionerHoursCalendar extends Component {
    *
    */
   scheduleMap() {
-    const normalizedSchedule =
-      this.state.selectedDay && this.state.selectedDailySchedule.isDailySchedule
-        ? this.getFeaturedDay()
-        : {
-          ...this.state.baseSchedule.weeklySchedule,
-          ...(this.state.selectedDay ? this.getFeaturedDay() : null),
-        };
+    const normalizedSchedule = this.state.selectedDay
+      && this.state.selectedDailySchedule.isDailySchedule
+      ? this.getFeaturedDay()
+      : {
+        ...this.state.baseSchedule.weeklySchedule,
+        ...(this.state.selectedDay ? this.getFeaturedDay() : null),
+      };
     const parsedWeeklySchedule = pick(normalizedSchedule, [
       'sunday',
       'monday',
@@ -152,8 +147,10 @@ class PractitionerHoursCalendar extends Component {
    * @param callback
    */
   handleDayClick(date, callback) {
-    const selectedDay =
-      this.state.selectedDay && this.state.selectedDay.getTime() === date.getTime() ? null : date;
+    const selectedDay = this.state.selectedDay
+      && this.state.selectedDay.getTime() === date.getTime()
+      ? null
+      : date;
     this.setState(
       {
         selectedDay,
@@ -174,7 +171,7 @@ class PractitionerHoursCalendar extends Component {
   handleDoubleClick(day, handleEditSchedule) {
     return () =>
       this.handleDayClick(day, () =>
-        handleEditSchedule(dateFormatter(day, this.props.timezone, 'dddd').toLowerCase()));
+        handleEditSchedule(getFormattedDate(day, 'dddd', this.props.timezone).toLowerCase()));
   }
 
   /**
@@ -198,14 +195,13 @@ class PractitionerHoursCalendar extends Component {
     })
       .then(() => {
         this.getSchedule(this.state.month);
-        const body =
-          date && isDailySchedule
-            ? `Updated holiday hours for ${this.props.practitioner.getPrettyName()} on ${dateFormatter(
-              date,
-              this.props.timezone,
-              'dddd, MMMM Do',
-            )}`
-            : `Updated default schedule for ${this.props.practitioner.getPrettyName()}`;
+        const body = date && isDailySchedule
+          ? `Updated holiday hours for ${this.props.practitioner.getPrettyName()} on ${getFormattedDate(
+            date,
+            'dddd, MMMM Do',
+            this.props.timezone,
+          )}`
+          : `Updated default schedule for ${this.props.practitioner.getPrettyName()}`;
         this.props.showAlertTimeout({
           alert: { body },
           type: 'success',
@@ -269,16 +265,16 @@ class PractitionerHoursCalendar extends Component {
         )
         : await createPractitionerWeeklyHours(this.props.practitioner);
       this.getSchedule().then(() => {
-        this.setState({
-          selectedDailySchedule: this.state.selectedDay
-            ? Object.values(this.getFeaturedDay(this.state.selectedDay))[0]
+        this.setState(prevState => ({
+          selectedDailySchedule: prevState.selectedDay
+            ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
             : null,
-        });
+        }));
         const body = date
-          ? `Created holiday hours for ${this.props.practitioner.getPrettyName()} on ${dateFormatter(
+          ? `Created holiday hours for ${this.props.practitioner.getPrettyName()} on ${getFormattedDate(
             date,
-            this.props.timezone,
             'dddd, MMMM Do',
+            this.props.timezone,
           )}`
           : `Created default schedule for ${this.props.practitioner.getPrettyName()}`;
 
@@ -298,16 +294,16 @@ class PractitionerHoursCalendar extends Component {
         ? await deleteDailyHours(scheduleId)
         : await deletePractitionerWeeklyHours(this.props.practitioner);
       this.getSchedule().then(() => {
-        this.setState({
-          selectedDailySchedule: this.state.selectedDay
-            ? Object.values(this.getFeaturedDay(this.state.selectedDay))[0]
+        this.setState(prevState => ({
+          selectedDailySchedule: prevState.selectedDay
+            ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
             : null,
-        });
+        }));
         const body = date
-          ? `Deleted holiday hours for ${this.props.practitioner.getPrettyName()} on ${dateFormatter(
+          ? `Deleted holiday hours for ${this.props.practitioner.getPrettyName()} on ${getFormattedDate(
             date,
-            this.props.timezone,
             'dddd, MMMM Do',
+            this.props.timezone,
           )}`
           : `Deleted default schedule for ${this.props.practitioner.getPrettyName()}`;
         this.props.showAlertTimeout({
@@ -395,7 +391,4 @@ const mapStateToProps = ({ auth, entities }) => {
 
 const mapActionsToProps = dispatch => bindActionCreators({ showAlertTimeout }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapActionsToProps,
-)(PractitionerHoursCalendar);
+export default connect(mapStateToProps, mapActionsToProps)(PractitionerHoursCalendar);

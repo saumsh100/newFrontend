@@ -1,8 +1,6 @@
 
 import React, { Component, createRef } from 'react';
-import moment from 'moment-timezone';
 import { v4 as uuid } from 'uuid';
-import { dateFormatter, setDateToTimezone } from '@carecru/isomorphic';
 import DayPicker from 'react-day-picker';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -15,11 +13,13 @@ import defaultHelpers from './defaultRangeHelpers';
 import dayPicker from './dayPicker.scss';
 import ui from '../../../../ui-kit.scss';
 import styles from './styles.scss';
+import { getDate, getUTCDate, parseDate } from '../../util/datetime';
 
 const defaultTypeName = 'Custom';
 
-const valueToDate = value => value && setDateToTimezone(value).toDate();
-
+const valueToDate = (value, timezone) => value && parseDate(value, timezone).toDate();
+const formatDate = (value, timezone, format = undefined) =>
+  getUTCDate(value, timezone).format(format);
 const isInvalidRange = (date, isFromInput, state) =>
   (isFromInput ? date > state.end : date < state.start);
 
@@ -28,8 +28,11 @@ class DayRangeWithHelpers extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      start: valueToDate((props.defaultValue && props.defaultValue.start) || props.start),
-      end: valueToDate((props.defaultValue && props.defaultValue.end) || props.end),
+      start: valueToDate(
+        (props.defaultValue && props.defaultValue.start) || props.start,
+        props.timezone,
+      ),
+      end: valueToDate((props.defaultValue && props.defaultValue.end) || props.end, props.timezone),
       activeElement: null,
       typeName: (props.defaultValue && props.defaultValue.label) || defaultTypeName,
       visibleMonth: new Date(),
@@ -58,12 +61,12 @@ class DayRangeWithHelpers extends Component {
   componentDidUpdate(prevProps) {
     const defaultOption = this.props.helpers.find(
       ({ start, end }) =>
-        setDateToTimezone(start).isSame(this.props.start, 'day') &&
-        setDateToTimezone(end).isSame(this.props.end, 'day'),
+        parseDate(start, this.props.timezone).isSame(this.props.start, 'day')
+        && parseDate(end, this.props.timezone).isSame(this.props.end, 'day'),
     );
     if (prevProps !== this.props) {
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ visibleMonth: valueToDate(this.props.start) });
+      this.setState({ visibleMonth: valueToDate(this.props.start, this.props.timezone) });
       this.setDateValues('start', this.props.start, defaultOption && defaultOption.label);
       this.setDateValues('end', this.props.end, defaultOption && defaultOption.label);
     }
@@ -77,8 +80,8 @@ class DayRangeWithHelpers extends Component {
   }
 
   /**
-   * Only update the state if the provided moment instance is valid.
-   * @param displayValue {moment}
+   * Only update the state if the provided displayValue instance is valid.
+   * @param displayValue {DateTimeObj}
    * @param field
    */
   setValidDate(displayValue, field) {
@@ -97,7 +100,7 @@ class DayRangeWithHelpers extends Component {
   setDateValues(key, value, typeName = defaultTypeName) {
     const input = key === 'start' ? this.fromInput.current : this.toInput.current;
     if (input) {
-      input.value = dateFormatter(value, null, 'll');
+      input.value = formatDate(value, null, 'll');
     }
     return this.setState({
       [key]: value,
@@ -113,14 +116,14 @@ class DayRangeWithHelpers extends Component {
    * @param field
    */
   handleInputBlur(e, field) {
-    const changedValue = moment(e.target.value, 'll', true);
+    const changedValue = getDate(e.target.value, 'll', true);
     if (!changedValue.isValid()) return;
 
     const isFromInput = field === 'start';
-    const formattedDate = dateFormatter(changedValue.toDate());
+    const formattedDate = formatDate(changedValue.toDate());
     if (isInvalidRange(formattedDate, isFromInput, this.state)) {
       const input = isFromInput ? 'fromInput' : 'toInput';
-      this[input].value = dateFormatter(this.state[field], null, 'll');
+      this[input].value = formatDate(this.state[field], null, 'll');
       return;
     }
 
@@ -134,11 +137,11 @@ class DayRangeWithHelpers extends Component {
    * @param field
    */
   handleInputChange(e, field) {
-    const changedValue = moment(e.target.value);
+    const changedValue = getDate(e.target.value);
     if (!changedValue.isValid()) return;
 
     const isFromInput = field === 'start';
-    const formattedDate = dateFormatter(changedValue.toDate());
+    const formattedDate = formatDate(changedValue.toDate(), this.props.timezone);
     if (isInvalidRange(formattedDate, isFromInput, this.state)) return;
 
     this.setState({ typeName: defaultTypeName }, () => this.setValidDate(changedValue, field));
@@ -151,8 +154,8 @@ class DayRangeWithHelpers extends Component {
   confirmRangeChanges() {
     if (this.props.onChange && this.state.start && this.state.end) {
       this.props.onChange({
-        start: setDateToTimezone(this.state.start).toISOString(),
-        end: setDateToTimezone(this.state.end).toISOString(),
+        start: parseDate(this.state.start, this.props.timezone).toISOString(),
+        end: parseDate(this.state.end, this.props.timezone).toISOString(),
       });
     }
 
@@ -166,7 +169,7 @@ class DayRangeWithHelpers extends Component {
    * @return {*}
    */
   handleDayClick(day) {
-    day = dateFormatter(day);
+    day = formatDate(day, this.props.timezone);
     if (!this.state.activeElement) {
       const key = !this.state.start || day < this.state.start ? 'start' : 'end';
       return this.setDateValues(key, day);
@@ -176,7 +179,7 @@ class DayRangeWithHelpers extends Component {
     if (isInvalidRange(day, isFromInput, this.state)) return false;
 
     const key = isFromInput ? 'start' : 'end';
-    this[this.state.activeElement].value = dateFormatter(day, null, 'll');
+    this[this.state.activeElement].value = formatDate(day, this.props.timezone, 'll');
     return this.setDateValues(key, day);
   }
 
@@ -188,9 +191,9 @@ class DayRangeWithHelpers extends Component {
    */
   handleOutsideClick({ target }) {
     if (
-      this.containerEl.current &&
-      !this.containerEl.current.contains(target) &&
-      this.state.isOpen
+      this.containerEl.current
+      && !this.containerEl.current.contains(target)
+      && this.state.isOpen
     ) {
       this.confirmRangeChanges();
     }
@@ -224,9 +227,9 @@ class DayRangeWithHelpers extends Component {
    */
   handleClickWrapper({ target }) {
     if (
-      !this.state.isOpen ||
-      target === this.fromInput.current ||
-      target === this.toInput.current
+      !this.state.isOpen
+      || target === this.fromInput.current
+      || target === this.toInput.current
     ) {
       return this.showDayRange();
     }
@@ -242,14 +245,14 @@ class DayRangeWithHelpers extends Component {
    * @param date
    */
   handleClickInputElement(input, date) {
-    if (!input.value || dateFormatter(date, null, 'll') !== input.value) {
-      input.value = dateFormatter(date, null, 'll');
+    if (!input.value || formatDate(date, this.props.timezone, 'll') !== input.value) {
+      input.value = formatDate(date, this.props.timezone, 'll');
     }
 
     this.setState(
       {
         activeElement: input.name,
-        visibleMonth: valueToDate(date),
+        visibleMonth: valueToDate(date, this.props.timezone),
       },
       () => {
         input.focus();
@@ -293,12 +296,12 @@ class DayRangeWithHelpers extends Component {
                 <div className={styles.labelWrapper}>
                   <strong>{this.state.typeName}</strong>
                   <div className={styles.dateWrapper}>
-                    <span>{dateFormatter(this.state.start, null, 'll')}</span>
+                    <span>{formatDate(this.state.start, this.props.timezone, 'll')}</span>
                     <DayRangeInput
                       placeholder={placeholderStart}
                       name="fromInput"
                       isActive={this.state.activeElement === 'fromInput'}
-                      defaultValue={dateFormatter(this.state.start, null, 'll')}
+                      defaultValue={formatDate(this.state.start, this.props.timezone, 'll')}
                       onBlur={e => this.handleInputBlur(e, 'start')}
                       onChange={e => this.handleInputChange(e, 'start')}
                       onClick={() =>
@@ -310,12 +313,14 @@ class DayRangeWithHelpers extends Component {
                   </div>
                   -
                   <div className={styles.dateWrapper}>
-                    <span>{this.state.end && dateFormatter(this.state.end, null, 'll')}</span>
+                    <span>
+                      {this.state.end && formatDate(this.state.end, this.props.timezone, 'll')}
+                    </span>
                     <DayRangeInput
                       placeholder={placeholderEnd}
                       name="toInput"
                       isActive={this.state.activeElement === 'toInput'}
-                      defaultValue={dateFormatter(this.state.end, null, 'll')}
+                      defaultValue={formatDate(this.state.end, this.props.timezone, 'll')}
                       onBlur={e => this.handleInputBlur(e, 'end')}
                       onChange={e => this.handleInputChange(e, 'end')}
                       onClick={() =>
@@ -357,13 +362,13 @@ class DayRangeWithHelpers extends Component {
                   classNames={dayPickerClasses}
                   selectedDays={[
                     {
-                      from: valueToDate(this.state.start),
-                      to: valueToDate(this.state.end),
+                      from: valueToDate(this.state.start, this.props.timezone),
+                      to: valueToDate(this.state.end, this.props.timezone),
                     },
                   ]}
                   modifiers={{
-                    [dayPicker.start]: valueToDate(this.state.start),
-                    [dayPicker.end]: valueToDate(this.state.end),
+                    [dayPicker.start]: valueToDate(this.state.start, this.props.timezone),
+                    [dayPicker.end]: valueToDate(this.state.end, this.props.timezone),
                   }}
                   month={this.state.visibleMonth}
                   timezone={this.props.timezone}

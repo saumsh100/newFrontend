@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
@@ -31,6 +30,7 @@ import {
   getTodaysDate,
   getUTCDate,
   getDate,
+  DateTimeObj,
 } from '../../library';
 import { selectAppointmentShape } from '../../library/PropTypeShapes';
 import styles from './styles.scss';
@@ -345,8 +345,7 @@ class AddNewAppointment extends Component {
       form: formName,
     };
 
-    let title =
-      selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
+    let title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
     let buttonTitle = selectedAppointment && !selectedAppointment.request ? 'Save' : 'Add';
 
     if (selectedAppointment && selectedAppointment.request) {
@@ -483,7 +482,7 @@ AddNewAppointment.propTypes = {
   chairs: PropTypes.instanceOf(Map).isRequired,
   changeForm: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
-  currentDate: PropTypes.instanceOf(moment).isRequired,
+  currentDate: PropTypes.instanceOf(DateTimeObj).isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   fetchEntities: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,

@@ -2,7 +2,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import moment from 'moment-timezone';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
@@ -15,9 +14,9 @@ import {
   CardHeader,
   Icon,
   Button,
-  IconButton,
   Avatar,
   RemoteSubmitButton,
+  getTodaysDate,
 } from '../library';
 import {
   fetchEntities,
@@ -29,8 +28,9 @@ import { setSelectedWaitSpot } from '../../actions/schedule';
 import withEntitiesRequest from '../../hocs/withEntities';
 import DigitalWaitListItem from './DigitalWaitListItem';
 import AddWaitSpotForm from './AddWaitSpotForm';
-import { SortByFirstName } from '../library/util/SortEntities';
 import styles from './styles.scss';
+import { patientShape, waitSpotShape } from '../library/PropTypeShapes';
+import WaitSpot from '../../entities/models/WaitSpot';
 
 class DigitalWaitList extends Component {
   constructor(props) {
@@ -58,15 +58,14 @@ class DigitalWaitList extends Component {
         const patientList = Object.keys(searchedPatients).length
           ? Object.keys(searchedPatients).map(key => searchedPatients[key])
           : [];
-        patientList.map((patient) => {
+        patientList.forEach((patient) => {
           patient.display = (
             <div className={styles.suggestionContainer}>
               <Avatar user={patient} size="sm" />
               <span className={styles.suggestionContainer_fullName}>
-                {`${patient.firstName} ${patient.lastName}, ${moment().diff(
-                  patient.birthDate,
-                  'years',
-                )}`}
+                {`${patient.firstName} ${patient.lastName}, ${getTodaysDate(
+                  this.props.timezone,
+                ).diff(patient.birthDate, 'years')}`}
               </span>
             </div>
           );
@@ -78,9 +77,9 @@ class DigitalWaitList extends Component {
   addWaitSpot(values) {
     const {
       selectedWaitSpot,
-      updateEntityRequest,
-      createEntityRequest,
-      reset,
+      updateEntityRequest: localUpdateEntityRequest,
+      createEntityRequest: localCreateEntityRequest,
+      reset: localReset,
     } = this.props;
 
     let newValues = {};
@@ -89,7 +88,7 @@ class DigitalWaitList extends Component {
       newValues = Object.assign(
         {
           patientId: values.patientData.id,
-          endDate: moment()
+          endDate: getTodaysDate(this.props.timezone)
             .add(1, 'days')
             .toISOString(),
         },
@@ -132,29 +131,29 @@ class DigitalWaitList extends Component {
     };
 
     if (!selectedWaitSpot) {
-      createEntityRequest({
+      localCreateEntityRequest({
         key: 'waitSpots',
         entityData: newValues,
         alert: alertCreate,
       });
-      reset('addWaitSpot');
+      localReset('addWaitSpot');
     } else {
-      const waitSpotModel = selectedWaitSpot.waitSpotModel;
+      const { waitSpotModel } = selectedWaitSpot;
       const valuesMap = Map(newValues);
       const modifiedWaitSpot = waitSpotModel.merge(valuesMap);
 
-      updateEntityRequest({
+      localUpdateEntityRequest({
         key: 'waitSpots',
         model: modifiedWaitSpot,
         alert: alertUpdate,
       });
-      reset('editWaitSpot');
+      localReset('editWaitSpot');
     }
     this.reinitializeState();
   }
 
   toggleWaitSpotForm() {
-    this.setState({ isAddingWaitSpot: !this.state.isAddingWaitSpot });
+    this.setState(prevState => ({ isAddingWaitSpot: !prevState.isAddingWaitSpot }));
   }
 
   reinitializeState() {
@@ -165,10 +164,11 @@ class DigitalWaitList extends Component {
   }
 
   removeWaitSpot(id) {
-    const confirmDelete = confirm('Are you sure you want to remove this wait spot?');
+    const confirmDelete = window.confirm('Are you sure you want to remove this wait spot?');
 
     if (confirmDelete) {
-      this.props.deleteEntityRequest({ key: 'waitSpots', id });
+      this.props.deleteEntityRequest({ key: 'waitSpots',
+        id });
     }
 
     this.reinitializeState();
@@ -176,13 +176,10 @@ class DigitalWaitList extends Component {
 
   render() {
     const {
-      borderColor,
-      cardTitle,
       waitSpots,
       patients,
       patientUsers,
-      isFetching,
-      setSelectedWaitSpot,
+      setSelectedWaitSpot: localSetSelectedWaitSpot,
       selectedWaitSpot,
     } = this.props;
 
@@ -209,7 +206,8 @@ class DigitalWaitList extends Component {
               label: 'CANCEL',
             },
             {
-              props: { flat: true, form: formName },
+              props: { flat: true,
+                form: formName },
               component: RemoteSubmitButton,
               onClick: this.reinitializeState,
               label: 'SAVE',
@@ -233,13 +231,9 @@ class DigitalWaitList extends Component {
             data-test-id="waitListCount"
           >
             <Button flat compact onClick={this.toggleWaitSpotForm}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                Add to Waitlist{' '}
-                <Icon
-                  style={{ marginLeft: '5px' }}
-                  size={1.5}
-                  icon="plus-circle"
-                />
+              <div style={{ display: 'flex',
+                alignItems: 'center' }}>
+                Add to Waitlist <Icon style={{ marginLeft: '5px' }} size={1.5} icon="plus-circle" />
               </div>
             </Button>
           </CardHeader>
@@ -253,15 +247,9 @@ class DigitalWaitList extends Component {
                 let patientData = null;
 
                 if (waitSpot.patientUserId && !waitSpot.patientId) {
-                  patientData = patientUsers.getIn([
-                    'models',
-                    waitSpot.get('patientUserId'),
-                  ]);
+                  patientData = patientUsers.getIn(['models', waitSpot.get('patientUserId')]);
                 } else if (waitSpot.patientId) {
-                  patientData = patients.getIn([
-                    'models',
-                    waitSpot.get('patientId'),
-                  ]);
+                  patientData = patients.getIn(['models', waitSpot.get('patientId')]);
                 }
 
                 return (
@@ -270,7 +258,7 @@ class DigitalWaitList extends Component {
                     index={index}
                     waitSpot={waitSpot}
                     patientUser={patientData}
-                    setSelectedWaitSpot={setSelectedWaitSpot}
+                    setSelectedWaitSpot={localSetSelectedWaitSpot}
                     handlePatientClick={this.handlePatientClick}
                     removeWaitSpot={this.removeWaitSpot}
                   />
@@ -284,25 +272,33 @@ class DigitalWaitList extends Component {
 }
 
 DigitalWaitList.propTypes = {
-  waitSpots: PropTypes.object.isRequired,
-  patients: PropTypes.object.isRequired,
+  waitSpots: PropTypes.shape(waitSpotShape).isRequired,
+  patients: PropTypes.shape(patientShape).isRequired,
   fetchEntities: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
-  setSelectedPatientId: PropTypes.func.isRequired,
   setSelectedWaitSpot: PropTypes.func.isRequired,
-  selectedWaitSpot: PropTypes.object,
-  push: PropTypes.func.isRequired,
+  patientUsers: PropTypes.instanceOf(Map).isRequired,
+  selectedWaitSpot: PropTypes.shape({
+    patientUserId: PropTypes.string,
+    patientId: PropTypes.string,
+    waitSpotModel: PropTypes.shape(WaitSpot),
+  }),
+  timezone: PropTypes.string.isRequired,
 };
 
-function mapStateToProps({ entities, schedule }) {
+DigitalWaitList.defaultProps = {
+  selectedWaitSpot: null,
+};
+
+function mapStateToProps({ entities, schedule, auth }) {
   return {
     selectedWaitSpot: schedule.toJS().selectedWaitSpot,
     patientUsers: entities.get('patientUsers'),
     patients: entities.get('patients'),
+    timezone: auth.get('timezone'),
   };
 }
 
@@ -326,17 +322,14 @@ const enhance = compose(
     key: 'waitSpots',
     join: ['patientUser', 'patient'],
     params: {
-      startTime: moment().toISOString(),
-      endTime: moment()
+      startTime: getTodaysDate().toISOString(),
+      endTime: getTodaysDate()
         .add(360, 'days')
         .toISOString(),
     },
   }),
 
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 );
 
 export default enhance(DigitalWaitList);

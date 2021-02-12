@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateFormatter } from '@carecru/isomorphic';
 import classnames from 'classnames';
 import {
   Button,
@@ -15,6 +14,7 @@ import {
   DropdownSelect,
   Modal,
   Loading,
+  getFormattedDate,
 } from '../../library';
 import appoitmentsStyle from '../AddNewAppointment/styles.scss';
 import getFinalDailySchedules from './getFinalDailySchedules';
@@ -112,12 +112,12 @@ class ScheduleModal extends React.Component {
                       <div className={styles.practitionerDebug} key={practitioner.id}>
                         <div className={styles.practitionerTitle}>
                           {practitioner.firstName} {practitioner.lastName} -{' '}
-                          {dateFormatter(
+                          {getFormattedDate(
                             this.props.scheduleDate,
-                            this.props.timezone,
                             'YYYY-MM-DD',
+                            this.props.timezone,
                           )}{' '}
-                          ({dateFormatter(this.props.scheduleDate, this.props.timezone, 'dddd')})
+                          ({getFormattedDate(this.props.scheduleDate, 'dddd', this.props.timezone)})
                           <span className={styles.extraInfo}>
                             {`{ timezone: ${this.props.timezone}, isCustomSchedule: `}
                             {`${schedule.dailySchedule.isCustomSchedule || 'Y'} }`}
@@ -166,17 +166,17 @@ class ScheduleModal extends React.Component {
                               {schedule.dailySchedule.isModifiedByTimeOff ? 'Y' : 'N'}
                             </div>
                             <div className={styles.oneHalf}>
-                              {dateFormatter(
+                              {getFormattedDate(
                                 schedule.dailySchedule.startTime,
-                                this.props.timezone,
                                 'h:mma',
+                                this.props.timezone,
                               )}
                             </div>
                             <div className={styles.oneHalf}>
-                              {dateFormatter(
+                              {getFormattedDate(
                                 schedule.dailySchedule.endTime,
-                                this.props.timezone,
                                 'h:mma',
+                                this.props.timezone,
                               )}
                             </div>
                             <div
@@ -192,14 +192,14 @@ class ScheduleModal extends React.Component {
                                       key={`filler_${chairId}_${startDate}_${type}`}
                                     >
                                       <span>
-                                        {dateFormatter(startDate, this.props.timezone, 'hh:mma')}
+                                        {getFormattedDate(startDate, 'hh:mma', this.props.timezone)}
                                       </span>
                                       <span>
-                                        {dateFormatter(endDate, this.props.timezone, 'hh:mma')}
+                                        {getFormattedDate(endDate, 'hh:mma', this.props.timezone)}
                                       </span>
                                       <span>{type}</span>
                                     </div>
-                                  ))
+                                ))
                                 : 'None'}
                             </div>
                             <div
@@ -212,13 +212,13 @@ class ScheduleModal extends React.Component {
                                 ? schedule.openings.map(({ startDate, endDate }) => (
                                     <div className={styles.block} key={`opening_${startDate}`}>
                                       <span>
-                                        {dateFormatter(startDate, this.props.timezone, 'hh:mma')}
+                                        {getFormattedDate(startDate, 'hh:mma', this.props.timezone)}
                                       </span>
                                       <span>
-                                        {dateFormatter(endDate, this.props.timezone, 'hh:mma')}
+                                        {getFormattedDate(endDate, 'hh:mma', this.props.timezone)}
                                       </span>
                                     </div>
-                                  ))
+                                ))
                                 : 'None'}
                             </div>
                             <div
@@ -234,13 +234,13 @@ class ScheduleModal extends React.Component {
                                       key={`availabilities_${startDate}`}
                                     >
                                       <span>
-                                        {dateFormatter(startDate, this.props.timezone, 'hh:mma')}
+                                        {getFormattedDate(startDate, 'hh:mma', this.props.timezone)}
                                       </span>
                                       <span>
-                                        {dateFormatter(endDate, this.props.timezone, 'hh:mma')}
+                                        {getFormattedDate(endDate, 'hh:mma', this.props.timezone)}
                                       </span>
                                     </div>
-                                  ))
+                                ))
                                 : 'None'}
                             </div>
                           </div>

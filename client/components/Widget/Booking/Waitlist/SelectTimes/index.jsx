@@ -2,11 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Set } from 'immutable';
-import { Button } from '../../../../library';
+import { Button, getFormattedDate } from '../../../../library';
 import Service from '../../../../../entities/models/Service';
 import { setWaitSpotTimes } from '../../../../../reducers/availabilities';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
@@ -160,8 +159,7 @@ class SelectTimes extends React.PureComponent {
      * @param {string} label
      */
     const timeListOnFrame = (timeframe, label) =>
-      timeframe
-      && timeframe.length > 0 && (
+      timeframe && timeframe.length > 0 && (
         <div className={styles.timeFrameWrapper}>
           <h3 className={styles.slotsTitle}>{label}</h3>
           {timeframe.map((availability) => {
@@ -176,7 +174,7 @@ class SelectTimes extends React.PureComponent {
                   onClick={() => handleAvailability(availability)}
                   className={classes}
                 >
-                  {moment.tz(availability.startDate, timezone).format('LT')}
+                  {getFormattedDate(availability.startDate, 'LT', timezone)}
                 </Button>
               </div>
             );
@@ -213,7 +211,8 @@ class SelectTimes extends React.PureComponent {
 }
 
 function mapStateToProps({ availabilities, auth, entities, widgetNavigation }) {
-  const getPatientUser = availabilities.get('familyPatientUser') && auth.get('familyPatients').length > 0
+  const getPatientUser = availabilities.get('familyPatientUser')
+    && auth.get('familyPatients').length > 0
     ? auth
       .get('familyPatients')
       .find(patient => patient.id === availabilities.get('familyPatientUser'))

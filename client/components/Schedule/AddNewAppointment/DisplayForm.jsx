@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
 import { Map } from 'immutable';
-import { sortAsc, dateFormatter } from '@carecru/isomorphic';
+import { sortAsc } from '@carecru/isomorphic';
 import {
   Form,
   Field,
@@ -10,6 +10,7 @@ import {
   getTodaysDate,
   getUTCDate,
   DateTimeObj,
+  getFormattedDate,
 } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import DisplaySearchedPatient from './DisplaySearchedPatient';
@@ -59,7 +60,7 @@ const defaultStartTime = (timezone, date) => {
     timezone,
     date,
   }).sort((a, b) => sortAsc(a.value, b.value));
-  const nextAvailable = sortedTimes.find(opt => dateFormatter(opt.value, timezone, 'HH:mm') > now.format('HH:mm'))
+  const nextAvailable = sortedTimes.find(opt => getFormattedDate(opt.value, 'HH:mm', timezone) > now.format('HH:mm'))
     || sortedTimes[0];
 
   return nextAvailable.value;

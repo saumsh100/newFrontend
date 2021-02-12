@@ -3,13 +3,12 @@ import React, { PureComponent } from 'react';
 import { List } from 'immutable';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { CSSTransition } from 'react-transition-group';
 import { Element, scroller } from 'react-scroll';
 import { stringify, parse } from 'query-string';
-import { dateFormatter, groupTimesPerPeriod, setDateToTimezone } from '@carecru/isomorphic';
+import { groupTimesPerPeriod } from '@carecru/isomorphic';
 import {
   setConfirmAvailability,
   setSelectedAvailability,
@@ -32,10 +31,10 @@ import { isResponsive } from '../../../../util/hub';
 import transitions from './transitions.scss';
 import dayPickerStyles from '../dayPickerStyles.scss';
 import styles from './styles.scss';
-import { getFormattedDate } from '../../../library';
+import { getFormattedDate, getTodaysDate, getUTCDate, parseDate } from '../../../library';
 
 /**
- * Loop a list of Moment object and
+ * Loop a list of date object and
  * check if the provided date is the same day,
  * taking in consideration the account's timezone.
  * It also group times that are on the same timeframe (morning, afternoon, evening).
@@ -47,22 +46,13 @@ import { getFormattedDate } from '../../../library';
  */
 const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) =>
   availabilities
-    .filter(date => genericMoment(date.startDate, accountTimezone).isSame(selectedDate, 'day'))
+    .filter(date => getUTCDate(date.startDate, accountTimezone).isSame(selectedDate, 'day'))
     .reduce(groupTimesPerPeriod(accountTimezone), {
       morning: [],
       afternoon: [],
       evening: [],
       total: 0,
     });
-
-/**
- * Return the correct moment object checking if there's a timezone before.
- *
- * @param time
- * @param timezone
- * @returns {*}
- */
-const genericMoment = (time, timezone) => (timezone ? moment.tz(time, timezone) : moment(time));
 
 class DateTime extends PureComponent {
   constructor(props) {
@@ -130,7 +120,7 @@ class DateTime extends PureComponent {
     this.setState(prevState => ({
       needToUpdateWaitlist: true,
       month: nextAvailability
-        ? setDateToTimezone(date, this.props.accountTimezone).toDate()
+        ? parseDate(date, this.props.accountTimezone).toDate()
         : prevState.month,
     }));
     this.props.hideButton();
@@ -179,8 +169,7 @@ class DateTime extends PureComponent {
       return history.push(nextLoc);
     }
 
-    const currentDayPlus24 = moment()
-      .tz(accountTimezone)
+    const currentDayPlus24 = getTodaysDate(accountTimezone)
       .add(1, 'day')
       .toISOString();
 
@@ -236,10 +225,10 @@ class DateTime extends PureComponent {
      */
     const nextAvailabilityButton = ({ startDate }) => (
       <Button
-        onClick={() => this.changeSelectedDate(genericMoment(startDate, accountTimezone), true)}
+        onClick={() => this.changeSelectedDate(getUTCDate(startDate, accountTimezone), true)}
         className={styles.nextAvailabilityButton}
       >
-        Next Availablility on {genericMoment(startDate, accountTimezone).format('ddd, MMM D')}
+        Next Availablility on {getUTCDate(startDate, accountTimezone).format('ddd, MMM D')}
       </Button>
     );
 
@@ -318,13 +307,13 @@ class DateTime extends PureComponent {
         )
       );
     };
-    const currentDate = new Date();
+    const currentDate = getTodaysDate(accountTimezone).toDate();
     const queryVars = parse(this.props.location.search);
     const disabledDates = queryVars
       && queryVars.dueDate
       && this.props.isRecall
       && queryVars.dueDate > currentDate.toISOString()
-      ? moment(queryVars.dueDate).toDate()
+      ? getUTCDate(queryVars.dueDate, accountTimezone).toDate()
       : currentDate;
     return (
       <Element id="scrollableContainer" className={styles.scrollableContainer}>
@@ -348,7 +337,7 @@ class DateTime extends PureComponent {
                 // but it can sometimes be a future date depending on the timezone you currently are
                 value={
                   selectedStartDate
-                  && dateFormatter(selectedStartDate, accountTimezone, 'YYYY-MM-DD')
+                  && getFormattedDate(selectedStartDate, 'YYYY-MM-DD', accountTimezone)
                 }
                 tipSize={0.01}
                 showPreviousMonth={false}

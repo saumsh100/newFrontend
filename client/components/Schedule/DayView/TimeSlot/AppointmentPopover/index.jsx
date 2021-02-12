@@ -1,7 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber, setDateToTimezone, dateFormatter } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '@carecru/isomorphic';
+import { connect } from 'react-redux';
 import {
   Card,
   Avatar,
@@ -14,20 +15,20 @@ import {
   Button,
   TextArea,
   PointOfContactBadge,
+  getTodaysDate,
+  getFormattedDate,
 } from '../../../../library';
 import { appointmentShape } from '../../../../library/PropTypeShapes';
 import PatientModel from '../../../../../entities/models/Patient';
 import EnabledFeature from '../../../../library/EnabledFeature';
 import styles from './styles.scss';
 
-export default function AppointmentPopover({ patient, appointment, scheduleView, ...props }) {
+const AppointmentPopover = ({ patient, appointment, timezone, scheduleView, ...props }) => {
   const { startDate, endDate, practitionerData, chairData, note } = appointment;
-  const appointmentDate = dateFormatter(startDate, '', 'dddd LL');
+  const appointmentDate = getFormattedDate(startDate, 'dddd LL', timezone);
   const textAreaTheme = { group: styles.textAreaGroup };
   const patientUrl = `/patients/${patient.id}`;
-  const age = patient.birthDate
-    ? setDateToTimezone(Date.now(), null).diff(patient.birthDate, 'years')
-    : null;
+  const age = patient.birthDate ? getTodaysDate(timezone).diff(patient.birthDate, 'years') : null;
 
   return (
     <Card className={styles.card} noBorder>
@@ -53,7 +54,8 @@ export default function AppointmentPopover({ patient, appointment, scheduleView,
           <div className={styles.container}>
             <div className={styles.subHeader}>Time</div>
             <div className={styles.data}>
-              {dateFormatter(startDate, '', 'h:mm a')} - {dateFormatter(endDate, '', 'h:mm a')}
+              {getFormattedDate(startDate, 'h:mm a', timezone)} -{' '}
+              {getFormattedDate(endDate, 'h:mm a', timezone)}
             </div>
           </div>
 
@@ -133,7 +135,7 @@ export default function AppointmentPopover({ patient, appointment, scheduleView,
       </SContainer>
     </Card>
   );
-}
+};
 
 AppointmentPopover.propTypes = {
   patient: PropTypes.instanceOf(PatientModel).isRequired,
@@ -142,6 +144,10 @@ AppointmentPopover.propTypes = {
   editAppointment: PropTypes.func.isRequired,
   scheduleView: PropTypes.string,
   handleGoToChat: PropTypes.func.isRequired,
+  timezone: PropTypes.func.isRequired,
 };
 
 AppointmentPopover.defaultProps = { scheduleView: 'chair' };
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(mapStateToProps, null)(AppointmentPopover);

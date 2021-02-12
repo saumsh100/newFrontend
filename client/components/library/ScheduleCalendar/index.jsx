@@ -165,6 +165,7 @@ class ScheduleCalendar extends Component {
           month={month}
           onNextClick={() => this.changeMonth(1)}
           onPreviousClick={() => this.changeMonth(-1)}
+          timezone={timezone}
         />
         <div className={styles.contentWrapper}>
           <div className={styles.content}>

@@ -1,15 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateFormatter, formatPhoneNumber, setDateToTimezone } from '@carecru/isomorphic';
-import { Card, SContainer, SHeader, SBody, Avatar, Icon, IconButton } from '../../library';
+import { connect } from 'react-redux';
+import { formatPhoneNumber } from '@carecru/isomorphic';
+import { Card, SContainer, SHeader, SBody, Avatar, Icon, IconButton } from '..';
 import { patientShape } from '../PropTypeShapes';
 import styles from './styles.scss';
+import { getFormattedDate, getTodaysDate } from '../util/datetime';
 
-const PatientUserProfile = ({ patient, closePopover }) => {
-  const age = patient.birthDate
-    ? setDateToTimezone(Date.now(), null).diff(patient.birthDate, 'years')
-    : null;
+const PatientUserProfile = ({ patient, closePopover, timezone }) => {
+  const age = patient.birthDate ? getTodaysDate(timezone).diff(patient.birthDate, 'years') : null;
 
   return (
     <Card className={styles.card} noBorder id="appPopOver">
@@ -30,7 +30,7 @@ const PatientUserProfile = ({ patient, closePopover }) => {
               <div className={styles.subHeader}>Birthday</div>
               <div className={styles.data}>
                 <span className={styles.basicText}>
-                  {dateFormatter(patient.birthDate, '', 'MM/DD/YYYY')}
+                  {getFormattedDate(patient.birthDate, 'MM/DD/YYYY', timezone)}
                 </span>
               </div>
             </div>
@@ -73,9 +73,12 @@ const PatientUserProfile = ({ patient, closePopover }) => {
     </Card>
   );
 };
-export default PatientUserProfile;
 
 PatientUserProfile.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,
   closePopover: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+export default connect(mapStateToProps, null)(PatientUserProfile);

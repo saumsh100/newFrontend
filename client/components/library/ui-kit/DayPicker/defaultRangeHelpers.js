@@ -1,7 +1,7 @@
 
-import moment from 'moment-timezone';
+import { getUTCDate } from '../../util/datetime';
 
-const today = moment()
+const today = getUTCDate()
   .startOf('day')
   .add(12, 'hours');
 

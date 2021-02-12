@@ -1,7 +1,7 @@
 
-import { dateFormatter } from '@carecru/isomorphic';
 import { fetchEntities } from './fetchEntities';
 import { httpClient } from '../util/httpClient';
+import { getFormattedDate } from '../components/library';
 
 export const loadWeeklySchedule = () => dispatch =>
   dispatch(
@@ -12,12 +12,11 @@ export const loadWeeklySchedule = () => dispatch =>
   );
 
 export const loadMassTextTemplate = ({ timezone, id, name }) => {
-  const url =
-    `/api/accounts/${id}/renderedTemplate` +
-    '?templateName=waitlist-mass-text-message' +
-    `&parameters[date]=${dateFormatter(new Date(), timezone, 'MMMM Do YYYY')}` +
-    `&parameters[time]=${dateFormatter(new Date(), timezone, 'h:mm a')}` +
-    `&parameters[account][name]=${name}`;
+  const url = `/api/accounts/${id}/renderedTemplate`
+    + '?templateName=waitlist-mass-text-message'
+    + `&parameters[date]=${getFormattedDate(new Date(), 'MMMM Do YYYY', timezone)}`
+    + `&parameters[time]=${getFormattedDate(new Date(), 'h:mm a', timezone)}`
+    + `&parameters[account][name]=${name}`;
 
   return httpClient().get(url);
 };

@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { formatPhoneNumber, setDateToTimezone } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
 import {
   Card,
@@ -17,14 +17,13 @@ import {
   Button,
   PointOfContactBadge,
   getUTCDate,
+  getTodaysDate,
 } from '..';
 import { patientShape } from '../PropTypeShapes';
 import styles from './styles.scss';
 
 const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, timezone }) => {
-  const age = patient.birthDate
-    ? setDateToTimezone(Date.now(), null).diff(patient.birthDate, 'years')
-    : null;
+  const age = patient.birthDate ? getTodaysDate(timezone).diff(patient.birthDate, 'years') : null;
 
   const patientPhone = isPatientUser ? 'phoneNumber' : 'cellPhoneNumber';
 

@@ -1,5 +1,5 @@
 
-import { dateFormatter } from '@carecru/isomorphic';
+import { getFormattedDate } from '../../components/library';
 import createModel from '../createModel';
 
 const PatientUserSchema = {
@@ -28,6 +28,6 @@ export default class PatientUser extends createModel(PatientUserSchema) {
 
   getBirthDate() {
     const birthDate = this.get('birthDate');
-    return birthDate ? dateFormatter(birthDate, '', 'MM/DD/YYYY') : '';
+    return birthDate ? getFormattedDate(birthDate, 'MM/DD/YYYY') : '';
   }
 }

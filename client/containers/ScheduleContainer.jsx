@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { List, Map } from 'immutable';
 import { connect } from 'react-redux';
-import { setDateToTimezone } from '@carecru/isomorphic';
 import Loader from '../components/Loader';
 import ScheduleComponent from '../components/Schedule';
 import { createEntityRequest, fetchEntities, fetchEntitiesRequest } from '../thunks/fetchEntities';
@@ -19,7 +18,7 @@ import {
   setScheduleDate,
 } from '../actions/schedule';
 import { setAllFilters } from '../thunks/schedule';
-import { DateTimeObj } from '../components/library/util/datetime';
+import { DateTimeObj, getTodaysDate, parseDate } from '../components/library/util/datetime';
 
 class ScheduleContainer extends Component {
   constructor(props) {
@@ -35,7 +34,7 @@ class ScheduleContainer extends Component {
   }
 
   componentDidMount() {
-    const currentDate = setDateToTimezone(this.props.currentDate);
+    const currentDate = parseDate(this.props.currentDate, this.props.timezone);
     const appointmentsQuery = this.buildAppointmentQuery(currentDate);
     const eventsQuery = this.buildEventsQuery(currentDate);
 
@@ -74,8 +73,8 @@ class ScheduleContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const previousDate = setDateToTimezone(prevProps.currentDate);
-    const nextPropsDate = setDateToTimezone(this.props.schedule.toJS().scheduleDate);
+    const previousDate = parseDate(prevProps.currentDate, this.props.timezone);
+    const nextPropsDate = parseDate(this.props.schedule.toJS().scheduleDate, this.props.timezone);
 
     if (this.isSameDay(previousDate, nextPropsDate)) {
       const appointmentsQuery = this.buildAppointmentQuery(nextPropsDate);
@@ -145,8 +144,8 @@ class ScheduleContainer extends Component {
   }
 
   refetchRecentlyUpdatedAppointments() {
-    const currentDate = setDateToTimezone(this.props.currentDate);
-    const fiveMinutesAgo = setDateToTimezone()
+    const currentDate = parseDate(this.props.currentDate, this.props.timezone);
+    const fiveMinutesAgo = getTodaysDate(this.props.timezone)
       .subtract(1, 'minutes')
       .toISOString();
 
@@ -261,6 +260,7 @@ function mapStateToProps({ apiRequests, entities, schedule, auth }) {
     pracsFetched,
     chairsFetched,
     accountsFetched,
+    timezone: auth.get('timezone'),
   };
 }
 
@@ -313,6 +313,7 @@ ScheduleContainer.propTypes = {
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
   accountsFetched: PropTypes.bool,
+  timezone: PropTypes.string.isRequired,
 };
 
 ScheduleContainer.defaultProps = {

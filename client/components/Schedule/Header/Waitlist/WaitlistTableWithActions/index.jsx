@@ -1,11 +1,10 @@
 
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { capitalize } from '@carecru/isomorphic';
 import ReactTable from 'react-table';
-import { Avatar, Checkbox, Icon } from '../../../../library';
+import { Avatar, Checkbox, Icon, getDate } from '../../../../library';
 import Tooltip from '../../../../Tooltip';
 import { propsGenerator } from '../helpers';
 import FilterBar from './FilterBar';
@@ -78,10 +77,12 @@ const WaitlistTableWithActions = ({
       selectedWaitlistMap,
     });
 
-    const availableTimes = spot.availableTimes.map(time => moment(time).toISOString());
+    const availableTimes = spot.availableTimes.map(time => getDate(time).toISOString());
 
-    return { ...generatedProps,
-      availableTimes };
+    return {
+      ...generatedProps,
+      availableTimes,
+    };
   });
 
   const sortHelper = useCallback((a, b) => {
@@ -217,6 +218,7 @@ const WaitlistTableWithActions = ({
           />
           <div className={tableStyles.addTo}>
             <button
+              type="button"
               className={styles.addButton}
               onClick={goToAddWaitListForm}
               data-test-id="button_addToWaitlist"

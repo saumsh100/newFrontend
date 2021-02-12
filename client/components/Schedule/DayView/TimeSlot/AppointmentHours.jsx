@@ -8,7 +8,7 @@ import { getUTCDate } from '../../../library';
 /**
  * Function to shorten the time string based on the minutes
  * Can also set the AM/PM indicator
- * @param {moment} date
+ * @param {DateTimeObj} date
  * @param {boolean} addAtoFormat
  * @returns {string}
  */
@@ -21,9 +21,9 @@ const shortenTime = (date, addAtoFormat = true) => {
 /**
  * Function that builds the correct format to display the times.
  * Supress the AM/PM of the end and start times are the same.
- * @param {string | moment} startDate
+ * @param {string | DateTimeObj} startDate
  * @param {string} timezone
- * @param {string | moment} endDate
+ * @param {string | DateTimeObj} endDate
  */
 const buildHoursFormat = (startDate, timezone, endDate = null) => {
   startDate = getUTCDate(startDate, timezone);
@@ -41,8 +41,8 @@ const buildHoursFormat = (startDate, timezone, endDate = null) => {
 
 /**
  * Builds the final string to display.
- * @param {string | moment} startDate
- * @param {string | moment} endDate
+ * @param {string | DateTimeObj} startDate
+ * @param {string | DateTimeObj} endDate
  * @param {string} timezone
  * @param {boolean} inline
  */

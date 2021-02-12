@@ -1,15 +1,13 @@
 
-import {
-  setDateToTimezone,
-  week,
-  dateFormatter,
-  getHoursFromInterval,
-  capitalize,
-} from '@carecru/isomorphic';
-import moment from 'moment';
+import { week, getHoursFromInterval, capitalize } from '@carecru/isomorphic';
 import PatientUserPopover from '../../../library/PatientUserPopover';
 import PatientPopover from '../../../library/PatientPopover';
-import { generateTimeOptions } from '../../../library';
+import {
+  generateTimeOptions,
+  getFormattedDate,
+  getUTCDateWithFormat,
+  parseDate,
+} from '../../../library';
 
 /**
  * Factory to format a date value.
@@ -29,7 +27,7 @@ const dateFormatterFactory = timezone => time =>
  * @return string
  */
 const formatTimeToTz = (value, timezone) => {
-  const valueInstance = setDateToTimezone(value, timezone);
+  const valueInstance = parseDate(value, timezone);
   const format = valueInstance.minutes() === 0 ? 'ha' : 'h:mma';
   return valueInstance.format(format);
 };
@@ -270,9 +268,9 @@ export const propsGenerator = ({
     checked: selectedWaitlistMap[ccId],
     onChange: () => toggleSingleWaitlistSelection(ccId),
     onRemove: () => removeWaitSpot({ id: ccId }),
-    addedDate: dateFormatter(createdAt, '', 'YYYY/MM/DD'),
+    addedDate: getFormattedDate(createdAt, 'YYYY/MM/DD', timezone),
     dates: waitlistDatesFormatter(daysOfTheWeek),
-    nextApptDate: nextAppt ? dateFormatter(nextAppt, '', 'YYYY/MM/DD') : null,
+    nextApptDate: nextAppt ? getFormattedDate(nextAppt, 'YYYY/MM/DD', timezone) : null,
     patient: isPatientUser ? patientUser : patient,
     PopOverComponent: isPatientUser ? PatientUserPopover : PatientPopover,
     times: hasTimes ? waitlistTimesFormatter(availableTimes.sort(), timezone) : '',
@@ -307,11 +305,11 @@ export const getTimeSlot = (
   beforeAfterNoon = '12:00 PM',
   beforeEvening = '5:30 PM',
 ) => {
-  const value = moment(currentTime, format);
-  if (value.isBefore(moment(beforeAfterNoon, format))) {
+  const value = getUTCDateWithFormat(currentTime, format);
+  if (value.isBefore(getUTCDateWithFormat(beforeAfterNoon, format))) {
     return 'morning';
   }
-  if (value.isAfter(moment(beforeEvening, format))) {
+  if (value.isAfter(getUTCDateWithFormat(beforeEvening, format))) {
     return 'evening';
   }
   return 'afternoon';

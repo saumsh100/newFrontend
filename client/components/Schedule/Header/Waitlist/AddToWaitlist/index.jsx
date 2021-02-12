@@ -3,10 +3,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import moment from 'moment/moment';
 import { bindActionCreators } from 'redux';
 import { week, frames, capitalize } from '@carecru/isomorphic';
-import { Grid, Row, Col, Avatar, Icon, Button, DialogBox } from '../../../../library/index';
+import {
+  Grid,
+  Row,
+  Col,
+  Avatar,
+  Icon,
+  Button,
+  DialogBox,
+  getUTCDate,
+  getTodaysDate,
+} from '../../../../library/index';
 import { Create as CreateWaitSpot } from '../../../../GraphQLWaitlist';
 import { isHub } from '../../../../../util/hub';
 import CheckboxButton from '../../../../library/CheckboxButton';
@@ -152,11 +161,11 @@ class AddToWaitlist extends React.Component {
    */
   handleCreateWaitSpot() {
     const { patientSearched, daysOfTheWeek, availableTimes } = this.state;
-    const { createWaitSpotHandler } = this.props;
+    const { createWaitSpotHandler, timezone } = this.props;
     if (
-      !patientSearched ||
-      Object.values(daysOfTheWeek).every(a => !a) ||
-      availableTimes.length === 0
+      !patientSearched
+      || Object.values(daysOfTheWeek).every(a => !a)
+      || availableTimes.length === 0
     ) {
       return;
     }
@@ -166,7 +175,7 @@ class AddToWaitlist extends React.Component {
           daysOfTheWeek,
           availableTimes,
           patientId: patientSearched.id,
-          endDate: moment()
+          endDate: getTodaysDate(timezone)
             .add(30, 'days')
             .toISOString(),
           accountId: this.props.accountId,
@@ -195,8 +204,8 @@ class AddToWaitlist extends React.Component {
    */
   hasEveryDateSelected(dates) {
     return (
-      Object.entries(this.state.daysOfTheWeek).filter(([k, v]) => dates.includes(k) && v).length ===
-      dates.length
+      Object.entries(this.state.daysOfTheWeek).filter(([k, v]) => dates.includes(k) && v).length
+      === dates.length
     );
   }
 
@@ -254,10 +263,9 @@ class AddToWaitlist extends React.Component {
   render() {
     const { availabilities, active, timezone } = this.props;
     const { patientSearched, availableTimes, daysOfTheWeek } = this.state;
-    const disabled =
-      !patientSearched ||
-      Object.values(daysOfTheWeek).every(a => !a) ||
-      availableTimes.length === 0;
+    const disabled = !patientSearched
+      || Object.values(daysOfTheWeek).every(a => !a)
+      || availableTimes.length === 0;
     return (
       <DialogBox
         custom
@@ -391,7 +399,7 @@ class AddToWaitlist extends React.Component {
                           labelStyles={styles.checkboxButton}
                           wrapperStyle={styles.wrapperCheckboxButton}
                           checked={availableTimes.includes(startDate)}
-                          label={moment.tz(startDate, timezone).format('LT')}
+                          label={getUTCDate(startDate, timezone).format('LT')}
                           onChange={() => this.handleCheckboxTime(startDate)}
                         />
                       </div>
@@ -414,10 +422,9 @@ const mapStateToProps = ({ auth, availabilities, entities }) => {
     activeAccount.get('weeklyScheduleId'),
   ]);
 
-  const availabilitiesGrouped =
-    weeklySchedule &&
-    activeAccount &&
-    availabilitiesGroupedByPeriod(
+  const availabilitiesGrouped = weeklySchedule
+    && activeAccount
+    && availabilitiesGroupedByPeriod(
       Object.values(weeklySchedule.toJS()),
       activeAccount.get('timezone'),
       60,
@@ -433,10 +440,7 @@ const mapStateToProps = ({ auth, availabilities, entities }) => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({ loadWeeklySchedule }, dispatch);
 
-const AddToWaitlistEnhanced = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AddToWaitlist);
+const AddToWaitlistEnhanced = connect(mapStateToProps, mapDispatchToProps)(AddToWaitlist);
 
 AddToWaitlist.defaultProps = {
   active: false,
@@ -491,7 +495,7 @@ SelectedPatient.defaultProps = {
   className: '',
 };
 
-export default props =>
+const CreateWaitSpotWrapper = props =>
   props.active && (
     <CreateWaitSpot>
       {createWaitSpotHandler => (
@@ -499,3 +503,13 @@ export default props =>
       )}
     </CreateWaitSpot>
   );
+
+CreateWaitSpotWrapper.propTypes = {
+  active: PropTypes.bool,
+};
+
+CreateWaitSpotWrapper.defaultProps = {
+  active: false,
+};
+
+export default CreateWaitSpotWrapper;

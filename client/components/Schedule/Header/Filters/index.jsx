@@ -2,10 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map, List } from 'immutable';
-import moment from 'moment';
 import styles from './styles.scss';
 import FiltersAll from './FiltersAll';
-import { getDate } from '../../../library';
+import { DateTimeObj, getDate } from '../../../library';
 
 export default function Filters(props) {
   const { practitioners, schedule, chairs, appointments, currentDate } = props;
@@ -73,6 +72,6 @@ Filters.propTypes = {
   schedule: PropTypes.instanceOf(Map).isRequired,
   chairs: PropTypes.instanceOf(Map).isRequired,
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
-  currentDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(moment)])
+  currentDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(DateTimeObj)])
     .isRequired,
 };

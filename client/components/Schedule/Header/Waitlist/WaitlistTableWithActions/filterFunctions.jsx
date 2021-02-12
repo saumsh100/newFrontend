@@ -1,10 +1,11 @@
 
-const moment = require('moment');
+import { getDate } from '../../../../library';
 
 /**
  * @param waitlist
  * @param filterRules
  */
+
 // eslint-disable-next-line import/prefer-default-export
 export function applyAllFilters(waitlist, filterRules) {
   const { reasons, practitioners, units, dayOfWeek, times } = filterRules;
@@ -101,7 +102,7 @@ const timesFilter = (waitlist, filterRule, showNotSet) =>
       return waitspot;
     }
     const { availableTimes } = waitspot;
-    return availableTimes.find(time => filterRule[moment(time).toLocaleString()]);
+    return availableTimes.find(time => filterRule[getDate(time).toLocaleString()]);
   });
 
 /**

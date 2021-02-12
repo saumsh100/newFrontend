@@ -1,12 +1,12 @@
 
 import React, { Component } from 'react';
-import moment from 'moment';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import Popover from 'react-popover';
 import PropTypes from 'prop-types';
 import RequestPopover from '../../Requests/RequestPopover';
 import styles from '../PatientPopover/styles.scss';
+import { getUTCDate } from '../util/datetime';
 
 class RequestPopoverLoader extends Component {
   constructor(props) {
@@ -43,13 +43,15 @@ class RequestPopoverLoader extends Component {
       isRecallsFormActive,
       practitioners,
       data,
+      timezone,
     } = this.props;
 
     if (!data) {
       return null;
     }
     const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
-    const time = `${moment(data.startDate).format('LT')} - ${moment(data.endDate).format('LT')}`;
+    const getTime = value => getUTCDate(value, timezone).format('LT');
+    const time = `${getTime(data.startDate)} - ${getTime(data.endDate)}`;
     const practitionerEntity = data.practitioner && practitioners.get(data.practitioner.id);
 
     return (
@@ -100,6 +102,7 @@ RequestPopoverLoader.propTypes = {
   patientStyles: PropTypes.string,
   getOrCreateChatForPatient: PropTypes.func,
   patientChat: PropTypes.string,
+  timezone: PropTypes.string.isRequired,
   isNoteFormActive: PropTypes.bool.isRequired,
   isFollowUpsFormActive: PropTypes.bool.isRequired,
   isRecallsFormActive: PropTypes.bool.isRequired,
@@ -119,11 +122,12 @@ RequestPopoverLoader.defaultProps = {
   getOrCreateChatForPatient: null,
 };
 
-const mapStateToProps = ({ patientTable, entities }) => ({
+const mapStateToProps = ({ patientTable, entities, auth }) => ({
   practitioners: entities.getIn(['practitioners', 'models']),
   isNoteFormActive: patientTable.get('isNoteFormActive'),
   isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
   isRecallsFormActive: patientTable.get('isRecallsFormActive'),
+  timezone: auth.get('timezone'),
 });
 
 export default connect(mapStateToProps)(RequestPopoverLoader);

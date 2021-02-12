@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
  * @param {boolean} [strict]
  * @returns {moment.Moment} A Moment object
  */
-export const getDate = (date, format = false, strict = false) =>
+export const getDate = (date, format = undefined, strict = false) =>
   (format ? moment(date, format, strict) : moment(date));
 
 /**
@@ -34,7 +34,7 @@ export const getTodaysDate = (timezone = null, useLocalTime = false) => {
  * @param {string} [format]
  * @returns {moment.Moment} A Moment object
  */
-export const getUTCDate = (date, timezone = null, strict = false, format = null) => {
+export const getUTCDate = (date, timezone = null, strict = false, format = undefined) => {
   const newDate = format ? moment.utc(date, format, strict) : moment.utc(date, strict);
 
   return timezone && typeof timezone === 'string' ? newDate.tz(timezone) : newDate;
@@ -131,7 +131,7 @@ export const getFormattedDate = (date, format, timezone = null, useLocalTime = f
  * @param {boolean} [strict] strict mode is disabled by default
  * @returns {boolean} check if the date is valid or nor in a given format
  */
-export const isDateValid = (date, format = null, strict = false) =>
+export const isDateValid = (date, format = undefined, strict = false) =>
   (format ? getDate(date, format, strict).isValid() : getDate(date, strict).isValid);
 
 /**

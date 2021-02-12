@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { formatPhoneNumber, setDateToTimezone } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
 import {
   Card,
@@ -23,7 +23,7 @@ import Appointments from '../../../entities/models/Appointments';
 import ChairModel from '../../../entities/models/Chair';
 import EnabledFeature from '../EnabledFeature';
 import styles from './styles.scss';
-import { getFormattedDate } from '../util/datetime';
+import { getFormattedDate, getTodaysDate } from '../util/datetime';
 
 const popoverDataSections = (subHeaderText, data) => (
   <div className={styles.container} key={subHeaderText}>
@@ -54,9 +54,7 @@ const AppointmentInfo = (props) => {
     errorMessage,
   } = props;
   const { startDate, endDate, note, reason, description } = appointment;
-  const age = patient?.birthDate
-    ? setDateToTimezone(Date.now(), null).diff(patient.birthDate, 'years')
-    : null;
+  const age = patient?.birthDate ? getTodaysDate(timezone).diff(patient.birthDate, 'years') : null;
   const appointmentDate = getFormattedDate(startDate, 'dddd LL', timezone);
   const textAreaTheme = { group: styles.textAreaGroup };
   const notes = description || note || '';
@@ -238,6 +236,7 @@ AppointmentInfo.propTypes = {
 
 const mapStateToProps = ({ auth }) => ({
   nonApptWritePMS: nonApptWritePMS(auth.get('adapterType')),
+  timezone: auth.get('timezone'),
 });
 
 export default connect(mapStateToProps, null)(AppointmentInfo);

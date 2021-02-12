@@ -1,7 +1,7 @@
 
 import zxcvbn from 'zxcvbn';
-import moment from 'moment';
 import { httpClient, bookingWidgetHttpClient } from '../../../util/httpClient';
+import { getUTCDateWithFormat } from '../util/datetime';
 
 const asyncEmailValidatePatient = ({ email }) => {
   if (!email) return null;
@@ -133,7 +133,7 @@ const postalCodeValidate = (value) => {
 const isSamePassword = ({ password, confirmPassword }) =>
   password && confirmPassword && password !== confirmPassword;
 
-const passwordsValidate = (value, values) => {
+const passwordsValidate = (_value, values) => {
   if (isSamePassword(values)) {
     return 'Password is not match';
   }
@@ -214,7 +214,7 @@ const validateBirthdate = (value) => {
   if (!pattern.test(value) && value !== undefined && value !== null) {
     return format;
   }
-  const date = moment(value, format);
+  const date = getUTCDateWithFormat(value, format);
   const isValid = date.isValid();
   if (!isValid && value !== undefined && value !== null) {
     return format;
