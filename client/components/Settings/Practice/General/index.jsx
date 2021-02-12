@@ -10,7 +10,7 @@ import Address from './Address';
 import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
 import { Dropzone, AccountLogo, Button, Header, Link } from '../../../library';
-import { getTodaysDate, getUTCDate, getDateDurantion } from '../../../library/util/datetime';
+import { getTodaysDate, getUTCDate, getDateDuration } from '../../../library/util/datetime';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
@@ -114,7 +114,7 @@ class General extends Component {
     if (this.state.downloadLink) {
       const now = getUTCDate(this.state.expired, this.props.timezone);
       const end = getTodaysDate(this.props.timezone);
-      const duration = getDateDurantion(now.diff(end)).asSeconds();
+      const duration = getDateDuration(now.diff(end)).asSeconds();
 
       button = duration > 0 ? (
           <Link className={styles.linkAsButton} href={this.state.downloadLink} download>

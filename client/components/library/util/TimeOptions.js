@@ -1,5 +1,5 @@
 
-import { getDate } from './datetime';
+import { getDate, getDateDuration } from './datetime';
 
 const generateTimeOptions = () => {
   const timeOptions = [];
@@ -37,6 +37,6 @@ export const setTime = (time) => {
 
 export const getDuration = (startDate, endDate, customBufferTime) => {
   const end = getDate(endDate);
-  const duration = getDate().duration(end.diff(startDate));
+  const duration = getDateDuration(end.diff(startDate));
   return duration.asMinutes() - customBufferTime;
 };

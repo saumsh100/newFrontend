@@ -142,7 +142,7 @@ export const isDateValid = (date, format = undefined, strict = false) =>
  * @param {moment.unitOfTime.DurationConstructor} [unit]
  * @returns {moment.Duration} moment.Duration
  */
-export const getDateDurantion = (input, unit = undefined) =>
+export const getDateDuration = (input, unit = undefined) =>
   (unit ? moment.duration(input, unit) : moment.duration(input));
 
 /**

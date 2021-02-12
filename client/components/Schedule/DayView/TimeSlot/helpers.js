@@ -4,7 +4,7 @@ import {
   APPOITMENT_WIDTH_LEFT_PADDING,
   APPOITMENT_POPOVER_DEFAULT_PLACEMENT,
 } from '../../../../constants/schedule';
-import { getUTCDate, getDateDurantion } from '../../../library';
+import { getUTCDate, getDateDuration } from '../../../library';
 
 /**
  * Returns an array of appointments
@@ -22,13 +22,11 @@ export const intersectingAppointments = (appointments, startDate, endDate, timez
     const appStartDate = getUTCDate(app.startDate, timezone);
     const appEndDate = getUTCDate(app.endDate, timezone);
 
-    const dateIntersectsApp =
-      sDate.isBetween(appStartDate, appEndDate, null, '[)') ||
-      eDate.isBetween(appStartDate, appEndDate, null, '(]');
+    const dateIntersectsApp = sDate.isBetween(appStartDate, appEndDate, null, '[)')
+      || eDate.isBetween(appStartDate, appEndDate, null, '(]');
 
-    const appIntersectsDates =
-      appStartDate.isBetween(sDate, eDate, null, '()') ||
-      appEndDate.isBetween(sDate, eDate, null, '()');
+    const appIntersectsDates = appStartDate.isBetween(sDate, eDate, null, '()')
+      || appEndDate.isBetween(sDate, eDate, null, '()');
 
     return dateIntersectsApp || appIntersectsDates;
   });
@@ -53,7 +51,7 @@ export const calculateHeight = (duration, timeSlotHeight) => (duration / 60) * t
 
 export const getDuration = (startDate, endDate, customBufferTime, timezone = null) => {
   const end = getUTCDate(endDate, timezone);
-  const duration = getDateDurantion(end.diff(startDate));
+  const duration = getDateDuration(end.diff(startDate));
   return duration.asMinutes() - customBufferTime;
 };
 
@@ -73,9 +71,11 @@ export const setPopoverPlacement = (columnIndex, numOfColumns, minWidth) => {
 
   if (maxColumns > numOfColumns && columnIndex === numOfColumns - 1) {
     return 'left';
-  } else if (maxColumns < numOfColumns && columnIndex === maxColumns - 1) {
+  }
+  if (maxColumns < numOfColumns && columnIndex === maxColumns - 1) {
     return 'left';
-  } else if (columnIndex === numOfColumns - 1) {
+  }
+  if (columnIndex === numOfColumns - 1) {
     return 'left';
   }
   return 'right';
@@ -98,8 +98,8 @@ export const calculateAppointmentTop = params => (appointment) => {
 
   const startDateMinutesDived = startDateMinutes / 60;
 
-  appointment.topCalc =
-    (startDateHours - startHour + startDateMinutesDived) * timeSlotHeight.height;
+  const calcResult = (startDateHours - startHour + startDateMinutesDived) * timeSlotHeight.height;
+  appointment.topCalc = calcResult;
 
   appointment.heightCalc = calculateHeight(
     durationTime > unit ? durationTime : unit,
@@ -164,15 +164,13 @@ export const buildAppointmentProps = (params) => {
 
   const left = appPosition > 0 ? multiAppLineLeft : `${splitRow}%`;
 
-  const multiAppLineWidth =
-    appPosition > 0
-      ? `calc(${100 / rowSort.length}%)`
-      : `calc(${100 / rowSort.length}% - ${APPOITMENT_WIDTH_LEFT_PADDING}px)`;
+  const multiAppLineWidth = appPosition > 0
+    ? `calc(${100 / rowSort.length}%)`
+    : `calc(${100 / rowSort.length}% - ${APPOITMENT_WIDTH_LEFT_PADDING}px)`;
 
-  const width =
-    rowSort.length > 1
-      ? multiAppLineWidth
-      : `calc(${100}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)`;
+  const width = rowSort.length > 1
+    ? multiAppLineWidth
+    : `calc(${100}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)`;
 
   const containerStyle = {
     top,
@@ -187,10 +185,9 @@ export const buildAppointmentProps = (params) => {
     zIndex: appPosition,
   };
 
-  const placement =
-    numOfColumns === 1
-      ? APPOITMENT_POPOVER_DEFAULT_PLACEMENT
-      : setPopoverPlacement(columnIndex, numOfColumns, minWidth);
+  const placement = numOfColumns === 1
+    ? APPOITMENT_POPOVER_DEFAULT_PLACEMENT
+    : setPopoverPlacement(columnIndex, numOfColumns, minWidth);
 
   return {
     rowSort,

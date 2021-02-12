@@ -87,7 +87,7 @@ export {
   generateTimeBreaks,
   generateTimeOptions,
   getDate,
-  getDateDurantion,
+  getDateDuration,
   getFixedDate,
   getFormattedDate,
   getFormattedTime,
