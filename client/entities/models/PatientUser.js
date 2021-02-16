@@ -1,5 +1,5 @@
 
-import { getFormattedDate } from '../../components/library';
+import { getFormattedDate } from '../../components/library/util/datetime';
 import createModel from '../createModel';
 
 const PatientUserSchema = {
