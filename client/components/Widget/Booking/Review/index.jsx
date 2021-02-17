@@ -114,13 +114,10 @@ class Review extends PureComponent {
       history,
     });
 
+    const localFormattedDate = format => getFormattedDate(dateAndTime.startDate, format, timezone);
+
     const dateTimeSummaryText = dateAndTime
-      ? `${getFormattedDate(dateAndTime.startDate, 'ddd, MMM Do', timezone)} at ${getFormattedDate(
-        dateAndTime.startDate,
-        'h:mm a',
-        true,
-        timezone,
-      )}`
+      ? `${localFormattedDate('ddd, MMM Do')} at ${localFormattedDate('h:mm a')}`
       : NOT_PROVIDED_TEXT;
 
     return (
