@@ -24,7 +24,7 @@ const AppointmentsSchema = {
   createdAt: null,
 };
 
-export default class Appointments extends createModel(AppointmentsSchema) {
+export default class Appointments extends createModel(AppointmentsSchema, 'Appointments') {
   /**
    * Add all TextMessage specific member functions here
    */

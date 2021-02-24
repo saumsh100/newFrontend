@@ -9,5 +9,6 @@ export default class patientUsers extends createCollection(PatientUser) {
   /*
   getUrlRoot() {
     return '/api/patients';
-  }*/
+  }
+  */
 }

@@ -132,7 +132,6 @@ const FilterBar = ({
 };
 
 const mapStateToProps = ({ auth, entities }) => ({
-  account: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   practitioners: entities
     .getIn(['practitioners', 'models'])
     .sort(sortPractitionersAlphabetical)

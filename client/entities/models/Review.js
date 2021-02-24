@@ -11,6 +11,4 @@ const ReviewSchema = {
   description: null,
 };
 
-export default class Review extends createModel(ReviewSchema) {
-
-}
+export default class Review extends createModel(ReviewSchema, 'Review') {}

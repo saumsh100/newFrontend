@@ -18,7 +18,7 @@ const ServiceSchema = {
   unitCost: null,
 };
 
-export default class Service extends createModel(ServiceSchema) {
+export default class Service extends createModel(ServiceSchema, 'Service') {
   /**
    * Add all TextMessage specific member functions here
    */

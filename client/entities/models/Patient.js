@@ -57,7 +57,7 @@ const PatientSchema = {
   foundChatId: null,
 };
 
-export default class Patient extends createModel(PatientSchema) {
+export default class Patient extends createModel(PatientSchema, 'Patient') {
   /**
    * Add all Patient specific member functions here
    */

@@ -16,7 +16,7 @@ const WaitSpotSchema = {
   createdAt: null,
 };
 
-export default class WaitSpot extends createModel(WaitSpotSchema) {
+export default class WaitSpot extends createModel(WaitSpotSchema, 'WaitSpot') {
   getUrlRoot() {
     return `/api/waitSpots/${this.get('id')}`;
   }

@@ -10,11 +10,11 @@ const DialogSchema = {
   patientName: null,
 };
 
-export default class Dialog extends createModel(DialogSchema) {
+export default class Dialog extends createModel(DialogSchema, 'Dialog') {
   /**
    * Add all TextMessage specific member functions here
    */
-   getUrlRoot() {
-     return `/api/textMessages/dialogs`;
-   }
+  getUrlRoot() {
+    return '/api/textMessages/dialogs';
+  }
 }

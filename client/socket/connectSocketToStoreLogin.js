@@ -58,8 +58,8 @@ export default function connectSocketToStoreLogin(store, socket) {
           onClick: () => {
             if (isHub()) {
               import('../thunks/electron').then((electronThunk) => {
-                store.getState().router.location.pathname.indexOf('/requests') === -1 &&
-                  dispatch(push('/requests'));
+                store.getState().router.location.pathname.indexOf('/requests') === -1
+                  && dispatch(push('/requests'));
                 dispatch(electronThunk.displayContent());
               });
               return;

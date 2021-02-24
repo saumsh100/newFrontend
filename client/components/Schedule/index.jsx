@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -8,7 +8,6 @@ import { push } from 'connected-react-router';
 import { Map, List } from 'immutable';
 import { isHub, isResponsive } from '../../util/hub';
 import { setBackHandler, setTitle } from '../../reducers/electron';
-import Account from '../../entities/models/Account';
 import {
   Card,
   SBody,
@@ -35,7 +34,7 @@ import AssignPatientToChatDialog from '../Patients/AssignPatientToChatDialog';
 import { selectAppointmentShape, practitionerShape } from '../library/PropTypeShapes';
 import styles from './styles.scss';
 
-class ScheduleComponent extends Component {
+class ScheduleComponent extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -416,7 +415,7 @@ class ScheduleComponent extends Component {
             reinitializeState={this.reinitializeState}
             setPatientSearched={this.setPatientSearched}
             patientSearched={this.state.patientSearched}
-            unit={unit.get('unit')}
+            unit={unit}
             currentDate={currentDate}
             showInput={this.state.showInput}
             setShowInput={this.setShowInput}
@@ -480,7 +479,7 @@ class ScheduleComponent extends Component {
                       reinitializeState={this.reinitializeState}
                       setPatientSearched={this.setPatientSearched}
                       patientSearched={this.state.patientSearched}
-                      unit={unit.get('unit')}
+                      unit={unit}
                       currentDate={currentDate}
                       showInput={this.state.showInput}
                       setShowInput={this.setShowInput}
@@ -543,7 +542,7 @@ ScheduleComponent.propTypes = {
   eventsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
   pracsFetched: PropTypes.bool,
-  unit: PropTypes.instanceOf(Account).isRequired,
+  unit: PropTypes.number.isRequired,
   schedule: PropTypes.instanceOf(Map).isRequired,
   selectedAppointment: PropTypes.shape(selectAppointmentShape),
   selectAppointment: PropTypes.func.isRequired,

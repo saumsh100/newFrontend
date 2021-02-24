@@ -8,7 +8,7 @@ const EnterpriseSchema = {
   plan: null,
 };
 
-export default class Enterprise extends createModel(EnterpriseSchema) {
+export default class Enterprise extends createModel(EnterpriseSchema, 'Enterprise') {
   getUrlRoot() {
     return `/api/enterprises/${this.getId()}`;
   }

@@ -1,3 +1,4 @@
+
 import createModel from '../createModel';
 
 const SegmentSchema = {
@@ -10,6 +11,4 @@ const SegmentSchema = {
   rawWhere: null,
 };
 
-export default class Segment extends createModel(SegmentSchema) {
-
-}
+export default class Segment extends createModel(SegmentSchema, 'Segment') {}

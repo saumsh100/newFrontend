@@ -63,7 +63,7 @@ const AccountSchema = {
   useRecallWithoutOnlineBooking: null,
 };
 
-export default class Account extends createModel(AccountSchema) {
+export default class Account extends createModel(AccountSchema, 'Account') {
   getUrlRoot() {
     return `/api/accounts/${this.getId()}`;
   }

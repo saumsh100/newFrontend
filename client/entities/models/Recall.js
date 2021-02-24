@@ -12,6 +12,4 @@ const RecallSchema = {
   isDeleted: null,
 };
 
-export default class Recall extends createModel(RecallSchema) {
-
-}
+export default class Recall extends createModel(RecallSchema, 'Recall') {}

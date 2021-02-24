@@ -208,7 +208,6 @@ function receiveEntitiesState(state, entities, hardMerge) {
           || key === 'textMessages'
           || key === 'patientTimelineEvents')
       ) {
-        // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);
       } else {

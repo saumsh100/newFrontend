@@ -18,7 +18,7 @@ const PatientUserSchema = {
   insuranceGroupId: null,
 };
 
-export default class PatientUser extends createModel(PatientUserSchema) {
+export default class PatientUser extends createModel(PatientUserSchema, 'PatientUser') {
   /**
    * Add all Patient specific member functions here
    */

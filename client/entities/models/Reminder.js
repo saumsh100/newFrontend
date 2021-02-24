@@ -22,4 +22,4 @@ const ReminderSchema = {
   isWaitingRoomEnabled: null,
 };
 
-export default class Reminder extends createModel(ReminderSchema) {}
+export default class Reminder extends createModel(ReminderSchema, 'Reminder') {}

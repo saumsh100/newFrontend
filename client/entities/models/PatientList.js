@@ -1,8 +1,9 @@
+
 import createModel from '../createModel';
 
 const PatientListSchema = {
-	lastAppointmentDate: null,
-	nextAppointmentTitle: null,
+  lastAppointmentDate: null,
+  nextAppointmentTitle: null,
   firstName: null,
   middleName: null,
   lastName: null,
@@ -12,20 +13,19 @@ const PatientListSchema = {
   workPhoneNumber: null,
   otherPhoneNumber: null,
   preferredPhoneNumber: null,
-	gender: null,
-	photo: null,
+  gender: null,
+  photo: null,
   email: null,
-	patientId: null,
-	language: null,
-	birthDate: null,
-	status: null,
-	id: null,
-	insurance: null,
+  patientId: null,
+  language: null,
+  birthDate: null,
+  status: null,
+  id: null,
+  insurance: null,
   appointments: null,
-	middleName: null,
 };
 
-export default class PatientList extends createModel(PatientListSchema) {
+export default class PatientList extends createModel(PatientListSchema, 'PatientList') {
   // TODO: temp fix, this file will be removed
   getFullName() {
     return `${this.get('firstName')} ${this.get('lastName')}`;
@@ -34,7 +34,7 @@ export default class PatientList extends createModel(PatientListSchema) {
   /**
    * Add all TextMessage specific member functions here
    */
-   getUrlRoot() {
-     return `/api/patients/`;
-   }
+  getUrlRoot() {
+    return '/api/patients/';
+  }
 }

@@ -222,7 +222,6 @@ const WaitlistTableWithActions = ({
               className={styles.addButton}
               onClick={goToAddWaitListForm}
               data-test-id="button_addToWaitlist"
-              type="button"
             >
               <Icon icon="plus" color="#3c444c" />
             </button>
@@ -282,13 +281,6 @@ const WaitlistTableWithActions = ({
   );
 };
 
-const mapStateToProps = ({ auth, entities }) => ({
-  timezone: auth.get('timezone'),
-  defaultUnit: entities.getIn(['accounts', 'models', auth.get('accountId')]).get('unit'),
-});
-
-export default memo(connect(mapStateToProps)(WaitlistTableWithActions));
-
 WaitlistTableWithActions.propTypes = {
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
   selectedWaitlistMap: PropTypes.objectOf(PropTypes.bool).isRequired,
@@ -303,3 +295,10 @@ WaitlistTableWithActions.propTypes = {
 WaitlistTableWithActions.defaultProps = {
   waitlist: [],
 };
+
+const mapStateToProps = ({ auth }) => ({
+  timezone: auth.get('timezone'),
+  defaultUnit: auth.get('account').get('unit'),
+});
+
+export default memo(connect(mapStateToProps)(WaitlistTableWithActions));

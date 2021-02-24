@@ -15,7 +15,7 @@ const UserSchema = {
   isSSO: null,
 };
 
-export default class User extends createModel(UserSchema) {
+export default class User extends createModel(UserSchema, 'User') {
   /**
    * Add all TextMessage specific member functions here
    */

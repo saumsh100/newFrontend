@@ -37,7 +37,6 @@ const PatientShape = {
   lastRecallDate: PropTypes.string,
   lastRestorativeApptId: PropTypes.string,
   lastRestorativeDate: PropTypes.string,
-  lastUpdated: PropTypes.number,
   middleName: PropTypes.string,
   mobilePhoneNumber: PropTypes.string,
   cellPhoneNumber: PropTypes.string,
@@ -49,10 +48,12 @@ const PatientShape = {
   photo: PropTypes.string,
   preferences: PropTypes.oneOfType([
     PropTypes.objectOf(PropTypes.bool),
-    PropTypes.objectOf(PropTypes.shape({
-      type: PropTypes.string,
-      defaultValue: PropTypes.objectOf(PropTypes.bool),
-    })),
+    PropTypes.objectOf(
+      PropTypes.shape({
+        type: PropTypes.string,
+        defaultValue: PropTypes.objectOf(PropTypes.bool),
+      }),
+    ),
   ]),
   preferredPhoneNumber: PropTypes.number,
   status: PropTypes.string,

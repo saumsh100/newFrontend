@@ -1,5 +1,4 @@
 
-
 import createCollection from '../createCollection';
 import Enterprise from '../models/Enterprise';
 

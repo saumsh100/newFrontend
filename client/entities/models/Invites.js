@@ -9,9 +9,8 @@ const InvitesSchema = {
   sendingUserId: null,
 };
 
-export default class Invites extends createModel(InvitesSchema) {
+export default class Invites extends createModel(InvitesSchema, 'Invites') {
   /**
    * Add all TextMessage specific member functions here
    */
-
 }

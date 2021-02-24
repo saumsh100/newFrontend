@@ -1,5 +1,4 @@
 
-
 import createCollection from '../createCollection';
 import Dialog from '../models/Dialogs';
 

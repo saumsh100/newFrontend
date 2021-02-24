@@ -10,4 +10,7 @@ const PatientTimelineEventSchema = {
   metaData: null,
 };
 
-export default class PatientTimelineEvent extends createModel(PatientTimelineEventSchema) {}
+export default class PatientTimelineEvent extends createModel(
+  PatientTimelineEventSchema,
+  'PatientTimelineEvent',
+) {}

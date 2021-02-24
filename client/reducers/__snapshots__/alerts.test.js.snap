@@ -27,7 +27,6 @@ Immutable.Map {
     "caller": false,
     "clickable": false,
     "browserAlert": false,
-    "lastUpdated": null,
     "isFetching": false,
   },
 }

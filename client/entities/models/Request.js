@@ -22,7 +22,7 @@ const RequestsSchema = {
   sentRecallId: null,
 };
 
-export default class Requests extends createModel(RequestsSchema) {
+export default class Requests extends createModel(RequestsSchema, 'Requests') {
   getUrlRoot() {
     return `/api/requests/${this.get('id')}`;
   }

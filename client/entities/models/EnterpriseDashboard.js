@@ -7,7 +7,10 @@ const EnterpriseDashboardSchema = {
   clinics: null,
 };
 
-export default class EnterpriseDashboard extends createModel(EnterpriseDashboardSchema) {
+export default class EnterpriseDashboard extends createModel(
+  EnterpriseDashboardSchema,
+  'EnterpriseDashboard',
+) {
   getUrlRoot() {
     return `/api/enterprises/dashboard/${this.getId()}`;
   }

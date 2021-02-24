@@ -12,7 +12,7 @@ const SentReminderSchema = {
   isWaitingRoomEnabled: null,
 };
 
-export default class SentReminder extends createModel(SentReminderSchema) {
+export default class SentReminder extends createModel(SentReminderSchema, 'SentReminder') {
   getUrlRoot() {
     return `/api/sentReminders/${this.getId()}`;
   }

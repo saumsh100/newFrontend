@@ -85,18 +85,18 @@ const NextWaitlist = (props) => {
 
   const goToSendMassMessage = useCallback(
     (ids) => {
-      waitlistRecipientsAnalyzer(account.get('id'), ids).then(({ data }) => {
+      waitlistRecipientsAnalyzer(accountId, ids).then(({ data }) => {
         setConversionAnalyzer(data);
         setWaitListState(WAITLIST_STATE.draft);
       });
     },
-    [account],
+    [accountId],
   );
 
   const handleSendMessage = useCallback(() => {
     setIsSendingMessage(true);
     const dataset = groupBy([...conversionAnalyzer.success, ...conversionAnalyzer.errors], 'id');
-    sendMassMessage(account.get('id'), Object.keys(dataset), textMessage).then(({ data }) => {
+    sendMassMessage(accountId, Object.keys(dataset), textMessage).then(({ data }) => {
       const sentData = {
         errors: mergeData(data.errors, dataset),
         success: mergeData(data.success, dataset),
@@ -106,14 +106,14 @@ const NextWaitlist = (props) => {
       setIsSendingMessage(false);
       setWaitListState(WAITLIST_STATE.sent);
     });
-  }, [account, conversionAnalyzer, textMessage]);
+  }, [accountId, conversionAnalyzer, textMessage]);
 
   const handleSubmit = callback => ({ patient, patientUser, ...values }) => {
     callback({
       variables: {
         input: {
           ...values,
-          accountId: account.get('id'),
+          accountId,
           patientId: patient && patient.id,
           patientUserId: patientUser && patientUser.id,
           id: selectedWaitSpot.id,
@@ -139,6 +139,7 @@ const NextWaitlist = (props) => {
   };
 
   const goToAddWaitListForm = useCallback(() => setWaitListState(WAITLIST_STATE.form), []);
+  const setWaitListToInitialState = useCallback(() => setWaitListState(WAITLIST_STATE.initial), []);
 
   return (
     <>
@@ -156,14 +157,14 @@ const NextWaitlist = (props) => {
         title="Waitlist"
         active={waitlistState === WAITLIST_STATE.draft}
         bodyStyles={styles.dialogBodyList}
-        onEscKeyDown={() => setWaitListState(WAITLIST_STATE.initial)}
-        onOverlayClick={() => setWaitListState(WAITLIST_STATE.initial)}
+        onEscKeyDown={setWaitListToInitialState}
+        onOverlayClick={setWaitListToInitialState}
         type="large"
       >
         <DraftMessage
           {...props}
           conversionAnalyzer={conversionAnalyzer}
-          goToWaitlistTable={() => setWaitListState(WAITLIST_STATE.initial)}
+          goToWaitlistTable={setWaitListToInitialState}
           handleSendMessage={handleSendMessage}
           textMessage={textMessage}
           selectedWaitlistMap={selectedWaitlistMap}
@@ -175,8 +176,8 @@ const NextWaitlist = (props) => {
         title="Waitlist"
         active={waitlistState === WAITLIST_STATE.sent}
         bodyStyles={styles.dialogBodyList}
-        onEscKeyDown={() => setWaitListState(WAITLIST_STATE.initial)}
-        onOverlayClick={() => setWaitListState(WAITLIST_STATE.initial)}
+        onEscKeyDown={setWaitListToInitialState}
+        onOverlayClick={setWaitListToInitialState}
         type="large"
       >
         <ResponseMessage

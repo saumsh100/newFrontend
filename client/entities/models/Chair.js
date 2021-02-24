@@ -9,7 +9,7 @@ const ChairsSchema = {
   isActive: null,
 };
 
-export default class Chairs extends createModel(ChairsSchema) {
+export default class Chairs extends createModel(ChairsSchema, 'Chairs') {
   /**
    * Add all TextMessage specific member functions here
    */

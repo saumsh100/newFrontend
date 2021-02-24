@@ -8,7 +8,7 @@ const PermissionSchema = {
   permissions: null,
 };
 
-export default class Permission extends createModel(PermissionSchema) {
+export default class Permission extends createModel(PermissionSchema, 'Permission') {
   getRole() {
     return this.get('role');
   }

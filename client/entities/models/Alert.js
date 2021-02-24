@@ -14,6 +14,4 @@ const AlertsSchema = {
   browserAlert: null,
 };
 
-export default class Alerts extends createModel(AlertsSchema) {
-
-}
+export default class Alerts extends createModel(AlertsSchema, 'Alerts') {}

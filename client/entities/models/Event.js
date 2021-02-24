@@ -18,4 +18,4 @@ const EventsSchema = {
   event: true,
 };
 
-export default class Events extends createModel(EventsSchema) {}
+export default class Events extends createModel(EventsSchema, 'Events') {}

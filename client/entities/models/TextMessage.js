@@ -15,7 +15,7 @@ const TextMessageSchema = {
   userId: null,
 };
 
-export default class TextMessage extends createModel(TextMessageSchema) {
+export default class TextMessage extends createModel(TextMessageSchema, 'TextMessage') {
   /**
    * Add all TextMessage specific member functions here
    */

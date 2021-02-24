@@ -8,6 +8,4 @@ const AvailabilitySchema = {
   practitionerId: null,
 };
 
-export default class Availability extends createModel(AvailabilitySchema) {
-
-}
+export default class Availability extends createModel(AvailabilitySchema, 'Availability') {}

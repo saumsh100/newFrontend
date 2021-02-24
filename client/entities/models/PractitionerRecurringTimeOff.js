@@ -1,3 +1,4 @@
+
 import createModel from '../createModel';
 
 const PractitionerRecurringTimeOffSchema = {
@@ -15,7 +16,10 @@ const PractitionerRecurringTimeOffSchema = {
   interval: null,
 };
 
-export default class PractitionerRecurringTimeOff extends createModel(PractitionerRecurringTimeOffSchema) {
+export default class PractitionerRecurringTimeOff extends createModel(
+  PractitionerRecurringTimeOffSchema,
+  'PractitionerRecurringTimeOff',
+) {
   getUrlRoot() {
     return `/api/recurringtimeOffs/${this.get('id')}`;
   }

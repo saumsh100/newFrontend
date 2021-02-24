@@ -5,12 +5,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';
 import { generateWaitlistHours, getAllTimeSlots, getTimePickers, getTimeSlot } from '../../helpers';
-import Account from '../../../../../../entities/models/Account';
 import SegmentButton from '../../../../../library/SegmentButton';
 import styles from './styles.scss';
 import { NOT_SET_LABEL, NOT_SET_OPTION } from '../consts';
 
-const TimesSegment = ({ account, timesRule, updateSelectedTimes }) => {
+const TimesSegment = ({ timezone, timesRule, updateSelectedTimes }) => {
   const { rule: selectedTimes, isActive } = timesRule;
   const dirtyState = isActive && 'dirty';
   const selectedTimesKeys = Object.keys(selectedTimes);
@@ -37,7 +36,6 @@ const TimesSegment = ({ account, timesRule, updateSelectedTimes }) => {
     [selectedTimes, selectedTimesKeys, updateSelectedTimes],
   );
 
-  const timezone = useMemo(() => account.get('timezone'), [account]);
   // TODO: use office hours instead of fixed time
   const timeOptions = useMemo(() => generateWaitlistHours(timezone).concat(NOT_SET_OPTION), [
     timezone,
@@ -115,16 +113,16 @@ const TimesSegment = ({ account, timesRule, updateSelectedTimes }) => {
 };
 
 TimesSegment.propTypes = {
-  account: PropTypes.instanceOf(Account).isRequired,
   timesRule: PropTypes.shape({
     rule: PropTypes.shape({}).isRequired,
     isActive: PropTypes.bool.isRequired,
   }).isRequired,
   updateSelectedTimes: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ auth, entities }) => ({
-  account: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+const mapStateToProps = ({ auth }) => ({
+  timezone: auth.get('timezone'),
 });
 
 export default memo(connect(mapStateToProps)(TimesSegment));

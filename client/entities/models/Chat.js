@@ -16,7 +16,7 @@ const ChatSchema = {
   isOpen: false,
 };
 
-export default class Chat extends createModel(ChatSchema) {
+export default class Chat extends createModel(ChatSchema, 'Chat') {
   /**
    * Add all Chat specific member functions here
    */

@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import TopBarContainer from '../containers/TopBarContainer';
-import NavRegionContainer from '../containers/NavRegionContainer';
-import MainRegionContainer from '../containers/MainRegionContainer';
+import TopBarContainer from './TopBarContainer';
+import NavRegionContainer from './NavRegionContainer';
+import MainRegionContainer from './MainRegionContainer';
 import { setIsCollapsed } from '../actions/toolbar';
 import NavList from '../components/NavList';
 import SubTabs from '../components/SubTabs';
 import CallerModal from '../components/CallerModal';
-import AlertContainer from '../containers/AlertContainer';
+import AlertContainer from './AlertContainer';
 import PatientActionsContainer from '../components/Patients/Shared/PatientActionsContainer';
 import { locationShape } from '../components/library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
@@ -151,7 +151,4 @@ DashboardApp.propTypes = {
   loadUnreadChatCount: PropTypes.func.isRequired,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DashboardApp);
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardApp);

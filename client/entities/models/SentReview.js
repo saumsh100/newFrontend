@@ -15,6 +15,4 @@ const SentReviewSchema = {
   primaryType: null,
 };
 
-export default class SentReview extends createModel(SentReviewSchema) {
-
-}
+export default class SentReview extends createModel(SentReviewSchema, 'SentReview') {}

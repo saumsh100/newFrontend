@@ -24,7 +24,7 @@ const PractitionerSchema = {
   isHidden: null,
 };
 
-export default class Practitioner extends createModel(PractitionerSchema) {
+export default class Practitioner extends createModel(PractitionerSchema, 'Practitioner') {
   additionalInfo(isActive) {
     return isActive ? '' : ' (Inactive)';
   }

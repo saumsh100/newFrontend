@@ -1,5 +1,4 @@
 
-
 import createCollection from '../createCollection';
 import EnterpriseDashboard from '../models/EnterpriseDashboard';
 

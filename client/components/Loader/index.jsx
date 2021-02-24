@@ -26,7 +26,6 @@ Loader.defaultProps = {
   isLoaded: false,
   inContainer: false,
   children: null,
-  isLoaded: false,
 };
 
 export default Loader;

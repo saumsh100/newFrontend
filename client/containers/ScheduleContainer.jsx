@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { List, Map } from 'immutable';
@@ -9,7 +9,6 @@ import ScheduleComponent from '../components/Schedule';
 import { createEntityRequest, fetchEntities, fetchEntitiesRequest } from '../thunks/fetchEntities';
 import { deleteAllEntity } from '../reducers/entities';
 import { appointmentShape, practitionerShape } from '../components/library/PropTypeShapes';
-import Account from '../entities/models/Account';
 import Appointment from '../entities/models/Appointments';
 import {
   selectAppointment,
@@ -20,7 +19,7 @@ import {
 import { setAllFilters } from '../thunks/schedule';
 import { DateTimeObj, getTodaysDate, parseDate } from '../components/library/util/datetime';
 
-class ScheduleContainer extends Component {
+class ScheduleContainer extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -124,7 +123,7 @@ class ScheduleContainer extends Component {
   }
 
   buildEventsQuery(date, queryOverride = {}) {
-    const accountId = this.props.activeAccount.get('id');
+    const { accountId } = this.props;
     const startDate = date.startOf('day').toISOString();
     const endDate = date.endOf('day').toISOString();
     return {
@@ -194,11 +193,12 @@ class ScheduleContainer extends Component {
       services,
       patients,
       chairs,
-      activeAccount,
+      unit,
+      accountId,
     } = this.props;
 
     return (
-      <Loader isLoaded={!!activeAccount}>
+      <Loader isLoaded={!!unit && !!accountId}>
         <ScheduleComponent
           practitioners={practitioners}
           schedule={schedule}
@@ -207,7 +207,7 @@ class ScheduleContainer extends Component {
           services={services}
           patients={patients}
           chairs={chairs}
-          unit={activeAccount}
+          unit={unit}
           setMergingPatient={this.props.setMergingPatient}
           setCreatingPatient={this.props.setCreatingPatient}
           createEntityRequest={this.props.createEntityRequest}
@@ -226,9 +226,6 @@ class ScheduleContainer extends Component {
 }
 
 function mapStateToProps({ apiRequests, entities, schedule, auth }) {
-  const waitForAuth = auth.get('accountId');
-  const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
-
   const appsFetched = apiRequests.get('appSchedule')
     ? apiRequests.get('appSchedule').wasFetched
     : null;
@@ -254,7 +251,8 @@ function mapStateToProps({ apiRequests, entities, schedule, auth }) {
     patients: entities.get('patients'),
     services: entities.get('services'),
     chairs: entities.get('chairs'),
-    activeAccount,
+    accountId: auth.get('accountId'),
+    unit: auth.get('account').get('unit'),
     appsFetched,
     eventsFetched,
     pracsFetched,
@@ -294,7 +292,6 @@ ScheduleContainer.propTypes = {
   services: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   patients: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   chairs: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
-  activeAccount: PropTypes.instanceOf(Account),
   selectedAppointment: PropTypes.oneOfType([
     PropTypes.instanceOf(Appointment),
     PropTypes.shape(appointmentShape),
@@ -313,7 +310,9 @@ ScheduleContainer.propTypes = {
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
   accountsFetched: PropTypes.bool,
+  accountId: PropTypes.string,
   timezone: PropTypes.string.isRequired,
+  unit: PropTypes.number,
 };
 
 ScheduleContainer.defaultProps = {
@@ -324,7 +323,8 @@ ScheduleContainer.defaultProps = {
   chairsFetched: false,
   accountsFetched: false,
   selectedAppointment: null,
-  activeAccount: undefined,
+  accountId: undefined,
+  unit: undefined,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScheduleContainer);

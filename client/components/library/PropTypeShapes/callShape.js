@@ -26,7 +26,6 @@ const callShape = {
   destinationNum: PropTypes.string,
   trackingNum: PropTypes.string,
   callSource: PropTypes.string,
-  lastUpdated: PropTypes.number,
   isFetching: PropTypes.bool,
 };
 

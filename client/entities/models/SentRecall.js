@@ -1,9 +1,10 @@
+
 import createModel from '../createModel';
 
 const SentRecallSchema = {
   id: null,
   createdAt: null,
-  //sentDate: null,
+  // sentDate: null,
   recallId: null,
   accountId: null,
   patientId: null,
@@ -11,7 +12,7 @@ const SentRecallSchema = {
   isSent: null,
 };
 
-export default class SentRecall extends createModel(SentRecallSchema) {
+export default class SentRecall extends createModel(SentRecallSchema, 'SentRecall') {
   getUrlRoot() {
     return `/api/sentRecalls/${this.getId()}`;
   }

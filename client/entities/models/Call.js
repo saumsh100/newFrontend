@@ -28,7 +28,7 @@ const CallSchema = {
   callSource: null,
 };
 
-export default class Call extends createModel(CallSchema) {
+export default class Call extends createModel(CallSchema, 'Call') {
   getUrlRoot() {
     return `/api/calls/${this.get('id')}`;
   }

@@ -434,7 +434,6 @@ const patientShape = {
   isFetching: PropTypes.bool,
   isSyncedWithPms: PropTypes.bool,
   lastName: PropTypes.string,
-  lastUpdated: PropTypes.number,
   mobilePhoneNumber: PropTypes.string,
   patientUserId: PropTypes.string,
   status: PropTypes.string,

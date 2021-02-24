@@ -1,3 +1,4 @@
+
 import createModel from '../createModel';
 
 const PractitionerTimeOffSchema = {
@@ -9,7 +10,10 @@ const PractitionerTimeOffSchema = {
   note: null,
 };
 
-export default class PractitionerTimeOff extends createModel(PractitionerTimeOffSchema) {
+export default class PractitionerTimeOff extends createModel(
+  PractitionerTimeOffSchema,
+  'PractitionerTimeOff',
+) {
   getUrlRoot() {
     return `/api/timeOffs/${this.get('id')}`;
   }

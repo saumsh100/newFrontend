@@ -15,7 +15,7 @@ const WeeklyScheduleSchema = {
   isAdvanced: null,
 };
 
-export default class WeeklySchedule extends createModel(WeeklyScheduleSchema) {
+export default class WeeklySchedule extends createModel(WeeklyScheduleSchema, 'WeeklySchedule') {
   getUrlRoot() {
     return `/api/weeklySchedules/${this.getId()}`;
   }

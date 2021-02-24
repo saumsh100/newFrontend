@@ -1,5 +1,4 @@
 
-import { Record } from 'immutable';
 import createModel from '../createModel';
 
 const AddressSchema = {
@@ -13,6 +12,4 @@ const AddressSchema = {
   timezone: null,
 };
 
-export default class Address extends createModel(AddressSchema) {
-
-}
+export default class Address extends createModel(AddressSchema, 'Address') {}
