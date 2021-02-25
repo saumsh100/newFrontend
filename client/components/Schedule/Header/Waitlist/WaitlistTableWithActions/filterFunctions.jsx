@@ -102,7 +102,7 @@ const timesFilter = (waitlist, filterRule, showNotSet) =>
       return waitspot;
     }
     const { availableTimes } = waitspot;
-    return availableTimes.find(time => filterRule[getDate(time).toLocaleString()]);
+    return availableTimes.find(time => filterRule[getDate(time).toISOString()]);
   });
 
 /**
