@@ -8,7 +8,7 @@ import {
   setToDoRecalls,
 } from '../reducers/dashboard';
 import { httpClient } from '../util/httpClient';
-import { getUTCDate, parseDate } from '../components/library/util/datetime';
+import { getTodaysDate, getUTCDate, parseDate } from '../components/library/util/datetime';
 
 export function fetchInsights() {
   return async function (dispatch, getState) {
@@ -65,7 +65,9 @@ export function fetchDonnasToDos(index) {
     const timezone = account.get('timezone');
 
     const currentDate = parseDate(dashboard.get('dashboardDate'), timezone);
-    const startDate = currentDate.startOf('day').toISOString();
+    const isToday = currentDate.isSame(getTodaysDate(timezone), 'day');
+
+    const startDate = isToday && index === 2 ? getTodaysDate(timezone) : currentDate.startOf('day').toISOString();
     const endDate = currentDate.endOf('day').toISOString();
 
     const recallBuffer = account.get('recallBuffer');
