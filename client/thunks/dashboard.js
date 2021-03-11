@@ -67,7 +67,9 @@ export function fetchDonnasToDos(index) {
     const currentDate = parseDate(dashboard.get('dashboardDate'), timezone);
     const isToday = currentDate.isSame(getTodaysDate(timezone), 'day');
 
-    const startDate = isToday && index === 2 ? getTodaysDate(timezone) : currentDate.startOf('day').toISOString();
+    const now = getTodaysDate(timezone).toISOString();
+    const startDate = isToday && index === 2 ? now : currentDate.startOf('day').toISOString();
+
     const endDate = currentDate.endOf('day').toISOString();
 
     const recallBuffer = account.get('recallBuffer');
