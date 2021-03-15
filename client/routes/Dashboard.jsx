@@ -63,7 +63,6 @@ const DashboardRouter = ({ isAuth, isSuperAdmin, isSSO, navigationPreferences })
           {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
           {!isSSO && <Route path="/profile" component={Routes.profile} />}
           <Route path="/typography" component={Routes.typography} />
-          <Route path="/dashboard" component={() => <Redirect to="/" />} />
           <Route component={FourZeroFour} />
         </Switch>
       </Suspense>
@@ -82,29 +81,6 @@ const DashboardRouter = ({ isAuth, isSuperAdmin, isSSO, navigationPreferences })
         }}
       />
     ));
-
-  Dashboard.defaultProps = {
-    location: {},
-  };
-
-  Dashboard.propTypes = {
-    location: PropTypes.shape({
-      assign: PropTypes.func,
-      hash: PropTypes.string,
-      host: PropTypes.string,
-      hostname: PropTypes.string,
-      href: PropTypes.string,
-      origin: PropTypes.string,
-      pathname: PropTypes.string,
-      port: PropTypes.string,
-      protocol: PropTypes.string,
-      reload: PropTypes.func,
-      replace: PropTypes.func,
-      search: PropTypes.string,
-      toString: PropTypes.func,
-      valueOf: PropTypes.func,
-    }),
-  };
 
   const signUp = /^\/signup\/.+$/i;
   const urlTest = signUp.test(history.location.pathname) ? history.location.pathname : '/signup';
