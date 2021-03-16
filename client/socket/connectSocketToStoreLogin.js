@@ -26,7 +26,8 @@ export default function connectSocketToStoreLogin(store, socket) {
         DesktopNotification.showNotification('Patient has entered waiting room', {
           body: `${patient.firstName} ${patient.lastName} has entered the virtual waiting room.`,
           onClick: () => {
-            dispatch(push('/'));
+            // this is intentionally not fixed, it will redirect in the router
+            dispatch(push('/dashboard'));
           },
         });
 
