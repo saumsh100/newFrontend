@@ -26,7 +26,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         DesktopNotification.showNotification('Patient has entered waiting room', {
           body: `${patient.firstName} ${patient.lastName} has entered the virtual waiting room.`,
           onClick: () => {
-            dispatch(push('/dashboard'));
+            dispatch(push('/'));
           },
         });
 
