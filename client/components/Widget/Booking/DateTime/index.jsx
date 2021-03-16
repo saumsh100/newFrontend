@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { CSSTransition } from 'react-transition-group';
 import { Element, scroller } from 'react-scroll';
 import { stringify, parse } from 'query-string';
-import { groupTimesPerPeriod } from '@carecru/isomorphic';
+import { groupTimesPerPeriod } from '../../../library/util/datetime/helpers';
 import {
   setConfirmAvailability,
   setSelectedAvailability,

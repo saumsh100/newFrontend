@@ -1,7 +1,7 @@
 
 import PropTypes from 'prop-types';
 import { parse } from 'query-string';
-import { capitalize } from '@carecru/isomorphic';
+import { capitalize } from '../../util/isomorphic';
 import { pick, isFunction, isArray, omit as lOmit } from '../library/util/lodash';
 
 /**

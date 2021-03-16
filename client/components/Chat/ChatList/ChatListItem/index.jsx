@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '../../../../util/isomorphic';
 import { Icon, ListItem, Avatar, getTodaysDate, getUTCDate } from '../../../library';
 import { toggleFlagged, selectChat, getChatCategoryCounts } from '../../../../thunks/chat';
 import { isHub } from '../../../../util/hub';

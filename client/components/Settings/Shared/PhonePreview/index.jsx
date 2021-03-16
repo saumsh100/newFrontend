@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { normalizePhone } from '@carecru/isomorphic';
 import PropTypes from 'prop-types';
+import { normalizePhone } from '../../../../util/isomorphic';
 import Icon from '../../../library/Icon';
 import LinkButton from '../../../library/ui-kit/Button/LinkButton';
 import styles from './styles.scss';

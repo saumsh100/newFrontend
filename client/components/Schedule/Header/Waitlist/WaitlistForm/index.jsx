@@ -1,7 +1,7 @@
 
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { week, capitalize } from '@carecru/isomorphic';
+import { week, capitalize } from '../../../../../util/isomorphic';
 import { Button, getDate, Icon, Input, parseDate } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';

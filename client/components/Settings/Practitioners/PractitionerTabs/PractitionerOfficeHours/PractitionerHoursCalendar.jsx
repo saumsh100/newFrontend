@@ -1,12 +1,12 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getEndOfTheMonth, getStartOfTheMonth } from '@carecru/isomorphic';
 import pick from 'lodash/pick';
 import pickBy from 'lodash/pickBy';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { showAlertTimeout } from '../../../../../thunks/alerts';
+import { getEndOfTheMonth, getStartOfTheMonth } from '../../../../library/util/datetime/helpers';
 import ScheduleCalendar from '../../../../library/ScheduleCalendar';
 import { practitionerShape } from '../../../../library/PropTypeShapes';
 import {
@@ -107,8 +107,7 @@ class PractitionerHoursCalendar extends Component {
    *
    */
   scheduleMap() {
-    const normalizedSchedule = this.state.selectedDay
-      && this.state.selectedDailySchedule.isDailySchedule
+    const normalizedSchedule = this.state.selectedDay && this.state.selectedDailySchedule.isDailySchedule
       ? this.getFeaturedDay()
       : {
         ...this.state.baseSchedule.weeklySchedule,
@@ -147,10 +146,7 @@ class PractitionerHoursCalendar extends Component {
    * @param callback
    */
   handleDayClick(date, callback) {
-    const selectedDay = this.state.selectedDay
-      && this.state.selectedDay.getTime() === date.getTime()
-      ? null
-      : date;
+    const selectedDay = this.state.selectedDay && this.state.selectedDay.getTime() === date.getTime() ? null : date;
     this.setState(
       {
         selectedDay,

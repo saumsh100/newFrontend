@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '../../../util/isomorphic';
 import PatientPopover from '../../library/PatientPopover';
 import RequestPopoverLoader from '../../library/RequestPopoverLoader';
 
@@ -39,5 +39,6 @@ PatientName.propTypes = {
     isUnknown: PropTypes.bool,
     isProspect: PropTypes.bool,
     cellPhoneNumber: PropTypes.string,
+    request: PropTypes.objectOf(PropTypes.any),
   }),
 };

@@ -50,6 +50,7 @@ class ScheduleModal extends React.Component {
       accountId: this.props.accountId,
       startDate: this.props.scheduleDate,
       reasonId: value,
+      timezone: this.props.timezone,
     })
       .then(({ data: { practitionersData } }) =>
         setTimeout(

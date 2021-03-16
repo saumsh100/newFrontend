@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '../../../util/isomorphic';
 import { getFormattedDate, Icon } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
 import styles from './styles.scss';

@@ -1,7 +1,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { isValidUUID } from '@carecru/isomorphic';
+import { isValidUUID } from '../../../../util/isomorphic';
 import { Form, Field } from '../../../library';
 import LastSyncDisplay from '../../../LastSyncDisplay';
 import AccountModel from '../../../../entities/models/Account';

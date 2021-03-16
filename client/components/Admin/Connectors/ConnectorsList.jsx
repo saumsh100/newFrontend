@@ -1,7 +1,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { sortAsc } from '@carecru/isomorphic';
+import { sortAsc } from '../../../util/isomorphic';
 import ConnectorListItem from './ConnectorListItem';
 import { List } from '../../library';
 import accountShape from '../../library/PropTypeShapes/accountShape';

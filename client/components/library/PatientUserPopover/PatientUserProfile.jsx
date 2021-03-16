@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '../../../util/isomorphic';
 import { Card, SContainer, SHeader, SBody, Avatar, Icon, IconButton } from '..';
 import { patientShape } from '../PropTypeShapes';
 import styles from './styles.scss';

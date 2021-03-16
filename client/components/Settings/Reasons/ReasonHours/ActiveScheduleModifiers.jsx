@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
-import { sort } from '@carecru/isomorphic';
+import { sort } from '../../../../util/isomorphic';
 import { Button } from '../../../library';
 import styles from '../../../library/ScheduleCalendar/modal.scss';
 import ui from '../../../../styles/ui-kit.scss';

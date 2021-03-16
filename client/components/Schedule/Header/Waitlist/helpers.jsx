@@ -1,5 +1,6 @@
 
-import { week, getHoursFromInterval, capitalize } from '@carecru/isomorphic';
+import { week, capitalize } from '../../../../util/isomorphic';
+import { getHoursFromInterval } from '../../../library/util/datetime/helpers';
 import PatientUserPopover from '../../../library/PatientUserPopover';
 import PatientPopover from '../../../library/PatientPopover';
 import {
@@ -8,15 +9,6 @@ import {
   getUTCDateWithFormat,
   parseDate,
 } from '../../../library';
-
-/**
- * Factory to format a date value.
- *
- * @param timezone
- * @return {function(*=): *}
- */
-const dateFormatterFactory = timezone => time =>
-  formatTimeToTz(new Date(time).toISOString(), timezone);
 
 /**
  * Checks if the provided time is a full hour before formatting,
@@ -31,6 +23,15 @@ const formatTimeToTz = (value, timezone) => {
   const format = valueInstance.minutes() === 0 ? 'ha' : 'h:mma';
   return valueInstance.format(format);
 };
+
+/**
+ * Factory to format a date value.
+ *
+ * @param timezone
+ * @return {function(*=): *}
+ */
+const dateFormatterFactory = timezone => time =>
+  formatTimeToTz(new Date(time).toISOString(), timezone);
 
 /**
  * Checks if the provided input is present inside of the lookup table.

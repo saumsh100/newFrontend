@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { intervalToNumType, numTypeToInterval, ordinalSuffix } from '@carecru/isomorphic';
 import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
 import { DropdownSelect, Icon, Input, Toggle } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
@@ -13,6 +12,11 @@ import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem'
 import Account from '../../../../../entities/models/Account';
 import Reminders from '../../../../../entities/models/Reminder';
 import EnabledFeature from '../../../../library/EnabledFeature';
+import {
+  intervalToNumType,
+  numTypeToInterval,
+  ordinalSuffix,
+} from '../../../../../util/isomorphic';
 import styles from './styles.scss';
 import { wordMap } from '../../helpers';
 
@@ -356,7 +360,4 @@ SmallIconCircle.propTypes = {
 
 const mapDispatchToProps = dispatch => bindActionCreators({ updateEntityRequest }, dispatch);
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(RemindersItem);
+export default connect(null, mapDispatchToProps)(RemindersItem);

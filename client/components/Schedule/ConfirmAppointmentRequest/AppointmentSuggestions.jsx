@@ -2,8 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { formatPhoneNumber } from '@carecru/isomorphic';
 import groupBy from 'lodash/groupBy';
+import { formatPhoneNumber } from '../../../util/isomorphic';
 import { selectAppointmentShape } from '../../library/PropTypeShapes';
 import { Icon, Button, Avatar, SHeader, getTodaysDate } from '../../library';
 import SameAppointment from './SameAppointment';

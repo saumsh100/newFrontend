@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
-import { week, frames, capitalize } from '@carecru/isomorphic';
+import { week, frames, capitalize } from '../../../../../util/isomorphic';
 import {
   Grid,
   Row,

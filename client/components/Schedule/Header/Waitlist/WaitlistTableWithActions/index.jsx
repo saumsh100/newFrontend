@@ -2,8 +2,8 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { capitalize } from '@carecru/isomorphic';
 import ReactTable from 'react-table';
+import { capitalize } from '../../../../../util/isomorphic';
 import { Avatar, Checkbox, Icon, getDate } from '../../../../library';
 import Tooltip from '../../../../Tooltip';
 import { propsGenerator } from '../helpers';
@@ -47,8 +47,7 @@ const WaitlistTableWithActions = ({
 
   const segmentedWaitListIds = segmentedWaitList.map(waitSpot => waitSpot.id);
 
-  const isEveryWaitlistSelected = segmentedWaitList?.length > 0
-    && segmentedWaitList?.length === selectedWaitlistIds?.length;
+  const isEveryWaitlistSelected = segmentedWaitList?.length > 0 && segmentedWaitList?.length === selectedWaitlistIds?.length;
 
   useEffect(() => {
     const waitlistIdsInView = selectedWaitlistIds.filter(id => segmentedWaitListIds.includes(id));
@@ -246,9 +245,7 @@ const WaitlistTableWithActions = ({
           })}
           getTheadThProps={(state, _, { id }) => {
             const { sorted } = state;
-            const sortedStyle = sorted[0].id === id && sorted[0].desc
-              ? styles.theadDesc
-              : styles.theadAsc;
+            const sortedStyle = sorted[0].id === id && sorted[0].desc ? styles.theadDesc : styles.theadAsc;
             const showSortedStyle = id === selectedColumn;
             const tHeadThStyles = id === 'waitSpotCheckbox'
               ? colHeaderStyle({ justifyContent: 'flex-end' })

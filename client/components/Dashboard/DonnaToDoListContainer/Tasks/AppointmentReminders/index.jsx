@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
 import classnames from 'classnames';
-import { sortAsc } from '@carecru/isomorphic';
+import { sortAsc } from '../../../../../util/isomorphic';
 import patientShape from '../../../../library/PropTypeShapes/patient';
 import { List, ListItem, Icon, Avatar, getFormattedDate } from '../../../../library';
 import PatientPopover from '../../../../library/PatientPopover';

@@ -1,14 +1,13 @@
 
 import React from 'react';
-import {
-  createAvailabilitiesFromOpening,
-  dateFormatterFactory,
-  groupTimesPerPeriod,
-  toHumanCommaSeparated,
-  capitalize,
-} from '@carecru/isomorphic';
+import { toHumanCommaSeparated, capitalize } from '../../../../util/isomorphic';
 import styles from './styles.scss';
-import { parseDate } from '../../../library';
+import { parseDate } from '../../../library/util/datetime';
+import {
+  groupTimesPerPeriod,
+  dateFormatterFactory,
+  createAvailabilitiesFromOpening,
+} from '../../../library/util/datetime/helpers';
 
 /**
  * Display the dates selected on the waitlist's steps.
@@ -31,7 +30,8 @@ export const waitlistDates = (week) => {
  * Display a linear list of times that were selected from the user on the waitlist's steps.
  */
 export const waitlistTimes = (waitSpot, availabilities, timezone) =>
-  availabilities && waitSpot.get('times').size > 0 && (
+  availabilities
+  && waitSpot.get('times').size > 0 && (
     <span>
       {Object.keys(availabilities)
         .reduce(

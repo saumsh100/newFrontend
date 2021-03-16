@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '../../../util/isomorphic';
 import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
 import {
   Card,

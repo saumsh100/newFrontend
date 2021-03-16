@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import { ordinalSuffix, convertIntervalToMs } from '@carecru/isomorphic';
+import { ordinalSuffix } from '../../../../util/isomorphic';
+import { convertIntervalToMs } from '../../../library/util/datetime/helpers';
 import {
   updateEntityRequest,
   fetchEntities,
@@ -438,7 +439,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Reminders);
+export default connect(mapStateToProps, mapDispatchToProps)(Reminders);

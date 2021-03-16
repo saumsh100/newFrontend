@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { week, formatPhoneNumber } from '@carecru/isomorphic';
+import { week, formatPhoneNumber } from '../../../../util/isomorphic';
 import {
   Avatar,
   Icon,

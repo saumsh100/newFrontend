@@ -1,11 +1,11 @@
 
-import { sortDesc } from '@carecru/isomorphic';
 import Map from 'immutable';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
+import { sortDesc } from '../../../../util/isomorphic';
 
 import {
   createEntityRequest,

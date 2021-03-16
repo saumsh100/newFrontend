@@ -108,4 +108,17 @@ export {
   WeeklyScheduleShape,
 } from './util/datetime';
 
+export {
+  addOffset,
+  convertIntervalStringToObject,
+  convertIntervalToMs,
+  createAvailabilitiesFromOpening,
+  dateFormatterFactory,
+  getEndOfTheMonth,
+  getHoursFromInterval,
+  getStartOfTheMonth,
+  groupTimesPerPeriod,
+  timeToVerticalPosition,
+} from './util/datetime/helpers';
+
 export { nonApptWritePMS } from './util/nonApptWritePMS';

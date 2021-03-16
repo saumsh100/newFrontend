@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { capitalize } from '@carecru/isomorphic';
+import { capitalize } from '../../../../util/isomorphic';
 import Service from '../../../../entities/models/Service';
 import UpdateReasonWeeklyHours from '../../../GraphQL/ReasonHours/updateReasonWeeklyHours';
 import EditReasonWeeklyHours from './EditReasonWeeklyHours';
@@ -325,7 +325,7 @@ class ReasonWeeklyHoursWrapper extends Component {
         <ReasonHours
           reason={this.props.reason}
           onEditClick={this.onEditClick}
-          allowedFormat={allowedFormat}
+          allowedTimeFormat={allowedFormat}
         />
         <UpdateReasonWeeklyHours>
           {commit => (

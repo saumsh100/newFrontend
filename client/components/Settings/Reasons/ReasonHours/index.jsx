@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { capitalize, range, week } from '@carecru/isomorphic';
+import { capitalize, range, week } from '../../../../util/isomorphic';
 import { Button, parseDateWithFormat, Toggle } from '../../../library';
 import EditIcon from '../EditIcon';
 import FetchReasonHours from '../../../GraphQL/ReasonHours/fetchReasonHours';

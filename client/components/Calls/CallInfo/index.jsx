@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '../../../util/isomorphic';
 import InfoDump from '../../Patients/Shared/InfoDump';
 import { callShape } from '../../library/PropTypeShapes';
 import styles from './styles.scss';

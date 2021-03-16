@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '../../util/isomorphic';
 import styles from './styles.scss';
 
 export default function CallDisplayInfo({ call }) {
@@ -47,4 +47,4 @@ export default function CallDisplayInfo({ call }) {
   );
 }
 
-CallDisplayInfo.propTypes = { call: PropTypes.objectOf(PropTypes.any) };
+CallDisplayInfo.propTypes = { call: PropTypes.objectOf(PropTypes.any).isRequired };

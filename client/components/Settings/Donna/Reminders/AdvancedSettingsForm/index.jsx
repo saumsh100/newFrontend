@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
-import { isValidUUID, validateJsonString } from '@carecru/isomorphic';
+import { isValidUUID, validateJsonString } from '../../../../../util/isomorphic';
 import { Form, Field } from '../../../../library';
 import { reminderShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
@@ -189,7 +189,4 @@ function mapStateToProps(state, { reminder }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  null,
-)(AdvancedSettingsForm);
+export default connect(mapStateToProps, null)(AdvancedSettingsForm);

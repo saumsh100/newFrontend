@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { getRangeFromList } from '@carecru/isomorphic';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { accountShape } from '../library/PropTypeShapes';
@@ -19,6 +18,7 @@ import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 import MultiSelectAccount from '../library/MultiSelectAccount';
 import styles from './style.scss';
 import { parseDate } from '../library';
+import getRangeFromList from '../../util/getRangeFromList';
 
 const DATE_RANGE = 'dateRange';
 const TOGGLE = 'toggle';

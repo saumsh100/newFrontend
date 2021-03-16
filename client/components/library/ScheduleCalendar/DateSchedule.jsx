@@ -1,8 +1,8 @@
 import React from 'react';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
-import { capitalize } from '@carecru/isomorphic';
 import classNames from 'classnames';
+import { capitalize } from '../../../util/isomorphic';
 import styles from './single-date.scss';
 import GearIcon from '../ui-kit/Icons/Gear';
 import { getFormattedTime } from '../util/datetime';

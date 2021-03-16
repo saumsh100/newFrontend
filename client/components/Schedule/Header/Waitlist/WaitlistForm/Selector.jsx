@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { capitalize } from '@carecru/isomorphic';
+import { capitalize } from '../../../../../util/isomorphic';
 import Icon from '../../../../library/Icon';
 import Input from '../../../../library/Input';
 import styles from './styles.scss';

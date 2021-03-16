@@ -1,7 +1,7 @@
 
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
-import { Cache } from '@carecru/isomorphic';
+import Cache from '../../../../util/cache';
 import styles from './styles.scss';
 import { httpClient } from '../../../../util/httpClient';
 

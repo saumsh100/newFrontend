@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '../../../../util/isomorphic';
 import { patientShape, appointmentShape } from '../../../library/PropTypeShapes';
 import {
   PatientPopover,
@@ -184,9 +184,8 @@ export default function InsightList(props) {
   let displayFamilyRecare = null;
 
   insightData.insights.forEach((insightObj) => {
-    const gender =
-      (patient && patient.gender && (patient.gender.toLowerCase() === 'male' ? 'his' : 'her')) ||
-      'their';
+    const gender = (patient && patient.gender && (patient.gender.toLowerCase() === 'male' ? 'his' : 'her'))
+      || 'their';
 
     if (insightObj && insightObj.type === 'missingEmail') {
       displayEmailInsight = buildMissingEmailData(patient, gender);

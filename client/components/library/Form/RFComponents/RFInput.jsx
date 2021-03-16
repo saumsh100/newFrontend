@@ -1,7 +1,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { normalizePhone } from '@carecru/isomorphic';
+import { normalizePhone } from '../../../../util/isomorphic';
 import Icon from '../../Icon';
 import Input from '../../Input';
 import { inputShape, metaShape } from '../../PropTypeShapes/inputShape';
@@ -23,9 +23,8 @@ export default function RFInput({
   };
   const { touched, asyncValidating, dirty } = meta;
   const finalError = error || (touched || dirty ? meta.error : null);
-  const IconComponent =
-    iconComponent ||
-    (asyncValidating && (
+  const IconComponent = iconComponent
+    || (asyncValidating && (
       <Icon
         pulse
         className={theme && theme.iconClassName}

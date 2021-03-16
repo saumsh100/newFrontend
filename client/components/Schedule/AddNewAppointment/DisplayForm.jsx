@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
 import { Map } from 'immutable';
-import { sortAsc } from '@carecru/isomorphic';
+import { sortAsc } from '../../../util/isomorphic';
 import {
   Form,
   Field,

@@ -1,8 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber, capitalize } from '@carecru/isomorphic';
 import { connect } from 'react-redux';
+import { formatPhoneNumber, capitalize } from '../../../../util/isomorphic';
 import { Grid, Row, Col, PointOfContactBadge, getTodaysDate, getUTCDate } from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';

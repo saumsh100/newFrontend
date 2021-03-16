@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { formatPhoneNumber } from '@carecru/isomorphic';
+import { formatPhoneNumber } from '../../../util/isomorphic';
 import { Button, Avatar, Icon } from '../../library';
 import { patientShape } from '../../library/PropTypeShapes';
 import styles from './styles.scss';
@@ -14,7 +14,9 @@ const PatientData = (props) => {
 
   return (
     <Button
-      className={classNames(styles.singleSuggestion, { [styles.patientSelected]: selectedPatient && selectedPatient.id === patient.id })}
+      className={classNames(styles.singleSuggestion, {
+        [styles.patientSelected]: selectedPatient && selectedPatient.id === patient.id,
+      })}
       onClick={() => {
         selectPatient(patient);
       }}

@@ -1,8 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber } from '@carecru/isomorphic';
 import { connect } from 'react-redux';
+import { formatPhoneNumber } from '../../../../util/isomorphic';
 import { getFormattedDate, PointOfContactBadge } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import { validDateValue } from '../../Shared/helpers';
@@ -10,8 +10,8 @@ import { patientShape } from '../../../library/PropTypeShapes/index';
 import styles from './styles.scss';
 
 function DataTable({ patient, timezone }) {
-  const secondaryNumber =
-    patient.homePhoneNumber || patient.prefPhoneNumber || patient.workPhoneNumber;
+  const { homePhoneNumber, prefPhoneNumber, workPhoneNumber } = patient;
+  const secondaryNumber = homePhoneNumber || prefPhoneNumber || workPhoneNumber;
 
   return (
     <div className={styles.grid}>
@@ -67,10 +67,7 @@ function DataTable({ patient, timezone }) {
 }
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(DataTable);
+export default connect(mapStateToProps, null)(DataTable);
 
 DataTable.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,

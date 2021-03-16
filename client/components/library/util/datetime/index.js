@@ -1,7 +1,9 @@
 
-import { sortAsc } from '@carecru/isomorphic';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { sortAsc } from '../../../../util/isomorphic';
+
+export { moment as DateTimeObj };
 
 /**
  * @param {string|Date|moment} date
@@ -494,5 +496,3 @@ export const formatTimeToTz = (date, timezone) => {
 
   return newDate.format('LT');
 };
-
-export { moment as DateTimeObj };

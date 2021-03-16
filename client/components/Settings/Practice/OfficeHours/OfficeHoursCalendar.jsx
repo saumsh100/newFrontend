@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import pickBy from 'lodash/pickBy';
 import pick from 'lodash/pick';
-import { getEndOfTheMonth, getStartOfTheMonth } from '@carecru/isomorphic';
+import { getEndOfTheMonth, getStartOfTheMonth } from '../../../library/util/datetime/helpers';
 import ScheduleCalendar from '../../../library/ScheduleCalendar';
 import {
   createDailyHours,

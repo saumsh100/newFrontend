@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import { sortAsc } from '@carecru/isomorphic';
+import { sortAsc } from '../../../util/isomorphic';
 import { Modal, Button, DropdownMenu, Icon } from '../index';
 import EnabledFeature from '../EnabledFeature';
 import MultiSelect from '../MultiSelect';

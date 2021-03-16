@@ -6,10 +6,10 @@ import { connect } from 'react-redux';
 import { change, formValueSelector } from 'redux-form';
 import { Map } from 'immutable';
 import classNames from 'classnames';
-import { convertIntervalToMs, intervalToNumType } from '@carecru/isomorphic';
+import { convertIntervalToMs, intervalToNumType } from '../../../../library/util/datetime/helpers';
 import OmitForm from '../OmitForm';
 import { Grid, Row, Col, Form, Field, FormSection } from '../../../../library';
-import { capitalizeText } from '../../../../../components/Utils';
+import { capitalizeText } from '../../../../Utils';
 import { isResponsive } from '../../../../../util/hub';
 import styles from '../styles.scss';
 
@@ -62,8 +62,7 @@ class SettingsForm extends Component {
       this.setState({ [setting]: toOmit }, () => {
         const settingFieldName = this.getSettingType(setting);
 
-        const settingNextState =
-          this.state[setting].length !== sanitizeList(this.props[settingFieldName]).size;
+        const settingNextState = this.state[setting].length !== sanitizeList(this.props[settingFieldName]).size;
 
         // check if all child toggles are on/off and updates the parent accordingly
         if (this.props[`${settingFieldName}Field`] !== settingNextState) {
@@ -109,8 +108,8 @@ class SettingsForm extends Component {
                     ...acc,
                     [setting]:
                       // check if some omit toggle was already on
-                      prev[setting].length > 0 &&
-                      prev[setting].length < sanitizeList(this.props[settingFieldName]).size
+                      prev[setting].length > 0
+                      && prev[setting].length < sanitizeList(this.props[settingFieldName]).size
                         ? prev[setting]
                         : [],
                   };
@@ -299,7 +298,4 @@ SettingsForm.defaultProps = {
   recallsField: null,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SettingsForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsForm);

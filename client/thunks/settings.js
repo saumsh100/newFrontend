@@ -1,5 +1,5 @@
 
-import { normalizePhone } from '@carecru/isomorphic';
+import { normalizePhone } from '../util/isomorphic';
 import { createEntityRequest, deleteEntityRequest } from './fetchEntities';
 import { receiveEntities } from '../reducers/entities';
 import { httpClient } from '../util/httpClient';

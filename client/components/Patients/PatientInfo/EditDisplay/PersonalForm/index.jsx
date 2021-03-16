@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { touch } from 'redux-form';
-import { isValidEmail } from '@carecru/isomorphic';
+import { isValidEmail } from '../../../../../util/isomorphic';
 import { Grid, Row, Col, Form, Field, isDateValid, getFormattedDate } from '../../../../library';
 import { usStates, caProv } from '../../../../Settings/Practice/General/Address/selectConstants';
 import { isResponsive } from '../../../../../util/hub';

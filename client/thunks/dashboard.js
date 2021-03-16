@@ -1,4 +1,3 @@
-import { convertIntervalStringToObject } from '@carecru/isomorphic';
 import {
   setLoading,
   setInsights,
@@ -9,8 +8,34 @@ import {
 import { httpClient } from '../util/httpClient';
 import { getTodaysDate, getUTCDate, parseDate } from '../components/library/util/datetime';
 
+const convertIntervalStringToObject = interval => {
+  const array = interval.split(' ');
+
+  // Defaults to be overridden
+  const intervalData = {
+    years: 0,
+    months: 0,
+    weeks: 0,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  };
+
+  // IMPORTANT! We increment by 2 to get only hours (30 min intervals)
+  let i;
+  for (i = 0; i < array.length; i += 2) {
+    const quantity = parseFloat(array[i]);
+    const type = array[i + 1];
+    intervalData[type] = quantity;
+  }
+
+  return intervalData;
+};
+
 export function fetchInsights() {
-  return async function (dispatch, getState) {
+  return async function(dispatch, getState) {
     try {
       const { auth, dashboard, entities } = getState();
       const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
@@ -58,7 +83,7 @@ const toDoFunctions = {
 };
 
 export function fetchDonnasToDos(index) {
-  return async function (dispatch, getState) {
+  return async function(dispatch, getState) {
     const { auth, dashboard, entities } = getState();
     const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
     const timezone = account.get('timezone');

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { sortAsc } from '@carecru/isomorphic';
+import { sortAsc } from '../../../util/isomorphic';
 import RevenueDisplay from './RevenueDisplay';
 import RevenueChart from './RevenueChart';
 import AccountModel from '../../../entities/models/Account';

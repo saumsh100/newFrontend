@@ -1,7 +1,7 @@
 
 
 const { sendTemplate } = require('../server/lib/mail');
-const { formatPhoneNumber } = require('@carecru/isomorphic');
+const { formatPhoneNumber } = require('../client/util/isomorphic');
 
 const mergeVars = [
   {

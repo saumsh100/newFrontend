@@ -1,7 +1,7 @@
 
 import React, { useMemo, useState, memo } from 'react';
-import { week, capitalize } from '@carecru/isomorphic';
 import PropTypes from 'prop-types';
+import { week, capitalize } from '../../../../../../util/isomorphic';
 import { convertArrayOfOptionsInMap, getDayPickers } from '../../helpers';
 import SegmentButton from '../../../../../library/SegmentButton';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';

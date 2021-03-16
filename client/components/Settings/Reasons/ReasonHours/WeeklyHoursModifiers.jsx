@@ -1,10 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { timeToVerticalPosition } from '@carecru/isomorphic';
 import ScheduleModifier from './ScheduleModifier';
 import styles from './styles.scss';
-import { parseDateWithFormat } from '../../../library';
+import { parseDateWithFormat } from '../../../library/util/datetime';
+import { timeToVerticalPosition } from '../../../library/util/datetime/helpers';
 
 const h2px = 75;
 const m2px = h2px / 60;
@@ -33,16 +32,16 @@ const timeToVerticalPositionBuilder = ({ timezone, rangeStartTime, time, allowed
  * @return {number}
  */
 const getModifierHeight = (modifierKey, endTime, startTime, { duration, ...props }) =>
-  (modifierKey === AVAILABILITIES
+  modifierKey === AVAILABILITIES
     ? duration * m2px
     : timeToVerticalPositionBuilder({
-      ...props,
-      time: endTime,
-    })
-      - timeToVerticalPositionBuilder({
+        ...props,
+        time: endTime,
+      }) -
+      timeToVerticalPositionBuilder({
         ...props,
         time: startTime,
-      }));
+      });
 
 const WeeklyHoursModifiers = ({ modifiers, ...props }) => {
   if (!Object.values(modifiers.breaks).length && !Object.values(modifiers.availabilities).length) {
@@ -66,7 +65,7 @@ const WeeklyHoursModifiers = ({ modifiers, ...props }) => {
             height={getModifierHeight(modifierKey, endTime, startTime, props)}
             label={modifierKey === AVAILABILITIES ? 'Set Availability' : 'Blocked'}
           />
-        )))}
+        )),)}
     </div>
   );
 };

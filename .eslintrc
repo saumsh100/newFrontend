@@ -1,7 +1,7 @@
 {
   "parser": "@babel/eslint-parser",
-  "extends": ["prettier", "airbnb", "prettier/react", "prettier/standard"],
-  "plugins": ["react", "react-hooks"],
+  "extends": ["airbnb", "prettier", "prettier/react", "prettier/standard"],
+  "plugins": ["react", "react-hooks", "jsx-a11y", "import"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {

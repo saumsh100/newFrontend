@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { normalizePhone } from '@carecru/isomorphic';
+import { normalizePhone } from '../../../../../util/isomorphic';
 import { Button, Col, DialogBox, DropdownSelect, Grid, Row } from '../../../../library';
 import RadioGroup from '../../../../library/ui-kit/Radio/RadioGroup';
 import Radio from '../../../../library/ui-kit/Radio';

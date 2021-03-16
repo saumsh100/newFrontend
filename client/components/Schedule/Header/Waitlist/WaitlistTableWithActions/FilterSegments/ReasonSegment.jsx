@@ -1,7 +1,7 @@
 
 import React, { useState, memo } from 'react';
-import { capitalize } from '@carecru/isomorphic';
 import PropTypes from 'prop-types';
+import { capitalize } from '../../../../../../util/isomorphic';
 import { convertArrayOfOptionsInMap } from '../../helpers';
 import SegmentButton from '../../../../../library/SegmentButton';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';
@@ -53,8 +53,8 @@ const ReasonSegment = ({ selectedReasons, updateReasons }) => {
     }
 
     if (
-      selectedReasonsCapitalized.length ===
-      allReasonsOptions.filter(v => v.value !== NOT_SET_VALUE).length
+      selectedReasonsCapitalized.length
+      === allReasonsOptions.filter(v => v.value !== NOT_SET_VALUE).length
     ) {
       return 'All Reasons';
     }

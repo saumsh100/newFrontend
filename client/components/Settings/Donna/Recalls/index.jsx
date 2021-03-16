@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { Map } from 'immutable';
-import { convertIntervalToMs } from '@carecru/isomorphic';
+import { convertIntervalToMs } from '../../../library/util/datetime/helpers';
 import {
   updateEntityRequest,
   fetchEntities,
@@ -156,8 +156,8 @@ class Recalls extends Component {
   revertToDefaultSettings() {
     if (
       !window.confirm(
-        'Are you sure you want to revert to the default recalls settings? ' +
-          'There is no way to undo this after you proceed.',
+        'Are you sure you want to revert to the default recalls settings? '
+          + 'There is no way to undo this after you proceed.',
       )
     ) {
       return;

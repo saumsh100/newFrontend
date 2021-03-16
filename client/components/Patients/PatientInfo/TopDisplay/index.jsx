@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { formatPhoneNumber } from '@carecru/isomorphic';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { formatPhoneNumber } from '../../../../util/isomorphic';
 import { Card, Avatar, Icon, Grid, Row, Col, Button, getFormattedDate } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';

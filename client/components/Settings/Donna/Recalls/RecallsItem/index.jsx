@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { intervalToNumType } from '@carecru/isomorphic';
+import { intervalToNumType } from '../../../../../util/isomorphic';
 import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
 import { Toggle } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
@@ -234,9 +234,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ updateEntityRequest }, dispatch);
 }
 
-const enhance = connect(
-  null,
-  mapDispatchToProps,
-);
+const enhance = connect(null, mapDispatchToProps);
 
 export default enhance(RecallsItem);

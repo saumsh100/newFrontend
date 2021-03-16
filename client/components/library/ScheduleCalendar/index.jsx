@@ -3,7 +3,7 @@ import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import RDayPicker, { LocaleUtils } from 'react-day-picker';
 import classNames from 'classnames';
-import { capitalize } from '@carecru/isomorphic';
+import { capitalize } from '../../../util/isomorphic';
 import { weeklyScheduleShape } from '../PropTypeShapes';
 import Navbar from './Navbar';
 import renderDay from './renderDay';

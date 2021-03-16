@@ -1,8 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber } from '@carecru/isomorphic';
 import { connect } from 'react-redux';
+import { formatPhoneNumber } from '../../../../../util/isomorphic';
 import {
   Card,
   Avatar,

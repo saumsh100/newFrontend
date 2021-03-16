@@ -1,5 +1,5 @@
 
-export { normalizePhone } from '@carecru/isomorphic';
+export { normalizePhone } from '../../../util/isomorphic';
 
 export function maxDigits(max) {
   return (value) => {

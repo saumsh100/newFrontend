@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { intervalToNumType, numTypeToInterval } from '@carecru/isomorphic';
+import { intervalToNumType, numTypeToInterval } from '../../../../../util/isomorphic';
 import { updateReviewsSettings } from '../../../../../thunks/accounts';
 import { Icon, Input, DropdownSelect } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
@@ -249,9 +249,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ updateReviewsSettings }, dispatch);
 }
 
-const enhance = connect(
-  null,
-  mapDispatchToProps,
-);
+const enhance = connect(null, mapDispatchToProps);
 
 export default enhance(ReviewItem);

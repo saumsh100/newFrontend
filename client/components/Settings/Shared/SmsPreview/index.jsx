@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Cache } from '@carecru/isomorphic';
+import Cache from '../../../../util/cache';
 import { SMSPreview } from '../../../library';
 import { httpClient } from '../../../../util/httpClient';
 import styles from './styles.scss';
@@ -59,11 +59,10 @@ export default class SmsPreview extends Component {
     const { account } = this.props;
     const { text } = this.state;
 
-    const smsPhoneNumber =
-      account.twilioPhoneNumber ||
-      account.destinationPhoneNumber ||
-      account.phoneNumber ||
-      '+1112223333';
+    const smsPhoneNumber = account.twilioPhoneNumber
+      || account.destinationPhoneNumber
+      || account.phoneNumber
+      || '+1112223333';
 
     return (
       <div className={styles.smsPreviewWrapper}>

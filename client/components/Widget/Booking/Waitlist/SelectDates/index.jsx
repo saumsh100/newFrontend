@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import classnames from 'classnames';
-import { week, frames, dayToFrame, capitalize } from '@carecru/isomorphic';
+import { week, frames, dayToFrame, capitalize } from '../../../../../util/isomorphic';
 import {
   updateDaysOfTheWeek,
   getSelectedDaysOfTheWeek,
@@ -224,10 +224,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SelectDates);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectDates);
 
 SelectDates.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { capitalize } from '@carecru/isomorphic';
+import { capitalize } from '../../../../util/isomorphic';
 import { Checkbox, Button, DropdownMenu } from '../../../library';
 import EllipsisIcon from './EllipsisIcon';
 import { patientShape } from '../../../library/PropTypeShapes';

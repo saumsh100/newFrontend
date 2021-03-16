@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { capitalize } from '@carecru/isomorphic';
+import { capitalize } from '../../../../../util/isomorphic';
 import { Icon } from '../../../../library';
 import styles from './styles.scss';
 
