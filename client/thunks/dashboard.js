@@ -1,4 +1,3 @@
-
 import { convertIntervalStringToObject } from '@carecru/isomorphic';
 import {
   setLoading,

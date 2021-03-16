@@ -1,11 +1,10 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import { sort } from '@carecru/isomorphic';
 import { Button } from '../../../library';
 import styles from '../../../library/ScheduleCalendar/modal.scss';
-import ui from '../../../../ui-kit.scss';
+import ui from '../../../../styles/ui-kit.scss';
 
 const ActiveScheduleModifiers = ({ active, data, addTimeItem, children }) =>
   active !== 'isClosed' && (

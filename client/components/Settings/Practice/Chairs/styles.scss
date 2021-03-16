@@ -1,4 +1,4 @@
-@import '../../../../ui.scss';
+@import '../../../../styles/ui.scss';
 
 .container {
   display: flex;
@@ -61,7 +61,7 @@
   }
 
   &_text {
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
     padding-right: 20px;
   }
 }

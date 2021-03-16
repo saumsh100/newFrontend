@@ -1,4 +1,4 @@
-@import '../../../ui';
+@import '../../../styles/ui';
 
 .badgeWrapper {
   height: 100%;
@@ -9,7 +9,7 @@
     background-color: $primary-blue-green;
     border-radius: 10px;
     color: $color-white;
-    composes: fontBold from '../../../fonts.scss';
+    composes: fontBold from '../../../styles/fonts.scss';
     display: inline-block;
     font-size: $extra-small-size;
     min-width: 10px;

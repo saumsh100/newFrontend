@@ -1,4 +1,4 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 .mainContainer {
   box-sizing: border-box;
@@ -15,11 +15,11 @@
 }
 
 .subHeaderMedium {
-  composes: subHeaderMedium from '../../../fonts.scss';
+  composes: subHeaderMedium from '../../../styles/fonts.scss';
 }
 
 .subHeader {
-  composes: subHeader from '../../../fonts.scss';
+  composes: subHeader from '../../../styles/fonts.scss';
 }
 
 .crownIcon {
@@ -37,7 +37,7 @@
 
   &_title {
     align-items: center;
-    composes: fontLarge from '../../../fonts.scss';
+    composes: fontLarge from '../../../styles/fonts.scss';
     display: flex;
     padding-right: 10px;
 
@@ -48,7 +48,7 @@
   }
   &_subHeader {
     color: $primary-darkgrey;
-    composes: subHeader from '../../../fonts.scss';
+    composes: subHeader from '../../../styles/fonts.scss';
     display: flex;
     padding-top: 10px;
   }
@@ -305,7 +305,7 @@ $height: 6px;
   background: white;
   box-shadow: none;
   color: #a7a9ac;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   display: flex;
   justify-content: flex-start;
 }
@@ -358,7 +358,7 @@ $height: 6px;
 
 .sectionHeader {
   color: white;
-  composes: listItemHeader from '../../../fonts.scss';
+  composes: listItemHeader from '../../../styles/fonts.scss';
   padding-bottom: 5px;
   padding-top: 10px;
 }
@@ -376,7 +376,7 @@ $height: 6px;
   border-radius: 16px;
   box-sizing: border-box;
   color: $primary-white;
-  composes: fontSmall from '../../../fonts.scss';
+  composes: fontSmall from '../../../styles/fonts.scss';
   display: flex;
   justify-content: center;
   margin-right: 5px;
@@ -419,7 +419,7 @@ $height: 6px;
 
 .data {
   align-items: center;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   display: flex;
   font-size: 13px;
   padding-bottom: 6px;

@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .container {
   height: 100%;
@@ -21,7 +21,7 @@
   }
 
   &_count {
-    composes: fontBold from '../../../../fonts.scss';
+    composes: fontBold from '../../../../styles/fonts.scss';
   }
 }
 
@@ -46,7 +46,7 @@
 .colStyling {
   align-items: center;
   color: inherit;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   font-size: 10px;
   justify-content: center;

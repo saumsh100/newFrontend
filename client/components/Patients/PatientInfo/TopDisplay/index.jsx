@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -13,7 +12,7 @@ import { isResponsive } from '../../../../util/hub';
 import { accountShape } from '../../../library/PropTypeShapes';
 import PatientModel from '../../../../entities/models/Patient';
 import ActionsDropdown from '../ActionsDropdown';
-import ui from '../../../../ui-kit.scss';
+import ui from '../../../../styles/ui-kit.scss';
 import styles from './styles.scss';
 
 const bgImgs = [
@@ -48,10 +47,9 @@ function TopDisplay(props) {
 
   const age = patient.getAge();
 
-  const production =
-    wasStatsFetched && patientStats.get('productionCalendarYear')
-      ? `$${patientStats.get('productionCalendarYear')}`
-      : '$0';
+  const production = wasStatsFetched && patientStats.get('productionCalendarYear')
+    ? `$${patientStats.get('productionCalendarYear')}`
+    : '$0';
 
   const bgStyle = {
     background: `url('/images/banners/${bgImgs[randomNum]}')`,
@@ -64,9 +62,7 @@ function TopDisplay(props) {
   return (
     <Card className={styles.card} noBorder>
       <div className={styles.content}>
-        <div className={styles.imageContainer} style={bgStyle}>
-          {''}
-        </div>
+        <div className={styles.imageContainer} style={bgStyle} />
         {wasAllFetched && (
           <div className={styles.dataContainer}>
             <div className={styles.avatarContainer}>
@@ -105,8 +101,8 @@ function TopDisplay(props) {
                     <Icon icon="phone" />{' '}
                   </span>
                   <div className={styles.avatarContainer_data_phone}>
-                    {(patient.cellPhoneNumber && formatPhoneNumber(patient.cellPhoneNumber)) ||
-                      'N/A'}
+                    {(patient.cellPhoneNumber && formatPhoneNumber(patient.cellPhoneNumber))
+                      || 'N/A'}
                   </div>
                 </div>
                 <ActionsDropdown
@@ -114,9 +110,7 @@ function TopDisplay(props) {
                   align="left"
                   render={({ onClick }) => (
                     <Button
-                      className={`${styles.actionsButtonNormal} ${styles.actionsButton} ${
-                        ui.modal__save
-                      } `}
+                      className={`${styles.actionsButtonNormal} ${styles.actionsButton} ${ui.modal__save} `}
                       onClick={onClick}
                     >
                       <div className={styles.actionText}>Actions</div>
@@ -206,10 +200,7 @@ function TopDisplay(props) {
 }
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(TopDisplay);
+export default connect(mapStateToProps, null)(TopDisplay);
 
 TopDisplay.propTypes = {
   wasStatsFetched: PropTypes.bool,

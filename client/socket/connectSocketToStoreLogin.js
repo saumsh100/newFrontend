@@ -1,4 +1,3 @@
-
 import { push } from 'connected-react-router';
 import { updateEntity, deleteEntity, receiveEntities } from '../reducers/entities';
 import { setSyncingWithPMS } from '../actions/schedule';

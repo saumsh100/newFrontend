@@ -1,9 +1,9 @@
-@import '../../../ui';
+@import '../../../styles/ui';
 
-$intercom-icon: '/images/electron/intercom_icon_blue.svg';
-$intercom-icon-active: '/images/electron/intercom_icon_white.svg';
-$shortcut-icon: '/images/electron/shortcut_icon_blue.svg';
-$shortcut-icon-active: '/images/electron/shortcut_icon_white.svg';
+$intercom-icon: '/../public/images/electron/intercom_icon_blue.svg';
+$intercom-icon-active: '/../public/images/electron/intercom_icon_white.svg';
+$shortcut-icon: '/../public/images/electron/shortcut_icon_blue.svg';
+$shortcut-icon-active: '/../public/images/electron/shortcut_icon_white.svg';
 
 .navListWrapper {
   background: $primary-white;

@@ -1,4 +1,4 @@
-@import '../../../../../ui';
+@import '../../../../../styles/ui';
 
 .tagsContainer {
   display: flex;
@@ -23,7 +23,7 @@
 
 .tagText {
   color: $primary-white;
-  composes: fontMedium from '../../../../../fonts.scss';
+  composes: fontMedium from '../../../../../styles/fonts.scss';
   padding-right: 10px;
 }
 

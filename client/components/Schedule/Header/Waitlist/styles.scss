@@ -1,5 +1,5 @@
-@import '../../../../ui';
-@import '../../../../ui-kit';
+@import '../../../../styles/ui';
+@import '../../../../styles/ui-kit';
 
 .waitListItem:hover .checkBox {
   opacity: 1;
@@ -84,7 +84,7 @@
   background: white;
   border-radius: 4px;
   box-shadow: 1px 1px 2px 0px rgba(104, 110, 116, 0.11);
-  composes: fontDefault from '../../../../fonts.scss';
+  composes: fontDefault from '../../../../styles/fonts.scss';
   display: flex;
   flex-direction: column;
   height: 100%;

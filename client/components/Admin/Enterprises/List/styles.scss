@@ -1,4 +1,4 @@
-@import '../../../../ui.scss';
+@import '../../../../styles/ui.scss';
 
 .enterpriseContainer {
   box-sizing: border-box;
@@ -23,7 +23,7 @@
   align-items: center;
   border-bottom: 1px solid $primary-grey;
   box-sizing: border-box;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   justify-content: space-between;
   min-height: 80px;
@@ -37,7 +37,7 @@
 
 .link {
   color: $primary-dark;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   font-size: 14px;
   text-decoration: none;
   width: 100px;

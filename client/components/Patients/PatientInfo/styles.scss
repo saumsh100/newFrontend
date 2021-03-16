@@ -1,4 +1,4 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 @mixin responsiveMainContainer {
   max-width: none !important;
@@ -112,7 +112,7 @@
   flex-direction: column;
   &_header {
     color: $primary-darkgrey;
-    composes: fontMedium from '../../../fonts.scss';
+    composes: fontMedium from '../../../styles/fonts.scss';
     padding-bottom: 10px;
     padding-top: 25px;
   }
@@ -136,7 +136,7 @@
 }
 
 .cardTitle {
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   font-size: 15px;
 }
 
@@ -144,7 +144,7 @@
   align-items: center;
   background: none;
   color: $primary-darkgrey;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   display: flex;
   margin-left: auto;
   padding-bottom: 2px;

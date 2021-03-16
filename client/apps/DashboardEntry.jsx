@@ -1,13 +1,10 @@
-
 import '../components/library/util/why-did-you-render';
 import React from 'react';
 import { render } from 'react-dom';
 import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
-import _ from 'lodash';
 import Immutable from 'immutable';
 import nlp from 'compromise';
-import * as time from '@carecru/isomorphic';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import socket from '../socket';
 import App from './Dashboard';
@@ -87,8 +84,6 @@ load()(store.dispatch).then(() => {
   window.store = store;
   window.socket = socket;
   window.moment = extendMoment(moment);
-  window.time = time;
-  window._ = _;
   window.Immutable = Immutable;
   window.nlp = nlp;
 

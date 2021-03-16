@@ -1,4 +1,4 @@
-@import '../../ui.scss';
+@import '../../styles/ui.scss';
 
 .dashboard {
   box-sizing: border-box;
@@ -16,7 +16,7 @@
 }
 
 .userName {
-  composes: fontMedium from '../../fonts.scss';
+  composes: fontMedium from '../../styles/fonts.scss';
   font-size: 19px;
   @media screen and (max-width: 700px) {
     display: none;

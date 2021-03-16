@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .body {
   box-sizing: border-box;
@@ -17,7 +17,7 @@
 .header {
   align-items: center;
   border-bottom: 0;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   font-size: 23px;
   padding: 20px 20px 15px 40px;
@@ -27,7 +27,7 @@
     background-color: $primary-yellow;
     border-radius: 50%;
     color: $primary-white;
-    composes: fontDefault from '../../../../fonts.scss';
+    composes: fontDefault from '../../../../styles/fonts.scss';
     display: flex;
     font-size: 14px;
     height: 15px;
@@ -150,14 +150,14 @@
 }
 
 .insightHeader {
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   font-size: $small-size;
 }
 
 .insightSubHeader {
   box-sizing: border-box;
   color: $light-grey;
-  composes: fontDefault from '../../../../fonts.scss';
+  composes: fontDefault from '../../../../styles/fonts.scss';
   font-size: $small-size;
   width: 100%;
 
@@ -169,7 +169,7 @@
 .insightSubHeaderList {
   box-sizing: border-box;
   color: $primary-dark-grey;
-  composes: fontDefault from '../../../../fonts.scss';
+  composes: fontDefault from '../../../../styles/fonts.scss';
   font-size: 11px;
   opacity: 0.6;
   padding-left: 18px;
@@ -187,7 +187,7 @@
   &_name {
     align-items: center;
     border-left: 1px solid #efefef;
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
     display: flex;
     flex-direction: column;
     font-size: 15px;
@@ -219,7 +219,7 @@
 
   &_otherInfo {
     color: $primary-dark-grey;
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
     font-size: 10px;
     max-width: 160px;
     overflow: hidden;
@@ -261,7 +261,7 @@
   background-color: $primary-yellow;
   border-radius: 12px;
   color: $primary-white;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   font-size: 12px;
   height: 12px;
@@ -288,7 +288,7 @@
 .apptData {
 
   align-items: left;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

@@ -28,7 +28,7 @@ export default class ConnectorsListItem extends Component {
   toggleConnector(e) {
     const { account } = this.props;
     if (
-      confirm(`Are you sure you want to turn on the connector for ${account.name}?`)
+      window.confirm(`Are you sure you want to turn on the connector for ${account.name}?`)
     ) {
       this.setState({ active: !this.state.active });
     }

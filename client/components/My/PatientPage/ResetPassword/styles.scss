@@ -1,8 +1,8 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .header {
   color: $primary-dark;
-  composes: header from '../../../../fonts.scss';
+  composes: header from '../../../../styles/fonts.scss';
   text-align: center;
 }
 

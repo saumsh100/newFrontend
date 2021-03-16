@@ -1,4 +1,4 @@
-@import '../../../../../ui';
+@import '../../../../../styles/ui';
 
 .mainContainer {
   animation: fadeinform 0.9s;
@@ -15,7 +15,7 @@
   align-items: center;
   box-sizing: border-box;
   color: $primary-dark;
-  composes: fontMediumLarge from '../../../../../fonts.scss';
+  composes: fontMediumLarge from '../../../../../styles/fonts.scss';
   display: flex;
   &_text {
     padding-left: 10px;

@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
@@ -13,12 +12,12 @@ import { patientShape, accountShape } from '../../../library/PropTypeShapes';
 import EventsTable from './EventsTable';
 import { getEventsOffsetLimitObj } from '../../Shared/helpers';
 import PatientActionsDropdown from '../../PatientInfo/ActionsDropdown';
-import patientInfoQuery from '../../../Patients/PatientInfo/PatientInfo_Query';
-import LeftInfoDisplay from '../../../Patients/PatientInfo/LeftInfoDisplay';
+import patientInfoQuery from '../../PatientInfo/PatientInfo_Query';
+import LeftInfoDisplay from '../../PatientInfo/LeftInfoDisplay';
 import Icon from '../../../library/Icon';
 import Button from '../../../library/Button';
 import styles from './styles.scss';
-import ui from '../../../../ui-kit.scss';
+import ui from '../../../../styles/ui-kit.scss';
 
 class PatientSubComponent extends Component {
   constructor(props) {
@@ -66,9 +65,7 @@ class PatientSubComponent extends Component {
                 align="right"
                 render={props => (
                   <Button
-                    className={`${styles.actionsButtonNormal} ${styles.actionsButton} ${
-                      ui.modal__save
-                    } `}
+                    className={`${styles.actionsButtonNormal} ${styles.actionsButton} ${ui.modal__save} `}
                     {...props}
                   >
                     <div className={styles.actionText}>Actions</div>
@@ -172,7 +169,4 @@ const PatientSubComponentWithData = parentProps => (
   </Query>
 );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientSubComponentWithData);
+export default connect(mapStateToProps, mapDispatchToProps)(PatientSubComponentWithData);

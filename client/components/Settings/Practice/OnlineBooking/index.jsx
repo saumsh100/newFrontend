@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -46,11 +45,10 @@ class OnlineBooking extends Component {
       return null;
     }
 
+    // TODO: UPDATE this print when the widget build is updated.
     const { location } = window;
     const port = location.port ? `:${location.port}` : '';
-    const snippet = `<script type="text/javascript" src="${location.protocol}//my.${
-      location.hostname
-    }${port}/widgets/${activeAccount.id}/cc.js"></script>`;
+    const snippet = `<script type="text/javascript" src="${location.protocol}//my.${location.hostname}${port}/widgets/${activeAccount.id}/cc.js"></script>`;
 
     return (
       <SettingsCard title="Online Booking" bodyClass={styles.onlineBookingBody}>
@@ -100,9 +98,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ updateEntityRequest }, dispatch);
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(OnlineBooking);

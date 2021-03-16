@@ -1,10 +1,9 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import DropdownMenu from 'react-dd-menu';
-import { Icon } from '../../';
-import ui from '../../../../ui-kit.scss';
+import { Icon } from '../..';
+import ui from '../../../../styles/ui-kit.scss';
 import styles from './styles.scss';
 
 class DropdownSelect extends Component {
@@ -18,7 +17,7 @@ class DropdownSelect extends Component {
   }
 
   toggle() {
-    this.setState({ isOpen: !this.state.isOpen });
+    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
   }
 
   close() {

@@ -1,4 +1,4 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 @mixin formContainer-mixin() {
   height: 100%;
@@ -34,7 +34,7 @@
   border-bottom: 0;
   box-sizing: border-box;
   color: $primary-white;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   display: flex;
   font-size: 18px;
   height: 43px;
@@ -55,7 +55,7 @@
 }
 
 .searchInput {
-  composes: fontDefault from '../../../fonts.scss';
+  composes: fontDefault from '../../../styles/fonts.scss';
 
   > input {
     box-sizing: border-box;
@@ -103,7 +103,7 @@
 
   &_details {
     color: #a7a9ac;
-    composes: fontDefault from '../../../fonts.scss';
+    composes: fontDefault from '../../../styles/fonts.scss';
     display: flex;
     flex-direction: column;
     line-height: 1.3;
@@ -138,7 +138,7 @@
 }
 
 .dropDownValueStyle {
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
 }
 
 .grid {
@@ -195,13 +195,13 @@
 
 .confirmCancel {
   align-items: center;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   display: inline-block;
   font-size: 10px;
 
   &_label {
     color: #3d4956;
-    composes: fontMedium from '../../../fonts.scss';
+    composes: fontMedium from '../../../styles/fonts.scss';
     font-size: 12px;
     padding-bottom: 1px;
 
@@ -257,7 +257,7 @@
   width: 100%;
 
   &_name {
-    composes: fontMedium from '../../../fonts.scss';
+    composes: fontMedium from '../../../styles/fonts.scss';
     font-size: 15px;
     padding-left: 10px;
   }
@@ -275,7 +275,7 @@
   border: none;
   box-sizing: border-box;
   color: #929293;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   cursor: pointer;
   display: flex;
   height: 35px;
@@ -299,7 +299,7 @@
 }
 
 .valueFont {
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
 }
 
 .hidden {

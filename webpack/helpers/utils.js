@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const { EOL } = require('os');
 const path = require('path');
@@ -24,14 +23,19 @@ exports.appEntries = appEntries;
 exports.entries = (isDevMode = false) =>
   appEntries(
     isDevMode
-      ? name => ['core-js/stable', 'regenerator-runtime/runtime', 'react-hot-loader/patch', `./entries/${name}.js`]
-      : name => `./entries/${name}.js`,
+      ? name => [
+        'core-js/stable',
+        'regenerator-runtime/runtime',
+        'react-hot-loader/patch',
+        `./entries/${name}.js`,
+      ]
+      : name => `./client/entries/${name}.js`,
   );
 
 /**
  * Absolute path to project root
  */
-exports.projectRoot = path.normalize(path.join(__dirname, '..'));
+exports.projectRoot = path.normalize(path.join(__dirname, '..', 'client'));
 
 /**
  * Parse env file into object
@@ -55,13 +59,8 @@ exports.linkFrontEndModule = ({
   frontEndPackage = '@carecru/carecru',
 } = {}) => {
   const serverPath = process.env.SERVER_PATH || shell.pwd().toString();
-
-  console.log(
-    `\nLinking "${buildPath}" to module ${frontEndPackage} on ${path.resolve(
-      `${process.cwd()}${buildPath}`,
-      serverPath,
-    )}\n`,
-  );
+  const linkServerPath = path.resolve(`${process.cwd()}${buildPath}`, serverPath);
+  console.log(`\nLinking "${buildPath}" to module ${frontEndPackage} on ${linkServerPath}\n`);
 
   generatePublishPackage(buildPath);
 
@@ -69,4 +68,38 @@ exports.linkFrontEndModule = ({
   shell.exec('npm link');
   shell.cd(serverPath);
   shell.exec(`npm link ${frontEndPackage}`);
+};
+
+exports.getCompleteHost = () => {
+  const {
+    NODE_ENV,
+    API_SERVER_PORT,
+    API_SERVER_HOST,
+    SERVER_PORT,
+    SERVER_HOST,
+  } = process.env;
+
+  const USE_LOCAL_BACKEND = process.env.USE_LOCAL_BACKEND === 'true';
+
+  let host = SERVER_HOST || 'localhost';
+  let port = SERVER_PORT ? `:${SERVER_PORT}` : ':5000';
+  let protocol = 'http';
+
+  const checkForPort = () =>
+    (API_SERVER_PORT === '80' && protocol === 'https' ? '' : `:${API_SERVER_PORT}`);
+  const checkForProtocol = () =>
+    (NODE_ENV === 'production' || !host.includes('localhost') ? 'https' : 'http');
+
+  if (!USE_LOCAL_BACKEND) {
+    host = API_SERVER_HOST;
+    protocol = checkForProtocol();
+    port = API_SERVER_PORT ? checkForPort() : '';
+  }
+
+  return {
+    host,
+    port,
+    protocol,
+    fullUrl: `${protocol}://${host}${port}`,
+  };
 };

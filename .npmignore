@@ -1,3 +1,4 @@
 *
 !client/build/**/*
+!build/**/*
 !package.json

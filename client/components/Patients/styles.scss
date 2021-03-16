@@ -18,16 +18,16 @@
 }*/
 
 .subHeaderMediumSmall {
-  composes: subHeaderMediumSmall from '../../fonts.scss';
+  composes: subHeaderMediumSmall from '../../styles/fonts.scss';
 }
 
 .subHeaderSmall {
-  composes: subHeaderSmall from '../../fonts.scss';
+  composes: subHeaderSmall from '../../styles/fonts.scss';
 }
 
 .users {
   &_name {
-    composes: listItemHeader from '../../fonts.scss';
+    composes: listItemHeader from '../../styles/fonts.scss';
   }
   &_text {
     display: flex;
@@ -42,7 +42,7 @@
 }
 
 .displayName {
-  composes: header from '../../fonts.scss';
+  composes: header from '../../styles/fonts.scss';
 }
 
 .info {
@@ -55,7 +55,7 @@
 }
 
 .contact {
-  composes: subHeaderMedium from '../../fonts.scss';
+  composes: subHeaderMedium from '../../styles/fonts.scss';
 }
 
 .dialogs {

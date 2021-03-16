@@ -1,4 +1,4 @@
-@import '../../../ui';
+@import '../../../styles/ui';
 
 .fa-envelope {
   color: $primary-blue;
@@ -22,11 +22,11 @@
 }
 
 .listItemHeader {
-  composes: listItemHeader from '../../../fonts.scss';
+  composes: listItemHeader from '../../../styles/fonts.scss';
 }
 
 .subHeader {
-  composes: subHeader from '../../../fonts.scss';
+  composes: subHeader from '../../../styles/fonts.scss';
 }
 
 .reminders {

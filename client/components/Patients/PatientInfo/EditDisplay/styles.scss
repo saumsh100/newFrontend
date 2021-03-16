@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .card {
   display: flex;
@@ -7,7 +7,7 @@
 .text {
   align-items: center;
   color: $primary-darkgrey;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -58,7 +58,7 @@
 
 .header {
   align-items: center;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   padding-left: 15px;
 
@@ -124,7 +124,7 @@
 
 .formHeader {
   color: $primary-dark;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   font-size: 15px;
   @media screen and (max-width: 800px) {
     display: none;
@@ -161,7 +161,7 @@
 .disabledPage {
   align-items: center;
   color: $primary-dark-grey;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   font-size: $extra-small-size;
   height: 100%;
@@ -183,7 +183,7 @@
   width: 100%;
   &_label {
     color: $primary-dark-grey;
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
   }
 }
 

@@ -10,7 +10,17 @@
   ],
   "plugins": [
     "react-hot-loader/babel",
-    "add-react-displayname",
+    "@babel/plugin-transform-react-display-name",
+    ["babel-plugin-named-asset-import",
+      {
+        "loaderMap": {
+          "svg": {
+            "ReactComponent":
+              "@svgr/webpack?-svgo,+titleProp,+ref![path]"
+          }
+        }
+      }
+    ],
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-optional-chaining",
     ["@babel/plugin-proposal-class-properties",

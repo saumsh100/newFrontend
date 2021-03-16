@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .card {
   background: white;
@@ -18,7 +18,7 @@
 
 .header {
   color: $primary-dark;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   font-size: 23px;
   padding: 20px 0 10px 20px;
 }

@@ -1,4 +1,4 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 .dialogBodyAdd {
   overflow: unset;
@@ -88,7 +88,7 @@
 
   &_details {
     color: #a7a9ac;
-    composes: fontDefault from '../../../fonts.scss';
+    composes: fontDefault from '../../../styles/fonts.scss';
     display: flex;
     flex-direction: column;
     line-height: 1.3;

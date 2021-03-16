@@ -1,4 +1,4 @@
-@import '../../../ui';
+@import '../../../styles/ui';
 
 .bigComment {
   align-items: flex-end;
@@ -33,7 +33,7 @@
     position: relative;
 
     &__header {
-      composes: fontMedium from '../../../fonts.scss';
+      composes: fontMedium from '../../../styles/fonts.scss';
       &__link {
         color: $primary-blue;
         cursor: pointer;
@@ -74,7 +74,7 @@
     }
     &__title {
       color: $primary-green;
-      composes: fontMedium from '../../../fonts.scss';
+      composes: fontMedium from '../../../styles/fonts.scss';
       margin-bottom: 15px;
     }
     &__rating {
@@ -83,7 +83,7 @@
     }
     &__preview {
       color: $primary-dark;
-      composes: letterSpacing from '../../../fonts.scss';
+      composes: letterSpacing from '../../../styles/fonts.scss';
       letter-spacing: 0;
       line-height: 20px;
       &__toggleButton {
@@ -99,7 +99,7 @@
     }
     &__createdAt {
       color: lighten($primary-darkgrey, 20%);
-      composes: subHeaderSmall from '../../../fonts.scss';
+      composes: subHeaderSmall from '../../../styles/fonts.scss';
       margin: 10px 0;
     }
   }

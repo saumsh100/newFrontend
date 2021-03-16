@@ -1,4 +1,4 @@
-@import '../../../../ui.scss';
+@import '../../../../styles/ui.scss';
 
 .schedule_filter {
   background-color: white;
@@ -70,13 +70,13 @@
   padding: 15px 10px 10px;
 
   &__name {
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
     font-size: 10px;
   }
 
   &__type {
     color: $empty-grey;
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
     font-size: 9px;
     padding-top: 4px;
   }
@@ -120,7 +120,7 @@
 
   &__title {
     color: $primary-darkgrey;
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
     font-size: 9px;
     text-transform: uppercase;
   }
@@ -130,7 +130,7 @@
     display: flex;
     flex: 1 0 35%;
     font-size: 9px;
-    //composes: fontMedium from '../../../../fonts.scss';
+    //composes: fontMedium from '../../../../styles/fonts.scss';
     text-overflow: ellipsis;
     text-transform: uppercase;
     //padding: 2px;

@@ -1,4 +1,4 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 @mixin dialogBodyMobile-mixin() {
   overflow: auto;
@@ -34,7 +34,7 @@
 }
 
 .title {
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
 }
 .cardHeader {
   color: $primary-white !important;

@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .listItem {
   // min-height: 80px;
@@ -83,7 +83,7 @@
 
 .reminderLabel {
   color: black;
-  composes: cardHeaderTitle from '../../../../fonts.scss';
+  composes: cardHeaderTitle from '../../../../styles/fonts.scss';
   font-size: 14px;
   text-align: center;
   text-transform: capitalize;

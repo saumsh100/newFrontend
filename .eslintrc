@@ -1,7 +1,7 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "extends": ["prettier", "airbnb", "prettier/react", "prettier/standard"],
-  "plugins": ["react", "react-hooks", "bof-newline"],
+  "plugins": ["react", "react-hooks"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {
@@ -58,8 +58,7 @@
     "prefer-promise-reject-errors": "warn",
     "function-paren-newline": ["error", "consistent"],
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
-    "camelcase": ["error", { "allow": ["^UNSAFE_", "smart_follow_up"]}],
-    "bof-newline/bof-newline": ["error", "always"]
+    "camelcase": ["error", { "allow": ["^UNSAFE_", "smart_follow_up"]}]
   },
   "env": {
     "browser": true,

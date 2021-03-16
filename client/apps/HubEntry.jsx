@@ -1,13 +1,10 @@
-
 import '../components/library/util/why-did-you-render';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
-import _ from 'lodash';
 import Immutable from 'immutable';
-import * as time from '@carecru/isomorphic';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import { socketInstance } from '../socket';
 import App from './Hub';
@@ -172,8 +169,6 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
     window.store = store;
     window.socket = socket;
     window.moment = extendMoment(moment);
-    window.time = time;
-    window._ = _;
     window.Immutable = Immutable;
 
     // We have to create global objects only once

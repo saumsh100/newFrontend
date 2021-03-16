@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import DataSlot from '../../../library/DataSlot';
-import ui from '../../../../ui-kit.scss';
+import ui from '../../../../styles/ui-kit.scss';
 
 const renderList = (props, currentValue, scrollIndex, close, callback) => (
   <div tabIndex={-1} className={ui.dropdown__list} ref={callback}>

@@ -1,4 +1,4 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 .iconCard {
   align-items: center;
@@ -17,11 +17,11 @@
     justify-content: center;
   }
   &__count {
-    composes: font-jumbo from '../../../fonts.scss';
+    composes: font-jumbo from '../../../styles/fonts.scss';
   }
 
   &__title {
-    composes: font-header-title-white from '../../../fonts.scss';
+    composes: font-header-title-white from '../../../styles/fonts.scss';
     @media screen and (max-width: 1660px) {
       max-width: 120px;
       text-align: center;

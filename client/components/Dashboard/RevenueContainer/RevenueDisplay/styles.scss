@@ -1,7 +1,7 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .fontMedium {
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
 }
 
 .revenueDisplay {

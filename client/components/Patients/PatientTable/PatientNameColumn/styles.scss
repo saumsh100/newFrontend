@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .patientRow {
   align-items: center;
@@ -10,7 +10,7 @@
 }
 .name {
   color: lighten($primary-blue, 10%);
-  composes: subHeader from '../../../../fonts.scss';
+  composes: subHeader from '../../../../styles/fonts.scss';
   overflow: hidden;
   text-overflow: ellipsis;
   &:hover {

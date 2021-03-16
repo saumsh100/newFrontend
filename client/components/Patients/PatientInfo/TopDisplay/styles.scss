@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .card {
   background: #fafafa;
@@ -65,7 +65,7 @@
     &_nameAge {
       align-items: center;
       color: #505c68;
-      composes: fontMedium from '../../../../fonts.scss';
+      composes: fontMedium from '../../../../styles/fonts.scss';
       display: flex;
       font-size: $extra-medium-size;
       height: 25px;
@@ -83,7 +83,7 @@
     }
 
     &_email {
-      composes: subHeaderSmall from '../../../../fonts.scss';
+      composes: subHeaderSmall from '../../../../styles/fonts.scss';
       font-size: 11px;
       font-style: italic;
       line-height: 11px;
@@ -91,7 +91,7 @@
     }
 
     &_phone {
-      composes: subHeaderSmall from '../../../../fonts.scss';
+      composes: subHeaderSmall from '../../../../styles/fonts.scss';
       font-size: 11px;
       font-style: italic;
       line-height: 11px;
@@ -99,7 +99,7 @@
     }
 
     &_icon {
-      composes: subHeaderSmall from '../../../../fonts.scss';
+      composes: subHeaderSmall from '../../../../styles/fonts.scss';
       line-height: 11px;
       margin-top: 8px;
       padding-right: 10px;
@@ -111,7 +111,7 @@
       border-radius: 20px;
       box-sizing: border-box;
       color: #fff;
-      composes: subHeaderExtraSmall from '../../../../fonts.scss';
+      composes: subHeaderExtraSmall from '../../../../styles/fonts.scss';
       display: inline-flex;
       height: 18px;
       justify-content: center;
@@ -185,7 +185,7 @@
 
 .fontStyle {
   color: $primary-dark !important;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable consistent-return */
 
 export function identifyPracticeUser({ account, enterprise, user }) {
   if (!window.FS || !window.FS.identify) {

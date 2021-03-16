@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .container {
   display: flex;
@@ -8,7 +8,7 @@
 
 .label {
   color: $primary-dark-grey;
-  composes: fontExtraSmall from '../../../../fonts.scss';
+  composes: fontExtraSmall from '../../../../styles/fonts.scss';
   font-family: $medium-font;
   font-size: $extra-small-size;
   opacity: 1;
@@ -18,7 +18,7 @@
 
 .data {
   color: $primary-dark;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   margin-right: 15px;
   overflow: hidden;
   text-overflow: ellipsis;

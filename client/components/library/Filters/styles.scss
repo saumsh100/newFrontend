@@ -1,11 +1,11 @@
-@import '../../../ui';
-@import '../../../fonts';
+@import '../../../styles/ui';
+@import '../../../styles/fonts';
 
 .filters {
   &__checkFilter {
     align-items: center;
     color: lighten($primary-darkgrey, 20%);
-    composes: subHeader from '../../../fonts.scss';
+    composes: subHeader from '../../../styles/fonts.scss';
     display: flex;
     flex-direction: column;
     justify-content: center;

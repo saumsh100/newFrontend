@@ -1,4 +1,4 @@
-@import '../../ui.scss';
+@import '../../styles/ui.scss';
 
 .callsContainer {
   box-sizing: border-box;
@@ -39,7 +39,7 @@
 
 .headerGraph_title {
   color: $primary-dark;
-  composes: fontMedium from '../../fonts.scss';
+  composes: fontMedium from '../../styles/fonts.scss';
   font-size: 25px;
 }
 

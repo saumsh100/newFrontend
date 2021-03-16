@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .container {
   border-right: 1px solid $primary-grey;
@@ -28,7 +28,7 @@
 }
 
 .header {
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   font-size: 23px;
   padding-bottom: 20px;
 }
@@ -119,7 +119,7 @@
   border: 1px solid $primary-grey;
   box-sizing: border-box;
   color: $primary-dark-grey;
-  composes: fontDefault from '../../../../fonts.scss';
+  composes: fontDefault from '../../../../styles/fonts.scss';
   display: flex;
   flex: none;
   font-size: 13px;

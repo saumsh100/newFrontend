@@ -1,3 +1,4 @@
+import getApiHost from './getApiHost';
 
 const { location } = window;
 
@@ -23,16 +24,16 @@ export function getApiUrl() {
 }
 
 export function getSubscriptionUrl(path = '') {
-  const [protocol, host] = isHub()
-    ? PRODUCTION_API.split('://')
-    : [location.protocol, location.host];
+  const [protocol, host] = isHub() ? PRODUCTION_API.split('://') : getApiHost().split('://');
 
-  return `${protocol === 'https:' ? 'wss:' : 'ws:'}//${host}${path}`;
+  const isLocal = location.hostname !== host
+    && (location.host === 'localhost' || location.host.includes('127.0.0.1'));
+  return `${protocol === 'https:' || isLocal ? 'wss:' : 'ws:'}//${host}${path}`;
 }
 
 export function getSocketUrl() {
   if (!isOnDevice()) {
-    return '';
+    return getApiHost();
   }
 
   return PRODUCTION_API;

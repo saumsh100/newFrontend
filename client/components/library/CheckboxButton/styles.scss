@@ -1,11 +1,11 @@
-@import '../../../ui';
+@import '../../../styles/ui';
 
 .buttonLabel {
   background: transparent;
   border: 1px solid $primary-dark-grey;
   border-radius: 0.25em;
   color: $primary-dark-grey;
-  composes: fontDefault from '../../../fonts.scss';
+  composes: fontDefault from '../../../styles/fonts.scss';
   cursor: pointer;
   display: inline-block;
   line-height: 1em;

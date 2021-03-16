@@ -1,4 +1,4 @@
-@import '../../ui.scss';
+@import '../../styles/ui.scss';
 
 .blurBg {
   bottom: 0;
@@ -34,7 +34,7 @@
 
 .actionButton {
   bottom: 15px;
-  composes: fontDefault from '../../fonts.scss';
+  composes: fontDefault from '../../styles/fonts.scss';
   font-size: 20px;
   height: auto;
   left: 15px;

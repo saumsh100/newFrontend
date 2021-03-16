@@ -1,4 +1,4 @@
-@import '../../ui.scss';
+@import '../../styles/ui.scss';
 
 .backDrop {
   background-color: $primary-dark;
@@ -83,7 +83,7 @@
   width: 100%;
 
   &_text {
-    composes: subHeaderExtraSmall from '../../fonts.scss';
+    composes: subHeaderExtraSmall from '../../styles/fonts.scss';
     margin: 0 auto;
 
     &:hover {

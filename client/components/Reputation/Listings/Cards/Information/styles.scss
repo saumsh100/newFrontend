@@ -1,5 +1,5 @@
-@import '../../../../../ui';
-@import '../../../../../fonts';
+@import '../../../../../styles/ui';
+@import '../../../../../styles/fonts';
 
 .total {
   height: 210px;
@@ -48,7 +48,7 @@
     }
     &_text {
       color: $primary-dark;
-      composes: subHeaderMedium from '../../../../../fonts.scss';
+      composes: subHeaderMedium from '../../../../../styles/fonts.scss';
     }
     &_data {
       color: lighten($primary-darkgrey, 20%);

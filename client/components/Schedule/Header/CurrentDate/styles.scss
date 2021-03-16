@@ -1,8 +1,8 @@
-@import '../../../../ui.scss';
+@import '../../../../styles/ui.scss';
 
 .container {
   align-items: center;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
 }
 

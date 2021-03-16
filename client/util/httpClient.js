@@ -1,6 +1,6 @@
-
 import axios from 'axios';
-import { isOnDevice, getApiUrl } from '../util/hub';
+import { isOnDevice, getApiUrl } from './hub';
+import getApiHost from './getApiHost';
 
 const getTokenDefault = () => localStorage.getItem('token');
 const getTokenBookingWidget = () => localStorage.getItem('auth_token');
@@ -25,19 +25,22 @@ const buildHttpClient = (getToken, requestConfig = {}) => {
   );
 
   // Add a response interceptor
-  instance.interceptors.response.use(response => response, error => Promise.reject(error));
+  instance.interceptors.response.use(
+    response => response,
+    error => Promise.reject(error),
+  );
 
   return instance;
 };
 
 export const httpClient = config =>
   buildHttpClient(getTokenDefault, {
-    baseURL: isOnDevice() ? getApiUrl() : '',
+    baseURL: isOnDevice() ? getApiUrl() : getApiHost(),
     ...config,
   });
 
 export const bookingWidgetHttpClient = config =>
   buildHttpClient(getTokenBookingWidget, {
-    baseURL: '/my',
+    baseURL: `${getApiHost()}/my`,
     ...config,
   });

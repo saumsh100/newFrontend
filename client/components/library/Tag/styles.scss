@@ -1,10 +1,10 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 .tagsContainer {
   border-bottom: 1px solid $primary-darkgrey;
   border-right: 1px solid $primary-darkgrey;
   border-top: 1px solid $primary-darkgrey;
-  composes: listItemHeader from '../../../fonts.scss';
+  composes: listItemHeader from '../../../styles/fonts.scss';
   margin: 2px 0;
   padding: 5px 0 5px 5px;
   position: relative;

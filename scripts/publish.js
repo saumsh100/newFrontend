@@ -6,7 +6,7 @@ const generatePublishPackage = require('./generatePublishPackage');
   try {
     // it builds both dashboard and booking widget
     cmd.exec('npm run client:build');
-    const buildPath = 'client/build/';
+    const buildPath = 'build/';
 
     generatePublishPackage(buildPath);
 

@@ -1,4 +1,4 @@
-@import '../../ui.scss';
+@import '../../styles/ui.scss';
 
 .backDrop {
   background-color: $primary-dark;
@@ -48,7 +48,7 @@
 }
 
 .textLogin {
-  composes: subHeaderExtraSmall from '../../fonts.scss';
+  composes: subHeaderExtraSmall from '../../styles/fonts.scss';
   cursor: pointer;
   padding-top: 15px;
   text-align: center;
@@ -68,7 +68,7 @@
 }
 
 .textSuccess2 {
-  composes: fontMedium from '../../fonts.scss';
+  composes: fontMedium from '../../styles/fonts.scss';
   padding: 10px;
   text-align: center;
 }

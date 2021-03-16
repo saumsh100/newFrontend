@@ -1,4 +1,4 @@
-@import '../../../../ui.scss';
+@import '../../../../styles/ui.scss';
 
 .patientSub {
   //padding-left: 35px;
@@ -59,7 +59,7 @@
 
 .headerText {
   color: $primary-dark;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   font-size: 16px;
 }
 
@@ -116,13 +116,13 @@
 
 .subHeader {
   color: $primary-darkgrey;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   padding-top: 20px;
 }
 
 .subHeaderSmall {
   color: $primary-darkgrey;
-  composes: fontExtraSmall from '../../../../fonts.scss';
+  composes: fontExtraSmall from '../../../../styles/fonts.scss';
   font-style: italic;
   padding-top: 10px;
 }

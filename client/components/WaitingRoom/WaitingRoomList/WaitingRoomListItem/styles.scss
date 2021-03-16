@@ -1,4 +1,4 @@
-@import '../../../../ui.scss';
+@import '../../../../styles/ui.scss';
 
 .waitingRoomListItem {
   align-items: center;
@@ -15,9 +15,6 @@
 }
 
 /* Left Section */
-
-.leftSection {
-}
 
 .checkinTime {
   color: $primary-green;
@@ -52,10 +49,6 @@
 
 .tooltip {
   background: blue;
-}
-
-.tooltipBody {
-  // background: blue;
 }
 
 .practitionerName {

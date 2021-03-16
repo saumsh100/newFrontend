@@ -98,7 +98,7 @@ export default function FilterPractitioners(props) {
 FilterPractitioners.propTypes = {
   filterKey: PropTypes.string,
   allChecked: PropTypes.bool,
-  practitioners: PropTypes.object.required,
+  practitioners: PropTypes.shape({}),
   selectedFilterItem: PropTypes.array,
   handleAllCheck: PropTypes.func,
   handleEntityCheck: PropTypes.func,

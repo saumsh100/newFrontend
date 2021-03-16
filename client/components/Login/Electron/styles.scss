@@ -1,4 +1,4 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 .backDrop {
   align-items: center;
@@ -76,7 +76,7 @@
   &_text {
     background: none;
     color: $primary-darkgrey;
-    composes: subHeaderExtraSmall from '../../../fonts.scss';
+    composes: subHeaderExtraSmall from '../../../styles/fonts.scss';
     padding: 0;
 
     &:hover {

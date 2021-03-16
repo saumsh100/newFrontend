@@ -1,4 +1,4 @@
-@import '../../../ui';
+@import '../../../styles/ui';
 
 .card {
   box-shadow: 0 5px 25px 2px rgba(209, 209, 209, 0.6);
@@ -31,7 +31,7 @@
   padding-right: 15px;
 
   &_text {
-    composes: fontDefault from '../../../fonts.scss';
+    composes: fontDefault from '../../../styles/fonts.scss';
     font-size: 15px;
     margin-right: 10px;
     padding-left: 5px;
@@ -46,7 +46,7 @@
 .closeIcon {
   background: none;
   color: $primary-grey;
-  composes: fontMediumSize from '../../../fonts.scss';
+  composes: fontMediumSize from '../../../styles/fonts.scss';
   font-size: 14px;
   margin-left: auto;
   padding: 1px 7px 2px;
@@ -92,7 +92,7 @@
 }
 
 .subHeader {
-  composes: subHeaderExtraSmall from '../../../fonts.scss';
+  composes: subHeaderExtraSmall from '../../../styles/fonts.scss';
   padding-bottom: 5px;
   text-transform: uppercase;
 }
@@ -112,7 +112,7 @@
 
 .data {
   align-items: center;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   display: flex;
   font-size: 13px;
   padding-bottom: 8px;
@@ -137,7 +137,7 @@
 
 .subData {
   color: $primary-dark-grey;
-  composes: fontExtraSmall from '../../../fonts.scss';
+  composes: fontExtraSmall from '../../../styles/fonts.scss';
 }
 
 .footer {
@@ -174,7 +174,7 @@
 }
 
 .actionButtonMobile {
-  composes: fontDefault from '../../../fonts.scss';
+  composes: fontDefault from '../../../styles/fonts.scss';
   font-size: 20px;
   height: auto;
   padding: 12px 13px;
@@ -217,7 +217,7 @@
 
 .requestedAt {
   color: #808081;
-  composes: fontDefault from '../../../fonts.scss';
+  composes: fontDefault from '../../../styles/fonts.scss';
   font-size: $extra-small-size;
 
   &_diffUserContainer {
@@ -226,7 +226,7 @@
 
   &_byDiffUser {
     color: $primary-dark;
-    composes: fontDefault from '../../../fonts.scss';
+    composes: fontDefault from '../../../styles/fonts.scss';
     font-size: $extra-small-size;
     opacity: 1;
   }

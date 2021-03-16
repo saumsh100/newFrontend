@@ -1,4 +1,4 @@
-@import '../../ui.scss';
+@import '../../styles/ui.scss';
 
 .callDisplayContainer {
   background: $primary-white;
@@ -89,7 +89,7 @@
 }
 
 .patientNameAge {
-  composes: header from '../../fonts.scss';
+  composes: header from '../../styles/fonts.scss';
   display: flex;
   justify-content: center;
   padding-bottom: 10px;
@@ -97,7 +97,7 @@
 }
 
 .patientBirthday {
-  composes: subHeaderMedium from '../../fonts.scss';
+  composes: subHeaderMedium from '../../styles/fonts.scss';
   display: flex;
   justify-content: center;
 }
@@ -117,7 +117,7 @@
 }
 
 .appointmentInfoContainer {
-  composes: subHeaderMediumSmall from '../../fonts.scss';
+  composes: subHeaderMediumSmall from '../../styles/fonts.scss';
   display: flex;
   padding-left: 10px;
   padding-right: 10px;
@@ -133,7 +133,7 @@
   }
 
   &_date {
-    composes: subHeaderMedium from '../../fonts.scss';
+    composes: subHeaderMedium from '../../styles/fonts.scss';
     padding-top: 5px;
     &_hover {
       &:hover {
@@ -143,7 +143,7 @@
     }
   }
   &_dateLast {
-    composes: subHeaderMedium from '../../fonts.scss';
+    composes: subHeaderMedium from '../../styles/fonts.scss';
     padding-top: 5px;
     &_hover {
       &:hover {
@@ -159,7 +159,7 @@
   padding-bottom: 15px;
   &_header {
     border-top: 1px solid #efefef;
-    composes: header from '../../fonts.scss';
+    composes: header from '../../styles/fonts.scss';
     font-size: 18px;
     margin-bottom: 10px;
     margin-top: 10px;
@@ -183,12 +183,12 @@
   }
 
   &_desc {
-    composes: subHeader from '../../fonts.scss';
+    composes: subHeader from '../../styles/fonts.scss';
     width: 90px;
   }
 
   &_data {
-    composes: subHeaderSmall from '../../fonts.scss';
+    composes: subHeaderSmall from '../../styles/fonts.scss';
   }
 }
 
@@ -201,7 +201,7 @@
   padding-top: 20px;
   width: 100%;
   &_text {
-    composes: font-medium from '../../fonts.scss';
+    composes: font-medium from '../../styles/fonts.scss';
     margin-left: auto;
     padding-right: 5px;
   }

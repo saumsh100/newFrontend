@@ -1,4 +1,4 @@
-@import '../../../../ui.scss';
+@import '../../../../styles/ui.scss';
 
 :root {
   #{--primaryButtonColor}: $electron-button-primary;
@@ -10,7 +10,7 @@
   background-color: var(--primaryButtonColor);
   border: none;
   color: white;
-  composes: letterSpacing from '../../../../fonts.scss';
+  composes: letterSpacing from '../../../../styles/fonts.scss';
   cursor: pointer;
 
   font-family: $dashboard-font;
@@ -174,7 +174,7 @@
 }
 
 .dense {
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   font-size: 11px;
   height: 28px;
   padding-bottom: 0.6em;

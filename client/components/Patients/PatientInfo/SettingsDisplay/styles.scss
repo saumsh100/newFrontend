@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .mainContainer {
   display: flex;
@@ -7,7 +7,7 @@
 .text {
   align-items: center;
   color: $primary-darkgrey;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   justify-content: flex-end;
   width: 100%;
@@ -34,7 +34,7 @@
 
 .header {
   align-items: center;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   padding-bottom: 15px;
   padding-left: 15px;
@@ -83,7 +83,7 @@
 
 .formHeader {
   color: $primary-darkgrey;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
 }
 
 .formHeader:first-child {

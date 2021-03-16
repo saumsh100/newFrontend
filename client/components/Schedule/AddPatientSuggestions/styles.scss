@@ -1,4 +1,4 @@
-@import '../../../ui';
+@import '../../../styles/ui';
 
 .suggestionsContainer {
   background: $primary-white;
@@ -27,15 +27,15 @@
   padding-top: 15px;
 }
 .listItemHeader {
-  composes: listItemHeader from '../../../fonts.scss';
+  composes: listItemHeader from '../../../styles/fonts.scss';
 }
 
 .subHeaderSmall {
-  composes: subHeaderSmall from '../../../fonts.scss';
+  composes: subHeaderSmall from '../../../styles/fonts.scss';
 }
 
 .fontBold {
-  composes: fontBold from '../../../fonts.scss';
+  composes: fontBold from '../../../styles/fonts.scss';
 }
 
 .container {
@@ -146,6 +146,6 @@
 
 .bold {
   color: $primary-blue;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   text-transform: capitalize;
 }

@@ -1,4 +1,4 @@
-@import '../../ui';
+@import '../../styles/ui';
 
 @mixin responsiveWrapper {
   background: white;
@@ -230,7 +230,7 @@
 
   &__name {
     color: #2e3845;
-    composes: listItemHeader from '../../fonts.scss';
+    composes: listItemHeader from '../../styles/fonts.scss';
     display: flex;
     font-size: 14px;
     max-width: 90%;
@@ -253,7 +253,7 @@
   }
 
   &__text {
-    composes: subHeaderSmall from '../../fonts.scss';
+    composes: subHeaderSmall from '../../styles/fonts.scss';
     padding-bottom: 10px;
     //padding-top: 10px;
     padding-right: 40px;
@@ -448,7 +448,7 @@
 
 .fullName {
   //font-weight: 900;
-  composes: header from '../../fonts.scss';
+  composes: header from '../../styles/fonts.scss';
   //font-family: "Gotham-Book";
   //font-size: 18px;
   margin: 10px 0;
@@ -476,7 +476,7 @@
 
 .fonts {
   color: #bfbfbf;
-  composes: subHeaderSmall from '../../fonts.scss';
+  composes: subHeaderSmall from '../../styles/fonts.scss';
   font-weight: bold;
 }
 

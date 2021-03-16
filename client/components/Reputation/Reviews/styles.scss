@@ -1,4 +1,4 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 @import '../styles.scss';
 
 .reviews {
@@ -44,11 +44,11 @@
   justify-content: center;
   width: 80%;
   &_header {
-    composes: font-header-title from '../../../fonts.scss';
+    composes: font-header-title from '../../../styles/fonts.scss';
     margin-bottom: 10px;
   }
   &_subHeader {
-    composes: subHeader from '../../../fonts.scss';
+    composes: subHeader from '../../../styles/fonts.scss';
   }
 }
 
@@ -65,7 +65,7 @@
   width: 80%;
 
   &__count {
-    composes: fontExtraMediumLarge from '../../../fonts.scss';
+    composes: fontExtraMediumLarge from '../../../styles/fonts.scss';
   }
 
   &__title {
@@ -82,7 +82,7 @@
     border-top: 2px solid $primary-grey;
     box-sizing: border-box;
     color: lighten($primary-darkgrey, 20%);
-    composes: subHeaderSmall from '../../../fonts.scss';
+    composes: subHeaderSmall from '../../../styles/fonts.scss';
     font-size: $medium-size;
     margin: 5px 0 0;
     padding-top: 15px;
@@ -145,7 +145,7 @@
     width: 25%;
     &__update {
       color: lighten($primary-darkgrey, 20%);
-      composes: subHeaderSmall from '../../../fonts.scss';
+      composes: subHeaderSmall from '../../../styles/fonts.scss';
       font-size: $medium-size;
       margin-top: 10px;
     }

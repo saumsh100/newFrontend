@@ -1,8 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../../library/ScheduleCalendar/modal.scss';
-import ui from '../../../../ui-kit.scss';
+import ui from '../../../../styles/ui-kit.scss';
 
 const ModalHeader = props => (
   <div className={styles.header}>

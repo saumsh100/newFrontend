@@ -1,4 +1,4 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 .callTableContainer {
   box-sizing: border-box;
@@ -11,7 +11,7 @@
 
 .title {
   color: $primary-dark;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   font-size: 25px;
   padding: 30px;
 }
@@ -61,7 +61,7 @@
 
 .colStyling {
   align-items: center;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   display: flex;
   justify-content: flex-start;
   text-align: left;

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -95,7 +94,7 @@ function NavList(props) {
         )}
         onClick={props.collapseContent}
       >
-        <img src="/images/electron/logo_white.svg" alt="logo" />
+        <img src="/../public/images/electron/logo_white.svg" alt="logo" />
       </Button>
       <Nav>
         <SingleNavItem
@@ -185,9 +184,6 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(withAuthProps(NavList));

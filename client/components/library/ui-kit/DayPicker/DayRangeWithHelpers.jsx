@@ -1,4 +1,3 @@
-
 import React, { Component, createRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import DayPicker from 'react-day-picker';
@@ -11,7 +10,7 @@ import DayRangeInput from './DayRangeInput';
 import dayPickerClasses from './dayPickerClasses';
 import defaultHelpers from './defaultRangeHelpers';
 import dayPicker from './dayPicker.scss';
-import ui from '../../../../ui-kit.scss';
+import ui from '../../../../styles/ui-kit.scss';
 import styles from './styles.scss';
 import { getDate, getUTCDate, parseDate } from '../../util/datetime';
 

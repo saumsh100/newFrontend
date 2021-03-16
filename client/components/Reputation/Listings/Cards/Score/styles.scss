@@ -1,5 +1,5 @@
-@import '../../../../../ui';
-@import '../../../../../fonts';
+@import '../../../../../styles/ui';
+@import '../../../../../styles/fonts';
 
 .score {
   align-items: center;
@@ -14,11 +14,11 @@
     width: 80%;
     &_count {
       color: $primary-blue;
-      composes: fontExtraLarge from '../../../../../fonts.scss';
+      composes: fontExtraLarge from '../../../../../styles/fonts.scss';
     }
     &_title {
       color: $primary-dark;
-      composes: fontMediumLarge from '../../../../../fonts.scss';
+      composes: fontMediumLarge from '../../../../../styles/fonts.scss';
     }
   }
   &__body {
@@ -26,7 +26,7 @@
     width: 80%;
     &_listing {
       color: lighten($primary-darkgrey, 20%);
-      composes: subHeaderSmall from '../../../../../fonts.scss';
+      composes: subHeaderSmall from '../../../../../styles/fonts.scss';
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;

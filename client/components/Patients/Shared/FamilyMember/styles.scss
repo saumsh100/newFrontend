@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 @mixin withBorder {
   border-bottom: 1px solid #efefef;
@@ -28,7 +28,7 @@
 
   &_fontStyle {
     color: $primary-dark !important;
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -76,7 +76,7 @@
     background: none;
     border: none;
     color: $primary-blue-green;
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
     cursor: pointer;
     display: inline-block;
     font-size: $extra-small-size;

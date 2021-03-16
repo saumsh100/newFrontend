@@ -17,7 +17,7 @@ export default class ConfigurationItem extends Component {
     const { name } = attributes;
     // Put together configuration object and call parent function
     if (
-      confirm(`Are you sure you want to change ${name} in ${account.name}?`)
+      window.confirm(`Are you sure you want to change ${name} in ${account.name}?`)
     ) {
       this.props.onUpdateConfiguration({ name, value });
     }

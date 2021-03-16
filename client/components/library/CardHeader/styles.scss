@@ -1,5 +1,5 @@
-@import '../../../ui.scss';
-@import '../../../fonts.scss';
+@import '../../../styles/ui.scss';
+@import '../../../styles/fonts.scss';
 
 .cardHeader {
   align-items: center;
@@ -27,12 +27,12 @@
 
 .cardCount {
   color: $primary-dark;
-  composes: cardHeaderCount from '../../../fonts.scss';
+  composes: cardHeaderCount from '../../../styles/fonts.scss';
   display: inline-block;
   padding-right: 5px;
 }
 
 .title {
-  composes: cardHeaderTitle from '../../../fonts.scss';
+  composes: cardHeaderTitle from '../../../styles/fonts.scss';
   display: inline-block;
 }

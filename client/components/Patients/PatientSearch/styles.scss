@@ -1,5 +1,5 @@
-@import '../../../ui.scss';
-@import '../../../fonts.scss';
+@import '../../../styles/ui.scss';
+@import '../../../styles/fonts.scss';
 
 .container {
   background: $primary-lightgray;
@@ -25,7 +25,7 @@
 
 .group {
   background-color: $search-bg;
-  composes: fontDefault from '../../../fonts.scss';
+  composes: fontDefault from '../../../styles/fonts.scss';
   height: 50px;
   padding: 0;
 

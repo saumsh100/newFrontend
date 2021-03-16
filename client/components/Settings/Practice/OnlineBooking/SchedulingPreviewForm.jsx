@@ -1,4 +1,3 @@
-
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { DialogBox, Loading } from '../../../library';
@@ -13,6 +12,7 @@ export default function SchedulingPreviewForm({ activeAccount }) {
   const closePreview = () => setViewingPreview(false);
   const openPreview = () => setViewingPreview(true);
 
+  // TODO: UPDATE this print when the widget build is updated.
   return (
     <Fragment>
       <div className={styles.formContainer_pickerField}>

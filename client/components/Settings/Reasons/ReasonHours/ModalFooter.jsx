@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '../../../library';
 import styles from '../../../library/ScheduleCalendar/modal.scss';
-import ui from '../../../../ui-kit.scss';
+import ui from '../../../../styles/ui-kit.scss';
 
 const ModalFooter = ({ hideModal, disableUpdate, updateReason }) => (
   <div className={styles.footer}>

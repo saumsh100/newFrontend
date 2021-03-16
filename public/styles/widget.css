@@ -1,0 +1,292 @@
+/*
+  Modal
+ */
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+.CareCruModal {
+  display: block;
+  position: fixed;
+  content: "";
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.2s, z-index 0s 0.2s;
+  text-align: center;
+  overflow: hidden;
+  overflow-y: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  visibility: hidden;
+}
+
+.CareCruModal.CareCruActive {
+  z-index: 999999;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s;
+}
+
+.CareCruModal:before {
+  display: inline-block;
+  overflow: hidden;
+  width: 0;
+  height: 100%;
+  vertical-align: middle;
+  content: "";
+}
+
+.CareCruModal > * {
+  display: inline-block;
+  white-space: normal;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.CareCruModalInner {
+  position: relative;
+  overflow: hidden;
+  width: 600px;
+  height: 100%;
+  max-width: 100%;
+  overflow-y: auto;
+  background: #fff;
+  z-index: -1;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.2s, transform 0.2s, z-index 0s 0.2s;
+}
+
+@media screen and (min-width : 610px) {
+  .CareCruModalInner {
+    height: 650px;
+  }
+}
+
+.CareCruModalInner.CareCruActive {
+  z-index: 100;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+/*
+  Book Online Button
+ */
+
+.CareCruButton {
+  position: fixed;
+  right: -160px;
+  opacity: 0;
+  top: 250px;
+  width: 157px;
+  min-height: 75px;
+  cursor: pointer;
+  display: block;
+  align-items: center;
+  background-color: var(--bookingWidgetPrimaryColor);
+  text-align: right;
+  justify-content: center;
+  padding: 20px;
+  color: white;
+  box-sizing: border-box;
+  z-index: 9998;
+  box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
+  transition: all 0.2s ease-in;
+  text-transform: uppercase;
+  font-family: 'Roboto' !important;
+  font-size: 19px;
+  letter-spacing: 0;
+  line-height: 19px;
+  text-shadow: 0.5px 0.5px 0.5px rgba(0, 0, 0, 0.10);
+  border-bottom-left-radius: 999px;
+  border-top-left-radius: 999px;
+}
+
+.CareCruButton.CareCruFadeIn {
+  animation: CareCruFadeIn 1s ease-out forwards;
+}
+
+@keyframes CareCruFadeIn {
+  0% {
+    opacity: 0;
+    right: -160px;
+  }
+  50% {
+    opacity: 0;
+    right: -20px;
+  }
+  100%{
+    opacity: 1;
+    right: 0px;
+  }
+}
+
+.CareCruButton .CareCruButtonIconBook {
+  display: block;
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 25px;
+  color: white;
+  font-family: 'Roboto' !important;
+}
+
+.CareCruButtonIcon {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  transition: all 0.2s ease-in;
+  top: 24px;
+}
+
+.CareCruButtonIcon .CareCruButtonIconSVG {
+  fill: currentColor;
+  height: 35px;
+  transition: all 0.2s ease-in;
+}
+
+.CareCruButton:hover {
+  background: var(--bookingWidgetPrimaryColorDarker);
+  box-shadow: 1px 4px 5px 0 rgba(128, 128, 128, 0.25);
+  transition: all 0.2s ease-in;
+}
+
+.CareCruButton:hover .CareCruButtonIcon {
+  transition: all 0.2s ease-in;
+  border-color: var(--bookingWidgetPrimaryColorDarker);
+}
+
+.CareCruButton:hover .CareCruButtonIcon .CareCruButtonIconSVG {
+  transition: all 0.2s ease-in;
+  color: var(--bookingWidgetPrimaryColorDarker);
+}
+
+@media screen and (max-width: 610px) {
+  .CareCruButton {
+    top: auto;
+    right: 0;
+    opacity: 0;
+    width: 90%;
+    left: 5%;
+    font-size: 18px;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 9999px;
+    padding: 10px 0;
+    text-align: center;
+    min-height: auto;
+  }
+
+  .CareCruButton.CareCruFadeIn {
+    animation: CareCruFadeIn 1s ease-out forwards;
+  }
+
+  @keyframes CareCruFadeIn {
+    0% {
+      opacity: 0;
+      bottom: -3%;
+    }
+    50% {
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+      bottom: 2.5%;
+    }
+  }
+
+  .CareCruButton .CareCruButtonIconBook {
+    display: inline;
+    font-size: 18px;
+  }
+
+  .CareCruButtonIcon {
+    display: none;
+  }
+}
+
+/*
+  Booking App Iframe
+ */
+
+#CareCruIframe {
+  z-index: 101;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  min-width: 100%;
+  height: 100%;
+  border: none;
+  overflow: hidden;
+}
+
+
+/*
+  Initial Spinner
+*/
+.CareCruSpinner {
+  font-family: 'Roboto';
+  margin: 0 auto 0;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-weight: 700;
+  letter-spacing: .035em;
+  z-index: 102;
+  position: relative;
+  background: white;
+  opacity: 1;
+  transition: opacity 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.CareCruSpinner.CareCruFadeOut {
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.CareCruSpinner > div > div {
+  width: 18px;
+  height: 18px;
+  background-color: var(--bookingWidgetPrimaryColor);
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: CareCruSpinner-bouncedelay 1.4s infinite ease-in-out both;
+  animation: CareCruSpinner-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.CareCruSpinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.CareCruSpinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.CareCruSpinner > span {
+  margin-top: 12px;
+}
+
+@-webkit-keyframes CareCruSpinner-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes CareCruSpinner-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}

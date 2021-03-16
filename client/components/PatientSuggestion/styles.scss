@@ -1,8 +1,8 @@
-@import '../../ui';
+@import '../../styles/ui';
 
 .bold {
   background: none;
-  composes: fontBold from '../../fonts.scss';
+  composes: fontBold from '../../styles/fonts.scss';
 }
 
 .wrapper {
@@ -44,7 +44,7 @@
 
   &_details {
     color: #a7a9ac;
-    composes: fontDefault from '../../fonts.scss';
+    composes: fontDefault from '../../styles/fonts.scss';
     display: flex;
     flex-direction: column;
     line-height: 1.3;

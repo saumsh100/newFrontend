@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from '../../../library';
@@ -8,7 +7,7 @@ import renderList from './renderList';
 import ActiveScheduleModifiers from './ActiveScheduleModifiers';
 import { hasError } from '../../../library/ScheduleCalendar/EditSchedule';
 import styles from '../../../library/ScheduleCalendar/modal.scss';
-import ui from '../../../../ui-kit.scss';
+import ui from '../../../../styles/ui-kit.scss';
 
 const options = [
   {

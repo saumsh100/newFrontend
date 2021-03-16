@@ -1,13 +1,10 @@
-
 import '../components/library/util/why-did-you-render';
 import React from 'react';
 import { render } from 'react-dom';
 import { push } from 'connected-react-router';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
-import _ from 'lodash';
 import Immutable from 'immutable';
-import * as time from '@carecru/isomorphic';
 import App from './Reviews';
 import configure from '../store/reviewsStore';
 import connectStoreToHost from '../widget/connectStoreToHost';
@@ -29,8 +26,8 @@ store.dispatch(
     custom: {
       accountId: store
         .getState()
-        .availabilities.get('account')
-        .get('id'),
+        .availabilities?.get('account')
+        ?.get('id'),
     },
   }),
 );
@@ -52,8 +49,6 @@ loadPatient()(store.dispatch).then(() => {
   window.store = store;
   window.push = push;
   window.moment = extendMoment(moment);
-  window.time = time;
-  window._ = _;
   window.Immutable = Immutable;
 
   // We have to create global objects only once

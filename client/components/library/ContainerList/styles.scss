@@ -1,7 +1,7 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 .listItemHeader {
-  composes: listItemHeader from '../../../fonts.scss';
+  composes: listItemHeader from '../../../styles/fonts.scss';
 }
 
 .containerList {

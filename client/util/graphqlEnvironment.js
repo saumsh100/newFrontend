@@ -1,4 +1,3 @@
-
 import { ApolloClient } from 'apollo-boost';
 import { HttpLink } from 'apollo-link-http'; // eslint-disable-line import/no-extraneous-dependencies
 import { setContext } from 'apollo-link-context'; // eslint-disable-line import/no-extraneous-dependencies
@@ -7,20 +6,19 @@ import { split } from 'apollo-link'; // eslint-disable-line import/no-extraneous
 import { InMemoryCache } from 'apollo-cache-inmemory'; // eslint-disable-line import/no-extraneous-dependencies
 import { WebSocketLink } from 'apollo-link-ws';
 import { getSubscriptionUrl } from './hub';
+import getApiHost from './getApiHost';
 
 const getTokenDefault = () => localStorage.getItem('token');
 const defaultEndpoint = '/graphql';
 const nestEndpoint = '/newgraphql';
 const isNestOperation = operation => operation.search(/\w*_NEST\b/) === -1;
-const getUrlWithPath = (path = defaultEndpoint) => path;
+const getUrlWithPath = (path = defaultEndpoint) => `${getApiHost()}${path}`;
 
 export default () => {
   const httpLink = new HttpLink({
     // The logic below is required, so that we can support both NEST and legacy api endpoints.
     uri: ({ operationName }) =>
-      getUrlWithPath(
-        isNestOperation(operationName) ? defaultEndpoint : nestEndpoint,
-      ),
+      getUrlWithPath(isNestOperation(operationName) ? defaultEndpoint : nestEndpoint),
   });
 
   // get the authentication token from local storage if it exists

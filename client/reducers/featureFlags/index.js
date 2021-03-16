@@ -17,7 +17,7 @@ export const contextChanged = createAction(CONTEXT_CHANGED);
 export const resetState = createAction(RESET_STATE);
 
 export const isFeatureEnabledSelector = (features, featureName) =>
-  features.get(featureName) || false;
+  features?.get(featureName) || false;
 
 export const initialState = fromJS({
   flags: {},

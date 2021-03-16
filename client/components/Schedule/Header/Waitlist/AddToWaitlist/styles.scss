@@ -1,4 +1,4 @@
-@import '../../../../../ui';
+@import '../../../../../styles/ui';
 
 .addToContainer {
   height: auto;
@@ -44,7 +44,7 @@
 
 .subHeader {
   color: $primary-dark;
-  composes: fontDefault from '../../../../../fonts.scss';
+  composes: fontDefault from '../../../../../styles/fonts.scss';
   font-size: 13px;
   text-align: left;
 }
@@ -119,7 +119,7 @@
 
   &_name {
     color: $primary-dark;
-    composes: fontMedium from '../../../../../fonts.scss';
+    composes: fontMedium from '../../../../../styles/fonts.scss';
     font-size: 15px;
     padding-left: 10px;
   }
@@ -139,7 +139,7 @@
 
   &_details {
     color: #a7a9ac;
-    composes: fontDefault from '../../../../../fonts.scss';
+    composes: fontDefault from '../../../../../styles/fonts.scss';
     display: flex;
     flex-direction: column;
     line-height: 1.3;

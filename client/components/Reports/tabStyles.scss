@@ -1,4 +1,4 @@
-@import '../../ui';
+@import '../../styles/ui';
 
 .card {
   background-color: transparent;
@@ -14,7 +14,7 @@
   border-right: 1px solid #e3e3e3;
   box-sizing: border-box;
   color: $primary-dark;
-  composes: fontMedium from '../../fonts.scss';
+  composes: fontMedium from '../../styles/fonts.scss';
   display: inline-flex;
   height: 50px;
   justify-content: center;

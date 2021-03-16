@@ -1,8 +1,8 @@
-@import '../../../ui.scss';
+@import '../../../styles/ui.scss';
 
 .tab {
   align-items: center;
-  composes: tab from '../../../fonts.scss';
+  composes: tab from '../../../styles/fonts.scss';
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -51,7 +51,7 @@
   border-right: 1px solid $primary-light-grey;
   box-sizing: border-box;
   color: $primary-dark;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   cursor: pointer;
   display: inline-flex;
   height: 50px;
@@ -67,6 +67,6 @@
   background-color: white;
   border-bottom: none;
   color: black;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   transition: ease 0.2s all;
 }

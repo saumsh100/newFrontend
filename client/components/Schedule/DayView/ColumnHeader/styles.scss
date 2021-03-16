@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .columnHeader {
   align-items: stretch;
@@ -57,13 +57,13 @@
 }
 
 .containerText {
-  composes: fontDefault from '../../../../fonts.scss';
+  composes: fontDefault from '../../../../styles/fonts.scss';
   margin-left: 5px;
   overflow: hidden;
 }
 
 .practitionerName {
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   font-size: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -78,7 +78,7 @@
   align-items: center;
   box-sizing: border-box;
   color: $primary-dark;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
   font-size: 15px;
   height: 100%;

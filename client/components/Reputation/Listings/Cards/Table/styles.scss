@@ -1,4 +1,4 @@
-@import '../../../../../ui';
+@import '../../../../../styles/ui';
 
 .showDetails {
   display: flex;
@@ -11,7 +11,7 @@
 
   &_text {
     color: darken($primary-darkgrey, 5%);
-    composes: fontMedium from '../../../../../fonts.scss';
+    composes: fontMedium from '../../../../../styles/fonts.scss';
     line-height: 1.3em;
   }
 

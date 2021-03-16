@@ -1,4 +1,4 @@
-@import '../../../../ui.scss';
+@import '../../../../styles/ui.scss';
 
 .appointmentContainer {
   align-items: stretch;
@@ -44,7 +44,7 @@
 
 .note {
   box-sizing: border-box;
-  composes: subHeaderExtraSmall from '../../../../fonts.scss';
+  composes: subHeaderExtraSmall from '../../../../styles/fonts.scss';
   display: flex;
   padding-left: 5px;
   padding-top: 2px;
@@ -71,13 +71,13 @@
 
   &_name {
     @extend .box;
-    composes: subHeaderMediumSmall from '../../../../fonts.scss';
+    composes: subHeaderMediumSmall from '../../../../styles/fonts.scss';
     font-size: $extra-small-size;
   }
 
   &_hours {
     @extend .box;
-    composes: subHeaderExtraSmall from '../../../../fonts.scss';
+    composes: subHeaderExtraSmall from '../../../../styles/fonts.scss';
     flex: 1;
     min-width: 56px;
   }

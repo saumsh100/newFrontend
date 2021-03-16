@@ -1,17 +1,16 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import classNames from 'classnames';
-import NavRegionContainer from '../containers/NavRegionContainer';
-import MainRegionContainer from '../containers/MainRegionContainer';
+import NavRegionContainer from './NavRegionContainer';
+import MainRegionContainer from './MainRegionContainer';
 import NavList from '../components/NavList/Electron';
 import PageHeading from '../components/PageHeading';
 import SubTabs from '../components/SubTabs';
-import AlertContainer from '../containers/AlertContainer';
+import AlertContainer from './AlertContainer';
 import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../util/hub';
-import { locationShape } from '../../client/components/library/PropTypeShapes/routerShapes';
+import { locationShape } from '../components/library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 function HubApp({ location, children, isSearchCollapsed, showContent, toolbarPosition }) {

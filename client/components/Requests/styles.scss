@@ -1,16 +1,16 @@
-@import '../../fonts.scss';
-@import '../../ui.scss';
+@import '../../styles/fonts.scss';
+@import '../../styles/ui.scss';
 
 .mediumFont {
-  composes: fontMedium from '../../fonts.scss';
+  composes: fontMedium from '../../styles/fonts.scss';
 }
 
 .defaultFont {
-  composes: fontDefault from '../../fonts.scss';
+  composes: fontDefault from '../../styles/fonts.scss';
 }
 
 .boldFont {
-  composes: fontBold from '../../fonts.scss';
+  composes: fontBold from '../../styles/fonts.scss';
 }
 .requestPopover {
   z-index: 299;

@@ -1,11 +1,11 @@
-@import '../../../ui';
+@import '../../../styles/ui';
 
 .fontMedium {
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
 }
 
 .fontDefault {
-  composes: fontDefault from '../../../fonts.scss';
+  composes: fontDefault from '../../../styles/fonts.scss';
 }
 
 .appPopover > :global(svg.Popover-tip) {
@@ -30,7 +30,7 @@
   border-right: 1px solid #e3e3e3;
   box-sizing: border-box;
   color: $primary-dark;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   display: inline-flex;
   height: 50px;
   justify-content: center;
@@ -117,7 +117,7 @@
 }
 
 .patientName {
-  composes: fontBold from '../../../fonts.scss';
+  composes: fontBold from '../../../styles/fonts.scss';
   font-size: 13px;
   padding-bottom: 3px;
 }

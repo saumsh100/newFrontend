@@ -1,4 +1,4 @@
-@import '../../../ui';
+@import '../../../styles/ui';
 
 .callInfoModal {
   box-sizing: border-box;
@@ -41,7 +41,7 @@
 }
 
 .title {
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   font-size: 14px;
   margin-bottom: 15px;
 }
@@ -80,6 +80,6 @@
 
 .noData {
   color: $primary-dark;
-  composes: fontMedium from '../../../fonts.scss';
+  composes: fontMedium from '../../../styles/fonts.scss';
   margin-bottom: 20px;
 }

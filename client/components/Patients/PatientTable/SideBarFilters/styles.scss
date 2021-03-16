@@ -1,4 +1,4 @@
-@import '../../../../ui';
+@import '../../../../styles/ui';
 
 .sideBar {
   background: $primary-white;
@@ -14,7 +14,7 @@
   width: 100%;
 
   &_text {
-    composes: fontMedium from '../../../../fonts.scss';
+    composes: fontMedium from '../../../../styles/fonts.scss';
     font-size: 19px;
     padding-left: 10px;
   }
@@ -22,7 +22,7 @@
   &_clearText {
     background: initial;
     color: darken($primary-grey, 10%);
-    composes: fontSmall from '../../../../fonts.scss';
+    composes: fontSmall from '../../../../styles/fonts.scss';
     cursor: pointer;
     margin: 0 0 0 auto;
     padding: 0;
@@ -52,7 +52,7 @@
   background: #efefef;
   box-sizing: border-box;
   color: initial;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
   cursor: pointer;
   display: flex;
   height: 40px;
@@ -122,17 +122,17 @@
 
 .formHeader {
   color: $primary-blue;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
 }
 
 .formHeaderInput {
   color: $primary-blue;
-  composes: fontMedium from '../../../../fonts.scss';
+  composes: fontMedium from '../../../../styles/fonts.scss';
 }
 
 .formSubHeader {
   color: $primary-darkgrey;
-  composes: fontExtraSmall from '../../../../fonts.scss';
+  composes: fontExtraSmall from '../../../../styles/fonts.scss';
   padding-top: 5px;
 }
 .ddSelect {
