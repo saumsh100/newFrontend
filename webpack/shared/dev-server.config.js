@@ -4,15 +4,13 @@ const path = require('path');
 const escape = require('escape-string-regexp');
 const paths = require('../helpers/paths');
 
-const PORT = parseInt(process.env.PORT, 10) || 5000;
-const SERVER_HOST = process.env.SERVER_HOST || 'localhost';
-const SERVER_PORT = process.env.SERVER_PORT || '5000';
+const serverHost = process.env.SERVER_HOST || 'localhost';
+const serverPort = process.env.SERVER_PORT || '5000';
 
-const sockHost = process.env.WDS_SOCKET_HOST;
-const sockPath = process.env.WDS_SOCKET_PATH; // default: '/sockjs-node'
-const sockPort = process.env.WDS_SOCKET_PORT;
+const webpackProxyHost = process.env.WP_PROXY_HOST || 'localhost';
+const webpackProxyPort = process.env.WP_PROXY_PORT || '5100';
 
-const USE_LOCAL_BACKEND = process.env.USE_LOCAL_BACKEND === 'true';
+const shouldNotUseLocalBackend = process.env.USE_LOCAL_BACKEND === 'false';
 
 function ignoredFiles(appSrc) {
   const pathToIgnore = escape(path.normalize(`${appSrc}/`).replace(/[\\]+/g, '/'));
@@ -23,47 +21,43 @@ function ignoredFiles(appSrc) {
 }
 
 function getProxyConfig() {
-  const targetToProxy = `http://${SERVER_HOST}:${SERVER_PORT}`;
-  return USE_LOCAL_BACKEND
-    ? {
-      writeToDisk: true,
-      proxy: [
-        {
-          target: targetToProxy,
-          prependPath: true,
-          ws: true,
-          // Proxy all requests except HMR ws connection
-          context: pathname => pathname.indexOf('/sockjs-node/') !== 0,
-          bypass: (req) => {
-            const filePath = path.join(paths.appPublic, req.path);
+  if (shouldNotUseLocalBackend) {
+    return {};
+  }
+  console.log(`2 server ${serverHost}:${serverPort}; proxy ${webpackProxyHost}:${webpackProxyPort}`);
+  const targetToProxy = `http://${serverHost}:${serverPort}`;
 
-            // Return file from contentBase directory if its exists (reverse proxy)
-            if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) return req.path;
+  return {
+    // Allow us to develop the with the frontend being served by the backend through npm link
+    proxy: [
+      {
+        target: targetToProxy,
+        prependPath: true,
+        ws: true,
+        // Proxy all requests except HMR ws connection
+        context: pathname => pathname.indexOf('/sockjs-node/') !== 0,
+        bypass: (req) => {
+          const filePath = path.join(paths.appPublic, req.path);
 
-            // If not just ask server
-            return undefined;
-          },
+          // Return file from contentBase directory if its exists (reverse proxy)
+          if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) return req.path;
+
+          // If not just ask server
+          return undefined;
         },
-      ],
-    }
-    : {};
+      },
+    ],
+  };
 }
 
 module.exports = {
-  ...getProxyConfig(),
+  writeToDisk: true,
   compress: true,
   clientLogLevel: 'warning',
   contentBase: paths.appPublic,
   contentBasePublicPath: paths.publicUrlOrPath,
   watchContentBase: true,
   hot: true,
-  transportMode: 'ws',
-  // Enable custom sockjs pathname for websocket connection to hot reloading server.
-  // Enable custom sockjs hostname, pathname and port for websocket connection
-  // to hot reloading server.
-  sockHost,
-  sockPath,
-  sockPort,
   publicPath: paths.publicUrlOrPath.slice(0, -1),
   overlay: false,
   watchOptions: {
@@ -71,11 +65,10 @@ module.exports = {
     aggregateTimeout: 300,
     poll: 1000,
   },
-  https: false,
-  port: PORT,
+  port: webpackProxyPort,
+  host: webpackProxyHost,
   historyApiFallback: {
     // Paths with dots should still use the history fallback.
-    // See https://github.com/facebook/create-react-app/issues/387.
     disableDotRule: true,
     index: paths.publicUrlOrPath,
   },
@@ -92,4 +85,5 @@ module.exports = {
     chunks: false,
     chunkModules: false,
   },
+  ...getProxyConfig(),
 };

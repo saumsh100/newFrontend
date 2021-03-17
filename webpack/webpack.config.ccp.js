@@ -26,21 +26,21 @@ process.env.BABEL_ENV = process.env.NODE_ENV;
 const { resolveApp } = paths;
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
 const isEnvProduction = process.env.NODE_ENV === 'production';
-const USE_LOCAL_BACKEND = process.env.USE_LOCAL_BACKEND === 'true';
+const shouldNotUseLocalBackend = process.env.USE_LOCAL_BACKEND === 'false';
 
 const pluginsForDevOrProd = () => {
   if (isEnvDevelopment) {
-    const browserSyncWebpackPlugin = require('browser-sync-webpack-plugin');
+    const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
     return [
       new webpack.HotModuleReplacementPlugin({
         multiStep: true,
       }),
-      new browserSyncWebpackPlugin(
+      new BrowserSyncPlugin(
         {
           // browse to http://localhost:3000/ during development
           host: 'localhost',
           port: 3000,
-          proxy: `http://localhost:${parseInt(process.env.PORT, 10) || 5000}/`,
+          proxy: `http://localhost:${process.env.WP_PROXY_PORT || '5100'}/`,
         },
         {
           // prevent BrowserSync from reloading the page
@@ -70,10 +70,10 @@ const getHTMLWebpackPluginConfig = !isEnvProduction
   }
   : {};
 
-const optimization = isolated => ((isolated || isEnvDevelopment) ? {
+const optimization = isolated => ((isolated || shouldNotUseLocalBackend) ? {
   // Keep the runtime chunk separated to enable long term caching
   runtimeChunk: {
-    name: (isolated || isEnvDevelopment) ? entrypoint => `runtime-${entrypoint.name}` : false,
+    name: entrypoint => `runtime-${entrypoint.name}`,
   },
 } : {});
 
@@ -83,7 +83,7 @@ const webpackConfig = (isolated = false) => merge(isolated ? commonIsolated : co
     ...optimization(isolated),
   },
   plugins: [
-    (isolated || isEnvDevelopment) && new HtmlWebpackPlugin({
+    (isolated || shouldNotUseLocalBackend) && new HtmlWebpackPlugin({
       inject: true,
       chunks: ['app'],
       filename: 'index.html',
@@ -123,17 +123,17 @@ const webpackConfig = (isolated = false) => merge(isolated ? commonIsolated : co
   ].filter(Boolean),
 });
 
-if (isEnvDevelopment) {
-  module.exports = (env) => {
-    const isolated = (env && env.isolated) ? env.isolated : false;
-    if (USE_LOCAL_BACKEND) {
+module.exports = (env) => {
+  const isolated = (env && env.isolated) ? env.isolated : false;
+  const webpackConfigGenerated = webpackConfig(isolated);
+  if (isEnvDevelopment) {
+    if (!shouldNotUseLocalBackend) {
       linkFrontEndModule();
     }
     return {
-      ...webpackConfig(isolated),
+      ...webpackConfigGenerated,
       devServer: require('./shared/dev-server.config'),
     };
-  };
-} else {
-  module.exports = webpackConfig;
+  }
+  return webpackConfigGenerated;
 }

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 const express = require('express');
-const { findBuiltAsset, paths, getHost, readFile, replaceJavascriptFile } = require('../utils');
+const { getHost } = require('../utils');
 const getMyRouter = require('./my');
 
 const widgetsRouter = express.Router();

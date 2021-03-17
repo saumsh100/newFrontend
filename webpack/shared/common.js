@@ -40,7 +40,7 @@ const shouldUseSourceMap = SOURCE === 'true';
 const isEnvProductionProfile = isEnvProduction && process.argv.includes('--profile');
 
 
-const apiHost = getCompleteHost().fullUrl;
+const apiHost = getCompleteHost(process.env).fullUrl;
 
 const pluginsForDevOrProd = isEnvDevelopment ? [
   new webpack.NamedModulesPlugin(),

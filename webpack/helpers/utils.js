@@ -70,16 +70,17 @@ exports.linkFrontEndModule = ({
   shell.exec(`npm link ${frontEndPackage}`);
 };
 
-exports.getCompleteHost = () => {
+exports.getCompleteHost = (env) => {
   const {
     NODE_ENV,
     API_SERVER_PORT,
     API_SERVER_HOST,
     SERVER_PORT,
     SERVER_HOST,
-  } = process.env;
+    USE_LOCAL_BACKEND,
+  } = env;
 
-  const USE_LOCAL_BACKEND = process.env.USE_LOCAL_BACKEND === 'true';
+  const shouldNotUseLocalBackend = USE_LOCAL_BACKEND === 'false';
 
   let host = SERVER_HOST || 'localhost';
   let port = SERVER_PORT ? `:${SERVER_PORT}` : ':5000';
@@ -90,7 +91,7 @@ exports.getCompleteHost = () => {
   const checkForProtocol = () =>
     (NODE_ENV === 'production' || !host.includes('localhost') ? 'https' : 'http');
 
-  if (!USE_LOCAL_BACKEND) {
+  if (shouldNotUseLocalBackend && API_SERVER_HOST) {
     host = API_SERVER_HOST;
     protocol = checkForProtocol();
     port = API_SERVER_PORT ? checkForPort() : '';

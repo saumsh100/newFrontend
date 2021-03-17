@@ -10,11 +10,12 @@ process.env.BABEL_ENV = process.env.NODE_ENV;
 
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
 const isEnvProduction = process.env.NODE_ENV === 'production';
+const shouldNotUseLocalBackend = process.env.USE_LOCAL_BACKEND === 'false';
 
 const webpackConfig = {
   ...webpackSharedConfig,
   output: {
-    path: isEnvProduction ? paths.appBuild : undefined,
+    path: (isEnvProduction || !shouldNotUseLocalBackend) ? paths.appBuild : undefined,
     pathinfo: isEnvDevelopment,
     filename: isEnvProduction
       ? '[name].[contenthash:8].js'

@@ -52,7 +52,7 @@ const replaceJavascriptFile = async (readPath, config) => {
   }, js);
 };
 
-const getHost = getCompleteHost;
+const getHost = () => getCompleteHost(process.env);
 
 module.exports = {
   findBuiltAsset,
