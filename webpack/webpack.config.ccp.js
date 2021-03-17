@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable global-require */
 /* eslint-disable camelcase */
 /* eslint-disable no-nested-ternary */
 
@@ -11,13 +11,11 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
 
-const devServer = require('./shared/dev-server.config');
 const paths = require('./helpers/paths');
 const { linkFrontEndModule } = require('./helpers/utils');
 const commonIsolated = require('./webpack.isolated.common');
@@ -30,24 +28,30 @@ const isEnvDevelopment = process.env.NODE_ENV === 'development';
 const isEnvProduction = process.env.NODE_ENV === 'production';
 const USE_LOCAL_BACKEND = process.env.USE_LOCAL_BACKEND === 'true';
 
-const pluginsForDevOrProd = isEnvDevelopment ? [
-  new webpack.HotModuleReplacementPlugin({
-    multiStep: true,
-  }),
-  new BrowserSyncPlugin(
-    {
-      // browse to http://localhost:3000/ during development
-      host: 'localhost',
-      port: 3000,
-      proxy: `http://localhost:${parseInt(process.env.PORT, 10) || 5000}/`,
-    },
-    {
-      // prevent BrowserSync from reloading the page
-      // and let Webpack Dev Server take care of this
-      reload: false,
-    },
-  ),
-] : [];
+const pluginsForDevOrProd = () => {
+  if (isEnvDevelopment) {
+    const browserSyncWebpackPlugin = require('browser-sync-webpack-plugin');
+    return [
+      new webpack.HotModuleReplacementPlugin({
+        multiStep: true,
+      }),
+      new browserSyncWebpackPlugin(
+        {
+          // browse to http://localhost:3000/ during development
+          host: 'localhost',
+          port: 3000,
+          proxy: `http://localhost:${parseInt(process.env.PORT, 10) || 5000}/`,
+        },
+        {
+          // prevent BrowserSync from reloading the page
+          // and let Webpack Dev Server take care of this
+          reload: false,
+        },
+      ),
+    ]
+  }
+  return [];
+}
 
 const getHTMLWebpackPluginConfig = !isEnvProduction
   ? {
@@ -73,7 +77,7 @@ const optimization = isolated => ((isolated || isEnvDevelopment) ? {
   },
 } : {});
 
-const webpackConfig = isolated => merge(isolated ? commonIsolated : common, {
+const webpackConfig = (isolated = false) => merge(isolated ? commonIsolated : common, {
   entry: paths.entries,
   optimization: {
     ...optimization(isolated),
@@ -115,18 +119,19 @@ const webpackConfig = isolated => merge(isolated ? commonIsolated : common, {
         to: 'assets',
       },
     ]),
-    ...pluginsForDevOrProd,
+    ...pluginsForDevOrProd(),
   ].filter(Boolean),
 });
 
 if (isEnvDevelopment) {
-  module.exports = (isolated) => {
+  module.exports = (env) => {
+    const isolated = (env && env.isolated) ? env.isolated : false;
     if (USE_LOCAL_BACKEND) {
       linkFrontEndModule();
     }
     return {
       ...webpackConfig(isolated),
-      devServer,
+      devServer: require('./shared/dev-server.config'),
     };
   };
 } else {

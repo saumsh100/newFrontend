@@ -10,10 +10,9 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 const merge = require('webpack-merge');
 const webpackConfigCCP = require('./webpack.config.ccp');
 
-module.exports = env => merge(webpackConfigCCP(env.isolated), {
+module.exports = env => merge(webpackConfigCCP(env), {
   mode: 'production',
 });

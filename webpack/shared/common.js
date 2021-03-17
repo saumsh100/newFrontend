@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable import/no-extraneous-dependencies */
 
 'use strict';
 
@@ -74,7 +73,7 @@ const webpackConfig = {
     symlinks: false,
     cacheWithContext: false,
     alias: {
-      'react-dom': '@hot-loader/react-dom',
+      'react-dom': isEnvDevelopment ? '@hot-loader/react-dom' : 'react-dom',
       'react-redux': isEnvDevelopment ? 'react-redux/lib' : 'react-redux',
       ...(isEnvProductionProfile && {
         'react-dom$': 'react-dom/profiling',
