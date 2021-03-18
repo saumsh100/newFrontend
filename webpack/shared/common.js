@@ -105,7 +105,7 @@ const webpackConfig = {
         POLLING_REVENUE_INTERVAL: JSON.stringify(POLLING_REVENUE_INTERVAL),
         POLLING_VWR_INTERVAL: JSON.stringify(POLLING_VWR_INTERVAL),
         POLLING_UNREAD_CHAT_INTERVAL: JSON.stringify(POLLING_UNREAD_CHAT_INTERVAL),
-        API_SERVER_HOST: JSON.stringify(apiHost),
+        API_SERVER: JSON.stringify(apiHost),
       },
     }),
     new webpack.DefinePlugin({

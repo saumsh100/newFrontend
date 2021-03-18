@@ -1,0 +1,78 @@
+[
+  {
+    "name": "APP_PORT",
+    "value": "${APP_PORT}"
+  },
+  {
+    "name": "TYPEORM_HOST",
+    "value": "${TYPEORM_HOST}"
+  },
+  {
+    "name": "TYPEORM_USERNAME",
+    "value": "${TYPEORM_USERNAME}"
+  },
+  {
+    "name": "TYPEORM_PASSWORD",
+    "value": "${POSTGRESQL_PASSWORD}"
+  },
+  {
+    "name": "TYPEORM_DATABASE",
+    "value": "${TYPEORM_DATABASE}"
+  },
+  {
+    "name": "NODE_ENV",
+    "value": "development"
+  },
+  {
+    "name": "TYPEORM_PORT",
+    "value": "5432"
+  },
+  {
+    "name": "TYPEORM_SYNCHRONIZE",
+    "value": "false"
+  },
+  {
+    "name": "REDIS_TTL",
+    "value": "60"
+  },
+  {
+    "name": "REDIS_PORT",
+    "value": "6379"
+  },
+  {
+    "name": "REDIS_HOST",
+    "value": "${REDIS_HOST}"
+  },
+  {
+    "name": "TYPEORM_LOGGING",
+    "value": "true"
+  },
+  {
+    "name": "TYPEORM_ENTITIES",
+    "value": "src/**/**/*.entity.ts"
+  },
+  {
+    "name": "TYPEORM_MIGRATIONS",
+    "value": "src/migration/*.ts"
+  },
+  {
+    "name": "TYPEORM_CONNECTION",
+    "value": "postgres"
+  },
+  {
+    "name": "TYPEORM_POOL_MAX",
+    "value": "35"
+  },
+  {
+    "name": "SEQUELIZE_POOL_MAX",
+    "value": "${sequelize_pool_max}"
+  },
+  {
+    "name": "SEQUELIZE_POOL_MIN",
+    "value": "${sequelize_pool_min}"
+  },
+  {
+    "name": "TYPEORM_MIGRATIONS_DIR",
+    "value": "src/migration"
+  }
+]

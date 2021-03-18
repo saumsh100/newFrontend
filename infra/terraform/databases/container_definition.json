@@ -1,0 +1,56 @@
+[
+	{
+		"essential": true,
+		"cpu": 0,
+		"mountPoints": [],
+		"portMappings": [],
+		"volumesFrom": [],
+		"environment": [],
+		"user": "0",
+		"image": "public.ecr.aws/carecru/docker-images:fluent-bit-plugin-loki-2.0.0-amd64",
+    "name": "log-router",
+    "firelensConfiguration": {
+			"type": "fluentbit",
+			"options": {
+				"enable-ecs-log-metadata": "true"
+			}
+    },
+    "logConfiguration": {
+			"logDriver": "awslogs",
+			"options": {
+				"awslogs-group": "log-router",
+				"awslogs-region": "ca-central-1",
+				"awslogs-stream-prefix": "${container_name}"
+			}
+		},
+    "memoryReservation": 50
+	},
+	{
+		"name": "${container_name}",
+		"image": "${docker_image}",
+		"networkMode": "awsvpc",
+		"memoryReservation": 256,
+		"command": ${command},
+		"portMappings": [{
+			"containerPort": ${app_port},
+			"hostPort": ${app_port}
+		}],
+		"environment": ${env_var_file},
+		"logConfiguration": {
+			"logDriver": "awsfirelens",
+			"options": {
+					"Name": "loki",
+					"Url": "${loki_url}",
+					"Labels": "{job=\"${container_name}\"}",
+					"RemoveKeys": "container_id,ecs_task_arn",
+					"LabelKeys": "container_name,ecs_task_definition,source,ecs_cluster",
+					"LineFormat": "key_value"
+			}
+		},
+		"essential": true,
+		"cpu": 0,
+		"mountPoints": [],
+		"volumesFrom": [],
+		"user": "0"
+	}
+]

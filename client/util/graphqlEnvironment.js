@@ -6,13 +6,13 @@ import { split } from 'apollo-link'; // eslint-disable-line import/no-extraneous
 import { InMemoryCache } from 'apollo-cache-inmemory'; // eslint-disable-line import/no-extraneous-dependencies
 import { WebSocketLink } from 'apollo-link-ws';
 import { getSubscriptionUrl } from './hub';
-import getApiHost from './getApiHost';
+import apiHost from './getApiHost';
 
 const getTokenDefault = () => localStorage.getItem('token');
 const defaultEndpoint = '/graphql';
 const nestEndpoint = '/newgraphql';
 const isNestOperation = operation => operation.search(/\w*_NEST\b/) === -1;
-const getUrlWithPath = (path = defaultEndpoint) => `${getApiHost()}${path}`;
+const getUrlWithPath = (path = defaultEndpoint) => `${apiHost}${path}`;
 
 export default () => {
   const httpLink = new HttpLink({

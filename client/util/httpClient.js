@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { isOnDevice, getApiUrl } from './hub';
-import getApiHost from './getApiHost';
+import apiHost from './getApiHost';
 
 const getTokenDefault = () => localStorage.getItem('token');
 const getTokenBookingWidget = () => localStorage.getItem('auth_token');
@@ -35,12 +35,12 @@ const buildHttpClient = (getToken, requestConfig = {}) => {
 
 export const httpClient = config =>
   buildHttpClient(getTokenDefault, {
-    baseURL: isOnDevice() ? getApiUrl() : getApiHost(),
+    baseURL: isOnDevice() ? getApiUrl() : apiHost,
     ...config,
   });
 
 export const bookingWidgetHttpClient = config =>
   buildHttpClient(getTokenBookingWidget, {
-    baseURL: `${getApiHost()}/my`,
+    baseURL: `${apiHost}/my`,
     ...config,
   });

@@ -1,0 +1,190 @@
+[
+  {
+    "name": "API_SERVER_URL",
+    "value": "https://${HOST}"
+  },
+  {
+    "name": "POSTGRESQL_LOGGING",
+    "value": "true"
+  },
+  {
+    "name": "JOTFORM_FOLDER_ID",
+    "value": "5ee7f84698552454d7370441"
+  },
+  {
+    "name": "URL_SHORTENER_SERVER_URL",
+    "value": ""
+  },
+  {
+    "name": "JOTFORM_SERVER_URL",
+    "value": "https://forms.carecru.com"
+  },
+  {
+    "name": "API_URL",
+    "value": "https://${HOST}"
+  },
+  {
+    "name": "AWS_ACCESS_KEY_ID",
+    "value": "${AWS_ACCESS_KEY_ID}"
+  },
+  {
+    "name": "AWS_SECRET_ACCESS_KEY",
+    "value": "${AWS_SECRET_ACCESS_KEY}"
+  },
+  {
+    "name": "CLOUDAMQP_URL",
+    "value": "${RABBITMQ_URL}"
+  },
+  {
+    "name": "DATABASE_URL",
+    "value": "postgres://${POSTGRESQL_HOST}:5432/carecrudb"
+  },
+  {
+    "name": "GRAPHQL_SERVER_URL",
+    "value": "${GRAPHQL_SERVER_URL}"
+  },
+  {
+    "name": "HOST",
+    "value": "${HOST}"
+  },
+  {
+    "name": "HEROKU_POSTGRESQL_BLUE_URL",
+    "value": "postgres://${POSTGRESQL_HOST}:5432/carecrudb"
+  },
+  {
+    "name": "INTERCOM_APP_ID",
+    "value": "mj324rjy"
+  },
+  {
+    "name": "LOGROCKET_APP_ID",
+    "value": "elwjui/carecru"
+  },
+  {
+    "name": "MY_HOST",
+    "value": "https://my.${HOST}"
+  },
+  {
+    "name": "NEW_API_URL",
+    "value": "${GRAPHQL_SERVER_URL}"
+  },
+  {
+    "name": "NODE_MODULES_CACHE",
+    "value": "false"
+  },
+  {
+    "name": "NODE_ENV",
+    "value": "production"
+  },
+  {
+    "name": "PORT",
+    "value": "${PORT}"
+  },
+  {
+    "name": "POSTGRESQL_SSL",
+    "value": "false"
+  },
+  {
+    "name": "POSTGRESQL_DATABASE",
+    "value": "${POSTGRESQL_DATABASE}"
+  },
+  {
+    "name": "POSTGRESQL_HOST",
+    "value": "${POSTGRESQL_HOST}"
+  },
+  {
+    "name": "POSTGRESQL_PASSWORD",
+    "value": "${POSTGRESQL_PASSWORD}"
+  },
+  {
+    "name": "POSTGRESQL_PORT",
+    "value": "5432"
+  },
+  {
+    "name": "POSTGRESQL_USER",
+    "value": "${POSTGRESQL_USER}"
+  },
+  {
+    "name": "POSTGRESQL_POOL_MAX",
+    "value": "35"
+  },
+  {
+    "name": "POSTGRESQL_POOL_MIN",
+    "value": "25"
+  },
+  {
+    "name": "RABBITMQ_URL",
+    "value": "${RABBITMQ_URL}"
+  },
+  {
+    "name": "REBRANDLY_SHORT_DOMAIN",
+    "value": "carecru.co"
+  },
+  {
+    "name": "REDIS_URL",
+    "value": "redis://${REDIS_HOST}:6379"
+  },
+  {
+    "name": "REDIS_HOST",
+    "value": "${REDIS_HOST}"
+  },
+  {
+    "name": "S3_BUCKET",
+    "value": "carecru-staging"
+  },
+  {
+    "name": "S3_LOGGER_ENABLED",
+    "value": "false"
+  },
+  {
+    "name": "S3_LOGS_ACCESS_KEY_ID",
+    "value": ""
+  },
+  {
+    "name": "S3_LOGS_BUCKET_NAME",
+    "value": ""
+  },
+  {
+    "name": "S3_LOGS_SECRET_ACCESS_KEY",
+    "value": ""
+  },
+  {
+    "name": "SERVER_HOST",
+    "value": "${HOST}"
+  },
+  {
+    "name": "TZ",
+    "value": "America/Los_Angeles"
+  },
+  {
+    "name": "WP_PROXY_HOST",
+    "value": "0.0.0.0"
+  },
+  {
+    "name": "COGNITO_USER_POOL_ID",
+    "value": ""
+  },
+  {
+    "name": "COGNITO_CLIENT_ID",
+    "value": ""
+  },
+  {
+    "name": "COGNITO_CLIENT_SECRET",
+    "value": ""
+  },
+  {
+    "name": "COGNITO_POOL_REGION",
+    "value": ""
+  },
+  {
+    "name": "COGNITO_URL",
+    "value": ""
+  },
+  {
+    "name": "COGNITO_REDIRECT_URL",
+    "value": ""
+  },
+  {
+    "name": "COGNITO_USERNAME_PREFIX",
+    "value": "oktanewintegration_"
+  }
+]

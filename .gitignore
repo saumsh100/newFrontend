@@ -56,3 +56,14 @@ coverage
 
 client/build/*
 build/*
+
+### Terraform ###
+**/.terraform/*
+.terraform
+.terraform.lock*
+*.plan
+*.tfplan
+tfplan
+*.tfvars
+secret.tf
+secrets.tf
