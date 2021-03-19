@@ -24,7 +24,12 @@ const entries = {
 };
 
 const cc = {
-  cc: ['core-js/stable', 'regenerator-runtime/runtime', 'react-hot-loader/patch', resolveEntry('cc')],
+  cc: [
+    'core-js/stable',
+    'regenerator-runtime/runtime',
+    'react-hot-loader/patch',
+    resolveEntry('cc'),
+  ],
 };
 
 const appPackageJson = require(resolveApp('package.json'));

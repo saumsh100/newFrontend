@@ -18,8 +18,7 @@ const webpack = require('webpack');
 
 const paths = require('./helpers/paths');
 const { linkFrontEndModule } = require('./helpers/utils');
-const commonIsolated = require('./webpack.isolated.common');
-const common = require('./webpack.common');
+const common = require('./shared/webpack.common');
 
 process.env.BABEL_ENV = process.env.NODE_ENV;
 
@@ -70,18 +69,8 @@ const getHTMLWebpackPluginConfig = !isEnvProduction
   }
   : {};
 
-const optimization = isolated => ((isolated || shouldNotUseLocalBackend) ? {
-  // Keep the runtime chunk separated to enable long term caching
-  runtimeChunk: {
-    name: entrypoint => `runtime-${entrypoint.name}`,
-  },
-} : {});
-
-const webpackConfig = (isolated = false) => merge(isolated ? commonIsolated : common, {
+const webpackConfig = (isolated = false) => merge(common(isolated), {
   entry: paths.entries,
-  optimization: {
-    ...optimization(isolated),
-  },
   plugins: [
     (isolated || shouldNotUseLocalBackend) && new HtmlWebpackPlugin({
       inject: true,
@@ -130,10 +119,9 @@ module.exports = (env) => {
     if (!shouldNotUseLocalBackend) {
       linkFrontEndModule();
     }
-    return {
-      ...webpackConfigGenerated,
-      devServer: require('./shared/dev-server.config'),
-    };
+    return merge(webpackConfigGenerated, {
+      devServer: require('./shared/dev-server.config')
+    })
   }
   return webpackConfigGenerated;
 }

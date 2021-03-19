@@ -13,10 +13,7 @@ const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10
 
 process.env.BABEL_ENV = process.env.NODE_ENV;
 
-const {
-  NODE_ENV,
-  SOURCE,
-} = process.env;
+const { NODE_ENV, SOURCE } = process.env;
 
 const localIdentName = '[name]__[local]___[hash:base64:5]';
 const isEnvDevelopment = NODE_ENV === 'development';
@@ -25,7 +22,7 @@ const shouldUseSourceMap = SOURCE === 'true';
 
 const getCacheIdentifier = (environment, packages) => {
   let cacheIdentifier = environment == null ? '' : environment.toString();
-  packages.forEach((packageName) => {
+  packages.forEach(packageName => {
     cacheIdentifier += `:${packageName}@`;
     try {
       cacheIdentifier += require(`${packageName}/package.json`).version;
@@ -41,12 +38,14 @@ const getStyleLoaders = (extractCss, cssOptions, isSass = false) => {
 
   const loaders = [
     (isEnvDevelopment || isSass || !extractCss) && require.resolve('style-loader'),
-    (isEnvProduction && !isSass && extractCss) && {
-      loader: MiniCssExtractPlugin.loader,
-      // css is located in `static/css`, use '../../' to locate index.html folder
-      // in production `paths.publicUrlOrPath` can be a relative path
-      options: paths.publicUrlOrPath.startsWith('.') ? { publicPath: '../../' } : {},
-    },
+    isEnvProduction &&
+      !isSass &&
+      extractCss && {
+        loader: MiniCssExtractPlugin.loader,
+        // css is located in `static/css`, use '../../' to locate index.html folder
+        // in production `paths.publicUrlOrPath` can be a relative path
+        options: paths.publicUrlOrPath.startsWith('.') ? { publicPath: '../../' } : {},
+      },
     {
       loader: require.resolve('css-loader'),
       options: cssOptions,

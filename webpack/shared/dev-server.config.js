@@ -14,17 +14,16 @@ const shouldNotUseLocalBackend = process.env.USE_LOCAL_BACKEND === 'false';
 
 function ignoredFiles(appSrc) {
   const pathToIgnore = escape(path.normalize(`${appSrc}/`).replace(/[\\]+/g, '/'));
-  return new RegExp(
-    `^(?!${pathToIgnore}).+/node_modules/`,
-    'g',
-  );
+  return new RegExp(`^(?!${pathToIgnore}).+/node_modules/`, 'g');
 }
 
 function getProxyConfig() {
   if (shouldNotUseLocalBackend) {
     return {};
   }
-  console.log(`2 server ${serverHost}:${serverPort}; proxy ${webpackProxyHost}:${webpackProxyPort}`);
+  console.log(
+    `2 server ${serverHost}:${serverPort}; proxy ${webpackProxyHost}:${webpackProxyPort}`,
+  );
   const targetToProxy = `http://${serverHost}:${serverPort}`;
 
   return {
@@ -36,7 +35,7 @@ function getProxyConfig() {
         ws: true,
         // Proxy all requests except HMR ws connection
         context: pathname => pathname.indexOf('/sockjs-node/') !== 0,
-        bypass: (req) => {
+        bypass: req => {
           const filePath = path.join(paths.appPublic, req.path);
 
           // Return file from contentBase directory if its exists (reverse proxy)

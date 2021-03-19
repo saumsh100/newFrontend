@@ -24,11 +24,11 @@ exports.entries = (isDevMode = false) =>
   appEntries(
     isDevMode
       ? name => [
-        'core-js/stable',
-        'regenerator-runtime/runtime',
-        'react-hot-loader/patch',
-        `./entries/${name}.js`,
-      ]
+          'core-js/stable',
+          'regenerator-runtime/runtime',
+          'react-hot-loader/patch',
+          `./entries/${name}.js`,
+        ]
       : name => `./client/entries/${name}.js`,
   );
 
@@ -70,7 +70,7 @@ exports.linkFrontEndModule = ({
   shell.exec(`npm link ${frontEndPackage}`);
 };
 
-exports.getCompleteHost = (env) => {
+exports.getCompleteHost = env => {
   const {
     NODE_ENV,
     API_SERVER_PORT,
@@ -83,31 +83,36 @@ exports.getCompleteHost = (env) => {
 
   const shouldNotUseLocalBackend = USE_LOCAL_BACKEND === 'false';
 
-  const localProductionHost = NODE_ENV === 'production' ? {
-    host: '',
-    port: '',
-    protocol: 'https',
-  } : {
-    host: SERVER_HOST || 'localhost',
-    port: SERVER_PORT ? `:${SERVER_PORT}` : ':5000',
-    protocol: SERVER_PROTOCOL || 'http',
-  }
+  const localProductionHost =
+    NODE_ENV === 'production'
+      ? {
+          host: '',
+          port: '',
+          protocol: 'https',
+        }
+      : {
+          host: SERVER_HOST || 'localhost',
+          port: SERVER_PORT ? `:${SERVER_PORT}` : ':5000',
+          protocol: SERVER_PROTOCOL || 'http',
+        };
 
   let { host, port, protocol } = localProductionHost;
 
   const checkForPort = () => {
     if (API_SERVER_PORT === '443') {
       protocol = 'https';
-      return ''
+      return '';
     }
-    return API_SERVER_PORT === '80' && protocol === 'https' ? '' : `:${API_SERVER_PORT}`
+    return API_SERVER_PORT === '80' && protocol === 'https' ? '' : `:${API_SERVER_PORT}`;
   };
 
-  const checkForProtocol = () =>
-      (NODE_ENV === 'production' || !host.includes('localhost') ? 'https' : protocol);
+  const checkForProtocol = (tempHost = host) =>
+    NODE_ENV === 'production' || !tempHost.includes('localhost') ? 'https' : protocol;
 
   if (shouldNotUseLocalBackend && API_SERVER_HOST) {
-    const [tempProtocol, tempHost] = API_SERVER_HOST.includes('://') ? API_SERVER_HOST.split('://') : [checkForProtocol(), API_SERVER_HOST];
+    const [tempProtocol, tempHost] = API_SERVER_HOST.includes('://')
+      ? API_SERVER_HOST.split('://')
+      : [checkForProtocol(API_SERVER_HOST), API_SERVER_HOST];
     host = tempHost;
     protocol = tempProtocol;
     port = API_SERVER_PORT ? checkForPort() : '';
