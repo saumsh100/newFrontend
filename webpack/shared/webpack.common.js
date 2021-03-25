@@ -32,6 +32,7 @@ const {
   POLLING_VWR_INTERVAL,
   POLLING_UNREAD_CHAT_INTERVAL,
   SOURCE,
+  WORKFLOW_HOST,
 } = process.env;
 
 const isEnvDevelopment = NODE_ENV === 'development';
@@ -55,8 +56,8 @@ const pluginsForDevOrProd = isEnvDevelopment
 
 const getShouldUseSourceMap = () => (shouldUseSourceMap ? 'source-map' : false);
 
-const getOutputDetails = isolated =>
-  (isolated || shouldNotUseLocalBackend)
+const getOutputDetails = (isolated) =>
+  isolated || shouldNotUseLocalBackend
     ? {
         path: isEnvProduction ? paths.appDist : undefined,
         publicPath: paths.publicUrlOrPath,
@@ -73,12 +74,12 @@ const getOutputDetails = isolated =>
         filename: isEnvProduction ? '[name].[contenthash:8].js' : '[name].[hash].js',
       };
 
-const optimization = isolated =>
+const optimization = (isolated) =>
   isolated || shouldNotUseLocalBackend
     ? {
         // Keep the runtime chunk separated to enable long term caching
         runtimeChunk: {
-          name: entrypoint => `runtime-${entrypoint.name}`,
+          name: (entrypoint) => `runtime-${entrypoint.name}`,
         },
       }
     : {};
@@ -91,7 +92,13 @@ const webpackConfig = (isolated = false) => {
       ? getShouldUseSourceMap()
       : isEnvDevelopment && 'cheap-module-source-map',
     cache: true,
-    context: path.normalize(path.join(__dirname, '..', (isolated || shouldNotUseLocalBackend) ? '..' : `..${path.sep}client`)),
+    context: path.normalize(
+      path.join(
+        __dirname,
+        '..',
+        isolated || shouldNotUseLocalBackend ? '..' : `..${path.sep}client`,
+      ),
+    ),
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],
       symlinks: false,
@@ -111,8 +118,9 @@ const webpackConfig = (isolated = false) => {
       futureEmitAssets: true,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
-        ? info => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
-        : isEnvDevelopment && (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+        ? (info) => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
+        : isEnvDevelopment &&
+          ((info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
       globalObject: 'this',
       // Prevents conflicts when multiple webpack runtimes (from different apps)
       // are used on the same page.
@@ -147,6 +155,7 @@ const webpackConfig = (isolated = false) => {
           POLLING_VWR_INTERVAL: JSON.stringify(POLLING_VWR_INTERVAL),
           POLLING_UNREAD_CHAT_INTERVAL: JSON.stringify(POLLING_UNREAD_CHAT_INTERVAL),
           API_SERVER: JSON.stringify(apiHost),
+          WORKFLOW_HOST: JSON.stringify(WORKFLOW_HOST),
         },
         VERSION: JSON.stringify(paths.appPackageJson.version),
         'typeof window': JSON.stringify('object'),
