@@ -7,30 +7,34 @@ function MicroFrontend({ name, host, document, window, ...rest }) {
     const scriptId = `micro-frontend-script-${name}`;
 
     if (document.getElementById(scriptId)) {
-      console.log(`FOUND script - ${scriptId}`);
       renderMicroFrontend();
       return undefined;
     }
 
-    console.log('FETCHING manifest');
-
     fetch(`${host}/asset-manifest.json`)
       .then((res) => res.json())
       .then((manifest) => {
+        // this is for the JavaScript
+        const mainJsFileName = manifest.files['main.js'];
         const script = document.createElement('script');
         script.id = scriptId;
         script.crossOrigin = '';
-        script.src = `${host}${manifest.files['main.js']}`;
+        script.src = `${host}${mainJsFileName}`;
         script.onload = renderMicroFrontend;
-        console.log('INFO: ', scriptId, script.src);
         document.head.appendChild(script);
+
+        // this is for the CSS
+        const mainCssFileName = manifest.files['main.css'];
+        const link = document.createElement('link');
+        link.href = `${host}${mainCssFileName}`;
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
       })
       .catch(() => {
-        console.log(`ERROR fetching manifest for ${name} @ ${host}`);
+        console.error(`ERROR fetching manifest for ${name} @ ${host}`);
       });
 
     return () => {
-      console.log(`UNMOUNTING ${name}-container`);
       window[`unmount${name}`]?.(`${name}-container`);
     };
     // eslint-disable-next-line
