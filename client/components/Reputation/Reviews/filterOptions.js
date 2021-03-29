@@ -1,4 +1,3 @@
-
 export default [
   {
     title: 'sources',
@@ -9,7 +8,7 @@ export default [
       },
       {
         type: 'checkbox',
-        value: 'Google Maps',
+        value: 'Google',
       },
       {
         type: 'checkbox',

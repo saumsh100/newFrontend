@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map, List } from 'immutable';
@@ -110,7 +109,7 @@ class Reviews extends Component {
     const initialValues = {
       sources: {
         CareCru: true,
-        'Google Maps': true,
+        Google: true,
         Yelp: true,
         Facebook: true,
         'Rate MDs': true,
@@ -222,7 +221,8 @@ Reviews.defaultProps = {
 
 function mapStateToProps({ apiRequests, entities, auth, reputation }) {
   const reviews = apiRequests.get('reviews');
-  const reviewsWasFetched = reviews && ((reviews.get('wasFetched') && reputation.get('reviewsData').size > 0) || false);
+  const reviewsWasFetched =
+    reviews && ((reviews.get('wasFetched') && reputation.get('reviewsData').size > 0) || false);
   const reviewsFilter = reviewsWasFetched && reputation.get('reviewsFilter');
   const reviewsData = reviewsWasFetched && reputation.get('reviewsData');
   const reviewsList = reviewsWasFetched && reputation.get('reviewsList');
