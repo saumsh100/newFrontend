@@ -10,17 +10,20 @@ migrationServiceName = "${appGithubRepository}-migrations"
 seedServiceName = "${appGithubRepository}-seed"
 
 if (isPullRequest()) {
-  environment = "dev-${env.CHANGE_ID}"
-  ecsClusterName = "dev-ecs-cluster"
-  frontendUrl = "https://${environment}-${appGithubRepository}.carecru.com"
+  environment           = "dev-${env.CHANGE_ID}"
+  ecsClusterName        = "dev-ecs-cluster"
+  frontendUrl           = "https://${environment}-${appGithubRepository}.carecru.com"
+  mfeWorkflowServiceUrl = "https://test-workflow-service-frontend.carecru.com"
 } else if (isBranch(mainBranch)) {
-  environment = "test"
-  ecsClusterName = "test-ecs-cluster"
-  frontendUrl = "https://carecru.tech"
+  environment           = "test"
+  ecsClusterName        = "test-ecs-cluster"
+  frontendUrl           = "https://carecru.tech"
+  mfeWorkflowServiceUrl = "https://test-workflow-service-frontend.carecru.com"
 } else {
-  environment = "dev"
-  ecsClusterName = "dev-ecs-cluster"
-  frontendUrl = null
+  environment           = "dev"
+  ecsClusterName        = "dev-ecs-cluster"
+  frontendUrl           = null
+  mfeWorkflowServiceUrl = null
 }
 
 services = ["${appGithubRepository}": "infra/Dockerfile"]
@@ -64,6 +67,7 @@ def buildDockerImage(String appName, String dockerfilePath, String dockerVersion
         --build-arg FEATURE_FLAG_KEY=${FEATURE_FLAG_KEY} \
         --build-arg GOOGLE_API_KEY=${GOOGLE_API_KEY} \
         --build-arg INTERCOM_APP_ID=${INTERCOM_APP_ID} \
+        --build-arg WORKFLOW_HOST=${mfeWorkflowServiceUrl} \
         --build-arg API_SERVER_HOST=https://${environment}-backend.carecru.com
       docker tag ${aws_account_id}.dkr.ecr.ca-central-1.amazonaws.com/${environment}-${appName}:latest ${aws_account_id}.dkr.ecr.ca-central-1.amazonaws.com/${environment}-${appName}:${dockerVersionTag}
       aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.ca-central-1.amazonaws.com
