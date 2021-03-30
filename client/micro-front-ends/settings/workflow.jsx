@@ -12,7 +12,7 @@ const { WORKFLOW_HOST: workflowHost } = process.env;
 const Workflow = ({ history, location, match, ...rest }) => {
   delete rest.dispatch; // no need for redux at this time
   try {
-    history.location.state = JSON.parse(JSON.stringify(rest)); // put the required info in to the route state
+    history.location.state = rest; // put the required info in to the route state
   } catch (error) {
     history.location.state = undefined;
   }
@@ -28,12 +28,14 @@ Workflow.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
   location: PropTypes.shape(locationShape).isRequired,
   match: PropTypes.shape({}).isRequired,
-  users: PropTypes.shape({ [PropTypes.string]: userShape }).isRequired,
+  user: PropTypes.shape(userShape).isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = ({ entities, auth }) => ({
-  activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
-  users: entities.getIn(['users', 'models']),
+  activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
+  user: auth.get('user').toJS(),
+  role: auth.get('role'),
 });
 
 export default connect(mapStateToProps)(Workflow);
