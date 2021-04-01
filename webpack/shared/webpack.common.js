@@ -4,7 +4,6 @@
 'use strict';
 
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
@@ -41,7 +40,7 @@ const shouldUseSourceMap = SOURCE === 'true';
 const isEnvProductionProfile = isEnvProduction && process.argv.includes('--profile');
 const shouldNotUseLocalBackend = process.env.USE_LOCAL_BACKEND === 'false';
 
-const apiHost = getCompleteHost(process.env).fullUrl;
+const apiHost = getCompleteHost(process.env);
 
 const pluginsForDevOrProd = isEnvDevelopment
   ? [new webpack.NamedModulesPlugin(), new CaseSensitivePathsPlugin()]
@@ -120,7 +119,14 @@ const webpackConfig = (isolated = false) => {
       devtoolModuleFilenameTemplate: isEnvProduction
         ? (info) => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
         : isEnvDevelopment &&
-          ((info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+          ((info) => {
+            let pathResource = info.absoluteResourcePath;
+            if(!pathResource.includes('node_modules') && pathResource.startsWith('../src')) {
+              pathResource = pathResource.replace('../src', '../backend/src');
+            }
+            return path.resolve(pathResource).replace(/\\/g, '/')
+          })
+          ,
       globalObject: 'this',
       // Prevents conflicts when multiple webpack runtimes (from different apps)
       // are used on the same page.
@@ -131,15 +137,6 @@ const webpackConfig = (isolated = false) => {
       rules: rules(isolated),
     },
     plugins: [
-      new CleanWebpackPlugin({
-        cleanOnceBeforeBuildPatterns: [
-          '**/*',
-          '!widget',
-          '!widget/*',
-          '!package.json',
-          '!.gitignore',
-        ],
-      }),
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: JSON.stringify(NODE_ENV),
@@ -154,7 +151,10 @@ const webpackConfig = (isolated = false) => {
           POLLING_REVENUE_INTERVAL: JSON.stringify(POLLING_REVENUE_INTERVAL),
           POLLING_VWR_INTERVAL: JSON.stringify(POLLING_VWR_INTERVAL),
           POLLING_UNREAD_CHAT_INTERVAL: JSON.stringify(POLLING_UNREAD_CHAT_INTERVAL),
-          API_SERVER: JSON.stringify(apiHost),
+          API_SERVER: JSON.stringify(apiHost.fullUrl),
+          API_HOST: JSON.stringify(apiHost.host),
+          API_PORT: JSON.stringify(apiHost.port),
+          API_PROTOCOL: JSON.stringify(apiHost.protocol),
           WORKFLOW_HOST: JSON.stringify(WORKFLOW_HOST),
         },
         VERSION: JSON.stringify(paths.appPackageJson.version),

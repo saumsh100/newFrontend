@@ -12,6 +12,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 const CopyPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
@@ -108,6 +109,15 @@ const webpackConfig = (isolated = false) => merge(common(isolated), {
         to: 'assets',
       },
     ]),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [
+        '**/*',
+        '!widget',
+        '!widget/*',
+        '!package.json',
+        '!.gitignore',
+      ],
+    }),
     ...pluginsForDevOrProd(),
   ].filter(Boolean),
 });

@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 const compress = require('compression');
 const express = require('express');
 const subdomain = require('express-subdomain');
-const handleErrors = require('./handleErrors');
+const handleErrors = require('./helpers/handleErrors');
 const { buildFolder, mainReactApp } = require('./config');
-const getMyRouter = require('./routes/my');
+const widgetRouter = require('./routes/widget');
 
 /**
  * App Variables
@@ -46,14 +46,7 @@ server.use(
 const rootRouter = express.Router();
 
 // Bind subdomain capturing
-rootRouter.use(subdomain('my', require('./routes/widget')));
-
-const myRouter = getMyRouter(false);
-rootRouter.use('/my', myRouter);
-
-// Bind online booking routes
-// rootRouter.use('/my', require('./routes/onlinebooking'));
-
+rootRouter.use(subdomain('my', widgetRouter));
 
 /**
  * Server Activation

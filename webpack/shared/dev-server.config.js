@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const escape = require('escape-string-regexp');
+
 const paths = require('../helpers/paths');
 
 const serverHost = process.env.SERVER_HOST || 'localhost';
@@ -34,8 +35,8 @@ function getProxyConfig() {
         prependPath: true,
         ws: true,
         // Proxy all requests except HMR ws connection
-        context: pathname => pathname.indexOf('/sockjs-node/') !== 0,
-        bypass: req => {
+        context: (pathname) => pathname.indexOf('/sockjs-node/') !== 0,
+        bypass: (req) => {
           const filePath = path.join(paths.appPublic, req.path);
 
           // Return file from contentBase directory if its exists (reverse proxy)

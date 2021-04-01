@@ -6,6 +6,7 @@ ARG FEATURE_FLAG_KEY
 ARG GOOGLE_API_KEY
 ARG INTERCOM_APP_ID
 ARG API_SERVER_HOST
+ARG API_SERVER_PORT
 ARG WORKFLOW_HOST
 
 ENV PATH /app/node_modules/.bin:$PATH
@@ -17,7 +18,6 @@ ENV POLLING_FOLLOWUP_INTERVAL=300 \
 	REGION=CA \
 	DEBUG=false \
 	SOURCE=true \
-	API_SERVER_PORT=80 \
 	USE_LOCAL_BACKEND=false
 
 RUN apk add --no-cache --virtual builds-deps build-base python tzdata \
@@ -25,17 +25,32 @@ RUN apk add --no-cache --virtual builds-deps build-base python tzdata \
 	--repository http://dl-cdn.alpinelinux.org/alpine/v3.10/testing/ \
 	--repository http://dl-cdn.alpinelinux.org/alpine/v3.10/main/ \
 	--repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community
+
+RUN mkdir /app
+WORKDIR /app
+
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+COPY .npmrc.example .npmrc
+RUN npm ci
+
+# add app
+COPY . ./
+
+# build
+RUN npm run client:build
+
+# Deploy only the build with Express Server
+FROM public.ecr.aws/carecru/docker-images:node-14.15.1-alpine
+
+ENV PATH /app/node_modules/.bin:$PATH
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN mkdir /app
 WORKDIR /app
-COPY . .
-RUN npm ci
-RUN npm run client:build:isolated
+COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/node_modules /app/node_modules
 
-# Deploy build to NGINX
-FROM public.ecr.aws/carecru/docker-images:nginx-1.17.10-alpine
-COPY --from=builder /app/server/dist /usr/share/nginx/html
-COPY infra/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD node /app/dist/server.bundle.js

@@ -1,17 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 const reduce = require('lodash/reduce');
-const paths = require('../webpack/helpers/paths');
-
-const { getCompleteHost } = require('../webpack/helpers/utils');
+const paths = require('../../webpack/helpers/paths');
 
 const findBuiltAsset = (logicalPath) => {
-  const clientFile = fs.readdirSync(path.join(paths.appBuild, 'static', 'js'));
-  const widgetFile = fs.readdirSync(paths.appBuildWidget);
+  const clientFiles = fs.readdirSync(path.normalize(`${paths.appDist}/static/js`));
+  const widgetFiles = fs.readdirSync(path.normalize(`${paths.appDist}/widget`));
 
-  return [...clientFile, ...widgetFile]
-    .filter(f => f.endsWith('.js'))
-    .find(f => f.startsWith(logicalPath));
+  return [...clientFiles, ...widgetFiles]
+    .filter((f) => f.endsWith('.js'))
+    .find((f) => f.startsWith(logicalPath));
 };
 
 function replaceIndex(string, regex, index, repl) {
@@ -29,7 +27,7 @@ function replaceIndex(string, regex, index, repl) {
  * @param config
  * @returns {Promise.<*>}
  */
-const readFile = readPath =>
+const readFile = (readPath) =>
   new Promise((resolve, reject) => {
     fs.readFile(readPath, 'utf8', (err, strContent) => {
       if (err) return reject(err);
@@ -52,12 +50,9 @@ const replaceJavascriptFile = async (readPath, config) => {
   }, js);
 };
 
-const getHost = () => getCompleteHost(process.env);
-
 module.exports = {
   findBuiltAsset,
   paths,
-  getHost,
   replaceJavascriptFile,
   readFile,
 };

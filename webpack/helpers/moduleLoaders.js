@@ -5,8 +5,8 @@
 
 'use strict';
 
-const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 const paths = require('./paths');
 
 const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000', 10);
@@ -22,7 +22,7 @@ const shouldUseSourceMap = SOURCE === 'true';
 
 const getCacheIdentifier = (environment, packages) => {
   let cacheIdentifier = environment == null ? '' : environment.toString();
-  packages.forEach(packageName => {
+  packages.forEach((packageName) => {
     cacheIdentifier += `:${packageName}@`;
     try {
       cacheIdentifier += require(`${packageName}/package.json`).version;

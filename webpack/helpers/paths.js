@@ -1,20 +1,19 @@
-/* eslint-disable import/no-dynamic-require */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable operator-linebreak */
 const fs = require('fs');
 const path = require('path');
+
 const getPublicUrlOrPath = require('./getPublicUrlOrPath');
 
 const appDirectory = fs.realpathSync(process.cwd());
-const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
+const appPackageJson = require('../../package.json');
 
 const publicUrlOrPath = getPublicUrlOrPath(
   process.env.NODE_ENV === 'development',
-  require(resolveApp('package.json')).homepage,
+  appPackageJson.homepage,
   process.env.PUBLIC_URL,
 );
 
-const resolveEntry = entry => resolveApp(`client/entries/${entry}.js`);
+const resolveEntry = (entry) => resolveApp(`client/entries/${entry}.js`);
 
 const entries = {
   reviews: resolveEntry('reviews'),
@@ -32,26 +31,32 @@ const cc = {
   ],
 };
 
-const appPackageJson = require(resolveApp('package.json'));
+const server = {
+  server: [
+    resolveApp('server/index.js'),
+  ],
+}
 
 const paths = {
   appBuild: resolveApp('client/build'),
-  appDist: resolveApp('server/dist'),
   appBuildWidget: resolveApp('client/build/widget'),
-  appSrc: resolveApp('client'),
-  dotenv: resolveApp('.env'),
-  appPath: resolveApp('.'),
-  appPublic: resolveApp('public'),
+  appDist: resolveApp('dist/app'),
   appHtml: resolveApp('public/index.html'),
   appHtmlMy: resolveApp('public/my/index.html'),
   appIndexJs: resolveApp('client/index.jsx'),
   appJsConfig: resolveApp('jsconfig.json'),
-  publicUrlOrPath,
-  entries,
-  cc,
-  resolveApp,
+  appPath: resolveApp('.'),
+  appPublic: resolveApp('public'),
+  appSrc: resolveApp('client'),
+  dotenv: resolveApp('.env'),
+  serverDist: resolveApp('dist'),
   appDirectory,
   appPackageJson,
+  cc,
+  entries,
+  publicUrlOrPath,
+  resolveApp,
+  server,
 };
 
 module.exports = paths;

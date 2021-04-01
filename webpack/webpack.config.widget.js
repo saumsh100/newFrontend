@@ -3,7 +3,7 @@
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   throw err;
 });
 
@@ -15,13 +15,22 @@ const common = require('./shared/webpack.common');
 const paths = require('./helpers/paths');
 
 const mergeWebpack = merge.strategy({ entry: 'replace' });
-const webpackConfig = mergeWebpack(common(), {
+const webpackConfig = (env) => {
+  const isolated = (env && env.isolated) ? env.isolated : false;
+
+  return mergeWebpack(common(isolated), {
   mode: 'production',
   entry: paths.cc,
+  devtool: 'hidden-source-map',
   output: {
-    path: paths.appBuildWidget,
-    filename: '[name].[hash].js',
-    chunkFilename: '[name].[hash].chunk.js',
+    path: isolated ? paths.appDist : paths.appBuildWidget,
+    publicPath: paths.publicUrlOrPath,
+    filename: isolated
+      ? 'widget/[name].[contenthash:8].js'
+      : '[name].[hash].js',
+    chunkFilename: isolated
+      ? 'widget/[name].[contenthash:8].chunk.js'
+      : '[name].[hash].chunk.js',
   },
   plugins: [
     new CleanWebpackPlugin({
@@ -30,7 +39,9 @@ const webpackConfig = mergeWebpack(common(), {
   ],
   optimization: {
     splitChunks: false,
+    runtimeChunk: false,
   },
 });
+}
 
 module.exports = webpackConfig;

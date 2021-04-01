@@ -1,5 +1,5 @@
-const fs = require('fs');
 const { EOL } = require('os');
+const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
 
@@ -9,7 +9,7 @@ const generatePublishPackage = require('../../scripts/generatePublishPackage');
  * Convert list of names to wepbpack mapped entries
  * @param {Function} map
  */
-const appEntries = map => (...list) =>
+const appEntries = (map) => (...list) =>
   list.reduce(
     (entries, app) => ({
       ...entries,
@@ -23,13 +23,13 @@ exports.appEntries = appEntries;
 exports.entries = (isDevMode = false) =>
   appEntries(
     isDevMode
-      ? name => [
+      ? (name) => [
           'core-js/stable',
           'regenerator-runtime/runtime',
           'react-hot-loader/patch',
           `./entries/${name}.js`,
         ]
-      : name => `./client/entries/${name}.js`,
+      : (name) => `./client/entries/${name}.js`,
   );
 
 /**
@@ -42,13 +42,13 @@ exports.projectRoot = path.normalize(path.join(__dirname, '..', 'client'));
  * @param {string} envPath - path to env file
  * @returns {object}
  */
-exports.readEnv = envPath =>
+exports.readEnv = (envPath) =>
   fs
     .readFileSync(envPath)
     .toString()
     .split(EOL)
-    .filter(l => l)
-    .map(l => l.split('='))
+    .filter((l) => l)
+    .map((l) => l.split('='))
     .reduce((obj, [l, r]) => Object.assign(obj, { [l]: r }), {});
 
 /**
@@ -70,7 +70,7 @@ exports.linkFrontEndModule = ({
   shell.exec(`npm link ${frontEndPackage}`);
 };
 
-exports.getCompleteHost = env => {
+exports.getCompleteHost = (env) => {
   const {
     NODE_ENV,
     API_SERVER_PORT,
@@ -106,8 +106,13 @@ exports.getCompleteHost = env => {
     return API_SERVER_PORT === '80' && protocol === 'https' ? '' : `:${API_SERVER_PORT}`;
   };
 
+  const checkProtocolForLocalHost = (tempHost) =>
+    tempHost.includes('localhost') ? 'http' : protocol;
+
   const checkForProtocol = (tempHost = host) =>
-    NODE_ENV === 'production' || !tempHost.includes('localhost') ? 'https' : protocol;
+    NODE_ENV === 'production' && !tempHost.includes('localhost')
+      ? 'https'
+      : checkProtocolForLocalHost(tempHost);
 
   if (shouldNotUseLocalBackend && API_SERVER_HOST) {
     const [tempProtocol, tempHost] = API_SERVER_HOST.includes('://')

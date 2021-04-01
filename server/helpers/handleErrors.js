@@ -54,7 +54,7 @@ function sendError(err, req, res, next) {
     // objects are created.
 
     const errors = err.errors
-      ? err.errors.map(error => ({
+      ? err.errors.map((error) => ({
         status: errorStatus,
         source: {
           pointer: error.path ? `/data/attributes/${error.path}` : '/',
