@@ -45,10 +45,17 @@ class OnlineBooking extends Component {
       return null;
     }
 
-    // TODO: UPDATE this print when the widget build is updated.
     const { location } = window;
     const port = location.port ? `:${location.port}` : '';
-    const snippet = `<script type="text/javascript" src="${location.protocol}//my.${location.hostname}${port}/widgets/${activeAccount.id}/cc.js"></script>`;
+    const hostname =
+      window.location.hostname.split('.').length === 3
+        ? window.location.hostname
+            .split('.')
+            .slice(1)
+            .join('.')
+        : window.location.hostname;
+    const subDomain = process.env.MY_SUBDOMAIN;
+    const snippet = `<script type="text/javascript" src="${location.protocol}//${subDomain}.${hostname}${port}/widgets/${activeAccount.id}/cc.js"></script>`;
 
     return (
       <SettingsCard title="Online Booking" bodyClass={styles.onlineBookingBody}>

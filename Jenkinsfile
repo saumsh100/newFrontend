@@ -16,16 +16,19 @@ if (isPullRequest()) {
   ecsClusterName        = "dev-ecs-cluster"
   frontendUrl           = "https://${environment}-${appGithubRepository}.carecru.com"
   mfeWorkflowServiceUrl = "https://test-workflow-service-frontend.carecru.com"
+  my_subdomain          = "${environment}-${appGithubRepository}"
 } else if (isBranch(mainBranch)) {
   environment           = "test"
   ecsClusterName        = "test-ecs-cluster"
   frontendUrl           = "https://test.carecru.com"
   mfeWorkflowServiceUrl = "https://test-workflow-service-frontend.carecru.com"
+  my_subdomain          = "${environment}"
 } else {
   environment           = "prod"
   ecsClusterName        = "prod-ecs-cluster"
   frontendUrl           = "https://carecru.ca"
   mfeWorkflowServiceUrl = "https://prod-workflow-service-frontend.carecru.com"
+  my_subdomain          = "my"
 }
 
 pipeline = new Deployment(this, environment, appGithubRepository)
@@ -70,6 +73,7 @@ def buildDockerImage(String appName, String dockerfilePath, String dockerVersion
         --build-arg INTERCOM_APP_ID=${INTERCOM_APP_ID} \
         --build-arg WORKFLOW_HOST=${mfeWorkflowServiceUrl} \
         --build-arg API_SERVER_HOST=${backendUrl} \
+        --build-arg MY_SUBDOMAIN=${my_subdomain} \
         --build-arg API_SERVER_PORT=80
       docker tag ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:latest ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:${dockerVersionTag}
       aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.${region}.amazonaws.com

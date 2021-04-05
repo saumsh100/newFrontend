@@ -20,4 +20,5 @@ module.exports = {
   mainReactApp,
   onlineBookingApp,
   reviewsApp,
+  mySubdomain: process.env.MY_SUBDOMAIN || 'my'
 };

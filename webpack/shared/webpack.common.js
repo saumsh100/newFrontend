@@ -32,6 +32,7 @@ const {
   POLLING_UNREAD_CHAT_INTERVAL,
   SOURCE,
   WORKFLOW_HOST,
+  MY_SUBDOMAIN = 'my'
 } = process.env;
 
 const isEnvDevelopment = NODE_ENV === 'development';
@@ -156,6 +157,7 @@ const webpackConfig = (isolated = false) => {
           API_PORT: JSON.stringify(apiHost.port),
           API_PROTOCOL: JSON.stringify(apiHost.protocol),
           WORKFLOW_HOST: JSON.stringify(WORKFLOW_HOST),
+          MY_SUBDOMAIN: JSON.stringify(MY_SUBDOMAIN),
         },
         VERSION: JSON.stringify(paths.appPackageJson.version),
         'typeof window': JSON.stringify('object'),

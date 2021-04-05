@@ -72,7 +72,7 @@ module.exports = {
     disableDotRule: true,
     index: paths.publicUrlOrPath,
   },
-  // Allows the my.carecru.dev to not throw Invalid Host header
+  // Allows the my.care.cru to not throw Invalid Host header
   disableHostCheck: true,
   noInfo: true,
   stats: {

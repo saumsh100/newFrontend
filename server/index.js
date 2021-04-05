@@ -5,7 +5,7 @@ const compress = require('compression');
 const express = require('express');
 const subdomain = require('express-subdomain');
 const handleErrors = require('./helpers/handleErrors');
-const { buildFolder, mainReactApp } = require('./config');
+const { buildFolder, mainReactApp, mySubdomain } = require('./config');
 const widgetRouter = require('./routes/widget');
 
 /**
@@ -46,7 +46,7 @@ server.use(
 const rootRouter = express.Router();
 
 // Bind subdomain capturing
-rootRouter.use(subdomain('my', widgetRouter));
+rootRouter.use(subdomain(mySubdomain, widgetRouter));
 
 /**
  * Server Activation

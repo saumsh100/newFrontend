@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DialogBox, Loading } from '../../../library';
 import FormButton from '../../../library/Form/FormButton';
@@ -12,9 +12,17 @@ export default function SchedulingPreviewForm({ activeAccount }) {
   const closePreview = () => setViewingPreview(false);
   const openPreview = () => setViewingPreview(true);
 
-  // TODO: UPDATE this print when the widget build is updated.
+  const hostname =
+    window.location.hostname.split('.').length === 3
+      ? window.location.hostname
+          .split('.')
+          .slice(1)
+          .join('.')
+      : window.location.hostname;
+  const subDomain = process.env.MY_SUBDOMAIN;
+
   return (
-    <Fragment>
+    <>
       <div className={styles.formContainer_pickerField}>
         Test run your online scheduling widget without it being published on your website
       </div>
@@ -40,12 +48,12 @@ export default function SchedulingPreviewForm({ activeAccount }) {
             height="100%"
             style={loadingIFrame ? { display: 'none' } : {}}
             title="Online Scheduling Widget Preview"
-            src={`${window.location.protocol}//my.${window.location.hostname}/widgets/${activeAccount.id}/app/book`}
+            src={`${window.location.protocol}//${subDomain}.${hostname}/widgets/${activeAccount.id}/app/book`}
             onLoad={() => setloadingIFrame(false)}
           />
         )}
       </DialogBox>
-    </Fragment>
+    </>
   );
 }
 
