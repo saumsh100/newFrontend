@@ -10,15 +10,23 @@ const mainReactApp = path.join(appDist, 'index.html');
 const onlineBookingApp = path.join(appDist, 'my/index.html');
 const reviewsApp = path.join(appDist, 'reviews/index.html');
 
+const {
+  API_SERVER,
+  API_SERVER_PROTOCOL = 'http',
+  API_SERVER_HOST = 'localhost',
+  API_SERVER_PORT = '5000',
+  MY_SUBDOMAIN = 'my'
+} = process.env;
+
 module.exports = {
   buildFolder: appDist,
   staticFolder,
-  apiServer: process.env.API_SERVER,
-  apiHost: process.env.API_HOST,
-  apiPort: process.env.API_PORT,
-  apiProtocol: process.env.API_PROTOCOL,
+  apiServer: API_SERVER || `${API_SERVER_PROTOCOL}://${API_SERVER_HOST}:${API_SERVER_PORT}`,
+  apiHost: API_SERVER_HOST,
+  apiPort: API_SERVER_PORT,
+  apiProtocol: API_SERVER_PROTOCOL,
   mainReactApp,
   onlineBookingApp,
   reviewsApp,
-  mySubdomain: process.env.MY_SUBDOMAIN || 'my'
+  mySubdomain: MY_SUBDOMAIN
 };

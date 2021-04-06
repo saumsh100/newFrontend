@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const reduce = require('lodash/reduce');
 const paths = require('../../webpack/helpers/paths');
 
 const findBuiltAsset = (logicalPath) => {
@@ -11,15 +10,6 @@ const findBuiltAsset = (logicalPath) => {
     .filter((f) => f.endsWith('.js'))
     .find((f) => f.startsWith(logicalPath));
 };
-
-function replaceIndex(string, regex, index, repl) {
-  let nth = -1;
-  return string.replace(regex, (match) => {
-    nth += 1;
-    if (index === nth) return repl;
-    return match;
-  });
-}
 
 /**
  *
@@ -35,24 +25,8 @@ const readFile = (readPath) =>
     });
   });
 
-/**
- *
- * @param path
- * @param config
- * @returns {Promise.<*>}
- */
-const replaceJavascriptFile = async (readPath, config) => {
-  const js = await readFile(readPath);
-  return reduce(config, (result, value, key) => {
-    const before = `"${key}"`;
-    const after = value;
-    return replaceIndex(result, new RegExp(before, 'g'), 0, after);
-  }, js);
-};
-
 module.exports = {
   findBuiltAsset,
   paths,
-  replaceJavascriptFile,
   readFile,
 };

@@ -4,8 +4,8 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 
-const { findBuiltAsset, replaceJavascriptFile, readFile, paths } = require('../helpers/utils');
-const { apiProtocol, apiServer, onlineBookingApp, reviewsApp } = require('../config');
+const { findBuiltAsset, readFile, paths } = require('../helpers/utils');
+const { apiProtocol, apiServer, reviewsApp } = require('../config');
 
 const widgetsRouter = express.Router();
 
@@ -34,7 +34,6 @@ widgetsRouter.get('/:accountIdJoin/app(/*)?', async (req, res, next) => {
 
 widgetsRouter.get('/:accountId/cc.js', async (req, res, next) => {
   try {
-    const toString = (str) => `'${str}'`; // single-line text
     const toTemplateString = (str) => `\`${str}\``; // multi-line text
     const url = `${apiServer}/public/${req.params.accountId}`
     const basicAccount = await axios.get(url).then((result) => result.data);
@@ -45,26 +44,21 @@ widgetsRouter.get('/:accountId/cc.js', async (req, res, next) => {
 
     // /book route by default to load widget
     const iframeSrc = `${apiProtocol}://${req.headers.host}/widgets/${basicAccount.id}/app`;
-    const js = await replaceJavascriptFile(jsPath, {
-      __CARECRU_ACCOUNT_ID__: toString(basicAccount.id),
-      __CARECRU_WIDGET_PRIMARY_COLOR__: toString(basicAccount.bookingWidgetPrimaryColor || '#FF715A'),
-      __CARECRU_STYLE_CSS__: toTemplateString(await readFile(cssPath)),
-      __CARECRU_IFRAME_SRC__: toString(iframeSrc),
-    });
+    let js = await readFile(jsPath);
+    js = js.replace(new RegExp('.__CARECRU_ACCOUNT_ID__', 'g'), `['${basicAccount.id}']`)
+    js = js.replace(new RegExp('"__CARECRU_STYLE_CSS__"', 'g'), toTemplateString(await readFile(cssPath)))
+    js = js.replace(new RegExp('__CARECRU_WIDGET_PRIMARY_COLOR__', 'g'), basicAccount.bookingWidgetPrimaryColor || '#FF715A')
+    js = js.replace(new RegExp('__CARECRU_IFRAME_SRC__', 'g'), iframeSrc)
 
     res.type('javascript').send(js);
 
   } catch (e) {
+    console.log(e)
     next(e)
   }
 });
 
 const myWidgetRenderRouter = express.Router();
 myWidgetRenderRouter.use('/widgets', widgetsRouter);
-
-// This route is for the `online booking` app
-myWidgetRenderRouter.get('(/*)?', (req, res, next) => {
-  res.sendFile(onlineBookingApp);
-});
 
 module.exports = myWidgetRenderRouter;

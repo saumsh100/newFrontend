@@ -5,7 +5,7 @@ const compress = require('compression');
 const express = require('express');
 const subdomain = require('express-subdomain');
 const handleErrors = require('./helpers/handleErrors');
-const { buildFolder, mainReactApp, mySubdomain } = require('./config');
+const { buildFolder, mainReactApp, mySubdomain, onlineBookingApp } = require('./config');
 const widgetRouter = require('./routes/widget');
 
 /**
@@ -46,8 +46,19 @@ server.use(
 const rootRouter = express.Router();
 
 // Bind subdomain capturing
-rootRouter.use(subdomain(mySubdomain, widgetRouter));
+const subdomainRouter = express.Router();
+subdomainRouter.use(widgetRouter);
+// This route is for the `online booking` app
+subdomainRouter.get('(/*)?', (req, res, next) => {
+  res.sendFile(onlineBookingApp);
+});
+rootRouter.use(subdomain(mySubdomain, subdomainRouter));
 
+// Widget on the root
+rootRouter.use(widgetRouter);
+rootRouter.get('/my(/*)?', (req, res, next) => {
+  res.sendFile(onlineBookingApp);
+});
 /**
  * Server Activation
  */
