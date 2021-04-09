@@ -16,18 +16,21 @@ if (isPullRequest()) {
   ecsClusterName        = "dev-ecs-cluster"
   frontendUrl           = "https://${environment}-${appGithubRepository}.carecru.com"
   mfeWorkflowServiceUrl = "https://test-workflow-service-frontend.carecru.com"
+  execution_environment = "DEVELOPMENT"
   my_subdomain          = "${environment}-${appGithubRepository}"
 } else if (isBranch(mainBranch)) {
   environment           = "test"
   ecsClusterName        = "test-ecs-cluster"
   frontendUrl           = "https://test.carecru.com"
   mfeWorkflowServiceUrl = "https://test-workflow-service-frontend.carecru.com"
+  execution_environment = "TEST"
   my_subdomain          = "${environment}"
 } else {
   environment           = "prod"
   ecsClusterName        = "prod-ecs-cluster"
   frontendUrl           = "https://carecru.ca"
   mfeWorkflowServiceUrl = "https://prod-workflow-service-frontend.carecru.com"
+  execution_environment = "PRODUCTION"
   my_subdomain          = "my"
 }
 
@@ -61,6 +64,7 @@ def buildDockerImage(String appName, String dockerfilePath, String dockerVersion
   withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id'),
     string(credentialsId: 'NPM_TOKEN', variable: 'NPM_TOKEN'),
     string(credentialsId: 'FEATURE_FLAG_KEY', variable: 'FEATURE_FLAG_KEY'),
+    string(credentialsId: 'MODE_ANALYTICS_ACCESS_KEY', variable: 'MODE_ANALYTICS_ACCESS_KEY'),
     string(credentialsId: 'GOOGLE_API_KEY', variable: 'GOOGLE_API_KEY'),
     string(credentialsId: 'INTERCOM_APP_ID', variable: 'INTERCOM_APP_ID')]) {
     npmrcGenerate(WORKSPACE)
@@ -70,11 +74,14 @@ def buildDockerImage(String appName, String dockerfilePath, String dockerVersion
         --build-arg NPM_TOKEN=${NPM_TOKEN} \
         --build-arg FEATURE_FLAG_KEY=${FEATURE_FLAG_KEY} \
         --build-arg GOOGLE_API_KEY=${GOOGLE_API_KEY} \
+        --build-arg MODE_ANALYTICS_ACCESS_KEY=${MODE_ANALYTICS_ACCESS_KEY} \
+        --build-arg EXECUTION_ENVIRONMENT=${execution_environment} \
         --build-arg INTERCOM_APP_ID=${INTERCOM_APP_ID} \
         --build-arg WORKFLOW_HOST=${mfeWorkflowServiceUrl} \
         --build-arg API_SERVER_HOST=${backendUrl} \
         --build-arg MY_SUBDOMAIN=${my_subdomain} \
-        --build-arg API_SERVER_PORT=80
+        --build-arg API_SERVER_PORT=80 \
+        --build-arg LIVESESSION_ID=a5443281.12543338
       docker tag ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:latest ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:${dockerVersionTag}
       aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.${region}.amazonaws.com
       docker push ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:latest
