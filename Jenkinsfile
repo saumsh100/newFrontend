@@ -12,41 +12,30 @@ caRegion = "ca-central-1"
 usRegion = "us-west-1"
 
 if (isPullRequest()) {
-  environment           = "dev-${env.CHANGE_ID}"
-  ecsClusterName        = "dev-ecs-cluster"
-  frontendUrl           = "https://${environment}-${appGithubRepository}.carecru.com"
-  mfeWorkflowServiceUrl = "https://test-workflow-service-frontend.carecru.com"
-  execution_environment = "DEVELOPMENT"
-  my_subdomain          = "${environment}-${appGithubRepository}"
+  caEnvironment           = "dev-${env.CHANGE_ID}"
+  ecsClusterName          = "dev-ecs-cluster"
+  frontendUrl             = "https://${caEnvironment}-${appGithubRepository}.carecru.com"
+  execution_environment   = "DEVELOPMENT"
+  my_subdomain            = "${caEnvironment}-${appGithubRepository}"
 } else if (isBranch(mainBranch)) {
-  environment           = "test"
-  ecsClusterName        = "test-ecs-cluster"
-  frontendUrl           = "https://test.carecru.com"
-  mfeWorkflowServiceUrl = "https://test-workflow-service-frontend.carecru.com"
-  execution_environment = "TEST"
-  my_subdomain          = "${environment}"
+  caEnvironment           = "test"
+  ecsClusterName          = "test-ecs-cluster"
+  frontendUrl             = "https://test.carecru.com"
+  execution_environment   = "TEST"
+  my_subdomain            = "${caEnvironment}"
 } else {
-  environment           = "prod"
-  ecsClusterName        = "prod-ecs-cluster"
-  frontendUrl           = "https://carecru.ca"
-  mfeWorkflowServiceUrl = "https://prod-workflow-service-frontend.carecru.com"
-  execution_environment = "PRODUCTION"
-  my_subdomain          = "my"
+  caEnvironment             = "prod"
+  usEnvironment             = "prod-us"
+  ecsClusterName            = "prod-ecs-cluster"
+  frontendUrl               = "https://carecru.ca and https://carecru.io"
+  execution_environment     = "PRODUCTION"
+  my_subdomain              = "my"
 }
 
-pipeline = new Deployment(this, environment, appGithubRepository)
-migrationTaskDefinitionName = "${environment}-${migrationServiceName}"
-seedTaskDefinitionName = "${environment}-${seedServiceName}"
-backendUrl = "https://${environment}-backend.carecru.com"
+pipeline = new Deployment(this, caEnvironment, appGithubRepository)
+migrationTaskDefinitionName = "${caEnvironment}-${migrationServiceName}"
+seedTaskDefinitionName = "${caEnvironment}-${seedServiceName}"
 services = ["${appGithubRepository}": "infra/Dockerfile"]
-
-def setVars(String region) {
-  withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'cicarecru', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-    env.AWS_ACCESS_KEY_ID     = "${AWS_ACCESS_KEY_ID}"
-    env.AWS_SECRET_ACCESS_KEY = "${AWS_SECRET_ACCESS_KEY}"
-    env.AWS_DEFAULT_REGION    = "${region}"
-  }
-}
 
 def npmrcGenerate(String npmrcDir) {
   withCredentials([string(credentialsId: 'NPM_TOKEN', variable: 'NPM_TOKEN'),string(credentialsId: 'FORT_AWESOME_NPM_TOKEN', variable: 'FORT_AWESOME_NPM_TOKEN')]) {
@@ -60,7 +49,7 @@ def npmrcGenerate(String npmrcDir) {
   }
 }
 
-def buildDockerImage(String appName, String dockerfilePath, String dockerVersionTag, String region) {
+def buildDockerImage(String appName, String dockerfilePath, String dockerVersionTag, String region, String environment) {
   withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id'),
     string(credentialsId: 'NPM_TOKEN', variable: 'NPM_TOKEN'),
     string(credentialsId: 'FEATURE_FLAG_KEY', variable: 'FEATURE_FLAG_KEY'),
@@ -77,13 +66,13 @@ def buildDockerImage(String appName, String dockerfilePath, String dockerVersion
         --build-arg MODE_ANALYTICS_ACCESS_KEY=${MODE_ANALYTICS_ACCESS_KEY} \
         --build-arg EXECUTION_ENVIRONMENT=${execution_environment} \
         --build-arg INTERCOM_APP_ID=${INTERCOM_APP_ID} \
-        --build-arg WORKFLOW_HOST=${mfeWorkflowServiceUrl} \
-        --build-arg API_SERVER_HOST=${backendUrl} \
+        --build-arg WORKFLOW_HOST=https://${environment}-workflow-service-frontend.carecru.com \
+        --build-arg API_SERVER_HOST="https://${environment}-backend.carecru.com" \
         --build-arg MY_SUBDOMAIN=${my_subdomain} \
         --build-arg API_SERVER_PORT=80 \
         --build-arg LIVESESSION_ID=a5443281.12543338
       docker tag ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:latest ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:${dockerVersionTag}
-      aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.${region}.amazonaws.com
+      aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.${region}.amazonaws.com
       docker push ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:latest
       docker push ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:${dockerVersionTag}
     """
@@ -97,40 +86,25 @@ def buildDockerImage(String appName, String dockerfilePath, String dockerVersion
   }
 }
 
-def parallelBuildDockerImage(Deployment pipeline, String region) {
+def parallelBuildDockerImage(Deployment pipeline, String region, String environment) {
   String dockerVersionTag = pipeline.gitCommitNumber()
   def serviceName = [:]
   services.each { service ->
     def newServiceName = service
-    if (!service.getValue()) {
-      return
-    }
     serviceName[newServiceName.getKey()] = {
-      buildDockerImage(newServiceName.getKey(), newServiceName.getValue(), dockerVersionTag, region)
+      buildDockerImage(newServiceName.getKey(), newServiceName.getValue(), dockerVersionTag, region, environment)
     }
   }
   return serviceName
 }
 
-def deployApp(String appName, Deployment pipeline, String region) {
-  withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
-    String dockerVersionTag = pipeline.gitCommitNumber()
-    sh """
-      aws ecs describe-task-definition --task-definition ${environment}-${appName} | jq .taskDefinition | jq "del(.taskDefinitionArn,.requiresAttributes,.revision, .status, .requiresAttributes, .compatibilities)" > ${environment}-${appName}.json
-      sed -i -e 's;.*dkr.ecr.${region}.amazonaws.com.*;\"image\": \"${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:${dockerVersionTag}\",;g' ${environment}-${appName}.json
-      newRevision=`aws ecs register-task-definition --cli-input-json file://${environment}-${appName}.json | jq .taskDefinition.revision`
-      aws ecs update-service --cluster ${ecsClusterName} --service ${environment}-${appName} --task-definition ${environment}-${appName}:\$newRevision --force-new-deployment
-    """
-    pipeline.checkDeployment(appName, ecsClusterName)
-  }
-}
-
-def parallelDeployApp(Deployment pipeline, String region) {
+def parallelDeployApp(Deployment pipeline, String region, String environment) {
+  String dockerVersionTag = pipeline.gitCommitNumber()
   def serviceName = [:]
   services.keySet().each { service ->
     def newServiceName = service
     serviceName[newServiceName] = {
-      deployApp(newServiceName, pipeline, region)
+      pipeline.deployApp(newServiceName, region, environment, dockerVersionTag, ecsClusterName, appGithubRepository)
     }
   }
   return serviceName
@@ -138,10 +112,10 @@ def parallelDeployApp(Deployment pipeline, String region) {
 
 node(jenkinsNodeExecutor) {
   try {
+    pipeline.clearWorkspace()
+    pipeline.checkout()
     if (isValidBranch(mainBranch) || isProduction()) {
       setVars(caRegion)
-      pipeline.clearWorkspace()
-      pipeline.checkout()
       if (isPullRequest()) {
         throttle(['noConcurrentJobs']) {
           node(jenkinsNodeExecutor) {
@@ -152,12 +126,12 @@ node(jenkinsNodeExecutor) {
         }
       }
       stage('Build CA Docker Images') {
-        parallel parallelBuildDockerImage(pipeline, caRegion)
+        parallel parallelBuildDockerImage(pipeline, caRegion, caEnvironment)
       }
       if (isProduction()) {
         setVars(usRegion)
         stage('Build US Docker Images') {
-          parallel parallelBuildDockerImage(pipeline, usRegion)
+          parallel parallelBuildDockerImage(pipeline, usRegion, usEnvironment)
         }
       }
       setVars(caRegion)
@@ -166,12 +140,12 @@ node(jenkinsNodeExecutor) {
         pipeline.runMigrationsOrSeed(seedTaskDefinitionName, ecsClusterName)
       }
       stage('Deploy CA App') {
-        parallel parallelDeployApp(pipeline, caRegion)
+        parallel parallelDeployApp(pipeline, caRegion, caEnvironment)
       }
       if (isProduction()) {
         setVars(usRegion)
         stage('Deploy US App') {
-          parallel parallelDeployApp(pipeline, usRegion)
+          parallel parallelDeployApp(pipeline, usRegion, usEnvironment)
         }
       }
     }
@@ -181,7 +155,7 @@ node(jenkinsNodeExecutor) {
     currentBuild.result = "FAILURE"
   }
   finally {
-    if (isValidBranch(mainBranch)) {
+    if (isValidBranch(mainBranch) || isProduction()) {
       pipeline.deleteLocalDockerImages()
       if (isBranch(mainBranch)) {
         throttle(['noConcurrentJobs']) {
@@ -193,7 +167,7 @@ node(jenkinsNodeExecutor) {
         }
       }
       pipeline.notifyBuild(frontendUrl, notifyChannelName)
-      deleteDir()
     }
+    deleteDir()
   }
 }
