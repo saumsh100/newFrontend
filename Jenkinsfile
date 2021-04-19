@@ -66,7 +66,7 @@ def buildDockerImage(String appName, String dockerfilePath, String dockerVersion
         --build-arg MODE_ANALYTICS_ACCESS_KEY=${MODE_ANALYTICS_ACCESS_KEY} \
         --build-arg EXECUTION_ENVIRONMENT=${execution_environment} \
         --build-arg INTERCOM_APP_ID=${INTERCOM_APP_ID} \
-        --build-arg WORKFLOW_HOST=https://${environment}-workflow-service-frontend.carecru.com \
+        --build-arg WORKFLOW_HOST=https://${environment}-workflow-frontend.carecru.com \
         --build-arg API_SERVER_HOST="https://${environment}-backend.carecru.com" \
         --build-arg MY_SUBDOMAIN=${my_subdomain} \
         --build-arg API_SERVER_PORT=80 \
