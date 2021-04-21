@@ -15,7 +15,7 @@ const myRouter = require('./routes/my');
 
 const server = express();
 server.disable('x-powered-by');
-const port = 80;
+const port = parseInt(process.env.PORT || '80', 10);
 
 /**
  *  App Configuration

@@ -25,7 +25,7 @@ const externalModules = (nodeModulesPath) =>
     .reduce((map, mod) => Object.assign(map, { [mod]: `commonjs ${mod}` }), {});
 
 const mergeWebpack = merge.strategy({ entry: 'replace' });
-const webpackConfig = mergeWebpack(common(), {
+const webpackConfig = mergeWebpack(common, {
   name: 'server',
   target: 'node',
   devtool: 'cheap-module-source-map',

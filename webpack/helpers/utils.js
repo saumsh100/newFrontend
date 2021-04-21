@@ -73,15 +73,8 @@ exports.linkFrontEndModule = ({
 exports.getCompleteHost = (env) => {
   const {
     NODE_ENV,
-    API_SERVER_PORT,
-    API_SERVER_HOST,
-    SERVER_PORT,
-    SERVER_PROTOCOL,
-    SERVER_HOST,
-    USE_LOCAL_BACKEND,
+    API_SERVER,
   } = env;
-
-  const shouldNotUseLocalBackend = USE_LOCAL_BACKEND === 'false';
 
   const localProductionHost =
     NODE_ENV === 'production'
@@ -91,36 +84,43 @@ exports.getCompleteHost = (env) => {
           protocol: 'https',
         }
       : {
-          host: SERVER_HOST || 'localhost',
-          port: SERVER_PORT ? `:${SERVER_PORT}` : ':5000',
-          protocol: SERVER_PROTOCOL || 'http',
+          host: 'localhost',
+          port: ':5000',
+          protocol: 'http',
         };
 
   let { host, port, protocol } = localProductionHost;
 
   const checkForPort = () => {
-    if (API_SERVER_PORT === '443') {
+    if (API_SERVER.includes(':443')) {
       protocol = 'https';
       return '';
     }
-    return API_SERVER_PORT === '80' && protocol === 'https' ? '' : `:${API_SERVER_PORT}`;
+    const tempHost = API_SERVER.includes('://') ? API_SERVER.split('://')[1] : API_SERVER;
+    const tempPort = tempHost.includes(':') ? tempPort.split(':')[1] : null;
+
+    if (tempPort) {
+      return tempPort === ('80') && protocol === 'https' ? '' : `:${tempPort}`;
+    }
+
+    return '';
   };
 
-  const checkProtocolForLocalHost = (tempHost) =>
+  const checkProtocolForLocalhost = (tempHost) =>
     tempHost.includes('localhost') ? 'http' : protocol;
 
   const checkForProtocol = (tempHost = host) =>
     NODE_ENV === 'production' && !tempHost.includes('localhost')
       ? 'https'
-      : checkProtocolForLocalHost(tempHost);
+      : checkProtocolForLocalhost(tempHost);
 
-  if (shouldNotUseLocalBackend && API_SERVER_HOST) {
-    const [tempProtocol, tempHost] = API_SERVER_HOST.includes('://')
-      ? API_SERVER_HOST.split('://')
-      : [checkForProtocol(API_SERVER_HOST), API_SERVER_HOST];
+  if (API_SERVER) {
+    const [tempProtocol, tempHost] = API_SERVER.includes('://')
+      ? API_SERVER.split('://')
+      : [checkForProtocol(API_SERVER), API_SERVER.split(':')[0]];
     host = tempHost;
     protocol = tempProtocol;
-    port = API_SERVER_PORT ? checkForPort() : '';
+    port = checkForPort();
   }
 
   return {

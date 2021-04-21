@@ -67,9 +67,9 @@ def buildDockerImage(String appName, String dockerfilePath, String dockerVersion
         --build-arg EXECUTION_ENVIRONMENT=${execution_environment} \
         --build-arg INTERCOM_APP_ID=${INTERCOM_APP_ID} \
         --build-arg WORKFLOW_HOST=https://${environment}-workflow-frontend.carecru.com \
-        --build-arg API_SERVER_HOST="https://${environment}-backend.carecru.com" \
+        --build-arg API_SERVER="https://${environment}-backend.carecru.com" \
         --build-arg MY_SUBDOMAIN=${my_subdomain} \
-        --build-arg API_SERVER_PORT=80 \
+        --build-arg PORT=80 \
         --build-arg LIVESESSION_ID=a5443281.12543338
       docker tag ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:latest ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${environment}-${appName}:${dockerVersionTag}
       aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.${region}.amazonaws.com

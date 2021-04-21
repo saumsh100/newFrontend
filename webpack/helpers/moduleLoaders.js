@@ -33,14 +33,12 @@ const getCacheIdentifier = (environment, packages) => {
   return cacheIdentifier;
 };
 
-const getStyleLoaders = (extractCss, cssOptions, isSass = false) => {
+const getStyleLoaders = (cssOptions, isSass = false) => {
   const postcssNormalize = require('postcss-normalize');
 
   const loaders = [
-    (isEnvDevelopment || isSass || !extractCss) && require.resolve('style-loader'),
-    isEnvProduction &&
-      !isSass &&
-      extractCss && {
+    (isEnvDevelopment || isSass) && require.resolve('style-loader'),
+    isEnvProduction && !isSass && {
         loader: MiniCssExtractPlugin.loader,
         // css is located in `static/css`, use '../../' to locate index.html folder
         // in production `paths.publicUrlOrPath` can be a relative path
@@ -97,7 +95,7 @@ const getStyleLoaders = (extractCss, cssOptions, isSass = false) => {
   return loaders;
 };
 
-const rules = (extractCss = false) => [
+const rules = [
   { parser: { requireEnsure: false } },
   {
     // "oneOf" will traverse all following loaders until one will
@@ -148,7 +146,7 @@ const rules = (extractCss = false) => [
       },
       {
         test: /\.css$/,
-        use: getStyleLoaders(extractCss, {
+        use: getStyleLoaders({
           // importLoaders: 1,
           sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
         }),
@@ -157,7 +155,6 @@ const rules = (extractCss = false) => [
       {
         test: /\.s(a|c)ss$/,
         use: getStyleLoaders(
-          extractCss,
           {
             importLoaders: 3,
             sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,

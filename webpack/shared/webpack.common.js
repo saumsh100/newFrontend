@@ -39,8 +39,6 @@ const isEnvDevelopment = NODE_ENV === 'development';
 const isEnvProduction = NODE_ENV === 'production';
 const shouldUseSourceMap = SOURCE === 'true';
 const isEnvProductionProfile = isEnvProduction && process.argv.includes('--profile');
-const shouldNotUseLocalBackend = process.env.USE_LOCAL_BACKEND === 'false';
-
 const apiHost = getCompleteHost(process.env);
 
 const pluginsForDevOrProd = isEnvDevelopment
@@ -56,36 +54,7 @@ const pluginsForDevOrProd = isEnvDevelopment
 
 const getShouldUseSourceMap = () => (shouldUseSourceMap ? 'source-map' : false);
 
-const getOutputDetails = (isolated) =>
-  isolated || shouldNotUseLocalBackend
-    ? {
-        path: isEnvProduction ? paths.appDist : undefined,
-        publicPath: paths.publicUrlOrPath,
-        filename: isEnvProduction
-          ? 'static/js/[name].[contenthash:8].js'
-          : isEnvDevelopment && 'static/js/bundle.js',
-        chunkFilename: isEnvProduction
-          ? 'static/js/[name].[contenthash:8].chunk.js'
-          : isEnvDevelopment && 'static/js/[name].chunk.js',
-      }
-    : {
-        path: isEnvProduction || !shouldNotUseLocalBackend ? paths.appBuild : undefined,
-        publicPath: '/assets/',
-        filename: isEnvProduction ? '[name].[contenthash:8].js' : '[name].[hash].js',
-      };
-
-const optimization = (isolated) =>
-  isolated || shouldNotUseLocalBackend
-    ? {
-        // Keep the runtime chunk separated to enable long term caching
-        runtimeChunk: {
-          name: (entrypoint) => `runtime-${entrypoint.name}`,
-        },
-      }
-    : {};
-
-const webpackConfig = (isolated = false) => {
-  return {
+const webpackConfig = {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
     devtool: isEnvProduction
@@ -96,7 +65,7 @@ const webpackConfig = (isolated = false) => {
       path.join(
         __dirname,
         '..',
-        isolated || shouldNotUseLocalBackend ? '..' : `..${path.sep}client`,
+        '..',
       ),
     ),
     resolve: {
@@ -113,7 +82,14 @@ const webpackConfig = (isolated = false) => {
       },
     },
     output: {
-      ...getOutputDetails(isolated),
+      path: isEnvProduction ? paths.appDist : undefined,
+        publicPath: paths.publicUrlOrPath,
+        filename: isEnvProduction
+          ? 'static/js/[name].[contenthash:8].js'
+          : isEnvDevelopment && 'static/js/bundle.js',
+        chunkFilename: isEnvProduction
+          ? 'static/js/[name].[contenthash:8].chunk.js'
+          : isEnvDevelopment && 'static/js/[name].chunk.js',
       pathinfo: isEnvDevelopment,
       futureEmitAssets: true,
       // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -135,7 +111,7 @@ const webpackConfig = (isolated = false) => {
     },
     module: {
       strictExportPresence: true,
-      rules: rules(isolated),
+      rules,
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -173,7 +149,10 @@ const webpackConfig = (isolated = false) => {
       ...pluginsForDevOrProd,
     ],
     optimization: {
-      ...optimization(isolated),
+      // Keep the runtime chunk separated to enable long term caching
+      runtimeChunk: {
+        name: (entrypoint) => `runtime-${entrypoint.name}`,
+      },
       minimize: isEnvProduction,
       moduleIds: 'hashed',
       minimizer: [
@@ -246,5 +225,4 @@ const webpackConfig = (isolated = false) => {
       child_process: 'empty',
     },
   };
-};
 module.exports = webpackConfig;

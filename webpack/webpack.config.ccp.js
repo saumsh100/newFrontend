@@ -18,7 +18,6 @@ const merge = require('webpack-merge');
 const webpack = require('webpack');
 
 const paths = require('./helpers/paths');
-const { linkFrontEndModule } = require('./helpers/utils');
 const common = require('./shared/webpack.common');
 
 process.env.BABEL_ENV = process.env.NODE_ENV;
@@ -26,7 +25,6 @@ process.env.BABEL_ENV = process.env.NODE_ENV;
 const { resolveApp } = paths;
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
 const isEnvProduction = process.env.NODE_ENV === 'production';
-const shouldNotUseLocalBackend = process.env.USE_LOCAL_BACKEND === 'false';
 
 const pluginsForDevOrProd = () => {
   if (isEnvDevelopment) {
@@ -40,7 +38,7 @@ const pluginsForDevOrProd = () => {
           // browse to http://localhost:3000/ during development
           host: 'localhost',
           port: 3000,
-          proxy: `http://localhost:${process.env.WP_PROXY_PORT || '5100'}/`,
+          proxy: `http://localhost:${process.env.PORT || '5100'}/`,
         },
         {
           // prevent BrowserSync from reloading the page
@@ -70,10 +68,10 @@ const getHTMLWebpackPluginConfig = !isEnvProduction
   }
   : {};
 
-const webpackConfig = (isolated = false) => merge(common(isolated), {
+const webpackConfig = merge(common, {
   entry: paths.entries,
   plugins: [
-    (isolated || shouldNotUseLocalBackend) && new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin({
       inject: true,
       chunks: ['app'],
       filename: 'index.html',
@@ -81,7 +79,7 @@ const webpackConfig = (isolated = false) => merge(common(isolated), {
       title: 'Dashboard | CareCru',
       ...getHTMLWebpackPluginConfig,
     }),
-    isolated && new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin({
       inject: true,
       template: resolveApp('public/onlinebooking.html'),
       chunks: ['my'],
@@ -89,7 +87,7 @@ const webpackConfig = (isolated = false) => merge(common(isolated), {
       title: 'Online Booking | CareCru',
       ...getHTMLWebpackPluginConfig,
     }),
-    isolated && new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin({
       inject: true,
       chunks: ['reviews'],
       template: resolveApp('public/index.html'),
@@ -97,13 +95,13 @@ const webpackConfig = (isolated = false) => merge(common(isolated), {
       title: 'Reviews | CareCru',
       ...getHTMLWebpackPluginConfig,
     }),
-    isolated && new CopyPlugin([
+    new CopyPlugin([
       {
         from: 'public',
         ignore: ['**/*.html'],
       },
     ]),
-    isolated && new CopyPlugin([
+    new CopyPlugin([
       {
         from: 'assets',
         to: 'assets',
@@ -119,19 +117,14 @@ const webpackConfig = (isolated = false) => merge(common(isolated), {
       ],
     }),
     ...pluginsForDevOrProd(),
-  ].filter(Boolean),
+  ],
 });
 
-module.exports = (env) => {
-  const isolated = (env && env.isolated) ? env.isolated : false;
-  const webpackConfigGenerated = webpackConfig(isolated);
+module.exports = () => {
   if (isEnvDevelopment) {
-    if (!shouldNotUseLocalBackend) {
-      linkFrontEndModule();
-    }
-    return merge(webpackConfigGenerated, {
+    return merge(webpackConfig, {
       devServer: require('./shared/dev-server.config')
     })
   }
-  return webpackConfigGenerated;
+  return webpackConfig;
 }

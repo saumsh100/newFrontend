@@ -68,9 +68,7 @@ Please follow the steps below in the order they are layed out. We'll be using `N
     POLLING_UNREAD_CHAT_INTERVAL=300
 
     # API request configuration
-    API_SERVER_HOST="https://carecru.tech"
-    API_SERVER_PORT=80
-    USE_LOCAL_BACKEND=false
+    API_SERVER="https://test-backend.carecru.com"
 
     # Should build source maps?
     SOURCE=true
@@ -132,10 +130,8 @@ This way the API can be reached from within the VM. There are other ways to achi
     # Should build source maps?
     SOURCE=true
 
-    # Use local backend proxy (for online booking development)
-    SERVER_PATH=
-    SERVER_HOST=localhost
-    SERVER_PORT=5000
+    # API request configuration
+    API_SERVER="http://localhost:5000"
     ```
 
     > You can check the [.env.example file](./.env.example) for all the properties used by production mode. You don't need to set all of them for development.

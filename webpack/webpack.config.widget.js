@@ -15,22 +15,15 @@ const common = require('./shared/webpack.common');
 const paths = require('./helpers/paths');
 
 const mergeWebpack = merge.strategy({ entry: 'replace' });
-const webpackConfig = (env) => {
-  const isolated = (env && env.isolated) ? env.isolated : false;
-
-  return mergeWebpack(common(isolated), {
+const webpackConfig = mergeWebpack(common, {
   mode: 'production',
   entry: paths.cc,
   devtool: 'hidden-source-map',
   output: {
-    path: isolated ? paths.appDist : paths.appBuildWidget,
+    path: paths.appDist,
     publicPath: paths.publicUrlOrPath,
-    filename: isolated
-      ? 'widget/[name].[contenthash:8].js'
-      : '[name].[hash].js',
-    chunkFilename: isolated
-      ? 'widget/[name].[contenthash:8].chunk.js'
-      : '[name].[hash].chunk.js',
+    filename: 'widget/[name].[contenthash:8].js',
+    chunkFilename: 'widget/[name].[contenthash:8].chunk.js',
   },
   plugins: [
     new CleanWebpackPlugin({
@@ -42,6 +35,5 @@ const webpackConfig = (env) => {
     runtimeChunk: false,
   },
 });
-}
 
 module.exports = webpackConfig;
