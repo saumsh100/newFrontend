@@ -1,8 +1,8 @@
 {
   "name": "@carecru/carecru",
-  "version": "4.25.2",
+  "version": "5.0.0",
   "description": "Dental Practice Dashboard",
-  "author": "Justin Sharp <justin@carecru.com>",
+  "author": "CareCru Inc. <info@carecru.com>",
   "engines": {
     "node": "^8 || ^10 || ^12 || ^14"
   },
