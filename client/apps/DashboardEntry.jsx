@@ -22,10 +22,7 @@ import { receiveEntities } from '../reducers/entities';
 import ErrorBoundary from '../components/ErrorBoundary';
 
 /* eslint-disable camelcase */
-if (process.env.NODE_ENV === 'production') {
-  window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
-}
-
+/* eslint-disable react/jsx-props-no-spreading */
 const store = configure();
 
 store.dispatch(
@@ -54,12 +51,15 @@ load()(store.dispatch).then(() => {
         user,
       });
 
-      window.Intercom('update', {
-        user_id: userId,
-        name: fullName,
-        email,
-        created_at: user.createdAt,
-      });
+      setTimeout(() => {
+        window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
+        window.Intercom('update', {
+          user_id: userId,
+          name: fullName,
+          email,
+          created_at: user.createdAt,
+        });
+      }, 2000);
       DesktopNotification.requestPermission();
     }
 
