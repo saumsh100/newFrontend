@@ -109,7 +109,12 @@ node(jenkinsNodeExecutor) {
   }
   finally {
     if (isValidBranch(mainBranch) || isProduction()) {
-      pipeline.deleteLocalDockerImages()
+      stage("Delete Local Docker Images") {
+        pipeline.removeLocalDockerImages(caEnvironment, caRegion, appGithubRepository)
+        if (isProduction()) {
+          pipeline.removeLocalDockerImages(usEnvironment, usRegion, appGithubRepository)
+        }
+      }
       if (isBranch(mainBranch)) {
         throttle(['noConcurrentJobs']) {
           node(jenkinsNodeExecutor) {
