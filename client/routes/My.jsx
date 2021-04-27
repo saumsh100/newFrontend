@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
@@ -12,6 +11,8 @@ import Unsubscribe from '../components/My/PatientPage/Unsubscribe';
 import ConfirmedEmail from '../components/My/PatientPage/ConfirmedEmail';
 import withAuthProps from '../hocs/withAuthProps';
 
+/* eslint-disable react/jsx-props-no-spreading */
+
 const MyRouter = ({ history }) => {
   // These routes are for the static patient-facing pages
   const PatientPages = (pageProps) => {
@@ -21,18 +22,18 @@ const MyRouter = ({ history }) => {
         <Switch>
           <Route
             exact
-            path="/reset-password/:tokenId"
-            render={props => <ResetPassword {...props} params={params} />}
+            path="/my/reset-password/:tokenId"
+            render={(props) => <ResetPassword {...props} params={params} />}
           />
           <Route
             exact
-            path="/sentReminders/:sentReminderId/confirmed"
-            render={props => <ConfirmedAppointment {...props} params={params} />}
+            path="/my/sentReminders/:sentReminderId/confirmed"
+            render={(props) => <ConfirmedAppointment {...props} params={params} />}
           />
-          <Route path="/unsubscribe" render={props => <Unsubscribe {...props} params={params} />} />
+          <Route path="/unsubscribe" render={(props) => <Unsubscribe {...props} params={params} />} />
           <Route
-            path="/signup/confirmed"
-            render={props => <ConfirmedEmail {...props} params={params} />}
+            path="/my/signup/confirmed"
+            render={(props) => <ConfirmedEmail {...props} params={params} />}
           />
           <Route component={FourZeroFour} />
         </Switch>

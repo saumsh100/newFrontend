@@ -97,7 +97,7 @@ exports.getCompleteHost = (env) => {
       return '';
     }
     const tempHost = API_SERVER.includes('://') ? API_SERVER.split('://')[1] : API_SERVER;
-    const tempPort = tempHost.includes(':') ? tempPort.split(':')[1] : null;
+    const tempPort = tempHost.includes(':') ? tempHost.split(':')[1] : null;
 
     if (tempPort) {
       return tempPort === ('80') && protocol === 'https' ? '' : `:${tempPort}`;
@@ -118,7 +118,7 @@ exports.getCompleteHost = (env) => {
     const [tempProtocol, tempHost] = API_SERVER.includes('://')
       ? API_SERVER.split('://')
       : [checkForProtocol(API_SERVER), API_SERVER.split(':')[0]];
-    host = tempHost;
+    host = tempHost.split(':')[0];
     protocol = tempProtocol;
     port = checkForPort();
   }

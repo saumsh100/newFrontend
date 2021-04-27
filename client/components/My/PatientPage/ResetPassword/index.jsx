@@ -63,6 +63,7 @@ class ResetPassword extends React.Component {
             />
           )}
         </Section>
+        <Section />
       </div>
     );
   }
@@ -78,7 +79,7 @@ ResetPassword.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
 };
 
-const mapActionsToProps = dispatch =>
+const mapActionsToProps = (dispatch) =>
   bindActionCreators(
     {
       resetPatientPassword,

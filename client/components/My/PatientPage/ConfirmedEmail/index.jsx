@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Section from '../Shared/Section';
 import { Button } from '../../../library';
 import styles from './styles.scss';
+import { accountShape } from '../../../library/PropTypeShapes';
 
 export default function ConfirmedEmail({ params }) {
   const { account } = params;
@@ -26,10 +27,11 @@ export default function ConfirmedEmail({ params }) {
           />
         </a>
       </Section>
+      <Section />
     </div>
   );
 }
 
 ConfirmedEmail.propTypes = {
-  params: PropTypes.shape({}).isRequired,
+  params: PropTypes.shape(accountShape).isRequired,
 };
