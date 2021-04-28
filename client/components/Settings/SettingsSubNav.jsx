@@ -1,72 +1,91 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import find from 'lodash/find';
 import { RouterList } from '../library';
+import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
-const PATHS = {
-  '/settings/practice': [
-    {
-      to: '/settings/practice/general',
-      label: 'General',
-    },
-    {
-      to: '/settings/practice/users',
-      label: 'Users',
-    },
-    {
-      to: '/settings/practice/hours',
-      label: 'Office Hours',
-    },
-    {
-      to: '/settings/practice/onlinebooking',
-      label: 'Online Booking',
-    },
-    {
-      to: '/settings/practice/chairs',
-      label: 'Chairs',
-    },
-    {
-      to: '/settings/practice/superadmin',
-      label: 'Super Admin',
-      adminOnly: true,
-    },
-  ],
+function SettingsSubNav({ location, className, users, featureFlags, ...props }) {
+  const {
+    useReminderWorkflowService,
+    useVirtualWaitRoomService,
+    useRecallService,
+    useReviewService,
+  } = props;
 
-  '/settings/donna': [
-    {
-      to: '/settings/donna/reminders',
-      label: 'Reminders',
-      icon: 'clock',
-    },
-    {
-      to: '/settings/donna/recalls',
-      label: 'Recalls',
-    },
-    {
-      to: '/settings/donna/reviews',
-      label: 'Reviews',
-    },
-  ],
+  const PATHS = {
+    '/settings/practice': [
+      {
+        to: '/settings/practice/general',
+        label: 'General',
+      },
+      {
+        to: '/settings/practice/users',
+        label: 'Users',
+      },
+      {
+        to: '/settings/practice/hours',
+        label: 'Office Hours',
+      },
+      {
+        to: '/settings/practice/onlinebooking',
+        label: 'Online Booking',
+      },
+      {
+        to: '/settings/practice/chairs',
+        label: 'Chairs',
+      },
+      {
+        to: '/settings/practice/superadmin',
+        label: 'Super Admin',
+        adminOnly: true,
+      },
+    ],
 
-  '/settings/reasons': [
-    {
-      to: '/settings/reasons/reasonslist',
-      label: 'Reasons List',
-    },
-  ],
+    '/settings/donna': [
+      {
+        to: useReminderWorkflowService
+          ? '/settings/workflow/reminders'
+          : '/settings/donna/reminders',
+        label: 'Reminders',
+        icon: 'clock',
+      },
+      {
+        to: useRecallService ? '/settings/workflow/recalls' : '/settings/donna/recalls',
+        label: 'Recalls',
+      },
+      {
+        to: useReviewService ? '/settings/workflow/reviews' : '/settings/donna/reviews',
+        label: 'Reviews',
+      },
+      {
+        to: useVirtualWaitRoomService
+          ? '/settings/workflow/virtual-waiting-room'
+          : '/settings/donna/reminders',
+        label: 'Virtual Waiting Room',
+      },
+      {
+        to: '/settings/donna/admin/email-template-generator',
+        label: 'Super Admin',
+      },
+    ],
 
-  '/settings/practitioners': [
-    {
-      to: '/settings/practitioners/practitionerslist',
-      label: 'Practitioners List',
-    },
-  ],
-};
+    '/settings/reasons': [
+      {
+        to: '/settings/reasons/reasonslist',
+        label: 'Reasons List',
+      },
+    ],
 
-function SettingsSubNav({ location, className, users, featureFlags }) {
+    '/settings/practitioners': [
+      {
+        to: '/settings/practitioners/practitionerslist',
+        label: 'Practitioners List',
+      },
+    ],
+  };
+
   const routes = find(PATHS, (route, key) => location.pathname.indexOf(key) === 0);
   const { flags } = featureFlags.toJS();
 
@@ -87,6 +106,10 @@ SettingsSubNav.propTypes = {
   location: PropTypes.objectOf(PropTypes.string).isRequired,
   users: PropTypes.instanceOf(Map).isRequired,
   featureFlags: PropTypes.instanceOf(Map).isRequired,
+  useReminderWorkflowService: PropTypes.bool.isRequired,
+  useVirtualWaitRoomService: PropTypes.bool.isRequired,
+  useRecallService: PropTypes.bool.isRequired,
+  useReviewService: PropTypes.bool.isRequired,
 };
 
 SettingsSubNav.defaultProps = {
@@ -94,7 +117,30 @@ SettingsSubNav.defaultProps = {
 };
 
 function mapStateToProps({ featureFlags }) {
-  return { featureFlags };
+  const useReminderWorkflowService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-reminder',
+  );
+  const useVirtualWaitRoomService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-wait-room',
+  );
+  const useReviewService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-review',
+  );
+  const useRecallService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-recall',
+  );
+
+  return {
+    featureFlags,
+    useReminderWorkflowService,
+    useVirtualWaitRoomService,
+    useRecallService,
+    useReviewService,
+  };
 }
 
 const enhance = connect(mapStateToProps, null);

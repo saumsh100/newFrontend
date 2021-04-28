@@ -5,6 +5,7 @@ import historyShape from '../../components/library/PropTypeShapes/historyShape';
 import locationShape from '../../components/library/PropTypeShapes/locationShape';
 import userShape from '../../components/library/PropTypeShapes/patientUserShape';
 import AccountModel from '../../entities/models/Account';
+import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 import MicroFrontEnd from '../micro-front-end';
 
 const { WORKFLOW_HOST: workflowHost } = process.env;
@@ -32,10 +33,33 @@ Workflow.propTypes = {
   role: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ entities, auth }) => ({
-  activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
-  user: auth.get('user').toJS(),
-  role: auth.get('role'),
-});
+const mapStateToProps = ({ entities, auth, featureFlags }) => {
+  const useReminderWorkflowService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-reminder',
+  );
+  const useVirtualWaitRoomService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-wait-room',
+  );
+  const useReviewService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-review',
+  );
+  const useRecallService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-recall',
+  );
+
+  return {
+    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
+    user: auth.get('user').toJS(),
+    role: auth.get('role'),
+    useCCPReminder: !useReminderWorkflowService,
+    useCCPVirtualWaitRoom: !useVirtualWaitRoomService,
+    useCCPRecall: !useRecallService,
+    useCCPReview: !useReviewService,
+  };
+};
 
 export default connect(mapStateToProps)(Workflow);

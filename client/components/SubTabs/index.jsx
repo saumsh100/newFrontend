@@ -1,21 +1,11 @@
-
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { RouterTabs } from '../library';
+import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
 const ROUTES = {
-  '/schedule': [
-    /* {
-      to: '/schedule/calendar',
-      label: 'Calendar View',
-    },
-    {
-      to: '/schedule/appointments',
-      label: 'Appointments List',
-      disabled: true,
-    }, */
-  ],
+  '/schedule': [],
 
   '/settings': [
     {
@@ -66,45 +56,44 @@ const ROUTES = {
   ],
 };
 
-class SubTabs extends Component {
-  constructor(props) {
-    super(props);
+const SubTabs = (props) => {
+  const {
+    location: { pathname },
+    featureFlags,
+  } = props;
 
-    this.handleTabChange = this.handleTabChange.bind(this);
-  }
+  const activeRoute = Object.keys(ROUTES).find((route) => pathname.indexOf(route) === 0);
+  if (!activeRoute) return null;
 
-  handleTabChange(index) {
-    alert(`Changing to tab ${index}`);
-  }
+  const routes = ROUTES[activeRoute].filter(
+    ({ flag }) => !flag || featureFlags.getIn(['flags', flag]),
+  );
 
-  render() {
-    const {
-      location: { pathname },
-      featureFlags,
-    } = this.props;
-
-    const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
-    if (!activeRoute) return null;
-    const routes = ROUTES[activeRoute].filter(
-      ({ flag }) => !flag || featureFlags.getIn(['flags', flag]),
+  const updatedRoutes = routes.map((route) => {
+    if (route.label !== 'Donna') {
+      return route;
+    }
+    const isReminderWorkflowEnabled = isFeatureEnabledSelector(
+      featureFlags.get('flags'),
+      'use-templates-from-workflow-service-reminder',
     );
 
-    return <RouterTabs routes={routes} />;
-  }
-}
+    route.to = isReminderWorkflowEnabled ? '/settings/workflow' : '/settings/donna/reminders';
+    return route;
+  });
+
+  return <RouterTabs routes={updatedRoutes} />;
+};
 
 SubTabs.propTypes = {
   location: PropTypes.objectOf(PropTypes.any).isRequired,
-  featureFlags: PropTypes.shape({}).isRequired,
+  featureFlags: PropTypes.instanceOf(Map).isRequired,
 };
 
 const mapStateToProps = ({ featureFlags }) => ({
   featureFlags,
 });
 
-const enhance = connect(
-  mapStateToProps,
-  null,
-);
+const enhance = connect(mapStateToProps, null);
 
 export default enhance(SubTabs);

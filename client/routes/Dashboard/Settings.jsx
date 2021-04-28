@@ -1,20 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
-
-import PropTypes from 'prop-types';
 import React, { lazy, Suspense } from 'react';
 import DocumentTitle from 'react-document-title';
-import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Donna from '../../components/Settings/Donna';
 import Practice from '../../components/Settings/Practice';
 import Container from '../../containers/SettingsContainer';
 import Workflows from '../../micro-front-ends/settings/workflow';
-import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
 const base = (path = '') => `/settings${path}`;
 const practiceBase = (path = '') => base(`/practice${path}`);
-const donnaBase = (path = '') => base(`/donna${path}`);
+const donnaBase = (path = '') => base(`/workflow${path}`);
+const donnaOldBase = (path = '') => base(`/donna${path}`);
 
 const Routes = {
   clinicGeneral: lazy(() => import('../../components/Settings/Practice/General')),
@@ -51,25 +48,23 @@ const PracticeContainer = (props) => (
 const DonnaContainer = (props) => (
   <Donna {...props}>
     <Switch>
-      <Redirect exact from={donnaBase()} to={donnaBase('/reminders')} />
-      <Route path={donnaBase('/reminders')} component={Routes.reminders} />
-      <Route path={donnaBase('/recalls')} component={Routes.recalls} />
-      <Route path={donnaBase('/reviews')} component={Routes.reviews} />
+      <Redirect exact from={donnaOldBase()} to={donnaBase('/reminders')} />
+      <Route path={donnaOldBase('/reminders')} component={Routes.reminders} />
+      <Route path={donnaOldBase('/recalls')} component={Routes.recalls} />
+      <Route path={donnaOldBase('/reviews')} component={Routes.reviews} />
     </Switch>
   </Donna>
 );
 
-const Settings = (props) => {
-  const { useWorkflowService, ...rest } = props;
-
+const Settings = () => {
   return (
     <DocumentTitle title="CareCru | Settings">
       <Suspense fallback={<Loader />}>
         <Switch>
-          {useWorkflowService && <Route path={donnaBase()} component={Workflows} />}
-          <Container {...rest}>
+          <Route path={donnaBase()} component={Workflows} />
+          <Container>
             <Route path={practiceBase()} component={PracticeContainer} />
-            {!useWorkflowService && <Route path={donnaBase()} component={DonnaContainer} />}
+            <Route path={donnaOldBase()} component={DonnaContainer} />
             <Route path={base('/reasons')} component={Routes.reasons} />
             <Route path={base('/practitioners')} component={Routes.practitioners} />
             <Route path={base('/forms')} component={Routes.forms} />
@@ -81,21 +76,4 @@ const Settings = (props) => {
   );
 };
 
-Settings.propTypes = {
-  useWorkflowService: PropTypes.bool.isRequired,
-};
-
-function mapStateToProps({ featureFlags }) {
-  const useWorkflowService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-templates-from-workflow-service',
-  );
-
-  return {
-    useWorkflowService,
-  };
-}
-
-const enhance = connect(mapStateToProps);
-
-export default enhance(Settings);
+export default Settings;
