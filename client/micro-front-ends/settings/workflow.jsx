@@ -38,10 +38,6 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
     featureFlags.get('flags'),
     'use-templates-from-workflow-service-reminder',
   );
-  const useVirtualWaitRoomService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-templates-from-workflow-service-wait-room',
-  );
   const useReviewService = isFeatureEnabledSelector(
     featureFlags.get('flags'),
     'use-templates-from-workflow-service-review',
@@ -56,7 +52,7 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
     user: auth.get('user').toJS(),
     role: auth.get('role'),
     useCCPReminder: !useReminderWorkflowService,
-    useCCPVirtualWaitRoom: !useVirtualWaitRoomService,
+    useCCPVirtualWaitRoom: !useReminderWorkflowService,
     useCCPRecall: !useRecallService,
     useCCPReview: !useReviewService,
   };

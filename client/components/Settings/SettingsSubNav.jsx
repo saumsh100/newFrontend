@@ -7,12 +7,7 @@ import { RouterList } from '../library';
 import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
 function SettingsSubNav({ location, className, users, featureFlags, ...props }) {
-  const {
-    useReminderWorkflowService,
-    useVirtualWaitRoomService,
-    useRecallService,
-    useReviewService,
-  } = props;
+  const { useReminderWorkflowService, useRecallService, useReviewService } = props;
 
   const PATHS = {
     '/settings/practice': [
@@ -60,7 +55,7 @@ function SettingsSubNav({ location, className, users, featureFlags, ...props }) 
         label: 'Reviews',
       },
       {
-        to: useVirtualWaitRoomService
+        to: useReminderWorkflowService
           ? '/settings/workflow/virtual-waiting-room'
           : '/settings/donna/reminders',
         label: 'Virtual Waiting Room',
@@ -107,7 +102,6 @@ SettingsSubNav.propTypes = {
   users: PropTypes.instanceOf(Map).isRequired,
   featureFlags: PropTypes.instanceOf(Map).isRequired,
   useReminderWorkflowService: PropTypes.bool.isRequired,
-  useVirtualWaitRoomService: PropTypes.bool.isRequired,
   useRecallService: PropTypes.bool.isRequired,
   useReviewService: PropTypes.bool.isRequired,
 };
@@ -121,10 +115,6 @@ function mapStateToProps({ featureFlags }) {
     featureFlags.get('flags'),
     'use-templates-from-workflow-service-reminder',
   );
-  const useVirtualWaitRoomService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-templates-from-workflow-service-wait-room',
-  );
   const useReviewService = isFeatureEnabledSelector(
     featureFlags.get('flags'),
     'use-templates-from-workflow-service-review',
@@ -137,7 +127,6 @@ function mapStateToProps({ featureFlags }) {
   return {
     featureFlags,
     useReminderWorkflowService,
-    useVirtualWaitRoomService,
     useRecallService,
     useReviewService,
   };
