@@ -40,7 +40,7 @@ const generateChartOptions = () => {
           gridLines: {
             display: true,
             drawTicks: false,
-            color: '#00000',
+            color: '#2e3845',
             tickMarkLength: 20,
             offsetGridLines: true,
           },

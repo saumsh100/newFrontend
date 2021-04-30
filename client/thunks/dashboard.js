@@ -38,6 +38,7 @@ export function fetchInsights() {
   return async function(dispatch, getState) {
     try {
       const { auth, dashboard, entities } = getState();
+      if (!auth) window.location.reload();
       const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
       const timezone = account.get('timezone');
 

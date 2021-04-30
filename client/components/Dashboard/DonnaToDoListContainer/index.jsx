@@ -63,13 +63,12 @@ class DonnaToDoListContainer extends Component {
   }
 }
 
-function mapStateToProps({ entities, auth, apiRequests, dashboard }) {
+function mapStateToProps({ auth, apiRequests, dashboard }) {
   const wasAccountFetched =
     apiRequests.get('dashAccount') && apiRequests.getIn(['dashAccount', 'wasFetched']);
 
-  const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   return {
-    account,
+    account: auth.get('account'),
     wasAccountFetched,
     loadingToDos: dashboard.get('loadingToDos'),
     reminders: dashboard.get('reminders'),

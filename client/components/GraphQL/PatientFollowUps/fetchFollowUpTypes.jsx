@@ -13,7 +13,7 @@ const query = gql`
   }
 `;
 
-const FetchFollowUpTypes = ({ children }) => <Query query={query}>{children}</Query>;
+const FetchFollowUpTypes = ({ children }) => <Query fetchPolicy='cache-and-network' query={query}>{children}</Query>;
 
 FetchFollowUpTypes.propTypes = {
   children: PropTypes.func,

@@ -51,15 +51,19 @@ load()(store.dispatch).then(() => {
         user,
       });
 
-      setTimeout(() => {
-        window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
-        window.Intercom('update', {
-          user_id: userId,
-          name: fullName,
-          email,
-          created_at: user.createdAt,
-        });
-      }, 2000);
+      const handleIntercomCheck = setInterval(() => {
+        if (window.Intercom && typeof window.Intercom === 'function') {
+          window.Intercom('boot', { app_id: process.env.INTERCOM_APP_ID });
+          window.Intercom('update', {
+            user_id: userId,
+            name: fullName,
+            email,
+            created_at: user.createdAt,
+          });
+          clearInterval(handleIntercomCheck);
+        }
+      }, 1000);
+
       DesktopNotification.requestPermission();
     }
 

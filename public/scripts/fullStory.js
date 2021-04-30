@@ -3,13 +3,13 @@
 /* eslint-disable camelcase */
 if (window !== window.top) window._fs_is_outer_script = true;
 
-const _fs_host = 'fullstory.com';
 window._fs_debug = window.debug || false;
-window._fs_host = _fs_host;
+window._fs_host = 'fullstory.com';
+window._fs_script = 'edge.fullstory.com/s/fs.js';
 window._fs_org = 'MVWBF';
 window._fs_namespace = 'FS';
 
-function fullStory(m, n, e, t, l, o, g, y) {
+(function fullStory(m, n, e, t, l, o, g, y) {
   if (e in m) {
     if (m.console && m.console.log) {
       m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].');
@@ -23,7 +23,7 @@ function fullStory(m, n, e, t, l, o, g, y) {
   o = n.createElement(t);
   o.async = 1;
   o.crossOrigin = 'anonymous';
-  o.src = `https://${_fs_host}/s/fs.js`;
+  o.src = `https://${m._fs_script}`;
   y = n.getElementsByTagName(t)[0];
   y.parentNode.insertBefore(o, y);
   g.identify = function (i, v, s) {
@@ -58,6 +58,4 @@ function fullStory(m, n, e, t, l, o, g, y) {
     g(o, v);
   };
   g.clearUserCookie = () => {};
-}
-
-fullStory(window, document, window._fs_namespace, 'script', 'user');
+})(window, document, window._fs_namespace, 'script', 'user')

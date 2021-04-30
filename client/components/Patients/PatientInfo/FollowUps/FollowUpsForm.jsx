@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../../library';
@@ -77,9 +76,10 @@ export default function FollowUpsForm({
         component="DayPickerWithHelpers"
       />
       <FetchFollowUpTypes>
-        {({ loading, error, data: { patientFollowUpTypes } }) => {
+        {({ loading, error, data }) => {
           if (loading) return <Loader isLoaded={loading} />;
           if (error) return `Error!: ${error}`;
+          const { patientFollowUpTypes } = data;
           return (
             <Field
               required
