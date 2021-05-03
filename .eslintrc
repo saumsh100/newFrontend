@@ -20,6 +20,7 @@
     "no-console": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-props-no-spreading": "off",
     "new-cap": "off",
     "linebreak-style": "off",
     "implicit-arrow-linebreak": "off",

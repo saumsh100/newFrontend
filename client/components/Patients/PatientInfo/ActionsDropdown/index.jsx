@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -29,18 +28,18 @@ class PatientActionsDropdown extends Component {
     }
   }
 
+  handleGoToChat(patientId) {
+    return this.props.getOrCreateChatForPatient(patientId);
+  }
+
   toggleForm(setFormActive) {
     const { patient } = this.props;
     this.props.setActivePatient(patient);
     setFormActive(true);
   }
 
-  handleGoToChat(patientId) {
-    return this.props.getOrCreateChatForPatient(patientId);
-  }
-
   render() {
-    const { canAddNote, canAddFollowUp, canLogRecall } = this.props;
+    const { canAddNote, canAddFollowUp, canLogRecall, canTextPatient } = this.props;
 
     const actionMenuItems = [];
     canAddNote &&
@@ -64,11 +63,12 @@ class PatientActionsDropdown extends Component {
         onClick: () => this.toggleForm(this.props.setIsRecallsFormActive),
       });
 
-    actionMenuItems.push({
-      key: 'go-to-chat',
-      children: <div>Text Patient</div>,
-      onClick: () => this.handleGoToChat(this.props.patient.id),
-    });
+    canTextPatient &&
+      actionMenuItems.push({
+        key: 'go-to-chat',
+        children: <div>Text Patient</div>,
+        onClick: () => this.handleGoToChat(this.props.patient.id),
+      });
 
     actionMenuItems.push({
       key: 'go-patient-profile',
@@ -85,6 +85,7 @@ PatientActionsDropdown.propTypes = {
   canAddNote: PropTypes.bool,
   canAddFollowUp: PropTypes.bool,
   canLogRecall: PropTypes.bool,
+  canTextPatient: PropTypes.bool,
   setActivePatient: PropTypes.func.isRequired,
   setIsNoteFormActive: PropTypes.func.isRequired,
   setIsFollowUpsFormActive: PropTypes.func.isRequired,
@@ -98,6 +99,7 @@ PatientActionsDropdown.defaultProps = {
   canAddNote: false,
   canAddFollowUp: false,
   canLogRecall: false,
+  canTextPatient: false,
   patientChat: '',
 };
 
@@ -115,22 +117,27 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStateToProps({ featureFlags, chat }) {
+function mapStateToProps({ featureFlags, chat }, { patient }) {
   const features = featureFlags.get('flags');
   const canAddNote = isFeatureEnabledSelector(features, 'patient-add-note-action');
   const canAddFollowUp = isFeatureEnabledSelector(features, 'patient-add-follow-up-action');
   const canLogRecall = isFeatureEnabledSelector(features, 'patient-log-recall-action');
+  const canTextPatient =
+    patient &&
+    (patient.foundChatId ||
+      patient.cellPhoneNumber ||
+      patient.homePhoneNumber ||
+      patient.workPhoneNumber);
+
   return {
     canAddNote,
     canAddFollowUp,
     canLogRecall,
+    canTextPatient,
     patientChat: chat.get('patientChat'),
   };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(PatientActionsDropdown);
