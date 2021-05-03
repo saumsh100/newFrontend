@@ -47,7 +47,7 @@ class MessageTextArea extends Component {
       caretPossition,
     )}`;
     this.props.change(`chatMessageForm_${chat.id}`, 'message', newMessage);
-    this.emojiDropdown.current.toggle();
+    this.emojiDropdown.current.props.clickToogle();
   }
 
   contactPoC() {
@@ -147,9 +147,7 @@ class MessageTextArea extends Component {
         <SFooter className={styles.sendIconWrapper}>
           <div className={styles.smileIcon}>
             <DropdownMenu
-              ref={(dropdown) => {
-                this.emojiDropdown = dropdown;
-              }}
+              ref={this.emojiDropdown}
               labelComponent={props => (
                 <Button {...props}>
                   <Icon icon="smile" />

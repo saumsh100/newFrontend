@@ -7,7 +7,7 @@ import Icon from '../Icon';
 import { ListItem } from '../List';
 import styles from './styles.scss';
 
-export const DropdownMenu = ({
+export const DropdownMenu = React.forwardRef(({
   children,
   className,
   labelProps,
@@ -15,7 +15,7 @@ export const DropdownMenu = ({
   align,
   upwards,
   ...props
-}) => {
+}, ref) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
@@ -32,15 +32,17 @@ export const DropdownMenu = ({
     children,
     isOpen,
     close,
+    clickToogle: toggle,
     toggle: <props.labelComponent {...labelProps} onClick={toggle} />,
     closeOnInsideClick,
     className: classNames(className, styles.dropdownContainer),
     align: align || 'right',
     upwards,
+    ref
   };
 
   return <RDropdownMenu {...menuOptions} />;
-};
+});
 
 DropdownMenu.defaultProps = {
   labelProps: {},
