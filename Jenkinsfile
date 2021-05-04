@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-@Library('pipeline-library') _
+@Library('pipeline-library@feature/addRegionToDeployments') _
 import com.carecru.pipeline.library.deployment.Deployment
 
 appGithubRepository = "frontend"
@@ -72,11 +72,9 @@ def parallelDeployApp(Deployment pipeline, String region, String environment) {
     }
     if (isProduction()) {
       parallelServiceNames["${serviceName}-us"] = {
-        setVars(usRegion)
         pipeline.deployApp(serviceName, usRegion, usEnvironment, dockerVersionTag, ecsClusterName, appGithubRepository)
       }
       parallelServiceNames["${serviceName}-demo"] = {
-        setVars(caRegion)
         pipeline.deployApp(serviceName, caRegion, demoEnvironment, dockerVersionTag, demoEcsClusterName, appGithubRepository)
       }
     }
