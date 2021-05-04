@@ -26,12 +26,14 @@ if (isPullRequest()) {
   execution_environment   = "TEST"
   frontendMySubdomain     = "${caEnvironment}"
 } else {
-  caEnvironment             = "prod"
-  usEnvironment             = "prod-us"
-  ecsClusterName            = "prod-ecs-cluster"
-  frontendUrl               = "https://carecru.ca and https://carecru.io"
-  execution_environment     = "PRODUCTION"
-  frontendMySubdomain       = "my"
+  caEnvironment           = "prod"
+  usEnvironment           = "prod-us"
+  demoEnvironment         = "demo"
+  ecsClusterName          = "prod-ecs-cluster"
+  demoEcsClusterName      = "demo-ecs-cluster"
+  frontendUrl             = "https://carecru.ca and https://carecru.io"
+  execution_environment   = "PRODUCTION"
+  frontendMySubdomain     = "my"
 }
 
 pipeline = new Deployment(this, caEnvironment, appGithubRepository)
@@ -41,26 +43,45 @@ services = ["${appGithubRepository}": "infra/Dockerfile"]
 
 def parallelBuildDockerImage(Deployment pipeline, String region, String environment) {
   String dockerVersionTag = pipeline.gitCommitNumber()
-  def serviceName = [:]
+  def parallelServiceNames = [:]
   services.each { service ->
-    def newServiceName = service
-    serviceName[newServiceName.getKey()] = {
-      pipeline.buildFrontendDockerImage(newServiceName.getKey(), newServiceName.getValue(), dockerVersionTag, region, environment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
+    def serviceName = service.getKey()
+    def dockerfile = service.getValue()
+    parallelServiceNames["${serviceName}-ca"] = {
+      pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, region, environment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
+    }
+    if (isProduction()) {
+      parallelServiceNames["${serviceName}-us"] = {
+        pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, usRegion, usEnvironment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
+      }
+      parallelServiceNames["${serviceName}-demo"] = {
+        pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, caRegion, demoEnvironment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
+      }
     }
   }
-  return serviceName
+  return parallelServiceNames
 }
 
 def parallelDeployApp(Deployment pipeline, String region, String environment) {
   String dockerVersionTag = pipeline.gitCommitNumber()
-  def serviceName = [:]
+  def parallelServiceNames = [:]
   services.keySet().each { service ->
-    def newServiceName = service
-    serviceName[newServiceName] = {
-      pipeline.deployApp(newServiceName, region, environment, dockerVersionTag, ecsClusterName, appGithubRepository)
+    def serviceName = service
+    parallelServiceNames["${serviceName}-ca"] = {
+      pipeline.deployApp(serviceName, region, environment, dockerVersionTag, ecsClusterName, appGithubRepository)
+    }
+    if (isProduction()) {
+      parallelServiceNames["${serviceName}-us"] = {
+        setVars(usRegion)
+        pipeline.deployApp(serviceName, usRegion, usEnvironment, dockerVersionTag, ecsClusterName, appGithubRepository)
+      }
+      parallelServiceNames["${serviceName}-demo"] = {
+        setVars(caRegion)
+        pipeline.deployApp(serviceName, caRegion, demoEnvironment, dockerVersionTag, demoEcsClusterName, appGithubRepository)
+      }
     }
   }
-  return serviceName
+  return parallelServiceNames
 }
 
 node(jenkinsNodeExecutor) {
@@ -78,28 +99,15 @@ node(jenkinsNodeExecutor) {
           }
         }
       }
-      stage('Build CA Docker Images') {
+      stage('Build Docker Images') {
         parallel parallelBuildDockerImage(pipeline, caRegion, caEnvironment)
       }
-      if (isProduction()) {
-        setVars(usRegion)
-        stage('Build US Docker Images') {
-          parallel parallelBuildDockerImage(pipeline, usRegion, usEnvironment)
-        }
-      }
-      setVars(caRegion)
       if (isPullRequest()) {
         pipeline.runMigrationsOrSeed(migrationTaskDefinitionName, ecsClusterName)
         pipeline.runMigrationsOrSeed(seedTaskDefinitionName, ecsClusterName)
       }
-      stage('Deploy CA App') {
+      stage('Deploy Application') {
         parallel parallelDeployApp(pipeline, caRegion, caEnvironment)
-      }
-      if (isProduction()) {
-        setVars(usRegion)
-        stage('Deploy US App') {
-          parallel parallelDeployApp(pipeline, usRegion, usEnvironment)
-        }
       }
     }
     currentBuild.result = "SUCCESS"
