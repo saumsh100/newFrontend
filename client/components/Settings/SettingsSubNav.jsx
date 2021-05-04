@@ -54,16 +54,6 @@ function SettingsSubNav({ location, className, users, featureFlags, ...props }) 
         to: useReviewService ? '/settings/workflow/reviews' : '/settings/donna/reviews',
         label: 'Reviews',
       },
-      {
-        to: useReminderWorkflowService
-          ? '/settings/workflow/virtual-waiting-room'
-          : '/settings/donna/reminders',
-        label: 'Virtual Waiting Room',
-      },
-      {
-        to: '/settings/donna/admin/email-template-generator',
-        label: 'Super Admin',
-      },
     ],
 
     '/settings/reasons': [
@@ -81,6 +71,18 @@ function SettingsSubNav({ location, className, users, featureFlags, ...props }) 
     ],
   };
 
+  if (useReminderWorkflowService) {
+    PATHS['/settings/donna'].push(
+      {
+        to: '/settings/workflow/virtual-waiting-room',
+        label: 'Virtual Waiting Room',
+      },
+      {
+        to: '/settings/workflow/admin/migration',
+        label: 'Super Admin',
+      },
+    );
+  }
   const routes = find(PATHS, (route, key) => location.pathname.indexOf(key) === 0);
   const { flags } = featureFlags.toJS();
 
