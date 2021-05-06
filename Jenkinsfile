@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-@Library('pipeline-library@feature/addRegionToDeployments') _
+@Library('pipeline-library') _
 import com.carecru.pipeline.library.deployment.Deployment
 
 appGithubRepository = "frontend"
@@ -101,8 +101,8 @@ node(jenkinsNodeExecutor) {
         parallel parallelBuildDockerImage(pipeline, caRegion, caEnvironment)
       }
       if (isPullRequest()) {
-        pipeline.runMigrationsOrSeed(migrationTaskDefinitionName, ecsClusterName)
-        pipeline.runMigrationsOrSeed(seedTaskDefinitionName, ecsClusterName)
+        pipeline.runMigrationsOrSeed(migrationTaskDefinitionName, ecsClusterName, caRegion)
+        pipeline.runMigrationsOrSeed(seedTaskDefinitionName, ecsClusterName, caRegion)
       }
       stage('Deploy Application') {
         parallel parallelDeployApp(pipeline, caRegion, caEnvironment)
@@ -115,12 +115,6 @@ node(jenkinsNodeExecutor) {
   }
   finally {
     if (isValidBranch(mainBranch) || isProduction()) {
-      stage("Delete Local Docker Images") {
-        pipeline.removeLocalDockerImages(caEnvironment, caRegion, appGithubRepository)
-        if (isProduction()) {
-          pipeline.removeLocalDockerImages(usEnvironment, usRegion, appGithubRepository)
-        }
-      }
       if (isBranch(mainBranch)) {
         throttle(['noConcurrentJobs']) {
           node(jenkinsNodeExecutor) {
