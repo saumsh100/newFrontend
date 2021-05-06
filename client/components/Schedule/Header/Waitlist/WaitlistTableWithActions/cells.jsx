@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import tableStyles from '../tableStyles.scss';
 import styles from './styles.scss';
@@ -10,7 +9,7 @@ import Tooltip from '../../../../Tooltip';
 
 export const ManageCell = ({ value }) => (
   <DropdownMenu
-    labelComponent={props => (
+    labelComponent={(props) => (
       <Button {...props} className={tableStyles.ellipsisButton}>
         <EllipsisIcon />
       </Button>
@@ -84,16 +83,67 @@ export const LastNameCell = ({ value }) => {
 
 LastNameCell.propTypes = namePropTypes;
 
-export const TimesCell = ({ value }) => (
-  <Tooltip
-    body={<div>{value.times}</div>}
-    placement="below"
-    tipSize={0.01}
-    styleOverride={tableStyles.notesTooltip}
-  >
-    <div className={tableStyles.noteTDWrapper}>{value.times}</div>
-  </Tooltip>
-);
+const DivTimesText = ({ times }) => {
+  const divRef = useRef(null);
+
+  /**
+   * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
+   *
+   * @param {String} text The text to be rendered.
+   * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
+   *
+   * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
+   */
+  function getTextWidth(text, font) {
+    // re-use canvas object for better performance
+    const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement('canvas'));
+    const context = canvas.getContext('2d');
+    context.font = font;
+    const metrics = context.measureText(text);
+    return metrics.width;
+  }
+
+  const trimTimes = useCallback(
+    (value) => {
+      if (divRef.current) {
+        const fontSize = parseFloat(window.getComputedStyle(divRef.current)['font-size']);
+        const valueParts = value.split('; ');
+        let valueTruncated = value;
+        const divMaxWidth = 100;
+        while (getTextWidth(valueTruncated, `${fontSize + 2}px sans-serif`) > divMaxWidth) {
+          valueParts.pop();
+          valueTruncated = `${valueParts.join('; ')}...`;
+        }
+        return valueTruncated;
+      }
+      return value;
+    },
+    [times],
+  );
+
+  return (
+    <div ref={divRef} className={tableStyles.noteTDWrapper}>
+      {trimTimes(times)}
+    </div>
+  );
+};
+
+DivTimesText.propTypes = {
+  times: PropTypes.string.isRequired,
+};
+
+export const TimesCell = ({ value }) => {
+  return (
+    <Tooltip
+      body={<div>{value.times}</div>}
+      placement="below"
+      tipSize={0.01}
+      styleOverride={tableStyles.notesTooltip}
+    >
+      <DivTimesText times={value.times} />
+    </Tooltip>
+  );
+};
 
 TimesCell.propTypes = {
   value: PropTypes.shape({
