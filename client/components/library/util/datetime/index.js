@@ -132,6 +132,18 @@ export const getFormattedDate = (date, format, timezone = null, useLocalTime = f
 
 /**
  * @param {string|Date|moment} date
+ * @param {string} timezone
+ * @param {boolean} useLocalTime set if it should use the computer timezone or not
+ * @returns {number} A string witth age
+ */
+ export const calculateAge = (date, timezone = null, useLocalTime = false) => {
+  const hasTimezone = () => (useLocalTime ? parseDate(date, timezone) : getUTCDate(date, timezone));
+  const dateToUse = timezone ? hasTimezone() : getDate(date);
+  return getTodaysDate(timezone).diff(dateToUse, 'years')
+};
+
+/**
+ * @param {string|Date|moment} date
  * @param {(string|string[])} format
  * @param {boolean} [strict] strict mode is disabled by default
  * @returns {boolean} check if the date is valid or nor in a given format

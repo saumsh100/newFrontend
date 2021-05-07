@@ -82,8 +82,10 @@ const VButton = Button;
 export { VButton, Button };
 
 export {
+  calculateAge,
   checkForDST,
   DateTimeObj,
+  formatTimeToTz,
   generateTimeBreaks,
   generateTimeOptions,
   getDate,
@@ -104,7 +106,6 @@ export {
   isDateValid,
   parseDate,
   parseDateWithFormat,
-  formatTimeToTz,
   WeeklyScheduleShape,
 } from './util/datetime';
 

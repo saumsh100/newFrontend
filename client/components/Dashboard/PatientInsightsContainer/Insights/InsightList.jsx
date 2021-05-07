@@ -1,14 +1,14 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatPhoneNumber } from '../../../../util/isomorphic';
 import { patientShape, appointmentShape } from '../../../library/PropTypeShapes';
 import {
-  PatientPopover,
-  Avatar,
   AppointmentPopover,
+  Avatar,
+  calculateAge,
   getFormattedDate,
   isDateValid,
+  PatientPopover,
 } from '../../../library';
 import styles from './styles.scss';
 
@@ -52,25 +52,24 @@ function displaySubHeaderDiv(content, index) {
  * @param patient
  * @param gender
  */
-function buildFamilyData(insightObj, patient, gender, timezone) {
+function buildFamilyData(insightObj, patient, timezone) {
   const numOfFam = insightObj.value.length;
   const totalFamilyMember = numOfFam === 1 ? 'family member' : 'family members';
-  const genderOption2 = (gender === 'his' && 'he') || (gender === 'her' && 'she') || 'they';
 
   const header = (
     <div>
-      <span className={styles.patientName}>{patient.firstName}</span> has {numOfFam}{' '}
-      {totalFamilyMember} due for Recare. Ask if {genderOption2} would like to schedule{' '}
-      {numOfFam > 1 ? 'a' : 'this'} family member.
+      <span className={styles.patientName}>{patient.firstName}</span>
+      {` has ${numOfFam} ${totalFamilyMember} due for Recare.`}
     </div>
   );
   const subHeader = (
     <div>
       {insightObj.value.map((famMember, index) => {
         if (isDateValid(famMember.dateDue)) {
+          const famMemberAge = famMember.birthDate ? calculateAge(famMember.birthDate, timezone) : null;
           const subHeaderDiv = (
             <div>
-              {famMember.firstName} {famMember.lastName} was due for{' '}
+              {famMember.firstName} {famMember.lastName} {famMemberAge && `, ${famMemberAge} years old, `} was due for{' '}
               {getFormattedDate(famMember.dateDue, 'MMM Do YYYY', timezone)}
             </div>
           );
@@ -132,7 +131,7 @@ function buildAttemptData(countObj) {
 
   let sentence = '';
   keys
-    .filter(k => countObj[k] > 0)
+    .filter((k) => countObj[k] > 0)
     .forEach((k, index, arr) => {
       const addTo = index < arr.length - 1 ? `${countObj[k]} ${k} and ` : `${countObj[k]} ${k}`;
       if (addTo) {
@@ -184,8 +183,9 @@ export default function InsightList(props) {
   let displayFamilyRecare = null;
 
   insightData.insights.forEach((insightObj) => {
-    const gender = (patient && patient.gender && (patient.gender.toLowerCase() === 'male' ? 'his' : 'her'))
-      || 'their';
+    const gender =
+      (patient && patient.gender && (patient.gender.toLowerCase() === 'male' ? 'his' : 'her')) ||
+      'their';
 
     if (insightObj && insightObj.type === 'missingEmail') {
       displayEmailInsight = buildMissingEmailData(patient, gender);
@@ -200,7 +200,7 @@ export default function InsightList(props) {
     }
 
     if (insightObj && insightObj.type === 'familiesDueRecare') {
-      displayFamilyRecare = buildFamilyData(insightObj, patient, gender, timezone);
+      displayFamilyRecare = buildFamilyData(insightObj, patient, timezone);
     }
   });
 
