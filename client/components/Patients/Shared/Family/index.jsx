@@ -26,6 +26,7 @@ const renderFamilyMembers = (head, timezone) => (node, i, arr) => {
       node.nextApptDate && getUTCDate(node.nextApptDate, timezone).format('MMM D, YYYY'),
     dueForHygieneDate: node.dueForHygieneDate,
     dueForRecallExamDate: node.dueForRecallExamDate,
+    cellPhoneNumber: node.cellPhoneNumber,
   };
 
   const activeAccount = node.status === 'Active';

@@ -27,6 +27,10 @@ export default gql`
             status
             omitReminderIds
             omitRecallIds
+            cellPhoneNumber
+            mobilePhoneNumber
+            homePhoneNumber
+            workPhoneNumber
           }
           members {
             edges {
@@ -46,6 +50,10 @@ export default gql`
                 status
                 omitReminderIds
                 omitRecallIds
+                cellPhoneNumber
+                mobilePhoneNumber
+                homePhoneNumber
+                workPhoneNumber
               }
             }
           }

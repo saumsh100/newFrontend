@@ -10,7 +10,6 @@ import {
   setIsFollowUpsFormActive,
   setIsRecallsFormActive,
 } from '../../../../reducers/patientTable';
-import { isFeatureEnabledSelector } from '../../../../reducers/featureFlags';
 import { getOrCreateChatForPatient } from '../../../../thunks/chat';
 import { patientShape } from '../../../library/PropTypeShapes';
 
@@ -39,52 +38,49 @@ class PatientActionsDropdown extends Component {
   }
 
   render() {
-    const { canAddNote, canAddFollowUp, canLogRecall, canTextPatient } = this.props;
+    const { canTextPatient } = this.props;
 
-    const actionMenuItems = [];
-    canAddNote &&
-      actionMenuItems.push({
+    const actionMenuItems = [
+      {
         key: 'add-note',
         children: <div>Add Note</div>,
         onClick: () => this.toggleForm(this.props.setIsNoteFormActive),
-      });
-
-    canAddFollowUp &&
-      actionMenuItems.push({
+      },
+      {
         key: 'add-follow-up',
         children: <div>Add Follow Up</div>,
         onClick: () => this.toggleForm(this.props.setIsFollowUpsFormActive),
-      });
-
-    canLogRecall &&
-      actionMenuItems.push({
+      },
+      {
         key: 'log-recall',
         children: <div>Log Recall</div>,
         onClick: () => this.toggleForm(this.props.setIsRecallsFormActive),
-      });
-
-    canTextPatient &&
-      actionMenuItems.push({
+      },
+      {
         key: 'go-to-chat',
         children: <div>Text Patient</div>,
-        onClick: () => this.handleGoToChat(this.props.patient.id),
-      });
-
-    actionMenuItems.push({
-      key: 'go-patient-profile',
-      children: <div>Patient Profile</div>,
-      onClick: () => this.props.push(`/patients/${this.props.patient.id}`),
-    });
-
+        onClick: () => canTextPatient ? this.handleGoToChat(this.props.patient.id) : {},
+        disabled: !canTextPatient,
+        tooltipText: (
+          <>
+            This patient has no cellphone registered.
+            <br />
+            Please, check the patient&apos;s personal information!
+          </>
+        ),
+      },
+      {
+        key: 'go-patient-profile',
+        children: <div>Patient Profile</div>,
+        onClick: () => this.props.push(`/patients/${this.props.patient.id}`),
+      },
+    ];
     return <ActionsDropdownMenu actionMenuItems={actionMenuItems} {...this.props} />;
   }
 }
 
 PatientActionsDropdown.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,
-  canAddNote: PropTypes.bool,
-  canAddFollowUp: PropTypes.bool,
-  canLogRecall: PropTypes.bool,
   canTextPatient: PropTypes.bool,
   setActivePatient: PropTypes.func.isRequired,
   setIsNoteFormActive: PropTypes.func.isRequired,
@@ -96,9 +92,6 @@ PatientActionsDropdown.propTypes = {
 };
 
 PatientActionsDropdown.defaultProps = {
-  canAddNote: false,
-  canAddFollowUp: false,
-  canLogRecall: false,
   canTextPatient: false,
   patientChat: '',
 };
@@ -117,22 +110,17 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStateToProps({ featureFlags, chat }, { patient }) {
-  const features = featureFlags.get('flags');
-  const canAddNote = isFeatureEnabledSelector(features, 'patient-add-note-action');
-  const canAddFollowUp = isFeatureEnabledSelector(features, 'patient-add-follow-up-action');
-  const canLogRecall = isFeatureEnabledSelector(features, 'patient-log-recall-action');
-  const canTextPatient =
-    patient &&
-    (patient.foundChatId ||
-      patient.cellPhoneNumber ||
-      patient.homePhoneNumber ||
-      patient.workPhoneNumber);
+function mapStateToProps({ chat }, { patient }) {
+
+  let patientObj = patient;
+
+  if (typeof patientObj.toJS === 'function') {
+    patientObj = patient.toJS();
+  }
+
+  const canTextPatient = !!(patientObj && (patientObj.foundChatId || patientObj.cellPhoneNumber));
 
   return {
-    canAddNote,
-    canAddFollowUp,
-    canLogRecall,
     canTextPatient,
     patientChat: chat.get('patientChat'),
   };
