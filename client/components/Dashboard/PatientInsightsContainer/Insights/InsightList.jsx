@@ -66,10 +66,13 @@ function buildFamilyData(insightObj, patient, timezone) {
     <div>
       {insightObj.value.map((famMember, index) => {
         if (isDateValid(famMember.dateDue)) {
-          const famMemberAge = famMember.birthDate ? calculateAge(famMember.birthDate, timezone) : null;
+          const famMemberAge = famMember.birthDate
+            ? calculateAge(famMember.birthDate, timezone)
+            : null;
           const subHeaderDiv = (
             <div>
-              {famMember.firstName} {famMember.lastName} {famMemberAge && `, ${famMemberAge} years old, `} was due for{' '}
+              {famMember.firstName} {famMember.lastName}
+              {famMemberAge && `, ${famMemberAge} years old, `} was due for recare on{' '}
               {getFormattedDate(famMember.dateDue, 'MMM Do YYYY', timezone)}
             </div>
           );
