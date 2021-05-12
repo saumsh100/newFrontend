@@ -11,7 +11,7 @@
   font-size: 14px;
   height: 3rem;
   padding: 0 1rem;
-  &:hover {
+  &:hover:not([disabled]){
     background-color: $primary-lightgrey !important;
     color: $primary-dark !important;
   }

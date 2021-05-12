@@ -43,5 +43,7 @@
 
   &:hover {
     cursor: not-allowed;
+    color: $disabled-color !important;
+    background-color: $primary-white !important;
   }
 }

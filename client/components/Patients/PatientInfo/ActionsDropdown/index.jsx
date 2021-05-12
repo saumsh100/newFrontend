@@ -63,9 +63,9 @@ class PatientActionsDropdown extends Component {
         disabled: !canTextPatient,
         tooltipText: (
           <>
-            This patient has no cellphone registered.
+            This patient has no cellphone number.
             <br />
-            Please, check the patient&apos;s personal information!
+            Update their contact information to send them a text.
           </>
         ),
       },
