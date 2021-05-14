@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -21,7 +20,7 @@ function ReviewPreview({ review, account, reviewsTemplateName }) {
       let typePreview = null;
       if (type === 'sms') {
         const templateName = 'review-request';
-        const link = 'carecru.co/a35fg';
+        const link = 'cru.care/[review-code]';
         const firstName = 'Jane';
         const url =
           `/api/accounts/${account.id}/renderedTemplate` +
@@ -36,9 +35,7 @@ function ReviewPreview({ review, account, reviewsTemplateName }) {
           </div>
         );
       } else if (type === 'email') {
-        const url = `/api/accounts/${
-          account.id
-        }/emails/preview?templateName=${reviewsTemplateName}`;
+        const url = `/api/accounts/${account.id}/emails/preview?templateName=${reviewsTemplateName}`;
         typePreview = (
           <div>
             <EmailPreview url={url} />
