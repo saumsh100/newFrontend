@@ -1,4 +1,3 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -14,7 +13,11 @@ import Button from '../library/Button';
 import { setIsClicked } from '../../reducers/widgetNavigation';
 import { locationShape, historyShape } from '../library/PropTypeShapes/routerShapes';
 import { AccountTabSVG, FindTimeSVG, ReviewBookSVG } from './SVGs';
-import { refreshFirstStepData, setSelectedServiceId } from '../../reducers/availabilities';
+import {
+  refreshFirstStepData,
+  setSelectedServiceId,
+  setUTMParams,
+} from '../../reducers/availabilities';
 import styles from './styles.scss';
 
 const buildMatchpath = (url, pathname) =>
@@ -43,6 +46,15 @@ class Widget extends Component {
     if (!queryVars.sentRecallId) {
       this.props.setSelectedServiceId(null);
     }
+
+    const utmParams = Object.keys(queryVars).reduce((acc, key) => {
+      if (key.includes('utm_')) {
+        acc[key] = queryVars[key];
+      }
+      return acc;
+    }, {});
+
+    this.props.setUTMParams(utmParams);
   }
 
   componentDidUpdate(prevProps) {
@@ -170,6 +182,7 @@ function mapDispatchToProps(dispatch) {
     {
       setIsClicked,
       setSelectedServiceId,
+      setUTMParams,
       refreshFirstStepData,
     },
     dispatch,
@@ -186,12 +199,8 @@ Widget.propTypes = {
   floatingButtonIsVisible: PropTypes.bool.isRequired,
   floatingButtonIsDisabled: PropTypes.bool.isRequired,
   setIsClicked: PropTypes.func.isRequired,
+  setUTMParams: PropTypes.func.isRequired,
   floatingButtonText: PropTypes.string.isRequired,
 };
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(Widget),
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Widget));

@@ -1,4 +1,3 @@
-
 import { fromJS, Map, OrderedSet } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
 import {
@@ -43,6 +42,7 @@ export const SET_WAITLIST_DATES = `${reducerName}SET_WAITLIST_DATES`;
 export const SET_WAITSPOT_TIMES = `${reducerName}SET_WAITSPOT_TIMES`;
 export const SET_FAMILY_PATIENT_USER = `${reducerName}SET_FAMILY_PATIENT_USER`;
 export const SET_SELECTED_SERVICE_ID = `${reducerName}SET_SELECTED_SERVICE_ID`;
+export const SET_UTM_PARAMS = `${reducerName}SET_UTM_PARAMS`;
 export const REFRESH_FIRST_STEP_DATA = `${reducerName}REFRESH_FIRST_STEP_DATA`;
 export const SET_SELECTED_PRACTITIONER_ID = `${reducerName}SET_SELECTED_PRACTITIONER_ID`;
 export const REFRESH_AVAILABILITIES_STATE = `${reducerName}REFRESH_AVAILABILITIES_STATE`;
@@ -65,6 +65,7 @@ export const setWaitSpotTimes = createAction(SET_WAITSPOT_TIMES);
 export const refreshFirstStepData = createAction(REFRESH_FIRST_STEP_DATA);
 export const setFamilyPatientUser = createAction(SET_FAMILY_PATIENT_USER);
 export const setSelectedServiceId = createAction(SET_SELECTED_SERVICE_ID);
+export const setUTMParams = createAction(SET_UTM_PARAMS);
 export const setSelectedPractitionerId = createAction(SET_SELECTED_PRACTITIONER_ID);
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 export const updateDaysOfTheWeek = createAction(UPDATE_DAYS_OF_THE_WEEK);
@@ -149,7 +150,8 @@ export const createInitialWidgetState = (state) => {
   });
 };
 
-export const getSelectedDaysOfTheWeek = waitSpot => waitSpot.get('daysOfTheWeek').filter(v => v);
+export const getSelectedDaysOfTheWeek = (waitSpot) =>
+  waitSpot.get('daysOfTheWeek').filter((v) => v);
 
 export default handleActions(
   {
@@ -162,6 +164,10 @@ export default handleActions(
 
     [SET_SELECTED_AVAILABILITY](state, action) {
       return state.set('selectedAvailability', action.payload);
+    },
+
+    [SET_UTM_PARAMS](state, action) {
+      return state.set('utmParams', action.payload);
     },
 
     [REFRESH_FIRST_STEP_DATA](state) {
@@ -295,17 +301,18 @@ export default handleActions(
       const account = state.get('account').toJS();
       const searchedDate = getUTCDate(payload, account.timezone).toObject();
       const startDateForToday = getStartTimeForToday(account);
-      const isToday = searchedDate.date === startDateForToday.get('date')
-        && searchedDate.months === startDateForToday.get('month')
-        && searchedDate.years === startDateForToday.get('year');
+      const isToday =
+        searchedDate.date === startDateForToday.get('date') &&
+        searchedDate.months === startDateForToday.get('month') &&
+        searchedDate.years === startDateForToday.get('year');
       const startDate = isToday
         ? startDateForToday.toISOString()
         : parseDate(searchedDate, account.timezone)
-          .hours(0)
-          .minutes(0)
-          .seconds(0)
-          .milliseconds(0)
-          .toISOString();
+            .hours(0)
+            .minutes(0)
+            .seconds(0)
+            .milliseconds(0)
+            .toISOString();
       return state.set('selectedStartDate', startDate);
     },
 
