@@ -21,7 +21,7 @@ function MicroFrontend({ name, host, document, window, ...rest }) {
         script.crossOrigin = '';
         script.src = `${host}${mainJsFileName}`;
         script.onload = renderMicroFrontend;
-        document.head.appendChild(script);
+        document.body.appendChild(script);
 
         // this is for the CSS
         const mainCssFileName = manifest.files['main.css'];

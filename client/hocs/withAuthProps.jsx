@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -29,7 +28,7 @@ const ConnectedInnerComponent = connect(({ auth, featureFlags }) => {
   };
 })(InnerComponent);
 
-export default el => props => (
+export default (el) => (props) => (
   <ConnectedInnerComponent
     {...{
       ...props,

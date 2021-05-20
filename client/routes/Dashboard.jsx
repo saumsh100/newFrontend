@@ -45,7 +45,8 @@ const DashboardRouter = ({ isAuth, isSuperAdmin, isSSO, navigationPreferences })
   if (!navigationPreferences) {
     return null;
   }
-  const n = page => navigationPreferences[page] !== 'disabled';
+
+  const n = (page) => navigationPreferences[page] !== 'disabled';
   const getAuthorizedRoutes = () => (
     <div>
       {GraphQlSubscriptions.subscriptionComponents()}
@@ -68,8 +69,8 @@ const DashboardRouter = ({ isAuth, isSuperAdmin, isSSO, navigationPreferences })
       </Suspense>
     </div>
   );
-  const Dashboard = props =>
-    (isAuth ? (
+  const Dashboard = (props) =>
+    isAuth ? (
       <DashboardApp {...props}>
         <Route render={getAuthorizedRoutes} />
       </DashboardApp>
@@ -80,7 +81,7 @@ const DashboardRouter = ({ isAuth, isSuperAdmin, isSSO, navigationPreferences })
           state: { from: props.location },
         }}
       />
-    ));
+    );
 
   Dashboard.defaultProps = {
     location: {},
@@ -120,27 +121,27 @@ const DashboardRouter = ({ isAuth, isSuperAdmin, isSSO, navigationPreferences })
           <Route
             exact
             path="/login"
-            render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)}
+            render={(props) => (isAuth ? <Redirect to="/" /> : <Login {...props} />)}
           />
           <Route
             exact
             path="/login/sso"
-            render={props => (isAuth ? <Redirect to="/" /> : <LoginSSO {...props} />)}
+            render={(props) => (isAuth ? <Redirect to="/" /> : <LoginSSO {...props} />)}
           />
           <Route
             exact
             path={urlTest}
-            render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)}
+            render={(props) => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)}
           />
           <Route
             exact
             path="/forgot"
-            render={props => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)}
+            render={(props) => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)}
           />
           <Route
             exact
             path={resetTest}
-            render={props => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)}
+            render={(props) => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)}
           />
           <Route exact path="/redirect" render={ExternalRedirector} />
           <Route path="/" component={Dashboard} />

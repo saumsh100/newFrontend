@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { lazy } from 'react';
 import { connect } from 'react-redux';
@@ -9,14 +8,15 @@ const base = (path = '') => `/chat${path}`;
 
 const Routes = {
   chat: lazy(() => import('../../components/Chat')),
+  communicationsChat: lazy(() => import('../../micro-front-ends/communications/chat')),
 };
 
 const Chat = ({ newChat }) =>
-  (newChat ? (
+  newChat ? (
     <DocumentTitle title="CareCru | Chat">
       <Switch>
-        <Route exact path={base()} component={Routes.chat} />
-        <Route path={base('/:chatId')} component={Routes.chat} />
+        <Route exact path={base()} component={Routes.communicationsChat} />
+        <Route path={base('/:chatId')} component={Routes.communicationsChat} />
       </Switch>
     </DocumentTitle>
   ) : (
@@ -26,10 +26,10 @@ const Chat = ({ newChat }) =>
         <Route path={base('/:chatId')} component={Routes.chat} />
       </Switch>
     </DocumentTitle>
-  ));
+  );
 
 const mapStateToProps = ({ featureFlags }) => ({
-  newChat: featureFlags.getIn(['flags', 'chat-2-0-front-end']),
+  newChat: !featureFlags.getIn(['flags', 'use-chat-from-communications-service']),
 });
 
 export default connect(mapStateToProps)(Chat);
