@@ -11,8 +11,8 @@ const Routes = {
   communicationsChat: lazy(() => import('../../micro-front-ends/communications/chat')),
 };
 
-const Chat = ({ newChat }) =>
-  newChat ? (
+const Chat = ({ useCommunicationsChat }) =>
+  useCommunicationsChat ? (
     <DocumentTitle title="CareCru | Chat">
       <Switch>
         <Route exact path={base()} component={Routes.communicationsChat} />
@@ -29,15 +29,15 @@ const Chat = ({ newChat }) =>
   );
 
 const mapStateToProps = ({ featureFlags }) => ({
-  newChat: !featureFlags.getIn(['flags', 'use-chat-from-communications-service']),
+  useCommunicationsChat: featureFlags.getIn(['flags', 'use-chat-from-communications-service']),
 });
 
 export default connect(mapStateToProps)(Chat);
 
 Chat.propTypes = {
-  newChat: PropTypes.bool,
+  useCommunicationsChat: PropTypes.bool,
 };
 
 Chat.defaultProps = {
-  newChat: false,
+  useCommunicationsChat: false,
 };
