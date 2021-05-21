@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { bindActionCreators } from 'redux';
@@ -23,8 +22,12 @@ class ResetPassword extends React.Component {
 
   handleSubmit(values) {
     // This just posts right back to location URL...
+    const { location } = this.props;
+    if (location.pathname.startsWith('/my')) {
+      location.pathname = location.pathname.slice(3);
+    }
     return this.props
-      .resetPatientPassword(this.props.location, values)
+      .resetPatientPassword(location, values)
       .then(() => this.setState({ submitted: true }));
   }
 
@@ -88,7 +91,4 @@ const mapActionsToProps = (dispatch) =>
     dispatch,
   );
 
-export default connect(
-  null,
-  mapActionsToProps,
-)(ResetPassword);
+export default connect(null, mapActionsToProps)(ResetPassword);
