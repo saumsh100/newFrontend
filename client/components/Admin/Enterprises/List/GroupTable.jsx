@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,9 +6,17 @@ import { IconButton, DataTable } from '../../../library';
 import { formattedDate } from './Shared/helpers';
 import styles from './styles.scss';
 
-const GroupTable = ({ data, loaded, expanded, timezone, handleRowClick, selectEnterprise }) => {
+const GroupTable = ({
+  data,
+  loaded,
+  expanded,
+  timezone,
+  handleRowClick,
+  selectEnterprise,
+  setQuery,
+}) => {
   const tableStyle = { height: '100%' };
-  const subComponent = enterprise => (
+  const subComponent = (enterprise) => (
     <AccountsSubComponent enterpriseId={enterprise.original.id} enterprise={enterprise} />
   );
 
@@ -18,7 +25,7 @@ const GroupTable = ({ data, loaded, expanded, timezone, handleRowClick, selectEn
       <span
         tabIndex={0}
         role="button"
-        onKeyDown={e => e.keyCode === 13 && handleRowClick({ viewIndex })}
+        onKeyDown={(e) => e.keyCode === 13 && handleRowClick({ viewIndex })}
       >
         {original.name}
       </span>
@@ -38,32 +45,42 @@ const GroupTable = ({ data, loaded, expanded, timezone, handleRowClick, selectEn
       />
     </div>
   );
+
+  const idFilter = (id, value) => String(id.toLowerCase()).includes(value.toLowerCase());
+
+  const onFiltersChange = (filtered) => {
+    const [filter] = filtered;
+    const { value } = filter;
+
+    const filteredData = data.filter((acc) => idFilter(acc.id, value) || idFilter(acc.name, value));
+    const ids = filteredData.map((acc) => acc.id);
+    setQuery(ids);
+  };
   const columns = [
     {
       Header: 'Group Name',
       id: 'name',
       width: 500,
-      accessor: d => `${d.name} (${d.id})`,
+      accessor: (d) => `${d.name} (${d.id})`,
       Cell: getGroupName,
       filterable: true,
-      filterMethod: ({ id, value }, row) =>
-        (row[id] ? String(row[id].toLowerCase()).includes(value.toLowerCase()) : true),
+      filterMethod: ({ id, value }, row) => (row[id] ? idFilter(row[id], value) : true),
     },
     {
       Header: 'Plan',
       id: 'plan',
-      accessor: d => d.plan,
+      accessor: (d) => d.plan,
     },
     {
       Header: 'Created On',
       id: 'createdAt',
-      accessor: d => d.createdAt,
+      accessor: (d) => d.createdAt,
       Cell: ({ row }) => formattedDate(row.createdAt, timezone),
     },
     {
       Header: 'Updated On',
       id: 'updatedAt',
-      accessor: d => d.updatedAt,
+      accessor: (d) => d.updatedAt,
       Cell: ({ row }) => formattedDate(row.updatedAt, timezone),
     },
     {
@@ -86,6 +103,7 @@ const GroupTable = ({ data, loaded, expanded, timezone, handleRowClick, selectEn
       noDataText="No Groups Found"
       showPageSizeOptions
       style={tableStyle}
+      onFiltersChange={onFiltersChange}
     />
   );
 };
@@ -96,6 +114,7 @@ GroupTable.propTypes = {
   handleRowClick: PropTypes.func.isRequired,
   original: PropTypes.shape({ id: PropTypes.string }),
   selectEnterprise: PropTypes.func.isRequired,
+  setQuery: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       createdAt: PropTypes.string,
@@ -117,7 +136,4 @@ GroupTable.defaultProps = {
 };
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(GroupTable);
+export default connect(mapStateToProps, null)(GroupTable);

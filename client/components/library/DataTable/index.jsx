@@ -1,47 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import styles from './styles.scss';
-
-export default function DataTable(props) {
-  const { handleRowClick, rowStyling } = props;
-
-  if (rowStyling) {
-    trStyle.className = classnames(trStyle.className, rowStyling);
-  }
-
-  return (
-    <ReactTable
-      tableStyle={styles.tbStyle}
-      eProps={() => tableStyle}
-      getTheadTrProps={() => headerStyle}
-      getTfootThProps={() => footerStyle}
-      getTbodyProps={() => bodyStyle}
-      getTrProps={() => trStyle}
-      getTdProps={(state, rowInfo, column) => ({
-        onClick: (e, handleOriginal) => {
-          handleRowClick(rowInfo, column);
-          if (handleOriginal) {
-            handleOriginal();
-          }
-        },
-        ...tdStyle,
-      })}
-      getTheadThProps={(state, rowInfo, column) =>
-        getTheadStyles(state, column)
-      }
-      {...props}
-    />
-  );
-}
-
-DataTable.propTypes = {
-  handleRowClick: PropTypes.func,
-  rowStyling: PropTypes.string,
-};
 
 const tableStyle = {
   className: styles.mainTableStyle,
@@ -94,3 +56,48 @@ function getTheadStyles(state, column) {
     className: check && column.id === state.sorted[0].id ? sortedClasses : null,
   };
 }
+export default function DataTable(props) {
+  const { handleRowClick, rowStyling, onFiltersChange } = props;
+
+  if (rowStyling) {
+    trStyle.className = classnames(trStyle.className, rowStyling);
+  }
+
+  return (
+    <ReactTable
+      tableStyle={styles.tbStyle}
+      eProps={() => tableStyle}
+      getTheadTrProps={() => headerStyle}
+      getTfootThProps={() => footerStyle}
+      getTbodyProps={() => bodyStyle}
+      getTrProps={() => trStyle}
+      getTdProps={(state, rowInfo, column) => ({
+        onClick: (e, handleOriginal) => {
+          handleRowClick(rowInfo, column);
+          if (handleOriginal) {
+            handleOriginal();
+          }
+        },
+        ...tdStyle,
+      })}
+      getTheadThProps={(state, rowInfo, column) => getTheadStyles(state, column)}
+      onFilteredChange={(filtered, column) => {
+        if (onFiltersChange) {
+          onFiltersChange(filtered, column);
+        }
+      }}
+      {...props}
+    />
+  );
+}
+
+DataTable.propTypes = {
+  handleRowClick: PropTypes.func.isRequired,
+  onFiltersChange: PropTypes.func,
+  rowStyling: PropTypes.string,
+};
+
+DataTable.defaultProps = {
+  onFiltersChange: null,
+  rowStyling: null,
+};

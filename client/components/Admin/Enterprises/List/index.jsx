@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -6,13 +5,14 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { push } from 'connected-react-router';
 import { deleteEntityRequest, fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
-import { Button, DialogBox, Card } from '../../../library/index';
+import { Button, DialogBox, Card, Loading } from '../../../library';
 import CreateAccount from '../CreateAccount';
 import withAuthProps from '../../../../hocs/withAuthProps';
 import { switchActiveEnterprise } from '../../../../thunks/auth';
 import { getEntities } from './Shared/helpers';
 import GroupTable from './GroupTable';
 import styles from './styles.scss';
+import { httpClient } from '../../../../util/httpClient';
 
 class Enterprises extends Component {
   constructor(props) {
@@ -22,10 +22,15 @@ class Enterprises extends Component {
       expanded: {},
       loaded: false,
       data: [],
+      query: [],
+      isLoading: false,
     };
-    this.setActive = this.setActive.bind(this);
+
+    this.handleOnClickExportData = this.handleOnClickExportData.bind(this);
     this.handleRowClick = this.handleRowClick.bind(this);
     this.selectEnterprise = this.selectEnterprise.bind(this);
+    this.setActive = this.setActive.bind(this);
+    this.setQuery = this.setQuery.bind(this);
   }
 
   componentDidMount() {
@@ -42,22 +47,46 @@ class Enterprises extends Component {
       });
   }
 
-  setActive() {
-    this.setState(prevState => ({
-      active: !prevState.active,
-    }));
-  }
-
-  selectEnterprise(enterpriseId) {
-    this.props.switchActiveEnterprise(enterpriseId, this.props.location.pathname);
-  }
-
   handleRowClick(rowInfo) {
     const { expanded } = this.state;
 
     this.setState({
       expanded: rowInfo && !(rowInfo.viewIndex in expanded) ? { [rowInfo.viewIndex]: true } : {},
     });
+  }
+
+  handleOnClickExportData(e) {
+    this.setState({ isLoading: true });
+    e.stopPropagation();
+    httpClient({ responseType: 'blob' })
+      .post('/api/enterprises/export', { ids: this.state.query })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'accounts_export.csv');
+        link.click();
+      })
+      .catch(console.error)
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  }
+
+  setActive() {
+    this.setState((prevState) => ({
+      active: !prevState.active,
+    }));
+  }
+
+  setQuery(query) {
+    this.setState({
+      query,
+    });
+  }
+
+  selectEnterprise(enterpriseId) {
+    this.props.switchActiveEnterprise(enterpriseId, this.props.location.pathname);
   }
 
   render() {
@@ -85,6 +114,14 @@ class Enterprises extends Component {
         >
           Add Customer
         </Button>
+        <Button
+          disabled={this.state.isLoading}
+          color="darkblue"
+          onClick={this.handleOnClickExportData}
+        >
+          {this.state.isLoading && <Loading smallSize as="span" disableFlex />}
+          Export Accounts
+        </Button>
       </div>
     );
 
@@ -103,6 +140,7 @@ class Enterprises extends Component {
               expanded={this.state.expanded}
               handleRowClick={this.handleRowClick}
               selectEnterprise={this.selectEnterprise}
+              setQuery={this.setQuery}
             />
           </div>
         </Card>
@@ -143,7 +181,8 @@ Enterprises.defaultProps = {
 };
 
 function mapStateToProps({ entities, apiRequests }) {
-  const enterprisesFetched = apiRequests.get('fetchingEnterprises') && apiRequests.get('fetchingEnterprises').wasFetched;
+  const enterprisesFetched =
+    apiRequests.get('fetchingEnterprises') && apiRequests.get('fetchingEnterprises').wasFetched;
 
   return {
     enterprises: entities.getIn(['enterprises', 'models']),
@@ -151,7 +190,7 @@ function mapStateToProps({ entities, apiRequests }) {
   };
 }
 
-const dispatchToProps = dispatch =>
+const dispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       fetchEntitiesRequest,
