@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -36,7 +35,6 @@ const mapStateToProps = ({ entities, chat }) => {
   const patients = entities.getIn(['patients', 'models']);
   const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
   const selectedPatientId = selectedChat && selectedChat.patientId;
-  const isUnknown = selectedChat && selectedChat.patientPhoneNumber && !selectedChat.patientId;
 
   return {
     selectedChatId,
@@ -46,15 +44,14 @@ const mapStateToProps = ({ entities, chat }) => {
       suggestionsContainerOpen: styles.suggestionsContainer,
     },
     toInputProps: { placeholder: 'To: Type name of patient' },
-    selectedPatient: isUnknown
-      ? UnknownPatient(selectedChat.patientPhoneNumber, prospect)
-      : patients.get(selectedPatientId),
-
+    selectedPatient:
+      patients.get(selectedPatientId) ||
+      (selectedChat && UnknownPatient(selectedChat.patientPhoneNumber, prospect)),
     isFetchingProspect,
   };
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       showAlertTimeout,
@@ -63,10 +60,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(ToHeader);
 
