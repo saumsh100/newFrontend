@@ -55,7 +55,7 @@ def parallelBuildDockerImage(Deployment pipeline, String region, String environm
         pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, usRegion, usEnvironment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
       }
       parallelServiceNames["${serviceName}-demo"] = {
-        pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, caRegion, demoEnvironment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
+        pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, caRegion, demoEnvironment, frontendDirectory, frontendPortNumber, "demo")
       }
     }
   }
