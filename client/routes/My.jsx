@@ -30,7 +30,11 @@ const MyRouter = ({ history }) => {
             path="/my/sentReminders/:sentReminderId/confirmed"
             render={(props) => <ConfirmedAppointment {...props} params={params} />}
           />
-          <Route path="/unsubscribe" render={(props) => <Unsubscribe {...props} params={params} />} />
+          <Route
+            exact
+            path="/my/unsubscribe"
+            render={(props) => <Unsubscribe {...props} params={params} />}
+          />
           <Route
             path="/my/signup/confirmed"
             render={(props) => <ConfirmedEmail {...props} params={params} />}
