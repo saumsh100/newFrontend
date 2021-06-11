@@ -72,17 +72,17 @@ function SettingsSubNav({ location, className, users, featureFlags, ...props }) 
   };
 
   if (useReminderWorkflowService) {
-    PATHS['/settings/donna'].push(
-      {
-        to: '/settings/workflow/virtual-waiting-room',
-        label: 'Virtual Waiting Room',
-      },
-      {
-        to: '/settings/workflow/admin/migration',
-        label: 'Super Admin',
-      },
-    );
+    PATHS['/settings/donna'].splice(1, 0, {
+      to: '/settings/workflow/virtual-waiting-room',
+      label: 'Virtual Waiting Room',
+    });
+
+    PATHS['/settings/donna'].push({
+      to: '/settings/workflow/admin/migration',
+      label: 'Super Admin',
+    });
   }
+
   const routes = find(PATHS, (route, key) => location.pathname.indexOf(key) === 0);
   const { flags } = featureFlags.toJS();
 
