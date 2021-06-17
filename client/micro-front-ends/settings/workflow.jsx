@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
 import historyShape from '../../components/library/PropTypeShapes/historyShape';
 import locationShape from '../../components/library/PropTypeShapes/locationShape';
@@ -10,17 +10,19 @@ import MicroFrontEnd from '../micro-front-end';
 
 const { WORKFLOW_HOST: workflowHost } = process.env;
 
-const Workflow = ({ history, location, match, ...rest }) => {
+const Workflow = React.memo(({ history, location, match, ...rest }) => {
   delete rest.dispatch; // no need for redux at this time
   try {
     history.location.state = rest; // put the required info in to the route state
   } catch (error) {
     history.location.state = undefined;
   }
-  const props = { history, location, match };
+
+  const props = useMemo(() => ({ history, location, match }), [history, location, match]);
+
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <MicroFrontEnd host={workflowHost} name="Workflow" {...props} />;
-};
+});
 
 Workflow.defaultProps = {};
 

@@ -1,9 +1,11 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import { useDeepCompareEffect } from 'react-use';
 import historyShape from '../components/library/PropTypeShapes/historyShape';
+import locationShape from '../components/library/PropTypeShapes/locationShape';
 
-function MicroFrontend({ name, host, document, window, ...rest }) {
-  useEffect(() => {
+function MicroFrontend({ name, host, document, window, location, ...rest }) {
+  useDeepCompareEffect(() => {
     const scriptId = `micro-frontend-script-${name}`;
 
     if (document.getElementById(scriptId)) {
@@ -37,13 +39,12 @@ function MicroFrontend({ name, host, document, window, ...rest }) {
     return () => {
       window[`unmount${name}`]?.(`${name}-container`);
     };
-    // eslint-disable-next-line
   }, []);
 
   function renderMicroFrontend() {
     let locationState;
     try {
-      const { state: stateString } = rest.history.location;
+      const { state: stateString } = location;
       locationState = JSON.parse(JSON.stringify(stateString));
     } catch (error) {
       locationState = undefined;
@@ -52,7 +53,7 @@ function MicroFrontend({ name, host, document, window, ...rest }) {
     const history = {
       ...rest.history,
       location: {
-        ...rest.history.location,
+        ...location,
         state: locationState,
       },
     };
@@ -71,6 +72,7 @@ MicroFrontend.defaultProps = {
 MicroFrontend.propTypes = {
   document: PropTypes.instanceOf(document.constructor),
   history: PropTypes.shape(historyShape).isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
   host: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   window: PropTypes.instanceOf(window.constructor),
