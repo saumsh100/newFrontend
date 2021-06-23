@@ -19,11 +19,11 @@ variable "loki_url" {
 }
 
 variable "api_image" {
-  default = "453923235837.dkr.ecr.ca-central-1.amazonaws.com/test-api:latest-master"
+  default = "453923235837.dkr.ecr.ca-central-1.amazonaws.com/api:latest-master"
 }
 
 variable "backend_image" {
-  default = "453923235837.dkr.ecr.ca-central-1.amazonaws.com/test-backend:latest-master"
+  default = "453923235837.dkr.ecr.ca-central-1.amazonaws.com/backend:latest-master"
 }
 
 variable "certificate_arn" {

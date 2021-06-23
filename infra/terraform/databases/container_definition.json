@@ -28,12 +28,11 @@
 	{
 		"name": "${container_name}",
 		"image": "${docker_image}",
-		"networkMode": "awsvpc",
+		"networkMode": "bridge",
 		"memoryReservation": 256,
 		"command": ${command},
 		"portMappings": [{
-			"containerPort": ${app_port},
-			"hostPort": ${app_port}
+			"containerPort": ${app_port}
 		}],
 		"environment": ${env_var_file},
 		"logConfiguration": {

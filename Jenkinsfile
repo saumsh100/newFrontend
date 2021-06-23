@@ -16,14 +16,14 @@ frontendPortNumber = "80"
 if (isPullRequest()) {
   caEnvironment           = "dev-${env.CHANGE_ID}"
   ecsClusterName          = "dev-ecs-cluster"
-  frontendUrl             = "https://${caEnvironment}-${appGithubRepository}.carecru.com"
+  frontendUrl             = "https://${caEnvironment}.carecru.com"
   execution_environment   = "DEVELOPMENT"
-  frontendMySubdomain     = "${caEnvironment}-${appGithubRepository}"
+  frontendMySubdomain     = "${caEnvironment}"
 } else if (isBranch(mainBranch)) {
-  caEnvironment           = "test"
-  ecsClusterName          = "test-ecs-cluster"
-  frontendUrl             = "https://test.carecru.com"
-  execution_environment   = "TEST"
+  caEnvironment           = "dev"
+  ecsClusterName          = "dev-ecs-cluster"
+  frontendUrl             = "https://dev.carecru.com"
+  execution_environment   = "DEVELOPMENT"
   frontendMySubdomain     = "${caEnvironment}"
 } else {
   caEnvironment           = "prod"
@@ -47,15 +47,19 @@ def parallelBuildDockerImage(Deployment pipeline, String region, String environm
   services.each { service ->
     def serviceName = service.getKey()
     def dockerfile = service.getValue()
-    parallelServiceNames["${serviceName}-ca"] = {
-      pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, region, environment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
-    }
     if (isProduction()) {
+      parallelServiceNames["${serviceName}-ca"] = {
+        pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, region, environment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
+      }
       parallelServiceNames["${serviceName}-us"] = {
         pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, usRegion, usEnvironment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
       }
       parallelServiceNames["${serviceName}-demo"] = {
         pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, caRegion, demoEnvironment, frontendDirectory, frontendPortNumber, "demo")
+      }
+    } else {
+      parallelServiceNames[serviceName] = {
+        pipeline.buildDockerImageForFrontend(serviceName, dockerfile, caEnvironment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
       }
     }
   }
@@ -67,15 +71,19 @@ def parallelDeployApp(Deployment pipeline, String region, String environment) {
   def parallelServiceNames = [:]
   services.keySet().each { service ->
     def serviceName = service
-    parallelServiceNames["${serviceName}-ca"] = {
-      pipeline.deployApp(serviceName, region, environment, dockerVersionTag, ecsClusterName, appGithubRepository)
-    }
     if (isProduction()) {
+      parallelServiceNames["${serviceName}-ca"] = {
+        pipeline.deployApp(serviceName, region, environment, dockerVersionTag, ecsClusterName, appGithubRepository)
+      }
       parallelServiceNames["${serviceName}-us"] = {
         pipeline.deployApp(serviceName, usRegion, usEnvironment, dockerVersionTag, ecsClusterName, appGithubRepository)
       }
       parallelServiceNames["${serviceName}-demo"] = {
         pipeline.deployApp(serviceName, caRegion, demoEnvironment, dockerVersionTag, demoEcsClusterName, appGithubRepository)
+      }
+    } else {
+      parallelServiceNames[serviceName] = {
+        pipeline.deployApplication(serviceName, environment, ecsClusterName, appGithubRepository)
       }
     }
   }

@@ -28,12 +28,12 @@ locals {
 }
 
 module "env_var_map" {
-  source = "git::https://github.com/CareCru/terraform-modules.git//env_var_map?ref=v3.2.27"
+  source = "git::https://github.com/CareCru/terraform-modules.git//env_var_map?ref=v3.2.38"
   env    = "dev"
 }
 
 module "postgres" {
-  source = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.27"
+  source = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.38"
 
   environment            = terraform.workspace
   region                 = module.env_var_map.region
@@ -44,9 +44,9 @@ module "postgres" {
   public_subnet_ids      = module.env_var_map.public_subnet_ids
   ecs_cluster_name       = module.env_var_map.ecs_cluster_name
   s3_for_elb_logs        = false
+  use_traffic_port       = true
   load_balancer_type     = "network"
   health_check_interval  = 10
-  code_pipeline          = false
   ecr_creation           = false
   internet_load_balancer = false
   healthy_threshold      = 3
@@ -73,7 +73,7 @@ module "postgres" {
 }
 
 module "redis" {
-  source = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.27"
+  source = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.38"
 
   environment            = terraform.workspace
   region                 = module.env_var_map.region
@@ -84,8 +84,8 @@ module "redis" {
   public_subnet_ids      = module.env_var_map.public_subnet_ids
   ecs_cluster_name       = module.env_var_map.ecs_cluster_name
   s3_for_elb_logs        = false
+  use_traffic_port       = true
   health_check_interval  = 10
-  code_pipeline          = false
   load_balancer_type     = "network"
   ecr_creation           = false
   internet_load_balancer = false
@@ -109,7 +109,7 @@ module "redis" {
 }
 
 module "rabbitmq" {
-  source = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.27"
+  source = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.38"
 
   environment            = terraform.workspace
   region                 = module.env_var_map.region
@@ -120,9 +120,9 @@ module "rabbitmq" {
   public_subnet_ids      = module.env_var_map.public_subnet_ids
   ecs_cluster_name       = module.env_var_map.ecs_cluster_name
   s3_for_elb_logs        = false
+  use_traffic_port       = true
   load_balancer_type     = "network"
   health_check_interval  = 10
-  code_pipeline          = false
   ecr_creation           = false
   internet_load_balancer = false
   healthy_threshold      = 3
@@ -145,22 +145,20 @@ module "rabbitmq" {
 }
 
 module "frontend" {
-  source = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.27"
-
-  environment        = terraform.workspace
-  region             = module.env_var_map.region
-  vpc_name           = module.env_var_map.vpc_name
-  vpc_id             = module.env_var_map.vpc_id
-  private_subnet_ids = module.env_var_map.private_subnet_ids
-  public_subnet_ids  = module.env_var_map.public_subnet_ids
-  ecs_cluster_arn    = module.env_var_map.ecs_cluster_arn
-  ecs_cluster_name   = module.env_var_map.ecs_cluster_name
-  s3_for_elb_logs    = false
-
+  source                 = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.38"
+  environment            = terraform.workspace
+  region                 = module.env_var_map.region
+  vpc_name               = module.env_var_map.vpc_name
+  vpc_id                 = module.env_var_map.vpc_id
+  private_subnet_ids     = module.env_var_map.private_subnet_ids
+  public_subnet_ids      = module.env_var_map.public_subnet_ids
+  ecs_cluster_arn        = module.env_var_map.ecs_cluster_arn
+  ecs_cluster_name       = module.env_var_map.ecs_cluster_name
+  s3_for_elb_logs        = false
+  use_traffic_port       = true
   health_check_interval  = 6
   deregistration_delay   = 5
   repository_name        = var.app_name
-  code_pipeline          = false
   application_name       = var.app_name
   ecs_service_name       = var.app_name
   app_port               = var.frontend_port
@@ -178,8 +176,7 @@ module "frontend" {
     secrets      = jsonencode(null)
     env_var_file = jsonencode(null)
     port_mappings = jsonencode([{
-      "containerPort" : var.frontend_port,
-      "hostPort" : var.frontend_port
+      "containerPort" : var.frontend_port
     }])
     container_name     = local.env_with_app_name
     loki_url           = var.loki_url
@@ -187,25 +184,30 @@ module "frontend" {
   })
 }
 
-module "frontend_records" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-route53.git//modules/records?ref=v1.5.0"
+module "dns_records" {
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-route53.git//modules/records?ref=v1.9.0"
   providers = {
     aws = aws.aws_dns_account
   }
   zone_id = module.env_var_map.dns_carecru_com_CNAME.zone_id
   records = [
     {
-      name    = local.env_with_app_name
+      name    = terraform.workspace
       type    = "CNAME"
       ttl     = 3600
       records = [module.frontend.alb_dns_name]
+    },
+    {
+      name    = "${terraform.workspace}-backend"
+      type    = "CNAME"
+      ttl     = 3600
+      records = [module.backend.alb_dns_name]
     }
   ]
 }
 
 module "backend" {
-  source = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.27"
-
+  source                 = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.38"
   environment            = terraform.workspace
   region                 = module.env_var_map.region
   vpc_name               = module.env_var_map.vpc_name
@@ -216,53 +218,35 @@ module "backend" {
   ecs_cluster_name       = module.env_var_map.ecs_cluster_name
   s3_for_elb_logs        = false
   health_check_interval  = 6
-  code_pipeline          = false
   ecr_creation           = false
+  use_traffic_port       = true
   deregistration_delay   = 5
-  application_name       = "${var.app_name}-backend"
-  ecs_service_name       = "${var.app_name}-backend"
+  application_name       = "backend"
+  ecs_service_name       = "backend"
   secrets                = var.secrets
   app_port               = var.backend_port
   certificate_arn        = var.certificate_arn
   desired_count          = 1
   alb_sg_port_number     = [var.backend_port, 80, 443]
   internet_load_balancer = true
-  container_name         = "${terraform.workspace}-${var.app_name}-backend"
+  container_name         = "${terraform.workspace}-backend"
   loki_url               = var.loki_url
   env_var_file           = templatefile("backend-env-vars.json", local.backend_vars)
   container_definition = templatefile("container-definition.json", {
     loki_url           = var.loki_url
-    container_name     = "${terraform.workspace}-${var.app_name}-backend"
+    container_name     = "${terraform.workspace}-backend"
     ecr_repository_url = var.backend_image
     command            = jsonencode(null)
     secrets            = jsonencode(var.secrets)
     port_mappings = jsonencode([{
-      "containerPort" : var.backend_port,
-      "hostPort" : var.backend_port
+      "containerPort" : var.backend_port
     }])
     env_var_file = templatefile("backend-env-vars.json", local.backend_vars)
   })
 }
 
-module "backend_dns" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-route53.git//modules/records?ref=v1.5.0"
-  providers = {
-    aws = aws.aws_dns_account
-  }
-  zone_id = module.env_var_map.dns_carecru_com_CNAME.zone_id
-  records = [
-    {
-      name    = "${terraform.workspace}-backend"
-      type    = "CNAME"
-      ttl     = 3600
-      records = [module.backend.alb_dns_name]
-    }
-  ]
-}
-
 module "api" {
-  source = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.27"
-
+  source                 = "git::https://github.com/CareCru/terraform-modules.git//new-app?ref=v3.2.38"
   environment            = terraform.workspace
   region                 = module.env_var_map.region
   vpc_name               = module.env_var_map.vpc_name
@@ -272,28 +256,27 @@ module "api" {
   ecs_cluster_arn        = module.env_var_map.ecs_cluster_arn
   ecs_cluster_name       = module.env_var_map.ecs_cluster_name
   s3_for_elb_logs        = false
+  use_traffic_port       = true
   health_check_interval  = 50
   healthy_threshold      = 2
-  code_pipeline          = false
   ecr_creation           = false
-  application_name       = "${var.app_name}-api"
-  ecs_service_name       = "${var.app_name}-api"
+  application_name       = "api"
+  ecs_service_name       = "api"
   app_port               = var.api_port
   deregistration_delay   = 10
   app_health_check_path  = "/api"
   desired_count          = 1
   alb_sg_port_number     = [var.api_port, 80, 443]
   internet_load_balancer = false
-  container_name         = "${terraform.workspace}-${var.app_name}-api"
+  container_name         = "${terraform.workspace}-api"
   container_definition = templatefile("container-definition.json", {
     loki_url           = var.loki_url
-    container_name     = "${terraform.workspace}-${var.app_name}-api"
+    container_name     = "${terraform.workspace}-api"
     ecr_repository_url = var.api_image
     command            = jsonencode(null)
     secrets            = jsonencode(null)
     port_mappings = jsonencode([{
-      "containerPort" : var.api_port,
-      "hostPort" : var.api_port
+      "containerPort" : var.api_port
     }])
     env_var_file = templatefile("api-env-vars.json", local.api_vars)
   })

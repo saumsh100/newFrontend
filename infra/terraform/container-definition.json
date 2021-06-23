@@ -35,7 +35,7 @@
 		"secrets": ${secrets},
 		"command": ${command},
 		"portMappings": ${port_mappings},
-		"networkMode": "awsvpc",
+		"networkMode": "bridge",
 		"environment": ${env_var_file},
 		"memoryReservation": 256,
 		"logConfiguration": {
