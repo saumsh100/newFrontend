@@ -2,118 +2,106 @@
 @Library('pipeline-library') _
 import com.carecru.pipeline.library.deployment.Deployment
 
-appGithubRepository = "frontend"
+try {
+  if (version) {}
+} catch (Exception e) {
+  version = null
+}
+
+mainApp = "frontend"
 jenkinsNodeExecutor = "prod-jenkins-slave"
 mainBranch = "master"
 notifyChannelName = "eng-ccp"
-migrationServiceName = "${appGithubRepository}-migrations"
-seedServiceName = "${appGithubRepository}-seed"
-caRegion = "ca-central-1"
 usRegion = "us-west-1"
 frontendDirectory = "."
-frontendPortNumber = "80"
 
-if (isPullRequest()) {
-  caEnvironment           = "dev-${env.CHANGE_ID}"
-  ecsClusterName          = "dev-ecs-cluster"
-  frontendUrl             = "https://${caEnvironment}.carecru.com"
-  execution_environment   = "DEVELOPMENT"
-  frontendMySubdomain     = "${caEnvironment}"
-} else if (isBranch(mainBranch)) {
-  caEnvironment           = "dev"
-  ecsClusterName          = "dev-ecs-cluster"
-  frontendUrl             = "https://dev.carecru.com"
-  execution_environment   = "DEVELOPMENT"
-  frontendMySubdomain     = "${caEnvironment}"
-} else {
-  caEnvironment           = "prod"
-  usEnvironment           = "prod-us"
-  demoEnvironment         = "demo"
-  ecsClusterName          = "prod-ecs-cluster"
-  demoEcsClusterName      = "demo-ecs-cluster"
-  frontendUrl             = "https://carecru.ca and https://carecru.io"
-  execution_environment   = "PRODUCTION"
-  frontendMySubdomain     = "my"
-}
+services = ["${mainApp}": "infra/Dockerfile"]
 
-pipeline = new Deployment(this, caEnvironment, appGithubRepository)
-migrationTaskDefinitionName = "${caEnvironment}-${migrationServiceName}"
-seedTaskDefinitionName = "${caEnvironment}-${seedServiceName}"
-services = ["${appGithubRepository}": "infra/Dockerfile"]
-
-def parallelBuildDockerImage(Deployment pipeline, String region, String environment) {
-  String dockerVersionTag = pipeline.gitCommitNumber()
+def parallelBuildDockerImage(Deployment pipeline, String environment) {
   def parallelServiceNames = [:]
   services.each { service ->
-    def serviceName = service.getKey()
-    def dockerfile = service.getValue()
-    if (isProduction()) {
-      parallelServiceNames["${serviceName}-ca"] = {
-        pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, region, environment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
+    def appName = service.getKey()
+    def dockerfilePath = service.getValue()
+    parallelServiceNames["${appName}-dev"] = {
+      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment)
+    }
+    if (isBranch(mainBranch)) {
+      parallelServiceNames["${appName}-test"] = {
+        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "test", frontendDirectory, "test")
       }
-      parallelServiceNames["${serviceName}-us"] = {
-        pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, usRegion, usEnvironment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
+      parallelServiceNames["${appName}-prod-ca"] = {
+        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod", frontendDirectory, "my")
       }
-      parallelServiceNames["${serviceName}-demo"] = {
-        pipeline.buildFrontendDockerImage(serviceName, dockerfile, dockerVersionTag, caRegion, demoEnvironment, frontendDirectory, frontendPortNumber, "demo")
+      parallelServiceNames["${appName}-prod-us"] = {
+        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod-us", frontendDirectory, "my")
       }
-    } else {
-      parallelServiceNames[serviceName] = {
-        pipeline.buildDockerImageForFrontend(serviceName, dockerfile, caEnvironment, frontendDirectory, frontendPortNumber, frontendMySubdomain)
+      parallelServiceNames["${appName}-demo"] = {
+        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "demo", frontendDirectory, "demo")
       }
     }
   }
   return parallelServiceNames
 }
 
-def parallelDeployApp(Deployment pipeline, String region, String environment) {
-  String dockerVersionTag = pipeline.gitCommitNumber()
-  def parallelServiceNames = [:]
-  services.keySet().each { service ->
-    def serviceName = service
+def parallelDeployApp(Deployment pipeline, String environment, String ecsClusterName, String version) {
+  def serviceName = [:]
+  services.keySet().each { appName ->
+    serviceName["${appName}-ca"] = {
+      pipeline.deployApplication(appName, environment, ecsClusterName, appName, environment == "prod" ? "prod_" + version : (
+        environment == "test" ? "test_" + version : version )
+      )
+    }
     if (isProduction()) {
-      parallelServiceNames["${serviceName}-ca"] = {
-        pipeline.deployApp(serviceName, region, environment, dockerVersionTag, ecsClusterName, appGithubRepository)
+      serviceName["${appName}-us"] = {
+        pipeline.deployApplication(appName, "${environment}-us", ecsClusterName, appName, "prod-us_" + version, usRegion)
       }
-      parallelServiceNames["${serviceName}-us"] = {
-        pipeline.deployApp(serviceName, usRegion, usEnvironment, dockerVersionTag, ecsClusterName, appGithubRepository)
-      }
-      parallelServiceNames["${serviceName}-demo"] = {
-        pipeline.deployApp(serviceName, caRegion, demoEnvironment, dockerVersionTag, demoEcsClusterName, appGithubRepository)
-      }
-    } else {
-      parallelServiceNames[serviceName] = {
-        pipeline.deployApplication(serviceName, environment, ecsClusterName, appGithubRepository)
+      serviceName["${appName}-demo"] = {
+        pipeline.deployApplication(appName, "demo", ecsClusterName, appName, "demo_" + version)
       }
     }
   }
-  return parallelServiceNames
+  return serviceName
+}
+
+def parallelRunMigrations(Deployment pipeline, String environment, String ecsClusterName, String version) {
+  def serviceName = [:]
+  serviceName["migrations"] = {
+    pipeline.executeMigrationsOrSeed("${environment}-${mainApp}-migrations", ecsClusterName, "api", version)
+  }
+  return serviceName
 }
 
 node(jenkinsNodeExecutor) {
   try {
-    pipeline.clearWorkspace()
-    pipeline.checkout()
-    if (isValidBranch(mainBranch) || isProduction()) {
-      setVars(caRegion)
-      if (isPullRequest()) {
-        throttle(['noConcurrentJobs']) {
-          node(jenkinsNodeExecutor) {
-            checkout scm
-            pipeline.deployEnvironment()
-            deleteDir()
+    if (isValidDeploy(mainBranch) ) {
+      pipeline = new Deployment(this, getVars('environment'), mainApp)
+      setVars("ca-central-1")
+      pipeline.clearWorkspace()
+      if (isValidBranch(mainBranch)) {
+        pipeline.checkout()
+        if (isPullRequest()) {
+          throttle(['noConcurrentJobs']) {
+            node(jenkinsNodeExecutor) {
+              checkout scm
+              pipeline.deployEnvironment()
+              deleteDir()
+            }
           }
         }
-      }
-      stage('Build Docker Images') {
-        parallel parallelBuildDockerImage(pipeline, caRegion, caEnvironment)
+        stage('Build Docker Images') {
+          parallel parallelBuildDockerImage(pipeline, getVars('environment'))
+        }
       }
       if (isPullRequest()) {
-        pipeline.runMigrationsOrSeed(migrationTaskDefinitionName, ecsClusterName, caRegion)
-        pipeline.runMigrationsOrSeed(seedTaskDefinitionName, ecsClusterName, caRegion)
+        stage('Execute Migrations') {
+          parallel parallelRunMigrations(pipeline, getVars('environment'), getVars('ecsClusterName'), version)
+        }
+        stage('Execute Seed') {
+          pipeline.executeMigrationsOrSeed("${getVars('environment')}-${mainApp}-seed", getVars('ecsClusterName'), mainApp, version)
+        }
       }
-      stage('Deploy Application') {
-        parallel parallelDeployApp(pipeline, caRegion, caEnvironment)
+      stage('Application Deployments') {
+        parallel parallelDeployApp(pipeline, getVars('environment'), getVars('ecsClusterName'), version)
       }
     }
     currentBuild.result = "SUCCESS"
@@ -122,7 +110,7 @@ node(jenkinsNodeExecutor) {
     currentBuild.result = "FAILURE"
   }
   finally {
-    if (isValidBranch(mainBranch) || isProduction()) {
+    if (isValidDeploy(mainBranch) ) {
       if (isBranch(mainBranch)) {
         throttle(['noConcurrentJobs']) {
           node(jenkinsNodeExecutor) {
@@ -132,8 +120,8 @@ node(jenkinsNodeExecutor) {
           }
         }
       }
-      pipeline.notifyBuild(frontendUrl, notifyChannelName)
+      pipeline.notifyBuild(getVars('frontendUrl'), notifyChannelName)
+      deleteDir()
     }
-    deleteDir()
   }
 }
