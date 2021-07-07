@@ -34,11 +34,9 @@ $padding-size-border: 10px;
 }
 
 .logoWrapper {
-  // border-bottom: 2px grey solid;
   background-color: $primary-dark;
   box-sizing: border-box;
   color: white;
-  // padding-left: 20px;
   height: 100%;
   padding-left: $padding-size-border;
   padding-right: $padding-size-border;
@@ -97,14 +95,11 @@ $padding-size-border: 10px;
 
 .hamburger {
   color: $primary-dark;
-  //width: 35px !important;
-  //margin-left: 15px;
 }
 
 .rightOfBar {
   display: flex !important;
   text-align: right;
-  //margin-left: auto;
 }
 
 .pillsList {
@@ -112,6 +107,7 @@ $padding-size-border: 10px;
   display: flex;
   flex-direction: row;
   list-style: none;
+  margin: unset;
   padding-left: 0;
 }
 
@@ -189,7 +185,11 @@ $padding-size-border: 10px;
 }
 
 .userAvatar {
+  height: 37px;
   margin-right: 10px;
+  min-height: 37px;
+  min-width: 37px;
+  width: 37px;
 }
 
 .activeAccountButton {

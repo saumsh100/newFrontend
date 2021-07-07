@@ -1,4 +1,3 @@
-
 @import '../../../styles/ui';
 
 .dropdownContainer {
@@ -9,9 +8,9 @@
   color: $primary-dark;
   cursor: pointer;
   font-size: 14px;
-  height: 3rem;
-  padding: 0 1rem;
-  &:hover:not([disabled]){
+  height: 48px;
+  padding: 0 16px;
+  &:hover:not([disabled]) {
     background-color: $primary-lightgrey !important;
     color: $primary-dark !important;
   }
@@ -23,10 +22,9 @@
 }
 
 .menuIcon {
-  color: #B4B4B5;
+  color: #b4b4b5;
   display: inline-block;
   margin-right: 10px;
-  // font-size: 1.5rem;
   text-align: center;
-  width: 2.5rem;
+  width: 40px;
 }
