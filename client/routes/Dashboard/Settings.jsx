@@ -1,12 +1,17 @@
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-pascal-case */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { lazy, Suspense } from 'react';
 import DocumentTitle from 'react-document-title';
+import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Loader from '../../components/Loader';
 import Donna from '../../components/Settings/Donna';
 import Practice from '../../components/Settings/Practice';
 import Container from '../../containers/SettingsContainer';
 import Workflows from '../../micro-front-ends/settings/workflow';
+import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
 const base = (path = '') => `/settings${path}`;
 const practiceBase = (path = '') => base(`/practice${path}`);
@@ -45,26 +50,59 @@ const PracticeContainer = (props) => (
   </Practice>
 );
 
-const DonnaContainer = (props) => (
-  <Donna {...props}>
-    <Switch>
-      <Redirect exact from={donnaOldBase()} to={donnaBase('/reminders')} />
-      <Route path={donnaOldBase('/reminders')} component={Routes.reminders} />
-      <Route path={donnaOldBase('/recalls')} component={Routes.recalls} />
-      <Route path={donnaOldBase('/reviews')} component={Routes.reviews} />
-    </Switch>
-  </Donna>
-);
+const DonnaContainer = (props) => {
+  const { isFeatureFlagOn } = props;
+  const redirectFrom = isFeatureFlagOn ? donnaOldBase() : donnaBase();
+  const redirectTo = isFeatureFlagOn ? donnaBase('/reminders') : donnaOldBase('/reminders');
 
-const Settings = () => {
+  return (
+    <Donna {...props}>
+      <Switch>
+        <Redirect exact from={redirectFrom} to={redirectTo} />
+        <Route
+          path={donnaOldBase('/reminders')}
+          render={(props) => {
+            return isFeatureFlagOn ? (
+              <Redirect to={donnaBase('/reminders')} />
+            ) : (
+              <Routes.reminders {...props} />
+            );
+          }}
+        />
+        <Route path={donnaOldBase('/recalls')} component={Routes.recalls} />
+        <Route path={donnaOldBase('/reviews')} component={Routes.reviews} />
+        <Route path={donnaOldBase('/old-reminders')} component={Routes.reminders} />)
+      </Switch>
+    </Donna>
+  );
+};
+
+DonnaContainer.propTypes = {
+  isFeatureFlagOn: PropTypes.bool.isRequired,
+};
+
+const Settings = ({ useReminderWorkflowService, useReviewService, useRecallService }) => {
+  const isFeatureFlagOn = useReminderWorkflowService || useReviewService || useRecallService;
   return (
     <DocumentTitle title="CareCru | Settings">
       <Suspense fallback={<Loader />}>
         <Switch>
-          <Route path={donnaBase()} component={Workflows} />
+          <Route
+            path={donnaBase()}
+            render={(props) => {
+              return isFeatureFlagOn ? (
+                <Workflows {...props} />
+              ) : (
+                <Redirect to={donnaOldBase('/reminders')} />
+              );
+            }}
+          />
           <Container>
             <Route path={practiceBase()} component={PracticeContainer} />
-            <Route path={donnaOldBase()} component={DonnaContainer} />
+            <Route
+              path={donnaOldBase()}
+              render={(props) => <DonnaContainer {...props} isFeatureFlagOn={isFeatureFlagOn} />}
+            />
             <Route path={base('/reasons')} component={Routes.reasons} />
             <Route path={base('/practitioners')} component={Routes.practitioners} />
             <Route path={base('/forms')} component={Routes.forms} />
@@ -76,4 +114,33 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+function mapStateToProps({ featureFlags }) {
+  const useReminderWorkflowService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-reminder',
+  );
+  const useReviewService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-review',
+  );
+  const useRecallService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-recall',
+  );
+
+  return {
+    useReminderWorkflowService,
+    useRecallService,
+    useReviewService,
+  };
+}
+
+Settings.propTypes = {
+  useReminderWorkflowService: PropTypes.bool.isRequired,
+  useRecallService: PropTypes.bool.isRequired,
+  useReviewService: PropTypes.bool.isRequired,
+};
+
+const enhance = connect(mapStateToProps, null);
+
+export default enhance(Settings);
