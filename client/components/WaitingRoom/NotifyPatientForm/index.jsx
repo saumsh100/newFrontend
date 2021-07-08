@@ -19,11 +19,20 @@ export default function NotifyPatientForm({
     return patient.firstName;
   }, []);
 
+  const replaceText = (text, tag, value) => {
+    const regEx = new RegExp(tag, 'g');
+    return text.replace(regEx, value);
+  };
+
   const getMessageFromTemplate = useCallback(
     (template, patient, option) => {
-      const regEx = new RegExp('\\$\\{displayName\\}', 'g');
       const patientName = getPatientName(patient, option);
-      return template.replace(regEx, patientName);
+      let templateReplaced = replaceText(template, '\\$\\{displayName\\}', patientName);
+      templateReplaced = replaceText(templateReplaced, '\\[patient%first&name\\]', patient.firstName);
+      templateReplaced = replaceText(templateReplaced, '\\[patient%last&name\\]', patient.lastName);
+      templateReplaced = replaceText(templateReplaced, '\\[patient%display&name\\]', patient.prefName);
+
+      return templateReplaced;
     },
     [getPatientName],
   );
