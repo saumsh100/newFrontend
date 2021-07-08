@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -59,6 +58,7 @@ function WaitingRoomList(props) {
     displayNameOption,
     fetchWaitingRoomNotificationTemplate,
     accountId,
+    activeAccount,
   } = props;
   const [selectedWaitingRoomPatient, setSelectedWaitingRoomPatient] = useState(null);
   const toggleNotifying = () => setSelectedWaitingRoomPatient(null);
@@ -72,7 +72,7 @@ function WaitingRoomList(props) {
 
   return (
     <List>
-      {waitingRoomPatients.map(waitingRoomPatient => (
+      {waitingRoomPatients.map((waitingRoomPatient) => (
         <WaitingRoomListItem
           key={waitingRoomPatient.id}
           waitingRoomPatient={waitingRoomPatient}
@@ -122,6 +122,7 @@ function WaitingRoomList(props) {
       >
         {selectedWaitingRoomPatient && (
           <NotifyPatientForm
+            activeAccount={activeAccount}
             formName={formName}
             defaultTemplate={defaultTemplate}
             // On Refresh, we close the modal and re-open after the template call,
@@ -169,11 +170,18 @@ WaitingRoomList.propTypes = {
   onComplete: PropTypes.func.isRequired,
   fetchWaitingRoomNotificationTemplate: PropTypes.func.isRequired,
   accountId: PropTypes.func.isRequired,
+  activeAccount: PropTypes.shape({
+    id: PropTypes.string,
+    phoneNumber: PropTypes.string,
+    name: PropTypes.string,
+    toJS: PropTypes.func,
+  }).isRequired,
 };
 
-function mapStateToProps({ auth, waitingRoom }) {
+function mapStateToProps({ auth, waitingRoom, entities }) {
   return {
     accountId: auth.get('accountId'),
+    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
     defaultTemplate: waitingRoom.get('defaultTemplate'),
   };
 }
@@ -187,9 +195,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(WaitingRoomList);
