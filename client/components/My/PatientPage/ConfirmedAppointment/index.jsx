@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Well, getFormattedDate } from '../../../library';
@@ -11,7 +10,7 @@ const WellHeader = ClassyDiv(styles.wellHeader);
 const WellItem = ClassyDiv(styles.wellItem);
 
 const buildAppointmentTime = ({ startDate, endDate, timezone }) => {
-  const apptDateFormat = datetime => getFormattedDate(datetime, 'h:mma', timezone);
+  const apptDateFormat = (datetime) => getFormattedDate(datetime, 'h:mma', timezone);
   return `${apptDateFormat(startDate)} - ${apptDateFormat(endDate)}`;
 };
 
@@ -44,7 +43,7 @@ AppointmentsList.propTypes = {
   timezone: PropTypes.string.isRequired,
 };
 
-const tinyIconFactory = bookingWidgetPrimaryColor => props => (
+const tinyIconFactory = (bookingWidgetPrimaryColor) => (props) => (
   <Icon
     style={{ color: bookingWidgetPrimaryColor }}
     className={styles.tinyIcon}
@@ -54,7 +53,7 @@ const tinyIconFactory = bookingWidgetPrimaryColor => props => (
 );
 const ConfirmedAppointment = ({
   params: {
-    account: { address, phoneNumber, contactEmail, bookingWidgetPrimaryColor, website },
+    account: { address, phoneNumber, contactEmail, bookingWidgetPrimaryColor, website, timezone },
     appointments,
     isCustomConfirm,
   },
@@ -73,7 +72,7 @@ const ConfirmedAppointment = ({
           }.`}
         </div>
       </Section>
-      <AppointmentsList appointments={appointments} />
+      <AppointmentsList appointments={appointments} timezone={timezone} />
       <Section>
         <WellHeader>Practice Information</WellHeader>
         <Well>
