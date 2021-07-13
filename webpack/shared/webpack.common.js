@@ -32,6 +32,7 @@ const {
   POLLING_UNREAD_CHAT_INTERVAL,
   SOURCE,
   WORKFLOW_HOST,
+  FORMS_HOST,
   CHAT_HOST,
   MY_SUBDOMAIN = 'my'
 } = process.env;
@@ -134,6 +135,7 @@ const webpackConfig = {
           API_SERVER_PORT: JSON.stringify(apiHost.port),
           API_SERVER_PROTOCOL: JSON.stringify(apiHost.protocol),
           WORKFLOW_HOST: JSON.stringify(WORKFLOW_HOST),
+          FORMS_HOST: JSON.stringify(FORMS_HOST),
           CHAT_HOST: JSON.stringify(CHAT_HOST),
           MY_SUBDOMAIN: JSON.stringify(MY_SUBDOMAIN),
         },

@@ -12,6 +12,7 @@ import Practice from '../../components/Settings/Practice';
 import Container from '../../containers/SettingsContainer';
 import Workflows from '../../micro-front-ends/settings/workflow';
 import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
+import Forms from '../../micro-front-ends/settings/forms';
 
 const base = (path = '') => `/settings${path}`;
 const practiceBase = (path = '') => base(`/practice${path}`);
@@ -81,7 +82,12 @@ DonnaContainer.propTypes = {
   isFeatureFlagOn: PropTypes.bool.isRequired,
 };
 
-const Settings = ({ useReminderWorkflowService, useReviewService, useRecallService }) => {
+const Settings = ({
+  useReminderWorkflowService,
+  useFormsFromFormService,
+  useReviewService,
+  useRecallService,
+}) => {
   const isFeatureFlagOn = useReminderWorkflowService || useReviewService || useRecallService;
   return (
     <DocumentTitle title="CareCru | Settings">
@@ -105,7 +111,12 @@ const Settings = ({ useReminderWorkflowService, useReviewService, useRecallServi
             />
             <Route path={base('/reasons')} component={Routes.reasons} />
             <Route path={base('/practitioners')} component={Routes.practitioners} />
-            <Route path={base('/forms')} component={Routes.forms} />
+            <Route
+              path={base('/forms')}
+              render={(props) =>
+                !useFormsFromFormService ? <Routes.forms {...props} /> : <Forms {...props} />
+              }
+            />
             <Route exact path={base()} component={() => <Redirect to={practiceBase()} />} />
           </Container>
         </Switch>
@@ -127,11 +138,16 @@ function mapStateToProps({ featureFlags }) {
     featureFlags.get('flags'),
     'use-templates-from-workflow-service-recall',
   );
+  const useFormsFromFormService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-forms-from-form-service',
+  );
 
   return {
     useReminderWorkflowService,
     useRecallService,
     useReviewService,
+    useFormsFromFormService,
   };
 }
 
@@ -139,6 +155,7 @@ Settings.propTypes = {
   useReminderWorkflowService: PropTypes.bool.isRequired,
   useRecallService: PropTypes.bool.isRequired,
   useReviewService: PropTypes.bool.isRequired,
+  useFormsFromFormService: PropTypes.bool.isRequired,
 };
 
 const enhance = connect(mapStateToProps, null);
