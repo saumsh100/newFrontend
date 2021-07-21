@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDeepCompareEffect } from 'react-use';
 import historyShape from '../components/library/PropTypeShapes/historyShape';
 import locationShape from '../components/library/PropTypeShapes/locationShape';
 
 function MicroFrontend({ name, host, document, window, location, ...rest }) {
+  const renderMicroFrontend = useCallback(() => {
+    let locationState;
+    try {
+      const { state: stateString } = location;
+      locationState = JSON.parse(JSON.stringify(stateString));
+    } catch (error) {
+      locationState = undefined;
+    }
+
+    const history = {
+      ...rest.history,
+      location: {
+        ...location,
+        state: locationState,
+      },
+    };
+
+    window[`render${name}`](`${name}-container`, { history });
+  }, [location, name, rest.history]);
+
   useDeepCompareEffect(() => {
     const scriptId = `micro-frontend-script-${name}`;
 
@@ -39,27 +59,7 @@ function MicroFrontend({ name, host, document, window, location, ...rest }) {
     return () => {
       window[`unmount${name}`]?.(`${name}-container`);
     };
-  }, []);
-
-  function renderMicroFrontend() {
-    let locationState;
-    try {
-      const { state: stateString } = location;
-      locationState = JSON.parse(JSON.stringify(stateString));
-    } catch (error) {
-      locationState = undefined;
-    }
-
-    const history = {
-      ...rest.history,
-      location: {
-        ...location,
-        state: locationState,
-      },
-    };
-
-    window[`render${name}`](`${name}-container`, { history });
-  }
+  }, [renderMicroFrontend]);
 
   return <main id={`${name}-container`} />;
 }
