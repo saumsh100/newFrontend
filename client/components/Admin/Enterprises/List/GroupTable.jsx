@@ -48,14 +48,16 @@ const GroupTable = ({
 
   const idFilter = (id, value) => String(id.toLowerCase()).includes(value.toLowerCase());
 
-  const onFiltersChange = (filtered) => {
-    const [filter] = filtered;
-    const { value } = filter;
+  const onFiltersChange = ([filter]) => {
+    if (!filter) return setQuery([]);
 
+    const { value } = filter;
     const filteredData = data.filter((acc) => idFilter(acc.id, value) || idFilter(acc.name, value));
     const ids = filteredData.map((acc) => acc.id);
-    setQuery(ids);
+
+    return setQuery(ids);
   };
+
   const columns = [
     {
       Header: 'Group Name',
