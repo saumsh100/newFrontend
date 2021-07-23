@@ -46,8 +46,8 @@ const ROUTES = {
       label: 'Enterprises',
     },
     {
-      to: '/admin/nasa',
-      label: 'NASA',
+      to: '/admin/integrations',
+      label: 'Integrations',
     },
     {
       to: '/admin/play',

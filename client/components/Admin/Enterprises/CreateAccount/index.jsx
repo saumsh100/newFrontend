@@ -1,8 +1,9 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { submit, destroy, reset } from 'redux-form';
 import { connect } from 'react-redux';
+import find from 'lodash/find';
+import get from 'lodash/get';
 import { bindActionCreators } from 'redux';
 import ClinicDetails from './ClinicDetails';
 import Address from './Address';
@@ -45,7 +46,7 @@ class CreateAccount extends Component {
   componentDidUpdate() {
     if (!this.props.active) {
       if (this.state.isVisible) {
-        formNames.forEach(formName => this.props.reset(formName) && this.props.destroy(formName));
+        formNames.forEach((formName) => this.props.reset(formName) && this.props.destroy(formName));
         this.resetIndex();
       }
     } else if (!this.state.isVisible) {
@@ -53,8 +54,20 @@ class CreateAccount extends Component {
     }
   }
 
+  get currentEnterprise() {
+    const currentSelectedEnterprise = get(this.state, ['values', 0, 'id']);
+    const newEnterprise = get(this.state, ['values', 0]);
+    return currentSelectedEnterprise
+      ? find(this.props.enterprises, ({ id }) => id === currentSelectedEnterprise)
+      : newEnterprise;
+  }
+
+  get enterpriseLabelText() {
+    return this?.currentEnterprise.id ? 'Selected Group: ' : 'Creating New Group: ';
+  }
+
   setCreate() {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       create: !prevState.create,
       index: 0,
     }));
@@ -83,6 +96,7 @@ class CreateAccount extends Component {
       this.setState({
         index: 0,
         create: false,
+        values: [],
       });
     } else {
       this.setState({
@@ -95,14 +109,14 @@ class CreateAccount extends Component {
     const newValues = this.state.values;
     newValues[index] = values;
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       index: prevState.formLength - 1 > index ? index + 1 : prevState.index,
       values: newValues,
     }));
 
     if (index === this.state.formLength - 1) {
       this.props.setAllAccountInfo({ formData: newValues }).then((enterpriseId) => {
-        formNames.forEach(formName => this.props.reset(formName) && this.props.destroy(formName));
+        formNames.forEach((formName) => this.props.reset(formName) && this.props.destroy(formName));
         this.props.selectEnterprise(enterpriseId);
       });
     }
@@ -129,7 +143,7 @@ class CreateAccount extends Component {
 
     const formList = [
       {
-        title: this.state.create ? 'Add Group' : 'Group Options',
+        title: this.state.create ? 'Add New Group' : '',
         component,
       },
       {
@@ -176,6 +190,11 @@ class CreateAccount extends Component {
 
     return (
       <div key={this.state.index} className={styles.mainContainer}>
+        {this.currentEnterprise && (
+          <div className={styles.enterpriseLabel}>
+            {this.enterpriseLabelText} <span>{this.currentEnterprise.name}</span>
+          </div>
+        )}
         <div className={styles.header}>
           <div className={styles.header_text}>{formList[this.state.index].title}</div>
         </div>
@@ -187,8 +206,8 @@ class CreateAccount extends Component {
             </Button>
           )}
 
-          {this.state.formLength - 1 > this.state.index
-            && (this.state.index >= 1 || this.state.create) && (
+          {this.state.formLength - 1 > this.state.index &&
+            (this.state.index >= 1 || this.state.create) && (
               <Button
                 onClick={() => {
                   this.props.submit(formNames[this.state.index]);
@@ -198,7 +217,7 @@ class CreateAccount extends Component {
               >
                 Next
               </Button>
-          )}
+            )}
           {this.state.formLength - 1 === this.state.index && (
             <Button
               onClick={() => {
@@ -208,7 +227,7 @@ class CreateAccount extends Component {
               className={styles.nextButton}
               color="blue"
             >
-              Add New Customer
+              Add New Practice
             </Button>
           )}
         </div>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -109,8 +108,7 @@ function NavList({
     type: PropTypes.string,
   };
 
-  MultiNavItem.defaultProps = { iconType: 'solid',
-    type: 'active' };
+  MultiNavItem.defaultProps = { iconType: 'solid', type: 'active' };
 
   const SubNavItem = ({ path, label, disabled }) => {
     const active = location.pathname.indexOf(path) === 0;
@@ -143,7 +141,7 @@ function NavList({
   SubNavItem.defaultProps = { disabled: false };
 
   // Helper to reduce code length on for single line components
-  const n = key => navigationPreferences[key];
+  const n = (key) => navigationPreferences[key];
 
   return (
     <div className={styles.navListWrapper}>
@@ -200,9 +198,9 @@ function NavList({
         <EnabledFeature
           predicate={() => isSuperAdmin}
           render={() => (
-            <MultiNavItem path="/admin" icon="superpowers" label="Super Admin" iconType="brand">
+            <MultiNavItem path="/admin" icon="superpowers" label="Global Admin" iconType="brand">
               <SubNavItem path="/admin/enterprises" label="Enterprises" />
-              <SubNavItem path="/admin/nasa" label="NASA" />
+              <SubNavItem path="/admin/integrations" label="Integrations" />
               <SubNavItem path="/admin/play" label="Playground" />
             </MultiNavItem>
           )}
@@ -243,7 +241,7 @@ function mapStateToProps({ chat, entities, waitingRoom, featureFlags }) {
   const requests = entities.getIn(['requests', 'models']);
   const filteredRequests = requests
     .toArray()
-    .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
+    .filter((req) => !req.get('isCancelled') && !req.get('isConfirmed'));
 
   const chatsLength = unreadChatsCount > 100 ? '99+' : unreadChatsCount;
   const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;

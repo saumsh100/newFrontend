@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -206,7 +205,7 @@ class SuperAdmin extends Component {
   }
 
   openPreviewModal() {
-    this.setState(prevState => ({ previewOpen: !prevState.previewOpen }));
+    this.setState((prevState) => ({ previewOpen: !prevState.previewOpen }));
   }
 
   render() {
@@ -248,7 +247,7 @@ class SuperAdmin extends Component {
 
     return (
       role === 'SUPERADMIN' && (
-        <SettingsCard title="Super Admin" bodyClass={styles.generalBodyClass}>
+        <SettingsCard title="Global Admin" bodyClass={styles.generalBodyClass}>
           <Header contentHeader title="Practice Settings" key="Practice Settings" />
           <div className={styles.formContainer}>
             <SuperAdminForm onSubmit={this.updateAdminForm} activeAccount={activeAccount} />
@@ -335,7 +334,7 @@ const mapStateToProps = ({ entities, auth }) => {
   };
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       fetchEntities,

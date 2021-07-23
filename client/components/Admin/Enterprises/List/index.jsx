@@ -113,7 +113,7 @@ class Enterprises extends Component {
             this.setActive();
           }}
         >
-          Add Customer
+          Add Practice
         </Button>
         <Button
           disabled={this.state.isLoading}
@@ -147,11 +147,12 @@ class Enterprises extends Component {
         </Card>
         {this.props.enterprisesFetched && (
           <DialogBox
+            bodyStyles={styles.newCustomerModal}
             active={this.state.active}
             onEscKeyDown={this.setActive}
             onOverlayClick={this.setActive}
             className={styles.customDialog}
-            title="New Customer Setup"
+            title="New Practice Setup"
           >
             <CreateAccount
               key="Create Account Component"

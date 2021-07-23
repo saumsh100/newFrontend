@@ -33,7 +33,7 @@ function SettingsSubNav({ location, className, users, featureFlags, ...props }) 
       },
       {
         to: '/settings/practice/superadmin',
-        label: 'Super Admin',
+        label: 'Global Admin',
         adminOnly: true,
       },
     ],
@@ -79,7 +79,7 @@ function SettingsSubNav({ location, className, users, featureFlags, ...props }) 
 
     PATHS['/settings/donna'].push({
       to: '/settings/workflow/admin/migration',
-      label: 'Super Admin',
+      label: 'Global Admin',
     });
   }
 

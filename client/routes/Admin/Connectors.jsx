@@ -1,12 +1,10 @@
-
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Switch, Redirect, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Connectors from '../../components/Admin/Connectors';
 
-const base = (path = '') => `/admin/nasa${path}`;
+const base = (path = '') => `/admin/integrations${path}`;
 
-const ConnectorsRoutes = props => (
+const ConnectorsRoutes = () => (
   <Switch>
     <Route exact path={base()} component={Connectors} />
   </Switch>

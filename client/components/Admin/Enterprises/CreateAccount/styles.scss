@@ -6,7 +6,12 @@
   position: relative;
 }
 
-.logo {
+.enterpriseLabel {
+  font-family: 'Gotham-Medium', sans-serif;
+  margin-bottom: 15px;
+  span {
+    font-family: 'Gotham-Bold', sans-serif;
+  }
 }
 
 .header {
@@ -80,6 +85,9 @@
     align-items: center;
     padding-top: 12px;
   }
+  div[class*='dropDownList'] {
+    max-height: 200px;
+  }
 }
 
 .accountOptions {
@@ -125,4 +133,8 @@
   100% {
     opacity: 1;
   }
+}
+
+.orSeparator {
+  margin: 25px auto 15px;
 }

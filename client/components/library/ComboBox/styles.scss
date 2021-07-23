@@ -1,0 +1,41 @@
+:global {
+  .cru-combo-box {
+    border: none;
+    div.cru-combo-box__control {
+      border-left: none;
+      border-radius: 0px;
+      border-right: none;
+      border-top: none;
+      &--is-focused {
+        border-color: #2e3845;
+        box-shadow: none;
+        .cru-combo-box__dropdown-indicator {
+          color: #2e3845;
+        }
+      }
+    }
+    &__menu {
+      max-height: 200px;
+    }
+    div.cru-combo-box__menu-list {
+      max-height: inherit;
+    }
+    div.cru-combo-box__option {
+      font-family: 'Gotham-Book', sans-serif;
+      font-size: 12px;
+      padding: 14px 20px;
+      &:hover {
+        background-color: #f0f0f0;
+      }
+      &--is-focused {
+        background-color: #f0f0f0;
+      }
+    }
+    &__indicator-separator {
+      display: none;
+    }
+    &__dropdown-indicator {
+      color: #959596;
+    }
+  }
+}

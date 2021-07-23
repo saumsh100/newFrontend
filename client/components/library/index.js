@@ -1,4 +1,3 @@
-
 import Button from './Button';
 /* eslint-disable import/no-cycle */
 
@@ -66,6 +65,7 @@ export { default as Tooltip } from './Tooltip';
 export { default as TrendLine } from './TrendLine';
 export { default as VCard } from './VCard';
 export { default as Well } from './Well';
+export { default as ComboBox } from './ComboBox';
 
 export { BigCommentBubble } from './BigCommentBubble';
 export { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';

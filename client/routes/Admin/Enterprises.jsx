@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
@@ -20,10 +19,10 @@ const Enterprises = () => (
 );
 
 const Admin = () => (
-  <DocumentTitle title="CareCru | Super Admin">
+  <DocumentTitle title="CareCru | Global Admin">
     <Switch>
       <Redirect exact from="/admin" to={base()} />
-      <Route path="/admin/nasa" component={Connectors} />
+      <Route path="/admin/integrations" component={Connectors} />
       <Route path="/admin/play" component={Playground} />
       <Route path={base('/:enterpriseId/accounts')} component={Accounts} />
       <Route path={base()} component={Enterprises} />

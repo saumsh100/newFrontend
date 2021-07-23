@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -28,15 +27,15 @@ class Modal extends Component {
     }
   }
 
-  deactivate(e) {
-    this.props.onOverlayClick && this.props.onOverlayClick(e);
-  }
-
   handleEscKeyDown(e) {
     this.props.active && e.which === 27 && this.props.onEscKeyDown && this.props.onEscKeyDown(e);
   }
 
   handleOverlayClick(e) {
+    this.props.onOverlayClick && this.props.onOverlayClick(e);
+  }
+
+  deactivate(e) {
     this.props.onOverlayClick && this.props.onOverlayClick(e);
   }
 
@@ -49,12 +48,17 @@ class Modal extends Component {
       className,
       showOverlay,
       containerStyles,
+      bodyStyles,
       backDropStyles,
     } = this.props;
 
-    const modalContainerClassName = classNames(styles.modalContainer, containerStyles, { [styles.active]: active });
+    const modalContainerClassName = classNames(styles.modalContainer, containerStyles, {
+      [styles.active]: active,
+    });
 
-    const modalBodyClassName = classNames(className, styles.modalBody, { [styles[type]]: !custom && type });
+    const modalBodyClassName = classNames(className, styles.modalBody, bodyStyles, {
+      [styles[type]]: !custom && type,
+    });
 
     const backDropClassName = classNames(styles.backDropDefault, backDropStyles);
 
@@ -80,6 +84,7 @@ class Modal extends Component {
 Modal.propTypes = {
   active: PropTypes.bool,
   backDropStyles: PropTypes.string,
+  bodyStyles: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
   containerStyles: PropTypes.string,
@@ -93,6 +98,7 @@ Modal.propTypes = {
 Modal.defaultProps = {
   active: false,
   backDropStyles: null,
+  bodyStyles: '',
   children: null,
   className: null,
   containerStyles: null,

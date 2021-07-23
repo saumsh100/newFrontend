@@ -1,4 +1,3 @@
-
 import RFInput from './RFInput';
 import RFDayPicker from './RFDayPicker';
 import RDayPickerWithHelpers from './RDayPickerWithHelpers';
@@ -13,6 +12,7 @@ import RFColorPicker from './RFColorPicker';
 import RFStars from './RFStars';
 import RFButton from './RFButton';
 import RFCheckboxButton from './RFCheckboxButton';
+import RFComboBox from './RFComboBox';
 
 export default {
   Input: RFInput,
@@ -20,6 +20,7 @@ export default {
   Toggle: RFToggle,
   DropdownSelect: RFDropdownSelect,
   DayPicker: RFDayPicker,
+  ComboBox: RFComboBox,
   DayPickerWithHelpers: RDayPickerWithHelpers,
   // DropDown: RFDropDown.
   Checkbox: RFCheckbox,
