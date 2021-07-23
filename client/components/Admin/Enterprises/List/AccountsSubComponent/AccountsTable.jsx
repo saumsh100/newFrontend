@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -22,37 +21,37 @@ const AccountsTable = ({ accounts, loaded, timezone }) => {
     {
       Header: 'Account Name',
       id: 'name',
-      accessor: d => d.name,
+      accessor: (d) => d.name,
     },
     {
       Header: 'Send Reminders',
       id: 'canSendReminders',
-      accessor: d => d.canSendReminders,
+      accessor: (d) => d.canSendReminders,
       Cell: ({ row }) => (row.canSendReminders ? 'True' : 'False'),
     },
     {
       Header: 'Send Recalls',
       id: 'canSendRecalls',
-      accessor: d => d.canSendRecalls,
+      accessor: (d) => d.canSendRecalls,
       Cell: ({ row }) => (row.canSendRecalls ? 'True' : 'False'),
     },
     {
       Header: 'Send Reviews',
       id: 'canSendReviews',
-      accessor: d => d.canSendReviews,
+      accessor: (d) => d.canSendReviews,
       Cell: ({ row }) => (row.canSendReviews ? 'True' : 'False'),
     },
     {
       Header: 'Last Sync Date',
       id: 'lastSyncDate',
-      accessor: d => d.lastSyncDate,
+      accessor: (d) => d.lastSyncDate,
       Cell: ({ row }) => formattedDate(row.createdAt, timezone),
     },
     {
       Header: 'Account ID',
       id: 'id',
       width: 400,
-      accessor: d => d.id,
+      accessor: (d) => d.id,
       Cell: getAccountID,
     },
   ];
@@ -63,7 +62,7 @@ const AccountsTable = ({ accounts, loaded, timezone }) => {
         key="Accounts Table"
         data={accounts}
         columns={columns}
-        defaultPageSize={30}
+        defaultPageSize={accounts ? accounts.length : 50} // 50 will never be used unless for some reason the accounts failed to load.
         loading={loaded}
         handleRowClick={() => null}
         showPagination={false}
@@ -84,7 +83,4 @@ AccountsTable.defaultProps = {
 };
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(AccountsTable);
+export default connect(mapStateToProps, null)(AccountsTable);

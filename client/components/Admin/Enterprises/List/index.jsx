@@ -82,6 +82,7 @@ class Enterprises extends Component {
   setQuery(query) {
     this.setState({
       query,
+      expanded: {},
     });
   }
 
