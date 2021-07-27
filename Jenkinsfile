@@ -56,7 +56,7 @@ def parallelDeployApp(Deployment pipeline, String environment, String ecsCluster
         pipeline.deployApplication(appName, "${environment}-us", ecsClusterName, appName, "prod-us_" + version, usRegion)
       }
       serviceName["${appName}-demo"] = {
-        pipeline.deployApplication(appName, "demo", ecsClusterName, appName, "demo_" + version)
+        pipeline.deployApplication(appName, "demo", "demo-ecs-cluster", appName, "demo_" + version)
       }
     }
   }
