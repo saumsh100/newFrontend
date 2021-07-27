@@ -6,7 +6,7 @@ import find from 'lodash/find';
 import { RouterList } from '../library';
 import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
-function SettingsSubNav({ location, className, users, featureFlags, ...props }) {
+function SettingsSubNav({ location, className, users, featureFlags, isSuperAdmin, ...props }) {
   const { useReminderWorkflowService, useRecallService, useReviewService } = props;
 
   const PATHS = {
@@ -76,7 +76,9 @@ function SettingsSubNav({ location, className, users, featureFlags, ...props }) 
       to: '/settings/workflow/virtual-waiting-room',
       label: 'Virtual Waiting Room',
     });
+  }
 
+  if (useReminderWorkflowService && isSuperAdmin) {
     PATHS['/settings/donna'].push({
       to: '/settings/workflow/admin/migration',
       label: 'Global Admin',
@@ -106,13 +108,14 @@ SettingsSubNav.propTypes = {
   useReminderWorkflowService: PropTypes.bool.isRequired,
   useRecallService: PropTypes.bool.isRequired,
   useReviewService: PropTypes.bool.isRequired,
+  isSuperAdmin: PropTypes.bool.isRequired,
 };
 
 SettingsSubNav.defaultProps = {
   className: '',
 };
 
-function mapStateToProps({ featureFlags }) {
+function mapStateToProps({ featureFlags, auth }) {
   const useReminderWorkflowService = isFeatureEnabledSelector(
     featureFlags.get('flags'),
     'use-templates-from-workflow-service-reminder',
@@ -125,12 +128,15 @@ function mapStateToProps({ featureFlags }) {
     featureFlags.get('flags'),
     'use-templates-from-workflow-service-recall',
   );
+  const userRole = auth.get('role');
+  const isSuperAdmin = userRole === 'SUPERADMIN';
 
   return {
     featureFlags,
     useReminderWorkflowService,
     useRecallService,
     useReviewService,
+    isSuperAdmin,
   };
 }
 

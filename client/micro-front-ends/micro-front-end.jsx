@@ -59,7 +59,7 @@ function MicroFrontend({ name, host, document, window, location, ...rest }) {
     return () => {
       window[`unmount${name}`]?.(`${name}-container`);
     };
-  }, [renderMicroFrontend]);
+  }, []);
 
   return <main id={`${name}-container`} />;
 }
