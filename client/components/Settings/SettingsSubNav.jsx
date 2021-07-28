@@ -80,7 +80,7 @@ function SettingsSubNav({ location, className, users, featureFlags, isSuperAdmin
 
   if (useReminderWorkflowService && isSuperAdmin) {
     PATHS['/settings/donna'].push({
-      to: '/settings/workflow/admin/migration',
+      to: '/settings/workflow/admin',
       label: 'Global Admin',
     });
   }
