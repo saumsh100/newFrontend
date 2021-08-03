@@ -9,6 +9,14 @@
       position: sticky;
     }
   }
+
+  :global .pagination-bottom {
+    & .-previous,
+    & .-next,
+    & .-center {
+      flex: none !important;
+    }
+  }
 }
 
 .manageCell {
@@ -102,4 +110,14 @@ $height: 4px;
   height: 27px;
   justify-content: center;
   width: 27px;
+}
+
+.paginationComp {
+  color: #154b6e;
+  cursor: pointer;
+  &[disabled] {
+    color: #efefef;
+    cursor: not-allowed;
+    opacity: 1;
+  }
 }
