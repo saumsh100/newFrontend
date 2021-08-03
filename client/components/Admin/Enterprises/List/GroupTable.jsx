@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import AccountsSubComponent from './AccountsSubComponent';
 import { IconButton, DataTable } from '../../../library';
 import { formattedDate } from './Shared/helpers';
+import ManageCell from './ManageCell';
 import styles from './styles.scss';
+import { enterpriseShape } from '../../../library/PropTypeShapes';
 
 const GroupTable = ({
   data,
@@ -12,10 +14,10 @@ const GroupTable = ({
   expanded,
   timezone,
   handleRowClick,
+  onEditName,
   selectEnterprise,
   setQuery,
 }) => {
-  const tableStyle = { height: '100%' };
   const subComponent = (enterprise) => (
     <AccountsSubComponent enterpriseId={enterprise.original.id} enterprise={enterprise} />
   );
@@ -90,10 +92,19 @@ const GroupTable = ({
       Cell: selectPractice,
       maxWidth: 130,
     },
+    {
+      id: 'manage',
+      Header: 'Manage',
+      accessor: (d) => d,
+      className: styles.manageCell,
+      Cell: (cellProps) => <ManageCell label="Group" {...cellProps} onEdit={onEditName} />,
+      sortable: false,
+    },
   ];
 
   return (
     <DataTable
+      className={styles.dataTable}
       key="Group Table"
       data={data}
       columns={columns}
@@ -104,7 +115,6 @@ const GroupTable = ({
       loadingText=""
       noDataText="No Groups Found"
       showPageSizeOptions
-      style={tableStyle}
       onFiltersChange={onFiltersChange}
     />
   );
@@ -114,19 +124,11 @@ GroupTable.propTypes = {
   loaded: PropTypes.bool,
   expanded: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
   handleRowClick: PropTypes.func.isRequired,
+  onEditName: PropTypes.func.isRequired,
   original: PropTypes.shape({ id: PropTypes.string }),
   selectEnterprise: PropTypes.func.isRequired,
   setQuery: PropTypes.func.isRequired,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      createdAt: PropTypes.string,
-      deletedAt: PropTypes.string,
-      id: PropTypes.string,
-      name: PropTypes.string,
-      plan: PropTypes.string,
-      updatedAt: PropTypes.string,
-    }),
-  ),
+  data: PropTypes.arrayOf(PropTypes.shape(enterpriseShape)),
   timezone: PropTypes.string.isRequired,
 };
 

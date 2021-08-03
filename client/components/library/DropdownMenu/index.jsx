@@ -8,10 +8,16 @@ import styles from './styles.scss';
 import { Tooltip } from '..';
 
 export const DropdownMenu = React.forwardRef(
-  ({ children, className, labelProps, closeOnInsideClick, align, upwards, ...props }, ref) => {
+  (
+    { children, className, labelProps, closeOnInsideClick, align, upwards, onLabelClick, ...props },
+    ref,
+  ) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggle = () => setIsOpen(!isOpen);
+    const toggle = (e) => {
+      onLabelClick(e, isOpen);
+      setIsOpen(!isOpen);
+    };
 
     const close = ({ target }) => {
       const regTest = /daypicker/i;
@@ -44,11 +50,13 @@ DropdownMenu.defaultProps = {
   className: '',
   closeOnInsideClick: true,
   align: '',
+  onLabelClick: () => null,
 };
 
 DropdownMenu.propTypes = {
   labelProps: PropTypes.objectOf(PropTypes.any),
   closeOnInsideClick: PropTypes.bool,
+  onLabelClick: PropTypes.func,
   align: PropTypes.string,
   upwards: PropTypes.bool,
   className: PropTypes.string,
@@ -56,7 +64,7 @@ DropdownMenu.propTypes = {
 };
 
 const Wrapper = ({ children, disabled, tooltipText }) =>
-  disabled && tooltipText ? <Tooltip overlay={tooltipText}>{children}</Tooltip> : <>{ children }</>;
+  disabled && tooltipText ? <Tooltip overlay={tooltipText}>{children}</Tooltip> : <>{children}</>;
 
 Wrapper.propTypes = {
   children: PropTypes.node.isRequired,

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { formattedDate } from '../Shared/helpers';
 import { DataTable } from '../../../../library';
 import { accountShape } from '../../../../library/PropTypeShapes';
+import ManageCell from '../ManageCell';
 import styles from '../styles.scss';
 
 const getAccountID = ({ original }) => (
@@ -16,7 +17,7 @@ getAccountID.propTypes = {
   original: PropTypes.shape({ id: PropTypes.string }).isRequired,
 };
 
-const AccountsTable = ({ accounts, loaded, timezone }) => {
+const AccountsTable = ({ accounts, loaded, timezone, onEditName }) => {
   const columns = [
     {
       Header: 'Account Name',
@@ -54,6 +55,14 @@ const AccountsTable = ({ accounts, loaded, timezone }) => {
       accessor: (d) => d.id,
       Cell: getAccountID,
     },
+    {
+      id: 'manage',
+      Header: 'Manage',
+      accessor: (d) => d,
+      className: styles.manageCell,
+      Cell: (cellProps) => <ManageCell label="Practice" {...cellProps} onEdit={onEditName} />,
+      sortable: false,
+    },
   ];
 
   return (
@@ -76,6 +85,7 @@ AccountsTable.propTypes = {
   accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)).isRequired,
   loaded: PropTypes.bool,
   timezone: PropTypes.string.isRequired,
+  onEditName: PropTypes.func.isRequired,
 };
 
 AccountsTable.defaultProps = {

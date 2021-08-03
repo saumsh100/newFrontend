@@ -1,4 +1,5 @@
-@import '../../../../styles/ui.scss';
+@import '../../../../styles/ui';
+@import '../../../../styles/ui-kit';
 
 .enterpriseContainer {
   box-sizing: border-box;
@@ -17,6 +18,20 @@
 .enterpriseTable {
   flex: 1;
   overflow-y: auto;
+
+  .manageCell {
+    overflow: visible;
+  }
+  :global .rt-thead,
+  :global .rt-tbody {
+    overflow-y: scroll;
+  }
+}
+
+.manageCellDropdown {
+  :global .dd-menu-items {
+    width: auto;
+  }
 }
 
 .header {
@@ -47,6 +62,10 @@
     cursor: pointer;
     text-decoration: underline;
   }
+}
+
+.groupNameTitle {
+  flex-basis: 20px;
 }
 
 .groupName {
@@ -84,6 +103,68 @@
   width: 100%;
 }
 
+.actionItem {
+  background-color: $white;
+  border-bottom: 1px solid $grey-lighter;
+  box-sizing: border-box;
+  color: $grey-dark;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 14px 20px;
+  text-align: left;
+  width: 100%;
+
+  span {
+    font-size: 9px;
+    font-style: italic;
+    margin-left: 20px;
+  }
+
+  &[disabled],
+  &[disabled]:hover {
+    background-color: $white;
+    color: $grey-light;
+  }
+
+  &:hover {
+    background: $grey-lightest;
+    color: $teal;
+  }
+}
+
+.ellipsisButton {
+  background-color: transparent;
+  border: 0;
+  display: block;
+  margin: 0 auto;
+  min-height: 20px;
+  min-width: 20px;
+  padding: 0;
+  text-align: center;
+
+  &:last-child {
+    margin: 0 auto;
+  }
+
+  .ellipsis {
+    color: #cacdd0;
+    max-width: 20px;
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    .ellipsis {
+      color: $primary-blue;
+      transition: all 0.2s ease;
+    }
+  }
+}
+
 .newCustomerModal {
   min-height: 300px;
+}
+
+.dataTable {
+  height: calc(100% - 2px);
 }

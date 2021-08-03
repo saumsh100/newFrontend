@@ -27,6 +27,10 @@ class Modal extends Component {
     }
   }
 
+  componentWillUnmount() {
+    document.body.removeEventListener('keydown', this.handleEscKeyDown);
+  }
+
   handleEscKeyDown(e) {
     this.props.active && e.which === 27 && this.props.onEscKeyDown && this.props.onEscKeyDown(e);
   }

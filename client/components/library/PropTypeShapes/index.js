@@ -1,8 +1,8 @@
-
 import accountShape from './accountShape';
 import appointmentShape from './appointmentShape';
 import availabilityShape from './availabilityShape';
 import chairShape from './chairShape';
+import enterpriseShape from './enterpriseShape';
 import patientShape from './patient';
 import patientUserShape from './patientUserShape';
 import practitionerShape from './practitionerShape';
@@ -18,6 +18,7 @@ export {
   availabilityShape,
   chairShape,
   dayShape,
+  enterpriseShape,
   patientShape,
   patientUserShape,
   practitionerShape,

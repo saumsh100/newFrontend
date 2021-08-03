@@ -4,8 +4,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { push } from 'connected-react-router';
-import { deleteEntityRequest, fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
-import { Button, DialogBox, Card, Loading } from '../../../library';
+import {
+  deleteEntityRequest,
+  fetchEntitiesRequest,
+  updateEntityRequest,
+} from '../../../../thunks/fetchEntities';
+import { Button, DialogBox, Card, Loading, RemoteSubmitButton } from '../../../library';
 import CreateAccount from '../CreateAccount';
 import withAuthProps from '../../../../hocs/withAuthProps';
 import { switchActiveEnterprise } from '../../../../thunks/auth';
@@ -13,8 +17,11 @@ import { getEntities } from './Shared/helpers';
 import GroupTable from './GroupTable';
 import styles from './styles.scss';
 import { httpClient } from '../../../../util/httpClient';
+import RenameForm from '../CreateAccount/RenameForm';
 
 class Enterprises extends Component {
+  editFormName = 'editNameForm';
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,13 +31,10 @@ class Enterprises extends Component {
       data: [],
       query: [],
       isLoading: false,
+      selectedGroupIndex: null,
+      selectedGroup: null,
+      editGroupNameActive: false,
     };
-
-    this.handleOnClickExportData = this.handleOnClickExportData.bind(this);
-    this.handleRowClick = this.handleRowClick.bind(this);
-    this.selectEnterprise = this.selectEnterprise.bind(this);
-    this.setActive = this.setActive.bind(this);
-    this.setQuery = this.setQuery.bind(this);
   }
 
   componentDidMount() {
@@ -73,6 +77,71 @@ class Enterprises extends Component {
       });
   }
 
+  handleEditNameSubmit(index, values) {
+    const alert = {
+      success: {
+        body: 'Group name update success',
+      },
+      error: {
+        body: 'Group name update failed',
+      },
+    };
+
+    this.props
+      .updateEntityRequest({
+        id: 'enterprises',
+        key: 'enterprises',
+        url: `/api/enterprises/${values.id}`,
+        values,
+        alert,
+      })
+      .then(({ enterprises }) => {
+        this.setState((preveState) => {
+          const data = [...preveState.data];
+          data[index].name = enterprises[values.id].name;
+          return {
+            selectedGroup: null,
+            selectedGroupIndex: null,
+            editGroupNameActive: false,
+            data,
+          };
+        });
+      });
+  }
+
+  handleEditName(index, value) {
+    this.setState({
+      selectedGroupIndex: index,
+      selectedGroup: value,
+    });
+    this.setEditNameActive();
+  }
+
+  get editGroupNameActions() {
+    return [
+      {
+        label: 'Cancel',
+        onClick: () => this.setEditNameActive(),
+        component: Button,
+        props: { border: 'blue' },
+      },
+      {
+        label: 'Save',
+        component: RemoteSubmitButton,
+        props: {
+          color: 'blue',
+          form: this.editFormName,
+        },
+      },
+    ];
+  }
+
+  setEditNameActive() {
+    this.setState((prevState) => ({
+      editGroupNameActive: !prevState.editGroupNameActive,
+    }));
+  }
+
   setActive() {
     this.setState((prevState) => ({
       active: !prevState.active,
@@ -92,7 +161,6 @@ class Enterprises extends Component {
 
   render() {
     const { enterprises } = this.props;
-
     const baseUrl = (path = '') => `/admin/enterprises${path}`;
 
     const renderAddButton = () => (
@@ -118,7 +186,7 @@ class Enterprises extends Component {
         <Button
           disabled={this.state.isLoading}
           color="darkblue"
-          onClick={this.handleOnClickExportData}
+          onClick={(event) => this.handleOnClickExportData(event)}
         >
           {this.state.isLoading && <Loading smallSize as="span" disableFlex />}
           Export Accounts
@@ -139,9 +207,10 @@ class Enterprises extends Component {
               data={this.state.data}
               loaded={!this.state.loaded}
               expanded={this.state.expanded}
-              handleRowClick={this.handleRowClick}
-              selectEnterprise={this.selectEnterprise}
-              setQuery={this.setQuery}
+              handleRowClick={(rowInfo) => this.handleRowClick(rowInfo)}
+              onEditName={(index, value) => this.handleEditName(index, value)}
+              selectEnterprise={(enterpriseId) => this.selectEnterprise(enterpriseId)}
+              setQuery={(query) => this.setQuery(query)}
             />
           </div>
         </Card>
@@ -149,17 +218,36 @@ class Enterprises extends Component {
           <DialogBox
             bodyStyles={styles.newCustomerModal}
             active={this.state.active}
-            onEscKeyDown={this.setActive}
-            onOverlayClick={this.setActive}
+            onEscKeyDown={() => this.setActive()}
+            onOverlayClick={() => this.setActive()}
             className={styles.customDialog}
             title="New Practice Setup"
           >
             <CreateAccount
               key="Create Account Component"
               enterprises={enterprises.toArray()}
-              setActive={this.setActive}
-              selectEnterprise={this.selectEnterprise}
+              setActive={() => this.setActive()}
+              selectEnterprise={(enterpriseId) => this.selectEnterprise(enterpriseId)}
               active={this.state.active}
+            />
+          </DialogBox>
+        )}
+        {this.state.editGroupNameActive && (
+          <DialogBox
+            actions={this.editGroupNameActions}
+            title="Edit Group"
+            type="small"
+            active={this.state.editGroupNameActive}
+            onEscKeyDown={() => this.setEditNameActive()}
+            onOverlayClick={() => this.setEditNameActive()}
+          >
+            <RenameForm
+              key="Edit Group"
+              label="Group"
+              formName={this.editFormName}
+              index={this.state.selectedGroupIndex}
+              initialValues={this.state.selectedGroup}
+              onSubmit={(index, values) => this.handleEditNameSubmit(index, values)}
             />
           </DialogBox>
         )}
@@ -170,6 +258,7 @@ class Enterprises extends Component {
 
 Enterprises.propTypes = {
   fetchEntitiesRequest: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
   enterprises: PropTypes.instanceOf(Map),
   location: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -197,6 +286,7 @@ const dispatchToProps = (dispatch) =>
     {
       fetchEntitiesRequest,
       deleteEntityRequest,
+      updateEntityRequest,
       switchActiveEnterprise,
       navigate: push,
     },
