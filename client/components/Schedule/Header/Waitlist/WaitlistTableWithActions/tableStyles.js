@@ -1,3 +1,4 @@
+
 export const theadStyles = {
   background: 'white',
   borderBottom: '1px solid #efefef',
@@ -12,7 +13,7 @@ export const tbodyStyles = {
   overflow: 'unset', // override default behavior
 };
 
-export const colHeaderStyle = (override) => ({
+export const colHeaderStyle = override => ({
   background: 'white',
   display: 'flex',
   justifyContent: 'center',
@@ -26,16 +27,5 @@ export const colHeaderStyle = (override) => ({
 
 export const trStyles = {
   alignItems: 'center',
-  /* minHeight: '64px', */
-};
-
-export const trGrpStyles = {
-  borderBottom: '1px solid rgba(0,0,0,0.05)',
-};
-
-export const pgStyles = {
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '12px',
-  boxShadow: 'none',
+  minHeight: '64px',
 };

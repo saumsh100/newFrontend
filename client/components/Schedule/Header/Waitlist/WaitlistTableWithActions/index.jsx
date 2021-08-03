@@ -1,22 +1,16 @@
+
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import { capitalize } from '../../../../../util/isomorphic';
-import { Avatar, Checkbox, Icon, IconButton, getDate } from '../../../../library';
+import { Avatar, Checkbox, Icon, getDate } from '../../../../library';
 import Tooltip from '../../../../Tooltip';
 import { propsGenerator } from '../helpers';
 import FilterBar from './FilterBar';
 import WaitListTableHeader from './WaitListTableHeader';
 import WaitListTableFooter from './WaitListTableFooter';
-import {
-  theadStyles,
-  colHeaderStyle,
-  tbodyStyles,
-  trStyles,
-  trGrpStyles,
-  pgStyles,
-} from './tableStyles';
+import { theadStyles, colHeaderStyle, tbodyStyles, trStyles } from './tableStyles';
 import tableStyles from '../tableStyles.scss';
 import styles from './styles.scss';
 import {
@@ -51,13 +45,12 @@ const WaitlistTableWithActions = ({
     [selectedWaitlistMap],
   );
 
-  const segmentedWaitListIds = segmentedWaitList.map((waitSpot) => waitSpot.id);
+  const segmentedWaitListIds = segmentedWaitList.map(waitSpot => waitSpot.id);
 
-  const isEveryWaitlistSelected =
-    segmentedWaitList?.length > 0 && segmentedWaitList?.length === selectedWaitlistIds?.length;
+  const isEveryWaitlistSelected = segmentedWaitList?.length > 0 && segmentedWaitList?.length === selectedWaitlistIds?.length;
 
   useEffect(() => {
-    const waitlistIdsInView = selectedWaitlistIds.filter((id) => segmentedWaitListIds.includes(id));
+    const waitlistIdsInView = selectedWaitlistIds.filter(id => segmentedWaitListIds.includes(id));
     if (selectedWaitlistIds?.length > 0) {
       setSelectedWaitlistMap(batchUpdate(true, waitlistIdsInView));
     }
@@ -69,7 +62,7 @@ const WaitlistTableWithActions = ({
   };
 
   const toggleSingleWaitlistSelection = (key) => {
-    setSelectedWaitlistMap((prevState) => ({
+    setSelectedWaitlistMap(prevState => ({
       ...prevState,
       [key]: !prevState[key],
     }));
@@ -83,7 +76,7 @@ const WaitlistTableWithActions = ({
       selectedWaitlistMap,
     });
 
-    const availableTimes = spot.availableTimes.map((time) => getDate(time).toISOString());
+    const availableTimes = spot.availableTimes.map(time => getDate(time).toISOString());
 
     return {
       ...generatedProps,
@@ -111,7 +104,7 @@ const WaitlistTableWithActions = ({
           onChange={toggleAllWaitlistSelection}
         />
       ),
-      accessor: (waitspot) => waitspot,
+      accessor: waitspot => waitspot,
       Cell: WaitSpotCheckboxCell,
       sortable: false,
       width: 70,
@@ -124,14 +117,14 @@ const WaitlistTableWithActions = ({
       id: 'userAvatar',
       sortable: false,
       maxWidth: 60,
-      accessor: (waitspot) => waitspot,
+      accessor: waitspot => waitspot,
       // eslint-disable-next-line react/prop-types
       Cell: ({ value }) => value.patient && <Avatar user={value.patient} size="xs" />,
     },
     {
       id: 'firstName',
       Header: 'First Name',
-      accessor: (waitspot) => waitspot,
+      accessor: waitspot => waitspot,
       sortMethod: (a, b) =>
         sortHelper(a.patient.firstName.toLowerCase(), b.patient.firstName.toLowerCase()),
       Cell: FirstNameCell,
@@ -139,7 +132,7 @@ const WaitlistTableWithActions = ({
     {
       id: 'lastName',
       Header: 'Last Name',
-      accessor: (waitspot) => waitspot,
+      accessor: waitspot => waitspot,
       sortMethod: (a, b) =>
         sortHelper(a.patient.lastName.toLowerCase(), b.patient.lastName.toLowerCase()),
       Cell: LastNameCell,
@@ -147,12 +140,12 @@ const WaitlistTableWithActions = ({
     {
       id: 'reasonText',
       Header: 'Reason',
-      accessor: (waitspot) => capitalize(waitspot.reasonText || ''),
+      accessor: waitspot => capitalize(waitspot.reasonText || ''),
     },
     {
       id: 'practitioners',
       Header: 'Practitioner',
-      accessor: (waitspot) => capitalize(waitspot.practitioner?.firstName || ''),
+      accessor: waitspot => capitalize(waitspot.practitioner?.firstName || ''),
     },
     {
       id: 'duration',
@@ -164,7 +157,7 @@ const WaitlistTableWithActions = ({
           </Tooltip>
         </>
       ),
-      accessor: (waitspot) => waitspot.duration || '',
+      accessor: waitspot => waitspot.duration || '',
     },
     {
       Header: 'Days',
@@ -173,7 +166,7 @@ const WaitlistTableWithActions = ({
     {
       id: 'times',
       Header: 'Times',
-      accessor: (waitspot) => waitspot,
+      accessor: waitspot => waitspot,
       sortMethod: (a, b) => sortHelper(a.availableTimes, b.availableTimes),
       Cell: TimesCell,
     },
@@ -185,13 +178,13 @@ const WaitlistTableWithActions = ({
       id: 'waitspotNotes',
       Header: 'Notes',
       sortMethod: (a, b) => sortHelper(a.note.toLowerCase(), b.note.toLowerCase()),
-      accessor: (waitspot) => waitspot,
+      accessor: waitspot => waitspot,
       Cell: WaitspotNotesCell,
     },
     {
       id: 'manage',
       Header: 'Manage',
-      accessor: (waitspot) => waitspot,
+      accessor: waitspot => waitspot,
       className: styles.manageCell,
       Cell: ManageCell,
       sortable: false,
@@ -237,25 +230,10 @@ const WaitlistTableWithActions = ({
           className={styles.waitlistTable}
           columns={columns}
           data={waitlistWithProps}
-          pageSize={6}
-          showPageSizeOptions={false}
-          showPageJump
+          pageSize={segmentedWaitList?.length}
+          minRows={8}
+          showPagination={false}
           resizable={false}
-          PreviousComponent={(props) => {
-            return (
-              <IconButton icon="angle-left" className={styles.paginationComp} size={1} {...props} />
-            );
-          }}
-          NextComponent={(props) => {
-            return (
-              <IconButton
-                icon="angle-right"
-                className={styles.paginationComp}
-                size={1}
-                {...props}
-              />
-            );
-          }}
           defaultSorted={[
             {
               id: 'addedDate',
@@ -267,13 +245,11 @@ const WaitlistTableWithActions = ({
           })}
           getTheadThProps={(state, _, { id }) => {
             const { sorted } = state;
-            const sortedStyle =
-              sorted[0].id === id && sorted[0].desc ? styles.theadDesc : styles.theadAsc;
+            const sortedStyle = sorted[0].id === id && sorted[0].desc ? styles.theadDesc : styles.theadAsc;
             const showSortedStyle = id === selectedColumn;
-            const tHeadThStyles =
-              id === 'waitSpotCheckbox'
-                ? colHeaderStyle({ justifyContent: 'flex-end' })
-                : colHeaderStyle();
+            const tHeadThStyles = id === 'waitSpotCheckbox'
+              ? colHeaderStyle({ justifyContent: 'flex-end' })
+              : colHeaderStyle();
             return {
               style: tHeadThStyles,
               className: showSortedStyle ? sortedStyle : null,
@@ -282,17 +258,9 @@ const WaitlistTableWithActions = ({
           getTbodyProps={() => ({
             style: tbodyStyles,
           })}
-          getTrGroupProps={() => ({
-            style: trGrpStyles,
-          })}
           getTrProps={() => ({
             style: trStyles,
           })}
-          getPaginationProps={() => {
-            return {
-              style: pgStyles,
-            };
-          }}
           onSortedChange={(prop) => {
             const { id } = prop[0];
             setSelectedColumn(id);
