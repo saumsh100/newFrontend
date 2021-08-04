@@ -200,22 +200,14 @@ const WaitlistTableWithActions = ({
 
   return (
     <>
-      <WaitListTableHeader exitFullScreen={parentProps.onOverlayClick} />
+      <WaitListTableHeader
+        exitFullScreen={parentProps.onOverlayClick}
+        segmentedWaitList={segmentedWaitList}
+        isFilterActive={isFilterActive}
+        waitlist={waitlist}
+      />
       <div className={tableStyles.waitList}>
         <div className={tableStyles.headerTable}>
-          <h3>
-            {segmentedWaitList?.length && isFilterActive ? (
-              <>
-                <span className={styles.waitListCountWrapper}>{segmentedWaitList?.length}</span> of{' '}
-                {waitlist?.length} in Waitlist
-              </>
-            ) : (
-              <>
-                <span className={styles.waitListCountWrapper}>{segmentedWaitList?.length}</span> in
-                Waitlist
-              </>
-            )}
-          </h3>
           <FilterBar
             waitlist={waitlist}
             segmentedWaitList={segmentedWaitList}
@@ -237,7 +229,7 @@ const WaitlistTableWithActions = ({
           className={styles.waitlistTable}
           columns={columns}
           data={waitlistWithProps}
-          pageSize={6}
+          pageSize={15}
           showPageSizeOptions={false}
           showPageJump
           resizable={false}

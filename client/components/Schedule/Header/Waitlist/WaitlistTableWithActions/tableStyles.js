@@ -26,11 +26,11 @@ export const colHeaderStyle = (override) => ({
 
 export const trStyles = {
   alignItems: 'center',
-  /* minHeight: '64px', */
 };
 
 export const trGrpStyles = {
   borderBottom: '1px solid rgba(0,0,0,0.05)',
+  height: '64px',
 };
 
 export const pgStyles = {
