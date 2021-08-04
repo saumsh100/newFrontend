@@ -1,4 +1,3 @@
-
 import { OrderedMap } from 'immutable';
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
@@ -52,8 +51,8 @@ const isWithinTimePeriod = (
   maxIntervalValue = 1,
   maxIntervalUnit = 'hours',
 ) =>
-  getUTCDate(startDate, timezone).diff(getUTCDate(testingDate, timezone), maxIntervalUnit)
-  > -Math.abs(maxIntervalValue);
+  getUTCDate(startDate, timezone).diff(getUTCDate(testingDate, timezone), maxIntervalUnit) >
+  -Math.abs(maxIntervalValue);
 
 const botAvatar = {
   fullAvatarUrl: '/images/donna.png',
@@ -107,7 +106,7 @@ class MessageContainer extends Component {
     // Scroll down on component
     const node = this.scrollContainer.current;
     if (node && node.scrollTop !== node.scrollHeight && !this.state.scrolled) {
-      node.scrollTop = node.scrollHeight;
+      this.scrollHandler(node);
     }
   }
 
@@ -132,6 +131,10 @@ class MessageContainer extends Component {
         });
       },
     );
+  }
+
+  scrollHandler(node) {
+    node.scrollTop = node.scrollHeight;
   }
 
   sendMessageHandler({ message }) {
@@ -180,9 +183,13 @@ class MessageContainer extends Component {
     this.props.reset(`chatMessageForm_${chatId}`);
     this.props
       .sendChatMessage(request)
-      .then(() => this.props.selectChat(chatId))
+      .then(() => {
+        this.props.selectChat(chatId);
+      })
       .finally(() => {
-        this.setState({ sendingMessage: false });
+        this.setState({ sendingMessage: false }, () => {
+          this.scrollHandler(this.scrollContainer.current);
+        });
       });
   }
 
@@ -224,9 +231,9 @@ class MessageContainer extends Component {
       return null;
     }
 
-    const isPending = message =>
-      Boolean(message.get('id'))
-      && !pendingMessages.includes(pending => pending.id === message.get('id'));
+    const isPending = (message) =>
+      Boolean(message.get('id')) &&
+      !pendingMessages.includes((pending) => pending.id === message.get('id'));
 
     return messages.filter(isPending).map((message) => {
       const isFromPatient = message.get('from') !== activeAccount.twilioPhoneNumber;
@@ -310,7 +317,7 @@ class MessageContainer extends Component {
     const { conversationIsLoading, selectedChat, newChat, totalChatMessages } = this.props;
 
     const hasMoreMessages = totalChatMessages > loadedMessages;
-    const chat = selectedChat || Object.assign({}, newChat, { id: 'newChat' });
+    const chat = selectedChat || { ...newChat, id: 'newChat' };
 
     return (
       <SContainer className={styles.messageContainer}>
@@ -358,7 +365,7 @@ function mapStateToProps({ entities, auth, chat }) {
   const textMessages = chat.get('chatMessages');
   const totalChatMessages = chat.get('totalChatMessages');
   const getPatient = ({ patientId, patientPhoneNumber }) =>
-    (patientId ? patients.get(patientId) : UnknownPatient(patientPhoneNumber, prospect));
+    patientId ? patients.get(patientId) : UnknownPatient(patientPhoneNumber, prospect);
   const selectedPatient = (selectedChat && getPatient(selectedChat)) || {};
 
   return {
