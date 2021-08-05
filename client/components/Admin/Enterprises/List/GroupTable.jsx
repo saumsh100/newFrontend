@@ -14,6 +14,7 @@ const GroupTable = ({
   expanded,
   timezone,
   handleRowClick,
+  onDeleteGroup,
   onEditName,
   selectEnterprise,
   setQuery,
@@ -97,7 +98,9 @@ const GroupTable = ({
       Header: 'Manage',
       accessor: (d) => d,
       className: styles.manageCell,
-      Cell: (cellProps) => <ManageCell label="Group" {...cellProps} onEdit={onEditName} />,
+      Cell: (cellProps) => (
+        <ManageCell label="Group" {...cellProps} onEdit={onEditName} onDelete={onDeleteGroup} />
+      ),
       sortable: false,
     },
   ];
@@ -124,6 +127,7 @@ GroupTable.propTypes = {
   loaded: PropTypes.bool,
   expanded: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
   handleRowClick: PropTypes.func.isRequired,
+  onDeleteGroup: PropTypes.func.isRequired,
   onEditName: PropTypes.func.isRequired,
   original: PropTypes.shape({ id: PropTypes.string }),
   selectEnterprise: PropTypes.func.isRequired,

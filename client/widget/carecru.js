@@ -41,7 +41,9 @@ function CareCru({ iframeSrc }) {
   this.host.onEvent('completeBooking', () => {
     const eventAction = 'New Appointment Request';
     const analyticsEvent = {
+      // eslint-disable-next-line camelcase
       event_category: 'CareCru Online Scheduler',
+      // eslint-disable-next-line camelcase
       event_label: null,
     };
 

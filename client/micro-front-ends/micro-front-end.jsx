@@ -23,6 +23,7 @@ function MicroFrontend({ name, host, document, window, location, ...rest }) {
     };
 
     window[`render${name}`](`${name}-container`, { history });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, name, rest.history]);
 
   useDeepCompareEffect(() => {

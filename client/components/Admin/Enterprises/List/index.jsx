@@ -9,6 +9,7 @@ import {
   fetchEntitiesRequest,
   updateEntityRequest,
 } from '../../../../thunks/fetchEntities';
+import { deleteEntity } from '../../../../reducers/entities';
 import { Button, DialogBox, Card, Loading, RemoteSubmitButton } from '../../../library';
 import CreateAccount from '../CreateAccount';
 import withAuthProps from '../../../../hocs/withAuthProps';
@@ -18,6 +19,15 @@ import GroupTable from './GroupTable';
 import styles from './styles.scss';
 import { httpClient } from '../../../../util/httpClient';
 import RenameForm from '../CreateAccount/RenameForm';
+
+const getAlertData = (action) => ({
+  success: {
+    body: `Group name ${action} success`,
+  },
+  error: {
+    body: `Group name ${action} failed`,
+  },
+});
 
 class Enterprises extends Component {
   editFormName = 'editNameForm';
@@ -78,26 +88,17 @@ class Enterprises extends Component {
   }
 
   handleEditNameSubmit(index, values) {
-    const alert = {
-      success: {
-        body: 'Group name update success',
-      },
-      error: {
-        body: 'Group name update failed',
-      },
-    };
-
     this.props
       .updateEntityRequest({
+        values,
         id: 'enterprises',
         key: 'enterprises',
         url: `/api/enterprises/${values.id}`,
-        values,
-        alert,
+        alert: getAlertData('update'),
       })
       .then(({ enterprises }) => {
-        this.setState((preveState) => {
-          const data = [...preveState.data];
+        this.setState(({ data: prevStateData }) => {
+          const data = [...prevStateData];
           data[index].name = enterprises[values.id].name;
           return {
             selectedGroup: null,
@@ -107,6 +108,33 @@ class Enterprises extends Component {
           };
         });
       });
+  }
+
+  handleDeleteGroup(index, values) {
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${values.name}?`);
+
+    if (confirmDelete) {
+      this.props
+        .deleteEntityRequest({
+          values,
+          id: values.id,
+          key: 'enterprises',
+          url: `/api/enterprises/${values.id}`,
+          alert: getAlertData('delete'),
+        })
+        .then(() => {
+          this.setState(({ data: prevStateData }) => {
+            const data = [...prevStateData].filter((item) => item.id !== values.id);
+            this.props.deleteEntity({
+              key: 'enterprises',
+              id: values.id,
+            });
+            return {
+              data,
+            };
+          });
+        });
+    }
   }
 
   handleEditName(index, value) {
@@ -209,6 +237,7 @@ class Enterprises extends Component {
               expanded={this.state.expanded}
               handleRowClick={(rowInfo) => this.handleRowClick(rowInfo)}
               onEditName={(index, value) => this.handleEditName(index, value)}
+              onDeleteGroup={(index, value) => this.handleDeleteGroup(index, value)}
               selectEnterprise={(enterpriseId) => this.selectEnterprise(enterpriseId)}
               setQuery={(query) => this.setQuery(query)}
             />
@@ -257,6 +286,8 @@ class Enterprises extends Component {
 }
 
 Enterprises.propTypes = {
+  deleteEntity: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
@@ -284,6 +315,7 @@ function mapStateToProps({ entities, apiRequests }) {
 const dispatchToProps = (dispatch) =>
   bindActionCreators(
     {
+      deleteEntity,
       fetchEntitiesRequest,
       deleteEntityRequest,
       updateEntityRequest,

@@ -90,6 +90,10 @@
 .accountsTableContainer {
   background: #fafafa;
   padding: 20px;
+
+  :global .ReactTable {
+    min-height: 200px;
+  }
 }
 
 .rowStyling {
