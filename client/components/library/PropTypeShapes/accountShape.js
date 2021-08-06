@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 const accountShape = {
@@ -11,6 +10,7 @@ const accountShape = {
   bufferBeforeOpening: PropTypes.string,
   bumpInterval: PropTypes.string,
   callrailId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  callrailIdV3: PropTypes.string,
   canAutoRespondOutsideOfficeHours: PropTypes.bool,
   canSendRecalls: PropTypes.bool,
   canSendReminders: PropTypes.bool,

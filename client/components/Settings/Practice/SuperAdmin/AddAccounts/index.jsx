@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../../../library';
@@ -12,7 +11,7 @@ export default function AddAccounts({ onSubmit, activeAccount }) {
     reputationManagement: !!activeAccount.get('vendastaSrId'),
     listings: !!activeAccount.get('vendastaMsId'),
     canSendReminders: !!activeAccount.get('twilioPhoneNumber'),
-    callTracking: !!activeAccount.get('callrailId'),
+    callTracking: !!activeAccount.get('callrailId') || !!activeAccount.get('callrailIdV3'),
   };
 
   return (

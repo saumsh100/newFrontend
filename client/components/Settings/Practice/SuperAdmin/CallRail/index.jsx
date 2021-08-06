@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -11,7 +10,8 @@ import style from '../styles.scss';
 
 function CallRail({ activeAccount, ...props }) {
   const accountId = activeAccount.get('id');
-  const hasCallRailId = !!activeAccount.get('callrailId');
+  const hasCallRailId = !!activeAccount.get('callrailId') || !!activeAccount.get('callrailIdV3');
+  const callRailFieldName = activeAccount.get('callrailId') ? 'callrailId' : 'callrailIdV3';
   const generateConfirmation = () => {
     if (window.confirm('Are you sure you want to generate a new CallRail key?')) {
       props.generateCallRailKey(accountId);
@@ -27,7 +27,7 @@ function CallRail({ activeAccount, ...props }) {
     <Grid>
       <Row>
         <Col xs={9}>
-          <Field name="callrailId" label="CallRail ID" data-test-id="callrailId" />
+          <Field name={callRailFieldName} label="CallRail ID" data-test-id="callrailId" />
         </Col>
         <Col xs={3} className={style.buttonsWrapper}>
           <Button
@@ -54,7 +54,7 @@ CallRail.propTypes = {
   removeCallRailKey: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       generateCallRailKey,
@@ -63,7 +63,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(CallRail);
+export default connect(null, mapDispatchToProps)(CallRail);

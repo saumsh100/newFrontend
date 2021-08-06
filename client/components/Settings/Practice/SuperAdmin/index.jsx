@@ -91,6 +91,7 @@ class SuperAdmin extends Component {
     const { activeAccount, address } = this.props;
     const {
       callrailId,
+      callrailIdV3,
       twilioPhoneNumber,
       vendastaAccountId,
       vendastaMsId,
@@ -158,14 +159,14 @@ class SuperAdmin extends Component {
       });
     }
 
-    if (callTracking && !callrailId) {
+    if (callTracking && !callrailId && !callrailIdV3) {
       sendingValuesCreate.integrations.push({
         type: 'callrail',
         options: 'create',
       });
     }
 
-    if (!callTracking && callrailId) {
+    if (!callTracking && (callrailId || callrailIdV3)) {
       sendingValuesDelete.integrations.push({
         type: 'callrail',
         options: 'delete',

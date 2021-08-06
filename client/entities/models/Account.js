@@ -1,4 +1,3 @@
-
 import createModel from '../createModel';
 
 const AccountSchema = {
@@ -40,6 +39,7 @@ const AccountSchema = {
   vendastaAccountId: null,
   vendastaSrId: null,
   callrailId: null,
+  callrailIdV3: null,
   recallInterval: null,
   hygieneInterval: null,
   recallBuffer: null,

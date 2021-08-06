@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { isValidUUID } from '../../../../util/isomorphic';
@@ -13,7 +12,7 @@ import styles from './styles.scss';
 const validateOmitIdsArray = (val) => {
   if (!val) return;
   const array = val.split(',');
-  const predicate = v => !isValidUUID(v);
+  const predicate = (v) => !isValidUUID(v);
   if (array.some(predicate)) {
     return "Must UUIDs separated by ',' with no spaces";
   }
@@ -25,6 +24,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     destinationPhoneNumber: activeAccount.get('destinationPhoneNumber'),
     vendastaId: activeAccount.get('vendastaId'),
     callrailId: activeAccount.get('callrailId'),
+    callrailIdV3: activeAccount.get('callrailIdV3'),
     timeInterval: activeAccount.get('timeInterval'),
     suggestedChairId: activeAccount.get('suggestedChairId'),
     canSendReminders: activeAccount.get('canSendReminders'),
