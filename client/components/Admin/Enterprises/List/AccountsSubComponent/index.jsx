@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchEntitiesRequest, updateEntityRequest } from '../../../../../thunks/fetchEntities';
-import { updateEntity } from '../../../../../reducers/entities';
+import {
+  deleteEntityRequest,
+  fetchEntitiesRequest,
+  updateEntityRequest,
+} from '../../../../../thunks/fetchEntities';
+import { deleteEntity, updateEntity } from '../../../../../reducers/entities';
 import { getCollection } from '../../../../Utils';
 import { switchActiveEnterprise } from '../../../../../thunks/auth';
 import { accountShape } from '../../../../library/PropTypeShapes';
 import AccountsTable from './AccountsTable';
 import { Button, DialogBox, RemoteSubmitButton } from '../../../../library';
 import RenameForm from '../../CreateAccount/RenameForm';
+import { getAlertData } from '../Shared/helpers';
 
 class AccountsSubComponent extends Component {
   editAccountFormName = 'editAccountNameForm';
@@ -28,22 +33,13 @@ class AccountsSubComponent extends Component {
   }
 
   handleEditAccountNameSubmit(index, values) {
-    const alert = {
-      success: {
-        body: 'Practice name update success',
-      },
-      error: {
-        body: 'Practice name update failed',
-      },
-    };
-
     this.props
       .updateEntityRequest({
         id: 'enterprises',
         key: 'enterprises',
         url: `/api/enterprises/${values.enterpriseId}/accounts/${values.id}`,
         values,
-        alert,
+        alert: getAlertData('Practice', 'update'),
       })
       .then(() => {
         this.props.updateEntity({
@@ -70,6 +66,27 @@ class AccountsSubComponent extends Component {
       selectedGroup: value,
     });
     this.setEditAccountNameActive();
+  }
+
+  handleDeleteAccount(index, value) {
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${value.name}?`);
+
+    if (confirmDelete) {
+      this.props
+        .deleteEntityRequest({
+          value,
+          id: value.id,
+          key: 'enterprises',
+          url: `/api/enterprises/${value.enterpriseId}/accounts/${value.id}`,
+          alert: getAlertData('Practice', 'delete'),
+        })
+        .then(() => {
+          this.props.deleteEntity({
+            key: 'accounts',
+            id: value.id,
+          });
+        });
+    }
   }
 
   get editAccountNameActions() {
@@ -114,6 +131,7 @@ class AccountsSubComponent extends Component {
             accounts={accounts}
             loaded={accounts.size}
             onEditName={(index, value) => this.handleEditAccountName(index, value)}
+            onDeleteAccount={(index, value) => this.handleDeleteAccount(index, value)}
           />
         )}
         {this.state.editAccountNameActive && (
@@ -141,6 +159,8 @@ class AccountsSubComponent extends Component {
 }
 
 AccountsSubComponent.propTypes = {
+  deleteEntity: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   updateEntity: PropTypes.func.isRequired,
@@ -160,6 +180,8 @@ const stateToProps = (state, { enterpriseId }) => ({
 const dispatchToProps = (dispatch) =>
   bindActionCreators(
     {
+      deleteEntity,
+      deleteEntityRequest,
       fetchEntitiesRequest,
       switchActiveEnterprise,
       updateEntityRequest,

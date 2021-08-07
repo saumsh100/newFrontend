@@ -17,7 +17,7 @@ getAccountID.propTypes = {
   original: PropTypes.shape({ id: PropTypes.string }).isRequired,
 };
 
-const AccountsTable = ({ accounts, loaded, timezone, onEditName }) => {
+const AccountsTable = ({ accounts, loaded, timezone, onEditName, onDeleteAccount }) => {
   const columns = [
     {
       Header: 'Account Name',
@@ -60,7 +60,14 @@ const AccountsTable = ({ accounts, loaded, timezone, onEditName }) => {
       Header: 'Manage',
       accessor: (d) => d,
       className: styles.manageCell,
-      Cell: (cellProps) => <ManageCell label="Practice" {...cellProps} onEdit={onEditName} />,
+      Cell: (cellProps) => (
+        <ManageCell
+          label="Practice"
+          {...cellProps}
+          onEdit={onEditName}
+          onDelete={onDeleteAccount}
+        />
+      ),
       sortable: false,
     },
   ];
@@ -86,6 +93,7 @@ AccountsTable.propTypes = {
   loaded: PropTypes.bool,
   timezone: PropTypes.string.isRequired,
   onEditName: PropTypes.func.isRequired,
+  onDeleteAccount: PropTypes.func.isRequired,
 };
 
 AccountsTable.defaultProps = {

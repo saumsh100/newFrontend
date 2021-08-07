@@ -1,4 +1,3 @@
-
 import { getFormattedDate } from '../../../../library';
 import { forEach } from '../../../../library/util/lodash';
 
@@ -15,3 +14,12 @@ export function getEntities(entities) {
   });
   return data;
 }
+
+export const getAlertData = (type, action) => ({
+  success: {
+    body: `${type} name ${action} success`,
+  },
+  error: {
+    body: `${type} name ${action} failed`,
+  },
+});

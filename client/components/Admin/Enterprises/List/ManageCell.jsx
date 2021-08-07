@@ -37,18 +37,16 @@ const ManageCell = ({ index, value, label, onEdit, onDelete }) => {
         >
           Edit {label}
         </Button>
-        {label === 'Group' && (
-          <Button
-            disabled={!showDeleteButton}
-            className={styles.actionItem}
-            onClick={(e) => {
-              e.stopPropagation();
-              showDeleteButton && onDelete(index, value);
-            }}
-          >
-            Delete
-          </Button>
-        )}
+        <Button
+          disabled={!showDeleteButton}
+          className={styles.actionItem}
+          onClick={(e) => {
+            e.stopPropagation();
+            showDeleteButton && onDelete(index, value);
+          }}
+        >
+          Delete
+        </Button>
       </DropdownMenu>
     )
   );

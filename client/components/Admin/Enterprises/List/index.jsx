@@ -14,20 +14,11 @@ import { Button, DialogBox, Card, Loading, RemoteSubmitButton } from '../../../l
 import CreateAccount from '../CreateAccount';
 import withAuthProps from '../../../../hocs/withAuthProps';
 import { switchActiveEnterprise } from '../../../../thunks/auth';
-import { getEntities } from './Shared/helpers';
+import { getEntities, getAlertData } from './Shared/helpers';
 import GroupTable from './GroupTable';
 import styles from './styles.scss';
 import { httpClient } from '../../../../util/httpClient';
 import RenameForm from '../CreateAccount/RenameForm';
-
-const getAlertData = (action) => ({
-  success: {
-    body: `Group name ${action} success`,
-  },
-  error: {
-    body: `Group name ${action} failed`,
-  },
-});
 
 class Enterprises extends Component {
   editFormName = 'editNameForm';
@@ -94,7 +85,7 @@ class Enterprises extends Component {
         id: 'enterprises',
         key: 'enterprises',
         url: `/api/enterprises/${values.id}`,
-        alert: getAlertData('update'),
+        alert: getAlertData('Group', 'update'),
       })
       .then(({ enterprises }) => {
         this.setState(({ data: prevStateData }) => {
@@ -120,7 +111,7 @@ class Enterprises extends Component {
           id: values.id,
           key: 'enterprises',
           url: `/api/enterprises/${values.id}`,
-          alert: getAlertData('delete'),
+          alert: getAlertData('Group', 'delete'),
         })
         .then(() => {
           this.setState(({ data: prevStateData }) => {
