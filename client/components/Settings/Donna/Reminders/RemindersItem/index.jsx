@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -59,11 +58,11 @@ const primaryTypesOptions = (showVoiceTouchPoint = false) => [
   },
   ...(showVoiceTouchPoint
     ? [
-      {
-        label: 'Voice',
-        value: 'phone',
-      },
-    ]
+        {
+          label: 'Voice',
+          value: 'phone',
+        },
+      ]
     : []),
 ];
 
@@ -80,7 +79,7 @@ const SmallIconCircle = ({ selected, icon }) => {
   return <div className={wrapperClass}>{icon && <Icon icon={icon} type="solid" />}</div>;
 };
 
-const AdvancedSettingsButton = props => <Icon icon="cogs" type="solid" {...props} />;
+const AdvancedSettingsButton = (props) => <Icon icon="cogs" type="solid" {...props} />;
 
 class RemindersItem extends Component {
   constructor(props) {
@@ -227,7 +226,10 @@ class RemindersItem extends Component {
 
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { isDeleted: true },
+      values: {
+        isDeleted: true,
+        isActive: false,
+      },
       alert,
     });
   }
@@ -313,7 +315,7 @@ class RemindersItem extends Component {
                       classStyles={dropdownSelectClass}
                       value={number}
                       onChange={this.onChangeNumberInput}
-                      onBlur={e => this.changeNumber(e.target.value)}
+                      onBlur={(e) => this.changeNumber(e.target.value)}
                     />
                   </div>
                   <div className={styles.bottomRowRight}>
@@ -358,6 +360,6 @@ SmallIconCircle.propTypes = {
   selected: PropTypes.bool.isRequired,
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ updateEntityRequest }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ updateEntityRequest }, dispatch);
 
 export default connect(null, mapDispatchToProps)(RemindersItem);
