@@ -66,7 +66,7 @@ def parallelDeployApp(Deployment pipeline, String environment, String ecsCluster
 def parallelRunMigrations(Deployment pipeline, String environment, String ecsClusterName, String version) {
   def serviceName = [:]
   serviceName["migrations"] = {
-    pipeline.executeMigrationsOrSeed("${environment}-${mainApp}-migrations", ecsClusterName, "api", version)
+    pipeline.executeMigrationsOrSeed("${environment}-${mainApp}-migrations", ecsClusterName, "api", version, null, null)
   }
   return serviceName
 }
