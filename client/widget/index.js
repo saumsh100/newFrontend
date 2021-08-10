@@ -7,6 +7,7 @@ import { darkerColor, hexToRgbA } from '../components/library/util/colorMap';
 /* DO NOT USE THESE STRINGS ANYWHERE ELSE OR ELSE SEARCH AND REPLACE WILL NOT WORK */
 const __CARECRU_ACCOUNT_ID__ = '__CARECRU_ACCOUNT_ID__';
 const __CARECRU_WIDGET_PRIMARY_COLOR__ = '__CARECRU_WIDGET_PRIMARY_COLOR__';
+const __CARECRU_WIDGET_BUTTON_LABEL__ = '__CARECRU_WIDGET_BUTTON_LABEL__';
 const __CARECRU_STYLE_CSS__ = '__CARECRU_STYLE_CSS__';
 const __CARECRU_IFRAME_SRC__ = '__CARECRU_IFRAME_SRC__';
 
@@ -85,8 +86,8 @@ function main() {
   // This should always be off for multiple widgets
   // but I would rather change SPA to allow toggling of accountId first
   if (window.CareCruSettings.showBookingButton) {
-    const button = UI.bookingButton();
-    button.onclick = e => {
+    const button = UI.bookingButton(__CARECRU_WIDGET_BUTTON_LABEL__);
+    button.onclick = (e) => {
       e.preventDefault();
       window.CareCru.open(CareCru.lastRoute);
     };

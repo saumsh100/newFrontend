@@ -39,6 +39,10 @@ widgetsRouter.get('/:accountId/cc.js', async (req, res, next) => {
       new RegExp('__CARECRU_WIDGET_PRIMARY_COLOR__', 'g'),
       basicAccount.bookingWidgetPrimaryColor || '#FF715A',
     );
+    js = js.replace(
+      new RegExp('__CARECRU_WIDGET_BUTTON_LABEL__', 'g'),
+      basicAccount.bookingWidgetButtonLabel,
+    );
     js = js.replace(new RegExp('__CARECRU_IFRAME_SRC__', 'g'), iframeSrc);
 
     res.type('javascript').send(js);
