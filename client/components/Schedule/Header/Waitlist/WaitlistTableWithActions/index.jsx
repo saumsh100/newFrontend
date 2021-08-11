@@ -229,7 +229,9 @@ const WaitlistTableWithActions = ({
           className={styles.waitlistTable}
           columns={columns}
           data={waitlistWithProps}
-          pageSize={15}
+          pageSize={segmentedWaitList?.length}
+          minRows={8}
+          showPagination={false}
           showPageSizeOptions={false}
           showPageJump
           resizable={false}
