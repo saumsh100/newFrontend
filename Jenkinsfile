@@ -23,7 +23,11 @@ def parallelBuildDockerImage(Deployment pipeline, String environment) {
     def appName = service.getKey()
     def dockerfilePath = service.getValue()
     parallelServiceNames["${appName}-dev"] = {
-      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment)
+      if (isDevelopment(mainBranch)) {
+        pipeline.buildDevDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment, "https://${environment}.carecru.com/backend")  
+      } else {
+        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment)
+      }
     }
     if (isBranch(mainBranch)) {
       parallelServiceNames["${appName}-test"] = {
@@ -97,7 +101,7 @@ node(jenkinsNodeExecutor) {
           parallel parallelRunMigrations(pipeline, getVars('environment'), getVars('ecsClusterName'), version)
         }
         stage('Execute Seed') {
-          pipeline.executeMigrationsOrSeed("${getVars('environment')}-${mainApp}-seed", getVars('ecsClusterName'), mainApp, version)
+          pipeline.executeMigrationsOrSeed("${getVars('environment')}-${mainApp}-seed", getVars('ecsClusterName'), mainApp, version, null, null)
         }
       }
       stage('Application Deployments') {
