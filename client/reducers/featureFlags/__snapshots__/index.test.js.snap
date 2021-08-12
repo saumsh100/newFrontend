@@ -62,6 +62,7 @@ Object {
 exports[`featureFlags reducer reducer works 1`] = `
 Immutable.Map {
   "flags": Immutable.Map {},
+  "flagsLoaded": false,
   "context": Object {
     "key": "carecru",
   },
@@ -71,6 +72,7 @@ Immutable.Map {
 exports[`featureFlags reducer reducer works 2`] = `
 Immutable.Map {
   "flags": Immutable.Map {},
+  "flagsLoaded": false,
   "context": Object {
     "custom": Object {
       "accountId": "5086adbe-22a9-4b76-981b-b68f0a3d6113",
@@ -95,6 +97,7 @@ Immutable.Map {
     "feature-call-tracking": true,
     "feature-revenue-card": true,
   },
+  "flagsLoaded": true,
   "context": Immutable.Map {},
 }
 `;
@@ -107,6 +110,7 @@ Immutable.Map {
     "feature-call-tracking": false,
     "feature-revenue-card": false,
   },
+  "flagsLoaded": false,
   "context": Immutable.Map {},
 }
 `;
@@ -114,6 +118,7 @@ Immutable.Map {
 exports[`featureFlags reducer reducer works 5`] = `
 Immutable.Map {
   "flags": Immutable.Map {},
+  "flagsLoaded": false,
   "context": Immutable.Map {},
 }
 `;

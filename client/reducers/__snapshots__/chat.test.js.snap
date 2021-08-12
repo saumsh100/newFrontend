@@ -2,6 +2,8 @@
 
 exports[`chat reducer reducers setChatMessages 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [
     Object {
       "body": "test",
@@ -14,64 +16,91 @@ Immutable.Map {
   ],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": null,
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": null,
   "chatList": Object {},
   "newChat": null,
   "isPoC": null,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers setChatPoC no payload 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": Object {},
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": null,
   "chatList": Object {},
   "newChat": null,
   "isPoC": true,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers setChatPoC with newChat 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": Object {
     "id": "333",
   },
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": null,
   "chatList": Object {},
   "newChat": Object {
     "patientId": "333",
   },
   "isPoC": true,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers setChatPoC with selected chat 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": Object {
     "id": "333",
   },
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": Immutable.Map {
     "id": "123",
     "patientId": "333",
@@ -79,54 +108,78 @@ Immutable.Map {
   "chatList": Object {},
   "newChat": null,
   "isPoC": true,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers setLockedChats 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": null,
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [
     "123",
   ],
+  "isLoading": true,
   "selectedChat": null,
   "chatList": Object {},
   "newChat": null,
   "isPoC": null,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers setNewChat 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": null,
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": null,
   "chatList": Object {},
   "newChat": Object {
     "patientId": "333",
   },
   "isPoC": null,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers setSelectedChat 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": null,
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": Immutable.Map {
     "id": "123",
     "patientId": "333",
@@ -134,30 +187,44 @@ Immutable.Map {
   "chatList": Object {},
   "newChat": null,
   "isPoC": null,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers setTotalChatMessages 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 13,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": null,
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": null,
   "chatList": Object {},
   "newChat": null,
   "isPoC": null,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers setUnreadChats 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [
     "123",
     "456",
@@ -165,39 +232,57 @@ Immutable.Map {
   ],
   "chatPoC": null,
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": null,
   "chatList": Object {},
   "newChat": null,
   "isPoC": null,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers updateChatId 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": null,
   "selectedChatId": null,
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": null,
   "chatList": Object {},
   "newChat": null,
   "isPoC": null,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 
 exports[`chat reducer reducers updateChatId with selected chat 1`] = `
 Immutable.Map {
+  "pendingMessages": Array [],
+  "unreadChatsCount": 0,
   "chatMessages": Array [],
   "selectedPatientId": null,
   "totalChatMessages": 0,
+  "prospect": null,
   "unreadChats": Array [],
   "chatPoC": null,
   "selectedChatId": "123",
+  "conversationIsLoading": false,
   "lockedChats": Array [],
+  "isLoading": true,
   "selectedChat": Immutable.Map {
     "id": "123",
     "patientId": "333",
@@ -205,6 +290,9 @@ Immutable.Map {
   "chatList": Object {},
   "newChat": null,
   "isPoC": null,
+  "chatCategoriesCount": Object {},
+  "patientChat": null,
+  "isFetchingProspect": false,
 }
 `;
 

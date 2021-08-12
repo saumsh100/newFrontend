@@ -29,54 +29,54 @@ Please follow the steps below in the order they are layed out. We'll be using `N
   - Install Python and set environment variable. Mac should have it out of the box, make sure Xcode is up to date and you're good to go.
   - Download `NVM` using this website. https://github.com/creationix/nvm. Please read through this on how to use properly and migrate existing npm packages.
   - To download and install a certain Node version using `NVM`, run: `nvm install <VERSION>`.
-  - To use a specific Node version run: `nvm use <VERSION>` (for example: `nvm use 8.11`)
+  - To use a specific Node version run: `nvm use <VERSION>` (for example: `nvm use 14.17.4`)
 
   **For Windows**
 
   - Open PowerShell as Administrator. Run `npm install --global --production windows-build-tools`. This installs the VS Build Tools and also Python 2.7
   - Download `nvm-windows` from https://github.com/coreybutler/nvm-windows and follow the steps in the document
   - To download and install a certain Node version using NVM, run `nvm install <VERSION>`
-  - To use a specific Node version run: `nvm use <VERSION>` (for example: `nvm use 8.11`)
+  - To use a specific Node version run: `nvm use <VERSION>` (for example: `nvm use 14.17.4`)
 
 - Install Node versions by executing `NVM` in root folder. This will run the configurations in `.nvmrc` file
-  - Install Node on version 8 with the command: `nvm install v8` and `nvm use v8` to set the desired version
+  - Install Node on version 14.17.4 with the command: `nvm install 14.17.4` and `nvm use 14.17.4` to set the desired version
 
 ### Setting up Front End
 
 1. Go to the frontend folder `cd frontend`.
 2. Create a `.env` file and copy the following content into it:
 
-    ```env
-    # Specific app configuration
-    NODE_ENV=development
-    DEBUG=false
-    # webpack will server the app on this port by default and
-    # the browser sync will proxy it to 3000
+   ```env
+   # Specific app configuration
+   NODE_ENV=development
+   DEBUG=false
+   # webpack will server the app on this port by default and
+   # the browser sync will proxy it to 3000
 
-    # Integration configuration
-    FEATURE_FLAG_KEY=5a332a3c95e24c205546f0df
-    GOOGLE_API_KEY=AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q
-    INTERCOM_APP_ID=enpxykhl
-    REGION="CA"
-    NODE_OPTIONS=--max-old-space-size=8192
+   # Integration configuration
+   FEATURE_FLAG_KEY=5a332a3c95e24c205546f0df
+   GOOGLE_API_KEY=AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q
+   INTERCOM_APP_ID=enpxykhl
+   REGION="CA"
+   NODE_OPTIONS=--max-old-space-size=8192
 
-    # Time in seconds
-    POLLING_FOLLOWUP_INTERVAL=300
-    POLLING_SCHEDULE_INTERVAL=300
-    POLLING_REVENUE_INTERVAL=300
-    POLLING_VWR_INTERVAL=60
-    POLLING_UNREAD_CHAT_INTERVAL=300
+   # Time in seconds
+   POLLING_FOLLOWUP_INTERVAL=300
+   POLLING_SCHEDULE_INTERVAL=300
+   POLLING_REVENUE_INTERVAL=300
+   POLLING_VWR_INTERVAL=60
+   POLLING_UNREAD_CHAT_INTERVAL=300
 
-    # API request configuration
-    API_SERVER="https://test-backend.carecru.com"
+   # API request configuration
+   API_SERVER="https://test-backend.carecru.com"
 
-    # Should build source maps?
-    SOURCE=true
-    ```
+   # Should build source maps?
+   SOURCE=true
+   ```
 
-    > You can check the [.env.example file](./.env.example) for all the properties used by production mode. You don't need to set all of them for development.
+   > You can check the [.env.example file](./.env.example) for all the properties used by production mode. You don't need to set all of them for development.
 
-    **Note**: Ask a team member for the keys to the `.env` file
+   **Note**: Ask a team member for the keys to the `.env` file
 
 3. Run `npm run npmrc` to create a `.npmrc` file with the right token
 4. Run `npm ci` to install the packages following the `package-lock.json` versions
@@ -108,35 +108,35 @@ This way the API can be reached from within the VM. There are other ways to achi
 2. Go to the frontend folder `cd frontend`.
 3. Create a `.env` file and copy the following content into it:
 
-    ```env
-    # Specific app configuration
-    NODE_ENV=development
-    DEBUG=false
+   ```env
+   # Specific app configuration
+   NODE_ENV=development
+   DEBUG=false
 
-    # Integration configuration
-    FEATURE_FLAG_KEY=5a332a3c95e24c205546f0df
-    GOOGLE_API_KEY=AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q
-    INTERCOM_APP_ID=enpxykhl
-    REGION="CA"
-    NODE_OPTIONS=--max-old-space-size=8192
+   # Integration configuration
+   FEATURE_FLAG_KEY=5a332a3c95e24c205546f0df
+   GOOGLE_API_KEY=AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q
+   INTERCOM_APP_ID=enpxykhl
+   REGION="CA"
+   NODE_OPTIONS=--max-old-space-size=8192
 
-    # Time in seconds
-    POLLING_FOLLOWUP_INTERVAL=300
-    POLLING_SCHEDULE_INTERVAL=300
-    POLLING_REVENUE_INTERVAL=300
-    POLLING_VWR_INTERVAL=60
-    POLLING_UNREAD_CHAT_INTERVAL=300
+   # Time in seconds
+   POLLING_FOLLOWUP_INTERVAL=300
+   POLLING_SCHEDULE_INTERVAL=300
+   POLLING_REVENUE_INTERVAL=300
+   POLLING_VWR_INTERVAL=60
+   POLLING_UNREAD_CHAT_INTERVAL=300
 
-    # Should build source maps?
-    SOURCE=true
+   # Should build source maps?
+   SOURCE=true
 
-    # API request configuration
-    API_SERVER="http://localhost:5000"
-    ```
+   # API request configuration
+   API_SERVER="http://localhost:5000"
+   ```
 
-    > You can check the [.env.example file](./.env.example) for all the properties used by production mode. You don't need to set all of them for development.
+   > You can check the [.env.example file](./.env.example) for all the properties used by production mode. You don't need to set all of them for development.
 
-    **Note**: Ask a team member for the keys to the `.env` file
+   **Note**: Ask a team member for the keys to the `.env` file
 
 4. Change the `API_SERVER_HOST` in your `.env` file to `"http://0.0.0.0:5100"`
 5. Run `npm run npmrc` to create a `.npmrc` file with the right token
@@ -147,7 +147,7 @@ This way the API can be reached from within the VM. There are other ways to achi
 
 It is useful to have your terminal application view split into 4 terminal panes.
 
-| Order | Execution Directory | Command     | Description                                                                                                           |
+| Order | Execution Directory | Command     | Description                                         |
 | ----- | ------------------- | ----------- | --------------------------------------------------- |
 | 1     | backend/            | `npm start` | Starts the backend api server and docker containers |
 | 2     | frontend/           | `npm start` | Starts CareCru application                          |

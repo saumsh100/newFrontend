@@ -16,7 +16,7 @@ Object {
 
 exports[`alerts reducer reducer works 1`] = `
 Immutable.Map {
-  "123-456": Immutable.Record {
+  "123-456": Immutable.Alerts {
     "id": "123-456",
     "title": "test alert",
     "body": "test body",

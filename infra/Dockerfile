@@ -1,4 +1,4 @@
-FROM public.ecr.aws/carecru/docker-images:node-14.15.1-alpine as builder
+FROM public.ecr.aws/carecru/docker-images:node-14.17.4-alpine3.14 as builder
 
 ARG TZ=America/Los_Angeles
 ARG NPM_TOKEN
@@ -47,7 +47,7 @@ COPY . ./
 RUN npm run client:build
 
 # Deploy only the build with Express Server
-FROM public.ecr.aws/carecru/docker-images:node-14.15.1-alpine
+FROM public.ecr.aws/carecru/docker-images:node-14.17.4-alpine3.14
 
 ENV PATH /app/node_modules/.bin:$PATH
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

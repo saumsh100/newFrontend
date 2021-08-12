@@ -4,7 +4,8 @@
   "description": "Dental Practice Dashboard",
   "author": "CareCru Inc. <info@carecru.com>",
   "engines": {
-    "node": "^8 || ^10 || ^12 || ^14"
+    "node": "^14.17.4",
+    "npm": "^6.14.14"
   },
   "files": [
     "/dist"
@@ -184,8 +185,8 @@
     "browser-sync": "^2.26.14",
     "browser-sync-webpack-plugin": "^2.2.2",
     "depcheck": "^0.9.0",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "escape-string-regexp": "^4.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.2.1",

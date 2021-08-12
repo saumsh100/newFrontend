@@ -1,7 +1,9 @@
-
 module.exports = {
   testURL: 'http://localhost/',
-  setupTestFrameworkScriptFile: '<rootDir>/tests/util/jestSetup.js',
+  transform: {
+    '\\.[jt]sx?$': 'babel-jest',
+  },
+  setupFilesAfterEnv: ['<rootDir>/tests/util/jestSetup.js'],
   displayName: 'test',
   moduleNameMapper: {
     '^CareCruModels$': '<rootDir>/server/_models/index.js',

@@ -1,18 +1,16 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import { render, cleanup } from 'react-testing-library';
 import 'jest-dom/extend-expect';
-import MessageTextArea from './';
+import MessageTextArea from '.';
 
-jest.mock('flexboxgrid', () => {});
 const configureMockStore = configureStore();
 let mockStore;
 
 const getter = (data = {}) => ({
-  get: param => data[param],
+  get: (param) => data[param],
   ...data,
 });
 
