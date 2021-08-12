@@ -17,9 +17,9 @@ export function getEntities(entities) {
 
 export const getAlertData = (type, action) => ({
   success: {
-    body: `${type} name ${action} success`,
+    body: `${type} ${action === 'update' ? 'name' : ''} ${action} success`,
   },
   error: {
-    body: `${type} name ${action} failed`,
+    body: `${type} ${action === 'update' ? 'name' : ''} ${action} failed`,
   },
 });

@@ -1,4 +1,3 @@
-
 import jwt from 'jwt-decode';
 import { push } from 'connected-react-router';
 import { SubmissionError } from 'redux-form';
@@ -31,7 +30,6 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
         ...session,
         sessionId,
       };
-      localStorage.setItem('session', JSON.stringify(userSession));
 
       const { user } = userSession;
       const userData = {
@@ -58,7 +56,6 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
       console.error(error);
       // Catch 401 from /api/users/me and logout
       localStorage.removeItem('token');
-      localStorage.removeItem('session');
       dispatch(authLogout());
       dispatch(push('./login'));
     });
@@ -125,7 +122,7 @@ const cleanRedirect = (redirectTo) => {
 };
 
 export function switchActiveAccount(accountId, redirectTo = '/') {
-  return dispatch =>
+  return (dispatch) =>
     httpClient()
       .post(`/api/accounts/${accountId}/switch`, {})
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
@@ -134,7 +131,7 @@ export function switchActiveAccount(accountId, redirectTo = '/') {
 }
 
 export function switchActiveEnterprise(enterpriseId, redirectTo = '/') {
-  return dispatch =>
+  return (dispatch) =>
     httpClient()
       .post('/api/enterprises/switch', { enterpriseId })
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
@@ -145,7 +142,6 @@ export function switchActiveEnterprise(enterpriseId, redirectTo = '/') {
 export function logout() {
   return (dispatch, getState) => {
     localStorage.removeItem('token');
-    localStorage.removeItem('session');
     sessionStorage.removeItem('scheduleDate');
     sessionStorage.removeItem('dashboardDate');
     const { auth } = getState();
