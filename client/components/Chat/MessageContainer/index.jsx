@@ -325,8 +325,14 @@ class MessageContainer extends Component {
           id="careCruChatScrollIntoView"
           className={styles.allMessages}
           refCallback={this.scrollContainer}
-          onScroll={() => {
-            this.setState({ scrolled: true });
+          onScroll={(e) => {
+            const { clientHeight, scrollHeight, scrollTop } = e.target;
+            const scrollSum = clientHeight + scrollTop + 10;
+            if (scrollSum >= scrollHeight) {
+              this.setState({ scrolled: false });
+            } else {
+              this.setState({ scrolled: true });
+            }
           }}
         >
           <InfiniteScroll
