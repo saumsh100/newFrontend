@@ -24,7 +24,7 @@ def parallelBuildDockerImage(Deployment pipeline, String environment) {
     def dockerfilePath = service.getValue()
     parallelServiceNames["${appName}-dev"] = {
       if (isDevelopment(mainBranch)) {
-        pipeline.buildDevDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment, "https://${environment}.carecru.com/backend")  
+        pipeline.buildDevDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment, "https://dev-backend.carecru.com")  
       } else {
         pipeline.buildDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment)
       }
