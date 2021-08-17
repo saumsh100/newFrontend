@@ -49,10 +49,6 @@ const ROUTES = {
       to: '/admin/integrations',
       label: 'Integrations',
     },
-    {
-      to: '/admin/play',
-      label: 'Playground',
-    },
   ],
 };
 

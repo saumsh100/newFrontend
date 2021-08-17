@@ -201,7 +201,6 @@ function NavList({
             <MultiNavItem path="/admin" icon="superpowers" label="Global Admin" iconType="brand">
               <SubNavItem path="/admin/enterprises" label="Enterprises" />
               <SubNavItem path="/admin/integrations" label="Integrations" />
-              <SubNavItem path="/admin/play" label="Playground" />
             </MultiNavItem>
           )}
         />
