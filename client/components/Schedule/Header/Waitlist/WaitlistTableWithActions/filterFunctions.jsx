@@ -1,4 +1,3 @@
-
 import { getDate } from '../../../../library';
 
 /**
@@ -102,7 +101,7 @@ const timesFilter = (waitlist, filterRule, showNotSet) =>
       return waitspot;
     }
     const { availableTimes } = waitspot;
-    return availableTimes.find(time => filterRule[getDate(time).toISOString()]);
+    return availableTimes.find((time) => filterRule[getDate(time).toISOString()]);
   });
 
 /**
@@ -117,7 +116,7 @@ const practitionersFilter = (waitlist, filterRule, showNotSet) =>
     if (showNotSet && !practitioner) {
       return true;
     }
-    return filterRule.find(pract => pract.id === practitioner?.ccId && pract.selected);
+    return filterRule.find((pract) => pract.id === practitioner?.ccId && pract.selected);
   });
 /**
  * @param waitlist - Array
@@ -145,3 +144,21 @@ function unitsFilter(waitlist, filterRule, showNotSet) {
     return min <= units && units <= max;
   });
 }
+
+/**
+ * @param waitlist - Array
+ * @param searchQuery - string
+ * @return Array
+ */
+export const patientSearch = (waitlist, searchQuery) => {
+  if (!searchQuery) return waitlist;
+  return waitlist.filter(({ patient }, item) => {
+    const { firstName, lastName } = patient;
+    const patientName = `${firstName}${lastName}`.toLowerCase();
+    const query = searchQuery.replaceAll(' ', '').toLowerCase();
+    if (patientName.includes(query)) {
+      return item;
+    }
+    return false;
+  });
+};

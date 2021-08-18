@@ -1,3 +1,5 @@
+@import '../../../../../../styles/ui';
+
 .listWrapper {
   border-radius: 4px;
   box-shadow: 1px 1px 7px 1px rgba(31, 82, 130, 0.16);
@@ -88,4 +90,40 @@
 
 .unsetUnitLabel {
   color: #093c61;
+}
+
+.waitlistSearchInputWrapper {
+  position: relative;
+}
+
+.waitlistSearchInput {
+  border: 0;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  box-shadow: 0 0 3px 1px rgba(31, 82, 130, 0.12);
+  color: $primary-dark;
+  font-family: $book-font;
+  font-size: $small-size;
+  font-weight: 300;
+  height: 32px;
+  letter-spacing: 0.7px;
+  outline: none;
+  padding: 0 20px 0 37px;
+  transition: all 0.2s ease-in 0s;
+  width: 200px;
+
+  &:focus {
+    border-color: rgb(21, 75, 110);
+  }
+
+  &::placeholder {
+    color: $primary-darkgrey;
+  }
+}
+
+.waitlistSearchInputIcon {
+  color: rgb(24, 60, 94);
+  left: 16px;
+  position: absolute;
+  top: 12px;
 }
