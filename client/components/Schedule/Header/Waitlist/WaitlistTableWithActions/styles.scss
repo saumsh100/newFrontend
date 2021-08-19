@@ -15,6 +15,12 @@
     & .-next,
     & .-center {
       flex: none !important;
+
+      & .-pageInfo .-pageJump input {
+        height: 40px;
+        margin-left: 8px;
+        margin-right: 8px;
+      }
     }
   }
 }
@@ -107,7 +113,7 @@ $height: 4px;
   border-radius: 20px;
   color: rgb(255, 255, 255);
   display: inline-flex;
-  font-family: 'Gotham-Bold', sans-serif;
+  font-family: 'Gotham-Medium', sans-serif;
   font-weight: bold;
   height: 36px;
   justify-content: center;
@@ -119,6 +125,7 @@ $height: 4px;
 .paginationComp {
   color: #154b6e;
   cursor: pointer;
+  font-size: 20px;
   &[disabled] {
     color: #efefef;
     cursor: not-allowed;

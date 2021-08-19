@@ -36,6 +36,8 @@ export const trGrpStyles = {
 export const pgStyles = {
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '12px',
+  paddingLeft: '12px',
+  paddingRight: '12px',
   boxShadow: 'none',
+  height: '64px',
 };
