@@ -1,10 +1,10 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import uniqBy from 'lodash/uniqBy';
+import { useSelector } from 'react-redux';
 import { isHub } from '../../util/hub';
 import { Input, InfiniteScroll } from '../library';
 import Loader from '../Loader';
@@ -73,32 +73,6 @@ class PatientSearch extends Component {
   }
 
   /**
-   * scroll the list to an index with offset
-   */
-  scrollTo(index) {
-    if (this.suggestionsNode) {
-      this.suggestionsNode.current.scrollTop = index * (isHub() ? 70 : 50);
-    }
-  }
-
-  /**
-   * Clear the state if a new search is made
-   * @param {*} search
-   */
-  clearPatientsState({ search }) {
-    if (this.state.lastSearch !== search) {
-      this.setState(() => ({
-        lastSearch: search,
-        currValue: '',
-        patients: [],
-        totalCount: 0,
-        isLoading: true,
-        endCursor: '',
-      }));
-    }
-  }
-
-  /**
    * load handler for InfiniteScroll
    */
   handleLoadMore() {
@@ -111,30 +85,6 @@ class PatientSearch extends Component {
         })
         .then(this.updateStateWithData(currValue));
     });
-  }
-
-  /**
-   * factory function to update the state with the promise data return
-   * @param {*} inputValue
-   * @returns {function}
-   */
-  updateStateWithData(inputValue) {
-    return ({ data }) =>
-      this.setState((prevState) => {
-        const { currValue } = prevState;
-        if (inputValue !== currValue || !data) return null;
-        const results = data.accountViewer.patients.edges.map(v => v.node);
-
-        return {
-          isLoading: false,
-          hasNextPage: data.accountViewer.patients.pageInfo.hasNextPage,
-          endCursor: data.accountViewer.patients.pageInfo.endCursor,
-          totalCount: data.accountViewer.patients.totalCount,
-          results,
-          patients:
-            inputValue === currValue ? uniqBy(prevState.patients.concat(results), 'id') : results,
-        };
-      });
   }
 
   /**
@@ -186,6 +136,56 @@ class PatientSearch extends Component {
   }
 
   /**
+   * scroll the list to an index with offset
+   */
+  scrollTo(index) {
+    if (this.suggestionsNode) {
+      this.suggestionsNode.current.scrollTop = index * (isHub() ? 70 : 50);
+    }
+  }
+
+  /**
+   * Clear the state if a new search is made
+   * @param {*} search
+   */
+  clearPatientsState({ search }) {
+    if (this.state.lastSearch !== search) {
+      this.setState(() => ({
+        lastSearch: search,
+        currValue: '',
+        patients: [],
+        totalCount: 0,
+        isLoading: true,
+        endCursor: '',
+      }));
+    }
+  }
+
+  /**
+   * factory function to update the state with the promise data return
+   * @param {*} inputValue
+   * @returns {function}
+   */
+  updateStateWithData(inputValue) {
+    return ({ data }) =>
+      this.setState((prevState) => {
+        const { currValue } = prevState;
+        if (inputValue !== currValue || !data) return null;
+        const results = data.accountViewer.patients.edges.map((v) => v.node);
+
+        return {
+          isLoading: false,
+          hasNextPage: data.accountViewer.patients.pageInfo.hasNextPage,
+          endCursor: data.accountViewer.patients.pageInfo.endCursor,
+          totalCount: data.accountViewer.patients.totalCount,
+          results,
+          patients:
+            inputValue === currValue ? uniqBy(prevState.patients.concat(results), 'id') : results,
+        };
+      });
+  }
+
+  /**
    * Render function for the relay query renderer
    * returns a function to be used as render prop
    */
@@ -214,8 +214,7 @@ class PatientSearch extends Component {
                   index={index}
                   inputValue={currValue}
                   highlightedIndex={highlightedIndex}
-                  getItemProps={getItemProps({ id: patient.id,
-                    item: patient })}
+                  getItemProps={getItemProps({ id: patient.id, item: patient })}
                   theme={theme}
                 />
               ))}
@@ -225,11 +224,11 @@ class PatientSearch extends Component {
         {isLoading
           ? renderListFooter(currValue, 'Searching...', isLoading)
           : renderListFooter(
-            currValue,
-            totalCount === 0
-              ? 'No results found for'
-              : `${totalCount} Patients found for the search`,
-          )}
+              currValue,
+              totalCount === 0
+                ? 'No results found for'
+                : `${totalCount} Patients found for the search`,
+            )}
       </div>
     );
   }
@@ -286,11 +285,12 @@ class PatientSearch extends Component {
         stateReducer={this.handleDownshiftStateReducer}
         onStateChange={this.handleStateChange()}
         onInputValueChange={this.clearList}
-        itemToString={patient =>
-          (patient === null ? '' : `${patient.firstName} ${patient.lastName}`)
+        itemToString={(patient) =>
+          patient === null ? '' : `${patient.firstName} ${patient.lastName}`
         }
         render={({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => {
-          const displayList = isOpen && typeof currValue !== 'undefined' && currValue !== '' && inputValue !== '';
+          const displayList =
+            isOpen && typeof currValue !== 'undefined' && currValue !== '' && inputValue !== '';
           const displaySearching = isOpen && inputValue !== '';
           const suggestionsListProps = {
             newTheme,
@@ -325,8 +325,7 @@ class PatientSearch extends Component {
                         key={patient.id}
                         patient={patient}
                         index={index}
-                        getItemProps={getItemProps({ id: patient.id,
-                          item: patient })}
+                        getItemProps={getItemProps({ id: patient.id, item: patient })}
                         theme={newTheme}
                       />
                     ))}
@@ -350,6 +349,7 @@ PatientSearch.propTypes = {
     id: PropTypes.string,
     placeholder: PropTypes.string,
     onBlur: PropTypes.func,
+    classStyles: PropTypes.string,
   }),
   theme: PropTypes.shape({ container: PropTypes.string }),
   searchedPatients: PropTypes.arrayOf(
@@ -381,22 +381,29 @@ PatientSearch.defaultProps = {
 };
 
 const GraphQLPatientSearch = ({ context, ...props }) => {
-  const setSearchData = refetch => data => refetch(composeSearchQuery(data));
-  const addNewPatientSearch = update => patient =>
-    update({ variables: { input: composeAddPatientSearchMutation(patient, context) } });
+  const setSearchData = (refetch) => (data) => refetch(composeSearchQuery(data));
+  const [userId, accountId] = useSelector((state) => [
+    state.auth.get('userId'),
+    state.auth.get('accountId'),
+  ]);
+
+  const addNewPatientSearch = (update) => (patient) =>
+    update({
+      variables: { input: composeAddPatientSearchMutation(patient, context, userId, accountId) },
+    });
 
   return (
     <FetchPatientSearches context={context}>
       {({ data }) => {
         if (!data) return null;
         const recentSearches = data.accountViewer
-          ? data.accountViewer.patientSearches.edges.map(v => v.node.patient).filter(p => !!p)
+          ? data.accountViewer.patientSearches.edges.map((v) => v.node.patient).filter((p) => !!p)
           : [];
         return (
           <FetchPatients>
             {({ refetch }) => (
               <AddPatientSearch>
-                {addPatientSearch => (
+                {(addPatientSearch) => (
                   <PatientSearch
                     {...props}
                     context={context}

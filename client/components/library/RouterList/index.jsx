@@ -1,19 +1,17 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Map } from 'immutable';
-import jwt from 'jwt-decode';
+import { useSelector } from 'react-redux';
 import Link from '../Link';
 import { List, ListItem } from '../List';
 import styles from './styles.scss';
 
 export default function RouterList({ location, routes, className, users, featureFlags }) {
-  const token = localStorage.getItem('token');
-  const decodedToken = jwt(token);
+  const userId = useSelector((state) => state.auth.get('userId'));
 
   let role = null;
   users.map((user) => {
-    if (decodedToken.userId === user.id) {
+    if (userId === user.id) {
       role = user.role;
     }
     return null;

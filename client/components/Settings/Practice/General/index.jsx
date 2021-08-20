@@ -1,10 +1,8 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import jwt from 'jwt-decode';
 import GeneralForm from './GeneralForm';
 import Address from './Address';
 import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
@@ -30,9 +28,7 @@ class General extends Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-    const url = `/api/users/${decodedToken.userId}`;
+    const url = `/api/users/${this.props.userId}`;
 
     this.props.fetchEntities({ url });
   }
@@ -63,7 +59,7 @@ class General extends Component {
 
   updatePracticeData(values) {
     const { activeAccount } = this.props;
-    const notificationEmailsArr = values.notificationEmails.split(',').map(val => val.trim());
+    const notificationEmailsArr = values.notificationEmails.split(',').map((val) => val.trim());
     const valuesMap = Map({
       ...values,
       notificationEmails: notificationEmailsArr,
@@ -85,7 +81,7 @@ class General extends Component {
   }
 
   render() {
-    const { activeAccount, users } = this.props;
+    const { activeAccount, users, userId } = this.props;
 
     if (!activeAccount) return null;
     const PracticeDetailsInitValues = {
@@ -99,11 +95,9 @@ class General extends Component {
         : '',
       useNotificationEmails: activeAccount.get('useNotificationEmails'),
     };
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
     let role = null;
     users.forEach((user) => {
-      if (decodedToken.userId === user.id) {
+      if (userId === user.id) {
         role = user.role;
       }
       return null;
@@ -116,20 +110,21 @@ class General extends Component {
       const end = getTodaysDate(this.props.timezone);
       const duration = getDateDuration(now.diff(end)).asSeconds();
 
-      button = duration > 0 ? (
+      button =
+        duration > 0 ? (
           <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
             Click to Download
             <br /> {Math.floor(duration)} s
           </Link>
-      ) : (
+        ) : (
           <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
             Link Expired
           </Link>
-      );
+        );
 
       setTimeout(() => {
         if (duration > 0) {
-          this.setState(prevState => ({ expired: prevState.expired }));
+          this.setState((prevState) => ({ expired: prevState.expired }));
         }
       }, 500);
     }
@@ -187,6 +182,7 @@ General.propTypes = {
   deleteLogo: PropTypes.func.isRequired,
   downloadConnector: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -213,6 +209,7 @@ function mapStateToProps({ entities, auth }) {
     activeAccount,
     address,
     timezone: activeAccount.timezone,
+    userId: auth.get('userId'),
   };
 }
 

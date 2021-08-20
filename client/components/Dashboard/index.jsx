@@ -1,9 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import jwt from 'jwt-decode';
 import { Map } from 'immutable';
 import DocumentTitle from 'react-document-title';
 import EnabledFeature from '../library/EnabledFeature';
@@ -28,10 +26,8 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { users } = this.props;
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-    const user = users.get(decodedToken.userId);
+    const { users, userId } = this.props;
+    const user = users.get(userId);
     const userName = user ? user.get('firstName') : '';
 
     return (
@@ -73,11 +69,12 @@ class Dashboard extends React.Component {
   }
 }
 
-function mapStateToProps({ entities, dashboard }) {
+function mapStateToProps({ entities, dashboard, auth }) {
   return {
     users: entities.getIn(['users', 'models']),
     dashboardDate: dashboard.get('dashboardDate'),
     dashboard,
+    userId: auth.get('userId'),
   };
 }
 
@@ -108,5 +105,6 @@ Dashboard.propTypes = {
     reviews: PropTypes.arrayOf(PropTypes.any),
     recalls: PropTypes.arrayOf(PropTypes.any),
   }).isRequired,
+  userId: PropTypes.string.isRequired,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

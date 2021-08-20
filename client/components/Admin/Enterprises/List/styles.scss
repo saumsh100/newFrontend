@@ -22,10 +22,10 @@
   .manageCell {
     overflow: visible;
   }
-  :global .rt-thead,
-  :global .rt-tbody {
-    overflow-y: scroll;
-  }
+}
+
+:global([class^='styles__enterpriseTable'] > .ReactTable > .rt-table > .rt-thead) {
+  overflow-y: scroll;
 }
 
 .manageCellDropdown {

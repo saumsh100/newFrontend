@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
-import jwt from 'jwt-decode';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { Header, Button, DialogBox, getFormattedDate } from '../../../library';
@@ -36,9 +35,7 @@ class SuperAdmin extends Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-    const url = `/api/users/${decodedToken.userId}`;
+    const url = `/api/users/${this.props.userId}`;
 
     this.props.fetchEntities({ url });
   }
@@ -210,15 +207,13 @@ class SuperAdmin extends Component {
   }
 
   render() {
-    const { activeAccount, users, timezone } = this.props;
+    const { activeAccount, users, timezone, userId } = this.props;
 
     if (!activeAccount) return null;
 
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
     let role = null;
     users.forEach((user) => {
-      if (decodedToken.userId === user.id) {
+      if (userId === user.id) {
         role = user.role;
       }
       return null;
@@ -310,6 +305,7 @@ SuperAdmin.propTypes = {
   timezone: PropTypes.string.isRequired,
   address: PropTypes.instanceOf(Address),
   reset: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 SuperAdmin.defaultProps = {
@@ -332,6 +328,7 @@ const mapStateToProps = ({ entities, auth }) => {
     address,
     users: entities.getIn(['users', 'models']),
     timezone,
+    userId: auth.get('userId'),
   };
 };
 

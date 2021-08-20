@@ -1,7 +1,5 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import jwt from 'jwt-decode';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
@@ -27,9 +25,9 @@ import { fetchEntities } from '../../../../thunks/fetchEntities';
 import { showAlertTimeout } from '../../../../thunks/alerts';
 import styles from './styles.scss';
 
-const getNotesFormName = data => (data ? `editNotesForm-${data.id}` : 'addNotesForm');
-const getFollowUpsFormName = data => (data ? `editFollowUpsForm-${data.id}` : 'addFollowUpsForm');
-const getRecallsFormName = data => (data ? `editRecallsForm-${data.id}` : 'logRecallsForm');
+const getNotesFormName = (data) => (data ? `editNotesForm-${data.id}` : 'addNotesForm');
+const getFollowUpsFormName = (data) => (data ? `editFollowUpsForm-${data.id}` : 'addFollowUpsForm');
+const getRecallsFormName = (data) => (data ? `editRecallsForm-${data.id}` : 'logRecallsForm');
 
 const updateRecallConfirmation =
   'Are you sure you want to update this logged recall? ' +
@@ -47,21 +45,9 @@ class PatientActionsContainer extends Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-    const url = `/api/users/${decodedToken.userId}`;
+    const url = `/api/users/${this.props.userId}`;
 
     this.props.fetchEntities({ url });
-  }
-
-  toggleForm(selectedData, setSelectedData, setFormActive) {
-    return () => {
-      if (selectedData) {
-        setSelectedData(null);
-      } else {
-        setFormActive(false);
-      }
-    };
   }
 
   async handleNotesFormSubmit({ note }, commit) {
@@ -286,6 +272,16 @@ class PatientActionsContainer extends Component {
     }
   }
 
+  toggleForm(selectedData, setSelectedData, setFormActive) {
+    return () => {
+      if (selectedData) {
+        setSelectedData(null);
+      } else {
+        setFormActive(false);
+      }
+    };
+  }
+
   render() {
     const {
       accountUsers,
@@ -326,12 +322,12 @@ class PatientActionsContainer extends Component {
           containerStyles={styles.patientActionsModalTheme}
         >
           <CreateOrUpdatePatientNoteMutation isUpdate={isUpdatingNote}>
-            {commit =>
+            {(commit) =>
               (isNoteFormActive || isUpdatingNote) && (
                 <NotesForm
                   formName={getNotesFormName(selectedNote)}
                   initialValues={selectedNote}
-                  onSubmit={values => this.handleNotesFormSubmit(values, commit)}
+                  onSubmit={(values) => this.handleNotesFormSubmit(values, commit)}
                   className={styles.notesForm}
                 />
               )
@@ -351,7 +347,7 @@ class PatientActionsContainer extends Component {
           containerStyles={styles.patientActionsModalTheme}
         >
           <CreateOrUpdateFollowUpMutation isUpdate={isUpdatingFollowUp}>
-            {commit =>
+            {(commit) =>
               (isFollowUpsFormActive || isUpdatingFollowUp) && (
                 <FollowUpsForm
                   accountUsers={accountUsers}
@@ -362,7 +358,7 @@ class PatientActionsContainer extends Component {
                       assignedUserId: this.props.userId,
                     }
                   }
-                  onSubmit={values => this.handleFollowUpsFormSubmit(values, commit)}
+                  onSubmit={(values) => this.handleFollowUpsFormSubmit(values, commit)}
                   className={styles.notesForm}
                 />
               )
@@ -382,7 +378,7 @@ class PatientActionsContainer extends Component {
           containerStyles={styles.patientActionsModalTheme}
         >
           <CreateOrUpdateSentRecallMutation isUpdate={isUpdatingRecall}>
-            {commit =>
+            {(commit) =>
               (isRecallsFormActive || isUpdatingRecall) && (
                 <LogRecallForm
                   patientId={activePatient.id}
@@ -396,7 +392,7 @@ class PatientActionsContainer extends Component {
                       createdAt: new Date().toISOString(),
                     }
                   }
-                  onSubmit={values => this.handleSentRecallFormSubmit(values, commit)}
+                  onSubmit={(values) => this.handleSentRecallFormSubmit(values, commit)}
                   className={styles.notesForm}
                 />
               )

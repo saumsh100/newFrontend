@@ -1,10 +1,8 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map, Record } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import jwt from 'jwt-decode';
 import CallsBody from './CallsBody';
 import {
   fetchEntitiesRequest,
@@ -42,19 +40,17 @@ class Calls extends Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
     const { startDate, endDate, skip, limit } = this.state;
-    const params = paramBuilder(startDate, endDate, decodedToken.activeAccountId, skip, limit);
+    const params = paramBuilder(startDate, endDate, this.props.accountId, skip, limit);
 
     this.fetchCallData(params).then((data) => {
       const dataLength = Object.keys(data[1].calls || {}).length;
       const moreData = dataLength === this.state.limit;
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         skip: prevState.skip + dataLength,
         moreData,
         callsLength: dataLength,
-        accountId: decodedToken.activeAccountId,
+        accountId: this.props.accountId,
       }));
     });
   }
@@ -69,9 +65,9 @@ class Calls extends Component {
     const endDate = getUTCDate(values.to, timezone);
 
     if (
-      startDate.isValid()
-      && endDate.isValid()
-      && !(startDate.toISOString() === endDate.toISOString())
+      startDate.isValid() &&
+      endDate.isValid() &&
+      startDate.toISOString() !== endDate.toISOString()
     ) {
       this.props.deleteAllEntity('calls');
 
@@ -91,6 +87,30 @@ class Calls extends Component {
         });
       });
     }
+  }
+
+  handleCallUpdate(id, wasApptBooked) {
+    this.props.updateEntityRequest({
+      key: 'calls',
+      values: { wasApptBooked },
+      url: `/api/calls/${id}`,
+    });
+  }
+
+  fetchCallData(params) {
+    return Promise.all([
+      this.props.fetchEntitiesRequest({
+        id: 'callGraphStats',
+        url: '/api/calls/statsgraph',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'calls',
+        url: '/api/calls',
+        join: ['patient'],
+        params,
+      }),
+    ]);
   }
 
   loadMore() {
@@ -117,30 +137,6 @@ class Calls extends Component {
       });
   }
 
-  fetchCallData(params) {
-    return Promise.all([
-      this.props.fetchEntitiesRequest({
-        id: 'callGraphStats',
-        url: '/api/calls/statsgraph',
-        params,
-      }),
-      this.props.fetchEntitiesRequest({
-        id: 'calls',
-        url: '/api/calls',
-        join: ['patient'],
-        params,
-      }),
-    ]);
-  }
-
-  handleCallUpdate(id, wasApptBooked) {
-    this.props.updateEntityRequest({
-      key: 'calls',
-      values: { wasApptBooked },
-      url: `/api/calls/${id}`,
-    });
-  }
-
   render() {
     const { callGraphStats, calls, patients, wasCallsFetched, wasStatsFetched } = this.props;
     return (
@@ -165,7 +161,8 @@ class Calls extends Component {
 
 function mapStateToProps({ entities, apiRequests, auth }) {
   const callGraphStats = apiRequests.get('callGraphStats') || null;
-  const wasStatsFetched = (apiRequests.get('callGraphStats') && apiRequests.get('callGraphStats').wasFetched) || null;
+  const wasStatsFetched =
+    (apiRequests.get('callGraphStats') && apiRequests.get('callGraphStats').wasFetched) || null;
 
   const wasCallsFetched = (apiRequests.get('calls') && apiRequests.get('calls').wasFetched) || null;
 
@@ -176,6 +173,7 @@ function mapStateToProps({ entities, apiRequests, auth }) {
     wasCallsFetched,
     wasStatsFetched,
     timezone: auth.get('timezone'),
+    accountId: auth.get('accountId'),
   };
 }
 
@@ -202,6 +200,7 @@ Calls.propTypes = {
   wasCallsFetched: PropTypes.bool,
   wasStatsFetched: PropTypes.bool,
   timezone: PropTypes.string.isRequired,
+  accountId: PropTypes.string.isRequired,
 };
 
 Calls.defaultProps = {
