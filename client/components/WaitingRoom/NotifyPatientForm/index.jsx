@@ -47,10 +47,15 @@ export default function NotifyPatientForm({
         '\\[practice%phone&number\\]',
         formatPhoneNumber(accountInfo.phoneNumber),
       );
+      templateReplaced = replaceText(
+        templateReplaced,
+        '\\[practice%email\\]',
+        formatPhoneNumber(accountInfo.contactEmail),
+      );
 
       return templateReplaced;
     },
-    [accountInfo.name, accountInfo.phoneNumber, getPatientName],
+    [accountInfo.name, accountInfo.phoneNumber, accountInfo.contactEmail, getPatientName],
   );
 
   const message = useMemo(
