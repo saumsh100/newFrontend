@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
+import { accountShape } from '../../components/library/PropTypeShapes';
 import historyShape from '../../components/library/PropTypeShapes/historyShape';
 import locationShape from '../../components/library/PropTypeShapes/locationShape';
 import userShape from '../../components/library/PropTypeShapes/patientUserShape';
@@ -33,26 +34,35 @@ Workflow.propTypes = {
   match: PropTypes.shape({}).isRequired,
   user: PropTypes.shape(userShape).isRequired,
   role: PropTypes.string.isRequired,
+  account: PropTypes.shape(accountShape).isRequired,
 };
 
 const mapStateToProps = ({ entities, auth, featureFlags }) => {
-  const useReminderWorkflowService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-templates-from-workflow-service-reminder',
-  );
-  const useReviewService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-templates-from-workflow-service-review',
-  );
-  const useRecallService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-templates-from-workflow-service-recall',
-  );
+  const isDev = process.env.NODE_ENV === 'development';
+  const useReminderWorkflowService = isDev
+    ? true
+    : isFeatureEnabledSelector(
+        featureFlags.get('flags'),
+        'use-templates-from-workflow-service-reminder',
+      );
+  const useReviewService = isDev
+    ? false
+    : isFeatureEnabledSelector(
+        featureFlags.get('flags'),
+        'use-templates-from-workflow-service-review',
+      );
+  const useRecallService = isDev
+    ? false
+    : isFeatureEnabledSelector(
+        featureFlags.get('flags'),
+        'use-templates-from-workflow-service-recall',
+      );
 
   return {
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
     user: auth.get('user').toJS(),
     role: auth.get('role'),
+    account: auth.get('account').toJS(),
     useCCPReminder: !useReminderWorkflowService,
     useCCPVirtualWaitRoom: !useReminderWorkflowService,
     useCCPRecall: !useRecallService,

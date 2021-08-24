@@ -126,22 +126,28 @@ const Settings = ({
 };
 
 function mapStateToProps({ featureFlags }) {
-  const useReminderWorkflowService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-templates-from-workflow-service-reminder',
-  );
-  const useReviewService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-templates-from-workflow-service-review',
-  );
-  const useRecallService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-templates-from-workflow-service-recall',
-  );
-  const useFormsFromFormService = isFeatureEnabledSelector(
-    featureFlags.get('flags'),
-    'use-forms-from-form-service',
-  );
+  const isDev = process.env.NODE_ENV === 'development';
+  const useReminderWorkflowService = isDev
+    ? true
+    : isFeatureEnabledSelector(
+        featureFlags.get('flags'),
+        'use-templates-from-workflow-service-reminder',
+      );
+  const useReviewService = isDev
+    ? false
+    : isFeatureEnabledSelector(
+        featureFlags.get('flags'),
+        'use-templates-from-workflow-service-review',
+      );
+  const useRecallService = isDev
+    ? false
+    : isFeatureEnabledSelector(
+        featureFlags.get('flags'),
+        'use-templates-from-workflow-service-recall',
+      );
+  const useFormsFromFormService = isDev
+    ? true
+    : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-forms-from-form-service');
 
   return {
     useReminderWorkflowService,
