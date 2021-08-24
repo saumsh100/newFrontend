@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -23,12 +22,27 @@ const WaitingRoomListItem = ({ waitingRoomPatient, onNotify, onClean, onComplete
     familyMembersCount,
     appointment,
     cleanedAt,
+    sentReminder: { sentRemindersPatients },
   } = waitingRoomPatient;
-  const { practitioner, startDate, endDate } = appointment;
+
+  let selectedAppointment;
+  let selectedPatient;
+  if (sentRemindersPatients.length > 0) {
+    const sentRemindersPatient = sentRemindersPatients.sort((aSrp, bSrp) =>
+      aSrp.appointment.startDate < bSrp.appointment.startDate ? -1 : 1,)[0];
+
+    selectedAppointment = sentRemindersPatient.appointment;
+    selectedPatient = sentRemindersPatient.patient;
+  } else {
+    selectedAppointment = appointment;
+    selectedPatient = patient;
+  }
+
+  const { practitioner, startDate, endDate } = selectedAppointment;
 
   const tooltipBody = (
     <div className={styles.tooltipBody}>
-      {familyMembers.map(fm => (
+      {familyMembers.map((fm) => (
         <div key={fm.id}>
           {fm.patient.firstName} {fm.patient.lastName}
         </div>
@@ -52,9 +66,9 @@ const WaitingRoomListItem = ({ waitingRoomPatient, onNotify, onClean, onComplete
           </div>
           <div>
             <div className={styles.patientNameWrapper}>
-              <PatientPopover patient={patient}>
+              <PatientPopover patient={selectedPatient}>
                 <span className={styles.patientName}>
-                  {patient.firstName} {patient.lastName}
+                  {selectedPatient.firstName} {selectedPatient.lastName}
                 </span>
               </PatientPopover>
               {familyMembersCount ? (
@@ -97,6 +111,14 @@ WaitingRoomListItem.propTypes = {
     familyMembersCount: PropTypes.number,
     appointment: PropTypes.shape(appointmentShape),
     cleanedAt: PropTypes.string,
+    sentReminder: PropTypes.shape({
+      sentRemindersPatients: PropTypes.arrayOf(
+        PropTypes.shape({
+          appointment: PropTypes.shape(appointmentShape),
+          patient: PropTypes.shape(patientShape),
+        }),
+      ),
+    }),
   }).isRequired,
   onNotify: PropTypes.func.isRequired,
   onClean: PropTypes.func.isRequired,
