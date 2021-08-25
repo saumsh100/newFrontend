@@ -29,19 +29,17 @@ def parallelBuildDockerImage(Deployment pipeline, String environment) {
         pipeline.buildDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment)
       }
     }
-    if (isBranch(mainBranch)) {
-      parallelServiceNames["${appName}-test"] = {
-        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "test", frontendDirectory, "test")
-      }
-      parallelServiceNames["${appName}-prod-ca"] = {
-        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod", frontendDirectory, "my")
-      }
-      parallelServiceNames["${appName}-prod-us"] = {
-        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod-us", frontendDirectory, "my")
-      }
-      parallelServiceNames["${appName}-demo"] = {
-        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "demo", frontendDirectory, "demo")
-      }
+    parallelServiceNames["${appName}-test"] = {
+      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "test", frontendDirectory, "test")
+    }
+    parallelServiceNames["${appName}-prod-ca"] = {
+      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod", frontendDirectory, "my")
+    }
+    parallelServiceNames["${appName}-prod-us"] = {
+      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod-us", frontendDirectory, "my")
+    }
+    parallelServiceNames["${appName}-demo"] = {
+      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "demo", frontendDirectory, "demo")
     }
   }
   return parallelServiceNames
