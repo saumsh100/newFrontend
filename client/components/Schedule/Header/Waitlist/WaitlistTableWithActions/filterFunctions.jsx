@@ -152,13 +152,10 @@ function unitsFilter(waitlist, filterRule, showNotSet) {
  */
 export const patientSearch = (waitlist, searchQuery) => {
   if (!searchQuery) return waitlist;
-  return waitlist.filter(({ patient }, item) => {
-    const { firstName, lastName } = patient;
-    const patientName = `${firstName}${lastName}`.toLowerCase();
+  return waitlist.filter(({ patient, patientUser }) => {
+    const patientToSearch = patient || patientUser;
+    const patientName = `${patientToSearch.firstName}${patientToSearch.lastName}`.toLowerCase();
     const query = searchQuery.replaceAll(' ', '').toLowerCase();
-    if (patientName.includes(query)) {
-      return item;
-    }
-    return false;
+    return patientName.includes(query);
   });
 };
