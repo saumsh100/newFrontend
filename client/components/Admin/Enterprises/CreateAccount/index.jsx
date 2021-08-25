@@ -14,6 +14,7 @@ import SelectAccountOptions from './SelectAccountOptions';
 import Enterprise from '../../../../entities/models/Enterprise';
 import { Button } from '../../../library';
 import { setAllAccountInfo } from '../../../../thunks/admin';
+import { fetchEntities } from '../../../../thunks/fetchEntities';
 import styles from './styles.scss';
 
 const formNames = [
@@ -41,6 +42,13 @@ class CreateAccount extends Component {
       country: '',
       isVisible: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.fetchEntities({
+      key: 'superadmins',
+      url: `/api/users/superadmins`,
+    });
   }
 
   componentDidUpdate() {
@@ -129,6 +137,7 @@ class CreateAccount extends Component {
       AddEnterprise({
         onSubmit: this.next,
         index: 0,
+        superadmins: this.props.superadmins,
         initialValues: this.state.values[0],
         formName: 'addEnterprise',
       })
@@ -245,7 +254,15 @@ CreateAccount.propTypes = {
   selectEnterprise: PropTypes.func.isRequired,
   destroy: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  superadmins: PropTypes.instanceOf(Map).isRequired,
 };
+
+function mapStateToProps({ entities }) {
+  return {
+    superadmins: entities.getIn(['superadmins', 'models']),
+  };
+}
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators(
@@ -254,10 +271,11 @@ function mapActionsToProps(dispatch) {
       destroy,
       reset,
       setAllAccountInfo,
+      fetchEntities,
     },
     dispatch,
   );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 export default enhance(CreateAccount);

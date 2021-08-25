@@ -1,4 +1,3 @@
-
 import { Map } from 'immutable';
 import each from 'lodash/each';
 import { handleActions, createAction } from 'redux-actions';
@@ -52,7 +51,9 @@ import WaitSpot from '../entities/models/WaitSpot';
 import weeklySchedules from '../entities/collections/weeklySchedules';
 import WeeklySchedule from '../entities/models/WeeklySchedule';
 import User from '../entities/models/User';
+import Superadmin from '../entities/models/Superadmin';
 import users from '../entities/collections/users';
+import superadmins from '../entities/collections/superadmins';
 import Reminder from '../entities/models/Reminder';
 import reminders from '../entities/collections/reminders';
 import SentReminder from '../entities/models/SentReminder';
@@ -101,6 +102,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) =>
       waitSpots: new waitSpots(),
       weeklySchedules: new weeklySchedules(),
       users: new users(),
+      superadmins: new superadmins(),
       timeOffs: new timeOffs(),
       practitionerRecurringTimeOffs: new practitionerRecurringTimeOffs(),
       reminders: new reminders(),
@@ -142,6 +144,7 @@ const Models = {
   waitSpots: WaitSpot,
   weeklySchedules: WeeklySchedule,
   users: User,
+  superadmins: Superadmin,
   reminders: Reminder,
   sentReminders: SentReminder,
   recalls: Recall,
@@ -157,8 +160,17 @@ export default handleActions(
       return state.setIn([key, 'isFetching'], true);
     },
 
-    [RECEIVE_ENTITIES](state, { payload: { entities, merge } }) {
-      return receiveEntitiesState(state, entities, merge);
+    [RECEIVE_ENTITIES](state, { payload: { entities, merge, key } }) {
+      let ents = entities;
+
+      // This is a temporary solution, as super admins come back as the "users" entity
+      // and we do not want to store them alongside users.
+      if (key === 'superadmins') {
+        ents = {
+          superadmins: entities.users,
+        };
+      }
+      return receiveEntitiesState(state, ents, merge);
     },
 
     [DELETE_ENTITY](state, { payload: { key, id } }) {
@@ -200,13 +212,13 @@ function receiveEntitiesState(state, entities, hardMerge) {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
       if (
-        !hardMerge
-        && (!model
-          || key === 'weeklySchedules'
-          || key === 'patients'
-          || key === 'chats'
-          || key === 'textMessages'
-          || key === 'patientTimelineEvents')
+        !hardMerge &&
+        (!model ||
+          key === 'weeklySchedules' ||
+          key === 'patients' ||
+          key === 'chats' ||
+          key === 'textMessages' ||
+          key === 'patientTimelineEvents')
       ) {
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);

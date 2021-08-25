@@ -13,6 +13,7 @@ import RFStars from './RFStars';
 import RFButton from './RFButton';
 import RFCheckboxButton from './RFCheckboxButton';
 import RFComboBox from './RFComboBox';
+import RFSuperAdminPicker from './RFSuperAdminPicker';
 
 export default {
   Input: RFInput,
@@ -21,6 +22,7 @@ export default {
   DropdownSelect: RFDropdownSelect,
   DayPicker: RFDayPicker,
   ComboBox: RFComboBox,
+  SuperAdminPicker: RFSuperAdminPicker,
   DayPickerWithHelpers: RDayPickerWithHelpers,
   // DropDown: RFDropDown.
   Checkbox: RFCheckbox,

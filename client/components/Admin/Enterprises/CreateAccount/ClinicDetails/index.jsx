@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field, getTimezoneList } from '../../../../library';
@@ -42,6 +41,9 @@ export default function ClinicDetails(props) {
             type="tel"
             required
           />
+        </div>
+        <div>
+          <Field name="externalId" label="External Id" />
         </div>
       </div>
     </Form>

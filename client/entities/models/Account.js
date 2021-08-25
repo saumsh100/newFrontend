@@ -27,6 +27,7 @@ const AccountSchema = {
   bookingWidgetButtonLabel: null,
   destinationPhoneNumber: null,
   enterpriseId: null,
+  externalId: null,
   weeklyScheduleId: null, // new OfficeHoursRecord(),
   unit: null,
   canSendReminders: null,

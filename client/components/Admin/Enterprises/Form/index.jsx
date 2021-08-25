@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -25,20 +24,22 @@ const EnterpriseForm = (props) => {
     const promise = isCreate
       ? props.createEntityRequest({ key, entityData })
       : props.updateEntityRequest({
-        key,
-        values: entityData,
-        url: `/api/enterprises/${enterprise.id}`,
-      });
+          key,
+          values: entityData,
+          url: `/api/enterprises/${enterprise.id}`,
+        });
 
     promise.then(() => navigate(enterprisesListPath));
   };
 
-  const pageTitle = () =>
-    (isCreate ? 'Add Enterprise' : `${enterprise.name} » Edit`);
+  const pageTitle = () => (isCreate ? 'Add Enterprise' : `${enterprise.name} » Edit`);
 
   const breadcrumbs = () => [
     {
-      icon: 'home', key: 'home', home: true, link: '/admin',
+      icon: 'home',
+      key: 'home',
+      home: true,
+      link: '/admin',
     },
     { title: 'Enterprises', key: 'enterprises', link: enterprisesListPath },
     { title: pageTitle(), key: isCreate ? 'add' : enterprise.id },
@@ -49,8 +50,10 @@ const EnterpriseForm = (props) => {
       <Form
         form="enterpriseForm"
         initialValues={{
-          name: enterprise && enterprise.name,
-          plan: enterprise && enterprise.plan,
+          name: enterprise?.name,
+          plan: enterprise?.plan,
+          organization: enterprise?.organization,
+          csmAccountOwnerId: enterprise?.csmAccountOwnerId,
         }}
         className={styles.form}
         onSubmit={onSubmit}
@@ -63,6 +66,13 @@ const EnterpriseForm = (props) => {
           options={[{ value: 'ENTERPRISE' }, { value: 'GROWTH' }]}
         />
         <Field required name="name" label="Name" />
+        <Field required name="organization" label="Organization" />
+        <Field
+          label="CSM Account Owner"
+          name="csmAccountOwnerId"
+          component="SuperAdminPicker"
+          search="label"
+        />
       </Form>
     </PageContainer>
   ) : (
@@ -75,13 +85,13 @@ EnterpriseForm.propTypes = {
   enterprise: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-  }),
-  accounts: PropTypes.arrayOf(PropTypes.object),
-  fetchEntities: PropTypes.func.isRequired,
+    plan: PropTypes.string,
+    organization: PropTypes.string,
+    csmAccountOwnerId: PropTypes.string,
+  }).isRequired,
   createEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
-  enterpriseId: PropTypes.string,
 };
 
 const stateToProps = (
@@ -97,7 +107,7 @@ const stateToProps = (
   enterprise: getModel(state, 'enterprises', enterpriseId),
 });
 
-const dispatchToProps = dispatch =>
+const dispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       fetchEntities,
@@ -108,7 +118,4 @@ const dispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  stateToProps,
-  dispatchToProps,
-)(EnterpriseForm);
+export default connect(stateToProps, dispatchToProps)(EnterpriseForm);

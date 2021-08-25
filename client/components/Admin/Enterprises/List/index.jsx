@@ -18,7 +18,7 @@ import { getEntities, getAlertData } from './Shared/helpers';
 import GroupTable from './GroupTable';
 import styles from './styles.scss';
 import { httpClient } from '../../../../util/httpClient';
-import RenameForm from '../CreateAccount/RenameForm';
+import EnterpriseForm from '../CreateAccount/EnterpriseForm';
 
 class Enterprises extends Component {
   editFormName = 'editNameForm';
@@ -90,7 +90,7 @@ class Enterprises extends Component {
       .then(({ enterprises }) => {
         this.setState(({ data: prevStateData }) => {
           const data = [...prevStateData];
-          data[index].name = enterprises[values.id].name;
+          data[index] = enterprises[values.id];
           return {
             selectedGroup: null,
             selectedGroupIndex: null,
@@ -261,7 +261,7 @@ class Enterprises extends Component {
             onEscKeyDown={() => this.setEditNameActive()}
             onOverlayClick={() => this.setEditNameActive()}
           >
-            <RenameForm
+            <EnterpriseForm
               key="Edit Group"
               label="Group"
               formName={this.editFormName}

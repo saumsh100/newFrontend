@@ -32,6 +32,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     canSendReviews: activeAccount.get('canSendReviews'),
     googlePlaceId: activeAccount.get('googlePlaceId'),
     facebookUrl: activeAccount.get('facebookUrl'),
+    externalId: activeAccount.get('externalId'),
     sendRequestEmail: activeAccount.get('sendRequestEmail'),
     omitChairIdsString: activeAccount.get('omitChairIds').join(','),
     omitPractitionerIdsString: activeAccount.get('omitPractitionerIds').join(','),

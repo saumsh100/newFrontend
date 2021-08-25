@@ -19,3 +19,8 @@ input:-webkit-autofill {
     }
   }
 }
+
+.fieldLabel {
+  color: $empty-grey;
+  font-size: 10px;
+}

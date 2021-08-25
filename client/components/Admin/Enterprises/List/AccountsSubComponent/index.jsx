@@ -13,7 +13,7 @@ import { switchActiveEnterprise } from '../../../../../thunks/auth';
 import { accountShape } from '../../../../library/PropTypeShapes';
 import AccountsTable from './AccountsTable';
 import { Button, DialogBox, RemoteSubmitButton } from '../../../../library';
-import RenameForm from '../../CreateAccount/RenameForm';
+import PracticeForm from '../../CreateAccount/PracticeForm';
 import { getAlertData } from '../Shared/helpers';
 
 class AccountsSubComponent extends Component {
@@ -143,9 +143,7 @@ class AccountsSubComponent extends Component {
             onEscKeyDown={() => this.setEditAccountNameActive()}
             onOverlayClick={() => this.setEditAccountNameActive()}
           >
-            <RenameForm
-              key="Edit Practice"
-              label="Practice"
+            <PracticeForm
               formName={this.editAccountFormName}
               index={this.state.selectedGroupIndex}
               initialValues={this.state.selectedGroup}

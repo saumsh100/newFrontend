@@ -22,6 +22,7 @@ const accountShape = {
   deletedAt: PropTypes.string,
   destinationPhoneNumber: PropTypes.string,
   enterpriseId: PropTypes.string,
+  externalId: PropTypes.string,
   facebookUrl: PropTypes.string,
   fullLogoUrl: PropTypes.string,
   googlePlaceId: PropTypes.string,

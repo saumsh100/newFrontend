@@ -7,6 +7,8 @@ const enterpriseShape = {
   name: PropTypes.string,
   plan: PropTypes.string,
   updatedAt: PropTypes.string,
+  organization: PropTypes.string,
+  csmAccountOwnerId: PropTypes.string,
 };
 
 export default enterpriseShape;

@@ -1,4 +1,3 @@
-
 import createModel from '../createModel';
 
 const EnterpriseSchema = {
@@ -6,6 +5,8 @@ const EnterpriseSchema = {
   createdAt: null,
   name: null,
   plan: null,
+  organization: null,
+  csmAccountOwnerId: null,
 };
 
 export default class Enterprise extends createModel(EnterpriseSchema, 'Enterprise') {
