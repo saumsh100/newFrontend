@@ -12,8 +12,11 @@ import socket from '../../socket';
 import { getTodaysDate } from '../../components/library';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
-  localStorage.setItem('token', token);
-  const { sessionId } = jwt(token);
+  let sessionId;
+  if (token && token !== null) {
+    localStorage.setItem('token', token);
+    ({ sessionId } = jwt(token));
+  }
 
   if (invalidateSession) {
     localStorage.removeItem('session');
@@ -193,10 +196,6 @@ export function resetPatientPassword(location, values) {
 export function load() {
   return (dispatch) => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      return Promise.resolve(null);
-    }
-
     return updateSessionByToken(token, dispatch, false);
   };
 }
