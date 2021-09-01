@@ -9,9 +9,8 @@ process.on('unhandledRejection', (err) => {
 
 process.env.NODE_ENV = 'production';
 
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const fs = require('fs');
-const merge = require('webpack-merge');
+const { mergeWithCustomize, customizeObject } = require('webpack-merge');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -22,10 +21,13 @@ const externalModules = (nodeModulesPath) =>
   fs
     .readdirSync(nodeModulesPath)
     .filter((f) => ['.bin'].indexOf(f) === -1)
-    .reduce((map, mod) => Object.assign(map, { [mod]: `commonjs ${mod}` }), {});
+    .reduce((map, mod) => Object.assign(map, {[mod]: `commonjs ${mod}`}), {});
 
-const mergeWebpack = merge.strategy({ entry: 'replace' });
-const webpackConfig = mergeWebpack(common, {
+const webpackConfig = mergeWithCustomize({
+  customizeObject: customizeObject({
+    entry: 'replace',
+  })
+})(common, {
   name: 'server',
   target: 'node',
   devtool: 'cheap-module-source-map',
@@ -38,29 +40,28 @@ const webpackConfig = mergeWebpack(common, {
     globalObject: 'this',
   },
   plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['[name].bundle.js'],
-    }),
     new webpack.DefinePlugin({
       'process.env.BROWSER': false,
       'process.env.BUNDLED': true,
     }),
-    new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
+    new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1}),
   ],
-  node: {
-    console: false,
-    global: false,
-    process: false,
-    Buffer: false,
-    __filename: false,
-    __dirname: false,
+  resolve: {
+    fallback: {
+      console: false,
+      global: false,
+      process: false,
+      __filename: false,
+      __dirname: false,
+    },
+
   },
   optimization: {
     splitChunks: false,
     runtimeChunk: false,
     minimize: false,
   },
-  watchOptions: { ignored: /node_modules/ },
+  watchOptions: {ignored: /node_modules/},
   externals: {
     ...externalModules(path.resolve(paths.appDirectory, 'node_modules')),
   },

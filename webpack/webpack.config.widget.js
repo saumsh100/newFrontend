@@ -9,31 +9,33 @@ process.on('unhandledRejection', (err) => {
 
 process.env.NODE_ENV = 'production';
 
-const merge = require('webpack-merge');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { mergeWithCustomize, customizeObject } = require('webpack-merge');
 const common = require('./shared/webpack.common');
 const paths = require('./helpers/paths');
 
-const mergeWebpack = merge.strategy({ entry: 'replace' });
-const webpackConfig = mergeWebpack(common, {
-  mode: 'production',
-  entry: paths.cc,
-  devtool: 'hidden-source-map',
-  output: {
-    path: paths.appDist,
-    publicPath: paths.publicUrlOrPath,
-    filename: 'widget/[name].[contenthash:8].js',
-    chunkFilename: 'widget/[name].[contenthash:8].chunk.js',
-  },
-  plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['widget', 'widget/*'],
-    }),
-  ],
-  optimization: {
-    splitChunks: false,
-    runtimeChunk: false,
-  },
-});
+const webpackConfig = mergeWithCustomize(
+  {
+    customizeObject: customizeObject({
+      entry: 'replace'
+    })
+  }
+)(
+  common,
+  {
+    mode: 'production',
+    entry: paths.cc,
+    devtool: 'hidden-source-map',
+    output: {
+      path: paths.appDist,
+      publicPath: paths.publicUrlOrPath,
+      filename: 'widget/[name].[contenthash:8].js',
+      chunkFilename: 'widget/[name].[contenthash:8].chunk.js',
+    },
+    optimization: {
+      splitChunks: false,
+      runtimeChunk: false,
+    },
+  }
+)
 
 module.exports = webpackConfig;

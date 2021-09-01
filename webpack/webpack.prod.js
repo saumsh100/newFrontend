@@ -10,7 +10,7 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const webpackConfigCCP = require('./webpack.config.ccp');
 
 module.exports = (env) =>

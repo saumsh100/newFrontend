@@ -12,9 +12,8 @@ process.on('unhandledRejection', (err) => {
 });
 
 const CopyPlugin = require('copy-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 
 const paths = require('./helpers/paths');
@@ -22,7 +21,7 @@ const common = require('./shared/webpack.common');
 
 process.env.BABEL_ENV = process.env.NODE_ENV;
 
-const { resolveApp } = paths;
+const {resolveApp} = paths;
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
 const isEnvProduction = process.env.NODE_ENV === 'production';
 
@@ -95,26 +94,23 @@ const webpackConfig = merge(common, {
       title: 'Reviews | CareCru',
       ...getHTMLWebpackPluginConfig,
     }),
-    new CopyPlugin([
-      {
-        from: 'public',
-        ignore: ['**/*.html'],
-      },
-    ]),
-    new CopyPlugin([
-      {
-        from: 'assets',
-        to: 'assets',
-      },
-    ]),
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [
-        '**/*',
-        '!widget',
-        '!widget/*',
-        '!package.json',
-        '!.gitignore',
-      ],
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'public',
+          globOptions: {
+            ignore: ['**/*.html'],
+          }
+        },
+      ]
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'assets',
+          to: 'assets',
+        },
+      ]
     }),
     ...pluginsForDevOrProd(),
   ],

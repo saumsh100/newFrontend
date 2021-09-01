@@ -96,7 +96,6 @@ const getStyleLoaders = (cssOptions, isSass = false) => {
 };
 
 const rules = [
-  { parser: { requireEnsure: false } },
   {
     // "oneOf" will traverse all following loaders until one will
     // match the requirements. When no loader matches it will fall
