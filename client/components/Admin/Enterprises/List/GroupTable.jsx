@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AccountsSubComponent from './AccountsSubComponent';
@@ -8,8 +8,13 @@ import ManageCell from './ManageCell';
 import styles from './styles.scss';
 import { enterpriseShape } from '../../../library/PropTypeShapes';
 
-const GroupTable = ({
+const SubComponent = (enterprise) => (
+  <AccountsSubComponent enterpriseId={enterprise.original.id} enterprise={enterprise} />
+);
+
+export const GroupTable = ({
   data,
+  pages,
   loaded,
   expanded,
   timezone,
@@ -17,49 +22,51 @@ const GroupTable = ({
   onDeleteGroup,
   onEditName,
   selectEnterprise,
-  setQuery,
+  onFetchData,
 }) => {
-  const subComponent = (enterprise) => (
-    <AccountsSubComponent enterpriseId={enterprise.original.id} enterprise={enterprise} />
+  const formattedDateValue = useCallback(({ row }) => formattedDate(row.createdAt, timezone), [
+    timezone,
+  ]);
+
+  const getGroupName = useCallback(
+    ({ original, viewIndex }) => (
+      <div style={{ display: 'flex' }}>
+        <span
+          tabIndex={0}
+          role="button"
+          data-testid="name"
+          onKeyDown={(e) => e.keyCode === 13 && handleRowClick({ viewIndex })}
+        >
+          {original.name}
+        </span>
+        <span style={{ marginLeft: '5px' }}>-</span>
+        <input value={original.id} className={styles.fakeInput} tabIndex={0} />
+      </div>
+    ),
+    [handleRowClick],
   );
 
-  const getGroupName = ({ original, viewIndex }) => (
-    <div style={{ display: 'flex' }}>
-      <span
-        tabIndex={0}
-        role="button"
-        onKeyDown={(e) => e.keyCode === 13 && handleRowClick({ viewIndex })}
-      >
-        {original.name}
-      </span>
-      <span style={{ marginLeft: '5px' }}>-</span>
-      <input value={original.id} className={styles.fakeInput} tabIndex={0} />
-    </div>
+  const selectPractice = useCallback(
+    ({ original }) => (
+      <div className={styles.groupName}>
+        <IconButton
+          icon="sign-in-alt"
+          onClick={(e) => {
+            e.stopPropagation();
+            return selectEnterprise(original.id);
+          }}
+        />
+      </div>
+    ),
+    [selectEnterprise],
   );
 
-  const selectPractice = ({ original }) => (
-    <div className={styles.groupName}>
-      <IconButton
-        icon="sign-in-alt"
-        onClick={(e) => {
-          e.stopPropagation();
-          return selectEnterprise(original.id);
-        }}
-      />
-    </div>
+  const getManageCell = useCallback(
+    (cellProps) => (
+      <ManageCell label="Group" {...cellProps} onEdit={onEditName} onDelete={onDeleteGroup} />
+    ),
+    [onEditName, onDeleteGroup],
   );
-
-  const idFilter = (id, value) => String(id.toLowerCase()).includes(value.toLowerCase());
-
-  const onFiltersChange = ([filter]) => {
-    if (!filter) return setQuery([]);
-
-    const { value } = filter;
-    const filteredData = data.filter((acc) => idFilter(acc.id, value) || idFilter(acc.name, value));
-    const ids = filteredData.map((acc) => acc.id);
-
-    return setQuery(ids);
-  };
 
   const columns = [
     {
@@ -69,7 +76,6 @@ const GroupTable = ({
       accessor: (d) => `${d.name} (${d.id})`,
       Cell: getGroupName,
       filterable: true,
-      filterMethod: ({ id, value }, row) => (row[id] ? idFilter(row[id], value) : true),
     },
     {
       Header: 'Plan',
@@ -80,28 +86,27 @@ const GroupTable = ({
       Header: 'Created On',
       id: 'createdAt',
       accessor: (d) => d.createdAt,
-      Cell: ({ row }) => formattedDate(row.createdAt, timezone),
+      Cell: formattedDateValue,
     },
     {
       Header: 'Updated On',
       id: 'updatedAt',
       accessor: (d) => d.updatedAt,
-      Cell: ({ row }) => formattedDate(row.updatedAt, timezone),
+      Cell: formattedDateValue,
     },
     {
       Header: 'Select Practice',
       Cell: selectPractice,
       maxWidth: 130,
+      sortable: false,
     },
     {
       id: 'manage',
       Header: 'Manage',
       accessor: (d) => d,
       className: styles.manageCell,
-      Cell: (cellProps) => (
-        <ManageCell label="Group" {...cellProps} onEdit={onEditName} onDelete={onDeleteGroup} />
-      ),
       sortable: false,
+      Cell: getManageCell,
     },
   ];
 
@@ -110,15 +115,17 @@ const GroupTable = ({
       className={styles.dataTable}
       key="Group Table"
       data={data}
+      pages={pages}
       columns={columns}
       loading={loaded}
-      SubComponent={subComponent}
+      SubComponent={SubComponent}
       expanded={expanded}
       handleRowClick={handleRowClick}
       loadingText=""
       noDataText="No Groups Found"
       showPageSizeOptions
-      onFiltersChange={onFiltersChange}
+      onFetchData={onFetchData}
+      manual
     />
   );
 };
@@ -129,18 +136,20 @@ GroupTable.propTypes = {
   handleRowClick: PropTypes.func.isRequired,
   onDeleteGroup: PropTypes.func.isRequired,
   onEditName: PropTypes.func.isRequired,
+  onFetchData: PropTypes.func.isRequired,
   original: PropTypes.shape({ id: PropTypes.string }),
   selectEnterprise: PropTypes.func.isRequired,
-  setQuery: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(PropTypes.shape(enterpriseShape)),
+  pages: PropTypes.number,
   timezone: PropTypes.string.isRequired,
 };
 
 GroupTable.defaultProps = {
   loaded: false,
-  expanded: [],
+  expanded: {},
   original: {},
   data: [],
+  pages: 10,
 };
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });

@@ -47,7 +47,7 @@
     "serve:prod": "node ./dist/server.bundle.js",
     "serve": "dotenv -- nodemon server",
     "test:jest": "dotenv -- jest --verbose --forceExit",
-    "test:watch": "dotenv -- jest --watch -o",
+    "test:watch": "dotenv -- jest --watch -o --collect-coverage",
     "twilio:ngrok": "twilio-run --live --port=5101 --ngrok",
     "twilio:watch": "twilio-run --live --port=5101"
   },

@@ -7,6 +7,12 @@ import EllipsisIcon from './EllipsisIcon';
 import { getCollection } from '../../../Utils';
 import { accountShape, enterpriseShape } from '../../../library/PropTypeShapes';
 
+const LabelComponent = (props) => (
+  <Button {...props} className={styles.ellipsisButton}>
+    <EllipsisIcon />
+  </Button>
+);
+
 const ManageCell = ({ index, value, label, onEdit, onDelete }) => {
   const showDeleteButton = useSelector((state) => {
     const accounts = getCollection(
@@ -22,11 +28,7 @@ const ManageCell = ({ index, value, label, onEdit, onDelete }) => {
       <DropdownMenu
         className={styles.manageCellDropdown}
         onLabelClick={(e) => e.stopPropagation()}
-        labelComponent={(props) => (
-          <Button {...props} className={styles.ellipsisButton}>
-            <EllipsisIcon />
-          </Button>
-        )}
+        labelComponent={LabelComponent}
       >
         <Button
           className={styles.actionItem}
@@ -61,10 +63,7 @@ ManageCell.defaultProps = {
 ManageCell.propTypes = {
   label: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  value: PropTypes.oneOfType(
-    PropTypes.arrayOf(PropTypes.shape(accountShape)),
-    PropTypes.arrayOf(PropTypes.shape(enterpriseShape)),
-  ),
+  value: PropTypes.oneOfType([PropTypes.shape(accountShape), PropTypes.shape(enterpriseShape)]),
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
 };

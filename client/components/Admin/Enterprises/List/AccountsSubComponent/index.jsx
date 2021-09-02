@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  deleteEntityRequest,
-  fetchEntitiesRequest,
-  updateEntityRequest,
-} from '../../../../../thunks/fetchEntities';
+import { deleteEntityRequest, updateEntityRequest } from '../../../../../thunks/fetchEntities';
 import { deleteEntity, updateEntity } from '../../../../../reducers/entities';
 import { getCollection } from '../../../../Utils';
 import { switchActiveEnterprise } from '../../../../../thunks/auth';
@@ -26,10 +22,6 @@ class AccountsSubComponent extends Component {
       selectedGroup: null,
       editAccountNameActive: false,
     };
-  }
-
-  componentDidMount() {
-    this.fetchAccounts();
   }
 
   handleEditAccountNameSubmit(index, values) {
@@ -114,13 +106,6 @@ class AccountsSubComponent extends Component {
     }));
   }
 
-  fetchAccounts() {
-    return this.props.fetchEntitiesRequest({
-      key: 'accounts',
-      url: `/api/enterprises/${this.props.enterpriseId}/accounts`,
-    });
-  }
-
   render() {
     const { accounts } = this.props;
 
@@ -159,10 +144,8 @@ class AccountsSubComponent extends Component {
 AccountsSubComponent.propTypes = {
   deleteEntity: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
-  fetchEntitiesRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   updateEntity: PropTypes.func.isRequired,
-  enterpriseId: PropTypes.string.isRequired,
   accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)).isRequired,
 };
 
@@ -180,7 +163,6 @@ const dispatchToProps = (dispatch) =>
     {
       deleteEntity,
       deleteEntityRequest,
-      fetchEntitiesRequest,
       switchActiveEnterprise,
       updateEntityRequest,
       updateEntity,
