@@ -50,8 +50,8 @@ Please follow the steps below in the order they are layed out. We'll be using `N
    # Specific app configuration
    NODE_ENV=development
    DEBUG=false
-   # webpack will server the app on this port by default and
-   # the browser sync will proxy it to 3000
+   # Run app on port 3000
+   PORT=3000
 
    # Integration configuration
    FEATURE_FLAG_KEY=5a332a3c95e24c205546f0df

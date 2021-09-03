@@ -27,24 +27,8 @@ const isEnvProduction = process.env.NODE_ENV === 'production';
 
 const pluginsForDevOrProd = () => {
   if (isEnvDevelopment) {
-    const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
     return [
-      new webpack.HotModuleReplacementPlugin({
-        multiStep: true,
-      }),
-      new BrowserSyncPlugin(
-        {
-          // browse to http://localhost:3000/ during development
-          host: 'localhost',
-          port: 3000,
-          proxy: `http://localhost:${process.env.PORT || '5100'}/`,
-        },
-        {
-          // prevent BrowserSync from reloading the page
-          // and let Webpack Dev Server take care of this
-          reload: false,
-        },
-      ),
+      new webpack.HotModuleReplacementPlugin(),
     ]
   }
   return [];

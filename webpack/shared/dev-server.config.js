@@ -13,6 +13,7 @@ function ignoredFiles(appSrc) {
 }
 
 module.exports = {
+  open: true,
   client: {
     overlay: false,
     logging: 'warn',
