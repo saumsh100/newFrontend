@@ -342,6 +342,7 @@ export function loadChatMessages(chatId, offset = 0, limit = 15) {
       })
       .then((total) => dispatch(setChatMessagesListForChat(chatId, total)))
       .finally(() => {
+        dispatch(setConversationIsLoading(false));
         if (chat.get('isLoading')) {
           dispatch(setChatIsLoading(false));
         }
@@ -441,7 +442,6 @@ export function selectChat(id, createChat = null) {
 
     dispatch(unlockChat(id));
     dispatch(loadChatMessages(id));
-    dispatch(setConversationIsLoading(false));
 
     return chatEntity;
   };
