@@ -259,7 +259,7 @@ class DateTime extends PureComponent {
             }}
             className={availabilityClasses}
           >
-            {getFormattedDate(availability.startDate, 'LT', accountTimezone, true)}
+            {getFormattedDate(availability.startDate, 'LT', accountTimezone)}
           </Button>
         </div>
       );
