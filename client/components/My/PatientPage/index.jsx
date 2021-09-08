@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from '../../library';
@@ -25,7 +24,6 @@ class PatientPage extends Component {
 
   render() {
     const { params, children } = this.props;
-
     const { account } = params;
     const { fullLogoUrl, bookingWidgetPrimaryColor, name } = account;
 
@@ -35,17 +33,18 @@ class PatientPage extends Component {
           style={{ borderTop: `5px solid ${bookingWidgetPrimaryColor}` }}
           className={styles.centerWrapper}
         >
-          <Section>
+          <div className={styles.patientPageConent}>
             {fullLogoUrl ? (
-              <img
-                className={styles.logoClinic}
-                src={fullLogoUrl.replace('[size]', 'original')}
-                alt={`Logo for ${name}`}
-              />
+              <Section>
+                <img
+                  className={styles.logoClinic}
+                  src={fullLogoUrl.replace('[size]', 'original')}
+                  alt={`Logo for ${name}`}
+                />
+              </Section>
             ) : null}
-          </Section>
-          {children}
-          <div className={styles.spaceFiller} />
+            {children}
+          </div>
           <PoweredByFooter />
         </Card>
       </div>

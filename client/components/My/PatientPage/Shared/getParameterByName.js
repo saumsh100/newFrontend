@@ -1,4 +1,3 @@
-
 /**
  * getParameterByName will parse the window's url for the encoded information
  * in it and decode it and return it
@@ -8,12 +7,16 @@
  * @returns {}
  */
 
+function b64ToUtf8(str) {
+  return decodeURIComponent(escape(window.atob(str)));
+}
+
 export default function getParameterByName(name, url) {
   if (!url) {
     url = window.location.href;
   }
 
-  name = name.replace(/[\[\]]/g, '\\$&');
+  name = name.replace(/[[\]]/g, '\\$&');
   const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
   const results = regex.exec(url);
   if (!results) return null;
@@ -21,7 +24,8 @@ export default function getParameterByName(name, url) {
     return '';
   }
 
-  const encodedParams = decodeURIComponent(results[2].replace(/\+/g, ' '));
-  const decodedParams = Buffer.from(encodedParams, 'base64').toString('utf8');
+  const encodedParams = decodeURIComponent(results[2].replace(/\+/g, ' '));
+  const decodedParams = b64ToUtf8(encodedParams);
+
   return JSON.parse(decodedParams);
 }
