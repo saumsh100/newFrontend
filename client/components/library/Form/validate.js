@@ -1,4 +1,3 @@
-
 import zxcvbn from 'zxcvbn';
 import { httpClient, bookingWidgetHttpClient } from '../../../util/httpClient';
 import { getUTCDateWithFormat } from '../util/datetime';
@@ -13,6 +12,9 @@ const asyncEmailValidatePatient = ({ email }) => {
       }
     })
     .catch((error) => {
+      if (!error.response) {
+        throw error;
+      }
       throw Object.assign(new Error(), { email: error.response?.data });
     });
 };
@@ -34,14 +36,14 @@ const asyncValidatePatient = composeAsyncValidators([
 function composeAsyncValidators(validatorFns) {
   return async (values, dispatch, props, field) => {
     let errors;
-    const results = validatorFns.map(validatorFn => validatorFn(values, dispatch, props, field));
+    const results = validatorFns.map((validatorFn) => validatorFn(values, dispatch, props, field));
     await Promise.allSettled(results)
       .then((responses) => {
         responses.forEach((response) => {
           if (response.status === 'rejected') {
             const error = { ...response.reason };
             delete error.stack;
-            errors = Object.assign({}, errors, error);
+            errors = { ...errors, ...error };
           }
         });
       })
@@ -85,11 +87,11 @@ function validateEmails(str) {
 
   const emails = str.split(',');
   // get rid of empty spaces
-  const trimmedEmails = emails.map(email => email.trim());
+  const trimmedEmails = emails.map((email) => email.trim());
   // check how many invalid emails are in the array
   const invalidEmails = trimmedEmails
-    .map(email => emailValidate(email))
-    .filter(val => typeof val === 'string');
+    .map((email) => emailValidate(email))
+    .filter((val) => typeof val === 'string');
 
   if (invalidEmails.length > 0) {
     return 'Invalid email addresses';
@@ -98,7 +100,7 @@ function validateEmails(str) {
   return null;
 }
 
-const leftTrim = value => value.replace(/^\s+/g, '');
+const leftTrim = (value) => value.replace(/^\s+/g, '');
 
 const phoneNumberValidate = (value) => {
   if (
@@ -112,10 +114,10 @@ const phoneValidateNullOkay = (value) => {
   if (
     !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(
       value,
-    )
-    && value !== null
-    && value !== ''
-    && value !== undefined
+    ) &&
+    value !== null &&
+    value !== '' &&
+    value !== undefined
   ) {
     return 'Invalid phone number';
   }
@@ -150,24 +152,24 @@ const passwordsMatch = (values) => {
   return errors;
 };
 
-const maxLength = max => value =>
-  (value && value.length > max ? `Must be ${max} characters or less` : undefined);
+const maxLength = (max) => (value) =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined;
 
 const asyncEmailValidateUser = ({ email }) =>
-  email
-  && httpClient()
+  email &&
+  httpClient()
     .post('/userCheck', { email })
     .then(
-      response =>
-        response.data.exists !== true
-        || Promise.reject(
+      (response) =>
+        response.data.exists !== true ||
+        Promise.reject(
           Object.assign(new Error(), { email: `User with ${email} already exists...` }),
         ),
     );
 
 const asyncEmailPasswordReset = ({ email }) =>
-  email
-  && httpClient()
+  email &&
+  httpClient()
     .post('/userCheck', { email })
     .then((response) => {
       if (response.data.exists !== true) {
@@ -175,15 +177,15 @@ const asyncEmailPasswordReset = ({ email }) =>
       }
     });
 
-const numDigitsValidate = max => (value) => {
+const numDigitsValidate = (max) => (value) => {
   if (!value || value.length >= max) return null;
   return 'Not enough digits';
 };
 
-const compose = validators => (values) => {
+const compose = (validators) => (values) => {
   let errors = {};
   validators.forEach((validate) => {
-    errors = Object.assign({}, errors, validate(values));
+    errors = { ...errors, ...validate(values) };
   });
 
   return errors;
@@ -201,11 +203,11 @@ const passwordStrength = (value) => {
   }
 };
 
-const parseNum = value => value && parseInt(value, 10);
+const parseNum = (value) => value && parseInt(value, 10);
 
-const notNegative = value => (value && value <= 0 ? 'Must be greater than 0' : undefined);
+const notNegative = (value) => (value && value <= 0 ? 'Must be greater than 0' : undefined);
 
-const normalizeBirthdate = value => value.trim();
+const normalizeBirthdate = (value) => value.trim();
 
 const validateBirthdate = (value) => {
   const format = 'MM/DD/YYYY';
