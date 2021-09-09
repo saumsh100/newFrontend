@@ -60,7 +60,7 @@ class OnlineBooking extends Component {
     return (
       <SettingsCard title="Online Booking" bodyClass={styles.onlineBookingBody}>
         <div className={styles.formContainer}>
-          <Header title="Customize Widget" contentHeader />
+          <Header title="Color Options" contentHeader />
           <PreferencesForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
         </div>
         <div className={styles.snippetContainer}>

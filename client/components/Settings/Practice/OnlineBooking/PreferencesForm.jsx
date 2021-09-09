@@ -1,35 +1,24 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Field, Icon } from '../../../library/index';
-import Tooltip from '../../../Tooltip';
+import { Form, Field } from '../../../library/index';
 import AccountShape from '../../../library/PropTypeShapes/accountShape';
 import styles from './styles.scss';
 
 export default function PreferencesForm({ handleSubmit, activeAccount }) {
   const initialValues = {
-    bookingWidgetPrimaryColor: activeAccount.get('bookingWidgetPrimaryColor') || '#FF715A',
-    bookingWidgetButtonLabel: activeAccount.get('bookingWidgetButtonLabel') || 'Book Online',
+    bookingWidgetPrimaryColor:
+      activeAccount.get('bookingWidgetPrimaryColor') || '#FF715A',
   };
-  const tooltipBody =
-    'This is the label that will appear on the online booking widget button on your website.';
-  const buttonLabelOptions = [
-    {
-      value: 'Book Online',
-    },
-    {
-      value: 'Request Appointment',
-    },
-  ];
 
   return (
     <Form
-      form="customizeWidget"
+      form="selectAccountColor"
       onSubmit={handleSubmit}
       className={styles.preferencesForm}
       initialValues={initialValues}
-      data-test-id="customizeWidgetForm"
+      data-test-id="selectAccountColorForm"
       alignSave="left"
-      enableReinitialize
     >
       <div className={styles.formContainer_pickerField}>
         <Field
@@ -40,25 +29,11 @@ export default function PreferencesForm({ handleSubmit, activeAccount }) {
           data-test-id="colorPicker"
         />
       </div>
-      <div className={styles.formContainer_widgetButtonLabel}>
-        <span className={styles.labelTooltip}>
-          <Tooltip body={tooltipBody} placement="right">
-            <Icon icon="question-circle" />
-          </Tooltip>
-        </span>
-        <Field
-          name="bookingWidgetButtonLabel"
-          label="Button Label"
-          component="DropdownSelect"
-          options={buttonLabelOptions}
-          data-test-id="buttonLabel"
-        />
-      </div>
     </Form>
   );
 }
 
 PreferencesForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  activeAccount: PropTypes.shape(AccountShape).isRequired,
+  handleSubmit: PropTypes.func,
+  activeAccount: PropTypes.shape(AccountShape),
 };

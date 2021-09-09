@@ -23,11 +23,6 @@
   &_intervalField {
     width: 250px;
   }
-
-  &_widgetButtonLabel {
-    position: relative;
-    width: 250px;
-  }
 }
 
 .preferencesForm {
@@ -43,16 +38,6 @@
   font-weight: $large-weight;
   padding-bottom: 5px;
   padding-top: 15px;
-}
-
-.labelTooltip {
-  font-size: 10px;
-  font-weight: normal;
-  left: 4.3rem;
-  pointer-events: unset;
-  position: absolute;
-  top: 0.6rem;
-  z-index: 10;
 }
 
 .chairSchedulingToggleWrapper {

@@ -24,7 +24,6 @@ const AccountSchema = {
   website: null,
   twilioPhoneNumber: null,
   bookingWidgetPrimaryColor: null,
-  bookingWidgetButtonLabel: null,
   destinationPhoneNumber: null,
   enterpriseId: null,
   externalId: null,
