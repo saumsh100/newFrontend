@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Field, Icon } from '../../../library/index';
 import Tooltip from '../../../Tooltip';
 import AccountShape from '../../../library/PropTypeShapes/accountShape';
+import EnabledFeature from '../../../library/EnabledFeature';
 import styles from './styles.scss';
 
 export default function PreferencesForm({ handleSubmit, activeAccount }) {
@@ -40,20 +41,25 @@ export default function PreferencesForm({ handleSubmit, activeAccount }) {
           data-test-id="colorPicker"
         />
       </div>
-      <div className={styles.formContainer_widgetButtonLabel}>
-        <span className={styles.labelTooltip}>
-          <Tooltip body={tooltipBody} placement="right">
-            <Icon icon="question-circle" />
-          </Tooltip>
-        </span>
-        <Field
-          name="bookingWidgetButtonLabel"
-          label="Button Label"
-          component="DropdownSelect"
-          options={buttonLabelOptions}
-          data-test-id="buttonLabel"
-        />
-      </div>
+      <EnabledFeature
+        predicate={({ flags }) => flags.get('customizable-booking-widget-labels')}
+        render={() => (
+          <div className={styles.formContainer_widgetButtonLabel}>
+            <span className={styles.labelTooltip}>
+              <Tooltip body={tooltipBody} placement="right">
+                <Icon icon="question-circle" />
+              </Tooltip>
+            </span>
+            <Field
+              name="bookingWidgetButtonLabel"
+              label="Button Label"
+              component="DropdownSelect"
+              options={buttonLabelOptions}
+              data-test-id="buttonLabel"
+            />
+          </div>
+        )}
+      />
     </Form>
   );
 }
