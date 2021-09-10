@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -13,10 +12,10 @@ import { capitalizeText } from '../../../../Utils';
 import { isResponsive } from '../../../../../util/hub';
 import styles from '../styles.scss';
 
-const getId = v => v.get('id');
+const getId = (v) => v.get('id');
 
-const sanitizeList = list =>
-  list.filter(v => v.isActive).sortBy(r => -convertIntervalToMs(r.interval));
+const sanitizeList = (list) =>
+  list.filter((v) => v.isActive).sortBy((r) => -convertIntervalToMs(r.interval));
 
 const singularType = {
   weeks: 'week',
@@ -40,9 +39,10 @@ class SettingsForm extends Component {
     super(props);
 
     this.state = {
-      omitReminderIds: props.patient.omitReminderIds.filter(id =>
-        sanitizeList(props.reminders).get(id)),
-      omitRecallIds: props.patient.omitRecallIds.filter(id => sanitizeList(props.recalls).get(id)),
+      omitReminderIds: props.patient.omitReminderIds.filter((id) =>
+        sanitizeList(props.reminders).get(id),),
+      omitRecallIds: props.patient.omitRecallIds.filter((id) =>
+        sanitizeList(props.recalls).get(id),),
     };
 
     this.omitFormHandler = this.omitFormHandler.bind(this);
@@ -58,11 +58,12 @@ class SettingsForm extends Component {
   }
 
   omitFormHandler(setting) {
-    return toOmit =>
+    return (toOmit) =>
       this.setState({ [setting]: toOmit }, () => {
         const settingFieldName = this.getSettingType(setting);
 
-        const settingNextState = this.state[setting].length !== sanitizeList(this.props[settingFieldName]).size;
+        const settingNextState =
+          this.state[setting].length !== sanitizeList(this.props[settingFieldName]).size;
 
         // check if all child toggles are on/off and updates the parent accordingly
         if (this.props[`${settingFieldName}Field`] !== settingNextState) {
@@ -82,7 +83,7 @@ class SettingsForm extends Component {
     return (
       <Form
         form="Form4"
-        onSubmit={values =>
+        onSubmit={(values) =>
           handleSubmit({
             ...values,
             ...this.state,
@@ -90,8 +91,8 @@ class SettingsForm extends Component {
         }
         onChange={(values) => {
           this.setState(
-            prev =>
-              Object.keys(this.state).reduce((acc, setting) => {
+            (prev) =>
+              Object.keys(prev).reduce((acc, setting) => {
                 const settingFieldName = this.getSettingType(setting);
 
                 // if the user disables all reminders/recalls
@@ -108,8 +109,8 @@ class SettingsForm extends Component {
                     ...acc,
                     [setting]:
                       // check if some omit toggle was already on
-                      prev[setting].length > 0
-                      && prev[setting].length < sanitizeList(this.props[settingFieldName]).size
+                      prev[setting].length > 0 &&
+                      prev[setting].length < sanitizeList(this.props[settingFieldName]).size
                         ? prev[setting]
                         : [],
                   };
@@ -122,12 +123,12 @@ class SettingsForm extends Component {
                 // dispatch updates to the child form inputs
                 return sanitizeList(this.props[settingFieldName])
                   .toArray()
-                  .map(r =>
+                  .map((r) =>
                     this.props.change(
                       `${setting}_${patient.id}`,
                       r.get('id'),
                       !this.state[setting].includes(r.get('id')),
-                    ));
+                    ),);
               });
             },
           );
@@ -175,7 +176,17 @@ class SettingsForm extends Component {
                   toggles={sanitizeList(reminders).toArray()}
                   onChange={this.omitFormHandler('omitReminderIds')}
                   renderToggles={({ toggleComponent, toggleProps }) => {
-                    const text = `${toggleProps.interval} reminder`;
+                    const contactTypes = toggleProps.primaryTypes
+                      .toJS()
+                      .map((contactType) => (contactType === 'phone' ? 'voice' : contactType))
+                      .join(', ');
+                    const touchpointMessageType = toggleProps.isConfirmable
+                      ? 'Confirmable'
+                      : 'Friendly';
+                    const touchpointType = toggleProps.isWaitingRoomEnabled
+                      ? 'Waiting Room'
+                      : touchpointMessageType;
+                    const text = `${`${toggleProps.interval} ${touchpointType}`} reminder (${contactTypes})`;
                     return (
                       <div className={styles.omitToggleWrapper}>
                         {toggleComponent({
@@ -271,16 +282,17 @@ class SettingsForm extends Component {
 
 const selector = formValueSelector('Form4');
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   remindersField: selector(state, 'preferences.reminders'),
   recallsField: selector(state, 'preferences.recalls'),
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ change }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ change }, dispatch);
 
 SettingsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   patient: PropTypes.shape({
+    id: PropTypes.number.isRequired,
     preferences: PropTypes.objectOf(PropTypes.bool),
     omitReminderIds: PropTypes.arrayOf(PropTypes.bool),
     omitRecallIds: PropTypes.arrayOf(PropTypes.bool),
