@@ -1,4 +1,3 @@
-
 import ee from 'event-emitter';
 import Host from 'ifrau/host';
 import Modal from './modal';
@@ -16,13 +15,12 @@ function CareCru({ iframeSrc }) {
     height: '100%',
   });
 
-  const frame = document.querySelector('#CareCruIframe');
   const self = this;
 
-  frame.onload = function () {
+  document.addEventListener('DOMContentLoaded', () => {
     const button = document.querySelector('.CareCruButton');
     button.classList.add('CareCruFadeIn');
-  };
+  });
 
   this.host.connect().then(() => {
     console.log('Connected to client!');
@@ -84,37 +82,37 @@ ee(CareCru.prototype);
 /**
  * #open
  */
-CareCru.prototype.open = function (route = 'book') {
+CareCru.prototype.open = function(route = 'book') {
   this.emit('open');
   this.host.sendEvent('changeBaseRoute', route);
   this.modal.open();
   this.emit('opened');
 };
 
-CareCru.prototype.mergeReviewValues = function (values) {
+CareCru.prototype.mergeReviewValues = function(values) {
   this.host.sendEvent('mergeReviewValues', values);
 };
 
-CareCru.prototype.mergeSentReviewValues = function (values) {
+CareCru.prototype.mergeSentReviewValues = function(values) {
   this.host.sendEvent('mergeSentReviewValues', values);
 };
 
-CareCru.prototype.setSentRecallId = function (id) {
+CareCru.prototype.setSentRecallId = function(id) {
   this.host.sendEvent('setSentRecallId', id);
 };
 
-CareCru.prototype.startRecall = function () {
+CareCru.prototype.startRecall = function() {
   this.host.sendEvent('startRecall');
 };
 
-CareCru.prototype.setDueDate = function (id) {
+CareCru.prototype.setDueDate = function(id) {
   this.host.sendEvent('setDueDate', id);
 };
 
 /**
  * #close
  */
-CareCru.prototype.close = function () {
+CareCru.prototype.close = function() {
   this.emit('close');
   this.modal.close();
   this.emit('closed');

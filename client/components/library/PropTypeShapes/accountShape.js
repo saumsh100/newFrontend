@@ -6,6 +6,7 @@ const accountShape = {
   addressId: PropTypes.string,
   autoRespondOutsideOfficeHoursLimit: PropTypes.string,
   bookingWidgetPrimaryColor: PropTypes.string,
+  bookingWidgetButtonLabel: PropTypes.string,
   bufferAfterClosing: PropTypes.string,
   bufferBeforeOpening: PropTypes.string,
   bumpInterval: PropTypes.string,
