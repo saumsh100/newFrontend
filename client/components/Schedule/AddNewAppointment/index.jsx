@@ -84,11 +84,10 @@ class AddNewAppointment extends Component {
               <Avatar user={patient} size="xs" />
               <div className={styles.suggestionContainer_details}>
                 <div className={styles.suggestionContainer_fullName}>
-                  {`${patient.firstName} ${patient.lastName}${
-                    patient.birthDate
+                  {`${patient.firstName} ${patient.lastName}${patient.birthDate
                       ? `, ${getTodaysDate(this.props.timezone).diff(patient.birthDate, 'years')}`
                       : ''
-                  }`}
+                    }`}
                 </div>
                 <div className={styles.suggestionContainer_date}>
                   Last Appointment:{' '}
@@ -258,6 +257,10 @@ class AddNewAppointment extends Component {
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
       const requestId = selectedAppointment ? selectedAppointment.requestModel.get('id') : null;
+
+      // if confirming an appointment for a online booking request then send the bookingRequestId
+      if (selectedAppointment?.request)
+        newAppointment.bookingRequestId = requestId;
 
       return this.props
         .createEntityRequest({
@@ -455,15 +458,15 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = ({ form, auth }, { formName }) =>
-  (!form[formName]
-    ? {
-      values: {},
-      timezone: auth.get('timezone'),
-    }
-    : {
-      appFormValues: form[formName].values,
-      timezone: auth.get('timezone'),
-    });
+(!form[formName]
+  ? {
+    values: {},
+    timezone: auth.get('timezone'),
+  }
+  : {
+    appFormValues: form[formName].values,
+    timezone: auth.get('timezone'),
+  });
 
 AddNewAppointment.propTypes = {
   appFormValues: PropTypes.shape({
