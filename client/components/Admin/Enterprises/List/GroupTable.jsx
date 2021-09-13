@@ -24,9 +24,10 @@ export const GroupTable = ({
   selectEnterprise,
   onFetchData,
 }) => {
-  const formattedDateValue = useCallback(({ row }) => formattedDate(row.createdAt, timezone), [
-    timezone,
-  ]);
+  const formattedDateValue = useCallback(
+    ({ row, column }) => formattedDate(row[column.id], timezone),
+    [timezone],
+  );
 
   const getGroupName = useCallback(
     ({ original, viewIndex }) => (
