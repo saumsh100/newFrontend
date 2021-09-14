@@ -337,7 +337,6 @@ class MessageContainer extends Component {
         >
           <InfiniteScroll
             isReverse
-            initialLoad={false}
             useWindow={false}
             loadMore={this.loadMoreMessages}
             hasMore={hasMoreMessages && !loadingMessages}
