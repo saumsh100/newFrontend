@@ -17,11 +17,6 @@ function CareCru({ iframeSrc }) {
 
   const self = this;
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const button = document.querySelector('.CareCruButton');
-    button.classList.add('CareCruFadeIn');
-  });
-
   this.host.connect().then(() => {
     console.log('Connected to client!');
 

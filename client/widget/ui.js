@@ -33,7 +33,7 @@ export default {
 
     const bookingButton = document.createElement('div');
     bookingButton.innerHTML = `<div class="CareCruButtonIcon">${CalendarSVG}</div><div><strong class="CareCruButtonIconBook">${buttonLabel[0]}</strong> ${buttonLabel[1]}</div>`;
-    bookingButton.className = `CareCruButton ${buttonLabel[0]}`;
+    bookingButton.className = `CareCruFadeIn CareCruButton ${buttonLabel[0]}`;
 
     // Append at bottom of body
     const body = document.getElementsByTagName('body')[0];
