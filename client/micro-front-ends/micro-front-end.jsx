@@ -62,7 +62,7 @@ function MicroFrontend({ name, host, document, window, location, ...rest }) {
     };
   }, []);
 
-  return <main id={`${name}-container`} />;
+  return <main id={`${name}-container`} className="mfe-container" />;
 }
 
 MicroFrontend.defaultProps = {
