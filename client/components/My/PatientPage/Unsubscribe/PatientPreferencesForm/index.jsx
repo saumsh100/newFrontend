@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Field } from '../../../../library';
@@ -47,8 +46,14 @@ export default function PatientPreferencesForm({ initialValues, onSubmit }) {
         className={styles.preferenceToggle}
       />
       <Field
+        name="birthdayMessage"
+        label="Special/Holiday Messages"
+        component="Toggle"
+        className={styles.preferenceToggle}
+      />
+      <Field
         name="newsletter"
-        label="Newsletters & Special Promotions"
+        label="Newsletter"
         component="Toggle"
         className={styles.preferenceToggle}
       />

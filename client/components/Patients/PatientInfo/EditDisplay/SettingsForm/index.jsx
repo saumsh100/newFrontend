@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { change, formValueSelector } from 'redux-form';
+import { formValueSelector } from 'redux-form';
 import { Map } from 'immutable';
 import classNames from 'classnames';
 import { convertIntervalToMs, intervalToNumType } from '../../../../library/util/datetime/helpers';
@@ -11,8 +10,6 @@ import { Grid, Row, Col, Form, Field, FormSection } from '../../../../library';
 import { capitalizeText } from '../../../../Utils';
 import { isResponsive } from '../../../../../util/hub';
 import styles from '../styles.scss';
-
-const getId = (v) => v.get('id');
 
 const sanitizeList = (list) =>
   list.filter((v) => v.isActive).sortBy((r) => -convertIntervalToMs(r.interval));
@@ -38,11 +35,16 @@ class SettingsForm extends Component {
   constructor(props) {
     super(props);
 
+    const {
+      patient: { preferences, omitReminderIds, omitRecallIds },
+      recalls,
+      reminders,
+    } = props;
+
     this.state = {
-      omitReminderIds: props.patient.omitReminderIds.filter((id) =>
-        sanitizeList(props.reminders).get(id),),
-      omitRecallIds: props.patient.omitRecallIds.filter((id) =>
-        sanitizeList(props.recalls).get(id),),
+      preferences,
+      omitReminderIds: omitReminderIds.filter((id) => sanitizeList(reminders).get(id)),
+      omitRecallIds: omitRecallIds.filter((id) => sanitizeList(recalls).get(id)),
     };
 
     this.omitFormHandler = this.omitFormHandler.bind(this);
@@ -58,28 +60,13 @@ class SettingsForm extends Component {
   }
 
   omitFormHandler(setting) {
-    return (toOmit) =>
-      this.setState({ [setting]: toOmit }, () => {
-        const settingFieldName = this.getSettingType(setting);
-
-        const settingNextState =
-          this.state[setting].length !== sanitizeList(this.props[settingFieldName]).size;
-
-        // check if all child toggles are on/off and updates the parent accordingly
-        if (this.props[`${settingFieldName}Field`] !== settingNextState) {
-          this.props.change(
-            'Form4',
-            `preferences.${this.getSettingType(setting)}`,
-            settingNextState,
-          );
-        }
-      });
+    return (toOmit) => this.setState({ [setting]: toOmit });
   }
 
   render() {
     const { handleSubmit, patient, reminders, recalls } = this.props;
-    const { omitReminderIds, omitRecallIds } = this.state;
-    const { preferences } = patient;
+    const { omitReminderIds, omitRecallIds, preferences } = this.state;
+
     return (
       <Form
         form="Form4"
@@ -89,50 +76,11 @@ class SettingsForm extends Component {
             ...this.state,
           })
         }
-        onChange={(values) => {
-          this.setState(
-            (prev) =>
-              Object.keys(prev).reduce((acc, setting) => {
-                const settingFieldName = this.getSettingType(setting);
-
-                // if the user disables all reminders/recalls
-                if (!values.preferences[settingFieldName]) {
-                  acc = {
-                    ...acc,
-                    [setting]: sanitizeList(this.props[settingFieldName])
-                      .toArray()
-                      .map(getId),
-                  };
-                  // if the user enables all reminders/recalls
-                } else if (values.preferences[settingFieldName]) {
-                  acc = {
-                    ...acc,
-                    [setting]:
-                      // check if some omit toggle was already on
-                      prev[setting].length > 0 &&
-                      prev[setting].length < sanitizeList(this.props[settingFieldName]).size
-                        ? prev[setting]
-                        : [],
-                  };
-                }
-                return acc;
-              }, prev),
-            () => {
-              Object.keys(this.state).map((setting) => {
-                const settingFieldName = this.getSettingType(setting);
-                // dispatch updates to the child form inputs
-                return sanitizeList(this.props[settingFieldName])
-                  .toArray()
-                  .map((r) =>
-                    this.props.change(
-                      `${setting}_${patient.id}`,
-                      r.get('id'),
-                      !this.state[setting].includes(r.get('id')),
-                    ),);
-              });
-            },
-          );
-        }}
+        onChange={(values) =>
+          this.setState({
+            preferences: values.preferences,
+          })
+        }
         className={styles.formContainer}
         initialValues={{ preferences }}
         ignoreSaveButton={!isResponsive()}
@@ -171,6 +119,7 @@ class SettingsForm extends Component {
               </Col>
               <Col xs={12} className={classNames(styles.colToggle, styles.omitFormWrapper)}>
                 <OmitForm
+                  disabled={!preferences.reminders}
                   formName={`omitReminderIds_${patient.id}`}
                   value={omitReminderIds}
                   toggles={sanitizeList(reminders).toArray()}
@@ -208,6 +157,7 @@ class SettingsForm extends Component {
               </Col>
               <Col xs={12} className={classNames(styles.colToggle, styles.omitFormWrapper)}>
                 <OmitForm
+                  disabled={!preferences.recalls}
                   formName={`omitRecallIds_${patient.id}`}
                   value={omitRecallIds}
                   toggles={sanitizeList(recalls).toArray()}
@@ -287,19 +237,16 @@ const mapStateToProps = (state) => ({
   recallsField: selector(state, 'preferences.recalls'),
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ change }, dispatch);
-
 SettingsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   patient: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     preferences: PropTypes.objectOf(PropTypes.bool),
     omitReminderIds: PropTypes.arrayOf(PropTypes.bool),
     omitRecallIds: PropTypes.arrayOf(PropTypes.bool),
   }).isRequired,
   reminders: PropTypes.instanceOf(Map).isRequired,
   recalls: PropTypes.instanceOf(Map).isRequired,
-  change: PropTypes.func.isRequired,
   // Those props are not being called by their name so they throw this lint error
   remindersField: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
   recallsField: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
@@ -310,4 +257,4 @@ SettingsForm.defaultProps = {
   recallsField: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsForm);
+export default connect(mapStateToProps)(SettingsForm);
