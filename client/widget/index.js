@@ -22,6 +22,12 @@ function getQueryVariable(variable) {
   }
 }
 
+function prepareIFrameSrc(ccUrl, utmSource) {
+  if (ccUrl)
+    return `${__CARECRU_IFRAME_SRC__}/${ccUrl}`;
+  return utmSource ? `${__CARECRU_IFRAME_SRC__}/book?utm_source=${utmSource}` : `${__CARECRU_IFRAME_SRC__}/book`;
+}
+
 /**
  * This is the script that builds Modal UI, and initiates client-side
  * CareCru object to control embedded widgets
@@ -55,11 +61,13 @@ function main() {
   const accountId = getQueryVariable('accountId');
   const stars = getQueryVariable('stars') || 0;
   const cc = getQueryVariable('cc');
+  const utmSource = getQueryVariable('utm_source');
   const suffix = cc && 'review' === cc ? cc : 'book';
 
   const ccUrl = cc && (sentRecallId ? 'book/date-and-time' : suffix) + window.location.search;
 
-  const iframeSrc = ccUrl ? `${__CARECRU_IFRAME_SRC__}/${ccUrl}` : `${__CARECRU_IFRAME_SRC__}/book`;
+  const iframeSrc = prepareIFrameSrc(ccUrl, utmSource);
+
   console.log('iframeSrc', __CARECRU_IFRAME_SRC__, iframeSrc);
 
   // Create API for that clinic's widget
