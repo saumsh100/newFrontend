@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -46,7 +45,9 @@ const mergeTime = (date, time) => {
 class AddNewAppointment extends Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      suggestionList: [],
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
@@ -64,43 +65,6 @@ class AddNewAppointment extends Component {
     if (!currentDate.isSame(previousDate)) {
       this.props.changeForm(this.props.formName, 'date', currentDate);
     }
-  }
-
-  getSuggestions(value) {
-    return this.props
-      .fetchEntitiesRequest({
-        url: '/api/patients/search',
-        params: { patients: value },
-      })
-      .then(searchData => searchData.patients)
-      .then((searchedPatients) => {
-        const patientList = Object.keys(searchedPatients).length
-          ? Object.keys(searchedPatients).map(key => searchedPatients[key])
-          : [];
-
-        return patientList.map((patient) => {
-          patient.display = (
-            <div className={styles.suggestionContainer}>
-              <Avatar user={patient} size="xs" />
-              <div className={styles.suggestionContainer_details}>
-                <div className={styles.suggestionContainer_fullName}>
-                  {`${patient.firstName} ${patient.lastName}${patient.birthDate
-                      ? `, ${getTodaysDate(this.props.timezone).diff(patient.birthDate, 'years')}`
-                      : ''
-                    }`}
-                </div>
-                <div className={styles.suggestionContainer_date}>
-                  Last Appointment:{' '}
-                  {patient.lastApptDate
-                    ? getUTCDate(patient.lastApptDate, this.props.timezone).format('MMM D YYYY')
-                    : 'n/a'}
-                </div>
-              </div>
-            </div>
-          );
-          return patient;
-        });
-      });
   }
 
   handleStartTimeChange(value) {
@@ -259,8 +223,7 @@ class AddNewAppointment extends Component {
       const requestId = selectedAppointment ? selectedAppointment.requestModel.get('id') : null;
 
       // if confirming an appointment for a online booking request then send the bookingRequestId
-      if (selectedAppointment?.request)
-        newAppointment.bookingRequestId = requestId;
+      if (selectedAppointment?.request) newAppointment.bookingRequestId = requestId;
 
       return this.props
         .createEntityRequest({
@@ -310,6 +273,44 @@ class AddNewAppointment extends Component {
       });
   }
 
+  getSuggestions(value) {
+    return this.props
+      .fetchEntitiesRequest({
+        url: '/api/patients/search',
+        params: { patients: value },
+      })
+      .then((searchData) => searchData.patients)
+      .then((searchedPatients) => {
+        const patientList = Object.keys(searchedPatients).length
+          ? Object.keys(searchedPatients).map((key) => searchedPatients[key])
+          : [];
+
+        return patientList.map((patient) => {
+          patient.display = (
+            <div className={styles.suggestionContainer}>
+              <Avatar user={patient} size="xs" />
+              <div className={styles.suggestionContainer_details}>
+                <div className={styles.suggestionContainer_fullName}>
+                  {`${patient.firstName} ${patient.lastName}${
+                    patient.birthDate
+                      ? `, ${getTodaysDate(this.props.timezone).diff(patient.birthDate, 'years')}`
+                      : ''
+                  }`}
+                </div>
+                <div className={styles.suggestionContainer_date}>
+                  Last Appointment:{' '}
+                  {patient.lastApptDate
+                    ? getUTCDate(patient.lastApptDate, this.props.timezone).format('MMM D YYYY')
+                    : 'n/a'}
+                </div>
+              </div>
+            </div>
+          );
+          return patient;
+        });
+      });
+  }
+
   deleteAppointment() {
     const { selectedAppointment, reinitializeState } = this.props;
 
@@ -348,7 +349,8 @@ class AddNewAppointment extends Component {
       form: formName,
     };
 
-    let title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
+    let title =
+      selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
     let buttonTitle = selectedAppointment && !selectedAppointment.request ? 'Save' : 'Add';
 
     if (selectedAppointment && selectedAppointment.request) {
@@ -400,6 +402,7 @@ class AddNewAppointment extends Component {
               change={this.props.changeForm}
               reset={this.props.reset}
               timezone={this.props.timezone}
+              suggestionList={this.state.suggestionList}
             />
           </SBody>
           <SFooter className={styles.footer}>
@@ -442,7 +445,7 @@ const patientShape = {
   status: PropTypes.string,
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       fetchEntities,
@@ -458,15 +461,15 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = ({ form, auth }, { formName }) =>
-(!form[formName]
-  ? {
-    values: {},
-    timezone: auth.get('timezone'),
-  }
-  : {
-    appFormValues: form[formName].values,
-    timezone: auth.get('timezone'),
-  });
+  !form[formName]
+    ? {
+        values: {},
+        timezone: auth.get('timezone'),
+      }
+    : {
+        appFormValues: form[formName].values,
+        timezone: auth.get('timezone'),
+      };
 
 AddNewAppointment.propTypes = {
   appFormValues: PropTypes.shape({

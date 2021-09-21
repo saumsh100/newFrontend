@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
 import { Map } from 'immutable';
@@ -30,7 +29,7 @@ const generateEntityOptions = (entities, label) =>
     [],
   );
 
-const generatePractitionerOptions = practitioners =>
+const generatePractitionerOptions = (practitioners) =>
   practitioners.sort(SortByFirstName).reduce(
     (prev, curr) => [
       ...prev,
@@ -43,15 +42,6 @@ const generatePractitionerOptions = practitioners =>
   );
 
 /**
- * Check if the current patientSelected value
- * is a valid object containing an ID.
- *
- * @param {*} value
- */
-const validatePatient = value =>
-  (value && typeof value === 'object' && value.id ? undefined : 'You must select a valid patient');
-
-/**
  * Sets the defaultStartTime using the next time after the currentHour + 1hour.
  */
 const defaultStartTime = (timezone, date) => {
@@ -60,8 +50,10 @@ const defaultStartTime = (timezone, date) => {
     timezone,
     date,
   }).sort((a, b) => sortAsc(a.value, b.value));
-  const nextAvailable = sortedTimes.find(opt => getFormattedDate(opt.value, 'HH:mm', timezone) > now.format('HH:mm'))
-    || sortedTimes[0];
+  const nextAvailable =
+    sortedTimes.find(
+      (opt) => getFormattedDate(opt.value, 'HH:mm', timezone) > now.format('HH:mm'),
+    ) || sortedTimes[0];
 
   return nextAvailable.value;
 };
@@ -69,6 +61,9 @@ const defaultStartTime = (timezone, date) => {
 class DisplayForm extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      validatePatient: false,
+    };
     this.autoSuggest = createRef();
     this.focusAutoSuggest = this.focusAutoSuggest.bind(this);
   }
@@ -78,6 +73,30 @@ class DisplayForm extends Component {
       this.focusAutoSuggest();
     }
   }
+
+  /**
+   * Check if the current patientSelected value
+   * is a valid object containing an ID.
+   *
+   * @param {*} value
+   */
+  validatePatient = (value) => {
+    if (typeof value === 'string' && value.length > 0) {
+      this.setState({ validatePatient: true });
+    } else {
+      this.setState({ validatePatient: false });
+    }
+    return value && typeof value === 'object' && value.id
+      ? undefined
+      : 'You must select a valid patient';
+  };
+
+  onClickButtonHandler = (e) => {
+    e.stopPropagation();
+    this.props.setCreatingPatient({ createPatientBool: true });
+    this.props.setShowInput(true);
+    this.props.setPatientSearched(null);
+  };
 
   focusAutoSuggest() {
     if (this.autoSuggest.current && this.autoSuggest.current.inputComponent) {
@@ -199,12 +218,7 @@ class DisplayForm extends Component {
         <button
           type="button"
           className={styles.addNewPatient}
-          onClick={(e) => {
-            e.stopPropagation();
-            this.props.setCreatingPatient({ createPatientBool: true });
-            this.props.setShowInput(true);
-            this.props.setPatientSearched(null);
-          }}
+          onClick={(e) => this.onClickButtonHandler(e)}
         >
           Create New Patient
         </button>
@@ -240,11 +254,22 @@ class DisplayForm extends Component {
             renderSuggestionsContainer={addNewPatientComponent}
             icon="search"
             ref={this.autoSuggest}
-            validate={[validatePatient]}
+            validate={[this.validatePatient]}
             onBlurFunction={() => this.props.setShowInput(false)}
             data-test-id="patientSelected"
           />
         </div>
+        {this.state.validatePatient && this.props.suggestionList?.length === 0 && (
+          <div className={styles.noPatientSuggested}>
+            <button
+              type="button"
+              className={styles.addNewPatient}
+              onClick={(e) => this.onClickButtonHandler(e)}
+            >
+              Create New Patient
+            </button>
+          </div>
+        )}
         <AppointmentForm
           practitionerOptions={practitionerOptions}
           chairOptions={chairOptions}
@@ -286,9 +311,11 @@ DisplayForm.propTypes = {
   showInput: PropTypes.bool.isRequired,
   unit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   timezone: PropTypes.string.isRequired,
+  suggestionList: PropTypes.arrayOf(PropTypes.any),
 };
 
 DisplayForm.defaultProps = {
   selectedAppointment: null,
   patientSearched: '',
+  suggestionList: [],
 };
