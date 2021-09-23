@@ -22,10 +22,20 @@ function getQueryVariable(variable) {
   }
 }
 
-function prepareIFrameSrc(ccUrl, utmSource) {
-  if (ccUrl)
-    return `${__CARECRU_IFRAME_SRC__}/${ccUrl}`;
-  return utmSource ? `${__CARECRU_IFRAME_SRC__}/book?utm_source=${utmSource}` : `${__CARECRU_IFRAME_SRC__}/book`;
+function prepareIFrameSrc(ccUrl, utmParams) {
+  if (ccUrl) return `${__CARECRU_IFRAME_SRC__}/${ccUrl}`;
+  const utmString = Object.entries(utmParams)
+    .reduce((result, [key, val]) => {
+      if (val) {
+        result.push(`${key}=${val}`);
+      }
+      return result;
+    }, [])
+    .join('&');
+
+  return utmString
+    ? `${__CARECRU_IFRAME_SRC__}/book?${utmString}`
+    : `${__CARECRU_IFRAME_SRC__}/book`;
 }
 
 /**
@@ -61,12 +71,16 @@ function main() {
   const accountId = getQueryVariable('accountId');
   const stars = getQueryVariable('stars') || 0;
   const cc = getQueryVariable('cc');
-  const utmSource = getQueryVariable('utm_source');
   const suffix = cc && 'review' === cc ? cc : 'book';
+  const utmParams = {
+    utm_source: getQueryVariable('utm_source') || '',
+    utm_campaign: getQueryVariable('utm_campaign') || '',
+    utm_medium: getQueryVariable('utm_medium') || '',
+  };
 
   const ccUrl = cc && (sentRecallId ? 'book/date-and-time' : suffix) + window.location.search;
 
-  const iframeSrc = prepareIFrameSrc(ccUrl, utmSource);
+  const iframeSrc = prepareIFrameSrc(ccUrl, utmParams);
 
   console.log('iframeSrc', __CARECRU_IFRAME_SRC__, iframeSrc);
 

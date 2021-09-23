@@ -79,7 +79,9 @@ export function createRequest() {
       insuranceMemberId: patientUser.insuranceMemberId || insuranceMemberId,
       insuranceGroupId: patientUser.insuranceGroupId,
       sentRecallId,
-      source: utmParams?.utm_source,
+      utmSource: utmParams?.utm_source,
+      utmCampaign: utmParams?.utm_campaign,
+      utmMedium: utmParams?.utm_medium,
     };
 
     if (selectedPractitionerId) {
