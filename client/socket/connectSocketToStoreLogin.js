@@ -9,7 +9,6 @@ import {
   socketLock,
 } from '../thunks/chat';
 import { fetchWaitingRoomQueue } from '../thunks/waitingRoom';
-import { isHub } from '../util/hub';
 import DesktopNotification from '../util/desktopNotification';
 
 export default function connectSocketToStoreLogin(store, socket) {
@@ -47,26 +46,6 @@ export default function connectSocketToStoreLogin(store, socket) {
             entities: data.entities,
           }),
         );
-        const alert = {
-          title: 'Appointment Request',
-          body: 'You have an appointment request.',
-          browserAlert: true,
-        };
-
-        DesktopNotification.showNotification(alert.title, {
-          body: alert.body,
-          onClick: () => {
-            if (isHub()) {
-              import('../thunks/electron').then((electronThunk) => {
-                store.getState().router.location.pathname.indexOf('/requests') === -1
-                  && dispatch(push('/requests'));
-                dispatch(electronThunk.displayContent());
-              });
-              return;
-            }
-            dispatch(push(`/schedule?selectedRequest=${data.result}`));
-          },
-        });
       });
 
       socket.on('update:Request', (data) => {

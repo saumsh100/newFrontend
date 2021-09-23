@@ -1,8 +1,4 @@
-
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../util/hub';
 
 class Intercom extends Component {
   componentDidMount() {
@@ -32,15 +28,8 @@ class Intercom extends Component {
   setPosition() {
     const intercomContainer = document.getElementById('intercom-container');
 
-    if (
-      !intercomContainer.classList.contains('right') &&
-      this.props.toolbarPosition === TOOLBAR_RIGHT
-    ) {
+    if (!intercomContainer.classList.contains('right')) {
       intercomContainer.classList.add('right');
-    }
-
-    if (this.props.toolbarPosition === TOOLBAR_LEFT) {
-      intercomContainer.classList.remove('right');
     }
   }
 
@@ -53,12 +42,4 @@ class Intercom extends Component {
   }
 }
 
-Intercom.propTypes = {
-  toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]).isRequired,
-};
-
-const mapStateToProps = ({ electron }) => ({
-  toolbarPosition: electron.get('toolbarPosition'),
-});
-
-export default connect(mapStateToProps)(Intercom);
+export default Intercom;

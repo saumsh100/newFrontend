@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -31,7 +30,7 @@ const WaitListItem = ({
   onSelect: onSelectCallback,
 }) => {
   const renderPatientHeading = () =>
-    (isHub() ? (
+    isHub() ? (
       <div className={styles.name}>
         {patient.firstName} {patient.lastName}
       </div>
@@ -40,9 +39,9 @@ const WaitListItem = ({
         patient={
           isPatientUser
             ? {
-              ...patient,
-              endDate: waitSpot.endDate,
-            }
+                ...patient,
+                endDate: waitSpot.endDate,
+              }
             : patient
         }
         isPatientUser={isPatientUser}
@@ -53,7 +52,7 @@ const WaitListItem = ({
           {patient.firstName} {patient.lastName}
         </div>
       </PatientPopover>
-    ));
+    );
 
   const renderPatientProfile = () => {
     const patientPhone = isPatientUser ? 'phoneNumber' : 'mobilePhoneNumber';
@@ -85,9 +84,9 @@ const WaitListItem = ({
             {patient.nextApptDate
               ? getFormattedDate(patient.nextApptDate, 'MMM Do, YYYY h:mm A', timezone)
               : 'n/a'}
-            {isPatientUser
-              && patient.endDate
-              && getFormattedDate(patient.endDate, 'MMM Do, YYYY h:mm A', timezone)}
+            {isPatientUser &&
+              patient.endDate &&
+              getFormattedDate(patient.endDate, 'MMM Do, YYYY h:mm A', timezone)}
           </span>
         </div>
         <div className={styles.info}>
@@ -117,16 +116,18 @@ const WaitListItem = ({
   const renderContentHub = () => {
     if (!patient) return null;
     const { daysOfTheWeek, endDate, availableTimes } = waitSpot;
-    const checkIfAnyTrue = Object.keys(daysOfTheWeek).every(k => !daysOfTheWeek[k]);
+    const checkIfAnyTrue = Object.keys(daysOfTheWeek).every((k) => !daysOfTheWeek[k]);
     const patientPhone = isPatientUser ? 'phoneNumber' : 'cellPhoneNumber';
 
-    const nextAppt = (isPatientUser
-      ? getFormattedDate(endDate, 'MMM Do YYYY', timezone)
-      : patient.nextApptDate
-          && getFormattedDate(patient.nextApptDate, 'MMM Do YYYY', timezone)) || 'n/a';
-    const filteredPreferencesList = availableTimes
-      && availableTimes
-        .map(time => getFormattedDate(new Date(time).toISOString(), 'LT', timezone))
+    const nextAppt =
+      (isPatientUser
+        ? getFormattedDate(endDate, 'MMM Do YYYY', timezone)
+        : patient.nextApptDate &&
+          getFormattedDate(patient.nextApptDate, 'MMM Do YYYY', timezone)) || 'n/a';
+    const filteredPreferencesList =
+      availableTimes &&
+      availableTimes
+        .map((time) => getFormattedDate(new Date(time).toISOString(), 'LT', timezone))
         .join(', ');
 
     return (
@@ -167,7 +168,7 @@ const WaitListItem = ({
               <div className={styles.info}>
                 <span className={styles.subHeader}>Preferred Days: </span>
                 <span className={styles.dataText}>
-                  {week.all.filter(day => daysOfTheWeek[day]).join(', ')}
+                  {week.all.filter((day) => daysOfTheWeek[day]).join(', ')}
                 </span>
               </div>
             )}
@@ -207,8 +208,8 @@ const WaitListItem = ({
     return getUTCDate(time2).diff(getUTCDate(time1), 'hour');
   };
 
-  const timeLT = time =>
-    (time ? getFormattedDate(new Date(time).toISOString(), 'LT', timezone) : '');
+  const timeLT = (time) =>
+    time ? getFormattedDate(new Date(time).toISOString(), 'LT', timezone) : '';
 
   const handleWaitListTimes = (arrTimes) => {
     if (arrTimes.length === 1) {
@@ -241,12 +242,13 @@ const WaitListItem = ({
   const renderContentWeb = () => {
     if (!patient) return null;
     const { daysOfTheWeek, endDate, availableTimes } = waitSpot;
-    const checkIfAnyTrue = Object.keys(daysOfTheWeek).every(k => !daysOfTheWeek[k]);
+    const checkIfAnyTrue = Object.keys(daysOfTheWeek).every((k) => !daysOfTheWeek[k]);
 
-    const nextAppt = (isPatientUser
-      ? getFormattedDate(endDate, 'MMM Do YYYY', timezone)
-      : patient.nextApptDate
-          && getFormattedDate(patient.nextApptDate, 'MMM Do YYYY', timezone)) || 'n/a';
+    const nextAppt =
+      (isPatientUser
+        ? getFormattedDate(endDate, 'MMM Do YYYY', timezone)
+        : patient.nextApptDate &&
+          getFormattedDate(patient.nextApptDate, 'MMM Do YYYY', timezone)) || 'n/a';
 
     // preference days
     const weekDays = {
@@ -258,11 +260,12 @@ const WaitListItem = ({
       friday: 'Fri',
       saturday: 'Sat',
     };
-    const filteredDays = week.all.filter(day => daysOfTheWeek[day]);
-    const preferenceDays = filteredDays.map(day => weekDays[day]).join(', ');
+    const filteredDays = week.all.filter((day) => daysOfTheWeek[day]);
+    const preferenceDays = filteredDays.map((day) => weekDays[day]).join(', ');
 
     // preference times
-    const preferenceTimes = availableTimes.length > 0 ? handleWaitListTimes(availableTimes.sort()) : 'N/A';
+    const preferenceTimes =
+      availableTimes.length > 0 ? handleWaitListTimes(availableTimes.sort()) : 'N/A';
 
     return (
       <ListItem className={styles.listItem}>

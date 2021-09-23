@@ -26,7 +26,6 @@ import {
   updateChatId,
 } from '../reducers/chat';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../reducers/entities';
-import DesktopNotification from '../util/desktopNotification';
 import { httpClient } from '../util/httpClient';
 import { isHub } from '../util/hub';
 import { createEntityRequest, fetchEntitiesRequest, updateEntityRequest } from './fetchEntities';
@@ -85,10 +84,9 @@ export function loadUnreadChatCount() {
 
 export function addMessage(message) {
   return (dispatch, getState) => {
-    const { chat, electron, router } = getState();
+    const { chat, router } = getState();
     const selectedChatId = chat.get('selectedChatId');
-    const chatPageActive =
-      isOnChatPage(router.location.pathname) && (!isHub() || electron.get('showContent'));
+    const chatPageActive = isOnChatPage(router.location.pathname);
     dispatch(createListOfUnreadedChats(message.entities.textMessages));
 
     if (selectedChatId === message.result) {
@@ -97,35 +95,6 @@ export function addMessage(message) {
       if (chatPageActive) {
         dispatch(markAsRead(selectedChatId));
       }
-    }
-
-    if (!chatPageActive) {
-      const { chats, textMessages, patients } = message.entities;
-      const chatId = message.result;
-      const conversation = chats[chatId];
-      const { patientId } = conversation;
-      const lastTextMessageId = conversation.textMessages[conversation.textMessages.length - 1];
-      const { body, read } = textMessages[lastTextMessageId];
-
-      if (read) {
-        return;
-      }
-
-      const { firstName, lastName } = patients[patientId];
-      const messageHeading = `New message from ${firstName} ${lastName}`;
-
-      DesktopNotification.showNotification(messageHeading, {
-        body,
-        onClick: () => {
-          dispatch(push(`/chat/${chatId}`));
-
-          if (isHub()) {
-            import('./electron').then((electronThunk) => {
-              dispatch(electronThunk.displayContent());
-            });
-          }
-        },
-      });
     }
   };
 }

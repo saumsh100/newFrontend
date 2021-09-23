@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -7,7 +6,6 @@ import { reset } from 'redux-form';
 import { push } from 'connected-react-router';
 import { Map, List } from 'immutable';
 import { isHub, isResponsive } from '../../util/hub';
-import { setBackHandler, setTitle } from '../../reducers/electron';
 import {
   Card,
   SBody,
@@ -90,7 +88,7 @@ class ScheduleComponent extends PureComponent {
   }
 
   setSendEmail() {
-    this.setState(prevState => ({ sendEmail: !prevState.sendEmail }));
+    this.setState((prevState) => ({ sendEmail: !prevState.sendEmail }));
   }
 
   setShowInput(showBool) {
@@ -284,8 +282,8 @@ class ScheduleComponent extends PureComponent {
     const leftColumnWidth = schedule.get('leftColumnWidth');
     const currentDate = getUTCDate(schedule.get('scheduleDate'), this.props.timezone);
 
-    const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
-    const filterChairs = chairs.get('models').filter(chair => chair.get('isActive'));
+    const filterPractitioners = practitioners.get('models').filter((prac) => prac.get('isActive'));
+    const filterChairs = chairs.get('models').filter((chair) => chair.get('isActive'));
 
     const sameApptTitle = isResponsive()
       ? 'Is this the same appointment?'
@@ -395,10 +393,11 @@ class ScheduleComponent extends PureComponent {
       displayTitle = 'Accept Appointment';
     }
 
-    const showDialog = (selectedAppointment && selectedAppointment.nextAppt)
-      || !!mergingPatientData.patientUser
-      || showApptSummary
-      || createNewPatient;
+    const showDialog =
+      (selectedAppointment && selectedAppointment.nextAppt) ||
+      !!mergingPatientData.patientUser ||
+      showApptSummary ||
+      createNewPatient;
 
     this.pageTitle = displayTitle;
     const appsEventsFetched = appsFetched && eventsFetched;
@@ -426,7 +425,7 @@ class ScheduleComponent extends PureComponent {
           />
         )}
         {allFetched && showDialog && (
-          <DialogBody actions={actions.filter(v => v.label !== 'Cancel')}>
+          <DialogBody actions={actions.filter((v) => v.label !== 'Cancel')}>
             {displayModalComponent}
           </DialogBody>
         )}
@@ -579,12 +578,10 @@ const mapStateToProps = ({ router, auth }) => ({
   apptWrite: !nonApptWritePMS(auth.get('adapterType')),
 });
 
-const mapActionsToProps = dispatch =>
+const mapActionsToProps = (dispatch) =>
   bindActionCreators(
     {
       push,
-      setBackHandler,
-      setTitle,
       reset,
     },
     dispatch,

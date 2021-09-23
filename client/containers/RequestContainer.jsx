@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { createBrowserHistory } from 'history';
@@ -7,7 +6,6 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { selectedRequestBuilder } from '../components/Utils';
 import { isHub } from '../util/hub';
-import { setTitle } from '../reducers/electron';
 import { loadOnlineRequest } from '../thunks/onlineRequests';
 import RequestsModel from '../entities/models/Request';
 import Requests from '../components/Requests';
@@ -96,7 +94,7 @@ function mapStateToProps({ entities, apiRequests, router }, ownProps) {
 
   const filteredRequests = requests
     .toArray()
-    .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
+    .filter((req) => !req.get('isCancelled') && !req.get('isConfirmed'));
 
   const sortedRequests = filteredRequests.sort(
     (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate),
@@ -122,15 +120,11 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       loadOnlineRequest,
-      setTitle,
     },
     dispatch,
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(RequestContainer);

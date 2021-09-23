@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
@@ -21,7 +20,6 @@ import {
   clearAllTimelineFilters,
   selectAllTimelineFilters,
 } from '../../../reducers/patientTable';
-import { setBackHandler, setTitle } from '../../../reducers/electron';
 import FilterTimeline from './FilterTimeline';
 import Loader from '../../Loader';
 import EditDisplay from './EditDisplay';
@@ -106,6 +104,10 @@ class PatientInfo extends Component {
     this.props.selectAllTimelineFilters();
   }
 
+  handleTabChange(index) {
+    this.setState({ tabIndex: index });
+  }
+
   changePageTab(pageTab) {
     this.setState({ pageTab });
   }
@@ -186,10 +188,6 @@ class PatientInfo extends Component {
         }
       },
     );
-  }
-
-  handleTabChange(index) {
-    this.setState({ tabIndex: index });
   }
 
   addRemoveFilter(filter) {
@@ -342,15 +340,13 @@ function mapDispatchToProps(dispatch) {
       addRemoveTimelineFilters,
       selectAllTimelineFilters,
       clearAllTimelineFilters,
-      setTitle,
-      setBackHandler,
       deleteAllEntity,
     },
     dispatch,
   );
 }
 
-function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }, { match }) {
+function mapStateToProps({ entities, apiRequests, patientTable, auth }, { match }) {
   const patientStats = apiRequests.getIn(['patientIdStats', 'data']) || null;
   const wasStatsFetched = apiRequests.getIn(['patientIdStats', 'wasFetched']) || false;
   const wasPatientFetched = apiRequests.getIn(['fetchPatient', 'wasFetched']) || false;
@@ -371,8 +367,6 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }
     recalls: entities.getIn(['recalls', 'models']),
     wasRemindersFetched,
     wasRecallsFetched,
-    currentBackHandler: electron.get('backHandler'),
-    currentTitle: electron.get('title'),
   };
 }
 
@@ -408,7 +402,7 @@ PatientInfo.propTypes = {
 
 PatientInfo.defaultProps = {
   accountViewer: null,
-  currentBackHandler: e => e,
+  currentBackHandler: (e) => e,
   currentTitle: '',
   patient: null,
   patientStats: null,
@@ -418,7 +412,7 @@ PatientInfo.defaultProps = {
 };
 
 // eslint-disable-next-line react/prop-types
-const PatientInfoRenderer = parentProps => ({ error, loading, data }) => {
+const PatientInfoRenderer = (parentProps) => ({ error, loading, data }) => {
   if (loading) return <Loader />;
 
   if (error) {
@@ -449,7 +443,4 @@ PatientInfoWithData.defaultProps = {
   patient: null,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientInfoWithData);
+export default connect(mapStateToProps, mapDispatchToProps)(PatientInfoWithData);

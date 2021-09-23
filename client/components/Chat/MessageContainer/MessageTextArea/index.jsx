@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
@@ -148,7 +147,7 @@ class MessageTextArea extends Component {
           <div className={styles.smileIcon}>
             <DropdownMenu
               ref={this.emojiDropdown}
-              labelComponent={props => (
+              labelComponent={(props) => (
                 <Button {...props}>
                   <Icon icon="smile" />
                 </Button>
@@ -240,9 +239,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(MessageTextArea);

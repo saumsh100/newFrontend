@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
@@ -8,7 +7,6 @@ import classnames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { CHAT_PAGE } from '../../constants/PageTitle';
 import { setChatIsLoading } from '../../reducers/chat';
-import { setBackHandler, setTitle } from '../../reducers/electron';
 import {
   cleanChatList,
   getChatCategoryCounts,
@@ -22,10 +20,8 @@ import {
   selectChatByPatientId,
 } from '../../thunks/chat';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
-import { isHub, TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../util/hub';
 import { Button, Card, InfiniteScroll, List, SBody, SContainer, SHeader } from '../library';
 import Loader from '../Loader';
-import PatientInfoPage from '../Patients/PatientInfo/Electron';
 import PatientSearch from '../PatientSearch';
 import ChatList from './ChatList';
 import ChatMenu from './ChatMenu';
@@ -209,13 +205,13 @@ class ChatMessage extends Component {
   }
 
   loadChatList() {
-    return this.chatListLoader()(CHAT_LIST_LIMIT, this.state.chats).then(result =>
-      this.receivedChatsPostUpdate(result));
+    return this.chatListLoader()(CHAT_LIST_LIMIT, this.state.chats).then((result) =>
+      this.receivedChatsPostUpdate(result),);
   }
 
   loadChatByCount = async (count) => {
     await this.chatListLoader()(count, CHAT_LIST_LIMIT).then(() =>
-      this.receivedChatsPostUpdate({}));
+      this.receivedChatsPostUpdate({}),);
   };
 
   changeTab(newIndex, callback = () => {}) {
@@ -242,14 +238,9 @@ class ChatMessage extends Component {
 
   showPatientInfo() {
     const { conversationIsLoading } = this.props;
-    const { showPatientInfo } = this.state;
 
     if (conversationIsLoading) {
       return <DesktopSkeleton />;
-    }
-
-    if (isHub() && showPatientInfo) {
-      return <PatientInfoPage />;
     }
 
     return (
@@ -292,7 +283,6 @@ class ChatMessage extends Component {
     const { conversationIsLoading } = this.props;
     const patientInfoStyle = classnames(styles.rightSplit, {
       [styles.slideIn]: showPatientInfo,
-      [styles.hubRightSplit]: isHub(),
       [styles.hideContainer]: !showPatientInfo,
     });
 
@@ -329,9 +319,7 @@ class ChatMessage extends Component {
   }
 
   renderHeading() {
-    const { toolbarPosition } = this.props;
-    const isLeftSide = isHub() && toolbarPosition === TOOLBAR_LEFT;
-    const newChatStyle = classnames(styles.addNewChatButton, { [styles.leftToolbar]: isLeftSide });
+    const newChatStyle = classnames(styles.addNewChatButton);
 
     return (
       <SHeader className={styles.leftCardHeader}>
@@ -360,7 +348,7 @@ class ChatMessage extends Component {
     const shouldSlideIn = showMessageContainer || showPatientInfo;
 
     return (
-      <div className={classnames(styles.chatWrapper, { [styles.hub]: isHub() })}>
+      <div className={classnames(styles.chatWrapper)}>
         <div
           className={classnames(styles.patientsList, {
             [styles.slideIn]: showPatientsList,
@@ -389,7 +377,6 @@ class ChatMessage extends Component {
 ChatMessage.defaultProps = {
   match: { params: { chatId: null } },
   chatsFetching: false,
-  toolbarPosition: TOOLBAR_LEFT,
 };
 
 ChatMessage.propTypes = {
@@ -406,7 +393,6 @@ ChatMessage.propTypes = {
   setTitle: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   chatsFetching: PropTypes.bool,
-  toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
   getChatEntity: PropTypes.func.isRequired,
   getChatCategoryCounts: PropTypes.func.isRequired,
   conversationIsLoading: PropTypes.bool.isRequired,
@@ -414,7 +400,7 @@ ChatMessage.propTypes = {
   setChatIsLoading: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ apiRequests, chat, electron }) {
+function mapStateToProps({ apiRequests, chat }) {
   const wasChatsFetched =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('wasFetched');
   const chatsFetching =
@@ -424,7 +410,6 @@ function mapStateToProps({ apiRequests, chat, electron }) {
     wasChatsFetched,
     chatsFetching,
     conversationIsLoading: chat.get('conversationIsLoading'),
-    toolbarPosition: electron.get('toolbarPosition'),
   };
 }
 
@@ -438,9 +423,7 @@ function mapDispatchToProps(dispatch) {
       loadOpenChatList,
       loadClosedChatList,
       cleanChatList,
-      setBackHandler,
       setLocation: push,
-      setTitle,
       fetchEntitiesRequest,
       getChatEntity,
       getChatCategoryCounts,
@@ -451,9 +434,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(ChatMessage);

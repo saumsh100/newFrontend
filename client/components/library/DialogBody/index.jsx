@@ -1,11 +1,10 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { isHub } from '../../../util/hub';
 import styles from './styles.scss';
 import Icon from '../Icon';
-import { Button } from '../../library';
+import { Button } from '..';
 import { SContainer, SHeader, SBody, SFooter } from '../Layout/index';
 
 class DialogBody extends Component {
@@ -76,14 +75,16 @@ DialogBody.propTypes = {
   'data-test-id': PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]),
   onOverlayClick: PropTypes.func.isRequired,
-  actions: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    onClick: PropTypes.func,
-    props: PropTypes.shape({
-      color: PropTypes.string,
-      form: PropTypes.string,
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      onClick: PropTypes.func,
+      props: PropTypes.shape({
+        color: PropTypes.string,
+        form: PropTypes.string,
+      }),
     }),
-  })),
+  ),
   title: PropTypes.string.isRequired,
   bodyStyles: PropTypes.string,
 };

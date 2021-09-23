@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -138,7 +137,7 @@ ChatListItem.propTypes = {
 
 ChatListItem.defaultProps = {
   selectedChatId: null,
-  onChatClick: e => e,
+  onChatClick: (e) => e,
 };
 
 function mapStateToProps(state, { chat = {} }) {

@@ -19,7 +19,6 @@ const entries = {
   reviews: resolveEntry('reviews'),
   my: resolveEntry('my'),
   app: resolveEntry('app'),
-  // hub: resolveEntry('hub'),
 };
 
 const cc = {

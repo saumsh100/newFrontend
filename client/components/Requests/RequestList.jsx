@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -18,7 +17,6 @@ import {
   deleteEntityRequest,
   createEntityRequest,
 } from '../../thunks/fetchEntities';
-import { setBackHandler, setTitle } from '../../reducers/electron';
 import { setHoverRequestId, setUndoRequest } from '../../actions/requests';
 import { selectAppointment } from '../../actions/schedule';
 import { checkPatientUser } from '../../thunks/schedule';
@@ -203,10 +201,10 @@ class RequestList extends Component {
   render() {
     return (
       <Media query="(max-width: 700px)">
-        {matches =>
-          (this.props.selectedRequest && (matches || isHub())
+        {(matches) =>
+          this.props.selectedRequest && (matches || isHub())
             ? this.renderSelectedRequest()
-            : this.renderRequestList())
+            : this.renderRequestList()
         }
       </Media>
     );
@@ -250,7 +248,7 @@ const mapStateToProps = ({ auth, router: { location } }) => ({
   timezone: auth.get('timezone'),
 });
 
-const mapActionsToProps = dispatch =>
+const mapActionsToProps = (dispatch) =>
   bindActionCreators(
     {
       updateEntityRequest,
@@ -261,8 +259,6 @@ const mapActionsToProps = dispatch =>
       checkPatientUser,
       push,
       setUndoRequest,
-      setBackHandler,
-      setTitle,
     },
     dispatch,
   );

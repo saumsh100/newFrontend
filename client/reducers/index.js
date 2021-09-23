@@ -1,4 +1,3 @@
-
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { reducer as form } from 'redux-form';
@@ -11,7 +10,6 @@ import caller from './caller';
 import chat from './chat';
 import dashboard from './dashboard';
 import dialogs from './dialogs';
-import electron from './electron';
 import entities from './entities';
 import featureFlags from './featureFlags';
 import intelligence from './intelligence';
@@ -26,7 +24,7 @@ import toolbar from './toolbar';
 import intelligenceReports from './intelligenceReports';
 import waitingRoom from './waitingRoom';
 
-const rootReducer = history =>
+const rootReducer = (history) =>
   combineReducers({
     accountSettings,
     alerts,
@@ -37,7 +35,6 @@ const rootReducer = history =>
     chat,
     currentDialog: dialogs,
     dashboard,
-    electron,
     entities,
     featureFlags,
     form,

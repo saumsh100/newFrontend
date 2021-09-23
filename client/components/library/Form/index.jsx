@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
@@ -36,7 +35,7 @@ function Form(props) {
         className={className}
         id={id}
         onSubmit={handleSubmit}
-        onChange={e => e.stopPropagation()}
+        onChange={(e) => e.stopPropagation()}
         data-test-id={props['data-test-id']}
       >
         {children}
@@ -70,7 +69,7 @@ Form.defaultProps = {
 };
 
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
-const withReduxForm = BaseComponent => reduxForm()(BaseComponent);
+const withReduxForm = (BaseComponent) => reduxForm()(BaseComponent);
 
 const enhance = compose(withReduxForm);
 
