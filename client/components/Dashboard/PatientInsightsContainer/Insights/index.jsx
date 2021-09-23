@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -12,7 +11,7 @@ export default function Insights(props) {
   const sortedInsights = insights
     .toJS()
     .filter(
-      insightData =>
+      (insightData) =>
         patients.get(insightData.patientId) && appointments.get(insightData.appointmentId),
     )
     .sort((a, b) => {

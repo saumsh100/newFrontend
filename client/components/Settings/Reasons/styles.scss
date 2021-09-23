@@ -49,10 +49,13 @@
 
 .servicesListItem {
   display: -webkit-box;
+  height: 40px;
   padding: 30px;
 
   &_text {
     composes: listItemHeader from '../../../styles/fonts.scss';
+    font-size: 12px;
+    line-height: 13px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
@@ -60,6 +63,7 @@
 
   &_duration {
     composes: subHeaderExtraSmall from '../../../styles/fonts.scss';
+    line-height: 11px;
     padding-top: 10px;
 
     &_text {

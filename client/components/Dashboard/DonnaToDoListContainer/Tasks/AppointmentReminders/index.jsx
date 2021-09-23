@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
@@ -99,7 +98,7 @@ export default function AppointmentReminders({ reminders, timezone }) {
     .map(appointmentMapper({ timezone }))
     .map(componentMapper);
 
-  return <List className={styles.list}>{toRender.map(component => component)}</List>;
+  return <List className={styles.list}>{toRender.map((component) => component)}</List>;
 }
 
 AppointmentReminders.propTypes = {

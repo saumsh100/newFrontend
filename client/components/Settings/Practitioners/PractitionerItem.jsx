@@ -1,7 +1,6 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { ListItem, Avatar, PractitionerAvatar } from '../../library';
+import { ListItem, PractitionerAvatar } from '../../library';
 import styles from './styles.scss';
 
 class PractitionerItem extends Component {
@@ -15,9 +14,7 @@ class PractitionerItem extends Component {
   }
 
   render() {
-    const {
-      fullName, id, practitionerId, practitioner,
-    } = this.props;
+    const { fullName, id, practitionerId, practitioner } = this.props;
 
     const selectedPractitioner = practitionerId === id;
 
@@ -30,13 +27,15 @@ class PractitionerItem extends Component {
       >
         <div className={styles.practListItem_container}>
           <span className={styles.practListItem_avatarContainer}>
-            <PractitionerAvatar practitioner={practitioner.toJS()} size="md" />
+            <PractitionerAvatar
+              className={styles.practitionerItemAvatar}
+              practitioner={practitioner.toJS()}
+              size="md"
+            />
           </span>
           <div className={styles.practListItem_textContainer}>
             <div className={styles.practListItem_name}>{fullName}</div>
-            <div className={styles.practListItem_type}>
-              {practitioner.get('type') || 'Dentist'}
-            </div>
+            <div className={styles.practListItem_type}>{practitioner.get('type') || 'Dentist'}</div>
           </div>
         </div>
       </ListItem>
@@ -45,9 +44,16 @@ class PractitionerItem extends Component {
 }
 
 PractitionerItem.propTypes = {
-  setPractitionerId: PropTypes.func,
-  fullName: PropTypes.string,
-  practitioner: PropTypes.object,
+  setPractitionerId: PropTypes.func.isRequired,
+  fullName: PropTypes.string.isRequired,
+  practitionerId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  practitioner: PropTypes.shape({
+    lastName: PropTypes.string,
+    firstName: PropTypes.string,
+    toJS: PropTypes.func,
+    get: PropTypes.func,
+  }).isRequired,
 };
 
 export default PractitionerItem;

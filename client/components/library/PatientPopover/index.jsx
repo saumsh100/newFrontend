@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { bindActionCreators } from 'redux';
@@ -39,6 +38,12 @@ class PatientPopover extends Component {
     }
   }
 
+  handleGoToChat(patientId) {
+    return () => {
+      this.props.getOrCreateChatForPatient(patientId);
+    };
+  }
+
   setOpen(value) {
     this.setState({ isOpen: value });
   }
@@ -49,12 +54,6 @@ class PatientPopover extends Component {
 
   closeOnScroll() {
     this.setState({ isOpen: false });
-  }
-
-  handleGoToChat(patientId) {
-    return () => {
-      this.props.getOrCreateChatForPatient(patientId);
-    };
   }
 
   render() {
@@ -97,13 +96,13 @@ class PatientPopover extends Component {
           className={classnames(styles.patientLink, patientStyles)}
           onDoubleClick={() => this.editPatient(patient.id)}
         >
-          {React.Children.map(children, patientLink =>
+          {React.Children.map(children, (patientLink) =>
             React.cloneElement(patientLink, {
               onClick: (e) => {
                 e.stopPropagation();
                 this.setOpen(true);
               },
-            }))}
+            }),)}
         </div>
       </Popover>
     );
@@ -145,7 +144,7 @@ const mapStateToProps = ({ patientTable }) => ({
   isRecallsFormActive: patientTable.get('isRecallsFormActive'),
 });
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       push,
@@ -154,7 +153,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientPopover);
+export default connect(mapStateToProps, mapDispatchToProps)(PatientPopover);

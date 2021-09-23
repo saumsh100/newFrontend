@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -20,7 +19,7 @@ export default function PatientRecalls({ recalls, timezone }) {
   return (
     <List className={styles.list}>
       {orderBy(recalls, 'sendDate').map(({ patient, primaryTypes, recall, sendDate }) => {
-        const hashedTypes = primaryTypes.map(e => contactMethodHash[e]);
+        const hashedTypes = primaryTypes.map((e) => contactMethodHash[e]);
         const { dueForHygieneDate, dueForRecallExamDate } = patient;
         let type = recall.interval;
         if (type[0] === '-') {
