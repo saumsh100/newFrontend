@@ -6,9 +6,8 @@ import { connect } from 'react-redux';
 import GeneralForm from './GeneralForm';
 import Address from './Address';
 import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
-import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
-import { Dropzone, AccountLogo, Button, Header, Link } from '../../../library';
-import { getTodaysDate, getUTCDate, getDateDuration } from '../../../library/util/datetime';
+import { uploadLogo, deleteLogo } from '../../../../thunks/accounts';
+import { Dropzone, AccountLogo, Button, Header } from '../../../library';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
@@ -17,32 +16,17 @@ class General extends Component {
     super(props);
     this.state = {
       uploading: false,
-      downloadLink: null,
-      expired: null,
     };
 
     this.updatePracticeData = this.updatePracticeData.bind(this);
     this.uploadLogo = this.uploadLogo.bind(this);
     this.deleteLogo = this.deleteLogo.bind(this);
-    this.downloadConnector = this.downloadConnector.bind(this);
   }
 
   componentDidMount() {
     const url = `/api/users/${this.props.userId}`;
 
     this.props.fetchEntities({ url });
-  }
-
-  downloadConnector() {
-    this.props.downloadConnector().then((downloadLink) => {
-      const reg = /Expires=([^&]*)/;
-      const matches = downloadLink.match(reg);
-
-      this.setState({
-        downloadLink,
-        expired: Number(matches[1] * 1000),
-      });
-    });
   }
 
   uploadLogo(files) {
@@ -103,32 +87,6 @@ class General extends Component {
       return null;
     });
 
-    let button = <Button onClick={this.downloadConnector}>Generate Download Link</Button>;
-
-    if (this.state.downloadLink) {
-      const now = getUTCDate(this.state.expired, this.props.timezone);
-      const end = getTodaysDate(this.props.timezone);
-      const duration = getDateDuration(now.diff(end)).asSeconds();
-
-      button =
-        duration > 0 ? (
-          <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
-            Click to Download
-            <br /> {Math.floor(duration)} s
-          </Link>
-        ) : (
-          <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
-            Link Expired
-          </Link>
-        );
-
-      setTimeout(() => {
-        if (duration > 0) {
-          this.setState((prevState) => ({ expired: prevState.expired }));
-        }
-      }, 500);
-    }
-
     return (
       <SettingsCard title="General" bodyClass={styles.generalBodyClass}>
         <div className={styles.generalMainContainer}>
@@ -159,10 +117,6 @@ class General extends Component {
         <div className={styles.formContainer}>
           <Address activeAccount={activeAccount} />
         </div>
-        <Header title="Download Connector" contentHeader />
-        <div className={styles.formContainer}>
-          <div className={styles.buttonContainer}>{button}</div>
-        </div>
       </SettingsCard>
     );
   }
@@ -180,8 +134,6 @@ General.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   uploadLogo: PropTypes.func.isRequired,
   deleteLogo: PropTypes.func.isRequired,
-  downloadConnector: PropTypes.func.isRequired,
-  timezone: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
 };
 
@@ -192,7 +144,6 @@ function mapDispatchToProps(dispatch) {
       fetchEntities,
       uploadLogo,
       deleteLogo,
-      downloadConnector,
     },
     dispatch,
   );
