@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -37,9 +36,14 @@ class Review extends PureComponent {
   }
 
   componentDidMount() {
-    const { dateAndTime, hasWaitList, canConfirm } = this.props;
+    const { dateAndTime, hasWaitList, canConfirm, bookingWidgetButtonLabel } = this.props;
+    const submitButtonText =
+      bookingWidgetButtonLabel === 'Request Appointment'
+        ? 'Submit Appointment Request'
+        : 'Submit Booking Request';
+
     if (canConfirm && (dateAndTime || hasWaitList)) {
-      this.props.setText('Submit Booking Request');
+      this.props.setText(submitButtonText);
       return this.props.showButton();
     }
     this.props.setText();
@@ -69,7 +73,7 @@ class Review extends PureComponent {
     ];
     return Promise.all(creationPromises)
       .then(() => history.push('./complete'))
-      .catch(err => console.error('Creating request failed', err));
+      .catch((err) => console.error('Creating request failed', err));
   }
 
   render() {
@@ -88,7 +92,7 @@ class Review extends PureComponent {
       waitSpot,
     } = this.props;
 
-    const b = path =>
+    const b = (path) =>
       location.pathname
         .split('/')
         .filter((v, index) => index < 5)
@@ -99,8 +103,9 @@ class Review extends PureComponent {
      * Generates the availabilities using the office openings,
      * also group them inside the specific time-frame.
      */
-    const availabilities = selectedService
-      && availabilitiesGroupedByPeriod(
+    const availabilities =
+      selectedService &&
+      availabilitiesGroupedByPeriod(
         Object.values(officeHours),
         timezone,
         selectedService.get('duration'),
@@ -114,7 +119,8 @@ class Review extends PureComponent {
       history,
     });
 
-    const localFormattedDate = format => getFormattedDate(dateAndTime.startDate, format, timezone);
+    const localFormattedDate = (format) =>
+      getFormattedDate(dateAndTime.startDate, format, timezone);
 
     const dateTimeSummaryText = dateAndTime
       ? `${localFormattedDate('ddd, MMM Do')} at ${localFormattedDate('h:mm a')}`
@@ -243,8 +249,8 @@ class Review extends PureComponent {
             {patientUser && (
               <SummaryItem
                 label="Insurance Member ID & Group ID"
-                value={`${patientUser.insuranceMemberId
-                  || NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`}
+                value={`${patientUser.insuranceMemberId ||
+                  NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`}
                 link={b('patient-information')}
               />
             )}
@@ -263,20 +269,22 @@ class Review extends PureComponent {
   }
 }
 
-function mapStateToProps({ availabilities, entities, auth, widgetNavigation }) {
-  const getPatientUser = availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
-    ? auth
-      .get('familyPatients')
-      .find(patient => patient.id === availabilities.get('familyPatientUser'))
-    : false;
+function mapStateToProps({ availabilities, entities, auth, widgetNavigation, reviews }) {
+  const getPatientUser =
+    availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
+      ? auth
+          .get('familyPatients')
+          .find((patient) => patient.id === availabilities.get('familyPatientUser'))
+      : false;
 
   const selectedPractitioner = entities.getIn([
     'practitioners',
     'models',
     availabilities.get('selectedPractitionerId'),
   ]);
-  const selectedService = availabilities.get('selectedServiceId')
-    && entities.getIn(['services', 'models', availabilities.get('selectedServiceId')]);
+  const selectedService =
+    availabilities.get('selectedServiceId') &&
+    entities.getIn(['services', 'models', availabilities.get('selectedServiceId')]);
   const selectedDaysOfTheWeek = getSelectedDaysOfTheWeek(availabilities.get('waitSpot'));
 
   return {
@@ -295,6 +303,7 @@ function mapStateToProps({ availabilities, entities, auth, widgetNavigation }) {
     timezone: availabilities.get('account').get('timezone'),
     user: auth.get('patientUser'),
     waitSpot: availabilities.get('waitSpot'),
+    bookingWidgetButtonLabel: reviews.get('account').get('bookingWidgetButtonLabel'),
   };
 }
 
@@ -343,6 +352,7 @@ Review.propTypes = {
   showButton: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   waitSpot: PropTypes.instanceOf(Map).isRequired,
+  bookingWidgetButtonLabel: PropTypes.string.isRequired,
 };
 
 Review.defaultProps = {

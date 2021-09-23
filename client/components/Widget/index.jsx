@@ -101,10 +101,15 @@ class Widget extends Component {
       isCompleteRoute,
     };
     const isSecondStep = isAccountRoute || isPatientRoute || isAdditionalRoute || isReviewRoute;
+    const bookingWidgetButtonLabel = this.props.account.get('bookingWidgetButtonLabel');
     return (
       <div className={styles.reviewsWidgetContainer}>
         <div className={styles.reviewsWidgetCenter}>
-          <Header routesState={routesState} isReviewApp={isReviewApp} />
+          <Header
+            routesState={routesState}
+            isReviewApp={isReviewApp}
+            bookingWidgetButtonLabel={bookingWidgetButtonLabel}
+          />
           <Element id="widgetContainer" className={styles.widgetContainer} ref={this.containerNode}>
             {!isCompleteRoute && !isReviewApp && (
               <div className={styles.stepsWrapper}>

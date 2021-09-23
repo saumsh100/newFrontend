@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -31,6 +30,7 @@ class Header extends Component {
       location,
       routesState: { isCompleteRoute, isFirstRoute },
       isReviewApp,
+      bookingWidgetButtonLabel,
     } = this.props;
 
     const path = location.pathname
@@ -38,6 +38,10 @@ class Header extends Component {
       .filter((_, i) => i > 3)
       .join('/');
 
+    const widgetPageHeading =
+      bookingWidgetButtonLabel === 'Request Appointment'
+        ? 'Request Your Appointment'
+        : 'Schedule Your Appointment';
     return (
       <div className={styles.topHead}>
         <div className={styles.headerContainer}>
@@ -75,7 +79,7 @@ class Header extends Component {
           />
           <div className={styles.headerCenterArea}>
             <h2 className={classNames(styles.pageTitle, { [styles.complete]: isCompleteRoute })}>
-              {isReviewApp ? 'Review Your Visit' : 'Schedule Your Appointment'}
+              {isReviewApp ? 'Review Your Visit' : widgetPageHeading}
             </h2>
           </div>
           <div className={styles.headerRightArea}>
@@ -102,11 +106,7 @@ Header.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
   routesState: PropTypes.objectOf(PropTypes.bool).isRequired,
   isReviewApp: PropTypes.bool.isRequired,
+  bookingWidgetButtonLabel: PropTypes.string.isRequired,
 };
 
-export default withRouter(
-  connect(
-    null,
-    mapDispatchToProps,
-  )(Header),
-);
+export default withRouter(connect(null, mapDispatchToProps)(Header));

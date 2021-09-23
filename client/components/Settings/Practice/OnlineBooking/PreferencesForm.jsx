@@ -42,7 +42,9 @@ export default function PreferencesForm({ handleSubmit, activeAccount }) {
         />
       </div>
       <EnabledFeature
-        predicate={({ flags }) => flags.get('customizable-booking-widget-labels')}
+        predicate={({ flags, userRole }) =>
+          flags.get('customizable-booking-widget-labels') && userRole === 'SUPERADMIN'
+        }
         render={() => (
           <div className={styles.formContainer_widgetButtonLabel}>
             <span className={styles.labelTooltip}>

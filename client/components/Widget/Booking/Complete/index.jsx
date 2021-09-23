@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -42,15 +41,16 @@ function Complete({
    * Generates the availabilities using the office openings,
    * also group them inside the specific time-frame.
    */
-  const availabilities = selectedService
-    && availabilitiesGroupedByPeriod(
+  const availabilities =
+    selectedService &&
+    availabilitiesGroupedByPeriod(
       Object.values(officeHours),
       timezone,
       selectedService.get('duration'),
     );
 
-  const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId
-    || NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`;
+  const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId ||
+    NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`;
   return (
     <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
@@ -63,7 +63,9 @@ function Complete({
           </h1>
           <p className={styles.description}>
             Your request has been submitted. <br />
-            We will be in touch soon, please wait for our confirmation.
+            Please note that the time and date of your appointment <br />
+            is not confirmed. We will be in touch within 1 – 2 business <br />
+            days to confirm the appointment details with you.
           </p>
         </div>
       </div>
@@ -139,11 +141,12 @@ function Complete({
 }
 
 function mapStateToProps({ auth, availabilities, entities }) {
-  const getPatientUser = availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
-    ? auth
-      .get('familyPatients')
-      .find(patient => patient.id === availabilities.get('familyPatientUser'))
-    : false;
+  const getPatientUser =
+    availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
+      ? auth
+          .get('familyPatients')
+          .find((patient) => patient.id === availabilities.get('familyPatientUser'))
+      : false;
 
   const selectedDaysOfTheWeek = getSelectedDaysOfTheWeek(availabilities.get('waitSpot'));
 
