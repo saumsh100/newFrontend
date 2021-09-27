@@ -12,7 +12,7 @@ export default function PreferencesForm({ handleSubmit, activeAccount }) {
     bookingWidgetButtonLabel: activeAccount.get('bookingWidgetButtonLabel') || 'Book Online',
   };
   const tooltipBody =
-    'This is the label that will appear on the online booking widget button on your website.';
+    'This setting will change a set of labels across the online booking flow incl. the widget button label on your website.';
   const buttonLabelOptions = [
     {
       value: 'Book Online',
@@ -54,7 +54,7 @@ export default function PreferencesForm({ handleSubmit, activeAccount }) {
             </span>
             <Field
               name="bookingWidgetButtonLabel"
-              label="Button Label"
+              label="Widget Labels"
               component="DropdownSelect"
               options={buttonLabelOptions}
               data-test-id="buttonLabel"
