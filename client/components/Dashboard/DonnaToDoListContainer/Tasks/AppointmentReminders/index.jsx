@@ -68,7 +68,9 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
                 </span>
               </AppointmentPopover>
               <span className={iconClass}>
-                {pat.appointment.isPatientConfirmed && <Icon icon="check" />}
+                {pat.appointment.isPatientConfirmed && (
+                  <Icon icon="check" style={{ 'font-size': '10px' }} />
+                )}
               </span>
             </div>
           </div>
