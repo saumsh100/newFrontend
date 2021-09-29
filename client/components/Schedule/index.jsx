@@ -358,6 +358,11 @@ class ScheduleComponent extends PureComponent {
       );
     }
 
+    const isAddNewAppointment = addNewAppointment || (noNextAppt && apptWrite);
+    if (isAddNewAppointment) {
+      displayTitle = 'Accept Appointment';
+    }
+
     if (createNewPatient) {
       displayTitle = 'Create New Patient';
       const patientFormName = 'Create New Patient';
@@ -385,12 +390,6 @@ class ScheduleComponent extends PureComponent {
       displayModalComponent = (
         <AddPatient formName={patientFormName} onSubmit={this.handlePatientSubmit} />
       );
-    }
-
-    const isAddNewAppointment = addNewAppointment || (noNextAppt && apptWrite);
-
-    if (isAddNewAppointment) {
-      displayTitle = 'Accept Appointment';
     }
 
     const showDialog =
