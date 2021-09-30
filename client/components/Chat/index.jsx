@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Skeleton from 'react-loading-skeleton';
 import classnames from 'classnames';
 import { bindActionCreators } from 'redux';
-import { CHAT_PAGE } from '../../constants/PageTitle';
 import { setChatIsLoading } from '../../reducers/chat';
 import {
   cleanChatList,
@@ -71,7 +70,6 @@ class ChatMessage extends Component {
     this.togglePatientsInfo = this.togglePatientsInfo.bind(this);
     this.toggleShowMessageContainer = this.toggleShowMessageContainer.bind(this);
     this.selectChatOrCreate = this.selectChatOrCreate.bind(this);
-    this.hubChatPage = this.hubChatPage.bind(this);
     this.selectChatIfIdIsProvided = this.selectChatIfIdIsProvided.bind(this);
   }
 
@@ -130,36 +128,19 @@ class ChatMessage extends Component {
   }
 
   togglePatientsInfo(pageTitle) {
-    this.setState(
-      {
-        showPatientInfo: !this.state.showPatientInfo,
-        showPatientsList: false,
-        showMessageContainer: !this.state.showMessageContainer,
-      },
-      () => {
-        this.props.setTitle(pageTitle);
-        this.props.setBackHandler(() => {
-          this.props.setTitle(CHAT_PAGE);
-          this.toggleShowMessageContainer();
-        });
-      },
-    );
+    this.setState({
+      showPatientInfo: !this.state.showPatientInfo,
+      showPatientsList: false,
+      showMessageContainer: !this.state.showMessageContainer,
+    });
   }
 
   toggleShowMessageContainer() {
-    this.setState(
-      {
-        showMessageContainer: !this.state.showMessageContainer,
-        showPatientsList: false,
-        showPatientInfo: false,
-      },
-      this.hubChatPage,
-    );
-  }
-
-  async hubChatPage() {
-    this.props.setTitle(CHAT_PAGE);
-    this.props.setBackHandler(this.togglePatientsList);
+    this.setState({
+      showMessageContainer: !this.state.showMessageContainer,
+      showPatientsList: false,
+      showPatientInfo: false,
+    });
   }
 
   selectChatOrCreate(patient) {
@@ -167,7 +148,6 @@ class ChatMessage extends Component {
       if (!this.state.showMessageContainer) {
         this.toggleShowMessageContainer();
       }
-      await this.hubChatPage();
       this.props.selectChatByPatientId(patient.ccId || patient.id);
     };
     this.changeTab(tabsConstants.ALL_TAB, selectChatCallback);
@@ -206,12 +186,14 @@ class ChatMessage extends Component {
 
   loadChatList() {
     return this.chatListLoader()(CHAT_LIST_LIMIT, this.state.chats).then((result) =>
-      this.receivedChatsPostUpdate(result),);
+      this.receivedChatsPostUpdate(result),
+    );
   }
 
   loadChatByCount = async (count) => {
     await this.chatListLoader()(count, CHAT_LIST_LIMIT).then(() =>
-      this.receivedChatsPostUpdate({}),);
+      this.receivedChatsPostUpdate({}),
+    );
   };
 
   changeTab(newIndex, callback = () => {}) {
@@ -389,8 +371,6 @@ ChatMessage.propTypes = {
   loadClosedChatList: PropTypes.func.isRequired,
   cleanChatList: PropTypes.func.isRequired,
   setLocation: PropTypes.func.isRequired,
-  setBackHandler: PropTypes.func.isRequired,
-  setTitle: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   chatsFetching: PropTypes.bool,
   getChatEntity: PropTypes.func.isRequired,
