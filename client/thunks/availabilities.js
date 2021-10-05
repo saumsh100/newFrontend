@@ -20,13 +20,13 @@ import { bookingWidgetHttpClient } from '../util/httpClient';
 import { getUTCDate } from '../components/library/util/datetime';
 
 export function sixDaysShift(dayObj) {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(sixDaysShiftAction(dayObj));
   };
 }
 
 export function confirmCode(values) {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const state = getState();
     const patientUser = state.auth.get('patientUser');
     return bookingWidgetHttpClient()
@@ -38,7 +38,7 @@ export function confirmCode(values) {
 }
 
 export function resendPinCode() {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const state = getState();
     const patientUser = state.auth.get('patientUser');
     return bookingWidgetHttpClient().post(`/auth/${patientUser.get('id')}/resend`);
@@ -46,7 +46,7 @@ export function resendPinCode() {
 }
 
 export function createRequest() {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const state = getState();
     const {
       account,
@@ -82,6 +82,7 @@ export function createRequest() {
       utmSource: utmParams?.utm_source,
       utmCampaign: utmParams?.utm_campaign,
       utmMedium: utmParams?.utm_medium,
+      documentReferrer: document.referrer
     };
 
     if (selectedPractitionerId) {
@@ -106,7 +107,7 @@ export function createRequest() {
 }
 
 export function createWaitSpot() {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const state = getState();
     const {
       account,
@@ -141,27 +142,27 @@ export function createWaitSpot() {
 }
 
 export function restartBookingProcess() {
-  return function(dispatch) {
+  return function (dispatch) {
     // This is a thunk because we may need to do some other maintanence here...
     dispatch(refreshAvailabilitiesState());
   };
 }
 
 export function setStartingAppointmentTime(startsAt) {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(setStartingAppointmentTimeAction(startsAt));
   };
 }
 
 export function startRecall() {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(setIsRecall(true));
     dispatch(setSelectedPractitionerId(''));
   };
 }
 
 export function setRegistrationStep(registrationStep, accountId) {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (parseInt(registrationStep, 10) === 2) {
       const { practitionerId, serviceId, startsAt } = getState().availabilities.toJS();
       bookingWidgetHttpClient()
@@ -181,7 +182,7 @@ export function setRegistrationStep(registrationStep, accountId) {
 }
 
 export function getClinicInfo(accountId) {
-  return function(dispatch) {
+  return function (dispatch) {
     bookingWidgetHttpClient()
       .get(`/logo/${accountId}`)
       .then((data) => {
@@ -199,7 +200,7 @@ export function getClinicInfo(accountId) {
 }
 
 export function removeReservation(reservationId) {
-  return function(dispatch) {
+  return function (dispatch) {
     bookingWidgetHttpClient()
       .delete(`/reservations/${reservationId}`)
       .then(() => {
