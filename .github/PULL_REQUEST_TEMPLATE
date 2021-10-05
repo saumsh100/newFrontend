@@ -1,5 +1,8 @@
 # Description
 
+#### Did you see an instance of isHub() or any Electron Directories?
+If you did while making your contribution please remove these.
+
 Please include a summary of the change and which issue has been fixed. Please also include relevant motivation and
 context. List any dependencies that are required for this change.
 
@@ -13,6 +16,8 @@ Please delete options that are not relevant.
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
+- [ ] Removed any instances of isHub() in the updated directory
+- [ ] Removed any electron related directories in the updated directory
 
 # How Has This Been Tested?
 
