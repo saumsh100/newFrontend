@@ -1,4 +1,3 @@
-
 import classNames from 'classnames';
 import { Map } from 'immutable';
 import PropTypes from 'prop-types';
@@ -33,7 +32,7 @@ class ChatListContainer extends Component {
 
   selectNewChat() {
     this.props.selectChat(null);
-    this.props.onChatClick();
+    this.props.onChatClick(!this.props.isLoading);
   }
 
   removeNewChat(e) {
@@ -51,8 +50,8 @@ class ChatListContainer extends Component {
     }
 
     return this.sortedChats()
-      .filter(chat => !chat.patient)
-      .map(chat => (
+      .filter((chat) => !chat.patient)
+      .map((chat) => (
         <ChatListItem key={`${chat.id}_listItem`} chat={chat} onChatClick={onChatClick} />
       ));
   }
@@ -130,7 +129,7 @@ ChatListContainer.defaultProps = {
   newChat: null,
   newChatPatient: null,
   selectedChatId: null,
-  onChatClick: e => e,
+  onChatClick: (e) => e,
 };
 
 function mapStateToProps({ entities, chat }, { tabIndex }) {
@@ -158,9 +157,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(ChatListContainer);

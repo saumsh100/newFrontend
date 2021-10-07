@@ -61,6 +61,7 @@ class ChatMessage extends Component {
       showPatientsList: true,
       showMessageContainer: false,
       showPatientInfo: false,
+      isNewconversation: false,
     };
 
     this.addNewChat = this.addNewChat.bind(this);
@@ -107,12 +108,6 @@ class ChatMessage extends Component {
     }
   }
 
-  addNewChat() {
-    // No data yet, this just sets it to not be null
-    this.props.selectChat(null, {});
-    this.toggleShowMessageContainer();
-  }
-
   togglePatientsList() {
     this.setState(
       {
@@ -135,13 +130,20 @@ class ChatMessage extends Component {
     });
   }
 
-  toggleShowMessageContainer() {
-    this.setState({
-      showMessageContainer: !this.state.showMessageContainer,
-      showPatientsList: false,
-      showPatientInfo: false,
-    });
+  toggleShowMessageContainer(isLoading) {
+    this.setState(
+      {
+        showMessageContainer: !this.state.showMessageContainer,
+        showPatientsList: false,
+        showPatientInfo: false,
+        isNewconversation: isLoading,
+      },
+     
+    );
   }
+
+  
+  
 
   selectChatOrCreate(patient) {
     const selectChatCallback = async () => {
@@ -219,8 +221,8 @@ class ChatMessage extends Component {
   }
 
   showPatientInfo() {
-    const { conversationIsLoading } = this.props;
-
+    const { conversationIsLoading } = this.state.isNewconversation ? false : this.props;
+    
     if (conversationIsLoading) {
       return <DesktopSkeleton />;
     }
@@ -262,7 +264,7 @@ class ChatMessage extends Component {
 
   renderMessageContainer() {
     const { showPatientInfo, tabIndex } = this.state;
-    const { conversationIsLoading } = this.props;
+    const { conversationIsLoading } = this.state.isNewconversation ? false : this.props;
     const patientInfoStyle = classnames(styles.rightSplit, {
       [styles.slideIn]: showPatientInfo,
       [styles.hideContainer]: !showPatientInfo,
@@ -298,6 +300,15 @@ class ChatMessage extends Component {
         </div>
       </SBody>
     );
+  }
+
+  addNewChat() {
+    // No data yet, this just sets it to not be null
+
+    this.props.selectChat(null, {});
+    this.toggleShowMessageContainer();
+    this.setState({ isNewconversation: true });
+    this.renderMessageContainer();
   }
 
   renderHeading() {
