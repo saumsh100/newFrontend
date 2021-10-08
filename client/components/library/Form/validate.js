@@ -212,6 +212,8 @@ const normalizeBirthdate = (value) => value.trim();
 const validateBirthdate = (value) => {
   const format = 'MM/DD/YYYY';
   const pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+  const today = new Date();
+  const birthDate = new Date(value);
 
   if (!pattern.test(value) && value !== undefined && value !== null) {
     return format;
@@ -220,6 +222,9 @@ const validateBirthdate = (value) => {
   const isValid = date.isValid();
   if (!isValid && value !== undefined && value !== null) {
     return format;
+  }
+  if (birthDate > today) {
+    return 'Invalid date of birth';
   }
 };
 
