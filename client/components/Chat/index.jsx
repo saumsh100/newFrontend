@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Skeleton from 'react-loading-skeleton';
 import classnames from 'classnames';
 import { bindActionCreators } from 'redux';
-import { setChatIsLoading } from '../../reducers/chat';
+import { setChatIsLoading, setConversationIsLoading } from '../../reducers/chat';
 import {
   cleanChatList,
   getChatCategoryCounts,
@@ -83,12 +83,25 @@ class ChatMessage extends Component {
       })
       .then(() => {
         this.props.setChatIsLoading(false);
+        this.props.setConversationIsLoading(false);
       });
     this.selectChatIfIdIsProvided(this.props.match.params.chatId);
   }
 
   componentWillUnmount() {
     this.props.selectChat(null);
+  }
+
+  loadChatByCount = async (count) => {
+    await this.chatListLoader()(count, CHAT_LIST_LIMIT).then(() =>
+      this.receivedChatsPostUpdate({}),
+    );
+  };
+
+  loadChatList() {
+    return this.chatListLoader()(CHAT_LIST_LIMIT, this.state.chats).then((result) =>
+      this.receivedChatsPostUpdate(result),
+    );
   }
 
   selectChatIfIdIsProvided(chatId = null) {
@@ -110,11 +123,11 @@ class ChatMessage extends Component {
 
   togglePatientsList() {
     this.setState(
-      {
-        showPatientsList: !this.state.showPatientsList,
+      (previousState) => ({
+        showPatientsList: !previousState.showPatientsList,
         showPatientInfo: false,
         showMessageContainer: false,
-      },
+      }),
       () => {
         this.props.setLocation('/chat');
         this.props.selectChat(null);
@@ -123,27 +136,21 @@ class ChatMessage extends Component {
   }
 
   togglePatientsInfo(pageTitle) {
-    this.setState({
-      showPatientInfo: !this.state.showPatientInfo,
+    this.setState((previousState) => ({
+      showPatientInfo: !previousState.showPatientInfo,
       showPatientsList: false,
-      showMessageContainer: !this.state.showMessageContainer,
-    });
+      showMessageContainer: !previousState.showMessageContainer,
+    }));
   }
 
   toggleShowMessageContainer(isLoading) {
-    this.setState(
-      {
-        showMessageContainer: !this.state.showMessageContainer,
-        showPatientsList: false,
-        showPatientInfo: false,
-        isNewconversation: isLoading,
-      },
-     
-    );
+    this.setState((previousState) => ({
+      showMessageContainer: !previousState.showMessageContainer,
+      showPatientsList: false,
+      showPatientInfo: false,
+      isNewconversation: isLoading,
+    }));
   }
-
-  
-  
 
   selectChatOrCreate(patient) {
     const selectChatCallback = async () => {
@@ -156,12 +163,12 @@ class ChatMessage extends Component {
   }
 
   receivedChatsPostUpdate(result) {
-    this.setState({
-      chats: this.state.chats + Object.keys(result.chats || {}).length,
+    this.setState((previousState) => ({
+      chats: previousState.chats + Object.keys(result.chats || {}).length,
       moreData: !(
         Object.keys(result).length === 0 || Object.keys(result.chats).length < CHAT_LIST_LIMIT
       ),
-    });
+    }));
   }
 
   chatListLoader() {
@@ -185,18 +192,6 @@ class ChatMessage extends Component {
 
     return this.props.loadChatList;
   }
-
-  loadChatList() {
-    return this.chatListLoader()(CHAT_LIST_LIMIT, this.state.chats).then((result) =>
-      this.receivedChatsPostUpdate(result),
-    );
-  }
-
-  loadChatByCount = async (count) => {
-    await this.chatListLoader()(count, CHAT_LIST_LIMIT).then(() =>
-      this.receivedChatsPostUpdate({}),
-    );
-  };
 
   changeTab(newIndex, callback = () => {}) {
     if (this.state.tabIndex === newIndex) {
@@ -222,7 +217,7 @@ class ChatMessage extends Component {
 
   showPatientInfo() {
     const { conversationIsLoading } = this.state.isNewconversation ? false : this.props;
-    
+
     if (conversationIsLoading) {
       return <DesktopSkeleton />;
     }
@@ -238,6 +233,15 @@ class ChatMessage extends Component {
         <div className={styles.bottomInfo} />
       </div>
     );
+  }
+
+  addNewChat() {
+    // No data yet, this just sets it to not be null
+
+    this.props.selectChat(null, {});
+    this.toggleShowMessageContainer();
+    this.setState({ isNewconversation: true });
+    this.renderMessageContainer();
   }
 
   renderChatList() {
@@ -300,15 +304,6 @@ class ChatMessage extends Component {
         </div>
       </SBody>
     );
-  }
-
-  addNewChat() {
-    // No data yet, this just sets it to not be null
-
-    this.props.selectChat(null, {});
-    this.toggleShowMessageContainer();
-    this.setState({ isNewconversation: true });
-    this.renderMessageContainer();
   }
 
   renderHeading() {
@@ -389,6 +384,7 @@ ChatMessage.propTypes = {
   conversationIsLoading: PropTypes.bool.isRequired,
   selectChatByPatientId: PropTypes.func.isRequired,
   setChatIsLoading: PropTypes.func.isRequired,
+  setConversationIsLoading: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ apiRequests, chat }) {
@@ -420,6 +416,7 @@ function mapDispatchToProps(dispatch) {
       getChatCategoryCounts,
       selectChatByPatientId,
       setChatIsLoading,
+      setConversationIsLoading,
     },
     dispatch,
   );
