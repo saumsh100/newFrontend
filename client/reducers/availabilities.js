@@ -49,6 +49,7 @@ export const REFRESH_AVAILABILITIES_STATE = `${reducerName}REFRESH_AVAILABILITIE
 export const SET_TIMEFRAME = `${reducerName}SET_TIMEFRAME`;
 export const UPDATE_DAYS_OF_THE_WEEK = `${reducerName}UPDATE_DAYS_OF_THE_WEEK `;
 export const SET_IS_RECALL = `${reducerName}SET_IS_RECALL `;
+export const SET_REFERRER_URL = `${reducerName}SET_REFERRER_URL`;
 /**
  * ACTIONS
  */
@@ -69,6 +70,7 @@ export const setUTMParams = createAction(SET_UTM_PARAMS);
 export const setSelectedPractitionerId = createAction(SET_SELECTED_PRACTITIONER_ID);
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 export const updateDaysOfTheWeek = createAction(UPDATE_DAYS_OF_THE_WEEK);
+export const setReferrerURL = createAction(SET_REFERRER_URL);
 
 function getStartTimeForToday(account) {
   return parseDate(new Date(), account.timezone).add(1, 'hours');
@@ -308,11 +310,11 @@ export default handleActions(
       const startDate = isToday
         ? startDateForToday.toISOString()
         : parseDate(searchedDate, account.timezone)
-            .hours(0)
-            .minutes(0)
-            .seconds(0)
-            .milliseconds(0)
-            .toISOString();
+          .hours(0)
+          .minutes(0)
+          .seconds(0)
+          .milliseconds(0)
+          .toISOString();
       return state.set('selectedStartDate', startDate);
     },
 
@@ -372,6 +374,10 @@ export default handleActions(
       }
 
       return newState;
+    },
+
+    [SET_REFERRER_URL](state, action) {
+      return state.set('referrerURL', action.payload);
     },
   },
   createInitialWidgetState(),

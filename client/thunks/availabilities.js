@@ -59,6 +59,7 @@ export function createRequest() {
       notes,
       familyPatientUser,
       utmParams,
+      referrerURL
     } = state.availabilities.toJS();
 
     const { patientUser } = state.auth.toJS();
@@ -82,7 +83,7 @@ export function createRequest() {
       utmSource: utmParams?.utm_source,
       utmCampaign: utmParams?.utm_campaign,
       utmMedium: utmParams?.utm_medium,
-      documentReferrer: document.referrer
+      documentReferrer: referrerURL
     };
 
     if (selectedPractitionerId) {

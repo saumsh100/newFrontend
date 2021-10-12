@@ -17,6 +17,7 @@ import {
   refreshFirstStepData,
   setSelectedServiceId,
   setUTMParams,
+  setReferrerURL
 } from '../../reducers/availabilities';
 import styles from './styles.scss';
 
@@ -55,6 +56,10 @@ class Widget extends Component {
     }, {});
 
     this.props.setUTMParams(utmParams);
+
+    //Get and set ref query param
+    const referrerURL = queryVars['ref'];
+    this.props.setReferrerURL(referrerURL);
   }
 
   componentDidUpdate(prevProps) {
@@ -189,6 +194,7 @@ function mapDispatchToProps(dispatch) {
       setSelectedServiceId,
       setUTMParams,
       refreshFirstStepData,
+      setReferrerURL
     },
     dispatch,
   );
@@ -206,6 +212,7 @@ Widget.propTypes = {
   setIsClicked: PropTypes.func.isRequired,
   setUTMParams: PropTypes.func.isRequired,
   floatingButtonText: PropTypes.string.isRequired,
+  setReferrerURL: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Widget));
