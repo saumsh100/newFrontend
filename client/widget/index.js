@@ -39,7 +39,8 @@ function prepareIFrameSrc(ccUrl, utmParams, referrerURL = "") {
     ? `${__CARECRU_IFRAME_SRC__}/book?${utmString}`
     : `${__CARECRU_IFRAME_SRC__}/book`;
 
-  return `${iFrameSrc}&ref=${referrerURL}`;
+  return (iFrameSrc.indexOf("?") === -1) ?
+    `${iFrameSrc}?ref=${referrerURL}` : `${iFrameSrc}&ref=${referrerURL}`;
 }
 
 /**
