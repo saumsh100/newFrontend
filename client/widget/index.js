@@ -23,10 +23,6 @@ function getQueryVariable(variable) {
 }
 
 function prepareIFrameSrc(ccUrl, utmParams, referrerURL = '') {
-  if (ccUrl) {
-    return `${__CARECRU_IFRAME_SRC__}/${ccUrl}`;
-  }
-
   const utmString = Object.entries(utmParams)
     .reduce((result, [key, val]) => {
       if (val) {
@@ -36,13 +32,15 @@ function prepareIFrameSrc(ccUrl, utmParams, referrerURL = '') {
     }, [])
     .join('&');
 
-  const iFrameSrc = utmString
-    ? `${__CARECRU_IFRAME_SRC__}/book?${utmString}`
-    : `${__CARECRU_IFRAME_SRC__}/book`;
+  const widgetURL = ccUrl ? `${__CARECRU_IFRAME_SRC__}/${ccUrl}` : `${__CARECRU_IFRAME_SRC__}/book`;
 
-  return iFrameSrc.indexOf('?') === -1
-    ? `${iFrameSrc}?ref=${referrerURL}`
-    : `${iFrameSrc}&ref=${referrerURL}`;
+  const iFrameSrc = utmString ? addURLParams(widgetURL, utmString) : widgetURL;
+
+  return addURLParams(iFrameSrc, `ref=${referrerURL}`);
+}
+
+function addURLParams(url, params) {
+  return url.indexOf('?') === -1 ? `${url}?${params}` : `${url}&${params}`;
 }
 
 /**
