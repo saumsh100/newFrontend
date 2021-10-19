@@ -25,7 +25,7 @@ function getQueryVariable(variable) {
 function prepareIFrameSrc(ccUrl, utmParams, referrerURL = '') {
   const utmString = Object.entries(utmParams)
     .reduce((result, [key, val]) => {
-      if (val) {
+      if (val && !(ccUrl || '').includes(`${key}=`)) {
         result.push(`${key}=${val}`);
       }
       return result;
