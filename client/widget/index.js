@@ -22,10 +22,11 @@ function getQueryVariable(variable) {
   }
 }
 
-function prepareIFrameSrc(ccUrl, utmParams, referrerURL = "") {
-  let iFrameSrc = "";
-  if (ccUrl)
-    iFrameSrc = `${__CARECRU_IFRAME_SRC__}/${ccUrl}`;
+function prepareIFrameSrc(ccUrl, utmParams, referrerURL = '') {
+  if (ccUrl) {
+    return `${__CARECRU_IFRAME_SRC__}/${ccUrl}`;
+  }
+
   const utmString = Object.entries(utmParams)
     .reduce((result, [key, val]) => {
       if (val) {
@@ -35,12 +36,13 @@ function prepareIFrameSrc(ccUrl, utmParams, referrerURL = "") {
     }, [])
     .join('&');
 
-  iFrameSrc = utmString
+  const iFrameSrc = utmString
     ? `${__CARECRU_IFRAME_SRC__}/book?${utmString}`
     : `${__CARECRU_IFRAME_SRC__}/book`;
 
-  return (iFrameSrc.indexOf("?") === -1) ?
-    `${iFrameSrc}?ref=${referrerURL}` : `${iFrameSrc}&ref=${referrerURL}`;
+  return iFrameSrc.indexOf('?') === -1
+    ? `${iFrameSrc}?ref=${referrerURL}`
+    : `${iFrameSrc}&ref=${referrerURL}`;
 }
 
 /**
