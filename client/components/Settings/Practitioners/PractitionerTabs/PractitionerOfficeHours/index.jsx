@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -26,7 +25,7 @@ import styles from '../../styles.scss';
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 function checkValues(obj) {
-  return Object.keys(obj).every(key => obj[key]);
+  return Object.keys(obj).every((key) => obj[key]);
 }
 
 class PractitionerOfficeHours extends Component {
@@ -59,12 +58,60 @@ class PractitionerOfficeHours extends Component {
     this.setState({ value });
   }
 
+  handleToggle(e) {
+    e.stopPropagation();
+    const { practitioner } = this.props;
+    const { value } = this.state;
+
+    const modifiedPractitioner =
+      value === 'off'
+        ? practitioner.set('isCustomSchedule', true)
+        : practitioner.set('isCustomSchedule', false);
+
+    const alert = {
+      success: { body: `${practitioner.get('firstName')} schedule updated.` },
+      error: { body: `${practitioner.get('firstName')} schedule update failed.` },
+    };
+
+    this.props.updateEntityRequest({
+      key: 'practitioners',
+      model: modifiedPractitioner,
+      url: `/api/practitioners/${practitioner.get('id')}/customSchedule`,
+      alert,
+    });
+
+    const newValue = value === 'off' ? 'on' : 'off';
+    this.setState({ value: newValue });
+  }
+
+  handleFormUpdate(index, values) {
+    const { weeklySchedule, practitioner } = this.props;
+    const newWeeklySchedule = { ...weeklySchedule.toJS() };
+
+    daysOfWeek.forEach((day) => {
+      Object.keys(values[day]).forEach((pram) => {
+        newWeeklySchedule[day][pram] = values[day][pram];
+      });
+    });
+
+    const alert = {
+      success: { body: `${practitioner.get('firstName')} schedule updated.` },
+      error: { body: `${practitioner.get('firstName')} schedule update failed.` },
+    };
+
+    this.props.updateEntityRequest({
+      key: 'weeklySchedule',
+      model: weeklySchedule.merge(newWeeklySchedule),
+      alert,
+    });
+  }
+
   setAllChairs(e) {
     e.stopPropagation();
 
     const { chairs, allChairs } = this.props;
 
-    const actions = chairs.map(chair => change('chairs', chair.id, !allChairs)).toArray();
+    const actions = chairs.map((chair) => change('chairs', chair.id, !allChairs)).toArray();
 
     this.props.batchActions(actions);
   }
@@ -92,7 +139,7 @@ class PractitionerOfficeHours extends Component {
     const newWeeklySchedule = weeklySchedule.toJS();
 
     newWeeklySchedule[day].chairIds = Object.keys(values).filter(
-      key => values[key] && key !== 'day',
+      (key) => values[key] && key !== 'day',
     );
 
     const sendWeeklySchedule = weeklySchedule.merge(newWeeklySchedule);
@@ -117,7 +164,7 @@ class PractitionerOfficeHours extends Component {
   }
 
   changeStartDate(values) {
-    const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
+    const weeklySchedule = { ...this.props.weeklySchedule.toJS() };
     weeklySchedule.startDate = values.startDate;
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
@@ -145,8 +192,8 @@ class PractitionerOfficeHours extends Component {
     }
 
     const weeklyScheduleJS = this.props.weeklySchedule.toJS();
-    const weeklySchedule = Object.assign({}, weeklyScheduleJS);
-    const weeklyScheduleNew = Object.assign({}, weeklyScheduleJS);
+    const weeklySchedule = { ...weeklyScheduleJS };
+    const weeklyScheduleNew = { ...weeklyScheduleJS };
     weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
 
     if (!weeklyScheduleNew.startDate) {
@@ -186,7 +233,7 @@ class PractitionerOfficeHours extends Component {
       return null;
     }
 
-    const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
+    const weeklySchedule = { ...this.props.weeklySchedule.toJS() };
     weeklySchedule.weeklySchedules.splice(i, 1);
 
     if (!weeklySchedule.weeklySchedules[0]) {
@@ -209,7 +256,7 @@ class PractitionerOfficeHours extends Component {
 
   sendEdit(index, values, j, k) {
     const i = k.dataId;
-    const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
+    const weeklySchedule = { ...this.props.weeklySchedule.toJS() };
     weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
 
     Object.keys(values).forEach((key) => {
@@ -236,58 +283,11 @@ class PractitionerOfficeHours extends Component {
     });
   }
 
-  handleToggle(e) {
-    e.stopPropagation();
-    const { practitioner } = this.props;
-    const { value } = this.state;
-
-    const modifiedPractitioner =
-      value === 'off'
-        ? practitioner.set('isCustomSchedule', true)
-        : practitioner.set('isCustomSchedule', false);
-
-    const alert = {
-      success: { body: `${practitioner.get('firstName')} schedule updated.` },
-      error: { body: `${practitioner.get('firstName')} schedule update failed.` },
-    };
-
-    this.props.updateEntityRequest({
-      key: 'practitioners',
-      model: modifiedPractitioner,
-      url: `/api/practitioners/${practitioner.get('id')}/customSchedule`,
-      alert,
-    });
-
-    const newValue = value === 'off' ? 'on' : 'off';
-    this.setState({ value: newValue });
-  }
-
-  handleFormUpdate(index, values) {
-    const { weeklySchedule, practitioner } = this.props;
-    const newWeeklySchedule = Object.assign({}, weeklySchedule.toJS());
-
-    daysOfWeek.forEach((day) => {
-      Object.keys(values[day]).forEach((pram) => {
-        newWeeklySchedule[day][pram] = values[day][pram];
-      });
-    });
-
-    const alert = {
-      success: { body: `${practitioner.get('firstName')} schedule updated.` },
-      error: { body: `${practitioner.get('firstName')} schedule update failed.` },
-    };
-
-    this.props.updateEntityRequest({
-      key: 'weeklySchedule',
-      model: weeklySchedule.merge(newWeeklySchedule),
-      alert,
-    });
-  }
-
   render() {
     const { weeklySchedule, practitioner, chairs, allChairs } = this.props;
-    let schedules = null;
     const initialValuesChairs = {};
+    let schedules = null;
+    let showComponent = null;
     let dialogShow = null;
     if (weeklySchedule) {
       const allSchedules = weeklySchedule.toJS().weeklySchedules || [];
@@ -350,7 +350,7 @@ class PractitionerOfficeHours extends Component {
         },
         {
           label: 'Save',
-          onClick: values => this.chairSubmit(values, this.state.modalChairDay),
+          onClick: (values) => this.chairSubmit(values, this.state.modalChairDay),
           component: RemoteSubmitButton,
           props: {
             form: 'chairs',
@@ -388,7 +388,7 @@ class PractitionerOfficeHours extends Component {
               destroyOnUnmount
               ignoreSaveButton
               form="chairs"
-              onSubmit={values => this.chairSubmit(values, this.state.modalChairDay)}
+              onSubmit={(values) => this.chairSubmit(values, this.state.modalChairDay)}
               initialValues={initialValuesChairs}
             >
               {chairFields}
@@ -397,8 +397,6 @@ class PractitionerOfficeHours extends Component {
         </DialogBox>
       );
     }
-
-    let showComponent = null;
 
     if (practitioner.get('isCustomSchedule')) {
       showComponent = (
@@ -414,24 +412,28 @@ class PractitionerOfficeHours extends Component {
               </Button>
             </div>
           </div>
-          <OfficeHoursForm
-            key={`${practitioner.get('id')}_Hours`}
-            weeklySchedule={weeklySchedule}
-            onSubmit={this.handleFormUpdate}
-            formName={`${weeklySchedule.get('id')}officeHours`}
-            modal
-            openModal={day => this.openModalChair(day)}
-            hoursIndex={0}
-          />
-          <Header title="Breaks" className={styles.subHeader} contentHeader />
-          <BreaksForm
-            key={`${practitioner.get('id')}_Breaks`}
-            weeklySchedule={weeklySchedule}
-            onSubmit={this.handleFormUpdate}
-            formName={`${weeklySchedule.get('id')}officeHours`}
-            breaksName={`${weeklySchedule.get('id')}clinicBreaks`}
-            breaksIndex={0}
-          />
+          {weeklySchedule && (
+            <>
+              <OfficeHoursForm
+                key={`${practitioner.get('id')}_Hours`}
+                weeklySchedule={weeklySchedule}
+                onSubmit={this.handleFormUpdate}
+                formName={`${weeklySchedule.get('id')}officeHours`}
+                modal
+                openModal={(day) => this.openModalChair(day)}
+                hoursIndex={0}
+              />
+              <Header title="Breaks" className={styles.subHeader} contentHeader />
+              <BreaksForm
+                key={`${practitioner.get('id')}_Breaks`}
+                weeklySchedule={weeklySchedule}
+                onSubmit={this.handleFormUpdate}
+                formName={`${weeklySchedule.get('id')}officeHours`}
+                breaksName={`${weeklySchedule.get('id')}clinicBreaks`}
+                breaksIndex={0}
+              />
+            </>
+          )}
         </div>
       );
     } else {
@@ -539,6 +541,6 @@ const mapStateToProps = ({ form, auth }) => ({
   timezone: auth.get('timezone'),
 });
 
-const mapActionsToProps = dispatch => bindActionCreators({ batchActions }, dispatch);
+const mapActionsToProps = (dispatch) => bindActionCreators({ batchActions }, dispatch);
 
 export default connect(mapStateToProps, mapActionsToProps)(PractitionerOfficeHours);
