@@ -125,8 +125,11 @@ class SettingsForm extends Component {
                   toggles={sanitizeList(reminders).toArray()}
                   onChange={this.omitFormHandler('omitReminderIds')}
                   renderToggles={({ toggleComponent, toggleProps }) => {
-                    const contactTypes = toggleProps.primaryTypes
-                      .toJS()
+                    let contactTypes = toggleProps.primaryTypes;
+                    let checkContactTypes = Array.isArray(contactTypes)
+                      ? contactTypes
+                      : contactTypes.toJS();
+                    checkContactTypes
                       .map((contactType) => (contactType === 'phone' ? 'voice' : contactType))
                       .join(', ');
                     const touchpointMessageType = toggleProps.isConfirmable
@@ -135,7 +138,8 @@ class SettingsForm extends Component {
                     const touchpointType = toggleProps.isWaitingRoomEnabled
                       ? 'Waiting Room'
                       : touchpointMessageType;
-                    const text = `${`${toggleProps.interval} ${touchpointType}`} reminder (${contactTypes})`;
+                    let remindersText = `${toggleProps.interval} ${touchpointType}`;
+                    const text = `${remindersText} reminder (${checkContactTypes})`;
                     return (
                       <div className={styles.omitToggleWrapper}>
                         {toggleComponent({
