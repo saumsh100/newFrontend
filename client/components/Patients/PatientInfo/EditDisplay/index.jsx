@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -14,7 +13,7 @@ import { isResponsive } from '../../../../util/hub';
 import CollapsibleTab from '../CollapsibleTab';
 import styles from './styles.scss';
 
-const NoInfo = text => (
+const NoInfo = (text) => (
   <div className={styles.formContainer}>
     <div className={styles.disabledPage}>
       <div className={styles.disabledPage_text}>{text}</div>
@@ -37,24 +36,6 @@ class EditDisplay extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  get dropDownStyle() {
-    return {
-      wrapper: styles.inputGroup,
-      toggleDiv: styles.toggleDivStyle,
-    };
-  }
-
-  get inputStyle() {
-    return {
-      input: styles.inputBarStyle,
-      group: styles.inputGroup,
-    };
-  }
-
-  setCountry(value) {
-    this.setState({ country: value });
-  }
-
   handleTabChange(index) {
     this.setState({ tabIndex: index });
   }
@@ -75,6 +56,24 @@ class EditDisplay extends Component {
     }).then(() => {
       reinitializeState();
     });
+  }
+
+  get dropDownStyle() {
+    return {
+      wrapper: styles.inputGroup,
+      toggleDiv: styles.toggleDivStyle,
+    };
+  }
+
+  get inputStyle() {
+    return {
+      input: styles.inputBarStyle,
+      group: styles.inputGroup,
+    };
+  }
+
+  setCountry(value) {
+    this.setState({ country: value });
   }
 
   renderAppointmentsForm() {
@@ -204,21 +203,23 @@ class EditDisplay extends Component {
 
     return (
       <div className={styles.mainContainer}>
-        <DialogBox
-          active={isOpen}
-          onEscKeyDown={reinitializeState}
-          onOverlayClick={reinitializeState}
-          title={
-            !isResponsive()
-              ? `Editing ${patient.get('firstName')}'s Patient Info`
-              : `Editing ${patient.get('firstName')}'s Info`
-          }
-          actions={!isResponsive() ? actions : []}
-          bodyStyles={styles.editModalBody}
-          custom
-        >
-          {!isResponsive() ? this.renderDesktop() : this.renderResponsive()}
-        </DialogBox>
+        {isOpen && (
+          <DialogBox
+            active={isOpen}
+            onEscKeyDown={reinitializeState}
+            onOverlayClick={reinitializeState}
+            title={
+              !isResponsive()
+                ? `Editing ${patient.get('firstName')}'s Patient Info`
+                : `Editing ${patient.get('firstName')}'s Info`
+            }
+            actions={!isResponsive() ? actions : []}
+            bodyStyles={styles.editModalBody}
+            custom
+          >
+            {!isResponsive() ? this.renderDesktop() : this.renderResponsive()}
+          </DialogBox>
+        )}
       </div>
     );
   }
