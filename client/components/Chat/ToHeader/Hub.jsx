@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -20,7 +19,7 @@ const HubHeader = ({
     {!isHub() && (
       <Button icon="arrow-left" className={styles.patientListButton} onClick={onPatientListClick} />
     )}
-    {selectedPatient ? (
+    {selectedPatient && selectedPatient.id !== null ? (
       <div className={styles.patientInfoWrapper}>
         <Button
           flat
@@ -61,6 +60,7 @@ HubHeader.propTypes = {
     lastName: PropTypes.string,
     isUnknown: PropTypes.bool,
     cellPhoneNumber: PropTypes.string,
+    id: PropTypes.string,
   }),
   toInputProps: PropTypes.objectOf(PropTypes.string),
   toInputTheme: PropTypes.objectOf(PropTypes.string),

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
@@ -25,6 +24,17 @@ const DesktopHeader = ({
           <Skeleton width={200} />
         </div>
       </div>
+    );
+  }
+
+  if (selectedPatient && selectedPatient.id === null) {
+    return (
+      <PatientSearch
+        placeholder="To: Type the name of the person"
+        onSelect={onSearch}
+        inputProps={toInputProps}
+        theme={toInputTheme}
+      />
     );
   }
 
@@ -62,6 +72,7 @@ DesktopHeader.propTypes = {
     lastName: PropTypes.string,
     isUnknown: PropTypes.bool,
     cellPhoneNumber: PropTypes.string,
+    id: PropTypes.string,
   }),
   toInputProps: PropTypes.objectOf(PropTypes.string),
   toInputTheme: PropTypes.objectOf(PropTypes.string),
