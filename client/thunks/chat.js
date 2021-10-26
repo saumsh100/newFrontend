@@ -24,6 +24,7 @@ import {
   setUnreadChatsCount,
   unsetPatientChat,
   updateChatId,
+  setIsPhoneNoAvailable,
 } from '../reducers/chat';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../reducers/entities';
 import { httpClient } from '../util/httpClient';
@@ -263,7 +264,6 @@ export function markAsRead(chatId) {
   return (dispatch, getState) => {
     const { chat } = getState();
     const lockedChats = chat.get('lockedChats') || [];
-
     if (lockedChats.includes(chatId)) {
       return;
     }
@@ -275,11 +275,11 @@ export function markAsRead(chatId) {
         url: `/api/chats/${chatId}/textMessages/read`,
       }),
     )
-      .then(({ textMessages = {} }) => {
+      .then(({ textMessages = {}, chats = {} }) => {
         const unreadChats = chat.get('unreadChats');
         const listToRemove = Object.keys(textMessages);
         const newList = pullAll(unreadChats, listToRemove);
-
+        dispatch(setIsPhoneNoAvailable(chats[chatId]?.isPhoneNumberAvailable));
         dispatch(setUnreadChats(newList));
       })
       .then(() => {
@@ -361,13 +361,15 @@ export function getChatEntity(id) {
       storedEntity ||
       httpClient()
         .get(`/api/chats/${id}`)
-        .then(({ data }) =>
-          dispatch(
+        .then(({ data }) => {
+          dispatch(setIsPhoneNoAvailable(data.entities.chats[id]?.isPhoneNumberAvailable));
+          return dispatch(
             fetchEntitiesRequest({
               url: '/api/patients/search',
               params: { patientId: data.entities.chats[id].patientId },
             }),
-          ),)
+          );
+        })
         .then(({ chats }) => Map(chats[id]))
         .finally(() => {
           if (chat.get('isLoading')) {
@@ -564,7 +566,10 @@ export function getOrCreateChatForPatient(patientId) {
 
     return httpClient()
       .get(`/api/patients/${patientId}/chat`)
-      .then(({ data: { chatId } }) => dispatch(setPatientChat(chatId)));
+      .then(({ data: { chatId, isPhoneNumberAvailable } }) => {
+        dispatch(setIsPhoneNoAvailable(isPhoneNumberAvailable));
+        dispatch(setPatientChat(chatId));
+      });
   };
 }
 
@@ -579,7 +584,8 @@ export function selectChatByPatientId(patientId) {
   return (dispatch) =>
     httpClient()
       .get(`/api/patients/${patientId}/chat`)
-      .then(({ data: { chatId } }) => {
+      .then(({ data: { chatId, isPhoneNumberAvailable } }) => {
+        dispatch(setIsPhoneNoAvailable(isPhoneNumberAvailable));
         dispatch(selectChat(chatId));
       });
 }

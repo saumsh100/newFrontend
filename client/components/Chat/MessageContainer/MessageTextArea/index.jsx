@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, submit, change } from 'redux-form';
+import capitalize from 'lodash/capitalize';
 import { Picker } from 'emoji-mart';
 import {
   Button,
@@ -37,6 +39,10 @@ class MessageTextArea extends Component {
     this.addEmoji = this.addEmoji.bind(this);
     this.contactPoC = this.contactPoC.bind(this);
   }
+
+  patientProfile = (patient) => {
+    this.props.push(`/patients/${patient.id}`);
+  };
 
   addEmoji(emoji) {
     const { chat, textBoxValue } = this.props;
@@ -83,12 +89,11 @@ class MessageTextArea extends Component {
   }
 
   render() {
-    const { chat, canSend, error, isPoC, patient, poc } = this.props;
-
+    const { chat, canSend, error, isPoC, patient, poc, isPhoneNoAvailable } = this.props;
     if (!chat || isPoC === null) return null;
-
     const hasPatient = patient && patient.id;
     const tooltipPlacement = isHub() ? 'bottomRight' : 'top';
+    const patientFirstName = hasPatient && capitalize(patient.firstName);
     return (
       <SContainer className={styles.textAreaContainer}>
         {!isPoC && hasPatient && (
@@ -121,61 +126,83 @@ class MessageTextArea extends Component {
           </div>
         )}
 
-        <SBody className={styles.textAreaBody}>
-          <Form
-            destroyOnUnmount
-            ignoreSaveButton
-            key={`chatMessageForm_${chat.id}`}
-            form={`chatMessageForm_${chat.id}`}
-            onSubmit={this.props.onSendMessage}
-            data-test-id="chatMessageForm"
-            className={styles.textWrapper}
-          >
-            <div className={styles.textAreaWrapper}>
-              <Field
-                onChange={this.button}
-                component="TextArea"
-                type="text"
-                name="message"
-                placeholder="Type a message"
-                data-test-id="message"
-              />
+        {!isPhoneNoAvailable && hasPatient && (
+          <div className={styles.textAreaPoC}>
+            <img
+              src="/images/donna.png"
+              height="335px"
+              width="338px"
+              alt="Donna"
+              className={styles.donnaImg}
+            />
+            <div className={styles.notPoC}>
+              <p>
+                Looks like <strong>{patientFirstName}</strong> does not have a cellphone number. Add
+                a valid cellphone number or try another contact method.
+              </p>
+              <Button className={styles.pocButton} onClick={() => this.patientProfile(patient)}>
+                Go to {patientFirstName}&apos;s Profile
+              </Button>
             </div>
-          </Form>
-        </SBody>
-        <SFooter className={styles.sendIconWrapper}>
-          <div className={styles.smileIcon}>
-            <DropdownMenu
-              ref={this.emojiDropdown}
-              labelComponent={(props) => (
-                <Button {...props}>
-                  <Icon icon="smile" />
-                </Button>
-              )}
-              closeOnInsideClick={false}
-              className={styles.emojiDropdown}
-              align="left"
-              upwards
-            >
-              <li className={styles.emojiContainer}>
-                <Picker
-                  onClick={this.addEmoji}
-                  showPreview={false}
-                  emojiTooltip
-                  set={EMOJI_SET}
-                  size={EMOJI_SIZE}
-                />
-              </li>
-            </DropdownMenu>
           </div>
-          {canSend ? (
-            this.renderSendButton()
-          ) : (
-            <Tooltip placement={tooltipPlacement} overlay={error}>
-              {this.renderSendButton()}
-            </Tooltip>
-          )}
-        </SFooter>
+        )}
+        <>
+          <SBody className={styles.textAreaBody}>
+            <Form
+              destroyOnUnmount
+              ignoreSaveButton
+              key={`chatMessageForm_${chat.id}`}
+              form={`chatMessageForm_${chat.id}`}
+              onSubmit={this.props.onSendMessage}
+              data-test-id="chatMessageForm"
+              className={styles.textWrapper}
+            >
+              <div className={styles.textAreaWrapper}>
+                <Field
+                  onChange={this.button}
+                  component="TextArea"
+                  type="text"
+                  name="message"
+                  placeholder="Type a message"
+                  data-test-id="message"
+                />
+              </div>
+            </Form>
+          </SBody>
+          <SFooter className={styles.sendIconWrapper}>
+            <div className={styles.smileIcon}>
+              <DropdownMenu
+                ref={this.emojiDropdown}
+                labelComponent={(props) => (
+                  <Button {...props}>
+                    <Icon icon="smile" />
+                  </Button>
+                )}
+                closeOnInsideClick={false}
+                className={styles.emojiDropdown}
+                align="left"
+                upwards
+              >
+                <li className={styles.emojiContainer}>
+                  <Picker
+                    onClick={this.addEmoji}
+                    showPreview={false}
+                    emojiTooltip
+                    set={EMOJI_SET}
+                    size={EMOJI_SIZE}
+                  />
+                </li>
+              </DropdownMenu>
+            </div>
+            {canSend ? (
+              this.renderSendButton()
+            ) : (
+              <Tooltip placement={tooltipPlacement} overlay={error}>
+                {this.renderSendButton()}
+              </Tooltip>
+            )}
+          </SFooter>
+        </>
       </SContainer>
     );
   }
@@ -194,6 +221,8 @@ MessageTextArea.propTypes = {
   patient: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.instanceOf(Patient)]),
   poc: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.instanceOf(Patient)]),
   selectChatOrCreate: PropTypes.func.isRequired,
+  isPhoneNoAvailable: PropTypes.bool.isRequired,
+  push: PropTypes.func.isRequired,
 };
 
 MessageTextArea.defaultProps = {
@@ -225,12 +254,14 @@ function mapStateToProps(state, { chat = {} }) {
     error,
     poc,
     patient,
+    isPhoneNoAvailable: state.chat.get('isPhoneNoAvailable'),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
+      push,
       submit,
       change,
       fetchEntitiesRequest,

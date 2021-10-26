@@ -1,4 +1,3 @@
-
 import { Map } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
 import tabConstants from '../components/Chat/consts';
@@ -25,6 +24,7 @@ export const SET_CHAT_PLACEHOLDERS = `${reducer}/SET_CHAT_PLACEHOLDERS`;
 export const SET_CHAT_CATEGORIES_COUNT = `${reducer}/SET_CHAT_CATEGORIES_COUNT`;
 export const SET_IS_FETCHING_PROSPECT = `${reducer}/SET_IS_FETCHING_PROSPECT`;
 export const SET_PROSPECT = `${reducer}/SET_PROSPECT`;
+export const SET_IS_PHONENO_AVAILABLE = `${reducer}/SET_IS_PHONENO_AVAILABLE`;
 
 export const addPendingMessage = createAction(ADD_PENDING_MESSAGE);
 export const prunePendingMessages = createAction(PRUNE_PENDING_MESSAGES);
@@ -45,6 +45,7 @@ export const unsetPatientChat = createAction(UNSET_PATIENT_CHAT);
 export const setChatCategoriesCount = createAction(SET_CHAT_CATEGORIES_COUNT);
 export const setIsFetchingProspect = createAction(SET_IS_FETCHING_PROSPECT);
 export const setProspect = createAction(SET_PROSPECT);
+export const setIsPhoneNoAvailable = createAction(SET_IS_PHONENO_AVAILABLE);
 
 export const initialState = Map({
   selectedChatId: null,
@@ -66,6 +67,7 @@ export const initialState = Map({
   conversationIsLoading: false,
   pendingMessages: [],
   prospect: null,
+  isPhoneNoAvailable: true,
 });
 
 export default handleActions(
@@ -124,7 +126,8 @@ export default handleActions(
         return state
           .set('chatPoC', payload)
           .set('isPoC', payload.id === state.getIn(['selectedChat', 'patientId']));
-      } else if (state.get('newChat') && state.get('newChat').patientId) {
+      }
+      if (state.get('newChat') && state.get('newChat').patientId) {
         return state
           .set('chatPoC', payload)
           .set('isPoC', payload.id === state.get('newChat').patientId);
@@ -160,6 +163,10 @@ export default handleActions(
     [SET_PROSPECT](state, { payload }) {
       return state.set('prospect', payload);
     },
+
+    [SET_IS_PHONENO_AVAILABLE](state, { payload }) {
+      return state.set('isPhoneNoAvailable', payload);
+    },
   },
   initialState,
 );
@@ -193,7 +200,7 @@ export function filterChatsByTab(chats, selectedChat, tabIndex) {
  * @return {*}
  */
 export function getUnreadChats(chats, selectedChat) {
-  return chats.filter(c => c.hasUnread || selectedChat === c.get('id'));
+  return chats.filter((c) => c.hasUnread || selectedChat === c.get('id'));
 }
 
 /**
@@ -202,7 +209,7 @@ export function getUnreadChats(chats, selectedChat) {
  * @return {*}
  */
 export function getFlaggedChats(chats) {
-  return chats.filter(filterChat => filterChat.get('isFlagged'));
+  return chats.filter((filterChat) => filterChat.get('isFlagged'));
 }
 
 /**
@@ -211,7 +218,7 @@ export function getFlaggedChats(chats) {
  * @return {*}
  */
 export function getOpenChats(chats) {
-  return chats.filter(filterChat => filterChat.get('isOpen'));
+  return chats.filter((filterChat) => filterChat.get('isOpen'));
 }
 
 /**
@@ -220,5 +227,5 @@ export function getOpenChats(chats) {
  * @return {*}
  */
 export function getClosedChats(chats) {
-  return chats.filter(filterChat => !filterChat.get('isOpen'));
+  return chats.filter((filterChat) => !filterChat.get('isOpen'));
 }
