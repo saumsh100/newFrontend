@@ -111,6 +111,7 @@ class MessageContainer extends Component {
   }
 
   loadMoreMessages() {
+    if (!this.props.selectedChat) return;
     const {
       selectedChat: { id: chatId },
       textMessages,
