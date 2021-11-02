@@ -94,14 +94,12 @@ class ChatMessage extends Component {
 
   loadChatByCount = async (count) => {
     await this.chatListLoader()(count, CHAT_LIST_LIMIT).then(() =>
-      this.receivedChatsPostUpdate({}),
-    );
+      this.receivedChatsPostUpdate({}),);
   };
 
   loadChatList() {
     return this.chatListLoader()(CHAT_LIST_LIMIT, this.state.chats).then((result) =>
-      this.receivedChatsPostUpdate(result),
-    );
+      this.receivedChatsPostUpdate(result),);
   }
 
   selectChatIfIdIsProvided(chatId = null) {
@@ -135,7 +133,7 @@ class ChatMessage extends Component {
     );
   }
 
-  togglePatientsInfo(pageTitle) {
+  togglePatientsInfo() {
     this.setState((previousState) => ({
       showPatientInfo: !previousState.showPatientInfo,
       showPatientsList: false,
@@ -210,6 +208,7 @@ class ChatMessage extends Component {
         this.props.cleanChatList();
         this.loadChatList().then(() => {
           callback();
+          this.props.setConversationIsLoading(false);
         });
       },
     );
