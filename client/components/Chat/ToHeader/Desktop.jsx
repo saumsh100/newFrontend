@@ -27,7 +27,7 @@ const DesktopHeader = ({
     );
   }
 
-  if (selectedPatient && selectedPatient.id === null) {
+  if (selectedPatient && selectedPatient.cellPhoneNumber === null && selectedPatient.id === null) {
     return (
       <PatientSearch
         placeholder="To: Type the name of the person"
