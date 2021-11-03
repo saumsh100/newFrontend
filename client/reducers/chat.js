@@ -15,6 +15,8 @@ export const SET_CONVERSATION_IS_LOADING = `${reducer}/SET_CONVERSATION_IS_LOADI
 export const SET_UNREAD_CHATS = `${reducer}/SET_UNREAD_CHATS`;
 export const SET_UNREAD_CHATS_COUNT = `${reducer}/SET_UNREAD_CHATS_COUNT`;
 export const SET_CHAT_MESSAGES = `${reducer}/SET_CHAT_MESSAGES`;
+export const SET_CHAT_CANCEL_TOKEN = `${reducer}/SET_CHAT_CANCEL_TOKEN`;
+export const SET_CHAT_NEW_TYPE = `${reducer}/SET_CHAT_NEW_TYPE`;
 export const SET_LOCKED_CHATS = `${reducer}/SET_LOCKED_CHATS`;
 export const SET_CHAT_POC = `${reducer}/SET_CHAT_POC`;
 export const SET_TOTAL_CHAT_MESSAGES = `${reducer}/SET_TOTAL_CHAT_MESSAGES`;
@@ -37,6 +39,8 @@ export const setConversationIsLoading = createAction(SET_CONVERSATION_IS_LOADING
 export const setUnreadChats = createAction(SET_UNREAD_CHATS);
 export const setUnreadChatsCount = createAction(SET_UNREAD_CHATS_COUNT);
 export const setChatMessages = createAction(SET_CHAT_MESSAGES);
+export const setCancelToken = createAction(SET_CHAT_CANCEL_TOKEN);
+export const setChatNewType = createAction(SET_CHAT_NEW_TYPE);
 export const setLockedChats = createAction(SET_LOCKED_CHATS);
 export const setChatPoC = createAction(SET_CHAT_POC);
 export const setTotalChatMessages = createAction(SET_TOTAL_CHAT_MESSAGES);
@@ -57,6 +61,8 @@ export const initialState = Map({
   unreadChatsCount: 0,
   chatList: {},
   chatMessages: [],
+  cancelToken: null,
+  chatTypeStatus: false,
   lockedChats: [],
   isPoC: null,
   chatPoC: null,
@@ -116,6 +122,12 @@ export default handleActions(
 
     [SET_CHAT_MESSAGES](state, { payload }) {
       return state.set('chatMessages', payload);
+    },
+    [SET_CHAT_CANCEL_TOKEN](state, { payload }) {
+      return state.set('cancelToken', payload);
+    },
+    [SET_CHAT_NEW_TYPE](state, { payload }) {
+      return state.set('newChatTypeStatus', payload);
     },
 
     [SET_CHAT_POC](state, { payload }) {

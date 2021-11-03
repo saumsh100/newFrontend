@@ -110,28 +110,35 @@ class MessageContainer extends Component {
     }
   }
 
-  loadMoreMessages() {
-    if (!this.props.selectedChat) return;
-    const {
-      selectedChat: { id: chatId },
-      textMessages,
-    } = this.props;
-    if (!chatId) {
-      return;
+  componentWillUnmount() {
+    if (this.props.cancelToken !== null) {
+      this.props.cancelToken.call();
     }
+  }
 
-    this.setState(
-      {
-        loadingMessages: true,
-        offset: textMessages.size,
-      },
-      () => {
-        const { offset } = this.state;
-        this.props.loadChatMessages(chatId, offset, DEFAULT_LIMIT).then(() => {
-          this.setState({ loadingMessages: false });
-        });
-      },
-    );
+  loadMoreMessages() {
+    if (
+      this.props.selectedChat &&
+      Object.keys(this.props.selectedChat).length !== 0 &&
+      Object.getPrototypeOf(this.props.selectedChat) !== Object.prototype
+    ) {
+      const {
+        selectedChat: { id: chatId },
+        textMessages,
+      } = this.props;
+      this.setState(
+        {
+          loadingMessages: true,
+          offset: textMessages.size,
+        },
+        () => {
+          const { offset } = this.state;
+          this.props.loadChatMessages(chatId, offset, DEFAULT_LIMIT).then(() => {
+            this.setState({ loadingMessages: false });
+          });
+        },
+      );
+    }
   }
 
   scrollHandler(node) {
@@ -315,7 +322,13 @@ class MessageContainer extends Component {
 
   render() {
     const { loadingMessages, loadedMessages } = this.state;
-    const { conversationIsLoading, selectedChat, newChat, totalChatMessages } = this.props;
+    const {
+      conversationIsLoading,
+      selectedChat,
+      newChat,
+      totalChatMessages,
+      isNewconversation,
+    } = this.props;
 
     const hasMoreMessages = totalChatMessages > loadedMessages;
     const chat = selectedChat || { ...newChat, id: 'newChat' };
@@ -343,8 +356,11 @@ class MessageContainer extends Component {
             hasMore={hasMoreMessages && !loadingMessages}
             threshold={100}
           >
-            {selectedChat && !conversationIsLoading && this.renderMessagesTree()}
-            {selectedChat && !conversationIsLoading && <PendingMessages />}
+            {selectedChat &&
+              !conversationIsLoading &&
+              !isNewconversation &&
+              this.renderMessagesTree()}
+            {selectedChat && !conversationIsLoading && !isNewconversation && <PendingMessages />}
             <div className={styles.raise} />
           </InfiniteScroll>
         </SBody>
@@ -373,7 +389,6 @@ function mapStateToProps({ entities, auth, chat }) {
   const getPatient = ({ patientId, patientPhoneNumber }) =>
     patientId ? patients.get(patientId) : UnknownPatient(patientPhoneNumber, prospect);
   const selectedPatient = (selectedChat && getPatient(selectedChat)) || {};
-
   return {
     conversationIsLoading: chat.get('conversationIsLoading'),
     textMessages,
@@ -385,6 +400,7 @@ function mapStateToProps({ entities, auth, chat }) {
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
     pendingMessages,
     timezone: auth.get('timezone'),
+    cancelToken: chat.get('cancelToken'),
   };
 }
 
@@ -433,7 +449,9 @@ MessageContainer.propTypes = {
     PropTypes.arrayOf(ChatTextMessage),
     PropTypes.instanceOf(OrderedMap),
   ]),
+  cancelToken: PropTypes.func,
   timezone: PropTypes.string.isRequired,
+  isNewconversation: PropTypes.bool.isRequired,
 };
 
 MessageContainer.defaultProps = {
@@ -441,6 +459,7 @@ MessageContainer.defaultProps = {
   selectedChat: null,
   selectedPatient: null,
   pendingMessages: [],
+  cancelToken: null,
 };
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

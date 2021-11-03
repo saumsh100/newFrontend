@@ -16,6 +16,7 @@ import {
   loadOpenChatList,
   loadUnreadChatList,
   selectChat,
+  setNewChatTypeStatus,
   selectChatByPatientId,
 } from '../../thunks/chat';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
@@ -90,6 +91,7 @@ class ChatMessage extends Component {
 
   componentWillUnmount() {
     this.props.selectChat(null);
+    this.props.setNewChatTypeStatus(false);
   }
 
   loadChatByCount = async (count) => {
@@ -146,7 +148,7 @@ class ChatMessage extends Component {
       showMessageContainer: !previousState.showMessageContainer,
       showPatientsList: false,
       showPatientInfo: false,
-      isNewconversation: isLoading,
+      isNewconversation: isLoading ?? false,
     }));
   }
 
@@ -236,9 +238,13 @@ class ChatMessage extends Component {
 
   addNewChat() {
     // No data yet, this just sets it to not be null
+    if (this.props.cancelToken !== null) {
+      this.props.cancelToken.call();
+    }
 
     this.props.selectChat(null, {});
     this.toggleShowMessageContainer();
+    this.props.setNewChatTypeStatus(true);
     this.setState({ isNewconversation: true });
     this.renderMessageContainer();
   }
@@ -266,8 +272,11 @@ class ChatMessage extends Component {
   }
 
   renderMessageContainer() {
-    const { showPatientInfo, tabIndex } = this.state;
-    const { conversationIsLoading } = this.state.isNewconversation ? false : this.props;
+    const { showPatientInfo, tabIndex, isNewconversation } = this.state;
+    let { conversationIsLoading } = this.props;
+    if (isNewconversation) {
+      conversationIsLoading = false;
+    }
     const patientInfoStyle = classnames(styles.rightSplit, {
       [styles.slideIn]: showPatientInfo,
       [styles.hideContainer]: !showPatientInfo,
@@ -292,12 +301,13 @@ class ChatMessage extends Component {
                 />
               )}
             </SHeader>
-            {!conversationIsLoading && (
+            {!conversationIsLoading ? (
               <MessageContainer
                 setTab={this.changeTab}
+                isNewconversation={isNewconversation}
                 selectChatOrCreate={this.selectChatOrCreate}
               />
-            )}
+            ) : null}
           </div>
           <div className={patientInfoStyle}>{this.showPatientInfo()}</div>
         </div>
@@ -369,6 +379,7 @@ ChatMessage.defaultProps = {
 ChatMessage.propTypes = {
   match: PropTypes.shape({ params: PropTypes.shape({ chatId: PropTypes.string }) }),
   selectChat: PropTypes.func.isRequired,
+  setNewChatTypeStatus: PropTypes.func.isRequired,
   loadChatList: PropTypes.func.isRequired,
   loadUnreadChatList: PropTypes.func.isRequired,
   loadFlaggedChatList: PropTypes.func.isRequired,
@@ -384,6 +395,7 @@ ChatMessage.propTypes = {
   selectChatByPatientId: PropTypes.func.isRequired,
   setChatIsLoading: PropTypes.func.isRequired,
   setConversationIsLoading: PropTypes.func.isRequired,
+  cancelToken: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ apiRequests, chat }) {
@@ -396,6 +408,7 @@ function mapStateToProps({ apiRequests, chat }) {
     wasChatsFetched,
     chatsFetching,
     conversationIsLoading: chat.get('conversationIsLoading'),
+    cancelToken: chat.get('cancelToken'),
   };
 }
 
@@ -416,6 +429,7 @@ function mapDispatchToProps(dispatch) {
       selectChatByPatientId,
       setChatIsLoading,
       setConversationIsLoading,
+      setNewChatTypeStatus,
     },
     dispatch,
   );

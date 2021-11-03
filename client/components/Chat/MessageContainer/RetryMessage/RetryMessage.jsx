@@ -1,4 +1,3 @@
-
 import { OrderedMap } from 'immutable';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -10,24 +9,29 @@ import styles from './styles.scss';
 
 const RetryMessage = ({ message }) => {
   const dispatch = useDispatch();
-  const selectedChat = useSelector(state => state.chat).get('selectedChat');
-  const chatId = selectedChat.get('id');
-  const patientId = selectedChat.get('patientId');
-  const id = message.get('id');
+  const selectedChat = useSelector((state) => state.chat).get('selectedChat');
+  const chatTypeStatus = useSelector((state) => state.chat).get('chatTypeStatus');
+  if (!chatTypeStatus && selectedChat) {
+    const chatId = selectedChat.get('id');
+    const patientId = selectedChat.get('patientId');
 
-  const handleClick = () => {
-    dispatch(resendMessage(id, patientId, chatId));
-  };
+    const id = message.get('id');
 
-  return (
-    <div className={styles.RetryMessage}>
-      <span className={styles.RetryMessage__Body}>Message not sent</span>
-      <span className={styles.RetryMessage__Body__Separator}>-</span>
-      <Button className={styles.RetryMessage__Link} onClick={handleClick}>
-        Click to retry
-      </Button>
-    </div>
-  );
+    const handleClick = () => {
+      dispatch(resendMessage(id, patientId, chatId));
+    };
+
+    return (
+      <div className={styles.RetryMessage}>
+        <span className={styles.RetryMessage__Body}>Message not sent</span>
+        <span className={styles.RetryMessage__Body__Separator}>-</span>
+        <Button className={styles.RetryMessage__Link} onClick={handleClick}>
+          Click to retry
+        </Button>
+      </div>
+    );
+  }
+  return null;
 };
 
 RetryMessage.propTypes = {

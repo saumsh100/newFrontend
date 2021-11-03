@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { push } from 'connected-react-router';
 import { Map } from 'immutable';
 import pull from 'lodash/pull';
@@ -25,12 +26,16 @@ import {
   unsetPatientChat,
   updateChatId,
   setIsPhoneNoAvailable,
+  setCancelToken,
+  setChatNewType,
 } from '../reducers/chat';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../reducers/entities';
 import { httpClient } from '../util/httpClient';
 import { isHub } from '../util/hub';
 import { createEntityRequest, fetchEntitiesRequest, updateEntityRequest } from './fetchEntities';
 import determineProspectForChat from './prospects';
+
+const { CancelToken } = axios;
 
 function isOnChatPage(currentPath) {
   return currentPath.indexOf('/chat') !== -1;
@@ -299,7 +304,11 @@ export function loadChatMessages(chatId, offset = 0, limit = 15) {
     const url = `/api/chats/${chatId}/textMessages?skip=${offset}&limit=${limit}`;
 
     return httpClient()
-      .get(url)
+      .get(url, {
+        cancelToken: new CancelToken(function executor(c) {
+          dispatch(setCancelTokenForChat(c));
+        }),
+      })
       .then(({ data }) => {
         dispatch(
           receiveEntities({
@@ -309,13 +318,29 @@ export function loadChatMessages(chatId, offset = 0, limit = 15) {
         );
         return data.total;
       })
-      .then((total) => dispatch(setChatMessagesListForChat(chatId, total)))
+      .then((total) => {
+        dispatch(setChatMessagesListForChat(chatId, total));
+      })
       .finally(() => {
+        dispatch(setCancelTokenForChat(null));
+
         dispatch(setConversationIsLoading(false));
         if (chat.get('isLoading')) {
           dispatch(setChatIsLoading(false));
         }
       });
+  };
+}
+
+export function setCancelTokenForChat(c) {
+  return (dispatch) => {
+    return dispatch(setCancelToken(c));
+  };
+}
+
+export function setNewChatTypeStatus(chatFlag) {
+  return (dispatch) => {
+    return dispatch(setChatNewType(chatFlag));
   };
 }
 
