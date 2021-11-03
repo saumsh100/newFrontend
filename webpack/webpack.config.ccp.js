@@ -15,45 +15,64 @@ const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { merge } = require('webpack-merge');
 const webpack = require('webpack');
+const { ModuleFederationPlugin } = require('webpack').container;
 
 const paths = require('./helpers/paths');
 const common = require('./shared/webpack.common');
 
 process.env.BABEL_ENV = process.env.NODE_ENV;
 
-const {resolveApp} = paths;
+const { resolveApp } = paths;
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
 const isEnvProduction = process.env.NODE_ENV === 'production';
 
 const pluginsForDevOrProd = () => {
   if (isEnvDevelopment) {
-    return [
-      new webpack.HotModuleReplacementPlugin(),
-    ]
+    return [new webpack.HotModuleReplacementPlugin()];
   }
   return [];
-}
+};
 
 const getHTMLWebpackPluginConfig = !isEnvProduction
   ? {
-    minify: {
-      removeComments: true,
-      collapseWhitespace: true,
-      removeRedundantAttributes: true,
-      useShortDoctype: true,
-      removeEmptyAttributes: true,
-      removeStyleLinkTypeAttributes: true,
-      keepClosingSlash: true,
-      minifyJS: true,
-      minifyCSS: true,
-      minifyURLs: true,
-    },
-  }
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+    }
   : {};
 
 const webpackConfig = merge(common, {
   entry: paths.entries,
   plugins: [
+    new ModuleFederationPlugin({
+      name: 'Container',
+      remotes: {
+        EM_MFE: `EM_MFE@${process.env.EM_MFE_HOST}/remoteEntry.js`,
+      },
+      shared: {
+        react: {
+          singleton: true,
+          eager: true,
+        },
+        'react-dom': {
+          singleton: true,
+          eager: true,
+        },
+        '@carecru/component-library': {
+          singleton: true,
+          eager: true,
+        },
+      },
+    }),
     new HtmlWebpackPlugin({
       inject: true,
       chunks: ['app'],
@@ -84,9 +103,9 @@ const webpackConfig = merge(common, {
           from: 'public',
           globOptions: {
             ignore: ['**/*.html'],
-          }
+          },
         },
-      ]
+      ],
     }),
     new CopyPlugin({
       patterns: [
@@ -94,7 +113,7 @@ const webpackConfig = merge(common, {
           from: 'assets',
           to: 'assets',
         },
-      ]
+      ],
     }),
     ...pluginsForDevOrProd(),
   ],
@@ -103,8 +122,8 @@ const webpackConfig = merge(common, {
 module.exports = () => {
   if (isEnvDevelopment) {
     return merge(webpackConfig, {
-      devServer: require('./shared/dev-server.config')
-    })
+      devServer: require('./shared/dev-server.config'),
+    });
   }
   return webpackConfig;
-}
+};

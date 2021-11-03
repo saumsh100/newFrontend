@@ -73,6 +73,10 @@ variable "secrets" {
       "valueFrom" : "arn:aws:ssm:ca-central-1:453923235837:parameter/NPM_TOKEN"
     },
     {
+      "name" : "FORT_AWESOME_NPM_TOKEN",
+      "valueFrom" : "arn:aws:ssm:ca-central-1:453923235837:parameter/FORT_AWESOME_NPM_TOKEN"
+    },
+    {
       "name" : "CALLRAIL_API_ACCOUNTID",
       "valueFrom" : "arn:aws:ssm:ca-central-1:453923235837:parameter/CALLRAIL_API_ACCOUNTID"
     },

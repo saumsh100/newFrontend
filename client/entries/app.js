@@ -1,3 +1,1 @@
-
-import '../apps/default';
-import '../apps/DashboardEntry';
+import('./bootstrap');

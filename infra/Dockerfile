@@ -2,6 +2,7 @@ FROM public.ecr.aws/carecru/docker-images:node-14.17.4-alpine3.14 as builder
 
 ARG TZ=America/Los_Angeles
 ARG NPM_TOKEN
+ARG FORT_AWESOME_NPM_TOKEN
 ARG FEATURE_FLAG_KEY
 ARG GOOGLE_API_KEY
 ARG INTERCOM_APP_ID
