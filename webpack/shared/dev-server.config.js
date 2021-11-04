@@ -4,7 +4,6 @@ const escape = require('escape-string-regexp');
 
 const paths = require('../helpers/paths');
 
-
 const webpackPort = process.env.PORT || '5100';
 
 function ignoredFiles(appSrc) {
@@ -50,5 +49,5 @@ module.exports = {
       chunks: false,
       chunkModules: false,
     },
-  }
+  },
 };
