@@ -2,7 +2,6 @@ import React, { Suspense, lazy } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
-import { connect } from 'react-redux';
 import Login from '../components/Login';
 import DashboardApp from '../containers/DashboardApp';
 import FourZeroFour from '../components/FourZeroFour';
@@ -27,7 +26,6 @@ const Routes = {
   settings: lazy(() => import('./Dashboard/Settings')),
   admin: lazy(() => import('./Admin/Enterprises')),
   calls: lazy(() => import('./Dashboard/Calls')),
-  enterpriseManagement: lazy(() => import('./MicroFrontend/EnterpriseManagementMFE')),
 };
 
 const ExternalRedirector = ({
@@ -43,13 +41,7 @@ ExternalRedirector.propTypes = {
   redirectUrl: PropTypes.string.isRequired,
 };
 
-const DashboardRouter = ({
-  enterpriseManagementPhaseTwoActive,
-  isAuth,
-  isSuperAdmin,
-  isSSO,
-  navigationPreferences,
-}) => {
+const DashboardRouter = ({ isAuth, isSuperAdmin, isSSO, navigationPreferences }) => {
   if (!navigationPreferences) {
     return null;
   }
@@ -68,9 +60,6 @@ const DashboardRouter = ({
           {n('calls') && <Route path="/calls" component={Routes.calls} />}
           {n('marketing') && <Route path="/reputation" component={Routes.reputation} />}
           {n('settings') && <Route path="/settings" component={Routes.settings} />}
-          {enterpriseManagementPhaseTwoActive && isSuperAdmin && (
-            <Route path="/enterprise-management" component={Routes.enterpriseManagement} />
-          )}
           {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
           {!isSSO && <Route path="/profile" component={Routes.profile} />}
           <Route path="/typography" component={Routes.typography} />
@@ -163,7 +152,6 @@ const DashboardRouter = ({
 };
 
 DashboardRouter.propTypes = {
-  enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,
   history: PropTypes.shape({
     action: PropTypes.string,
     block: PropTypes.func,
@@ -214,11 +202,4 @@ DashboardRouter.defaultProps = {
   navigationPreferences: null,
 };
 
-const mapStateToProps = ({ featureFlags }) => ({
-  enterpriseManagementPhaseTwoActive: featureFlags.getIn([
-    'flags',
-    'enterprise-management-phase-2',
-  ]),
-});
-
-export default withAuthProps(connect(mapStateToProps)(DashboardRouter));
+export default withAuthProps(DashboardRouter);
