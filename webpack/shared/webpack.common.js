@@ -34,6 +34,7 @@ const {
   WORKFLOW_HOST,
   FORMS_HOST,
   CHAT_HOST,
+  ENTERPRISE_MANAGEMENT_HOST,
   MY_SUBDOMAIN = 'my'
 } = process.env;
 
@@ -145,6 +146,7 @@ const webpackConfig = {
         WORKFLOW_HOST: JSON.stringify(WORKFLOW_HOST),
         FORMS_HOST: JSON.stringify(FORMS_HOST),
         CHAT_HOST: JSON.stringify(CHAT_HOST),
+        ENTERPRISE_MANAGEMENT_HOST: JSON.stringify(ENTERPRISE_MANAGEMENT_HOST),
         MY_SUBDOMAIN: JSON.stringify(MY_SUBDOMAIN),
       },
       VERSION: JSON.stringify(paths.appPackageJson.version),
