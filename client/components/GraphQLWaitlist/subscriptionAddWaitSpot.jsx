@@ -1,8 +1,6 @@
-
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import gql from 'graphql-tag';
-import { Subscription } from 'react-apollo';
+import { gql } from '@apollo/client';
+import { Subscription } from '@apollo/client/react/components';
 import PropTypes from 'prop-types';
 import DesktopNotification from '../../util/desktopNotification';
 
@@ -56,7 +54,9 @@ const SubscribeToNewWaitSpot = ({ accountId }) => (
       const patient = newWaitSpot.patient || newWaitSpot.patientUser;
       const fullName = `${patient.firstName} ${patient.lastName}`;
       const messageHeading = 'New wait spot request';
-      DesktopNotification.showNotification(messageHeading, { body: `New wait spot request by ${fullName}.` });
+      DesktopNotification.showNotification(messageHeading, {
+        body: `New wait spot request by ${fullName}.`,
+      });
     }}
   />
 );

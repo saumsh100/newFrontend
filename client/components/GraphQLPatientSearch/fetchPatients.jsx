@@ -1,9 +1,7 @@
-
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
+import { Query } from '@apollo/client/react/components';
 import composeSearchQuery from './composeSearchQuery';
 
 const query = gql`

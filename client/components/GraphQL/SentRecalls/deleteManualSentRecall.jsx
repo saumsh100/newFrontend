@@ -1,5 +1,4 @@
-
-import gql from 'graphql-tag'; // eslint-disable-line import/no-extraneous-dependencies
+import { gql } from '@apollo/client';
 
 export default gql`
   mutation deleteManualSentRecall_NEST($id: ID!) {

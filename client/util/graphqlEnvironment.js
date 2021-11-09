@@ -1,17 +1,14 @@
-import { ApolloClient } from 'apollo-boost';
-import { HttpLink } from 'apollo-link-http'; // eslint-disable-line import/no-extraneous-dependencies
-import { setContext } from 'apollo-link-context'; // eslint-disable-line import/no-extraneous-dependencies
-import { getMainDefinition } from 'apollo-utilities'; // eslint-disable-line import/no-extraneous-dependencies
-import { split } from 'apollo-link'; // eslint-disable-line import/no-extraneous-dependencies
-import { InMemoryCache } from 'apollo-cache-inmemory'; // eslint-disable-line import/no-extraneous-dependencies
-import { WebSocketLink } from 'apollo-link-ws';
+import { ApolloClient, HttpLink, split, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context'; // eslint-disable-line import/no-extraneous-dependencies
+import { getMainDefinition } from '@apollo/client/utilities'; // eslint-disable-line import/no-extraneous-dependencies
+import { WebSocketLink } from '@apollo/client/link/ws';
 import { getSubscriptionUrl } from './hub';
 import apiHost from './getApiHost';
 
 const getTokenDefault = () => localStorage.getItem('token');
 const defaultEndpoint = '/graphql';
 const nestEndpoint = '/newgraphql';
-const isNestOperation = operation => operation.search(/\w*_NEST\b/) === -1;
+const isNestOperation = (operation) => operation.search(/(_NEST+)+$/) === -1;
 const getUrlWithPath = (path = defaultEndpoint) => `${apiHost}${path}`;
 
 export default () => {

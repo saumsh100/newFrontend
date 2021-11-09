@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import React, { lazy } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from './ErrorFallback';

@@ -1,8 +1,6 @@
-
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import gql from 'graphql-tag';
-import { Subscription } from 'react-apollo';
+import { gql } from '@apollo/client';
+import { Subscription } from '@apollo/client/react/components';
 import PropTypes from 'prop-types';
 
 export const subsQuery = gql`

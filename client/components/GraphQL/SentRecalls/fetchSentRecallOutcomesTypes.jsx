@@ -1,8 +1,7 @@
-
 import React from 'react';
-import { Query } from 'react-apollo';
+import { gql } from '@apollo/client';
+import { Query } from '@apollo/client/react/components';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag'; // eslint-disable-line import/no-extraneous-dependencies
 
 const query = gql`
   query fetchSentRecallOutcomes_NEST {

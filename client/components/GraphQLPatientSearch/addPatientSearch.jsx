@@ -1,9 +1,7 @@
-
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { Mutation } from '@apollo/client/react/components';
 import { query } from './fetchPatientSearches';
 
 const mutation = gql`
@@ -29,7 +27,13 @@ const mutation = gql`
 const AddPatientSearchMutation = ({ children }) => (
   <Mutation
     mutation={mutation}
-    refetchQueries={({ data: { addPatientSearchesMutation: { patientSearch: { context } } } }) => [
+    refetchQueries={({
+      data: {
+        addPatientSearchesMutation: {
+          patientSearch: { context },
+        },
+      },
+    }) => [
       {
         query,
         variables: { where: { context } },

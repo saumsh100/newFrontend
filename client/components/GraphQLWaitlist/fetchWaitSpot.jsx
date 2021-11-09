@@ -1,9 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { gql } from '@apollo/client';
+import { Query } from '@apollo/client/react/components';
 
 export const query = gql`
   query fetchWaitSpot_Query {

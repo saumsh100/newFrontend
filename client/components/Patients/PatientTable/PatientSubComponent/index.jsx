@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
+import { Query } from '@apollo/client/react/components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../../../library';
@@ -63,7 +63,7 @@ class PatientSubComponent extends Component {
               <PatientActionsDropdown
                 patient={patient}
                 align="right"
-                render={props => (
+                render={(props) => (
                   <Button
                     className={`${styles.actionsButtonNormal} ${styles.actionsButton} ${ui.modal__save} `}
                     {...props}
@@ -117,7 +117,7 @@ function mapStateToProps({ entities, apiRequests, auth }, { patient }) {
   const events = entities
     .getIn(['patientTimelineEvents', 'models'])
     .toArray()
-    .filter(event => event.get('patientId') === patient.id);
+    .filter((event) => event.get('patientId') === patient.id);
 
   return {
     activeAccount,
@@ -155,7 +155,7 @@ PatientSubComponent.defaultProps = {
   wasFetched: false,
 };
 
-const PatientSubComponentWithData = parentProps => (
+const PatientSubComponentWithData = (parentProps) => (
   <Query query={patientInfoQuery} variables={{ patientId: parentProps.patient.id }}>
     {({ error, loading, data }) => {
       if (loading) return null;

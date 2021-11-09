@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Mutation } from 'react-apollo';
+import { Mutation } from '@apollo/client/react/components';
 import deleteManualSentRecall from '../../../GraphQL/SentRecalls/deleteManualSentRecall';
 
 export default function DeleteSentRecallMutation(props) {

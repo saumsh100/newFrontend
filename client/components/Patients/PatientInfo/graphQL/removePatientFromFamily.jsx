@@ -1,7 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { Mutation } from '@apollo/client/react/components';
 import mutation from './removePatientFromFamily_Mutation';
 import patientInfoQuery from '../PatientInfo_Query';
 

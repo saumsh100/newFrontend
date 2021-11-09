@@ -1,8 +1,7 @@
-
 import React from 'react';
-import { Query } from 'react-apollo';
+import { Query } from '@apollo/client/react/components';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag'; // eslint-disable-line import/no-extraneous-dependencies
+import { gql } from '@apollo/client';
 
 const query = gql`
   fragment dailyParts on ReasonDailyHours {

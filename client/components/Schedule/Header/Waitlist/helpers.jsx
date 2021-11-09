@@ -1,4 +1,3 @@
-
 import { week, capitalize } from '../../../../util/isomorphic';
 import { getHoursFromInterval } from '../../../library/util/datetime/helpers';
 import PatientUserPopover from '../../../library/PatientUserPopover';
@@ -30,7 +29,7 @@ const formatTimeToTz = (value, timezone) => {
  * @param timezone
  * @return {function(*=): *}
  */
-const dateFormatterFactory = timezone => time =>
+const dateFormatterFactory = (timezone) => (time) =>
   formatTimeToTz(new Date(time).toISOString(), timezone);
 
 /**
@@ -40,7 +39,7 @@ const dateFormatterFactory = timezone => time =>
  * @param input
  * @return boolean
  */
-const checkIfHasEvery = (criteria, input) => week[criteria].every(d => input.includes(d));
+const checkIfHasEvery = (criteria, input) => week[criteria].every((d) => input.includes(d));
 
 /**
  * Checks if a day is a weekend day.
@@ -48,7 +47,7 @@ const checkIfHasEvery = (criteria, input) => week[criteria].every(d => input.inc
  * @param day
  * @return boolean
  */
-const isAWeekendDay = day => week.weekends.includes(day);
+const isAWeekendDay = (day) => week.weekends.includes(day);
 
 /**
  * Checks if a difference between 2 ISOStrings is equal to 1 hour
@@ -58,8 +57,7 @@ const isAWeekendDay = day => week.weekends.includes(day);
  * @return {boolean}
  */
 const isOneHourApart = (startDate, endDate) =>
-  (getHoursFromInterval({ startDate,
-    endDate }) || 0) === 1;
+  (getHoursFromInterval({ startDate, endDate }) || 0) === 1;
 
 /**
  * Formats a list of times in a more readable way.
@@ -115,7 +113,7 @@ const generateReadableListOfDays = (days) => {
   const isAlreadyIn = {
     weekdays: false,
     weekends: false,
-    get: key => isAlreadyIn[key],
+    get: (key) => isAlreadyIn[key],
     set: (key, value = true) => {
       isAlreadyIn[key] = value;
     },
@@ -163,17 +161,19 @@ export const waitlistDatesFormatter = (days) => {
  * @return {object}
  * @param waitlist
  */
-export const batchUpdateFactory = waitlist => (state = false, waitListIDs = []) =>
-  waitlist.reduce(
-    (acc, curr) => ({
-      ...acc,
-      [curr.id]: waitListIDs.includes(curr.id) ? state : false,
-    }),
-    {},
-  );
+export const batchUpdateFactory =
+  (waitlist) =>
+  (state = false, waitListIDs = []) =>
+    waitlist.reduce(
+      (acc, curr) => ({
+        ...acc,
+        [curr.id]: waitListIDs.includes(curr.id) ? state : false,
+      }),
+      {},
+    );
 
 export const mergeData = (data, dataset) =>
-  data.map(v => ({
+  data.map((v) => ({
     ...v,
     patientData: dataset[v.waitSpotId][0].patientData,
   }));
@@ -194,10 +194,9 @@ export const generateTimesFilter = (timezone, start = 7, end = 21, hourInterval 
   }, {});
 };
 
-export const generatePractitionersFilter = practitioners =>
+export const generatePractitionersFilter = (practitioners) =>
   practitioners.reduce((update, curr) => {
-    update.push({ ...curr,
-      selected: false });
+    update.push({ ...curr, selected: false });
     return update;
   }, []);
 
@@ -274,16 +273,16 @@ export const propsGenerator = ({
     nextApptDate: nextAppt ? getFormattedDate(nextAppt, 'YYYY/MM/DD', timezone) : null,
     patient: isPatientUser ? patientUser : patient,
     PopOverComponent: isPatientUser ? PatientUserPopover : PatientPopover,
-    times: hasTimes ? waitlistTimesFormatter(availableTimes.sort(), timezone) : '',
+    times: hasTimes ? waitlistTimesFormatter([...availableTimes].sort(), timezone) : '',
   };
 };
 
 export const getDayPickers = (selectedDaysOfWeek, onToggleDayPicker) => {
-  const weekdaysChecked = !!week.weekdays.find(day => selectedDaysOfWeek.includes(day));
-  const weekdaysShowIndeterminate = !week.weekdays.every(day => selectedDaysOfWeek.includes(day));
+  const weekdaysChecked = !!week.weekdays.find((day) => selectedDaysOfWeek.includes(day));
+  const weekdaysShowIndeterminate = !week.weekdays.every((day) => selectedDaysOfWeek.includes(day));
 
-  const weekendsChecked = !!week.weekends.find(day => selectedDaysOfWeek.includes(day));
-  const weekendsShowIndeterminate = !week.weekends.every(day => selectedDaysOfWeek.includes(day));
+  const weekendsChecked = !!week.weekends.find((day) => selectedDaysOfWeek.includes(day));
+  const weekendsShowIndeterminate = !week.weekends.every((day) => selectedDaysOfWeek.includes(day));
   return [
     {
       label: 'Weekdays',
@@ -317,13 +316,13 @@ export const getTimeSlot = (
 };
 
 export const getAllTimeSlots = (timeOptions) => {
-  const result = { mornings: [],
-    afternoons: [],
-    evenings: [] };
+  const result = { mornings: [], afternoons: [], evenings: [] };
 
-  result.mornings = timeOptions.filter(time => time.slot === 'morning').map(time => time.value);
-  result.afternoons = timeOptions.filter(time => time.slot === 'afternoon').map(time => time.value);
-  result.evenings = timeOptions.filter(time => time.slot === 'evening').map(time => time.value);
+  result.mornings = timeOptions.filter((time) => time.slot === 'morning').map((time) => time.value);
+  result.afternoons = timeOptions
+    .filter((time) => time.slot === 'afternoon')
+    .map((time) => time.value);
+  result.evenings = timeOptions.filter((time) => time.slot === 'evening').map((time) => time.value);
 
   return result;
 };
@@ -331,14 +330,14 @@ export const getAllTimeSlots = (timeOptions) => {
 export const getTimePickers = (selectedTimes, timeSlots, onToggleTimePicker) => {
   const { mornings, afternoons, evenings } = timeSlots;
 
-  const morningsChecked = !!mornings.find(time => selectedTimes.includes(time));
-  const morningsShowIndeterminate = !mornings.every(time => selectedTimes.includes(time));
+  const morningsChecked = !!mornings.find((time) => selectedTimes.includes(time));
+  const morningsShowIndeterminate = !mornings.every((time) => selectedTimes.includes(time));
 
-  const afternoonsChecked = !!afternoons.find(time => selectedTimes.includes(time));
-  const afternoonsShowIndeterminate = !afternoons.every(time => selectedTimes.includes(time));
+  const afternoonsChecked = !!afternoons.find((time) => selectedTimes.includes(time));
+  const afternoonsShowIndeterminate = !afternoons.every((time) => selectedTimes.includes(time));
 
-  const eveningsChecked = !!evenings.find(time => selectedTimes.includes(time));
-  const eveningsShowIndeterminate = !evenings.every(time => selectedTimes.includes(time));
+  const eveningsChecked = !!evenings.find((time) => selectedTimes.includes(time));
+  const eveningsShowIndeterminate = !evenings.every((time) => selectedTimes.includes(time));
 
   return [
     {

@@ -1,8 +1,7 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Query } from 'react-apollo';
+import { Query } from '@apollo/client/react/components';
 import { connect } from 'react-redux';
 import MultiSelect from '../../../library/MultiSelect';
 import { familyDataSelector } from '../../Shared/helpers';
@@ -28,7 +27,7 @@ const contactOptions = [
   },
 ];
 
-const ErrorMessage = props => <div className={styles.errorMessage}>{props.msg}</div>;
+const ErrorMessage = (props) => <div className={styles.errorMessage}>{props.msg}</div>;
 
 ErrorMessage.propTypes = {
   msg: PropTypes.string.isRequired,
@@ -87,7 +86,7 @@ class LogRecallForm extends Component {
     return (
       <MultiSelect
         initialSelectedItem={[patientId]}
-        onChange={value =>
+        onChange={(value) =>
           this.setState({
             selectedPatientFamily: value,
             patientFamilyError: false,
@@ -112,9 +111,9 @@ class LogRecallForm extends Component {
               Family Members
             </span>
             <SentRecallSelector
-              selected={selectedItems.map(value => ({
+              selected={selectedItems.map((value) => ({
                 value,
-                label: patientFamily.find(patient => patient.value === value).label,
+                label: patientFamily.find((patient) => patient.value === value).label,
               }))}
               placeholder="Select patient(s)"
               isOpen={isOpen}
@@ -157,14 +156,14 @@ class LogRecallForm extends Component {
       <Form
         key={formName}
         form={formName}
-        onSubmit={values => this.handleSubmit(values)}
+        onSubmit={(values) => this.handleSubmit(values)}
         initialValues={initialValues}
         className={className}
         data-test-id={formName}
         ignoreSaveButton
       >
         <Query query={patientInfoQuery} variables={{ patientId }}>
-          {res => this.PatientFamilyField(res, patientId)}
+          {(res) => this.PatientFamilyField(res, patientId)}
         </Query>
         {this.state.patientFamilyError && <ErrorMessage msg="Select at least 1 patient" />}
         <Field

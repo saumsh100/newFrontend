@@ -1,7 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { Mutation } from '@apollo/client/react/components';
 import createManualSentRecall from '../../../GraphQL/SentRecalls/createManualSentRecall';
 import updateManualSentRecall from '../../../GraphQL/SentRecalls/updateManualSentRecall';
 

@@ -1,8 +1,7 @@
-
 import React from 'react';
-import gql from 'graphql-tag'; // eslint-disable-line import/no-extraneous-dependencies
+import { gql } from '@apollo/client';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { Mutation } from '@apollo/client/react/components';
 
 const mutation = gql`
   mutation updateReasonWeeklyHours_NEST(

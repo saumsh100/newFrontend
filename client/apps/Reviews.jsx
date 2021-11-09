@@ -1,8 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider } from '@apollo/client';
 import apolloClient from '../util/graphqlEnvironment';
 import storeShape from '../components/library/PropTypeShapes/reduxShapes';
 import { historyShape } from '../components/library/PropTypeShapes/routerShapes';

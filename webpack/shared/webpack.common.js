@@ -35,7 +35,7 @@ const {
   FORMS_HOST,
   CHAT_HOST,
   ENTERPRISE_MANAGEMENT_HOST,
-  MY_SUBDOMAIN = 'my'
+  MY_SUBDOMAIN = 'my',
 } = process.env;
 
 const isEnvDevelopment = NODE_ENV === 'development';
@@ -47,13 +47,13 @@ const apiHost = getCompleteHost(process.env);
 const pluginsForDevOrProd = isEnvDevelopment
   ? [new CaseSensitivePathsPlugin()]
   : [
-    new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
-      filename: 'static/css/[name].[contenthash:8].css',
-      chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
-    }),
-  ];
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: 'static/css/[name].[contenthash:8].css',
+        chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      }),
+    ];
 
 const getShouldUseSourceMap = () => (shouldUseSourceMap ? 'source-map' : false);
 
@@ -64,13 +64,7 @@ const webpackConfig = {
     ? getShouldUseSourceMap()
     : isEnvDevelopment && 'cheap-module-source-map',
   cache: true,
-  context: path.normalize(
-    path.join(
-      __dirname,
-      '..',
-      '..',
-    ),
-  ),
+  context: path.normalize(path.join(__dirname, '..', '..')),
   resolve: {
     fallback: {
       fs: false,
@@ -102,14 +96,13 @@ const webpackConfig = {
     devtoolModuleFilenameTemplate: isEnvProduction
       ? (info) => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
       : isEnvDevelopment &&
-      ((info) => {
-        let pathResource = info.absoluteResourcePath;
-        if (!pathResource.includes('node_modules') && pathResource.startsWith('../src')) {
-          pathResource = pathResource.replace('../src', '../backend/src');
-        }
-        return path.resolve(pathResource).replace(/\\/g, '/')
-      })
-    ,
+        ((info) => {
+          let pathResource = info.absoluteResourcePath;
+          if (!pathResource.includes('node_modules') && pathResource.startsWith('../src')) {
+            pathResource = pathResource.replace('../src', '../backend/src');
+          }
+          return path.resolve(pathResource).replace(/\\/g, '/');
+        }),
     globalObject: 'this',
     // Prevents conflicts when multiple webpack runtimes (from different apps)
     // are used on the same page.
@@ -120,7 +113,7 @@ const webpackConfig = {
     parser: {
       javascript: {
         requireEnsure: false,
-      }
+      },
     },
     rules,
   },
@@ -159,7 +152,10 @@ const webpackConfig = {
     // solution that requires the user to opt into importing specific locales.
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/,
+    }),
     ...pluginsForDevOrProd,
   ],
   optimization: {
@@ -203,13 +199,13 @@ const webpackConfig = {
           parser: safePostCssParser,
           map: shouldUseSourceMap
             ? {
-              inline: false,
-              annotation: true,
-            }
+                inline: false,
+                annotation: true,
+              }
             : false,
         },
         cssProcessorPluginOptions: {
-          preset: ['default', {minifyFontValues: {removeQuotes: false}}],
+          preset: ['default', { minifyFontValues: { removeQuotes: false } }],
         },
       }),
     ],

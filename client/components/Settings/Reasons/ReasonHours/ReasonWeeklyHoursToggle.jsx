@@ -1,7 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { Mutation } from '@apollo/client/react/components';
 import CreateReasonWeeklyHours from '../../../GraphQL/ReasonHours/createReasonWeeklyHours';
 import DeleteReasonWeeklyHours from '../../../GraphQL/ReasonHours/deleteReasonWeeklyHours';
 

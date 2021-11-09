@@ -1,5 +1,4 @@
-
-import gql from 'graphql-tag'; // eslint-disable-line import/no-extraneous-dependencies
+import { gql } from '@apollo/client';
 
 export default gql`
   mutation updatePatientNote_NEST($id: ID!, $note: String!, $userId: String!) {

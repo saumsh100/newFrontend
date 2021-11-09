@@ -1,8 +1,6 @@
-
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
+import { gql } from '@apollo/client';
+import { Mutation } from '@apollo/client/react/components';
 import PropTypes from 'prop-types';
 import { query } from './fetchWaitSpot';
 

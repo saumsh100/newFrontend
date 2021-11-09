@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Popover from 'react-popover';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Query } from 'react-apollo';
+import { Query } from '@apollo/client/react/components';
 import classNames from 'classnames';
 import { Map } from 'immutable';
 import { Button, Col, Grid, Icon, Row, Tab, Tabs } from '../../library';
@@ -411,15 +411,17 @@ PatientInfo.defaultProps = {
   wasStatsFetched: false,
 };
 
-// eslint-disable-next-line react/prop-types
-const PatientInfoRenderer = (parentProps) => ({ error, loading, data }) => {
-  if (loading) return <Loader />;
+const PatientInfoRenderer =
+  (parentProps) =>
+  // eslint-disable-next-line react/prop-types
+  ({ error, loading, data }) => {
+    if (loading) return <Loader />;
 
-  if (error) {
-    return <div>Error!</div>;
-  }
-  return <PatientInfo {...parentProps} {...data} />;
-};
+    if (error) {
+      return <div>Error!</div>;
+    }
+    return <PatientInfo {...parentProps} {...data} />;
+  };
 
 const PatientInfoWithData = (props) => {
   if (!props.patient) {
