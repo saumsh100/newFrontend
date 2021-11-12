@@ -65,14 +65,6 @@ def parallelDeployApp(Deployment pipeline, String environment, String ecsCluster
   return serviceName
 }
 
-def parallelRunMigrations(Deployment pipeline, String environment, String ecsClusterName, String version) {
-  def serviceName = [:]
-  serviceName["migrations"] = {
-    pipeline.executeMigrationsOrSeed("${environment}-${mainApp}-migrations", ecsClusterName, "api", version, null, null)
-  }
-  return serviceName
-}
-
 node(jenkinsNodeExecutor) {
   try {
     if (isValidDeploy(mainBranch) ) {
@@ -94,16 +86,10 @@ node(jenkinsNodeExecutor) {
           parallel parallelBuildDockerImage(pipeline, getVars('environment'))
         }
       }
-      if (isPullRequest()) {
-        stage('Execute Migrations') {
-          parallel parallelRunMigrations(pipeline, getVars('environment'), getVars('ecsClusterName'), version)
+      if (!isPullRequest()) {
+        stage('Application Deployments') {
+          parallel parallelDeployApp(pipeline, getVars('environment'), getVars('ecsClusterName'), version)
         }
-        stage('Execute Seed') {
-          pipeline.executeMigrationsOrSeed("${getVars('environment')}-${mainApp}-seed", getVars('ecsClusterName'), mainApp, version, null, null)
-        }
-      }
-      stage('Application Deployments') {
-        parallel parallelDeployApp(pipeline, getVars('environment'), getVars('ecsClusterName'), version)
       }
     }
     currentBuild.result = "SUCCESS"
@@ -113,15 +99,6 @@ node(jenkinsNodeExecutor) {
   }
   finally {
     if (isValidDeploy(mainBranch) ) {
-      if (isBranch(mainBranch)) {
-        throttle(['noConcurrentJobs']) {
-          node(jenkinsNodeExecutor) {
-            checkout scm
-            pipeline.destroyEnvironment()
-            deleteDir()
-          }
-        }
-      }
       pipeline.notifyBuild(getVars('frontendUrl'), notifyChannelName)
       deleteDir()
     }
