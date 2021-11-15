@@ -213,7 +213,7 @@ class EditDisplay extends Component {
                 ? `Editing ${patient.get('firstName')}'s Patient Info`
                 : `Editing ${patient.get('firstName')}'s Info`
             }
-            actions={!isResponsive() ? actions : []}
+            actions={!isResponsive() && this.state.tabIndex !== 2 ? actions : []}
             bodyStyles={styles.editModalBody}
             custom
           >

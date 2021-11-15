@@ -1,6 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Grid, Row, Col, Form, FormSection } from '../../../../library';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import Family from '../../../Shared/Family';
@@ -44,18 +44,18 @@ const memberListPropTypes = {
   patientNode: PropTypes.shape(patientShape),
 };
 
-const renderMemberList = ({ family, patientNode }) => (
+const renderMemberList = ({ dispatch, family, patientNode }) => (
   <Row className={styles.familyFormContainer}>
     <Family
       family={family}
-      render={familyMembers =>
-        familyMembers.map(familyMember => (
+      render={(familyMembers) =>
+        familyMembers.map((familyMember) => (
           <Row>
             <Col xs={12}>
-              <RemovePatientFamily currentPatientId={patientNode.ccId}>
-                {removePatientFamily => (
-                  <MakeHeadOfFamily>
-                    {makeHeadOfFamily => (
+              <RemovePatientFamily currentPatientId={patientNode.ccId} dispatch={dispatch}>
+                {(removePatientFamily) => (
+                  <MakeHeadOfFamily dispatch={dispatch}>
+                    {(makeHeadOfFamily) => (
                       <FamilyMember
                         key={familyMember.id}
                         {...familyMember}
@@ -106,16 +106,17 @@ renderMemberList.defaultProps = {
   patientNode: null,
 };
 
-const renderAddFamily = ({ family, patientNode }) => (
+const renderAddFamily = ({ dispatch, family, patientNode }) => (
   <Row className={styles.withPadding}>
     <AddPatientToAFamilyOrCreateFamilyWithMembers
       currentPatientId={patientNode.ccId}
       hasFamily={!!family}
+      dispatch={dispatch}
     >
-      {addPatientOrCreateFamily => (
+      {(addPatientOrCreateFamily) => (
         <PatientSearch
           focusInputOnMount
-          onSelect={patient =>
+          onSelect={(patient) =>
             addPatientOrCreateFamily({
               variables: {
                 input: {
@@ -180,4 +181,4 @@ FamilyForm.defaultProps = {
   familyLength: 0,
 };
 
-export default FamilyForm;
+export default connect()(FamilyForm);
