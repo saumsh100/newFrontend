@@ -1,7 +1,18 @@
+@import '../../../../styles/ui.scss';
+
 .content {
   padding-left: 50px;
 }
 
 .otherSection {
   padding-top: 25px;
+}
+
+.phoneLookup {
+  padding: 10px 20px;
+}
+
+.smsLookup {
+  color: darken($primary-darkgrey, 10%);
+  padding-right: 8px;
 }

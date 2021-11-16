@@ -1,4 +1,3 @@
-
 import { receiveEntities } from '../../reducers/entities';
 import { showAlertTimeout } from '../alerts';
 import { httpClient } from '../../util/httpClient';
@@ -29,7 +28,9 @@ export default function createEntityRequest({ key, entityData, url, params = {},
             }),
           );
         }
-
+        if (key === 'chats') {
+          return data;
+        }
         return data.entities;
       })
       .catch((err) => {

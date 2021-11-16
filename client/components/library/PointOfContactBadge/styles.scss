@@ -98,3 +98,41 @@
     transform: scale(1);
   }
 }
+
+.lookupTooltipContainer {
+  opacity: 1;
+  :global div.rc-tooltip-content {
+    & .rc-tooltip-arrow {
+      border-bottom-color: #7b7b7b;
+    }
+
+    & .rc-tooltip-inner {
+      background-color: #7b7b7b;
+      border-radius: 4px;
+      padding: 14px 16px;
+    }
+  }
+}
+
+.lookupTooltip {
+  font-family: Gotham-Medium, serif;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  & .tooltipHead {
+    color: #c9c9c9;
+    font-size: 12px;
+    height: 14px;
+    line-height: 14px;
+  }
+  & .tooltipSupport {
+    padding-bottom: 8px;
+  }
+  & .tooltipStatus,
+  & .tooltipSupport {
+    color: #ffffff;
+    font-size: 14px;
+    height: 17px;
+    line-height: 17px;
+  }
+}

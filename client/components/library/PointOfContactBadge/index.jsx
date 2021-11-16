@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -9,7 +8,7 @@ import XIcon from './XIcon';
 import CheckIcon from './CheckIcon';
 import styles from './styles.scss';
 
-const Spinner = () => (
+export const Spinner = () => (
   <div className={styles.spinner}>
     <div className={styles.double_bounce1} />
     <div className={styles.double_bounce2} />

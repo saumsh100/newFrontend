@@ -27,6 +27,7 @@ export const SET_CHAT_CATEGORIES_COUNT = `${reducer}/SET_CHAT_CATEGORIES_COUNT`;
 export const SET_IS_FETCHING_PROSPECT = `${reducer}/SET_IS_FETCHING_PROSPECT`;
 export const SET_PROSPECT = `${reducer}/SET_PROSPECT`;
 export const SET_IS_PHONENO_AVAILABLE = `${reducer}/SET_IS_PHONENO_AVAILABLE`;
+export const SET_IS_PHONELOOKUP_CHECKED = `${reducer}/SET_IS_PHONELOOKUP_CHECKED`;
 
 export const addPendingMessage = createAction(ADD_PENDING_MESSAGE);
 export const prunePendingMessages = createAction(PRUNE_PENDING_MESSAGES);
@@ -50,6 +51,7 @@ export const setChatCategoriesCount = createAction(SET_CHAT_CATEGORIES_COUNT);
 export const setIsFetchingProspect = createAction(SET_IS_FETCHING_PROSPECT);
 export const setProspect = createAction(SET_PROSPECT);
 export const setIsPhoneNoAvailable = createAction(SET_IS_PHONENO_AVAILABLE);
+export const setIsPhoneLookupChecked = createAction(SET_IS_PHONELOOKUP_CHECKED);
 
 export const initialState = Map({
   selectedChatId: null,
@@ -74,6 +76,7 @@ export const initialState = Map({
   pendingMessages: [],
   prospect: null,
   isPhoneNoAvailable: true,
+  phoneLookupObj: {},
 });
 
 export default handleActions(
@@ -178,6 +181,10 @@ export default handleActions(
 
     [SET_IS_PHONENO_AVAILABLE](state, { payload }) {
       return state.set('isPhoneNoAvailable', payload);
+    },
+
+    [SET_IS_PHONELOOKUP_CHECKED](state, { payload }) {
+      return state.set('phoneLookupObj', payload);
     },
   },
   initialState,

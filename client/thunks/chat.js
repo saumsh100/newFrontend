@@ -26,6 +26,7 @@ import {
   unsetPatientChat,
   updateChatId,
   setIsPhoneNoAvailable,
+  setIsPhoneLookupChecked,
   setCancelToken,
   setChatNewType,
 } from '../reducers/chat';
@@ -284,7 +285,22 @@ export function markAsRead(chatId) {
         const unreadChats = chat.get('unreadChats');
         const listToRemove = Object.keys(textMessages);
         const newList = pullAll(unreadChats, listToRemove);
+
+        // if keys are provided under chats object
+        let phoneLookupObj = {};
+        if (chats[chatId] && 'isSMSEnabled' in chats[chatId]) {
+          phoneLookupObj = {
+            isPhoneLookupChecked: true,
+            isSMSEnabled: chats[chatId].isSMSEnabled,
+            isVoiceEnabled: chats[chatId].isSMSEnabled,
+          };
+        } else {
+          phoneLookupObj = {
+            isPhoneLookupChecked: false,
+          };
+        }
         dispatch(setIsPhoneNoAvailable(chats[chatId]?.isPhoneNumberAvailable));
+        dispatch(setIsPhoneLookupChecked(phoneLookupObj));
         dispatch(setUnreadChats(newList));
       })
       .then(() => {
@@ -415,7 +431,8 @@ export function selectChat(id, createChat = null) {
     }
 
     const chatEntity = await dispatch(getChatEntity(id)).then((data) =>
-      data === null ? data : data.delete('textMessages'),);
+      data === null ? data : data.delete('textMessages'),
+    );
 
     dispatch(setConversationIsLoading(true));
     dispatch(setNewChat(createChat));
@@ -470,14 +487,30 @@ export function sendChatMessage(entityData) {
         url: '/api/chats/textMessages',
         alert: { error: { body: 'Failed to send patient the text message.' } },
       }),
-    ).finally(() => {
-      const index = pendingMessages.findIndex(
-        (pendingMessage) => pendingMessage.message === entityData.message,
-      );
-      dispatch(setPendingMessages(pendingMessages.splice(index, 1)));
-      // to set chat messages while sending message
-      dispatch(setChatMessagesListForChat(entityData.chatId));
-    });
+    )
+      .then((data) => {
+        let phoneLookupObj = {};
+        if (data && 'isSMSEnabled' in data) {
+          phoneLookupObj = {
+            isPhoneLookupChecked: true,
+            isSMSEnabled: data.isSMSEnabled,
+            isVoiceEnabled: data.isSMSEnabled,
+          };
+        } else {
+          phoneLookupObj = {
+            isPhoneLookupChecked: false,
+          };
+        }
+        dispatch(setIsPhoneLookupChecked(phoneLookupObj));
+      })
+      .finally(() => {
+        const index = pendingMessages.findIndex(
+          (pendingMessage) => pendingMessage.message === entityData.message,
+        );
+        dispatch(setPendingMessages(pendingMessages.splice(index, 1)));
+        // to set chat messages while sending message
+        dispatch(setChatMessagesListForChat(entityData.chatId));
+      });
   };
 }
 
