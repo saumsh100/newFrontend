@@ -73,15 +73,6 @@ node(jenkinsNodeExecutor) {
       pipeline.clearWorkspace()
       if (isValidBranch(mainBranch)) {
         pipeline.checkout()
-        if (isPullRequest()) {
-          throttle(['noConcurrentJobs']) {
-            node(jenkinsNodeExecutor) {
-              checkout scm
-              pipeline.deployEnvironment()
-              deleteDir()
-            }
-          }
-        }
         stage('Build Docker Images') {
           parallel parallelBuildDockerImage(pipeline, getVars('environment'))
         }
