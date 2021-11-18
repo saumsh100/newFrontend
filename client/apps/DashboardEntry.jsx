@@ -5,6 +5,7 @@ import { extendMoment } from 'moment-range';
 import moment from 'moment-timezone';
 import Immutable from 'immutable';
 import nlp from 'compromise';
+import { ErrorBoundary } from 'react-error-boundary';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import socket from '../socket';
 import App from './Dashboard';
@@ -19,7 +20,7 @@ import DesktopNotification from '../util/desktopNotification';
 import SubscriptionManager from '../util/graphqlSubscriptions';
 import { identifyPracticeUser } from '../util/fullStory';
 import { receiveEntities } from '../reducers/entities';
-import ErrorBoundary from '../components/ErrorBoundary';
+import ErrorPage from '../components/ErrorPage';
 
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -100,7 +101,7 @@ load()(store.dispatch).then(() => {
 
   const renderApp = () =>
     render(
-      <ErrorBoundary>
+      <ErrorBoundary FallbackComponent={ErrorPage}>
         <App {...appProps} />
       </ErrorBoundary>,
       document.getElementById('root'),

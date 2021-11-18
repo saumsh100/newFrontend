@@ -1,0 +1,57 @@
+@import '../../styles/ui.scss';
+@import '../../styles/ui-kit.scss';
+@import '../../styles/fonts.scss';
+.errorWrapper {
+  align-items: center;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  padding: 20px;
+  text-align: center;
+  .contentWrapper {
+    width: 400px;
+  }
+}
+
+.header {
+  color: $primary-blue;
+  font-size: 20px;
+  margin: 15px 0;
+}
+.errorImg {
+  height: 250px;
+  width: 365px;
+}
+.supportText {
+  color: rgb(104, 110, 116);
+  font-size: 12px;
+  margin: 20px 0;
+}
+.retryButton {
+  align-items: center;
+  background: $primary-blue;
+  border-radius: 4px;
+  color: white;
+  display: flex;
+  font-size: 12px;
+  font-weight: 500;
+  height: 34px;
+  justify-content: center;
+  margin-top: 30px;
+  width: 153px;
+}
+.bottomText {
+  bottom: 10px;
+  color: rgb(104, 110, 116);
+  font-size: 11px;
+  padding: 30px;
+  position: absolute;
+}
+.highlight {
+  color: $primary-blue;
+  font-family: $medium-font;
+  font-weight: bold;
+  text-decoration: none;
+}

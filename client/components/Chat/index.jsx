@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Skeleton from 'react-loading-skeleton';
 import classnames from 'classnames';
+import { ErrorBoundary } from 'react-error-boundary';
 import { bindActionCreators } from 'redux';
 import { setChatIsLoading, setConversationIsLoading } from '../../reducers/chat';
 import {
@@ -31,6 +32,8 @@ import PatientInfo from './PatientInfo';
 import styles from './styles.scss';
 import ToHeader from './ToHeader';
 import DesktopSkeleton from './ToHeader/DesktopSkeleton';
+import ModuleError from '../ModuleError';
+import ErrorPage from '../ErrorPage';
 
 const patientSearchTheme = {
   container: styles.patientSearchClass,
@@ -225,13 +228,15 @@ class ChatMessage extends Component {
 
     return (
       <div className={styles.rightInfo}>
-        <Button
-          icon="arrow-left"
-          onClick={this.togglePatientsInfo}
-          className={styles.closePatientInfo}
-        />
-        <PatientInfo />
-        <div className={styles.bottomInfo} />
+        <ErrorBoundary FallbackComponent={ModuleError}>
+          <Button
+            icon="arrow-left"
+            onClick={this.togglePatientsInfo}
+            className={styles.closePatientInfo}
+          />
+          <PatientInfo />
+          <div className={styles.bottomInfo} />
+        </ErrorBoundary>
       </div>
     );
   }
@@ -255,18 +260,20 @@ class ChatMessage extends Component {
 
     return (
       <SBody>
-        <List className={styles.chatsList}>
-          <InfiniteScroll
-            loadMore={this.loadChatList}
-            loader={<Loader key="loader" />}
-            hasMore={moreData && !chatsFetching}
-            initialLoad={false}
-            useWindow={false}
-            threshold={1}
-          >
-            <ChatList tabIndex={tabIndex} onChatClick={this.toggleShowMessageContainer} />
-          </InfiniteScroll>
-        </List>
+        <ErrorBoundary FallbackComponent={ModuleError}>
+          <List className={styles.chatsList}>
+            <InfiniteScroll
+              loadMore={this.loadChatList}
+              loader={<Loader key="loader" />}
+              hasMore={moreData && !chatsFetching}
+              initialLoad={false}
+              useWindow={false}
+              threshold={1}
+            >
+              <ChatList tabIndex={tabIndex} onChatClick={this.toggleShowMessageContainer} />
+            </InfiniteScroll>
+          </List>
+        </ErrorBoundary>
       </SBody>
     );
   }
@@ -288,26 +295,28 @@ class ChatMessage extends Component {
       <SBody>
         <div className={styles.splitWrapper}>
           <div className={container}>
-            <SHeader className={styles.messageHeader}>
-              {conversationIsLoading ? (
-                <HeaderSkeleton />
-              ) : (
-                <ToHeader
-                  onPatientInfoClick={this.togglePatientsInfo}
-                  onPatientListClick={this.togglePatientsList}
-                  onSearch={this.selectChatOrCreate}
-                  loadChatByCount={this.loadChatByCount}
-                  tabIndex={tabIndex}
+            <ErrorBoundary FallbackComponent={ModuleError}>
+              <SHeader className={styles.messageHeader}>
+                {conversationIsLoading ? (
+                  <HeaderSkeleton />
+                ) : (
+                  <ToHeader
+                    onPatientInfoClick={this.togglePatientsInfo}
+                    onPatientListClick={this.togglePatientsList}
+                    onSearch={this.selectChatOrCreate}
+                    loadChatByCount={this.loadChatByCount}
+                    tabIndex={tabIndex}
+                  />
+                )}
+              </SHeader>
+              {!conversationIsLoading ? (
+                <MessageContainer
+                  setTab={this.changeTab}
+                  isNewconversation={isNewconversation}
+                  selectChatOrCreate={this.selectChatOrCreate}
                 />
-              )}
-            </SHeader>
-            {!conversationIsLoading ? (
-              <MessageContainer
-                setTab={this.changeTab}
-                isNewconversation={isNewconversation}
-                selectChatOrCreate={this.selectChatOrCreate}
-              />
-            ) : null}
+              ) : null}
+            </ErrorBoundary>
           </div>
           <div className={patientInfoStyle}>{this.showPatientInfo()}</div>
         </div>
@@ -345,28 +354,35 @@ class ChatMessage extends Component {
     const shouldSlideIn = showMessageContainer || showPatientInfo;
 
     return (
-      <div className={classnames(styles.chatWrapper)}>
-        <div
-          className={classnames(styles.patientsList, {
-            [styles.slideIn]: showPatientsList,
-            [styles.hideContainer]: !showPatientsList,
-          })}
-        >
-          <Card noBorder className={styles.leftCard}>
-            <SContainer>
-              {this.renderHeading()}
-              {this.renderChatList()}
-            </SContainer>
-          </Card>
-          <ChatMenu changeTab={this.changeTab} index={this.state.tabIndex} />
+      <ErrorBoundary FallbackComponent={ErrorPage}>
+        <div className={classnames(styles.chatWrapper)}>
+          <div
+            className={classnames(styles.patientsList, {
+              [styles.slideIn]: showPatientsList,
+              [styles.hideContainer]: !showPatientsList,
+            })}
+          >
+            <ErrorBoundary FallbackComponent={ModuleError}>
+              <Card noBorder className={styles.leftCard}>
+                <SContainer>
+                  {this.renderHeading()}
+                  {this.renderChatList()}
+                </SContainer>
+              </Card>
+            </ErrorBoundary>
+
+            <ChatMenu changeTab={this.changeTab} index={this.state.tabIndex} />
+          </div>
+          <ErrorBoundary FallbackComponent={ModuleError}>
+            <Card
+              noBorder
+              className={classnames(styles.rightCard, { [styles.slideIn]: shouldSlideIn })}
+            >
+              <SContainer>{this.renderMessageContainer()}</SContainer>
+            </Card>
+          </ErrorBoundary>
         </div>
-        <Card
-          noBorder
-          className={classnames(styles.rightCard, { [styles.slideIn]: shouldSlideIn })}
-        >
-          <SContainer>{this.renderMessageContainer()}</SContainer>
-        </Card>
-      </div>
+      </ErrorBoundary>
     );
   }
 }

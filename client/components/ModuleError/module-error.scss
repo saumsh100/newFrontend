@@ -1,0 +1,42 @@
+@import '../../styles/ui.scss';
+@import '../../styles/ui-kit.scss';
+@import '../../styles/fonts.scss';
+.errorWrapper {
+  align-items: center;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-top: 20%;
+  max-height: 100%;
+  padding: 10px;
+  text-align: center;
+}
+
+.header {
+  color: $primary-blue;
+  font-size: 20px;
+  margin: 15px 0;
+}
+.errorImg {
+  height: 10rem;
+  width: 15rem;
+}
+.supportText {
+  color: rgb(104, 110, 116);
+  font-size: 12px;
+  margin: 10px 25px;
+}
+.bottomText {
+  bottom: 10px;
+  color: rgb(104, 110, 116);
+  font-size: 11px;
+  padding: 30px;
+  position: absolute;
+}
+.highlight {
+  color: $primary-blue;
+  font-family: $medium-font;
+  font-weight: bold;
+  text-decoration: none;
+}

@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import { push } from 'connected-react-router';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
+import { ErrorBoundary } from 'react-error-boundary';
 import Immutable from 'immutable';
 import App from './Reviews';
 import configure from '../store/reviewsStore';
@@ -11,7 +12,8 @@ import connectStoreToHost from '../widget/connectStoreToHost';
 import { loadPatient } from '../thunks/patientAuth';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
 import { setOnlineBookingUserVars } from '../util/fullStory';
-import ErrorBoundary from '../components/ErrorBoundary';
+import ErrorPage from '../components/ErrorPage';
+
 import { browserHistory } from '../store/factory';
 
 const store = configure({
@@ -24,10 +26,7 @@ store.dispatch(
   initializeFeatureFlags({
     key: 'carecru',
     custom: {
-      accountId: store
-        .getState()
-        .availabilities?.get('account')
-        ?.get('id'),
+      accountId: store.getState().availabilities?.get('account')?.get('id'),
     },
   }),
 );
@@ -59,7 +58,7 @@ loadPatient()(store.dispatch).then(() => {
   };
   const renderApp = () =>
     render(
-      <ErrorBoundary>
+      <ErrorBoundary FallbackComponent={ErrorPage}>
         <App {...appProps} />
       </ErrorBoundary>,
       document.getElementById('root'),
