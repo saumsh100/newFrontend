@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { Map } from 'immutable';
 import { Tabs, Tab, Button, DialogBox } from '../../../library';
 import PatientModel from '../../../../entities/models/Patient';
@@ -214,7 +215,9 @@ class EditDisplay extends Component {
                 : `Editing ${patient.get('firstName')}'s Info`
             }
             actions={!isResponsive() && this.state.tabIndex !== 2 ? actions : []}
-            bodyStyles={styles.editModalBody}
+            bodyStyles={classNames(styles.editModalBody, {
+              [styles.editModalBodyFamilySetting]: this.state.tabIndex === 2,
+            })}
             custom
           >
             {!isResponsive() ? this.renderDesktop() : this.renderResponsive()}

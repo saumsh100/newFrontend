@@ -28,6 +28,11 @@
 .editModal {
 }
 
+.editModalBodyFamilySetting {
+  & nav + div {
+    max-height: 596px;
+  }
+}
 .editModalBody {
   background: $primary-white;
   overflow-x: hidden;
