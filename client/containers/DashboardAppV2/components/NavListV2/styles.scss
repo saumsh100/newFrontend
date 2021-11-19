@@ -1,0 +1,138 @@
+@import '../../../../styles/ui';
+
+.navListWrapper {
+  margin-top: 25px;
+}
+
+.navItem {
+  align-items: center;
+  color: $inactive-color !important;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  padding: 0;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #41464c;
+    color: $primary-white !important;
+  }
+
+  &:active {
+    color: $primary-white !important;
+  }
+}
+
+.activeItem {
+  background-color: darken(#59616b, 5%);
+  border-left: $selection-border $primary-color;
+  color: $primary-white !important;
+}
+
+.disabledItem {
+  color: darken($inactive-color, 25%) !important;
+  &:hover {
+    background-color: transparent;
+    color: darken($inactive-color, 25%) !important;
+  }
+
+  &:active {
+    color: darken($inactive-color, 25%) !important;
+  }
+}
+
+.icon {
+  font-size: 1.5em;
+}
+
+.label {
+  margin-left: 20px;
+  margin-top: 5px;
+  text-align: left;
+  width: 95px;
+}
+
+.ulSubNav {
+  list-style-type: disc;
+  margin-top: 10px;
+}
+
+.liSubNavItem {
+  color: $inactive-color;
+  height: 25px;
+
+  &:hover {
+    border-bottom: 1px solid;
+    color: $primary-white;
+  }
+}
+
+.disabledSubNavItem {
+  &:hover {
+    border-bottom: none;
+    color: $inactive-color;
+  }
+}
+
+.activeSubNavItem {
+  color: $primary-white;
+}
+
+.multiple_nav {
+  list-style: none;
+  margin-bottom: 10px;
+  padding-left: 55px;
+  position: relative;
+
+  &__item {
+    background: #fff;
+    list-style-type: none;
+    padding-top: 20px;
+    position: relative;
+    width: 2px;
+
+    &::after {
+      background: inherit;
+      border-radius: 50%;
+      bottom: 0;
+      content: '';
+      height: 6px;
+      margin-left: 1px;
+      position: absolute;
+      transform: translateX(-50%);
+      width: 6px;
+    }
+  }
+
+  &__wrapper {
+    color: $primary-white;
+    margin-left: 15px;
+    width: 150px;
+  }
+
+  &__active {
+    border-bottom: 1px solid;
+
+    &::after {
+      background: $primary-color !important;
+      border-radius: 50%;
+      bottom: 0;
+      content: '';
+      height: 6px;
+      left: 0;
+      margin-left: 1px;
+      position: absolute;
+      transform: translateX(-50%);
+      width: 6px;
+      z-index: 1;
+    }
+  }
+}
+
+.comingSoon {
+  font-size: 1.2em;
+}
+
+.hiddenLabel {
+  display: none;
+}

@@ -411,8 +411,7 @@ PatientInfo.defaultProps = {
   wasStatsFetched: false,
 };
 
-const PatientInfoRenderer =
-  (parentProps) =>
+const PatientInfoRenderer = (parentProps) =>
   // eslint-disable-next-line react/prop-types
   ({ error, loading, data }) => {
     if (loading) return <Loader />;

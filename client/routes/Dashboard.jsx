@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import Login from '../components/Login';
 import DashboardApp from '../containers/DashboardApp';
+import DashboardAppV2 from '../containers/DashboardAppV2';
 import FourZeroFour from '../components/FourZeroFour';
 import SignUp from '../components/SignUpInvite';
 import ForgotPassword from '../components/ForgotPassword';
@@ -80,11 +81,14 @@ const DashboardRouter = ({
       </Suspense>
     </div>
   );
+
+  const DashboardComponent = enterpriseManagementPhaseTwoActive ? DashboardAppV2 : DashboardApp;
+
   const Dashboard = (props) =>
     isAuth ? (
-      <DashboardApp {...props}>
+      <DashboardComponent {...props}>
         <Route render={getAuthorizedRoutes} />
-      </DashboardApp>
+      </DashboardComponent>
     ) : (
       <Redirect
         to={{

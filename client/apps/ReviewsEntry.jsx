@@ -26,7 +26,10 @@ store.dispatch(
   initializeFeatureFlags({
     key: 'carecru',
     custom: {
-      accountId: store.getState().availabilities?.get('account')?.get('id'),
+      accountId: store
+        .getState()
+        .availabilities?.get('account')
+        ?.get('id'),
     },
   }),
 );

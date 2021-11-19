@@ -17,7 +17,7 @@ import {
   refreshFirstStepData,
   setSelectedServiceId,
   setUTMParams,
-  setReferrerURL
+  setReferrerURL,
 } from '../../reducers/availabilities';
 import styles from './styles.scss';
 
@@ -57,8 +57,8 @@ class Widget extends Component {
 
     this.props.setUTMParams(utmParams);
 
-    //Get and set ref query param
-    const referrerURL = queryVars['ref'];
+    // Get and set ref query param
+    const referrerURL = queryVars.ref;
     this.props.setReferrerURL(referrerURL);
   }
 
@@ -194,7 +194,7 @@ function mapDispatchToProps(dispatch) {
       setSelectedServiceId,
       setUTMParams,
       refreshFirstStepData,
-      setReferrerURL
+      setReferrerURL,
     },
     dispatch,
   );

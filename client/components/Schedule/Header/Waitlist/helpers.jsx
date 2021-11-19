@@ -161,16 +161,14 @@ export const waitlistDatesFormatter = (days) => {
  * @return {object}
  * @param waitlist
  */
-export const batchUpdateFactory =
-  (waitlist) =>
-  (state = false, waitListIDs = []) =>
-    waitlist.reduce(
-      (acc, curr) => ({
-        ...acc,
-        [curr.id]: waitListIDs.includes(curr.id) ? state : false,
-      }),
-      {},
-    );
+export const batchUpdateFactory = (waitlist) => (state = false, waitListIDs = []) =>
+  waitlist.reduce(
+    (acc, curr) => ({
+      ...acc,
+      [curr.id]: waitListIDs.includes(curr.id) ? state : false,
+    }),
+    {},
+  );
 
 export const mergeData = (data, dataset) =>
   data.map((v) => ({

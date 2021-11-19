@@ -1,0 +1,106 @@
+@import '../../styles/ui';
+
+.hubContentContainer {
+  background: $primary-white;
+  bottom: $electron-anti-radius-padding * 2;
+  box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.14), -1px 1px 6px 0 rgba(0, 0, 0, 0.12);
+  left: $electron-anti-radius-padding;
+  opacity: 0;
+  position: fixed;
+  right: $electron-bar-width;
+  top: $electron-anti-radius-padding * 2;
+  transform: translateX(200%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.left {
+    left: $electron-bar-width;
+    right: 5px;
+    transform: translateX(-100%);
+    @include borderTopRight;
+    @include borderBottomRight;
+  }
+
+  &.right {
+    @include borderTopLeft;
+    @include borderBottomLeft;
+  }
+
+  & > div {
+    padding-top: 0;
+  }
+
+  &.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.alertsContainer {
+  display: inline-block;
+  height: auto;
+  position: fixed;
+  right: -78px;
+  top: 70px;
+  z-index: 5002;
+
+  @media screen and (max-width: 576px) {
+    display: none;
+  }
+}
+
+.overlay {
+  background-color: rgba(48, 75, 88, 0.35);
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 5;
+  @media screen and (max-width: $medium-screen-width) {
+    display: block;
+  }
+
+  @media screen and (min-width: $medium-screen-width) {
+    display: none;
+  }
+}
+
+.subTabs {
+  display: block;
+  margin-left: 52px;
+  margin-top: -49px;
+  position: fixed;
+  z-index: 20;
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+.mainRegionChildren {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0;
+  position: static;
+  transition: ease-out 0.3s all;
+
+  > div {
+    height: 100%;
+  }
+}
+
+.emNavFooter {
+  align-items: center;
+  bottom: 15px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  > div {
+    margin: auto;
+  }
+}
