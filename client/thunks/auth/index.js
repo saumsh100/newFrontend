@@ -12,8 +12,11 @@ import socket from '../../socket';
 import { getTodaysDate } from '../../components/library';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
-  localStorage.setItem('token', token);
-  const { sessionId } = jwt(token);
+  let sessionId;
+  if (token && token !== null) {
+    localStorage.setItem('token', token);
+    ({ sessionId } = jwt(token));
+  }
 
   if (invalidateSession) {
     localStorage.removeItem('session');
@@ -50,7 +53,7 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
 
       const handleZendeskCheck = setInterval(() => {
         if (window.$zopim && typeof window.$zopim === 'function') {
-          window.$zopim(function() {
+          window.$zopim(function () {
             window.$zopim.livechat.setName(`${user.firstName} ${user.lastName}`);
             window.$zopim.livechat.setEmail(user.username);
             window.$zopim.livechat.addTags(userSession.enterprise.name);
@@ -204,7 +207,17 @@ export function resetPatientPassword(location, values) {
 export function load() {
   return (dispatch) => {
     const token = localStorage.getItem('token');
-    if (!token) {
+
+    // Unless we are in password reset flow, signup flow or sso flow, attempt to load the page without token
+    // This allows us to support kratos authentication which uses a HTTP only session cookie
+    // Requests sent to the backend with this cookie will be authenticated by kratos and oathkeeper
+    const { pathname } = window.location;
+    if (
+      !token &&
+      (pathname.includes('/resetpassword/') ||
+        pathname.includes('/signup/') ||
+        pathname.includes('/sso/'))
+    ) {
       return Promise.resolve(null);
     }
 
