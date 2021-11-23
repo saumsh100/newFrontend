@@ -1,19 +1,22 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map, List } from 'immutable';
-import { Form, Field, Header } from '../../library';
+import { Form, Field, Header, Tooltip } from '../../library';
+import Icon from '../../library/Icon';
 import ServicePractitioners from './ServicePractitioners';
 import styles from './styles.scss';
 
-const parseNum = value => value && parseInt(value, 10);
+const defaultPopover =
+  'There must always be one default reason. Please set another reason to the default to remove this reason as the default';
 
-const maxLength = max => value =>
-  (value && value.length > max ? `Must be ${max} characters or less` : undefined);
+const parseNum = (value) => value && parseInt(value, 10);
+
+const maxLength = (max) => (value) =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined;
 const maxLength45 = maxLength(45);
-const notNegative = value => (value && value <= 0 ? 'Must be greater than 0' : undefined);
-const maxDuration = value =>
-  (value && value > 180 ? 'Must be less than or equal to 180' : undefined);
+const notNegative = (value) => (value && value <= 0 ? 'Must be greater than 0' : undefined);
+const maxDuration = (value) =>
+  value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
 class ServiceDataItem extends Component {
   constructor(props) {
@@ -59,7 +62,6 @@ class ServiceDataItem extends Component {
       isHidden: service.get('isHidden'),
       isDefault: service.get('isDefault') || false,
     };
-
     return (
       <div className={styles.servicesFormRow}>
         <Header title="Reason Details" contentHeader />
@@ -107,10 +109,43 @@ class ServiceDataItem extends Component {
                 </div>
               </div>
               <div className={styles.servicesFormRow_hiddenText}>
-                <span className={styles.servicesFormRow_hiddenText_text}> Set as default </span>
-                <div className={styles.servicesFormRow_hiddenText_toggle}>
-                  <Field name="isDefault" component="Toggle" />
+                <div className={styles.servicesFormRow_hiddenText_text}>
+                  {' '}
+                  Set as default{' '}
+                  <Tooltip
+                    trigger={['hover']}
+                    overlay={
+                      <div className={styles.tooltipBody}>
+                        <div className={styles.tooltipBodyRow}>
+                          This is used to determine the default reason used by the online booking
+                          links sent to patients through Donna&apos;s automated recare messages.
+                        </div>
+                      </div>
+                    }
+                    placement="top"
+                  >
+                    <span>
+                      <Icon icon="question-circle" size={0.9} />
+                    </span>
+                  </Tooltip>
                 </div>
+
+                {service.get('isDefault') ? (
+                  <Tooltip
+                    trigger={['hover']}
+                    overlay={<div className={styles.tooltipWrapper}>{defaultPopover}</div>}
+                    placement="top"
+                    overlayClassName="light"
+                  >
+                    <div className={styles.servicesFormRow_hiddenText_toggle}>
+                      <Field name="isDefault" component="Toggle" disabled />
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <div className={styles.servicesFormRow_hiddenText_toggle}>
+                    <Field name="isDefault" component="Toggle" />
+                  </div>
+                )}
               </div>
             </div>
           </Form>
@@ -132,6 +167,8 @@ ServiceDataItem.propTypes = {
     unitCost: PropTypes.number,
     isHidden: PropTypes.bool,
     isDefault: PropTypes.bool,
+    get: PropTypes.func,
+    merge: PropTypes.func,
   }),
   practitioners: PropTypes.instanceOf(Map).isRequired,
   practitionerIds: PropTypes.oneOfType([

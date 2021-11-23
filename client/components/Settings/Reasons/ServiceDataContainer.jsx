@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -7,10 +6,13 @@ import { Map } from 'immutable';
 import ServiceDataItem from './ServiceDataItem';
 import { updateEntityRequest, deleteEntityRequest } from '../../../thunks/fetchEntities';
 import SettingsCard from '../Shared/SettingsCard';
-import { Card, Header, IconButton, Tab, Tabs } from '../../library';
+import { Card, Header, IconButton, Tab, Tabs, Tooltip } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
 import ReasonWeeklyHoursWrapper from './ReasonHours/Wrapper';
 import styles from './styles.scss';
+
+const defaultDeletePopover =
+  "This reason can't be deleted as it is the default online booking reason. Update the default reason if you wish to delete this reason.";
 
 class ServiceDataContainer extends Component {
   constructor(props) {
@@ -60,18 +62,36 @@ class ServiceDataContainer extends Component {
           headerClass={styles.serviceDataHeader}
           bodyClass={styles.serviceDataBody}
           rightActions={
-            <div
-              data-test-id="removeService"
-              onClick={this.deleteService}
-              role="button"
-              tabIndex={0}
-              onKeyDown={e => e.keyCode === 13 && this.deleteService()}
-            >
-              <IconButton icon="trash" iconType="solid" />
-            </div>
+            selectedService.isDefault ? (
+              <Tooltip
+                trigger={['hover']}
+                overlay={<div className={styles.tooltipWrapper}>{defaultDeletePopover}</div>}
+                placement="top"
+                overlayClassName="light"
+              >
+                <div
+                  data-test-id="removeService"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.keyCode === 13 && this.deleteService()}
+                >
+                  <IconButton icon="trash" iconType="solid" disabled />
+                </div>
+              </Tooltip>
+            ) : (
+              <div
+                data-test-id="removeService"
+                onClick={this.deleteService}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.keyCode === 13 && this.deleteService()}
+              >
+                <IconButton icon="trash" iconType="solid" />
+              </div>
+            )
           }
           subHeader={
-            <Tabs index={this.state.index} onChange={index => this.setState({ index })}>
+            <Tabs index={this.state.index} onChange={(index) => this.setState({ index })}>
               <Tab label="Reason Settings" data-test-id="tab_practitionerBasicData" />
               <Tab label="Override Availabilities" data-test-id="tab_practitionerOfficeHours" />
             </Tabs>
@@ -116,7 +136,7 @@ ServiceDataContainer.propTypes = {
   setServiceId: PropTypes.func.isRequired,
 };
 
-const mapActionsToProps = dispatch =>
+const mapActionsToProps = (dispatch) =>
   bindActionCreators(
     {
       updateEntityRequest,
@@ -125,7 +145,4 @@ const mapActionsToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  null,
-  mapActionsToProps,
-)(ServiceDataContainer);
+export default connect(null, mapActionsToProps)(ServiceDataContainer);
