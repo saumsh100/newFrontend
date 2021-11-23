@@ -28,6 +28,14 @@ export default function createEntityRequest({ key, entityData, url, params = {},
             }),
           );
         }
+        if (alert?.error && data?.smsStatus === 'failed') {
+          dispatch(
+            showAlertTimeout({
+              alert: alert.error,
+              type: 'error',
+            }),
+          );
+        }
         if (key === 'chats') {
           return data;
         }

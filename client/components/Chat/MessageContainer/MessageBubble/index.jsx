@@ -1,4 +1,3 @@
-
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -9,7 +8,7 @@ import { getUTCDate } from '../../../library';
 import RetryMessage from '../RetryMessage/RetryMessage';
 import styles from './styles.scss';
 
-const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
+const MessageBubble = ({ isFromPatient, textMessage, timezone, phoneLookupObj }) => {
   const status = textMessage.get('smsStatus');
   const hasFailed = status === 'failed';
   const bodyClasses = classNames(styles.bubbleBody, {
@@ -25,12 +24,30 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
   const body = textMessage.get('body');
   const time = getUTCDate(textMessage.get('createdAt'), timezone).format('h:mm a');
 
+  const messageBubbleCompFunc = () => {
+    let jsxObj;
+    if (hasFailed) {
+      if (phoneLookupObj?.isSMSEnabled === false) {
+        jsxObj = (
+          <div className={styles.notValidNoMessage}>
+            <span className={styles.notValidNoMessage__Body}>
+              Message not sent. Not a valid cellphone number.
+            </span>
+          </div>
+        );
+      } else {
+        jsxObj = <RetryMessage message={textMessage} />;
+      }
+    } else {
+      jsxObj = `Sent - ${time}`;
+    }
+    return jsxObj;
+  };
+
   return (
     <div className={styles.bubbleWrapper}>
       <div className={bodyClasses}>{body}</div>
-      <div className={timeClasses}>
-        {hasFailed ? <RetryMessage message={textMessage} /> : `Sent - ${time}`}
-      </div>
+      <div className={timeClasses}>{messageBubbleCompFunc()}</div>
     </div>
   );
 };
@@ -39,10 +56,16 @@ MessageBubble.propTypes = {
   isFromPatient: PropTypes.bool,
   textMessage: PropTypes.instanceOf(TextMessageModel).isRequired,
   timezone: PropTypes.string.isRequired,
+  phoneLookupObj: PropTypes.shape({
+    isPhoneLookupChecked: PropTypes.bool,
+    isSMSEnabled: PropTypes.bool,
+    isVoiceEnabled: PropTypes.bool,
+  }),
 };
 
 MessageBubble.defaultProps = {
   isFromPatient: true,
+  phoneLookupObj: {},
 };
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });

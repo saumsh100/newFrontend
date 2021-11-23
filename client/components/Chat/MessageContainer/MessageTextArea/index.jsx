@@ -89,13 +89,34 @@ class MessageTextArea extends Component {
   }
 
   render() {
-    const { chat, canSend, error, isPoC, patient, poc, isPhoneNoAvailable } = this.props;
+    const { chat, canSend, error, isPoC, patient, poc, isPhoneNoAvailable, phoneLookupObj } =
+      this.props;
     if (!chat || isPoC === null) return null;
     const hasPatient = patient && patient.id;
     const tooltipPlacement = isHub() ? 'bottomRight' : 'top';
     const patientFirstName = hasPatient && capitalize(patient.firstName);
     return (
       <SContainer className={styles.textAreaContainer}>
+        {isPoC && hasPatient && phoneLookupObj?.isSMSEnabled === false && (
+          <div className={styles.textAreaPoC}>
+            <img
+              src="/images/donna.png"
+              height="335px"
+              width="338px"
+              alt="Donna"
+              className={styles.donnaImg}
+            />
+            <div className={styles.notPoC}>
+              <p>
+                Looks like <strong>{patientFirstName}</strong>&apos;s cellphone number does not
+                support SMS. Add a valid cellphone number or try another contact method.
+              </p>
+              <Button className={styles.pocButton} onClick={() => this.patientProfile(patient)}>
+                Go to {patientFirstName}&apos;s Profile
+              </Button>
+            </div>
+          </div>
+        )}
         {!isPoC && hasPatient && (
           <div className={styles.textAreaPoC}>
             <img
@@ -223,6 +244,11 @@ MessageTextArea.propTypes = {
   selectChatOrCreate: PropTypes.func.isRequired,
   isPhoneNoAvailable: PropTypes.bool.isRequired,
   push: PropTypes.func.isRequired,
+  phoneLookupObj: PropTypes.shape({
+    isPhoneLookupChecked: PropTypes.bool,
+    isSMSEnabled: PropTypes.bool,
+    isVoiceEnabled: PropTypes.bool,
+  }),
 };
 
 MessageTextArea.defaultProps = {
@@ -232,6 +258,7 @@ MessageTextArea.defaultProps = {
   error: '',
   patient: {},
   isPoC: true,
+  phoneLookupObj: {},
 };
 
 function mapStateToProps(state, { chat = {} }) {

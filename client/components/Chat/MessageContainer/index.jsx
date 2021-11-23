@@ -232,7 +232,7 @@ class MessageContainer extends Component {
   }
 
   renderMessageGroup(messages) {
-    const { pendingMessages, selectedPatient } = this.props;
+    const { pendingMessages, selectedPatient, phoneLookupObj } = this.props;
     const activeAccount = this.props.activeAccount.toJS();
 
     if (!Array.isArray(messages) || messages.length < 1) {
@@ -270,7 +270,11 @@ class MessageContainer extends Component {
             className={isFromPatient ? styles.patientMessage : styles.clinicMessage}
           >
             {isFromPatient && avatar}
-            <MessageBubble textMessage={message} isFromPatient={isFromPatient} />
+            <MessageBubble
+              textMessage={message}
+              isFromPatient={isFromPatient}
+              phoneLookupObj={phoneLookupObj}
+            />
             {!isFromPatient && avatar}
             {isFromPatient && (
               <div
@@ -328,6 +332,7 @@ class MessageContainer extends Component {
       newChat,
       totalChatMessages,
       isNewconversation,
+      phoneLookupObj,
     } = this.props;
 
     const hasMoreMessages = totalChatMessages > loadedMessages;
@@ -370,6 +375,7 @@ class MessageContainer extends Component {
             selectChatOrCreate={this.props.selectChatOrCreate}
             sendingMessage={this.state.sendingMessage}
             onSendMessage={this.sendMessageHandler}
+            phoneLookupObj={phoneLookupObj}
           />
         </SFooter>
       </SContainer>
@@ -389,6 +395,7 @@ function mapStateToProps({ entities, auth, chat }) {
   const getPatient = ({ patientId, patientPhoneNumber }) =>
     patientId ? patients.get(patientId) : UnknownPatient(patientPhoneNumber, prospect);
   const selectedPatient = (selectedChat && getPatient(selectedChat)) || {};
+  const phoneLookupObj = chat.get('phoneLookupObj');
   return {
     conversationIsLoading: chat.get('conversationIsLoading'),
     textMessages,
@@ -401,6 +408,7 @@ function mapStateToProps({ entities, auth, chat }) {
     pendingMessages,
     timezone: auth.get('timezone'),
     cancelToken: chat.get('cancelToken'),
+    phoneLookupObj,
   };
 }
 
@@ -452,6 +460,11 @@ MessageContainer.propTypes = {
   cancelToken: PropTypes.func,
   timezone: PropTypes.string.isRequired,
   isNewconversation: PropTypes.bool.isRequired,
+  phoneLookupObj: PropTypes.shape({
+    isPhoneLookupChecked: PropTypes.bool,
+    isSMSEnabled: PropTypes.bool,
+    isVoiceEnabled: PropTypes.bool,
+  }),
 };
 
 MessageContainer.defaultProps = {
@@ -460,6 +473,7 @@ MessageContainer.defaultProps = {
   selectedPatient: null,
   pendingMessages: [],
   cancelToken: null,
+  phoneLookupObj: {},
 };
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

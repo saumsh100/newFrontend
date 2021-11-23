@@ -51,3 +51,15 @@
 .failedMessage {
   opacity: 0.5;
 }
+
+.notValidNoMessage {
+  align-items: baseline;
+  display: flex;
+}
+
+.notValidNoMessage__Body {
+  color: $danger-color;
+  font-size: 9px;
+  line-height: 11px;
+  opacity: 1;
+}
