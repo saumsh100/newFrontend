@@ -26,6 +26,7 @@ import {
   TimesCell,
   WaitSpotCheckboxCell,
   WaitspotNotesCell,
+  DaysCell,
 } from './cells';
 
 const WaitlistTableWithActions = ({
@@ -167,9 +168,13 @@ const WaitlistTableWithActions = ({
       accessor: (waitspot) => waitspot.duration || '',
     },
     {
+      id: 'dates',
       Header: 'Days',
-      accessor: 'dates',
+      accessor: (waitspot) => waitspot,
+      sortMethod: (a, b) => sortHelper(a.dates, b.dates),
+      Cell: DaysCell,
     },
+
     {
       id: 'times',
       Header: 'Times',

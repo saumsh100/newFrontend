@@ -151,6 +151,24 @@ TimesCell.propTypes = {
   }).isRequired,
 };
 
+export const DaysCell = ({ value }) => {
+  return (
+    <Tooltip
+      body={<div>{value.dates}</div>}
+      placement="below"
+      tipSize={0.01}
+      styleOverride={tableStyles.notesTooltip}
+    >
+      <div className={tableStyles.noteTDWrapper}>{value.dates}</div>
+    </Tooltip>
+  );
+};
+DaysCell.propTypes = {
+  value: PropTypes.shape({
+    dates: PropTypes.string,
+  }).isRequired,
+};
+
 export const WaitspotNotesCell = ({ value }) => (
   <Tooltip
     body={<div>{value.note}</div>}
