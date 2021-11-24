@@ -1,9 +1,11 @@
+import axios from 'axios';
 import jwt from 'jwt-decode';
 import { push } from 'connected-react-router';
 import { SubmissionError } from 'redux-form';
 import { loginSuccess, authLogout } from '../../reducers/auth';
 import { setDashboardDate } from '../../reducers/dashboard';
 import { setScheduleDate } from '../../actions/schedule';
+import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 import { updateFeatureFlagsContext, resetFeatureFlagsState } from '../featureFlags';
 import connectSocketToStoreLogin from '../../socket/connectSocketToStoreLogin';
 import SubscriptionManager from '../../util/graphqlSubscriptions';
@@ -154,24 +156,44 @@ export function switchActiveEnterprise(enterpriseId, redirectTo = '/') {
 }
 
 export function logout() {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     localStorage.removeItem('token');
     sessionStorage.removeItem('scheduleDate');
     sessionStorage.removeItem('dashboardDate');
-    const { auth } = getState();
+    const { auth, featureFlags } = getState();
     const isSSO = auth.getIn(['user', 'isSSO'], false);
     const url = isSSO ? '/auth/sso/session/' : '/auth/session/';
 
-    return httpClient()
-      .delete(url.concat(auth.get('sessionId')))
-      .then(({ data }) => {
-        dispatch(resetFeatureFlagsState());
-        dispatch(authLogout());
-        SubscriptionManager.accountId = null;
-        const action = isSSO ? push('/redirect', { redirectUrl: data.logoutUrl }) : push('/login');
+    const isEnterpriseManagementAuthEnabled = isFeatureEnabledSelector(
+      featureFlags.get('flags'),
+      'enterprise-management-authentication',
+    );
 
-        return dispatch(action);
-      });
+    if (!isEnterpriseManagementAuthEnabled) {
+      return httpClient()
+        .delete(url.concat(auth.get('sessionId')))
+        .then(({ data }) => {
+          dispatch(resetFeatureFlagsState());
+          dispatch(authLogout());
+          SubscriptionManager.accountId = null;
+          const action = isSSO
+            ? push('/redirect', { redirectUrl: data.logoutUrl })
+            : push('/login');
+          return dispatch(action);
+        });
+    }
+
+    // If Enterprise Management Authentication is enabled we use kratos to log the user out.
+    try {
+      const rootUrl = `${window.location.protocol}//${window.location.hostname}`;
+      const { data } = await axios.get(`${rootUrl}/kratos/self-service/logout/browser`);
+      await axios.get(data.logout_url);
+      dispatch(resetFeatureFlagsState());
+      SubscriptionManager.accountId = null;
+      window.location.href = `${rootUrl}/auth/login`;
+    } catch (error) {
+      console.error('failed to log out', error);
+    }
   };
 }
 
