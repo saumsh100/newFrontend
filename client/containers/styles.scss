@@ -91,3 +91,16 @@
     height: 100%;
   }
 }
+
+.emNavFooter {
+  align-items: center;
+  bottom: 15px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  > div {
+    margin: auto;
+  }
+}

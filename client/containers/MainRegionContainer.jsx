@@ -1,15 +1,9 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import MainRegion from '../components/MainRegion';
-import MainRegionElectron from '../components/MainRegion/Electron';
-import { isHub } from '../util/hub';
 
 function MainRegionContainer(props) {
-  if (isHub()) {
-    return <MainRegionElectron {...props} />;
-  }
   return <MainRegion {...props} />;
 }
 
@@ -23,9 +17,6 @@ function mapStateToProps({ toolbar }) {
   };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  null,
-);
+const enhance = connect(mapStateToProps, null);
 
 export default enhance(MainRegionContainer);

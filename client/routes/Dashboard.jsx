@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import Login from '../components/Login';
 import DashboardApp from '../containers/DashboardApp';
-import DashboardAppV2 from '../containers/DashboardAppV2';
 import FourZeroFour from '../components/FourZeroFour';
 import SignUp from '../components/SignUpInvite';
 import ForgotPassword from '../components/ForgotPassword';
@@ -51,9 +51,10 @@ const DashboardRouter = ({
   isSSO,
   navigationPreferences,
 }) => {
-  if (!navigationPreferences) {
-    return null;
-  }
+  // Dynamically import component library css when Enterprise Management phase 2 is featureflag is enabled
+  if (enterpriseManagementPhaseTwoActive) import('@carecru/component-library/dist/carecru.css');
+
+  if (!navigationPreferences) return null;
 
   const n = (page) => navigationPreferences[page] !== 'disabled';
   const getAuthorizedRoutes = () => (
@@ -82,13 +83,11 @@ const DashboardRouter = ({
     </div>
   );
 
-  const DashboardComponent = enterpriseManagementPhaseTwoActive ? DashboardAppV2 : DashboardApp;
-
   const Dashboard = (props) =>
     isAuth ? (
-      <DashboardComponent {...props}>
+      <DashboardApp {...props}>
         <Route render={getAuthorizedRoutes} />
-      </DashboardComponent>
+      </DashboardApp>
     ) : (
       <Redirect
         to={{
@@ -131,7 +130,11 @@ const DashboardRouter = ({
 
   return (
     <ConnectedRouter history={history}>
-      <div>
+      <div
+        className={classNames({
+          'enterprise-management-phase-two': enterpriseManagementPhaseTwoActive,
+        })}
+      >
         <Switch>
           <Route
             exact

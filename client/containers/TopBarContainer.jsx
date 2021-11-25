@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,8 +14,7 @@ class TopBarContainer extends PureComponent {
   componentDidMount() {
     Promise.all([
       this.props.fetchEntities({ url: `/api/accounts/${this.props.authAccountId}/users` }),
-      this.props.fetchEntities({ key: 'accounts',
-        join: ['weeklySchedule'] }),
+      this.props.fetchEntities({ key: 'accounts', join: ['weeklySchedule'] }),
       this.props.fetchEntities({
         key: 'accounts',
         url: '/api/accounts',
@@ -60,7 +58,7 @@ const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {
   const accountsFlagMap = featureFlags.getIn(['flags', 'accounts-available-to-switch']);
   const enterpriseAccountsMap = entities
     .getIn(['accounts', 'models'])
-    .filter(account => account.enterpriseId === auth.get('enterpriseId'));
+    .filter((account) => account.enterpriseId === auth.get('enterpriseId'));
 
   return {
     accountsFlagMap,
@@ -76,7 +74,7 @@ const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {
   };
 };
 
-const mapActionsToProps = dispatch =>
+const mapActionsToProps = (dispatch) =>
   bindActionCreators(
     {
       setIsCollapsed,

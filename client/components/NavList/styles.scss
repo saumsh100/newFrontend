@@ -23,6 +23,10 @@
   }
 }
 
+.navItemEMPhaseTwo {
+  height: 40px;
+}
+
 .activeItem {
   background-color: darken(#59616b, 5%);
   border-left: $selection-border $primary-color;

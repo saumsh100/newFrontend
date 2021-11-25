@@ -1,6 +1,5 @@
-
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { lazy } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import TopBarContainer from './TopBarContainer';
@@ -17,6 +16,9 @@ import styles from './styles.scss';
 import { isFeatureEnabledSelector } from '../reducers/featureFlags';
 import { fetchWaitingRoomQueue } from '../thunks/waitingRoom';
 import { loadUnreadChatCount } from '../thunks/chat';
+
+// eslint-disable-next-line import/no-unresolved
+const EmAvatarWidget = lazy(() => import('EM_MFE/EmAvatarWidget'));
 
 class DashboardApp extends React.Component {
   constructor(props) {
@@ -91,16 +93,28 @@ class DashboardApp extends React.Component {
         <CallerModal />
         <TopBarContainer />
         {!isCollapsed && (
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           <div
             className={styles.overlay}
             onClick={() => setIsCollapsed(!isCollapsed)}
             role="button"
+            label="collapse"
+            onKeyDown={() => null}
             tabIndex={0}
           />
         )}
         <NavRegionContainer>
           <NavList location={location} isCollapsed={isCollapsed} />
+
+          {this.props.enterpriseManagementPhaseTwoActive && (
+            <div className={styles.emNavFooter}>
+              <React.Suspense fallback="Loading Avatar..">
+                <EmAvatarWidget
+                  isCollapsed={isCollapsed}
+                  style={isCollapsed ? {} : { minWidth: 135 }}
+                />
+              </React.Suspense>
+            </div>
+          )}
         </NavRegionContainer>
         <MainRegionContainer>
           {isSearchCollapsed && (
@@ -127,6 +141,10 @@ function mapStateToProps({ featureFlags, toolbar, auth }) {
     isCollapsed: toolbar.get('isCollapsed'),
     isSearchCollapsed: toolbar.get('isSearchCollapsed'),
     accountId: auth.get('accountId'),
+    enterpriseManagementPhaseTwoActive: featureFlags.getIn([
+      'flags',
+      'enterprise-management-phase-2',
+    ]),
   };
 }
 
@@ -149,6 +167,7 @@ DashboardApp.propTypes = {
   accountId: PropTypes.string.isRequired,
   fetchWaitingRoomQueue: PropTypes.func.isRequired,
   loadUnreadChatCount: PropTypes.func.isRequired,
+  enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardApp);

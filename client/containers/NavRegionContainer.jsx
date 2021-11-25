@@ -1,15 +1,9 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import NavRegion from '../components/NavRegion';
-import NavRegionElectron from '../components/NavRegion/Electron';
-import { isHub } from '../util/hub';
 
 function NavRegionContainer(props) {
-  if (isHub()) {
-    return <NavRegionElectron {...props} />;
-  }
   return <NavRegion {...props} />;
 }
 
@@ -23,9 +17,6 @@ function mapStateToProps({ toolbar }) {
   };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  null,
-);
+const enhance = connect(mapStateToProps, null);
 
 export default enhance(NavRegionContainer);

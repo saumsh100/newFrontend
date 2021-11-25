@@ -16,6 +16,7 @@ function NavList({
   onlineRequests,
   navigationPreferences,
   waitingRoomQueueLength,
+  enterpriseManagementPhaseTwoActive,
 }) {
   const { navItem, activeItem } = styles;
 
@@ -38,7 +39,10 @@ function NavList({
     let classes = active ? activeClass : inactiveClass;
 
     disabled = disabled || type === 'disabled';
-    classes = classNames(classes, { [styles.disabledItem]: disabled });
+    classes = classNames(classes, {
+      [styles.disabledItem]: disabled,
+      [styles.navItemEMPhaseTwo]: enterpriseManagementPhaseTwoActive,
+    });
 
     const labelComponent = (
       <div className={classNames(inactiveLabelClass, { [styles.hiddenLabel]: isCollapsed })}>
@@ -49,7 +53,13 @@ function NavList({
     return (
       <Link to={path} disabled={disabled} href={path}>
         <NavItem className={classes}>
-          <Icon icon={icon} className={styles.icon} size={1.5} type={iconType} badgeText={badge} />
+          <Icon
+            icon={icon}
+            className={styles.icon}
+            size={enterpriseManagementPhaseTwoActive ? 1 : 1.5}
+            type={iconType}
+            badgeText={badge}
+          />
           {labelComponent}
         </NavItem>
       </Link>
@@ -141,7 +151,7 @@ function NavList({
   SubNavItem.defaultProps = { disabled: false };
 
   // Helper to reduce code length on for single line components
-  const n = (key) => navigationPreferences[key];
+  const getNavigationPreference = (key) => navigationPreferences[key];
 
   return (
     <div className={styles.navListWrapper}>
@@ -151,26 +161,26 @@ function NavList({
           icon="tachometer"
           label="Dashboard"
           badge={waitingRoomQueueLength}
-          type={n('dashboard')}
+          type={getNavigationPreference('dashboard')}
         />
         <SingleNavItem
           path="/intelligence"
           label="Intelligence"
           icon="chart-bar"
-          type={n('intelligence')}
+          type={getNavigationPreference('intelligence')}
         />
         <SingleNavItem
           path="/schedule"
           icon="calendar-alt"
           label="Schedule"
           badge={onlineRequests}
-          type={n('schedule')}
+          type={getNavigationPreference('schedule')}
         />
         <SingleNavItem
           path="/patients/list"
           icon="heart"
           label="Patient Management"
-          type={n('patients')}
+          type={getNavigationPreference('patients')}
         />
         <SingleNavItem
           path="/chat"
@@ -178,14 +188,29 @@ function NavList({
           label="Chat"
           badge={unreadChats}
           active={location.pathname.indexOf('/chat') !== -1}
-          type={n('chat')}
+          type={getNavigationPreference('chat')}
         />
-        <SingleNavItem path="/calls" icon="phone" label="Call Tracking" type={n('calls')} />
-        <MultiNavItem path="/reputation" icon="bullhorn" label="Marketing" type={n('marketing')}>
+        <SingleNavItem
+          path="/calls"
+          icon="phone"
+          label="Call Tracking"
+          type={getNavigationPreference('calls')}
+        />
+        <MultiNavItem
+          path="/reputation"
+          icon="bullhorn"
+          label="Marketing"
+          type={getNavigationPreference('marketing')}
+        >
           <SubNavItem path="/reputation/reviews" label="Reviews" />
           <SubNavItem path="/reputation/listings" label="Listings" />
         </MultiNavItem>
-        <MultiNavItem path="/settings" icon="cogs" label="Account Settings" type={n('settings')}>
+        <MultiNavItem
+          path="/settings"
+          icon="cogs"
+          label="Account Settings"
+          type={getNavigationPreference('settings')}
+        >
           <SubNavItem path="/settings/practice" label="Practice" />
           <SubNavItem path="/settings/reasons" label="Reasons" />
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
@@ -224,8 +249,8 @@ NavList.propTypes = {
     marketing: PropTypes.string,
     settings: PropTypes.string,
   }),
-
   waitingRoomQueueLength: PropTypes.number.isRequired,
+  enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,
 };
 
 NavList.defaultProps = {
@@ -257,6 +282,10 @@ function mapStateToProps({ chat, entities, waitingRoom, featureFlags }) {
     onlineRequests: requestsLength,
     waitingRoomQueueLength:
       waitingRoomQueue && canSeeVirtualWaitingRoom ? waitingRoomQueue.length : 0,
+    enterpriseManagementPhaseTwoActive: featureFlags.getIn([
+      'flags',
+      'enterprise-management-phase-2',
+    ]),
   };
 }
 
