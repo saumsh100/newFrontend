@@ -12,7 +12,14 @@
   padding: 10px 20px;
 }
 
-.smsLookup {
+.greyLookupLabel {
   color: darken($primary-darkgrey, 10%);
+}
+
+.greenLookupLabel {
+  color: $primary-green;
+}
+
+.smsPaddingStyling {
   padding-right: 8px;
 }

@@ -57,7 +57,7 @@ const About = ({ patient, timezone, phoneLookupObj }) => {
               </Content>
             </Col>
             {patient?.cellPhoneNumber && phoneLookupObj?.isPhoneLookupChecked && (
-              <Col xs={12}>
+              <Col xs={12} className={styles.phoneLookup}>
                 <PhoneLookupComponent phoneLookupObj={phoneLookupObj} />
               </Col>
             )}
