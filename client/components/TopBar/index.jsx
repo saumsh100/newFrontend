@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -12,6 +11,7 @@ import EnabledFeature from '../library/EnabledFeature';
 import AdaptiveLogo from './AdaptiveLogo';
 import MyFollowUpsButton from './MyFollowUpsButton';
 import styles from './styles.scss';
+import FormNotificationsButton from './FormNotificationsButton';
 
 const UserMenu = ({ user, activeAccount, enterprise, role, multipleAccounts, ...props }) => {
   const isEnterprise = multipleAccounts && (role === 'OWNER' || role === 'SUPERADMIN');
@@ -118,11 +118,12 @@ class TopBar extends Component {
       activeAccountMap,
     } = this.props;
 
-    const allowedAccounts = accountsFlagMap && accountsFlagMap.toJS().map(a => a.value);
+    const allowedAccounts = accountsFlagMap && accountsFlagMap.toJS().map((a) => a.value);
     const enterpriseAccounts = Object.values(enterpriseAccountsMap.toJS()) || [];
-    const accountsList = allowedAccounts.length > 0
-      ? enterpriseAccounts.filter(a => allowedAccounts.indexOf(a.id) > -1)
-      : enterpriseAccounts;
+    const accountsList =
+      allowedAccounts.length > 0
+        ? enterpriseAccounts.filter((a) => allowedAccounts.indexOf(a.id) > -1)
+        : enterpriseAccounts;
     const accounts = isSuperAdmin ? enterpriseAccounts : accountsList;
 
     const activeAccount = activeAccountMap && activeAccountMap.toJS();
@@ -263,7 +264,7 @@ class TopBar extends Component {
             <li>
               <DropdownMenu
                 className={styles.userDropdownMenu}
-                labelComponent={props => (
+                labelComponent={(props) => (
                   <EnabledFeature
                     predicate={() => true}
                     render={({ userRole, flags }) => {
@@ -308,6 +309,14 @@ class TopBar extends Component {
                 </MenuItem>
               </DropdownMenu>
             </li>
+            <EnabledFeature
+              predicate={({ flags }) => flags.get('use-forms-from-form-service')}
+              render={() => (
+                <li>
+                  <FormNotificationsButton />
+                </li>
+              )}
+            />
             <EnabledFeature
               predicate={({ flags }) => flags.get('follow-ups-shortcut-icon')}
               render={() => (
