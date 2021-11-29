@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import GeneralForm from './GeneralForm';
 import Address from './Address';
+import DisplayName from './DisplayName';
+
 import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 import { uploadLogo, deleteLogo } from '../../../../thunks/accounts';
 import { Dropzone, AccountLogo, Button, Header } from '../../../library';
@@ -73,6 +75,7 @@ class General extends Component {
       website: activeAccount.get('website'),
       phoneNumber: activeAccount.get('phoneNumber'),
       contactEmail: activeAccount.get('contactEmail'),
+      facebookUrl: activeAccount.get('facebookUrl'),
       unit: activeAccount.get('unit'),
       notificationEmails: activeAccount.get('notificationEmails')
         ? activeAccount.get('notificationEmails').join(', ')
@@ -116,6 +119,10 @@ class General extends Component {
         <Header title="Address Information" contentHeader />
         <div className={styles.formContainer}>
           <Address activeAccount={activeAccount} />
+        </div>
+        <Header contentHeader title="Patient Name Preference" key="Patient Name Preference" />
+        <div className={styles.formContainer} key="Patient Name Preference">
+          <DisplayName role={role} />
         </div>
       </SettingsCard>
     );

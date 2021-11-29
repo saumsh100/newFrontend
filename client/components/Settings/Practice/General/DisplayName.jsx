@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Form, Field } from '../../../library';
+import { Form, Field, Tooltip, Icon } from '../../../library';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import Account from '../../../../entities/models/Account';
 import styles from './styles.scss';
@@ -18,7 +17,6 @@ const nameOptions = [
     value: 'prefName',
   },
 ];
-
 class DisplayName extends React.Component {
   constructor(props) {
     super(props);
@@ -64,14 +62,32 @@ class DisplayName extends React.Component {
         onSubmit={this.handleDisplayNameSubmit}
         alignSave="left"
       >
-        <p className={styles.descriptionMessage}>
-          Set the way you would like Donna to communicate with your patients
-        </p>
+        <div className={styles.descriptionMessage}>
+          Set the way you would like Donna to communicate with your patients{' '}
+          {this.props.role !== 'OWNER' && this.props.role !== 'SUPERADMIN' ? (
+            <Tooltip
+              trigger={['hover']}
+              overlay={
+                <div className={styles.tooltipWrapper}>
+                  <div className={styles.tooltipBodyRow}>
+                    Please contact your account owner or the Support team to edit this.
+                  </div>
+                </div>
+              }
+              placement="top"
+            >
+              <span>
+                <Icon icon="question-circle" size={0.9} />
+              </span>
+            </Tooltip>
+          ) : null}
+        </div>
         <Field
           name="displayNameOption"
           label="Patient Name Preference"
           component="DropdownSelect"
           options={nameOptions}
+          disabled={this.props.role !== 'OWNER' && this.props.role !== 'SUPERADMIN'}
         />
       </Form>
     );
@@ -81,8 +97,11 @@ class DisplayName extends React.Component {
 DisplayName.propTypes = {
   updateEntityRequest: PropTypes.func.isRequired,
   activeAccount: PropTypes.instanceOf(Account).isRequired,
+  role: PropTypes.string,
 };
-
+DisplayName.defaultProps = {
+  role: '',
+};
 const mapStateToProps = ({ entities, auth }) => {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const displayNameOption = activeAccount.get('displayNameOption') || 'firstName';
@@ -93,9 +112,6 @@ const mapStateToProps = ({ entities, auth }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ updateEntityRequest }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ updateEntityRequest }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DisplayName);
+export default connect(mapStateToProps, mapDispatchToProps)(DisplayName);

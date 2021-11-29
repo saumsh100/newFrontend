@@ -31,7 +31,6 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     canSendRecalls: activeAccount.get('canSendRecalls'),
     canSendReviews: activeAccount.get('canSendReviews'),
     googlePlaceId: activeAccount.get('googlePlaceId'),
-    facebookUrl: activeAccount.get('facebookUrl'),
     externalId: activeAccount.get('externalId'),
     sendRequestEmail: activeAccount.get('sendRequestEmail'),
     omitChairIdsString: activeAccount.get('omitChairIds').join(','),
@@ -94,7 +93,6 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <VendestaInfo activeAccount={activeAccount} />
       <CallRail activeAccount={activeAccount} />
       <Field name="suggestedChairId" label="Suggested Chair ID" data-test-id="suggestedChairId" />
-      <Field name="facebookUrl" label="Facebook URL" data-test-id="facebookUrl" />
       <Field name="googlePlaceId" label="Google Place ID" data-test-id="googlePlaceId" />
       <Field
         name="omitPractitionerIdsString"

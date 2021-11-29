@@ -1,28 +1,24 @@
-
 import React from 'react';
 import { getFormValues, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
-import { Field } from '../../../library';
+import { Field, Tooltip } from '../../../library';
 import { emailValidate, notNegative, validateEmails } from '../../../library/Form/validate';
 import FormButton from '../../../library/Form/FormButton';
 import Icon from '../../../library/Icon';
-import Tooltip from '../../../Tooltip';
 import styles from './styles.scss';
 
-const maxLength = max => value =>
-  (value && value.length > max ? `Must be ${max} characters or less` : undefined);
+const maxLength = (max) => (value) =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined;
 const maxLength25 = maxLength(50);
-
 const emailValidateNull = (str) => {
   if (str && !str.length) {
     return undefined;
   }
   return emailValidate(str);
 };
-
-const maxUnitSize = value => value && value > 60 && 'Must be less than or equal to 60';
+const maxUnitSize = (value) => value && value > 60 && 'Must be less than or equal to 60';
 
 const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
   const emailValid = role === 'SUPERADMIN' ? emailValidateNull : emailValidate;
@@ -46,7 +42,7 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
     <form
       onSubmit={handleSubmit}
       data-test-id="PracticeDetailsForm123"
-      onChange={e => e.stopPropagation()}
+      onChange={(e) => e.stopPropagation()}
     >
       <Field name="name" label="Name" validate={[maxLength25]} data-test-id="name" />
       <Field name="website" label="Website" data-test-id="website" />
@@ -62,6 +58,34 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
         validate={[emailValid]}
         data-test-id="contactEmail"
       />
+      {role !== 'OWNER' && role !== 'SUPERADMIN' ? (
+        <Tooltip
+          trigger={['hover']}
+          overlay={
+            <div className={styles.tooltipWrapper}>
+              <div className={styles.tooltipBodyRow}>
+                Please contact your account owner or the Support team to edit this.
+              </div>
+            </div>
+          }
+          placement="right"
+        >
+          <Field
+            name="facebookUrl"
+            label="Facebook URL"
+            data-test-id="facebookUrl"
+            disabled={role !== 'OWNER' && role !== 'SUPERADMIN'}
+          />
+        </Tooltip>
+      ) : (
+        <Field
+          name="facebookUrl"
+          label="Facebook URL"
+          data-test-id="facebookUrl"
+          disabled={role !== 'OWNER' && role !== 'SUPERADMIN'}
+        />
+      )}
+
       <Field
         name="unit"
         label="Schedule Unit Value"
@@ -79,22 +103,27 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
       />
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
-          <div className={styles.paddingText}>Disable Email Notifications for Users</div>
-          <Tooltip
-            placement="below"
-            body={
-              <div className={styles.tooltipBody}>
-                <div className={styles.tooltipBodyRow}>
-                  ON = Only sends email notifications to emails listed above
+          <div className={styles.paddingText}>
+            Disable Email Notifications for Users{' '}
+            <Tooltip
+              trigger={['hover']}
+              overlay={
+                <div className={styles.tooltipWrapper}>
+                  <div className={styles.tooltipBodyRow}>
+                    ON = Only sends email notifications to emails listed above
+                  </div>
+                  <div className={styles.tooltipBodyRow}>
+                    OFF = Sends email notifications to all users AND emails listed above
+                  </div>
                 </div>
-                <div className={styles.tooltipBodyRow}>
-                  OFF = Sends email notifications to all users AND emails listed above
-                </div>
-              </div>
-            }
-          >
-            <Icon icon="question-circle" size={0.9} />
-          </Tooltip>
+              }
+              placement="bottom"
+            >
+              <span>
+                <Icon icon="question-circle" size={0.9} />
+              </span>
+            </Tooltip>
+          </div>
           <div className={styles.paddingField_toggle} data-test-id="toggle_useNotificationEmails">
             <Field
               component="Toggle"
@@ -118,6 +147,7 @@ GeneralForm.propTypes = {
     name: PropTypes.string,
     website: PropTypes.string,
     phoneNumber: PropTypes.string,
+    facebookUrl: PropTypes.string,
     contactEmail: PropTypes.string,
     notificationEmails: PropTypes.string,
     useNotificationEmails: PropTypes.bool,
@@ -132,17 +162,18 @@ GeneralForm.defaultProps = {
     name: '',
     website: '',
     phoneNumber: '',
+    facebookUrl: '',
     contactEmail: '',
     notificationEmails: '',
     useNotificationEmails: false,
   },
 };
 
-const withStateForm = connect(state => ({
+const withStateForm = connect((state) => ({
   formValues: getFormValues('PracticeDetailsForm123')(state),
 }))(GeneralForm);
 
-const withReduxForm = BaseComponent => reduxForm()(BaseComponent);
+const withReduxForm = (BaseComponent) => reduxForm()(BaseComponent);
 
 const enhance = compose(withReduxForm);
 export default enhance(withStateForm);
