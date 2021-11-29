@@ -12,7 +12,7 @@ import ReasonWeeklyHoursWrapper from './ReasonHours/Wrapper';
 import styles from './styles.scss';
 
 const defaultDeletePopover =
-  "This reason can't be deleted as it is the default online booking reason. Update the default reason if you wish to delete this reason.";
+  "This reason can't be deleted because it is set as default. Update the default reason to delete this.";
 
 class ServiceDataContainer extends Component {
   constructor(props) {

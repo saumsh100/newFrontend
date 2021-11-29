@@ -6,8 +6,10 @@ import Icon from '../../library/Icon';
 import ServicePractitioners from './ServicePractitioners';
 import styles from './styles.scss';
 
+const defaultTogglePopover =
+  'There must always be one reason set as default. Set another reason as default to disable this.';
 const defaultPopover =
-  'There must always be one default reason. Please set another reason to the default to remove this reason as the default';
+  "Patients are directed to request this appointment reason through Donna's automated recalls.";
 
 const parseNum = (value) => value && parseInt(value, 10);
 
@@ -116,10 +118,7 @@ class ServiceDataItem extends Component {
                     trigger={['hover']}
                     overlay={
                       <div className={styles.tooltipBody}>
-                        <div className={styles.tooltipBodyRow}>
-                          This is used to determine the default reason used by the online booking
-                          links sent to patients through Donna&apos;s automated recare messages.
-                        </div>
+                        <div className={styles.tooltipBodyRow}>{defaultPopover}</div>
                       </div>
                     }
                     placement="top"
@@ -133,7 +132,7 @@ class ServiceDataItem extends Component {
                 {service.get('isDefault') ? (
                   <Tooltip
                     trigger={['hover']}
-                    overlay={<div className={styles.tooltipWrapper}>{defaultPopover}</div>}
+                    overlay={<div className={styles.tooltipWrapper}>{defaultTogglePopover}</div>}
                     placement="top"
                     overlayClassName="light"
                   >
