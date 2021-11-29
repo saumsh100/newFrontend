@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-@Library('pipeline-library@1.0.3') _
+@Library('pipeline-library@1.0.4') _
 import com.carecru.pipeline.library.deployment.Deployment
 
 try {
