@@ -72,7 +72,7 @@ class ChatListItem extends Component {
 
     const messageDate = daysDifference ? mDate.format('YY/MM/DD') : mDate.format('h:mma');
 
-    const isUnread = !isActive && chat.hasUnread;
+    const isUnread = chat.hasUnread;
 
     const listItemClass = isHub() ? styles.hubListItem : styles.chatListItem;
 
