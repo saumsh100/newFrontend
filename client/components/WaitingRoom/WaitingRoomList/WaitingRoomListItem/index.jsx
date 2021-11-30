@@ -26,16 +26,14 @@ const WaitingRoomListItem = ({ waitingRoomPatient, onNotify, onClean, onComplete
   } = waitingRoomPatient;
 
   let selectedAppointment;
-  let selectedPatient;
+  const selectedPatient = patient;
   if (sentRemindersPatients.length > 0) {
     const sentRemindersPatient = sentRemindersPatients.sort((aSrp, bSrp) =>
       aSrp.appointment.startDate < bSrp.appointment.startDate ? -1 : 1,)[0];
 
     selectedAppointment = sentRemindersPatient.appointment;
-    selectedPatient = sentRemindersPatient.patient;
   } else {
     selectedAppointment = appointment;
-    selectedPatient = patient;
   }
 
   const { practitioner, startDate, endDate } = selectedAppointment;
