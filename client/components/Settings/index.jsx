@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -14,7 +13,8 @@ export default function Settings(props) {
   if (
     location.pathname === '/settings/reasons' ||
     location.pathname === '/settings/practitioners' ||
-    location.pathname === '/settings/forms'
+    location.pathname === '/settings/forms' ||
+    location.pathname === '/settings/forms/submissions'
   ) {
     showNav = <div className={styles.rowContainer}>{children}</div>;
   } else {
