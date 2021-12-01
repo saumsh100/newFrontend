@@ -1,4 +1,3 @@
-
 import createModel from '../createModel';
 import { httpClient } from '../../util/httpClient';
 import { getUTCDate, getTodaysDate } from '../../components/library/util/datetime';
@@ -55,6 +54,9 @@ const PatientSchema = {
   isProspect: false,
   request: null,
   foundChatId: null,
+  // PhoneLookup keys
+  isSMSEnabled: null,
+  isVoiceEnabled: null,
 };
 
 export default class Patient extends createModel(PatientSchema, 'Patient') {

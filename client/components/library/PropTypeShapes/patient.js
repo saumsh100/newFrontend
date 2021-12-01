@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 const PatientShape = {
@@ -60,6 +59,8 @@ const PatientShape = {
   workNumber: PropTypes.number,
   isUnknown: PropTypes.bool,
   foundChatId: PropTypes.string,
+  isSMSEnabled: PropTypes.bool,
+  isVoiceEnabled: PropTypes.bool,
 };
 
 export default PatientShape;

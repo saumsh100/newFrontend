@@ -38,7 +38,7 @@ class PatientActionsDropdown extends Component {
   }
 
   render() {
-    const { canTextPatient } = this.props;
+    const { canTextPatient, isSmsDisabled } = this.props;
 
     const actionMenuItems = [
       {
@@ -59,9 +59,15 @@ class PatientActionsDropdown extends Component {
       {
         key: 'go-to-chat',
         children: <div>Text Patient</div>,
-        onClick: () => canTextPatient ? this.handleGoToChat(this.props.patient.id) : {},
+        onClick: () => (canTextPatient ? this.handleGoToChat(this.props.patient.id) : {}),
         disabled: !canTextPatient,
-        tooltipText: (
+        tooltipText: isSmsDisabled ? (
+          <>
+            This patient does not have a valid cellphone number.
+            <br />
+            Update their contact information to send them a text.
+          </>
+        ) : (
           <>
             This patient has no cellphone number.
             <br />
@@ -89,11 +95,13 @@ PatientActionsDropdown.propTypes = {
   getOrCreateChatForPatient: PropTypes.func.isRequired,
   patientChat: PropTypes.string,
   push: PropTypes.func.isRequired,
+  isSmsDisabled: PropTypes.bool,
 };
 
 PatientActionsDropdown.defaultProps = {
   canTextPatient: false,
   patientChat: '',
+  isSmsDisabled: false,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -111,18 +119,25 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({ chat }, { patient }) {
-
   let patientObj = patient;
+  let canTextPatient;
+  let isSmsDisabled;
 
   if (typeof patientObj.toJS === 'function') {
     patientObj = patient.toJS();
   }
-
-  const canTextPatient = !!(patientObj && (patientObj.foundChatId || patientObj.cellPhoneNumber));
-
+  if (patientObj && patientObj.isSMSEnabled !== null && patientObj.isSMSEnabled !== undefined) {
+    const { foundChatId, cellPhoneNumber, isSMSEnabled } = patientObj;
+    canTextPatient = !!((foundChatId || cellPhoneNumber) && isSMSEnabled);
+    isSmsDisabled = !isSMSEnabled;
+  } else {
+    isSmsDisabled = false;
+    canTextPatient = !!(patientObj && (patientObj.foundChatId || patientObj.cellPhoneNumber));
+  }
   return {
     canTextPatient,
     patientChat: chat.get('patientChat'),
+    isSmsDisabled,
   };
 }
 

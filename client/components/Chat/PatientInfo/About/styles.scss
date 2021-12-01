@@ -9,7 +9,16 @@
 }
 
 .phoneLookup {
-  padding: 10px 20px;
+  margin-top: -10px;
+  padding: 0 20px;
+  padding-bottom: 10px;
+}
+
+.lookupLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
 }
 
 .greyLookupLabel {

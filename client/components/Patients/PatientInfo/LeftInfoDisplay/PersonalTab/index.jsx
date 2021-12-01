@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -18,8 +17,9 @@ function PersonalTab({ patient, timezone }) {
     </div>
   );
 
-  const birthDateData = isDateValid(patient.birthDate)
-    && getFormattedDate(patient.birthDate, 'MMMM Do, YYYY', timezone);
+  const birthDateData =
+    isDateValid(patient.birthDate) &&
+    getFormattedDate(patient.birthDate, 'MMMM Do, YYYY', timezone);
 
   return (
     <Grid className={styles.grid}>
@@ -51,6 +51,10 @@ const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 export default connect(mapStateToProps, null)(PersonalTab);
 
 PersonalTab.propTypes = {
-  patient: PropTypes.shape(patientShape).isRequired,
+  patient: PropTypes.shape(patientShape),
   timezone: PropTypes.string.isRequired,
+};
+
+PersonalTab.defaultProps = {
+  patient: {},
 };

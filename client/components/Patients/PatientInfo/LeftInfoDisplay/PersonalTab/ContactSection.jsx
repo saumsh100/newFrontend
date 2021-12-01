@@ -1,14 +1,22 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatPhoneNumber } from '../../../../../util/isomorphic';
 import { Row, Col, PointOfContactBadge } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
 import { patientShape } from '../../../../library/PropTypeShapes';
+import PhoneLookupComponent from '../../../../Chat/PatientInfo/About/PhoneLookupComponent';
 import styles from '../styles.scss';
 
 export default function ContactSection(props) {
   const { patient, className } = props;
+  let phoneLookupObj = {};
+  if (patient?.isSMSEnabled !== null && patient?.isSMSEnabled !== undefined) {
+    phoneLookupObj = {
+      isPhoneLookupChecked: true,
+      isSMSEnabled: patient.isSMSEnabled,
+      isVoiceEnabled: patient.isVoiceEnabled,
+    };
+  }
   return (
     <div className={className}>
       <div className={styles.subHeader}>Contact</div>
@@ -21,6 +29,12 @@ export default function ContactSection(props) {
               )
             }
           </InfoDump>
+          {patient?.cellPhoneNumber && phoneLookupObj?.isPhoneLookupChecked && (
+            <PhoneLookupComponent
+              phoneLookupObj={phoneLookupObj}
+              preferences={patient.preferences}
+            />
+          )}
         </Col>
         <Col xs={6} className={styles.paddingPhones}>
           <InfoDump

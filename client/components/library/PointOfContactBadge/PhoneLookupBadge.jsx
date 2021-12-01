@@ -7,7 +7,7 @@ import XIcon from './XIcon';
 import CheckIcon from './CheckIcon';
 import styles from './styles.scss';
 
-const PhoneLookupBadge = ({ isSupport, mode }) => {
+const PhoneLookupBadge = ({ isSupport, isContactMethodSetting, mode }) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const PhoneLookupBadge = ({ isSupport, mode }) => {
         </div>
         <div className={styles.tooltipHead}>Contact Method Settings</div>
         <div className={styles.tooltipStatus}>
-          {isSupport ? `${mode} Enabled` : `${mode} Disabled`}
+          {isContactMethodSetting ? `${mode} Enabled` : `${mode} Disabled`}
         </div>
       </div>
     );
@@ -54,6 +54,7 @@ const PhoneLookupBadge = ({ isSupport, mode }) => {
 
 PhoneLookupBadge.propTypes = {
   isSupport: PropTypes.bool.isRequired,
+  isContactMethodSetting: PropTypes.bool.isRequired,
   mode: PropTypes.string.isRequired,
 };
 

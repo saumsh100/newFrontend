@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -138,7 +137,7 @@ const AppointmentPopover = ({ patient, appointment, timezone, scheduleView, ...p
 };
 
 AppointmentPopover.propTypes = {
-  patient: PropTypes.instanceOf(PatientModel).isRequired,
+  patient: PropTypes.instanceOf(PatientModel),
   appointment: PropTypes.shape(appointmentShape).isRequired,
   closePopover: PropTypes.func.isRequired,
   editAppointment: PropTypes.func.isRequired,
@@ -147,7 +146,7 @@ AppointmentPopover.propTypes = {
   timezone: PropTypes.func.isRequired,
 };
 
-AppointmentPopover.defaultProps = { scheduleView: 'chair' };
+AppointmentPopover.defaultProps = { scheduleView: 'chair', patient: {} };
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 export default connect(mapStateToProps, null)(AppointmentPopover);

@@ -58,7 +58,10 @@ const About = ({ patient, timezone, phoneLookupObj }) => {
             </Col>
             {patient?.cellPhoneNumber && phoneLookupObj?.isPhoneLookupChecked && (
               <Col xs={12} className={styles.phoneLookup}>
-                <PhoneLookupComponent phoneLookupObj={phoneLookupObj} />
+                <PhoneLookupComponent
+                  phoneLookupObj={phoneLookupObj}
+                  preferences={patient?.preferences}
+                />
               </Col>
             )}
             <Col xs={12}>
@@ -77,7 +80,7 @@ const About = ({ patient, timezone, phoneLookupObj }) => {
 };
 
 About.propTypes = {
-  patient: PropTypes.shape(PatientModel).isRequired,
+  patient: PropTypes.shape(PatientModel),
   timezone: PropTypes.string.isRequired,
   phoneLookupObj: PropTypes.shape({
     isPhoneLookupChecked: PropTypes.bool,
@@ -87,6 +90,7 @@ About.propTypes = {
 };
 
 About.defaultProps = {
+  patient: {},
   phoneLookupObj: {},
 };
 
