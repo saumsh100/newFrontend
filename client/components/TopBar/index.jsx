@@ -310,7 +310,7 @@ class TopBar extends Component {
               </DropdownMenu>
             </li>
             <EnabledFeature
-              predicate={({ flags }) => flags.get('use-forms-from-form-service')}
+              predicate={({ flags }) => flags.get('use-form-submission')}
               render={() => (
                 <li>
                   <FormNotificationsButton />
