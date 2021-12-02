@@ -30,9 +30,7 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone, phoneLookupObj })
       if (phoneLookupObj?.isSMSEnabled === false) {
         jsxObj = (
           <div className={styles.notValidNoMessage}>
-            <span className={styles.notValidNoMessage__Body}>
-              Message not sent. Not a valid cellphone number.
-            </span>
+            <span className={styles.notValidNoMessage__Body}>Message not sent.</span>
           </div>
         );
       } else {
