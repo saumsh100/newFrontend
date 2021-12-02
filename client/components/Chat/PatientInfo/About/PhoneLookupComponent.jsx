@@ -5,12 +5,14 @@ import styles from './styles.scss';
 import PhoneLookupBadge from '../../../library/PointOfContactBadge/PhoneLookupBadge';
 
 const PhoneLookupComponent = ({ phoneLookupObj, preferences }) => {
+  const isGreenSmsStyle = phoneLookupObj?.isSMSEnabled && preferences?.sms;
+  const isGreenVoiceStyle = phoneLookupObj?.isVoiceEnabled && preferences?.phone;
   return (
     <div>
       <span
         className={classnames(styles.lookupLabel, styles.smsPaddingStyling, {
-          [styles.greyLookupLabel]: !phoneLookupObj?.isSMSEnabled,
-          [styles.greenLookupLabel]: phoneLookupObj?.isSMSEnabled,
+          [styles.greyLookupLabel]: !isGreenSmsStyle,
+          [styles.greenLookupLabel]: isGreenSmsStyle,
         })}
       >
         SMS
@@ -18,12 +20,13 @@ const PhoneLookupComponent = ({ phoneLookupObj, preferences }) => {
           isSupport={phoneLookupObj?.isSMSEnabled}
           isContactMethodSetting={preferences?.sms}
           mode="SMS"
+          isGreen={isGreenSmsStyle}
         />
       </span>
       <span
         className={classnames(styles.lookupLabel, {
-          [styles.greyLookupLabel]: !phoneLookupObj?.isVoiceEnabled,
-          [styles.greenLookupLabel]: phoneLookupObj?.isVoiceEnabled,
+          [styles.greyLookupLabel]: !isGreenVoiceStyle,
+          [styles.greenLookupLabel]: isGreenVoiceStyle,
         })}
       >
         Voice
@@ -31,6 +34,7 @@ const PhoneLookupComponent = ({ phoneLookupObj, preferences }) => {
           isSupport={phoneLookupObj?.isVoiceEnabled}
           isContactMethodSetting={preferences?.phone}
           mode="Voice"
+          isGreen={isGreenVoiceStyle}
         />
       </span>
     </div>
