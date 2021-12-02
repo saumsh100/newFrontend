@@ -16,10 +16,12 @@ import styles from './styles.scss';
 import { isFeatureEnabledSelector } from '../reducers/featureFlags';
 import { fetchWaitingRoomQueue } from '../thunks/waitingRoom';
 import { loadUnreadChatCount } from '../thunks/chat';
+import MicroFrontendRenderer from '../micro-front-ends/MicroFrontendRenderer';
 
 // eslint-disable-next-line import/no-unresolved
+const EmPracticeSwitcher = lazy(() => import('EM_MFE/EmPracticeSwitcher'));
+// eslint-disable-next-line import/no-unresolved
 const EmAvatarWidget = lazy(() => import('EM_MFE/EmAvatarWidget'));
-
 class DashboardApp extends React.Component {
   constructor(props) {
     super(props);
@@ -82,11 +84,15 @@ class DashboardApp extends React.Component {
   }
 
   render() {
-    const { location, children } = this.props;
+    const {
+      location,
+      children,
+      enterpriseManagementPhaseTwoActive,
+      isCollapsed,
+      isSearchCollapsed,
+    } = this.props;
 
     if (location.pathname.includes('login')) return <div>{children}</div>;
-
-    const { isCollapsed, isSearchCollapsed } = this.props;
 
     return (
       <div>
@@ -103,18 +109,24 @@ class DashboardApp extends React.Component {
           />
         )}
         <NavRegionContainer>
+          <MicroFrontendRenderer
+            load={enterpriseManagementPhaseTwoActive}
+            component={<EmPracticeSwitcher isCollapsed={isCollapsed} />}
+          />
+
           <NavList location={location} isCollapsed={isCollapsed} />
 
-          {this.props.enterpriseManagementPhaseTwoActive && (
-            <div className={styles.emNavFooter}>
-              <React.Suspense fallback="Loading Avatar..">
+          <div className={styles.emNavFooter}>
+            <MicroFrontendRenderer
+              load={enterpriseManagementPhaseTwoActive}
+              component={
                 <EmAvatarWidget
                   isCollapsed={isCollapsed}
                   style={isCollapsed ? {} : { minWidth: 135 }}
                 />
-              </React.Suspense>
-            </div>
-          )}
+              }
+            />
+          </div>
         </NavRegionContainer>
         <MainRegionContainer>
           {isSearchCollapsed && (

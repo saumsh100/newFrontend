@@ -28,7 +28,6 @@ const Routes = {
   settings: lazy(() => import('./Dashboard/Settings')),
   admin: lazy(() => import('./Admin/Enterprises')),
   calls: lazy(() => import('./Dashboard/Calls')),
-  enterpriseManagement: lazy(() => import('./MicroFrontend/EnterpriseManagementMFE')),
 };
 
 const ExternalRedirector = ({
@@ -56,22 +55,31 @@ const DashboardRouter = ({
 
   if (!navigationPreferences) return null;
 
-  const n = (page) => navigationPreferences[page] !== 'disabled';
+  const getNavigationPreference = (page) => navigationPreferences[page] !== 'disabled';
   const getAuthorizedRoutes = () => (
     <div>
       {GraphQlSubscriptions.subscriptionComponents()}
       <Suspense fallback={<Loader />}>
         <Switch>
-          {n('dashboard') && <Route path="/" exact component={Routes.dashboard} />}
-          {n('intelligence') && <Route path="/intelligence" component={Routes.intelligence} />}
-          {n('schedule') && <Route path="/schedule" component={Routes.schedule} />}
-          {n('patients') && <Route path="/patients" component={Routes.patients} />}
-          {n('chat') && <Route path="/chat" component={Routes.chat} />}
-          {n('calls') && <Route path="/calls" component={Routes.calls} />}
-          {n('marketing') && <Route path="/reputation" component={Routes.reputation} />}
-          {n('settings') && <Route path="/settings" component={Routes.settings} />}
-          {enterpriseManagementPhaseTwoActive && isSuperAdmin && (
-            <Route path="/enterprise-management" component={Routes.enterpriseManagement} />
+          {getNavigationPreference('dashboard') && (
+            <Route path="/" exact component={Routes.dashboard} />
+          )}
+          {getNavigationPreference('intelligence') && (
+            <Route path="/intelligence" component={Routes.intelligence} />
+          )}
+          {getNavigationPreference('schedule') && (
+            <Route path="/schedule" component={Routes.schedule} />
+          )}
+          {getNavigationPreference('patients') && (
+            <Route path="/patients" component={Routes.patients} />
+          )}
+          {getNavigationPreference('chat') && <Route path="/chat" component={Routes.chat} />}
+          {getNavigationPreference('calls') && <Route path="/calls" component={Routes.calls} />}
+          {getNavigationPreference('marketing') && (
+            <Route path="/reputation" component={Routes.reputation} />
+          )}
+          {getNavigationPreference('settings') && (
+            <Route path="/settings" component={Routes.settings} />
           )}
           {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
           {!isSSO && <Route path="/profile" component={Routes.profile} />}
