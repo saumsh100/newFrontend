@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -14,8 +13,9 @@ import AddToWaitlist from './Waitlist/AddToWaitlist';
 import { Delete as DeleteWaitSpot, MassDelete } from '../../GraphQLWaitlist';
 import EnabledFeature from '../../library/EnabledFeature';
 import styles from './styles.scss';
+import Tooltip from '../../Tooltip';
 
-const confirmDelete = ids =>
+const confirmDelete = (ids) =>
   window.confirm(
     `Are you sure you want to remove ${ids.length > 1 ? 'these wait spots' : 'this wait spot'}?`,
   );
@@ -51,7 +51,7 @@ class Header extends Component {
   }
 
   toggleWaitlist() {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       showWaitlist: !prevState.showWaitlist,
       showAddToWaitlist: prevState.showWaitlist ? false : prevState.showAddToWaitlist,
     }));
@@ -79,7 +79,7 @@ class Header extends Component {
   }
 
   toggleFilters() {
-    this.setState(prevState => ({ openFilters: !prevState.openFilters }));
+    this.setState((prevState) => ({ openFilters: !prevState.openFilters }));
   }
 
   render() {
@@ -145,14 +145,23 @@ class Header extends Component {
               tipSize={0.01}
               onOuterAction={this.toggleFilters}
             >
-              <div className={styles.headerLinks}>
-                <IconButton
-                  onClick={this.toggleFilters}
-                  icon="filter"
-                  size={1.2}
-                  className={styles.headerLinks_icon}
-                />
-              </div>
+              <Tooltip
+                trigger={['hover']}
+                body={<div className={styles.data}>Filter schedule by practitioner or chair</div>}
+                placement="left"
+              >
+                <div className={styles.headerLinks}>
+                  <IconButton
+                    dense
+                    compact
+                    border="blue"
+                    onClick={this.toggleFilters}
+                    icon="filter"
+                    size={1}
+                    className={styles.headerLinks_icon}
+                  />
+                </div>
+              </Tooltip>
             </Popover>
 
             <EnabledFeature
@@ -209,9 +218,9 @@ class Header extends Component {
               type={newWaitlist ? 'large' : 'medium'}
             >
               <MassDelete>
-                {massRemoveCallback => (
+                {(massRemoveCallback) => (
                   <DeleteWaitSpot>
-                    {removeCallback => (
+                    {(removeCallback) => (
                       <Waitlist
                         newWaitlist={newWaitlist}
                         removeWaitSpot={this.removeWaitSpot(removeCallback)}
@@ -259,7 +268,7 @@ Header.propTypes = {
   timezone: PropTypes.string.isRequired,
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ setScheduleView }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ setScheduleView }, dispatch);
 
 const mapStateToProps = ({ auth, schedule, apiRequests, featureFlags }) => ({
   accountId: auth.get('accountId'),

@@ -37,17 +37,22 @@
   color: $primary-dark;
   display: flex;
   font-weight: 600;
-  margin-right: 20px;
+  margin-right: 10px;
   outline: none;
 
   &:hover {
+    background-color: #154b6e;
     color: $primary-color-hover;
     cursor: pointer;
   }
 
   &_icon {
+    color: #154b6e;
     margin-right: 0;
     padding-left: 10px;
+    &:hover {
+      color: $color-white;
+    }
   }
 
   &_add {
@@ -102,6 +107,11 @@
   }
 }
 
+.data {
+  composes: fontMedium from '../../../styles/fonts.scss';
+  font-size: 13px;
+  text-align: center;
+}
 .waitlistFullScreen {
   background: #f2f3f5;
   height: 100%;
