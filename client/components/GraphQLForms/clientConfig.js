@@ -4,7 +4,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 
 const wsLink = new WebSocketLink({
-  uri: process.env.FORMS_WS_API || '',
+  uri: `${process.env.FORMS_WS_API}/graphql`,
   options: {
     reconnect: true,
   },
