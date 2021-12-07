@@ -135,6 +135,10 @@
 }
 
 .regularText {
+  h3 {
+    color: var(--primaryColor) !important;
+    font-size: 16px;
+  }
   background: $widget-grey-lightest;
   bottom: 0;
   color: $widget-grey-light;
@@ -153,6 +157,8 @@
   opacity: 0;
   visibility: hidden;
   h3 {
+    color: var(--primaryColor) !important;
+    font-size: 16px;
     span {
       animation-duration: 1.4s;
       animation-fill-mode: both;
