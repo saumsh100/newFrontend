@@ -92,3 +92,38 @@
     }
   }
 }
+
+.maintenanceBanner {
+  background-color: $background-color;
+  height: 60%;
+  padding-left: 25px;
+  padding-right: 25px;
+  position: absolute;
+  text-align: center;
+  z-index: 1000;
+
+  @media screen and (min-height: 720px) {
+    transform: translateY(-150px);
+  }
+  @media screen and (max-width: $medium-screen-width) {
+    padding-left: 25px;
+    padding-right: 25px;
+    width: 80%;
+  }
+
+  &_logo {
+    margin-top: 100px;
+    width: 200px;
+  }
+
+  &_text {
+    composes: headerImportant from '../../styles/fonts.scss';
+    margin: 0 auto;
+  }
+
+  &_subText {
+    color: $primary-blue;
+    composes: subHeader from '../../styles/fonts.scss';
+    margin: 0 auto;
+  }
+}

@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -52,6 +51,7 @@ class Login extends Component {
   }
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const { [window.location.hostname]: _, ...option } = switchLocations;
     const [differentLocation] = Object.values(option);
     return (
@@ -78,7 +78,7 @@ class Login extends Component {
               <div
                 className={styles.forgotPassword_text}
                 tabIndex={0}
-                onKeyDown={e => e.keyCode === 13 && this.props.push('/forgot')}
+                onKeyDown={(e) => e.keyCode === 13 && this.props.push('/forgot')}
                 role="button"
                 onClick={() => {
                   this.props.push('/forgot');
@@ -88,6 +88,27 @@ class Login extends Component {
               </div>
             </div>
           </Card>
+          <EnabledFeature
+            predicate={({ flags }) => flags.get('show-maintenance-banner')}
+            render={() => (
+              <div className={styles.maintenanceBanner}>
+                <div className={styles.logoContainer}>
+                  <img
+                    className={styles.maintenanceBanner_logo}
+                    src="/images/logo_black.png"
+                    alt="CareCru Logo"
+                  />
+                </div>
+                <div className={styles.maintenanceBanner_text}>
+                  CareCru is currently down for scheduled maintenance.
+                </div>
+                <div className={styles.maintenanceBanner_subText}>
+                  We are making important upgrades to our platform. CareCru will be back online
+                  again soon.
+                </div>
+              </div>
+            )}
+          />
           <CopyrightFooter />
         </div>
       </DocumentTitle>
@@ -120,9 +141,6 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(Login);
