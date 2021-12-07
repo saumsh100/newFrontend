@@ -70,7 +70,7 @@ class DisplayName extends React.Component {
               overlay={
                 <div className={styles.tooltipWrapper}>
                   <div className={styles.tooltipBodyRow}>
-                    Please contact your account owner or the Support team to edit this.
+                    Please contact your account owner or our support team to edit this.
                   </div>
                 </div>
               }

@@ -58,34 +58,7 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
         validate={[emailValid]}
         data-test-id="contactEmail"
       />
-      {role !== 'OWNER' && role !== 'SUPERADMIN' ? (
-        <Tooltip
-          trigger={['hover']}
-          overlay={
-            <div className={styles.tooltipWrapper}>
-              <div className={styles.tooltipBodyRow}>
-                Please contact your account owner or the Support team to edit this.
-              </div>
-            </div>
-          }
-          placement="right"
-        >
-          <Field
-            name="facebookUrl"
-            label="Facebook URL"
-            data-test-id="facebookUrl"
-            disabled={role !== 'OWNER' && role !== 'SUPERADMIN'}
-          />
-        </Tooltip>
-      ) : (
-        <Field
-          name="facebookUrl"
-          label="Facebook URL"
-          data-test-id="facebookUrl"
-          disabled={role !== 'OWNER' && role !== 'SUPERADMIN'}
-        />
-      )}
-
+      <Field name="facebookUrl" label="Facebook URL" data-test-id="facebookUrl" />
       <Field
         name="unit"
         label="Schedule Unit Value"
