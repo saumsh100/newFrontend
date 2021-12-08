@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -59,10 +58,10 @@ const AppointmentInfo = (props) => {
   const textAreaTheme = { group: styles.textAreaGroup };
   const notes = description || note || '';
   const TitleComponent = errorTitle ? (
-    <React.Fragment>
+    <>
       <Icon icon="calendar" size={1.25} className={styles.errorCalendarIcon} />
       <span className={styles.header_text}>{errorTitle}</span>
-    </React.Fragment>
+    </>
   ) : (
     <span className={styles.header_text}>{title}</span>
   );
@@ -71,14 +70,14 @@ const AppointmentInfo = (props) => {
       <SContainer>
         <SHeader className={styles.header} hey="header">
           {patient ? (
-            <React.Fragment>
+            <>
               <Icon icon="calendar" size={1.25} />
               <div
                 role="button"
                 tabIndex={0}
                 className={classNames(styles.patientLink, styles.textWhite)}
                 onDoubleClick={() => editPatient(patient.id)}
-                onKeyDown={e => e.keyCode === 13 && editPatient(patient.id)}
+                onKeyDown={(e) => e.keyCode === 13 && editPatient(patient.id)}
               >
                 <ActionsDropdown
                   patient={patient}
@@ -101,7 +100,7 @@ const AppointmentInfo = (props) => {
                   )}
                 />
               </div>
-            </React.Fragment>
+            </>
           ) : (
             TitleComponent
           )}
@@ -131,16 +130,16 @@ const AppointmentInfo = (props) => {
 
           {!!reason && popoverDataSections('Appointment Type', `${reason}`)}
 
-          {practitioner
-            && popoverDataSections(
+          {practitioner &&
+            popoverDataSections(
               'Practitioner',
-              `${practitioner.firstName} ${practitioner.lastName || null}`,
+              `${practitioner.firstName} ${practitioner.lastName || ''}`,
             )}
 
           {chair && popoverDataSections('Chair', chair.name)}
 
-          {(notes
-            && popoverDataSections(
+          {(notes &&
+            popoverDataSections(
               'Notes',
               <div className={styles.data_note} style={{ ...extraStyles?.note }} key="notes">
                 <TextArea
@@ -150,8 +149,8 @@ const AppointmentInfo = (props) => {
                   style={{ ...extraStyles?.note }}
                 />
               </div>,
-            ))
-            || (title && popoverDataSections('Notes', 'n/a'))}
+            )) ||
+            (title && popoverDataSections('Notes', 'n/a'))}
 
           {patient?.cellPhoneNumber || patient?.email ? (
             <div className={styles.container} key="contact">
