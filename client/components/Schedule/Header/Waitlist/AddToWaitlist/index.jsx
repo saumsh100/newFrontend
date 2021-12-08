@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -49,23 +48,32 @@ const initialState = {
  * @returns {*}
  * @constructor
  */
-export const SelectedPatient = ({ handleAutoSuggest, patientSearched, className, avatarSize }) => (
-  <div
-    className={classNames(styles.patientContainer, className)}
-    onClick={() => handleAutoSuggest(null)}
-    role="button"
-    onKeyDown={({ keyCode }) => keyCode === 13 && handleAutoSuggest(null)}
-    tabIndex="0"
-  >
-    <Avatar user={patientSearched} size={avatarSize} />
-    <div className={styles.patientContainer_name}>
-      {patientSearched.firstName} {patientSearched.lastName}
+export const SelectedPatient = ({ handleAutoSuggest, patientSearched, className, avatarSize }) => {
+  // eslint-disable-next-line no-underscore-dangle
+  const isNotPatientUserType = patientSearched?.__typename !== 'PatientUser';
+  return (
+    <div
+      className={classNames(styles.patientContainer, className, {
+        [styles.patientDefaultCursor]: !isNotPatientUserType,
+      })}
+      onClick={() => handleAutoSuggest(null)}
+      role="button"
+      onKeyDown={({ keyCode }) => keyCode === 13 && handleAutoSuggest(null)}
+      tabIndex="0"
+    >
+      <Avatar user={patientSearched} size={avatarSize} />
+      <div className={styles.patientContainer_name}>
+        {patientSearched.firstName} {patientSearched.lastName}
+      </div>
+
+      {isNotPatientUserType && (
+        <div className={styles.patientContainer_icon}>
+          <Icon icon="search" />
+        </div>
+      )}
     </div>
-    <div className={styles.patientContainer_icon}>
-      <Icon icon="search" />
-    </div>
-  </div>
-);
+  );
+};
 
 class AddToWaitlist extends React.Component {
   constructor(props) {
@@ -106,36 +114,6 @@ class AddToWaitlist extends React.Component {
   }
 
   /**
-   * Get all times available
-   *
-   * @returns {Array}
-   */
-  getAllTimes() {
-    return timeFrameOptions
-      .map(t => this.getTimeFrameArray(t))
-      .reduce((acc, curr) => [...acc, ...curr], []);
-  }
-
-  /**
-   * With the provided timeframe, return an array with only startDate.
-   * @param timeframe
-   * @returns {Array}
-   */
-  getTimeFrameArray(timeframe) {
-    return this.props.availabilities[timeframe].map(({ startDate }) => startDate);
-  }
-
-  /**
-   * Check if every time on the timeFrameArray is included into the selected availableTimes array.
-   *
-   * @param times {Array}
-   * @returns {Boolean}
-   */
-  hasEveryTimeSelected(times) {
-    return times.every(t => this.state.availableTimes.includes(t));
-  }
-
-  /**
    * Update the searchedPatient, you can clean the selection
    * or add a new patient object.
    *
@@ -146,11 +124,11 @@ class AddToWaitlist extends React.Component {
       patientSearched:
         'id' in newValue
           ? {
-            avatarUrl: newValue.avatarUrl,
-            firstName: newValue.firstName,
-            id: newValue.id,
-            lastName: newValue.lastName,
-          }
+              avatarUrl: newValue.avatarUrl,
+              firstName: newValue.firstName,
+              id: newValue.id,
+              lastName: newValue.lastName,
+            }
           : null,
     });
   }
@@ -163,9 +141,9 @@ class AddToWaitlist extends React.Component {
     const { patientSearched, daysOfTheWeek, availableTimes } = this.state;
     const { createWaitSpotHandler, timezone } = this.props;
     if (
-      !patientSearched
-      || Object.values(daysOfTheWeek).every(a => !a)
-      || availableTimes.length === 0
+      !patientSearched ||
+      Object.values(daysOfTheWeek).every((a) => !a) ||
+      availableTimes.length === 0
     ) {
       return;
     }
@@ -188,6 +166,40 @@ class AddToWaitlist extends React.Component {
   }
 
   /**
+   * Check the state of the provided time,
+   * if it's unselected we select it,
+   * otherwise unselect it.
+   *
+   * @param time {String}
+   */
+  handleCheckboxTime(time) {
+    const availableTimes = this.state.availableTimes.includes(time)
+      ? [...this.state.availableTimes.filter((a) => a !== time)]
+      : [...this.state.availableTimes, time];
+    this.setState({ availableTimes });
+  }
+
+  /**
+   * Get all times available
+   *
+   * @returns {Array}
+   */
+  getAllTimes() {
+    return timeFrameOptions
+      .map((t) => this.getTimeFrameArray(t))
+      .reduce((acc, curr) => [...acc, ...curr], []);
+  }
+
+  /**
+   * With the provided timeframe, return an array with only startDate.
+   * @param timeframe
+   * @returns {Array}
+   */
+  getTimeFrameArray(timeframe) {
+    return this.props.availabilities[timeframe].map(({ startDate }) => startDate);
+  }
+
+  /**
    * Reset the state
    */
   reinitializeState() {
@@ -198,14 +210,24 @@ class AddToWaitlist extends React.Component {
   }
 
   /**
+   * Check if every time on the timeFrameArray is included into the selected availableTimes array.
+   *
+   * @param times {Array}
+   * @returns {Boolean}
+   */
+  hasEveryTimeSelected(times) {
+    return times.every((t) => this.state.availableTimes.includes(t));
+  }
+
+  /**
    * Checks if every provided date is already selected.
    *
    * @param dates
    */
   hasEveryDateSelected(dates) {
     return (
-      Object.entries(this.state.daysOfTheWeek).filter(([k, v]) => dates.includes(k) && v).length
-      === dates.length
+      Object.entries(this.state.daysOfTheWeek).filter(([k, v]) => dates.includes(k) && v).length ===
+      dates.length
     );
   }
 
@@ -227,27 +249,13 @@ class AddToWaitlist extends React.Component {
   }
 
   /**
-   * Check the state of the provided time,
-   * if it's unselected we select it,
-   * otherwise unselect it.
-   *
-   * @param time {String}
-   */
-  handleCheckboxTime(time) {
-    const availableTimes = this.state.availableTimes.includes(time)
-      ? [...this.state.availableTimes.filter(a => a !== time)]
-      : [...this.state.availableTimes, time];
-    this.setState({ availableTimes });
-  }
-
-  /**
    * Toggle a frame of times, but first check if there's any time already selected.
    *
    * @param timeframe {Array}
    */
   toggleTimeFrames(timeframe) {
     const availableTimes = this.hasEveryTimeSelected(timeframe)
-      ? this.state.availableTimes.filter(t => !timeframe.includes(t))
+      ? this.state.availableTimes.filter((t) => !timeframe.includes(t))
       : [...new Set([...this.state.availableTimes, ...timeframe])];
     return this.setState({ availableTimes });
   }
@@ -263,9 +271,10 @@ class AddToWaitlist extends React.Component {
   render() {
     const { availabilities, active, timezone } = this.props;
     const { patientSearched, availableTimes, daysOfTheWeek } = this.state;
-    const disabled = !patientSearched
-      || Object.values(daysOfTheWeek).every(a => !a)
-      || availableTimes.length === 0;
+    const disabled =
+      !patientSearched ||
+      Object.values(daysOfTheWeek).every((a) => !a) ||
+      availableTimes.length === 0;
     return (
       <DialogBox
         custom
@@ -324,7 +333,7 @@ class AddToWaitlist extends React.Component {
                 </Col>
               </Row>
               <Row className={styles.dayContainer}>
-                {Object.values(frames).map(f => (
+                {Object.values(frames).map((f) => (
                   <div className={styles.colFrames} key={f}>
                     <CheckboxButton
                       labelStyles={styles.checkboxButton}
@@ -338,7 +347,7 @@ class AddToWaitlist extends React.Component {
               </Row>
               <div className={styles.orWrapper}>Or</div>
               <Row className={styles.dayContainer}>
-                {week.all.map(day => (
+                {week.all.map((day) => (
                   <div className={styles.colSpacing} key={day}>
                     <CheckboxButton
                       data-test-id={day}
@@ -347,7 +356,7 @@ class AddToWaitlist extends React.Component {
                       checked={daysOfTheWeek[day]}
                       label={capitalize(day)}
                       onChange={() =>
-                        this.setState(prevState => ({
+                        this.setState((prevState) => ({
                           daysOfTheWeek: {
                             ...prevState.daysOfTheWeek,
                             [day]: !prevState.daysOfTheWeek[day],
@@ -375,8 +384,8 @@ class AddToWaitlist extends React.Component {
                   />
                 </div>
                 {timeFrameOptions
-                  .filter(v => availabilities[v].length)
-                  .map(timeframe => (
+                  .filter((v) => availabilities[v].length)
+                  .map((timeframe) => (
                     <div className={styles.colFrames} key={timeframe}>
                       <CheckboxButton
                         labelStyles={styles.checkboxButton}
@@ -390,8 +399,8 @@ class AddToWaitlist extends React.Component {
               </Row>
               <div className={styles.orWrapper}>Or</div>
               {timeFrameOptions
-                .filter(v => availabilities[v].length)
-                .map(t => (
+                .filter((v) => availabilities[v].length)
+                .map((t) => (
                   <Row className={styles.timeFrameContainer} key={t}>
                     {availabilities[t].map(({ startDate }) => (
                       <div className={styles.colSpacing} key={startDate}>
@@ -422,9 +431,10 @@ const mapStateToProps = ({ auth, availabilities, entities }) => {
     activeAccount.get('weeklyScheduleId'),
   ]);
 
-  const availabilitiesGrouped = weeklySchedule
-    && activeAccount
-    && availabilitiesGroupedByPeriod(
+  const availabilitiesGrouped =
+    weeklySchedule &&
+    activeAccount &&
+    availabilitiesGroupedByPeriod(
       Object.values(weeklySchedule.toJS()),
       activeAccount.get('timezone'),
       60,
@@ -438,7 +448,7 @@ const mapStateToProps = ({ auth, availabilities, entities }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ loadWeeklySchedule }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ loadWeeklySchedule }, dispatch);
 
 const AddToWaitlistEnhanced = connect(mapStateToProps, mapDispatchToProps)(AddToWaitlist);
 
@@ -487,6 +497,7 @@ SelectedPatient.propTypes = {
     firstName: PropTypes.string,
     id: PropTypes.string,
     lastName: PropTypes.string,
+    __typename: PropTypes.string,
   }).isRequired,
 };
 
@@ -495,10 +506,10 @@ SelectedPatient.defaultProps = {
   className: '',
 };
 
-const CreateWaitSpotWrapper = props =>
+const CreateWaitSpotWrapper = (props) =>
   props.active && (
     <CreateWaitSpot>
-      {createWaitSpotHandler => (
+      {(createWaitSpotHandler) => (
         <AddToWaitlistEnhanced createWaitSpotHandler={createWaitSpotHandler} {...props} />
       )}
     </CreateWaitSpot>

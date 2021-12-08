@@ -15,11 +15,9 @@ export const ManageCell = ({ value }) => (
       </Button>
     )}
   >
-    {!value.isPatientUser && (
-      <Button className={tableStyles.actionItem} onClick={value.onEdit(value.id)}>
-        Edit
-      </Button>
-    )}
+    <Button className={tableStyles.actionItem} onClick={value.onEdit(value.id)}>
+      Edit
+    </Button>
     <Button className={tableStyles.actionItem} onClick={value.onRemove}>
       Delete
     </Button>
