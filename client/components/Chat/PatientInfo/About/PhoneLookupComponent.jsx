@@ -5,8 +5,11 @@ import styles from './styles.scss';
 import PhoneLookupBadge from '../../../library/PointOfContactBadge/PhoneLookupBadge';
 
 const PhoneLookupComponent = ({ phoneLookupObj, preferences }) => {
-  const isGreenSmsStyle = phoneLookupObj?.isSMSEnabled && preferences?.sms;
-  const isGreenVoiceStyle = phoneLookupObj?.isVoiceEnabled && preferences?.phone;
+  const smsPreference = preferences ? preferences.sms : phoneLookupObj?.isSMSEnabled;
+  const phonePreference = preferences ? preferences.phone : phoneLookupObj?.isVoiceEnabled;
+
+  const isGreenSmsStyle = phoneLookupObj?.isSMSEnabled && smsPreference;
+  const isGreenVoiceStyle = phoneLookupObj?.isVoiceEnabled && phonePreference;
   return (
     <div>
       <span
@@ -18,7 +21,7 @@ const PhoneLookupComponent = ({ phoneLookupObj, preferences }) => {
         SMS
         <PhoneLookupBadge
           isSupport={phoneLookupObj?.isSMSEnabled}
-          isContactMethodSetting={preferences?.sms}
+          isContactMethodSetting={smsPreference}
           mode="SMS"
           isGreen={isGreenSmsStyle}
         />
@@ -32,7 +35,7 @@ const PhoneLookupComponent = ({ phoneLookupObj, preferences }) => {
         Voice
         <PhoneLookupBadge
           isSupport={phoneLookupObj?.isVoiceEnabled}
-          isContactMethodSetting={preferences?.phone}
+          isContactMethodSetting={phonePreference}
           mode="Voice"
           isGreen={isGreenVoiceStyle}
         />
