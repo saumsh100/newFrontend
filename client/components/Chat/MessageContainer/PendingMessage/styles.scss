@@ -28,8 +28,8 @@
 }
 
 .PendingMessage__Avatar {
-  height: 1.5rem;
-  width: 1.5rem;
+  height: calc(1.5rem * 1.6);
+  width: calc(1.5rem * 1.6);
 }
 
 .PendingMessage__Body {

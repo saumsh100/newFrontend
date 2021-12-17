@@ -6,26 +6,26 @@
   display: flex;
   flex-direction: column;
   margin-top: 50px;
-  padding: 3rem;
+  padding: calc(3rem * 1.6);
   text-align: center;
 }
 
 .name {
-  margin-bottom: 1rem;
-  margin-top: 1rem;
+  margin-bottom: calc(1rem * 1.6);
+  margin-top: calc(1rem * 1.6);
   width: 100%;
 }
 
 .row {
-  margin-top: 1rem;
+  margin-top: calc(1rem * 1.6);
   width: 100%;
 }
 
 .innerRow {
   display: flex;
   justify-content: space-around;
-  padding-left: 3rem;
-  padding-right: 3rem;
+  padding-left: calc(3rem * 1.6);
+  padding-right: calc(3rem * 1.6);
 }
 
 .leftPlaceholder {
@@ -34,19 +34,19 @@
 }
 
 .rightPlaceholder {
-  margin-left: 3rem;
+  margin-left: calc(3rem * 1.6);
   text-align: left;
   width: 50%;
 }
 
 .firstFooter {
-  margin-top: 3rem;
-  padding: 0 1.75rem;
+  margin-top: calc(3rem * 1.6);
+  padding: 0 calc(1.75rem * 1.6);
   text-align: left;
 }
 
 .secondFooter {
-  margin-top: 1rem;
-  padding: 0 1.75rem;
+  margin-top: calc(1rem * 1.6);
+  padding: 0 calc(1.75rem * 1.6);
   text-align: left;
 }

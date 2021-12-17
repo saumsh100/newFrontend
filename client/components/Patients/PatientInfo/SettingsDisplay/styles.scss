@@ -43,7 +43,7 @@
   &_closeIcon {
     color: $primary-darkgrey;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: calc(1rem * 1.6);
     font-weight: 900;
     margin-left: auto;
     &:hover {

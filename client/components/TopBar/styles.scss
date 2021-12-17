@@ -83,12 +83,12 @@ $padding-size-border: 10px;
   cursor: pointer;
   display: inline;
   @media screen and (max-width: $medium-screen-width) {
-    font-size: 1.2rem;
+    font-size: calc(1.2rem * 1.6);
     margin-left: 5px;
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    font-size: 1.4rem;
+    font-size: calc(1.4rem * 1.6);
     margin-left: 10px;
   }
 }

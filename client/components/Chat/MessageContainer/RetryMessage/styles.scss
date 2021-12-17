@@ -14,8 +14,8 @@
 
 .RetryMessage__Body__Separator {
   color: $primary-gray;
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
+  margin-left: calc(0.25rem * 1.6);
+  margin-right: calc(0.25rem * 1.6);
 }
 
 .RetryMessage__Body--sending {

@@ -686,9 +686,9 @@ $size: 32px;
 }
 
 .skeletonAvatar {
-  margin-left: 1.25rem;
+  margin-left: calc(1.25rem * 1.6);
 }
 
 .skeletonRow {
-  margin-left: 1rem;
+  margin-left: calc(1rem * 1.6);
 }

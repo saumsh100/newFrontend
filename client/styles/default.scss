@@ -4,6 +4,10 @@
 $intercom-side-margin: 50px;
 
 :global {
+  html {
+    font-size: 10px;
+  }
+
   html.Dashboard,
   html.hub {
     height: 100%;
@@ -88,6 +92,7 @@ $intercom-side-margin: 50px;
 
   body.Widget {
     background-color: $widget-grey-lightest;
+    font-size: 16px;
   }
 
   #root {

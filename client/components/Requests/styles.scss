@@ -229,7 +229,7 @@
   &__newreqText {
     @extend .font-small-dark;
     color: #b5b5b5;
-    font-size: 0.9rem;
+    font-size: calc(0.9rem * 1.6);
     position: absolute;
     right: 20px;
     top: 50%;

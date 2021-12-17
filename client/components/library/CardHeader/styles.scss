@@ -10,9 +10,9 @@
   flex-wrap: wrap;
   height: 55px;
   justify-content: space-between;
-  padding-bottom: 1rem;
+  padding-bottom: calc(1rem * 1.6);
   padding-left: 15px;
-  padding-top: 1rem;
+  padding-top: calc(1rem * 1.6);
   position: relative;
   @media (max-width: 496px) {
     align-items: flex-start;

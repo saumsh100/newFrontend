@@ -22,10 +22,10 @@
 .botAvatar {
   background: $primary-white;
   border: 1px solid lighten($primary-blue, 50%);
-  height: 1.377rem;
-  min-height: 1.377rem;
-  min-width: 1.377rem;
-  width: 1.377rem;
+  height: calc(1.377rem * 1.6);
+  min-height: calc(1.377rem * 1.6);
+  min-width: calc(1.377rem * 1.6);
+  width: calc(1.377rem * 1.6);
 
   & > img {
     padding-right: 2px;

@@ -75,7 +75,7 @@
 
 .modalBody {
   animation: slidein 0.5s;
-  //border-radius: .5rem;
+  //border-radius: calc(.5rem * 1.6);
   box-shadow: 0 19px 60px rgba(0, 0, 0, 0.3), 0 15px 20px rgba(0, 0, 0, 0.22);
   display: flex;
   flex-direction: column;
@@ -94,7 +94,7 @@
   &__closeIcon {
     color: grey;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: calc(1rem * 1.6);
     font-weight: 900;
     margin-left: auto;
   }
@@ -114,7 +114,7 @@
 @keyframes slidein {
   from {
     opacity: 0;
-    transform: translateY(-4rem);
+    transform: translateY(calc(-4rem * 1.6));
   }
   to {
     opacity: 1;
@@ -126,7 +126,7 @@
   color: white;
   cursor: pointer;
   font-size: 60px;
-  line-height: 1rem;
+  line-height: calc(1rem * 1.6);
   position: fixed;
   right: 1%;
   top: 2%;

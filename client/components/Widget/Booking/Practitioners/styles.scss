@@ -59,9 +59,9 @@
 .avatarSize {
   @media screen and (max-width: 492px) {
     font-size: 14px;
-    height: 2.2rem;
-    min-height: 2.2rem;
-    min-width: 2.2rem;
-    width: 2.2rem;
+    height: calc(2.2rem * 1.6);
+    min-height: calc(2.2rem * 1.6);
+    min-width: calc(2.2rem * 1.6);
+    width: calc(2.2rem * 1.6);
   }
 }

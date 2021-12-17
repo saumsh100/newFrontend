@@ -144,7 +144,7 @@
   font-family: $inter;
   font-size: $small-size;
   font-size: 13px;
-  height: 2.5rem;
+  height: calc(2.5rem * 1.6);
   justify-content: flex-start;
   letter-spacing: 0;
   overflow: hidden;

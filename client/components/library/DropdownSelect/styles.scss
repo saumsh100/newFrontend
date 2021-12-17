@@ -74,7 +74,7 @@ $empty-grey: darken(lightgrey, 5%);
 
   display: flex;
   font-size: $small-size;
-  height: 2.5rem;
+  height: calc(2.5rem * 1.6);
   outline: none;
   overflow: hidden;
   padding-left: 20px;

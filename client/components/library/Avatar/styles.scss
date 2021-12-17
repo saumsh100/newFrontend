@@ -1,10 +1,10 @@
 @import '../../../styles/ui.scss';
 
-$extraSmall-size: 1.5rem;
-$small-size: 2.3rem;
-$medium-size: 3rem;
-$large-size: 5rem;
-$extra-Large-size: 7.75rem;
+$extraSmall-size: calc(1.5rem * 1.6);
+$small-size: calc(2.3rem * 1.6);
+$medium-size: calc(3rem * 1.6);
+$large-size: calc(5rem * 1.6);
+$extra-Large-size: calc(7.75rem * 1.6);
 
 .avatar {
   align-items: center;

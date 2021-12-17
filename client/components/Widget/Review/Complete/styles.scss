@@ -30,8 +30,8 @@
 }
 
 .avatar {
-  height: 4rem;
-  width: 4rem;
+  height: calc(4rem * 1.6);
+  width: calc(4rem * 1.6);
 }
 
 .messageWrapper {
@@ -119,9 +119,9 @@
   background: linear-gradient(var(--primaryColor), white 70%);
   border-radius: 50%;
   display: flex;
-  height: 4.4rem;
+  height: calc(4.4rem * 1.6);
   justify-content: center;
   //border-color: $primary-color;
   //transition-timing-function: ease-in;
-  width: 4.4rem;
+  width: calc(4.4rem * 1.6);
 }
