@@ -6,13 +6,15 @@ import AccountShape from '../../../library/PropTypeShapes/accountShape';
 import EnabledFeature from '../../../library/EnabledFeature';
 import styles from './styles.scss';
 
-export default function PreferencesForm({ handleSubmit, activeAccount }) {
+export default function PreferencesForm({ role, handleSubmit, activeAccount }) {
   const initialValues = {
     bookingWidgetPrimaryColor: activeAccount.get('bookingWidgetPrimaryColor') || '#FF715A',
     bookingWidgetButtonLabel: activeAccount.get('bookingWidgetButtonLabel') || 'Book Online',
   };
-  const tooltipBody =
-    'This setting will change a set of labels across the online booking flow incl. the widget button label on your website.';
+  const isRoleNotSuperOrOwner = role !== 'SUPERADMIN' && role !== 'OWNER';
+  const tooltipBody = isRoleNotSuperOrOwner
+    ? 'This setting will change a set of labels across the online booking flow incl. the widget button label on your website. If you would like to update this, please contact your account owner or our support team.'
+    : 'This setting will change a set of labels across the online booking flow incl. the widget button label on your website.';
   const buttonLabelOptions = [
     {
       value: 'Book Online',
@@ -42,9 +44,7 @@ export default function PreferencesForm({ handleSubmit, activeAccount }) {
         />
       </div>
       <EnabledFeature
-        predicate={({ flags, userRole }) =>
-          flags.get('customizable-booking-widget-labels') && userRole === 'SUPERADMIN'
-        }
+        predicate={({ flags }) => flags.get('customizable-booking-widget-labels')}
         render={() => (
           <div className={styles.formContainer_widgetButtonLabel}>
             <span className={styles.labelTooltip}>
@@ -58,6 +58,7 @@ export default function PreferencesForm({ handleSubmit, activeAccount }) {
               component="DropdownSelect"
               options={buttonLabelOptions}
               data-test-id="buttonLabel"
+              disabled={isRoleNotSuperOrOwner}
             />
           </div>
         )}
@@ -69,4 +70,5 @@ export default function PreferencesForm({ handleSubmit, activeAccount }) {
 PreferencesForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   activeAccount: PropTypes.shape(AccountShape).isRequired,
+  role: PropTypes.string.isRequired,
 };

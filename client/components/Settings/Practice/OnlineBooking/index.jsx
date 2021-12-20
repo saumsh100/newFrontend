@@ -7,7 +7,6 @@ import { Header, CodeSnippet } from '../../../library/index';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import accountModel from '../../../../entities/models/Account';
 import PreferencesForm from './PreferencesForm';
-import IntervalForm from './IntervalForm';
 import ChairSchedulingForm from './ChairSchedulingForm';
 import SchedulingUrlForm from './SchedulingUrlForm';
 import SchedulingPreviewForm from './SchedulingPreviewForm';
@@ -39,7 +38,7 @@ class OnlineBooking extends Component {
   }
 
   render() {
-    const { activeAccount } = this.props;
+    const { activeAccount, role } = this.props;
 
     if (!activeAccount) {
       return null;
@@ -61,22 +60,11 @@ class OnlineBooking extends Component {
       <SettingsCard title="Online Booking" bodyClass={styles.onlineBookingBody}>
         <div className={styles.formContainer}>
           <Header title="Customize Widget" contentHeader />
-          <PreferencesForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
-        </div>
-        <div className={styles.snippetContainer}>
-          <div className={styles.label}>
-            HTML SNIPPET Copy and paste the snippet below into your website, at the bottom of your
-            body tag.
-          </div>
-          <CodeSnippet codeSnippet={snippet} />
-        </div>
-        <div className={styles.formContainer}>
-          <Header title="Interval Options" contentHeader />
-          <IntervalForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
-        </div>
-        <div className={styles.formContainer}>
-          <Header title="Chair Scheduling" contentHeader />
-          <ChairSchedulingForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
+          <PreferencesForm
+            role={role}
+            activeAccount={activeAccount}
+            handleSubmit={this.handleSubmit}
+          />
         </div>
         <div className={styles.formContainer}>
           <Header title="Online Scheduling URL" contentHeader />
@@ -86,6 +74,21 @@ class OnlineBooking extends Component {
           <Header title="Online Scheduling Widget Preview" contentHeader />
           <SchedulingPreviewForm activeAccount={activeAccount} />
         </div>
+        {(role === 'SUPERADMIN' || role === 'OWNER') && (
+          <>
+            <div className={styles.formContainer}>
+              <Header title="Chair Scheduling" contentHeader />
+              <ChairSchedulingForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
+            </div>
+            <div className={styles.snippetContainer}>
+              <div className={styles.label}>
+                HTML SNIPPET Copy and paste the snippet below into your website, at the bottom of
+                your body tag.
+              </div>
+              <CodeSnippet codeSnippet={snippet} />
+            </div>
+          </>
+        )}
       </SettingsCard>
     );
   }
@@ -94,11 +97,13 @@ class OnlineBooking extends Component {
 OnlineBooking.propTypes = {
   activeAccount: PropTypes.instanceOf(accountModel).isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  return activeAccount ? { activeAccount } : {};
+  const role = auth.get('role');
+  return activeAccount ? { activeAccount, role } : {};
 }
 
 function mapDispatchToProps(dispatch) {
