@@ -36,3 +36,9 @@
     width: 100%;
   }
 }
+
+.textarea {
+  @extend .input;
+  min-height: 150px;
+  padding-top: 40px;
+}
