@@ -17,10 +17,14 @@ import { getDate, getUTCDate, parseDate } from '../../util/datetime';
 const defaultTypeName = 'Custom';
 
 const valueToDate = (value, timezone) => value && parseDate(value, timezone).toDate();
+
 const formatDate = (value, timezone, format = undefined) =>
-  getUTCDate(value, timezone).format(format);
+  getUTCDate(value)
+    .local()
+    .format(format);
+
 const isInvalidRange = (date, isFromInput, state) =>
-  (isFromInput ? date > state.end : date < state.start);
+  isFromInput ? date > state.end : date < state.start;
 
 class DayRangeWithHelpers extends Component {
   constructor(props) {
@@ -57,55 +61,11 @@ class DayRangeWithHelpers extends Component {
     window.addEventListener('click', this.handleOutsideClick);
   }
 
-  componentDidUpdate(prevProps) {
-    const defaultOption = this.props.helpers.find(
-      ({ start, end }) =>
-        parseDate(start, this.props.timezone).isSame(this.props.start, 'day')
-        && parseDate(end, this.props.timezone).isSame(this.props.end, 'day'),
-    );
-    if (prevProps !== this.props) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ visibleMonth: valueToDate(this.props.start, this.props.timezone) });
-      this.setDateValues('start', this.props.start, defaultOption && defaultOption.label);
-      this.setDateValues('end', this.props.end, defaultOption && defaultOption.label);
-    }
-  }
-
   /**
    * Remove an event listener (on the window element) when the component is unmounting.
    */
   componentWillUnmount() {
     window.removeEventListener('click', this.handleOutsideClick);
-  }
-
-  /**
-   * Only update the state if the provided displayValue instance is valid.
-   * @param displayValue {DateTimeObj}
-   * @param field
-   */
-  setValidDate(displayValue, field) {
-    if (displayValue.isValid()) {
-      this.setState({ [field]: displayValue.toDate() });
-    }
-  }
-
-  /**
-   * Sets the provided value on the state and on the input if it's mounted.
-   *
-   * @param key
-   * @param value
-   * @param typeName
-   */
-  setDateValues(key, value, typeName = defaultTypeName) {
-    const input = key === 'start' ? this.fromInput.current : this.toInput.current;
-    if (input) {
-      input.value = formatDate(value, null, 'll');
-    }
-    return this.setState({
-      [key]: value,
-      activeElement: null,
-      typeName,
-    });
   }
 
   /**
@@ -147,21 +107,6 @@ class DayRangeWithHelpers extends Component {
   }
 
   /**
-   * Fires parent's onChange if it exists and if both dates are set,
-   * otherwise just hide the picker.
-   */
-  confirmRangeChanges() {
-    if (this.props.onChange && this.state.start && this.state.end) {
-      this.props.onChange({
-        start: parseDate(this.state.start, this.props.timezone).toISOString(),
-        end: parseDate(this.state.end, this.props.timezone).toISOString(),
-      });
-    }
-
-    this.hideDayRange();
-  }
-
-  /**
    * Handle the day selection taking in consideration the active element
    *
    * @param day
@@ -178,43 +123,8 @@ class DayRangeWithHelpers extends Component {
     if (isInvalidRange(day, isFromInput, this.state)) return false;
 
     const key = isFromInput ? 'start' : 'end';
-    this[this.state.activeElement].value = formatDate(day, this.props.timezone, 'll');
+    this[this.state.activeElement].current.value = formatDate(day, this.props.timezone, 'll');
     return this.setDateValues(key, day);
-  }
-
-  /**
-   * Checks if the clicked DOM element is not part of the DayRangePicker and if picker is visible,
-   * with both being true we confirm the changes and close the picker.
-   *
-   * @param target
-   */
-  handleOutsideClick({ target }) {
-    if (
-      this.containerEl.current
-      && !this.containerEl.current.contains(target)
-      && this.state.isOpen
-    ) {
-      this.confirmRangeChanges();
-    }
-  }
-
-  /**
-   * Closes the DayRangePicker and unset the activeElement
-   */
-  hideDayRange() {
-    return this.setState({
-      isOpen: false,
-      activeElement: null,
-    });
-  }
-
-  /**
-   * Shows the DayRangePicker
-   */
-  showDayRange() {
-    return this.setState({
-      isOpen: true,
-    });
   }
 
   /**
@@ -226,9 +136,9 @@ class DayRangeWithHelpers extends Component {
    */
   handleClickWrapper({ target }) {
     if (
-      !this.state.isOpen
-      || target === this.fromInput.current
-      || target === this.toInput.current
+      !this.state.isOpen ||
+      target === this.fromInput.current ||
+      target === this.toInput.current
     ) {
       return this.showDayRange();
     }
@@ -257,6 +167,86 @@ class DayRangeWithHelpers extends Component {
         input.focus();
       },
     );
+  }
+
+  /**
+   * Checks if the clicked DOM element is not part of the DayRangePicker and if picker is visible,
+   * with both being true we confirm the changes and close the picker.
+   *
+   * @param target
+   */
+  handleOutsideClick({ target }) {
+    if (
+      this.containerEl.current &&
+      !this.containerEl.current.contains(target) &&
+      this.state.isOpen
+    ) {
+      this.confirmRangeChanges();
+    }
+  }
+
+  /**
+   * Only update the state if the provided displayValue instance is valid.
+   * @param displayValue {DateTimeObj}
+   * @param field
+   */
+  setValidDate(displayValue, field) {
+    if (displayValue.isValid()) {
+      this.setState({ [field]: displayValue.toDate() });
+    }
+  }
+
+  /**
+   * Sets the provided value on the state and on the input if it's mounted.
+   *
+   * @param key
+   * @param value
+   * @param typeName
+   */
+  setDateValues(key, value, typeName = defaultTypeName) {
+    const input = key === 'start' ? this.fromInput.current : this.toInput.current;
+    if (input) {
+      input.value = formatDate(value, null, 'll');
+    }
+    return this.setState({
+      [key]: value,
+      activeElement: null,
+      typeName,
+    });
+  }
+
+  /**
+   * Shows the DayRangePicker
+   */
+  showDayRange() {
+    return this.setState({
+      isOpen: true,
+    });
+  }
+
+  /**
+   * Closes the DayRangePicker and unset the activeElement
+   */
+  hideDayRange() {
+    return this.setState({
+      isOpen: false,
+      activeElement: null,
+    });
+  }
+
+  /**
+   * Fires parent's onChange if it exists and if both dates are set,
+   * otherwise just hide the picker.
+   */
+  confirmRangeChanges() {
+    if (this.props.onChange && this.state.start && this.state.end) {
+      this.props.onChange({
+        start: parseDate(this.state.start, this.props.timezone).toISOString(),
+        end: parseDate(this.state.end, this.props.timezone).toISOString(),
+      });
+    }
+
+    this.hideDayRange();
   }
 
   render() {
@@ -301,8 +291,8 @@ class DayRangeWithHelpers extends Component {
                       name="fromInput"
                       isActive={this.state.activeElement === 'fromInput'}
                       defaultValue={formatDate(this.state.start, this.props.timezone, 'll')}
-                      onBlur={e => this.handleInputBlur(e, 'start')}
-                      onChange={e => this.handleInputChange(e, 'start')}
+                      onBlur={(e) => this.handleInputBlur(e, 'start')}
+                      onChange={(e) => this.handleInputChange(e, 'start')}
                       onClick={() =>
                         this.handleClickInputElement(this.fromInput.current, this.state.start)
                       }
@@ -320,8 +310,8 @@ class DayRangeWithHelpers extends Component {
                       name="toInput"
                       isActive={this.state.activeElement === 'toInput'}
                       defaultValue={formatDate(this.state.end, this.props.timezone, 'll')}
-                      onBlur={e => this.handleInputBlur(e, 'end')}
-                      onChange={e => this.handleInputChange(e, 'end')}
+                      onBlur={(e) => this.handleInputBlur(e, 'end')}
+                      onChange={(e) => this.handleInputChange(e, 'end')}
                       onClick={() =>
                         this.handleClickInputElement(this.toInput.current, this.state.end)
                       }
@@ -342,7 +332,7 @@ class DayRangeWithHelpers extends Component {
             >
               <div className={styles.main}>
                 <div className={styles.helpersWrapper}>
-                  {helpers.map(helper => (
+                  {helpers.map((helper) => (
                     <GhostButton
                       key={uuid()}
                       onClick={() => {
