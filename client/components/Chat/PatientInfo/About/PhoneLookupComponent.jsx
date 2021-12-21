@@ -22,6 +22,7 @@ const PhoneLookupComponent = ({ phoneLookupObj, preferences }) => {
         <PhoneLookupBadge
           isSupport={phoneLookupObj?.isSMSEnabled}
           isContactMethodSetting={smsPreference}
+          isProfileAvailable={!!preferences}
           mode="SMS"
           isGreen={isGreenSmsStyle}
         />
@@ -36,6 +37,7 @@ const PhoneLookupComponent = ({ phoneLookupObj, preferences }) => {
         <PhoneLookupBadge
           isSupport={phoneLookupObj?.isVoiceEnabled}
           isContactMethodSetting={phonePreference}
+          isProfileAvailable={!!preferences}
           mode="Voice"
           isGreen={isGreenVoiceStyle}
         />

@@ -292,7 +292,7 @@ export function markAsRead(chatId) {
           phoneLookupObj = {
             isPhoneLookupChecked: true,
             isSMSEnabled: chats[chatId].isSMSEnabled,
-            isVoiceEnabled: chats[chatId].isSMSEnabled,
+            isVoiceEnabled: chats[chatId].isVoiceEnabled,
           };
         } else {
           phoneLookupObj = {
@@ -431,8 +431,7 @@ export function selectChat(id, createChat = null) {
     }
 
     const chatEntity = await dispatch(getChatEntity(id)).then((data) =>
-      data === null ? data : data.delete('textMessages'),
-    );
+      data === null ? data : data.delete('textMessages'),);
 
     dispatch(setConversationIsLoading(true));
     dispatch(setNewChat(createChat));
@@ -494,7 +493,7 @@ export function sendChatMessage(entityData) {
           phoneLookupObj = {
             isPhoneLookupChecked: true,
             isSMSEnabled: data.isSMSEnabled,
-            isVoiceEnabled: data.isSMSEnabled,
+            isVoiceEnabled: data.isVoiceEnabled,
           };
         } else {
           phoneLookupObj = {
