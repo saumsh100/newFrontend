@@ -150,6 +150,7 @@ $intercom-side-margin: 50px;
     border-top-color: #2e3845;
   }
   .rc-tooltip {
+    z-index:9999;
     &.light {
       opacity: 1;
       width: 250px;
