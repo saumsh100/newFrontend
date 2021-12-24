@@ -116,12 +116,12 @@ export function createWaitSpot() {
       selectedAvailability,
       selectedServiceId,
       selectedPractitionerId,
+      familyPatientUser,
     } = state.availabilities.toJS();
 
-    const { patientUser } = state.auth.toJS();
-    const params = {
+     const params = {
       accountId: account.id,
-      patientUserId: patientUser.id,
+      patientUserId: familyPatientUser,
       preferences: waitSpot.preferences,
       unavailableDays: waitSpot.unavailableDays,
       daysOfTheWeek: waitSpot.daysOfTheWeek,
