@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -32,6 +31,7 @@ const AppointmentSuggestions = (props) => {
   const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
   const birthDate = patientUser.get('birthDate');
   const age = birthDate ? `, ${getTodaysDate(timezone).diff(birthDate, 'years')}` : '';
+  const patientUserPhone = patientUser.phoneNumber || patientUser.cellPhoneNumber;
   const onClickCreate = () => {
     if (apptWrite) {
       createAppointment();
@@ -58,12 +58,10 @@ const AppointmentSuggestions = (props) => {
         </div>
 
         <div className={styles.itemContainer}>
-          {patientUser.cellPhoneNumber && (
+          {patientUserPhone && (
             <div className={styles.contactItem}>
               <Icon icon="phone" size={0.9} type="solid" className={styles.icon} />
-              <div className={styles.data_text}>
-                {formatPhoneNumber(patientUser.cellPhoneNumber)}
-              </div>
+              <div className={styles.data_text}>{formatPhoneNumber(patientUserPhone)}</div>
             </div>
           )}
           {patientUser.email && (
@@ -82,7 +80,7 @@ const AppointmentSuggestions = (props) => {
           return (
             <div className={styles.containerApp}>
               <div className={styles.sameAppList}>
-                {appointments.map(app => (
+                {appointments.map((app) => (
                   <SameAppointment
                     key={app.id}
                     patient={patient}
