@@ -15,11 +15,19 @@ const ErrorFallback = () => {
   return <div style={styles}>Failed to load component</div>;
 };
 
-const MicroFrontendRenderer = ({ component, errorFallback, fallbackMessage, load }) => {
+const MicroFrontendRenderer = ({
+  component,
+  errorFallback,
+  fallbackMessage,
+  load,
+  ContainerTag,
+}) => {
   return (
     load && (
       <Suspense fallback={fallbackMessage}>
-        <ErrorBoundary FallbackComponent={errorFallback}>{component}</ErrorBoundary>
+        <ErrorBoundary FallbackComponent={errorFallback}>
+          <ContainerTag className="mfe-container">{component}</ContainerTag>
+        </ErrorBoundary>
       </Suspense>
     )
   );
@@ -29,6 +37,7 @@ MicroFrontendRenderer.defaultProps = {
   load: false,
   fallbackMessage: 'Loading...',
   errorFallback: ErrorFallback,
+  ContainerTag: 'div',
 };
 
 MicroFrontendRenderer.propTypes = {
@@ -36,6 +45,7 @@ MicroFrontendRenderer.propTypes = {
   fallbackMessage: Proptypes.string,
   errorFallback: Proptypes.func,
   component: Proptypes.element.isRequired,
+  ContainerTag: Proptypes.string,
 };
 
 export default MicroFrontendRenderer;
