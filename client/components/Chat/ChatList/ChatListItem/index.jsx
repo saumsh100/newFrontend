@@ -22,7 +22,6 @@ class ChatListItem extends Component {
     e.stopPropagation();
     const { id, isFlagged } = this.props.chat;
     this.props.toggleFlagged(id, isFlagged);
-    this.props.getChatCategoryCounts();
   }
 
   selectChat() {

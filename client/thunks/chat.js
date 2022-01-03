@@ -205,7 +205,9 @@ export function toggleFlagged(chatId, isFlagged) {
         url: `/api/chats/${chatId}`,
         merge: true,
       }),
-    );
+    ).then(() => {
+      dispatch(getChatCategoryCounts());
+    });
 }
 
 export const toggleVisibility = (chatId, isOpen) => async (dispatch) => {
