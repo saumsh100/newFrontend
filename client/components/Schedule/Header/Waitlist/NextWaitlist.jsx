@@ -1,11 +1,10 @@
-
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import groupBy from 'lodash/groupBy';
 import { useSelector } from 'react-redux';
 import DialogBox from '../../../library/DialogBox';
 import WaitlistTableWithActions from './WaitlistTableWithActions';
-import { batchUpdateFactory, mergeData } from './helpers';
+import { batchUpdateFactory, mergeData, getFullDummyDate } from './helpers';
 import DraftMessage from './WaitlistMessage/DraftMessage';
 import ResponseMessage from './WaitlistMessage/ResponseMessage';
 import WaitlistForm from './WaitlistForm';
@@ -35,8 +34,8 @@ const NextWaitlist = (props) => {
         .getIn(['practitioners', 'models'])
         .sort(sortPractitionersAlphabetical)
         .toArray()
-        .filter(practitioner => practitioner.isActive)
-        .map(practitioner => ({
+        .filter((practitioner) => practitioner.isActive)
+        .map((practitioner) => ({
           value: practitioner.get('id'),
           label: practitioner.getPrettyName(),
         })),
@@ -55,10 +54,8 @@ const NextWaitlist = (props) => {
   const [selectedWaitlistMap, setSelectedWaitlistMap] = useState(batchUpdate);
   const [waitlistState, setWaitListState] = useState(WAITLIST_STATE.initial);
   const [textMessage, setTextMessage] = useState('');
-  const [conversionAnalyzer, setConversionAnalyzer] = useState({ success: [],
-    errors: [] });
-  const [sentMessages, setSentMessages] = useState({ success: [],
-    errors: [] });
+  const [conversionAnalyzer, setConversionAnalyzer] = useState({ success: [], errors: [] });
+  const [sentMessages, setSentMessages] = useState({ success: [], errors: [] });
 
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
@@ -67,9 +64,7 @@ const NextWaitlist = (props) => {
   }, [batchUpdate]);
 
   const loadDefaultTemplate = useCallback(() => {
-    loadMassTextTemplate({ timezone,
-      id: accountId,
-      name }).then(({ data }) => {
+    loadMassTextTemplate({ timezone, id: accountId, name }).then(({ data }) => {
       setTextMessage((prevTextMessage) => {
         if (prevTextMessage !== data) {
           return data;
@@ -108,7 +103,10 @@ const NextWaitlist = (props) => {
     });
   }, [accountId, conversionAnalyzer, textMessage]);
 
-  const handleSubmit = callback => ({ patient, patientUser, ...values }) => {
+  const handleSubmit = (callback) => ({ patient, patientUser, ...values }) => {
+    if (values.availableTimes.length && values.availableTimes[0].length === 4) {
+      values.availableTimes = values.availableTimes.map(getFullDummyDate);
+    }
     callback({
       variables: {
         input: {
@@ -125,7 +123,7 @@ const NextWaitlist = (props) => {
   };
 
   const handleEdit = useCallback(
-    waitspotId => () => {
+    (waitspotId) => () => {
       const waitSpot = props.waitlist.find(({ ccId }) => ccId === waitspotId);
       setSelectedWaitSpot(waitSpot);
       setWaitListState(WAITLIST_STATE.form);
@@ -201,9 +199,9 @@ const NextWaitlist = (props) => {
           type="large"
         >
           <UpdateWaitSpot>
-            {updateWaitSpotHandler => (
+            {(updateWaitSpotHandler) => (
               <CreateWaitSpot>
-                {createWaitSpotHandler => (
+                {(createWaitSpotHandler) => (
                   <WaitlistForm
                     isNewWaitSpot={isNewWaitSpot}
                     timezone={timezone}

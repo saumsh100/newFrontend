@@ -184,6 +184,42 @@ export const generateWaitlistHours = (timezone, start = 7, end = 21, hourInterva
     hourInterval,
   });
 
+export const generateWaitlistHoursOnlyTime = (
+  timezone,
+  start = 7,
+  end = 21,
+  hourInterval = 0.5,
+) => {
+  const a = generateTimeOptions({
+    timezone,
+    start,
+    end,
+    hourInterval,
+  });
+
+  return a.map((x) => ({ ...x, value: x.order }));
+};
+
+export const getTimeOnly = (value) => {
+  try {
+    const newValue = value.split(' GMT')[0];
+    const date = new Date(newValue);
+    const hourPrefix = date.getHours() < 10 ? '0' : '';
+    const minutePrefix = date.getMinutes() < 10 ? '0' : '';
+    return hourPrefix + date.getHours() + minutePrefix + date.getMinutes();
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * returns formated date like  Wed Dec 22 2021 08:30:00 GMT-0800 (PST)
+ * @param string timeStr is a time only format eg: 0830
+ */
+export const getFullDummyDate = (timeStr) => {
+  return `Wed Dec 22 2021 ${timeStr[0]}${timeStr[1]}:${timeStr[2]}${timeStr[3]} GMT-0800 (PST)`;
+};
+
 export const generateTimesFilter = (timezone, start = 7, end = 21, hourInterval = 0.5) => {
   const times = generateWaitlistHours(timezone, start, end, hourInterval);
   return times.reduce((update, curr) => {

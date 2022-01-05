@@ -1,4 +1,3 @@
-
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { sortAsc } from '../../../../util/isomorphic';
@@ -12,7 +11,7 @@ export { moment as DateTimeObj };
  * @returns {moment.Moment} A Moment object
  */
 export const getDate = (date, format = false, strict = false) =>
-  (format ? moment(date, format, strict) : moment(date));
+  format ? moment(date, format, strict) : moment(date);
 
 /**
  * @param {string} [timezone]
@@ -96,7 +95,7 @@ export const getISODateParsedWithFormat = (date, format, timezone = null, strict
  * @returns {moment.Moment} A Moment object
  */
 export const parseDate = (date, timezone = null) =>
-  (timezone ? moment.tz(date, timezone) : getDate(date));
+  timezone ? moment.tz(date, timezone) : getDate(date);
 
 /**
  * @param {string|Date|moment} date
@@ -106,9 +105,9 @@ export const parseDate = (date, timezone = null) =>
  * @returns {moment.Moment} A Moment object
  */
 export const parseDateWithFormat = (date, format, timezone = null, strict = false) =>
-  (timezone && typeof timezone === 'string'
+  timezone && typeof timezone === 'string'
     ? moment.tz(date, format, strict, timezone)
-    : getDate(date, format, strict));
+    : getDate(date, format, strict);
 
 /**
  * @param {string|Date|moment} date
@@ -136,10 +135,10 @@ export const getFormattedDate = (date, format, timezone = null, useLocalTime = f
  * @param {boolean} useLocalTime set if it should use the computer timezone or not
  * @returns {number} A string witth age
  */
- export const calculateAge = (date, timezone = null, useLocalTime = false) => {
+export const calculateAge = (date, timezone = null, useLocalTime = false) => {
   const hasTimezone = () => (useLocalTime ? parseDate(date, timezone) : getUTCDate(date, timezone));
   const dateToUse = timezone ? hasTimezone() : getDate(date);
-  return getTodaysDate(timezone).diff(dateToUse, 'years')
+  return getTodaysDate(timezone).diff(dateToUse, 'years');
 };
 
 /**
@@ -149,7 +148,7 @@ export const getFormattedDate = (date, format, timezone = null, useLocalTime = f
  * @returns {boolean} check if the date is valid or nor in a given format
  */
 export const isDateValid = (date, format = undefined, strict = false) =>
-  (format ? getDate(date, format, strict).isValid() : getDate(date, strict).isValid);
+  format ? getDate(date, format, strict).isValid() : getDate(date, strict).isValid;
 
 /**
  * @param {moment} input
@@ -157,7 +156,7 @@ export const isDateValid = (date, format = undefined, strict = false) =>
  * @returns {moment.Duration} moment.Duration
  */
 export const getDateDuration = (input, unit = undefined) =>
-  (unit ? moment.duration(input, unit) : moment.duration(input));
+  unit ? moment.duration(input, unit) : moment.duration(input);
 
 /**
  * @global
@@ -384,27 +383,41 @@ export const getWeeklySchedule = (entities, auth) => {
   const timezone = auth.get('timezone');
   const newSchedule = {
     week: {
-      sunday: { start: 12,
+      sunday: {
+        start: 12,
         end: 12,
-        day: 0 },
-      monday: { start: 12,
+        day: 0,
+      },
+      monday: {
+        start: 12,
         end: 12,
-        day: 1 },
-      tuesday: { start: 12,
+        day: 1,
+      },
+      tuesday: {
+        start: 12,
         end: 12,
-        day: 2 },
-      wednesday: { start: 12,
+        day: 2,
+      },
+      wednesday: {
+        start: 12,
         end: 12,
-        day: 3 },
-      thursday: { start: 12,
+        day: 3,
+      },
+      thursday: {
+        start: 12,
         end: 12,
-        day: 4 },
-      friday: { start: 12,
+        day: 4,
+      },
+      friday: {
+        start: 12,
         end: 12,
-        day: 5 },
-      saturday: { start: 12,
+        day: 5,
+      },
+      saturday: {
+        start: 12,
         end: 12,
-        day: 6 },
+        day: 6,
+      },
     },
     average: {
       start: 12,
@@ -443,7 +456,7 @@ export const WeeklyScheduleShape = {
 };
 
 const sortByOffset = (a, b) =>
-  (a.offset === b.offset ? a.name.localeCompare(b.name) : b.offset - a.offset);
+  a.offset === b.offset ? a.name.localeCompare(b.name) : b.offset - a.offset;
 
 const getOffsetFromTimezoneName = (name) => {
   const now = Date.now();
@@ -480,15 +493,15 @@ export const getTimezoneList = ({
   showAbbr = false,
 }) => {
   const allZones = moment.tz.names();
-  const names = filter ? allZones.filter(name => filter.test(name)) : allZones;
+  const names = filter ? allZones.filter((name) => filter.test(name)) : allZones;
 
   if (showOffset) {
     return names
       .map(getOffsetFromTimezoneName)
       .sort(sortByOffset)
-      .map(zone => generateDropdownOptionsFromTimezonesWithOffsets(zone, showAbbr));
+      .map((zone) => generateDropdownOptionsFromTimezonesWithOffsets(zone, showAbbr));
   }
-  return names.map(value => ({
+  return names.map((value) => ({
     value,
     label: value.replace(/_/gi, ' '),
   }));

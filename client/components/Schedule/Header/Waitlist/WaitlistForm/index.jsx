@@ -1,8 +1,7 @@
-
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { week, capitalize } from '../../../../../util/isomorphic';
-import { Button, getDate, Icon, Input, parseDate } from '../../../../library';
+import { Button, Icon, Input, parseDate } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';
 import PatientSearch from '../../../../PatientSearch';
@@ -12,12 +11,13 @@ import styles from './styles.scss';
 import Selector from './Selector';
 import {
   convertArrayOfOptionsInMap,
-  generateWaitlistHours,
+  generateWaitlistHoursOnlyTime,
   getDayPickers,
   getTimePickers,
   getTimeSlot,
   getAllTimeSlots,
   generateDaysOfWeek,
+  getTimeOnly,
 } from '../helpers';
 import { practitionerShape } from '../../../../library/PropTypeShapes';
 
@@ -80,14 +80,28 @@ const WaitlistForm = ({
   practitioners,
 }) => {
   const [formValues, setFormValues] = useState(setInitialState(initialState, defaultUnit));
+  const [selectedTimes, setSelectedTimes] = useState([]);
 
   const selectedPatient = formValues.patient || formValues.patientUser;
   const selectedDaysOfWeek = Object.entries(formValues.daysOfTheWeek)
     .filter(([, v]) => v)
     .map(([v]) => v);
 
-  const selectedTimes = formValues.availableTimes.map(time =>
-    parseDate(new Date(time), timezone).toISOString());
+  // TODO: use office hours instead of fixed time
+  const timeOptions = useMemo(() => generateWaitlistHoursOnlyTime(timezone), [timezone]);
+
+  useEffect(() => {
+    let newSelectedTimes = [];
+    if (formValues.availableTimes.length) {
+      newSelectedTimes = formValues.availableTimes.map((time) => {
+        if (time.length !== 4) {
+          return getTimeOnly(time);
+        }
+        return time;
+      });
+    }
+    setSelectedTimes(newSelectedTimes);
+  }, [formValues.availableTimes]);
 
   const handleAutoSuggest = (newValue) => {
     setFormValues({
@@ -95,16 +109,16 @@ const WaitlistForm = ({
       patient:
         newValue && 'ccId' in newValue
           ? {
-            avatarUrl: newValue.avatarUrl,
-            firstName: newValue.firstName,
-            id: newValue.ccId,
-            lastName: newValue.lastName,
-          }
+              avatarUrl: newValue.avatarUrl,
+              firstName: newValue.firstName,
+              id: newValue.ccId,
+              lastName: newValue.lastName,
+            }
           : null,
     });
   };
 
-  const onChange = key => (v) => {
+  const onChange = (key) => (v) => {
     setFormValues({
       ...formValues,
       [key]: v,
@@ -113,7 +127,7 @@ const WaitlistForm = ({
 
   const allWeekDays = useMemo(
     () =>
-      week.all.map(day => ({
+      week.all.map((day) => ({
         value: day,
         label: capitalize(day),
       })),
@@ -136,9 +150,6 @@ const WaitlistForm = ({
     });
   };
 
-  // TODO: use office hours instead of fixed time
-  const timeOptions = useMemo(() => generateWaitlistHours(timezone), [timezone]);
-
   const onDaysOfTheWeekChange = (values) => {
     onChange('daysOfTheWeek')(convertArrayOfOptionsInMap(values, generateDaysOfWeek()));
   };
@@ -154,8 +165,8 @@ const WaitlistForm = ({
   };
 
   const onToggleDayPicker = (key) => {
-    const allChecked = week[key].every(day => selectedDaysOfWeek.includes(day));
-    const newValue = selectedDaysOfWeek.filter(day => !week[key].includes(day));
+    const allChecked = week[key].every((day) => selectedDaysOfWeek.includes(day));
+    const newValue = selectedDaysOfWeek.filter((day) => !week[key].includes(day));
     if (allChecked) {
       onDaysOfTheWeekChange(newValue);
     } else {
@@ -164,13 +175,21 @@ const WaitlistForm = ({
   };
 
   const onToggleTimePicker = (data) => {
-    const allChecked = data.every(time => selectedTimes.includes(time));
-    const newValue = selectedTimes.filter(time => !data.includes(time));
+    const allChecked = data.every((time) => selectedTimes.includes(time));
+    const newValue = selectedTimes.filter((time) => !data.includes(time));
     if (allChecked) {
       onChange('availableTimes')(newValue);
     } else {
       onChange('availableTimes')([...newValue, ...data]);
     }
+  };
+
+  const returnFormattedValues = (v) => {
+    const result = timeOptions.find((option) => option.value === v)?.label;
+    if (result) {
+      return result;
+    }
+    return null;
   };
 
   const timeSlots = useMemo(() => {
@@ -197,7 +216,7 @@ const WaitlistForm = ({
           onClick={goToWaitlistTable}
           role="button"
           tabIndex={0}
-          onKeyUp={e => e.keyCode === 13 && goToWaitlistTable}
+          onKeyUp={(e) => e.keyCode === 13 && goToWaitlistTable}
         >
           <div className={styles.iconWrapper}>
             <Icon size={1} icon="chevron-left" />
@@ -288,9 +307,7 @@ const WaitlistForm = ({
                   disabled={disabled}
                   selected={selectedTimes}
                   placeholder="Preferred Times"
-                  formatValue={v =>
-                    timeOptions.find(option => option.value === getDate(v).toISOString())?.label
-                  }
+                  formatValue={returnFormattedValues}
                   error={error}
                   selectorProps={getToggleButtonProps()}
                   handleSelection={handleSelection}
@@ -327,9 +344,9 @@ const WaitlistForm = ({
             </div>
           </div>
           <div className={styles.waitlistFormColumnFull}>
-            <label htmlFor="textarea" className={styles.columnLabel}>
+            <div htmlFor="textarea" className={styles.columnLabel}>
               Notes
-            </label>
+            </div>
             <div className={styles.columnBody}>
               <textarea
                 id="textarea"
