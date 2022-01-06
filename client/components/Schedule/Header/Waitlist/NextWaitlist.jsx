@@ -203,6 +203,7 @@ const NextWaitlist = (props) => {
               <CreateWaitSpot>
                 {(createWaitSpotHandler) => (
                   <WaitlistForm
+                    waitlist={props.waitlist}
                     isNewWaitSpot={isNewWaitSpot}
                     timezone={timezone}
                     initialState={selectedWaitSpot}

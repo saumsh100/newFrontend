@@ -7,6 +7,7 @@ import DayPicker from '../../../../library/DayPicker';
 import PatientSearch from '../../../../PatientSearch';
 import { SelectedPatient } from '../AddToWaitlist';
 import MultiSelect from '../../../../library/ui-kit/MultiSelect';
+import FormWarning from '../../../../library/Form/FormWarning';
 import styles from './styles.scss';
 import Selector from './Selector';
 import {
@@ -71,6 +72,7 @@ const setInitialState = (
 });
 
 const WaitlistForm = ({
+  waitlist,
   goToWaitlistTable,
   timezone,
   handleSubmit,
@@ -80,6 +82,7 @@ const WaitlistForm = ({
   practitioners,
 }) => {
   const [formValues, setFormValues] = useState(setInitialState(initialState, defaultUnit));
+  const [isPatientInWaitlist, setIsPatientInWaitlist] = useState(false);
   const [selectedTimes, setSelectedTimes] = useState([]);
 
   const selectedPatient = formValues.patient || formValues.patientUser;
@@ -87,6 +90,13 @@ const WaitlistForm = ({
     .filter(([, v]) => v)
     .map(([v]) => v);
 
+  useEffect(() => {
+    const isPatientMatched = waitlist.some(({ patient, patientId, patientUser }) => {
+      const { firstName, lastName } = patientId ? patient : patientUser;
+      return selectedPatient?.firstName === firstName && selectedPatient?.lastName === lastName;
+    });
+    setIsPatientInWaitlist(isPatientMatched);
+  }, [waitlist, selectedPatient]);
   // TODO: use office hours instead of fixed time
   const timeOptions = useMemo(() => generateWaitlistHoursOnlyTime(timezone), [timezone]);
 
@@ -224,6 +234,16 @@ const WaitlistForm = ({
           Cancel and return to waitlist
         </div>
       </div>
+      {isNewWaitSpot && isPatientInWaitlist && (
+        <div className={styles.alreadyInWaitlist}>
+          <FormWarning
+            onClose={() => {
+              setIsPatientInWaitlist(false);
+            }}
+            message="This patient is already on the waitlist. Please review before adding to the waitlist."
+          />
+        </div>
+      )}
       <div className={styles.heading}>{isNewWaitSpot ? 'Add to Waitlist' : 'Update Wait Spot'}</div>
       <form id="waitlist-form" onSubmit={handleSubmitForm} className={styles.waitlistFormWrapper}>
         <div className={styles.waitlistForm}>
@@ -387,6 +407,7 @@ WaitlistForm.propTypes = {
   isNewWaitSpot: PropTypes.bool.isRequired,
   defaultUnit: PropTypes.number.isRequired,
   practitioners: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
+  waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
 };
 
 WaitlistForm.defaultProps = {
