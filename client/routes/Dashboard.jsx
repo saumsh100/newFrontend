@@ -1,9 +1,10 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import loadable from '@loadable/component';
 import Login from '../components/Login';
 import DashboardApp from '../containers/DashboardApp';
 import FourZeroFour from '../components/FourZeroFour';
@@ -17,17 +18,17 @@ import { browserHistory as history } from '../store/factory';
 import LoginSSO from '../components/LoginSSO';
 
 const Routes = {
-  dashboard: lazy(() => import('../components/Dashboard/index')),
-  profile: lazy(() => import('../components/Profile')),
-  intelligence: lazy(() => import('./Dashboard/Reports')),
-  schedule: lazy(() => import('./Dashboard/Schedule')),
-  patients: lazy(() => import('./Dashboard/Patients')),
-  chat: lazy(() => import('./Dashboard/Chat')),
-  typography: lazy(() => import('./Dashboard/Typography')),
-  reputation: lazy(() => import('./Dashboard/Reputation')),
-  settings: lazy(() => import('./Dashboard/Settings')),
-  admin: lazy(() => import('./Admin/Enterprises')),
-  calls: lazy(() => import('./Dashboard/Calls')),
+  dashboard: loadable(() => import('../components/Dashboard')),
+  profile: loadable(() => import('../components/Profile')),
+  intelligence: loadable(() => import('./Dashboard/Reports')),
+  schedule: loadable(() => import('./Dashboard/Schedule')),
+  patients: loadable(() => import('./Dashboard/Patients')),
+  chat: loadable(() => import('./Dashboard/Chat')),
+  typography: loadable(() => import('./Dashboard/Typography')),
+  reputation: loadable(() => import('./Dashboard/Reputation')),
+  settings: loadable(() => import('./Dashboard/Settings')),
+  admin: loadable(() => import('./Admin/Enterprises')),
+  calls: loadable(() => import('./Dashboard/Calls')),
 };
 
 const ExternalRedirector = ({

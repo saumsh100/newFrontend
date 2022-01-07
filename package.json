@@ -7,9 +7,7 @@
     "node": "^14.17.4",
     "npm": "^6.14.14"
   },
-  "files": [
-    "/dist"
-  ],
+  "files": ["/dist"],
   "scripts": {
     "build": "npm run client:build",
     "clean:assets": "rm -rf build",
@@ -34,7 +32,7 @@
     "serve:watch": "npm-run-all --parallel client:build:watch client:widget:watch serve",
     "serve:prod": "node ./dist/server.bundle.js",
     "serve": "dotenv -- nodemon server",
-    "test:jest": "dotenv -- jest --verbose --forceExit",
+    "test": "dotenv -- jest --verbose --forceExit",
     "test:watch": "dotenv -- jest --watch -o --collect-coverage",
     "twilio:ngrok": "twilio-run --live --port=5101 --ngrok",
     "twilio:watch": "twilio-run --live --port=5101"
@@ -50,7 +48,9 @@
     "@babel/preset-env": "^7.13.9",
     "@babel/preset-react": "^7.12.13",
     "@carecru/component-library": "1.0.0-alpha.0",
+    "@loadable/component": "^5.15.2",
     "@welldone-software/why-did-you-render": "^6.0.5",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "axios": "^0.21.4",
     "babel-loader": "^8.2.2",
     "babel-plugin-named-asset-import": "^0.3.7",
@@ -104,14 +104,14 @@
     "raf": "^3.4.0",
     "rc-slider": "^8.6.13",
     "rc-tooltip": "^3.4.2",
-    "react": "^16.14.0",
+    "react": "^17.0.2",
     "react-autosuggest": "9.4.0",
     "react-chartjs-2": "^2.7.6",
     "react-color": "^2.12.0",
     "react-day-picker": "^7.3.2",
     "react-dd-menu": "^2.0.0",
     "react-document-title": "^2.0.3",
-    "react-dom": "^16.14.0",
+    "react-dom": "^17.0.2",
     "react-dropzone": "^3.13.2",
     "react-error-boundary": "^3.1.4",
     "react-flexbox-grid": "^2.1.2",
@@ -156,7 +156,7 @@
   "devDependencies": {
     "@hot-loader/react-dom": "^16.9.0",
     "@types/query-string": "^4.3.1",
-    "@types/react": "^16.14.16",
+    "@types/react": "^17.0.38",
     "@types/react-redux": "^7.1.12",
     "@webpack-cli/serve": "^1.5.2",
     "babel-jest": "^24.9.0",

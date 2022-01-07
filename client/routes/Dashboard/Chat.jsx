@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { lazy } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
+import loadable from '@loadable/component';
 
 const base = (path = '') => `/chat${path}`;
 
 const Routes = {
-  chat: lazy(() => import('../../components/Chat')),
-  communicationsChat: lazy(() => import('../../micro-front-ends/communications/chat')),
+  chat: loadable(() => import('../../components/Chat')),
+  communicationsChat: loadable(() => import('../../micro-front-ends/communications/chat')),
 };
 
 const Chat = ({ useCommunicationsChat }) =>

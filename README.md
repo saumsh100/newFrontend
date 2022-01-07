@@ -185,6 +185,6 @@ Now, the application is hosted at `http://localhost:3000`.
 
 ## Running Tests
 
-To run all unit tests (including the existing frontend): `npm run test:jest`
+To run all unit tests (including the existing frontend): `npm run test`
 
 **note** the tests are broken for the frontend and we are looking for a volunteer to get them fixed ;)

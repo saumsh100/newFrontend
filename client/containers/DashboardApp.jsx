@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import React, { lazy } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import loadable from '@loadable/component';
 import TopBarContainer from './TopBarContainer';
 import NavRegionContainer from './NavRegionContainer';
 import MainRegionContainer from './MainRegionContainer';
@@ -19,9 +20,9 @@ import { loadUnreadChatCount } from '../thunks/chat';
 import MicroFrontendRenderer from '../micro-front-ends/MicroFrontendRenderer';
 
 // eslint-disable-next-line import/no-unresolved
-const EmPracticeSwitcher = lazy(() => import('EM_MFE/EmPracticeSwitcher'));
+const EmPracticeSwitcher = loadable(() => import('EM_MFE/EmPracticeSwitcher'));
 // eslint-disable-next-line import/no-unresolved
-const EmAvatarWidget = lazy(() => import('EM_MFE/EmAvatarWidget'));
+const EmAvatarWidget = loadable(() => import('EM_MFE/EmAvatarWidget'));
 class DashboardApp extends React.Component {
   constructor(props) {
     super(props);

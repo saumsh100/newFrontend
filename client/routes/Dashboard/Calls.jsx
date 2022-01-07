@@ -1,11 +1,11 @@
-
-import React, { lazy } from 'react';
+import React from 'react';
 import DocumentTitle from 'react-document-title';
 import { Switch, Route } from 'react-router-dom';
+import loadable from '@loadable/component';
 import EnabledFeature from '../../components/library/EnabledFeature';
 
 const Routes = {
-  calls: lazy(() => import('../../components/Calls')),
+  calls: loadable(() => import('../../components/Calls')),
 };
 
 const Calls = () => (

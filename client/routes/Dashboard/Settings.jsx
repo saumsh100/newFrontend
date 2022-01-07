@@ -1,11 +1,12 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import loadable from '@loadable/component';
 import Loader from '../../components/Loader';
 import Donna from '../../components/Settings/Donna';
 import Practice from '../../components/Settings/Practice';
@@ -20,21 +21,21 @@ const donnaBase = (path = '') => base(`/workflow${path}`);
 const donnaOldBase = (path = '') => base(`/donna${path}`);
 
 const Routes = {
-  clinicGeneral: lazy(() => import('../../components/Settings/Practice/General')),
-  clinicUsers: lazy(() => import('../../components/Settings/Practice/Users')),
+  clinicGeneral: loadable(() => import('../../components/Settings/Practice/General')),
+  clinicUsers: loadable(() => import('../../components/Settings/Practice/Users')),
 
-  scheduleOfficeHours: lazy(() => import('../../components/Settings/Practice/OfficeHours')),
-  scheduleOnlineBooking: lazy(() => import('../../components/Settings/Practice/OnlineBooking')),
-  chairs: lazy(() => import('../../components/Settings/Practice/Chairs')),
-  forms: lazy(() => import('../../components/Settings/Practice/Forms')),
-  superAdmin: lazy(() => import('../../components/Settings/Practice/SuperAdmin')),
+  scheduleOfficeHours: loadable(() => import('../../components/Settings/Practice/OfficeHours')),
+  scheduleOnlineBooking: loadable(() => import('../../components/Settings/Practice/OnlineBooking')),
+  chairs: loadable(() => import('../../components/Settings/Practice/Chairs')),
+  forms: loadable(() => import('../../components/Settings/Practice/Forms')),
+  superAdmin: loadable(() => import('../../components/Settings/Practice/SuperAdmin')),
 
-  reminders: lazy(() => import('../../components/Settings/Donna/Reminders')),
-  recalls: lazy(() => import('../../components/Settings/Donna/Recalls')),
-  reviews: lazy(() => import('../../components/Settings/Donna/Reviews')),
+  reminders: loadable(() => import('../../components/Settings/Donna/Reminders')),
+  recalls: loadable(() => import('../../components/Settings/Donna/Recalls')),
+  reviews: loadable(() => import('../../components/Settings/Donna/Reviews')),
 
-  reasons: lazy(() => import('../../components/Settings/Reasons')),
-  practitioners: lazy(() => import('../../components/Settings/Practitioners')),
+  reasons: loadable(() => import('../../components/Settings/Reasons')),
+  practitioners: loadable(() => import('../../components/Settings/Practitioners')),
 };
 
 const PracticeContainer = (props) => (
