@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -18,8 +17,14 @@ class FamilyMember extends React.Component {
   renderNameAge(fullName, age) {
     return (
       <ActionsDropdown
-        patient={{ ...this.props.patient,
-id: this.props.node.ccId }}
+        patient={{
+          id: this.props.node.ccId,
+          isPhoneNumberAvailable: this.props.node.isPhoneNumberAvailable,
+          isSMSEnabled: this.props.node.isSMSEnabled,
+          isVoiceEnabled: this.props.node.isVoiceEnabled,
+          phoneNumberType: this.props.node.phoneNumberType,
+          ...this.props.patient,
+        }}
         render={({ onClick }) => (
           <div
             role="button"
@@ -27,7 +32,7 @@ id: this.props.node.ccId }}
             className={styles.patientLink}
             onDoubleClick={() => this.props.push(`/patients/${this.props.node.ccId}`)}
             onClick={onClick}
-            onKeyDown={e => e.keyCode === 13 && onClick()}
+            onKeyDown={(e) => e.keyCode === 13 && onClick()}
           >
             <span className={styles.familyMember_name}>{`${fullName}, ${age}`}</span>
             <span className={styles.actionsButtonSmall}>
@@ -217,7 +222,7 @@ FamilyMember.defaultProps = {
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       push,
@@ -225,7 +230,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FamilyMember);
+export default connect(mapStateToProps, mapDispatchToProps)(FamilyMember);

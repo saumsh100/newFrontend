@@ -30,6 +30,10 @@ export default gql`
             mobilePhoneNumber
             homePhoneNumber
             workPhoneNumber
+            isPhoneNumberAvailable
+            isSMSEnabled
+            isVoiceEnabled
+            phoneNumberType
           }
           members {
             edges {
@@ -53,6 +57,10 @@ export default gql`
                 mobilePhoneNumber
                 homePhoneNumber
                 workPhoneNumber
+                isPhoneNumberAvailable
+                isSMSEnabled
+                isVoiceEnabled
+                phoneNumberType
               }
             }
           }

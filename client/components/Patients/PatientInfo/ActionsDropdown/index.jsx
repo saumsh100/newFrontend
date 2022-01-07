@@ -126,6 +126,7 @@ function mapStateToProps({ chat }, { patient }) {
   if (typeof patientObj.toJS === 'function') {
     patientObj = patient.toJS();
   }
+
   if (patientObj && patientObj.isSMSEnabled !== null && patientObj.isSMSEnabled !== undefined) {
     const { foundChatId, cellPhoneNumber, isSMSEnabled } = patientObj;
     canTextPatient = !!((foundChatId || cellPhoneNumber) && isSMSEnabled);
