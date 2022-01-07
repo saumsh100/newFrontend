@@ -93,10 +93,14 @@ const WaitlistForm = ({
   useEffect(() => {
     const isPatientMatched = waitlist.some(({ patient, patientId, patientUser }) => {
       const { firstName, lastName } = patientId ? patient : patientUser;
-      return selectedPatient?.firstName === firstName && selectedPatient?.lastName === lastName;
+      return (
+        selectedPatient?.firstName?.toLowerCase() === firstName?.toLowerCase() &&
+        selectedPatient?.lastName?.toLowerCase() === lastName?.toLowerCase()
+      );
     });
     setIsPatientInWaitlist(isPatientMatched);
   }, [waitlist, selectedPatient]);
+
   // TODO: use office hours instead of fixed time
   const timeOptions = useMemo(() => generateWaitlistHoursOnlyTime(timezone), [timezone]);
 
