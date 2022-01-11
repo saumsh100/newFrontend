@@ -57,6 +57,8 @@ const PatientSchema = {
   // PhoneLookup keys
   isSMSEnabled: null,
   isVoiceEnabled: null,
+  isPhoneNumberAvailable: null,
+  phoneNumberType: null,
 };
 
 export default class Patient extends createModel(PatientSchema, 'Patient') {
