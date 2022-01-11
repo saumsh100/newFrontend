@@ -30,6 +30,7 @@ const SameAppointment = (props) => {
   const age = birthDate ? `, ${getTodaysDate(timezone).diff(birthDate, 'years')}` : '';
   const appointmentDate = getUTCDate(startDate, timezone).format('LL');
   const patientPhone = patient.mobilePhoneNumber || patient.cellPhoneNumber;
+  const patientEmail = patient.email;
   return (
     <Button
       className={classNames(styles.dataContainer, styles.singleItem, {
@@ -54,6 +55,12 @@ const SameAppointment = (props) => {
             <div className={styles.contactItem}>
               <Icon icon="phone" size={0.9} type="solid" className={styles.icon} />
               <div className={styles.data_text}>{formatPhoneNumber(patientPhone)}</div>
+            </div>
+          )}
+          {patientEmail && (
+            <div className={styles.contactItem}>
+              <Icon icon="envelope" size={0.9} type="solid" className={styles.icon} />
+              <div className={styles.data_text}>{patientEmail}</div>
             </div>
           )}
         </div>
