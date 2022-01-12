@@ -7,7 +7,9 @@
     "node": "^14.17.4",
     "npm": "^6.14.14"
   },
-  "files": ["/dist"],
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "build": "npm run client:build",
     "clean:assets": "rm -rf build",
@@ -47,7 +49,7 @@
     "@babel/plugin-transform-react-display-name": "^7.12.13",
     "@babel/preset-env": "^7.13.9",
     "@babel/preset-react": "^7.12.13",
-    "@carecru/component-library": "1.0.0-alpha.0",
+    "@carecru/component-library": "1.0.0-alpha.2",
     "@loadable/component": "^5.15.2",
     "@welldone-software/why-did-you-render": "^6.0.5",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
