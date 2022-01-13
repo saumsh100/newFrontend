@@ -77,37 +77,40 @@ ee(CareCru.prototype);
 /**
  * #open
  */
-CareCru.prototype.open = function(route = 'book') {
+CareCru.prototype.open = function (route = 'book') {
   this.emit('open');
   this.host.sendEvent('changeBaseRoute', route);
   this.modal.open();
   this.emit('opened');
 };
 
-CareCru.prototype.mergeReviewValues = function(values) {
+CareCru.prototype.mergeReviewValues = function (values) {
   this.host.sendEvent('mergeReviewValues', values);
 };
 
-CareCru.prototype.mergeSentReviewValues = function(values) {
+CareCru.prototype.mergeSentReviewValues = function (values) {
   this.host.sendEvent('mergeSentReviewValues', values);
 };
 
-CareCru.prototype.setSentRecallId = function(id) {
+CareCru.prototype.setSentRecallId = function (id) {
   this.host.sendEvent('setSentRecallId', id);
 };
 
-CareCru.prototype.startRecall = function() {
+CareCru.prototype.startRecall = function () {
   this.host.sendEvent('startRecall');
 };
 
-CareCru.prototype.setDueDate = function(id) {
+CareCru.prototype.setDueDate = function (id) {
   this.host.sendEvent('setDueDate', id);
 };
 
 /**
  * #close
  */
-CareCru.prototype.close = function() {
+CareCru.prototype.close = function () {
+  if (window.location.search.search('cc=review') !== -1) {
+    window.location.href = window.location.href.split('?')[0].toString();
+  }
   this.emit('close');
   this.modal.close();
   this.emit('closed');
