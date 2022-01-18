@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
 import { bindActionCreators } from 'redux';
@@ -175,19 +175,10 @@ class PatientInfo extends Component {
   }
 
   reinitializeState() {
-    this.setState(
-      {
-        isOpen: false,
-        filterOpen: false,
-      },
-      () => {
-        if (isHub()) {
-          const { title, backHandler } = this.state.persistedElectronData;
-          this.props.setTitle(title);
-          this.props.setBackHandler(backHandler);
-        }
-      },
-    );
+    this.setState({
+      isOpen: false,
+      filterOpen: false,
+    });
   }
 
   addRemoveFilter(filter) {
@@ -206,6 +197,7 @@ class PatientInfo extends Component {
       accountViewer,
       reminders,
       recalls,
+      setRefetchState,
     } = this.props;
 
     const wasAllFetched = wasPatientFetched;
@@ -242,90 +234,89 @@ class PatientInfo extends Component {
               reminders={reminders}
               recalls={recalls}
               wasAllFetched={wasAllFetched}
+              setRefetchState={setRefetchState}
             />
           </Col>
         </Row>
-        {(!isHub() || (isHub() && !this.state.isOpen)) && (
-          <Row className={styles.row}>
-            <Col xs={12} className={styles.body}>
-              <div className={styles.tabsSection}>
-                <Tabs fluid index={this.state.pageTab} onChange={this.changePageTab}>
-                  <Tab
-                    label="Patient Info"
-                    inactiveClass={styles.inactiveTab}
-                    activeClass={styles.activeTab}
+        <Row className={styles.row}>
+          <Col xs={12} className={styles.body}>
+            <div className={styles.tabsSection}>
+              <Tabs fluid index={this.state.pageTab} onChange={this.changePageTab}>
+                <Tab
+                  label="Patient Info"
+                  inactiveClass={styles.inactiveTab}
+                  activeClass={styles.activeTab}
+                />
+                <Tab
+                  label="Timeline"
+                  inactiveClass={styles.inactiveTab}
+                  activeClass={styles.activeTab}
+                />
+              </Tabs>
+            </div>
+            {shouldDisplayInfoPage && (
+              <div className={styles.infoDisplay}>
+                {!isResponsive() && (
+                  <HeaderModalComponent
+                    icon="pencil"
+                    text="Edit"
+                    onClick={() => this.openModal()}
+                    title="Patient Info"
                   />
-                  <Tab
-                    label="Timeline"
-                    inactiveClass={styles.inactiveTab}
-                    activeClass={styles.activeTab}
-                  />
-                </Tabs>
+                )}
+                <LeftInfoDisplay
+                  accountViewer={accountViewer}
+                  patient={patient}
+                  openModal={this.openModal}
+                  reinitializeState={this.reinitializeState}
+                  tabIndex={this.state.tabIndex}
+                  handleTabChange={this.handleTabChange}
+                  activeAccount={activeAccount}
+                />
               </div>
-              {shouldDisplayInfoPage && (
-                <div className={styles.infoDisplay}>
-                  {!isResponsive() && (
-                    <HeaderModalComponent
-                      icon="pencil"
-                      text="Edit"
-                      onClick={() => this.openModal()}
-                      title="Patient Info"
-                    />
-                  )}
-                  <LeftInfoDisplay
-                    accountViewer={accountViewer}
-                    patient={patient}
-                    openModal={this.openModal}
-                    reinitializeState={this.reinitializeState}
-                    tabIndex={this.state.tabIndex}
-                    handleTabChange={this.handleTabChange}
-                    activeAccount={activeAccount}
-                  />
-                </div>
-              )}
-              {shouldDisplayTimelinePage && (
-                <div className={styles.timeline}>
-                  {!isResponsive() && (
-                    <div className={styles.textContainer}>
-                      <div className={styles.cardTitle}>Timeline & Activities</div>
-                      <Popover
-                        isOpen={this.state.filterOpen}
-                        body={[
-                          <FilterTimeline
-                            addRemoveFilter={this.addRemoveFilter}
-                            defaultEvents={this.state.defaultEvents}
-                            filters={this.props.filters}
-                            clearFilters={this.props.clearAllTimelineFilters}
-                            selectAllFilters={this.props.selectAllTimelineFilters}
-                          />,
-                        ]}
-                        preferPlace="below"
-                        tipSize={0.01}
-                        onOuterAction={this.reinitializeState}
+            )}
+            {shouldDisplayTimelinePage && (
+              <div className={styles.timeline}>
+                {!isResponsive() && (
+                  <div className={styles.textContainer}>
+                    <div className={styles.cardTitle}>Timeline & Activities</div>
+                    <Popover
+                      isOpen={this.state.filterOpen}
+                      body={[
+                        <FilterTimeline
+                          addRemoveFilter={this.addRemoveFilter}
+                          defaultEvents={this.state.defaultEvents}
+                          filters={this.props.filters}
+                          clearFilters={this.props.clearAllTimelineFilters}
+                          selectAllFilters={this.props.selectAllTimelineFilters}
+                        />,
+                      ]}
+                      preferPlace="below"
+                      tipSize={0.01}
+                      onOuterAction={this.reinitializeState}
+                    >
+                      <Button
+                        className={classNames(styles.textHeader, styles.textHeaderButton)}
+                        onClick={this.openFilter}
                       >
-                        <Button
-                          className={classNames(styles.textHeader, styles.textHeaderButton)}
-                          onClick={this.openFilter}
-                        >
-                          <div className={styles.textHeader_icon}>
-                            <Icon icon="filter" />
-                          </div>
-                          <div className={styles.textHeader_text}>Filter</div>
-                        </Button>
-                      </Popover>
-                    </div>
-                  )}
-                  <Timeline
-                    patient={patient}
-                    patientId={patientId}
-                    filters={this.props.filters}
-                    wasPatientFetched={wasPatientFetched}
-                  />
-                </div>
-              )}
-            </Col>
-          </Row>
-        )}
+                        <div className={styles.textHeader_icon}>
+                          <Icon icon="filter" />
+                        </div>
+                        <div className={styles.textHeader_text}>Filter</div>
+                      </Button>
+                    </Popover>
+                  </div>
+                )}
+                <Timeline
+                  patient={patient}
+                  patientId={patientId}
+                  filters={this.props.filters}
+                  wasPatientFetched={wasPatientFetched}
+                />
+              </div>
+            )}
+          </Col>
+        </Row>
       </Grid>
     );
   }
@@ -398,6 +389,7 @@ PatientInfo.propTypes = {
   clearAllTimelineFilters: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   deleteAllEntity: PropTypes.func.isRequired,
+  setRefetchState: PropTypes.func.isRequired,
 };
 
 PatientInfo.defaultProps = {
@@ -411,7 +403,8 @@ PatientInfo.defaultProps = {
   wasStatsFetched: false,
 };
 
-const PatientInfoRenderer = (parentProps) =>
+const PatientInfoRenderer =
+  (parentProps) =>
   // eslint-disable-next-line react/prop-types
   ({ error, loading, data }) => {
     if (loading) return <Loader />;
@@ -423,12 +416,23 @@ const PatientInfoRenderer = (parentProps) =>
   };
 
 const PatientInfoWithData = (props) => {
+  const [refetchState, setRefetchState] = useState(false);
+
+  useEffect(() => {
+    setRefetchState(false);
+  }, [refetchState]);
+
   if (!props.patient) {
     return <PatientInfo {...props} />;
   }
   return (
-    <Query query={patientInfoQuery} variables={{ patientId: props.patient.id }}>
-      {PatientInfoRenderer(props)}
+    <Query
+      query={patientInfoQuery}
+      fetchPolicy="cache-and-network"
+      variables={{ patientId: props.patient.id }}
+      pollInterval={refetchState && 1000}
+    >
+      {PatientInfoRenderer({ setRefetchState, ...props })}
     </Query>
   );
 };

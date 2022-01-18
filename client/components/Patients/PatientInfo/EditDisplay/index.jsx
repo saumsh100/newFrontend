@@ -55,6 +55,7 @@ class EditDisplay extends Component {
       },
       url: `/api/patients/${patient.get('id')}`,
     }).then(() => {
+      this.props.setRefetchState(true);
       reinitializeState();
     });
   }
@@ -238,6 +239,7 @@ EditDisplay.propTypes = {
   role: PropTypes.string.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   wasAllFetched: PropTypes.bool,
+  setRefetchState: PropTypes.func.isRequired,
 };
 
 EditDisplay.defaultProps = {
