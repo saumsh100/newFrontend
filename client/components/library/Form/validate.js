@@ -27,6 +27,9 @@ const asyncPhoneNumberValidatePatient = ({ phoneNumber }) => {
       throw Object.assign(new Error(), { phoneNumber: error.response?.data });
     });
 };
+const validateNoSpace = (string) => {
+  return string.replace(/ /g, '');
+};
 
 const asyncValidatePatient = composeAsyncValidators([
   asyncEmailValidatePatient,
@@ -70,7 +73,8 @@ const phoneValidate = (value) => {
 };
 
 const emailValidate = (value) => {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   if (!value || !re.test(String(value).toLowerCase())) {
     return 'Invalid email address';
@@ -119,7 +123,7 @@ const phoneValidateNullOkay = (value) => {
     value !== '' &&
     value !== undefined
   ) {
-    return 'Invalid phone number';
+    return 'Phone numbers must be saved in the following format: +1 666 777 8888';
   }
 };
 
@@ -249,6 +253,7 @@ export {
   maxLength,
   emailValidate,
   phoneNumberValidate,
+  validateNoSpace,
   passwordsValidate,
   passwordsMatch,
   compose,

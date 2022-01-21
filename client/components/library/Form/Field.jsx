@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import omit from 'lodash/omit';
@@ -10,7 +9,7 @@ import { normalizePhone } from './normalize';
 import { phoneValidateNullOkay } from './validate';
 import styles from './field.scss';
 
-const requiredValidation = val => (val ? undefined : 'Required');
+const requiredValidation = (val) => (val ? undefined : 'Required');
 
 class ReduxField extends Component {
   constructor(props) {
@@ -23,7 +22,7 @@ class ReduxField extends Component {
   }
 
   togglePopOver() {
-    this.setState({ isOpen: !this.state.isOpen });
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   }
 
   render() {
@@ -44,12 +43,13 @@ class ReduxField extends Component {
 
     // need to remove required attribute from ReduxField as the Input component uses it
     // extend component attribute for reduxForm's Field props
-    const newProps = Object.assign({}, omit(this.props, ['required', 'popover']), {
+    const newProps = {
+      ...omit(this.props, ['required', 'popover']),
       component,
       normalize,
       validate,
       onClick: this.togglePopOver,
-    });
+    };
 
     if (popover) {
       return (

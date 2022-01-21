@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field, getTimezoneList } from '../../../../library';
+import { validateNoSpace } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
 
 export default function ClinicDetails(props) {
@@ -12,7 +13,11 @@ export default function ClinicDetails(props) {
     <Form
       form={formName}
       onSubmit={(values) => {
-        onSubmit(values, index, formName);
+        const validatedValue = {
+          ...values,
+          destinationPhoneNumber: validateNoSpace(values.destinationPhoneNumber),
+        };
+        onSubmit(validatedValue, index, formName);
       }}
       initialValues={initialValues}
       ignoreSaveButton

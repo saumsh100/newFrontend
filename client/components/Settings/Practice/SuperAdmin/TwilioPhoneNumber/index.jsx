@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -72,7 +71,7 @@ TwilioPhoneNumber.propTypes = {
   removeTwilioNumber: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       generateTwilioNumber,
@@ -81,7 +80,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(TwilioPhoneNumber);
+export default connect(null, mapDispatchToProps)(TwilioPhoneNumber);

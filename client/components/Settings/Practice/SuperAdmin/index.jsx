@@ -5,6 +5,7 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { Header, Button, DialogBox, getFormattedDate } from '../../../library';
+import { validateNoSpace } from '../../../library/Form/validate';
 import {
   fetchEntities,
   createEntityRequest,
@@ -48,6 +49,7 @@ class SuperAdmin extends Component {
       omitPractitionerIds: values.omitPractitionerIdsString
         ? values.omitPractitionerIdsString.split(',')
         : [],
+      destinationPhoneNumber: validateNoSpace(values.destinationPhoneNumber),
     };
     const valuesMap = Map(newValues);
     const modifiedAccount = activeAccount.merge(valuesMap);

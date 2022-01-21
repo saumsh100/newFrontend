@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -25,19 +24,19 @@ const EnterpriseForm = (props) => {
   const accountsPath = (path = '') => enterprisesPath(`/${enterprise.id}${path}`);
 
   const onSubmit = (entityData) => {
+    console.log('here');
     const key = 'accounts';
-
     const promise = isCreate
       ? props.createEntityRequest({
-        key,
-        entityData,
-        url: `/api/enterprises/${enterprise.id}/accounts`,
-      })
+          key,
+          entityData,
+          url: `/api/enterprises/${enterprise.id}/accounts`,
+        })
       : props.updateEntityRequest({
-        key,
-        values: entityData,
-        url: `/api/enterprises/${enterprise.id}/accounts/${account.id}`,
-      });
+          key,
+          values: entityData,
+          url: `/api/enterprises/${enterprise.id}/accounts/${account.id}`,
+        });
 
     promise.then(() => navigate(accountsPath('/accounts')));
   };
@@ -130,7 +129,7 @@ const stateToProps = (
   account: getModel(state, 'accounts', accountId),
 });
 
-const dispatchToProps = dispatch =>
+const dispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       fetchEntities,
