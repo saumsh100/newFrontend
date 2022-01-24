@@ -1,4 +1,3 @@
-
 import { Map } from 'immutable';
 import { v4 as uuid } from 'uuid';
 import { createAction, handleActions } from 'redux-actions';
@@ -26,10 +25,7 @@ export const initialState = Map({});
 
 export default handleActions(
   {
-    [CREATE_ALERT](
-      state,
-      { payload: { alert, type } },
-    ) {
+    [CREATE_ALERT](state, { payload: { alert, type } }) {
       const title = alert.title || (type === 'success' ? 'Success' : 'Error');
       const id = alert.id || uuid();
       const alertData = new Alert({
@@ -39,7 +35,7 @@ export default handleActions(
         subText: alert.subText || '',
         type,
         caller: alert.caller || false,
-        time: 3000,
+        time: 1000,
         sticky: alert.sticky || false,
         browserAlert: alert.browserAlert || false,
         clickable: alert.clickable || false,
@@ -54,7 +50,11 @@ export default handleActions(
 
     [REMOVE_ALERT](
       state,
-      { payload: { alert: { id } } },
+      {
+        payload: {
+          alert: { id },
+        },
+      },
     ) {
       return state.delete(id);
     },

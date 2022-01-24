@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
+import each from 'lodash/each';
 import { Header, Button, DialogBox, getFormattedDate } from '../../../library';
 import { validateNoSpace } from '../../../library/Form/validate';
 import {
@@ -23,6 +24,7 @@ import Address from '../../../../entities/models/Address';
 import ChatSection from '../General/ChatSection';
 import CellPhoneFallback from './CellPhoneFallback';
 import styles from './styles.scss';
+import { showAlertTimeout } from '../../../../thunks/alerts';
 
 class SuperAdmin extends Component {
   constructor(props) {
@@ -172,23 +174,36 @@ class SuperAdmin extends Component {
     }
 
     if (sendingValuesCreate.integrations[0]) {
+      this.props.showAlertTimeout({
+        type: 'success',
+        alert: {
+          title: 'Service integration requested',
+          body: 'Integration in progress, check back in a minute.',
+        },
+      });
+
       await this.props
         .createEntityRequest({
           key: 'accounts',
           url: `/api/accounts/${activeAccount.id}/integrations`,
           entityData: sendingValuesCreate,
-          alert: {
-            success: {
-              title: 'Service integration requested',
-              body: 'Integration in progress, check back in a minute.',
-            },
-            error: {
-              title: 'Service integration failed',
-              body: 'Integrations may failed due to downtime or missing data.',
-            },
-          },
         })
-        .then(() => this.props.reset('apis'));
+        .then((response) => {
+          const entities = getEntities(response);
+          const twilioNumber = entities[1].twilioPhoneNumber;
+          if (sendingValuesCreate.integrations[0].type === 'twilio') {
+            return twilioNumber
+              ? this.props.showAlertTimeout({
+                  type: 'success',
+                  alert: { body: 'Twilio number created and call forwarding set up successfully' },
+                })
+              : this.props.showAlertTimeout({
+                  type: 'error',
+                  alert: { body: 'Failed to fully enable Twilio API' },
+                });
+          }
+        });
+      this.props.reset('apis');
     }
 
     if (sendingValuesDelete.integrations[0]) {
@@ -302,6 +317,7 @@ SuperAdmin.propTypes = {
   address: PropTypes.instanceOf(Address),
   reset: PropTypes.func.isRequired,
   userId: PropTypes.string.isRequired,
+  showAlertTimeout: PropTypes.func.isRequired,
 };
 
 SuperAdmin.defaultProps = {
@@ -339,8 +355,19 @@ const mapDispatchToProps = (dispatch) =>
       reset,
       deleteEntityRequest,
       updateEntityRequest,
+      showAlertTimeout,
     },
     dispatch,
   );
+
+function getEntities(entities) {
+  const data = [];
+  each(entities, (collectionMap) => {
+    each(collectionMap, (modelData) => {
+      data.push(modelData);
+    });
+  });
+  return data;
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(SuperAdmin);
