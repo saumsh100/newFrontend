@@ -18,6 +18,7 @@ const validateOmitIdsArray = (val) => {
   }
 };
 
+// Renders Account settings > Practice > Global Admin settings form.
 export default function SuperAdminForm({ onSubmit, activeAccount }) {
   const initialValues = {
     twilioPhoneNumber: activeAccount.get('twilioPhoneNumber'),
@@ -41,7 +42,6 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
   const lastSyncComponent = lastSyncDate && (
     <LastSyncDisplay date={lastSyncDate} className={styles.lastSyncWrapper} />
   );
-
   return (
     <Form
       enableReinitialize
@@ -86,7 +86,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <TwilioPhoneNumber activeAccount={activeAccount} />
       <Field
         name="destinationPhoneNumber"
-        label="Destination Phone Number"
+        label="Destination Phone Number/ Contact Phone Number"
         type="tel"
         data-test-id="destinationPhoneNumber"
       />

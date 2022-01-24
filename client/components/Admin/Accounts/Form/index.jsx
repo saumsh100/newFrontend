@@ -88,7 +88,12 @@ const EnterpriseForm = (props) => {
           options={options}
           search
         />
-        <Field required name="destinationPhoneNumber" label="Destination Phone Number" type="tel" />
+        <Field
+          required
+          name="destinationPhoneNumber"
+          label="Destination Phone Number/ Contact Phone Number"
+          type="tel"
+        />
       </Form>
     </PageContainer>
   ) : (

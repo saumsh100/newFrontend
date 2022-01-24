@@ -4,6 +4,7 @@ import { Form, Field, getTimezoneList } from '../../../../library';
 import { validateNoSpace } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
 
+// UI for Global Admin > Enterprises> Add Practice > "New Practice Setup" form.
 export default function ClinicDetails(props) {
   const { onSubmit, index, initialValues, formName } = props;
 
@@ -42,7 +43,7 @@ export default function ClinicDetails(props) {
         <div>
           <Field
             name="destinationPhoneNumber"
-            label="Destination Phone Number"
+            label="Destination Phone Number/ Contact Phone Number"
             type="tel"
             required
           />
