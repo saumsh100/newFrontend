@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import classNames from 'classnames';
 import { AppBar, Avatar, Button, DropdownMenu, Icon, IconButton, Link, MenuItem } from '../library';
@@ -116,6 +117,7 @@ class TopBar extends Component {
       accountsFlagMap,
       enterpriseAccountsMap,
       activeAccountMap,
+      enterpriseManagementAuthenticationActive,
     } = this.props;
 
     const allowedAccounts = accountsFlagMap && accountsFlagMap.toJS().map((a) => a.value);
@@ -288,7 +290,7 @@ class TopBar extends Component {
                   />
                 )}
               >
-                {!user.get('isSSO') && (
+                {!user.get('isSSO') && !enterpriseManagementAuthenticationActive && (
                   <Link to="/profile">
                     <MenuItem className={styles.userMenuLi} icon="user">
                       User Profile
@@ -333,6 +335,7 @@ class TopBar extends Component {
 }
 
 TopBar.propTypes = {
+  enterpriseManagementAuthenticationActive: PropTypes.bool.isRequired,
   isCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
@@ -359,4 +362,11 @@ TopBar.defaultProps = {
   activeAccountMap: null,
 };
 
-export default withAuthProps(withRouter(TopBar));
+const mapStateToProps = ({ featureFlags }) => ({
+  enterpriseManagementAuthenticationActive: featureFlags.getIn([
+    'flags',
+    'enterprise-management-authentication',
+  ]),
+});
+
+export default withAuthProps(withRouter(connect(mapStateToProps)(TopBar)));

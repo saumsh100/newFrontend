@@ -46,6 +46,7 @@ ExternalRedirector.propTypes = {
 
 const DashboardRouter = ({
   enterpriseManagementPhaseTwoActive,
+  enterpriseManagementAuthenticationActive,
   isAuth,
   isSuperAdmin,
   isSSO,
@@ -83,7 +84,9 @@ const DashboardRouter = ({
             <Route path="/settings" component={Routes.settings} />
           )}
           {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
-          {!isSSO && <Route path="/profile" component={Routes.profile} />}
+          {!isSSO && !enterpriseManagementAuthenticationActive && (
+            <Route path="/profile" component={Routes.profile} />
+          )}
           <Route path="/typography" component={Routes.typography} />
           <Route path="/dashboard" component={() => <Redirect to="/" />} />
           <Route component={FourZeroFour} />
@@ -180,6 +183,7 @@ const DashboardRouter = ({
 
 DashboardRouter.propTypes = {
   enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,
+  enterpriseManagementAuthenticationActive: PropTypes.bool.isRequired,
   history: PropTypes.shape({
     action: PropTypes.string,
     block: PropTypes.func,
@@ -234,6 +238,10 @@ const mapStateToProps = ({ featureFlags }) => ({
   enterpriseManagementPhaseTwoActive: featureFlags.getIn([
     'flags',
     'enterprise-management-phase-2',
+  ]),
+  enterpriseManagementAuthenticationActive: featureFlags.getIn([
+    'flags',
+    'enterprise-management-authentication',
   ]),
 });
 
