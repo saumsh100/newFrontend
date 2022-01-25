@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getFormValues, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -23,6 +23,9 @@ const maxUnitSize = (value) => value && value > 60 && 'Must be less than or equa
 const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
   const emailValid = role === 'SUPERADMIN' ? emailValidateNull : emailValidate;
 
+  const [phoneNumberFocusValue, setPhoneNumberFocusValue] = useState('');
+  const [allowSubmit, setAllowSubmit] = useState(false);
+
   function onNotificationEmailsChange(e) {
     const { useNotificationEmails } = formValues;
     const currentVal = e.target.value;
@@ -35,6 +38,23 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
 
     if (onInitialChange && useNotificationEmails === false) {
       change('useNotificationEmails', true);
+    }
+  }
+
+  function handleContactBlur() {
+    if (phoneNumberFocusValue !== formValues.phoneNumber) {
+      const confirmUpdate = window.confirm(
+        'Do you want your patient calls to be forwarded to this new number? ',
+      );
+      if (!confirmUpdate) {
+        change('PracticeDetailsForm123', 'phoneNumber', phoneNumberFocusValue);
+        setPhoneNumberFocusValue('');
+        setAllowSubmit(true);
+      } else {
+        setAllowSubmit(false);
+      }
+    } else {
+      pristine ? setAllowSubmit(true) : setAllowSubmit(false);
     }
   }
 
@@ -51,6 +71,12 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
         label="Contact Phone Number"
         type="tel"
         data-test-id="phoneNumber"
+        onFocus={() => {
+          setPhoneNumberFocusValue(formValues.phoneNumber);
+        }}
+        onBlur={() => {
+          handleContactBlur();
+        }}
       />
       <Field
         name="contactEmail"
@@ -72,7 +98,9 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
         label="Notification Email(s)"
         validate={[validateEmails]}
         data-test-id="notificationEmails"
-        onChange={onNotificationEmailsChange}
+        onChange={() => {
+          onNotificationEmailsChange();
+        }}
       />
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
@@ -107,7 +135,7 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
         </div>
       </div>
       <div className={styles.submitButton}>
-        <FormButton pristine={pristine} />
+        <FormButton pristine={pristine || allowSubmit} />
       </div>
     </form>
   );
