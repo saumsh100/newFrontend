@@ -47,6 +47,10 @@ export const query = gql`
               nextApptDate
               lastApptDate
               address
+              isPhoneNumberAvailable
+              isSMSEnabled
+              isVoiceEnabled
+              phoneNumberType
             }
             patientUser {
               id
