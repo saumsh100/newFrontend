@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../../../library';
@@ -16,11 +15,11 @@ import { httpClient } from '../../../../../util/httpClient';
 const options = [
   {
     label: 'Male',
-    value: 'male',
+    value: 'Male',
   },
   {
     label: 'Female',
-    value: 'female',
+    value: 'Female',
   },
 ];
 
