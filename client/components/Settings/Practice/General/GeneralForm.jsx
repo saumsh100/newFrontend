@@ -41,13 +41,13 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
     }
   }
 
-  function handleContactBlur() {
+  function handleContactBlur(e) {
     if (phoneNumberFocusValue !== formValues.phoneNumber) {
       const confirmUpdate = window.confirm(
         'Do you want your patient calls to be forwarded to this new number? ',
       );
       if (!confirmUpdate) {
-        change('PracticeDetailsForm123', 'phoneNumber', phoneNumberFocusValue);
+        change('phoneNumber', phoneNumberFocusValue);
         setPhoneNumberFocusValue('');
         setAllowSubmit(true);
       } else {
@@ -56,6 +56,7 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
     } else {
       pristine ? setAllowSubmit(true) : setAllowSubmit(false);
     }
+    e.preventDefault();
   }
 
   return (
@@ -74,8 +75,8 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
         onFocus={() => {
           setPhoneNumberFocusValue(formValues.phoneNumber);
         }}
-        onBlur={() => {
-          handleContactBlur();
+        onBlur={(e) => {
+          handleContactBlur(e);
         }}
       />
       <Field
