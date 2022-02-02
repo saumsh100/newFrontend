@@ -5,10 +5,9 @@ import { connect } from 'react-redux';
 import TextMessageModel from '../../../../entities/models/TextMessage';
 import { isHub } from '../../../../util/hub';
 import { getUTCDate } from '../../../library';
-import RetryMessage from '../RetryMessage/RetryMessage';
 import styles from './styles.scss';
 
-const MessageBubble = ({ isFromPatient, textMessage, timezone, phoneLookupObj }) => {
+const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
   const status = textMessage.get('smsStatus');
   const hasFailed = status === 'failed';
   const bodyClasses = classNames(styles.bubbleBody, {
@@ -27,15 +26,11 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone, phoneLookupObj })
   const messageBubbleCompFunc = () => {
     let jsxObj;
     if (hasFailed) {
-      if (phoneLookupObj?.isSMSEnabled === false) {
-        jsxObj = (
-          <div className={styles.notValidNoMessage}>
-            <span className={styles.notValidNoMessage__Body}>Message not sent.</span>
-          </div>
-        );
-      } else {
-        jsxObj = <RetryMessage message={textMessage} />;
-      }
+      jsxObj = (
+        <div className={styles.notValidNoMessage}>
+          <span className={styles.notValidNoMessage__Body}>Message not sent.</span>
+        </div>
+      );
     } else {
       jsxObj = `Sent - ${time}`;
     }
