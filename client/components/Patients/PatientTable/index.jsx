@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -53,6 +52,51 @@ class PatientTable extends React.PureComponent {
     this.handlePatientSelection = this.handlePatientSelection.bind(this);
   }
 
+  componentDidMount() {
+    this.props.fetchPatientTableData();
+  }
+
+  /**
+   * Expand or collapse a row, based on its current status.
+   *
+   * @param rowInfo
+   */
+  handleRowClick({ index }) {
+    const handleExpandedValue = (expanded) => (expanded[index] ? {} : { [index]: true });
+    this.setState(({ expanded }) => ({ expanded: handleExpandedValue(expanded) }));
+  }
+
+  /**
+   * Handle the patient selection, if the patient is selected we unselect,
+   * and if the patient is not selected yet we mark it as selected.
+   *
+   * @param id
+   */
+  handlePatientSelection(id) {
+    /**
+     * If it's a single value remove it from the array, otherwhise concat the value.
+     * @param patientIds
+     * @returns {*[]}
+     */
+    const handleSinglePatientSelection = (patientIds) =>
+      patientIds.includes(id) ? patientIds.filter((pId) => pId !== id) : [...patientIds, id];
+
+    /**
+     * If it's a multiple value check if values are already selected, so we can toggle the state.
+     * @param length
+     * @returns {Array}
+     */
+    const handleMultiplePatientsSelection = ({ length }) =>
+      length && length === id.length ? [] : id;
+
+    this.setState(({ patientIds }) => ({
+      patientIds:
+        typeof id === 'string'
+          ? handleSinglePatientSelection(patientIds)
+          : handleMultiplePatientsSelection(patientIds),
+    }));
+  }
+
   /**
    * Update sort and order options of the table,
    * if the provided param does not contain 'id' or 'desc' fields we early return with an error.
@@ -86,47 +130,6 @@ class PatientTable extends React.PureComponent {
   removeFilter(index) {
     this.props.removeFilter({ index });
     this.props.fetchPatientTableData();
-  }
-
-  /**
-   * Expand or collapse a row, based on its current status.
-   *
-   * @param rowInfo
-   */
-  handleRowClick({ index }) {
-    const handleExpandedValue = expanded => (expanded[index] ? {} : { [index]: true });
-    this.setState(({ expanded }) => ({ expanded: handleExpandedValue(expanded) }));
-  }
-
-  /**
-   * Handle the patient selection, if the patient is selected we unselect,
-   * and if the patient is not selected yet we mark it as selected.
-   *
-   * @param id
-   */
-  handlePatientSelection(id) {
-    /**
-     * If it's a single value remove it from the array, otherwhise concat the value.
-     * @param patientIds
-     * @returns {*[]}
-     */
-    const handleSinglePatientSelection = patientIds =>
-      (patientIds.includes(id) ? patientIds.filter(pId => pId !== id) : [...patientIds, id]);
-
-    /**
-     * If it's a multiple value check if values are already selected, so we can toggle the state.
-     * @param length
-     * @returns {Array}
-     */
-    const handleMultiplePatientsSelection = ({ length }) =>
-      (length && length === id.length ? [] : id);
-
-    this.setState(({ patientIds }) => ({
-      patientIds:
-        typeof id === 'string'
-          ? handleSinglePatientSelection(patientIds)
-          : handleMultiplePatientsSelection(patientIds),
-    }));
   }
 
   /**
@@ -248,7 +251,7 @@ class PatientTable extends React.PureComponent {
         Header: 'Last Appt',
         id: 'lastApptDate',
         accessor: ({ lastApptDate }) =>
-          (lastApptDate ? getFormattedDate(lastApptDate, 'MMM DD YYYY', timezone) : '-'),
+          lastApptDate ? getFormattedDate(lastApptDate, 'MMM DD YYYY', timezone) : '-',
         Cell: ({ value }) => (
           <div className={styles.displayFlex}>
             <div className={styles.cellText_lastAppt}>{value}</div>
@@ -260,7 +263,7 @@ class PatientTable extends React.PureComponent {
         Header: 'Next Appt',
         id: 'nextApptDate',
         accessor: ({ nextApptDate }) =>
-          (nextApptDate ? getFormattedDate(nextApptDate, 'MMM DD YYYY', timezone) : '-'),
+          nextApptDate ? getFormattedDate(nextApptDate, 'MMM DD YYYY', timezone) : '-',
         Cell: ({ value }) => (
           <div className={styles.displayFlex}>
             <div className={styles.cellText_lastAppt}>{value}</div>
@@ -321,7 +324,7 @@ class PatientTable extends React.PureComponent {
                 showPageSizeOptions={false}
                 noDataText="No Patients Found"
                 loadingText=""
-                SubComponent={row => <PatientSubComponent patient={row.original} />}
+                SubComponent={(row) => <PatientSubComponent patient={row.original} />}
                 onPageChange={this.pageChange}
                 onSortedChange={this.onSort}
                 getTdProps={(state, rowInfo) => {
@@ -389,7 +392,7 @@ const mapStateToProps = ({ entities, patientTable, auth }) => ({
   timezone: auth.get('timezone'),
 });
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       fetchEntities,
@@ -405,7 +408,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientTable);
+export default connect(mapStateToProps, mapDispatchToProps)(PatientTable);
