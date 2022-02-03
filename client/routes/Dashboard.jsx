@@ -16,6 +16,7 @@ import GraphQlSubscriptions from '../util/graphqlSubscriptions';
 import Loader from '../components/Loader';
 import { browserHistory as history } from '../store/factory';
 import LoginSSO from '../components/LoginSSO';
+import RecoveryTokenInvalid from '../components/ForgotPassword/ResetPassword/RecoveryTokenInvalid';
 
 const Routes = {
   dashboard: loadable(() => import('../components/Dashboard')),
@@ -167,6 +168,11 @@ const DashboardRouter = ({
             exact
             path="/forgot"
             render={(props) => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)}
+          />
+          <Route
+            exact
+            path="/recovery-token-invalid"
+            render={(props) => (isAuth ? <Redirect to="/" /> : <RecoveryTokenInvalid {...props}/>)}
           />
           <Route
             exact
