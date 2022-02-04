@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Query } from '@apollo/client/react/components';
 import { bindActionCreators } from 'redux';
@@ -155,18 +155,30 @@ PatientSubComponent.defaultProps = {
   wasFetched: false,
 };
 
-const PatientSubComponentWithData = (parentProps) => (
-  <Query query={patientInfoQuery} variables={{ patientId: parentProps.patient.id }}>
-    {({ error, loading, data }) => {
-      if (loading) return null;
+const PatientSubComponentWithData = (parentProps) => {
+  const [refetchedState, setRefetchedState] = useState(true);
+  useEffect(() => {
+    setRefetchedState(false);
+  }, []);
+  return (
+    <Query
+      query={patientInfoQuery}
+      variables={{ patientId: parentProps.patient.id }}
+      fetchPolicy="cache-and-network"
+      pollInterval={refetchedState && 500}
+    >
+      {({ error, loading, data }) => {
+        if (loading) return null;
 
-      if (error) {
-        return <div>Error!</div>;
-      }
+        if (error) {
+          return <div>Error!</div>;
+        }
+        const combinedProps = { setRefetchedState, ...parentProps };
 
-      return <PatientSubComponent {...parentProps} {...data} />;
-    }}
-  </Query>
-);
+        return <PatientSubComponent {...combinedProps} {...data} />;
+      }}
+    </Query>
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientSubComponentWithData);
