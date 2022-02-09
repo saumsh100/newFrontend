@@ -36,11 +36,7 @@ export default function NotifyPatientForm({
         patient.firstName,
       );
       templateReplaced = replaceText(templateReplaced, '\\[patient%last&name\\]', patient.lastName);
-      templateReplaced = replaceText(
-        templateReplaced,
-        '\\[patient%display&name\\]',
-        patient.prefName,
-      );
+      templateReplaced = replaceText(templateReplaced, '\\[patient%display&name\\]', patientName);
       templateReplaced = replaceText(templateReplaced, '\\[practice%name\\]', accountInfo.name);
       templateReplaced = replaceText(
         templateReplaced,
