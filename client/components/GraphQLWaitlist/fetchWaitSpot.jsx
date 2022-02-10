@@ -69,10 +69,15 @@ export const query = gql`
   }
 `;
 
-export default function FetchWaitSpot({ children }) {
-  return <Query query={query}>{children}</Query>;
+export default function FetchWaitSpot({ children, isRefetch }) {
+  return (
+    <Query query={query} fetchPolicy="cache-and-network" pollInterval={isRefetch && 500}>
+      {children}
+    </Query>
+  );
 }
 
 FetchWaitSpot.propTypes = {
   children: PropTypes.func.isRequired,
+  isRefetch: PropTypes.bool.isRequired,
 };

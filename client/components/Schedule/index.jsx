@@ -13,7 +13,6 @@ import {
   Button,
   Modal,
   DialogBox,
-  DialogBody,
   DayPicker,
   getUTCDate,
   getUTCDateObj,
@@ -59,126 +58,6 @@ class ScheduleComponent extends PureComponent {
     this.handlePatientSubmit = this.handlePatientSubmit.bind(this);
     this.setCreatingPatient = this.setCreatingPatient.bind(this);
     this.closeAssignPatientModal = this.closeAssignPatientModal.bind(this);
-  }
-
-  componentDidMount() {
-    if (isHub()) {
-      this.updateHubData({
-        ...this.props,
-        pageTitle: this.pageTitle,
-      });
-    }
-  }
-
-  componentDidUpdate() {
-    if (isHub()) {
-      this.updateHubData({
-        ...this.props,
-        pageTitle: this.pageTitle,
-      });
-    }
-  }
-
-  setCreatingPatient(value = false) {
-    this.props.setCreatingPatient({ creatingPatientBool: value });
-  }
-
-  setPatientSearched(patientSearched) {
-    this.setState({ patientSearched });
-  }
-
-  setSendEmail() {
-    this.setState((prevState) => ({ sendEmail: !prevState.sendEmail }));
-  }
-
-  setShowInput(showBool) {
-    this.setState({ showInput: showBool });
-  }
-
-  setCurrentDay(day) {
-    this.props.setScheduleDate({ scheduleDate: getUTCDate(day).toISOString() });
-  }
-
-  setShowApptSummary = () => {
-    this.setState({ showApptSummary: true });
-  };
-
-  openAssignPatientToChatModal(patient) {
-    this.setState({
-      patient,
-      assignPatientToChatModalActive: true,
-    });
-  }
-
-  nextDay(currentDay) {
-    this.props.setScheduleDate({
-      scheduleDate: getUTCDate(currentDay)
-        .add(1, 'days')
-        .toISOString(),
-    });
-  }
-
-  previousDay(currentDay) {
-    this.props.setScheduleDate({
-      scheduleDate: getUTCDate(currentDay)
-        .subtract(1, 'days')
-        .toISOString(),
-    });
-  }
-
-  addNewAppointment() {
-    this.setState({ addNewAppointment: true });
-  }
-
-  showSchedule() {
-    this.setState({ showSchedule: true });
-  }
-
-  updateHubData(props) {
-    const {
-      router: { location },
-      pageTitle,
-    } = props;
-
-    props.setTitle(pageTitle);
-    props.setBackHandler(() => {
-      this.reinitializeState();
-      props.push({
-        ...location,
-        pathname: '/requests',
-      });
-    });
-  }
-
-  reinitializeState() {
-    const { selectedAppointment } = this.props;
-    const noNextAppt = !!selectedAppointment && !selectedAppointment.nextAppt;
-    const showApptSummary = this.state.showApptSummary || noNextAppt;
-    if (showApptSummary) {
-      this.setState({ lastSummaryRequest: selectedAppointment?.requestId });
-    }
-    this.props.setMergingPatient({
-      patientUser: null,
-      requestData: null,
-      suggestions: [],
-    });
-    this.props.setCreatingPatient(false);
-    this.props.selectAppointment(null);
-    this.setState({
-      showSchedule: false,
-      addNewAppointment: false,
-      patientSearched: null,
-      sendEmail: false,
-      showInput: false,
-      showApptSummary: false,
-    });
-  }
-
-  closeAssignPatientModal() {
-    this.setState({
-      assignPatientToChatModalActive: false,
-      patient: null,
-    });
   }
 
   handlePatientUserSubmit(values) {
@@ -245,6 +124,104 @@ class ScheduleComponent extends PureComponent {
         }
         return true;
       });
+  }
+
+  setCreatingPatient(value = false) {
+    this.props.setCreatingPatient({ creatingPatientBool: value });
+  }
+
+  setPatientSearched(patientSearched) {
+    this.setState({ patientSearched });
+  }
+
+  setSendEmail() {
+    this.setState((prevState) => ({ sendEmail: !prevState.sendEmail }));
+  }
+
+  setShowInput(showBool) {
+    this.setState({ showInput: showBool });
+  }
+
+  setCurrentDay(day) {
+    this.props.setScheduleDate({ scheduleDate: getUTCDate(day).toISOString() });
+  }
+
+  setShowApptSummary = () => {
+    this.setState({ showApptSummary: true });
+  };
+
+  openAssignPatientToChatModal(patient) {
+    this.setState({
+      patient,
+      assignPatientToChatModalActive: true,
+    });
+  }
+
+  nextDay(currentDay) {
+    this.props.setScheduleDate({
+      scheduleDate: getUTCDate(currentDay).add(1, 'days').toISOString(),
+    });
+  }
+
+  previousDay(currentDay) {
+    this.props.setScheduleDate({
+      scheduleDate: getUTCDate(currentDay).subtract(1, 'days').toISOString(),
+    });
+  }
+
+  addNewAppointment() {
+    this.setState({ addNewAppointment: true });
+  }
+
+  showSchedule() {
+    this.setState({ showSchedule: true });
+  }
+
+  updateHubData(props) {
+    const {
+      router: { location },
+      pageTitle,
+    } = props;
+
+    props.setTitle(pageTitle);
+    props.setBackHandler(() => {
+      this.reinitializeState();
+      props.push({
+        ...location,
+        pathname: '/requests',
+      });
+    });
+  }
+
+  reinitializeState() {
+    const { selectedAppointment } = this.props;
+    const noNextAppt = !!selectedAppointment && !selectedAppointment.nextAppt;
+    const showApptSummary = this.state.showApptSummary || noNextAppt;
+    if (showApptSummary) {
+      this.setState({ lastSummaryRequest: selectedAppointment?.requestId });
+    }
+    this.props.setMergingPatient({
+      patientUser: null,
+      requestData: null,
+      suggestions: [],
+    });
+    this.props.setCreatingPatient(false);
+    this.props.selectAppointment(null);
+    this.setState({
+      showSchedule: false,
+      addNewAppointment: false,
+      patientSearched: null,
+      sendEmail: false,
+      showInput: false,
+      showApptSummary: false,
+    });
+  }
+
+  closeAssignPatientModal() {
+    this.setState({
+      assignPatientToChatModalActive: false,
+      patient: null,
+    });
   }
 
   render() {
@@ -402,34 +379,7 @@ class ScheduleComponent extends PureComponent {
     const appsEventsFetched = appsFetched && eventsFetched;
     const allFetched = appsEventsFetched && accountsFetched && chairsFetched && pracsFetched;
 
-    return isHub() ? (
-      <div className={styles.hubWrapper}>
-        {allFetched && isAddNewAppointment && (
-          <AddNewAppointment
-            formName={formName}
-            chairs={filterChairs}
-            practitioners={filterPractitioners}
-            patients={patients.get('models')}
-            reinitializeState={this.reinitializeState}
-            setPatientSearched={this.setPatientSearched}
-            patientSearched={this.state.patientSearched}
-            unit={unit}
-            currentDate={currentDate}
-            showInput={this.state.showInput}
-            setShowInput={this.setShowInput}
-            selectedAppointment={this.props.selectedAppointment}
-            setCreatingPatient={this.props.setCreatingPatient}
-            redirect={isHub() && hubRedirect}
-            timezone={this.props.timezone}
-          />
-        )}
-        {allFetched && showDialog && (
-          <DialogBody actions={actions.filter((v) => v.label !== 'Cancel')}>
-            {displayModalComponent}
-          </DialogBody>
-        )}
-      </div>
-    ) : (
+    return (
       <div className={styles.rowMainContainer}>
         <div className={styles.dayViewContainer}>
           <Card className={styles.card} runAnimation loaded={allFetched}>
