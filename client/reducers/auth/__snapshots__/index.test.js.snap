@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`auth reducer action creator works 1`] = `
+Object {
+  "payload": Object {
+    "accountId": "c05ade0e-eb8a-44ed-bf3c-a83bfa4bc5a3",
+    "enterprise": Object {
+      "createdAt": "2018-04-11T17:19:13.773Z",
+      "deletedAt": null,
+      "id": "f1405909-55cf-422a-9ec0-9f80de72b0bf",
+      "name": "Gallery Dental Inc.",
+      "plan": "ENTERPRISE",
+      "updatedAt": "2018-04-11T17:19:13.773Z",
+    },
+    "enterpriseId": "f1405909-55cf-422a-9ec0-9f80de72b0bf",
+    "role": "SUPERADMIN",
+    "sessionId": "d15fbddc-f306-49e1-b736-78cb6a6166d4",
+    "user": Object {
+      "firstName": "Justin",
+      "id": "6603fe66-aa03-4ffe-8de6-ce07a4ae9c5c",
+      "lastName": "Sharp",
+      "username": "justin@carecru.com",
+    },
+    "userId": "6603fe66-aa03-4ffe-8de6-ce07a4ae9c5c",
+  },
+  "type": "@auth/LOGIN_SUCCESS",
+}
+`;
+
+exports[`auth reducer action creator works 2`] = `
+Object {
+  "payload": undefined,
+  "type": "@auth/LOGOUT",
+}
+`;
+
+exports[`auth reducer action creator works 3`] = `
+Object {
+  "payload": Object {
+    "can-add-patient": true,
+    "can-set-ismissing": true,
+    "can-update-appointment": false,
+  },
+  "type": "@auth/ADAPTER_PERMISSIONS_SET",
+}
+`;
+
+exports[`auth reducer reducer works 1`] = `
+Immutable.Map {
+  "enterprise": Immutable.Map {
+    "id": "f1405909-55cf-422a-9ec0-9f80de72b0bf",
+    "name": "Gallery Dental Inc.",
+    "plan": "ENTERPRISE",
+    "createdAt": "2018-04-11T17:19:13.773Z",
+    "updatedAt": "2018-04-11T17:19:13.773Z",
+    "deletedAt": null,
+  },
+  "isAuthenticated": true,
+  "userId": "6603fe66-aa03-4ffe-8de6-ce07a4ae9c5c",
+  "accountId": "c05ade0e-eb8a-44ed-bf3c-a83bfa4bc5a3",
+  "adapterType": null,
+  "user": Immutable.Map {
+    "id": "6603fe66-aa03-4ffe-8de6-ce07a4ae9c5c",
+    "firstName": "Justin",
+    "lastName": "Sharp",
+    "username": "justin@carecru.com",
+  },
+  "sessionId": "d15fbddc-f306-49e1-b736-78cb6a6166d4",
+  "adapterPermissions": Immutable.Map {},
+  "role": "SUPERADMIN",
+  "timezone": null,
+  "enterpriseId": "f1405909-55cf-422a-9ec0-9f80de72b0bf",
+  "forgotPassword": false,
+}
+`;
+
+exports[`auth reducer reducer works 2`] = `
+Immutable.Map {
+  "enterprise": null,
+  "isAuthenticated": false,
+  "accountId": null,
+  "adapterType": null,
+  "user": null,
+  "sessionId": null,
+  "adapterPermissions": Immutable.Map {},
+  "role": null,
+  "timezone": null,
+  "forgotPassword": false,
+}
+`;
+
+exports[`auth reducer reducer works 3`] = `
+Immutable.Map {
+  "enterprise": null,
+  "isAuthenticated": false,
+  "accountId": null,
+  "adapterType": null,
+  "user": null,
+  "sessionId": null,
+  "adapterPermissions": Immutable.Map {
+    "can-add-patient": true,
+    "can-update-appointment": false,
+    "can-set-ismissing": true,
+  },
+  "role": null,
+  "timezone": null,
+  "forgotPassword": false,
+}
+`;

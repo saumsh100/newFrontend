@@ -34,7 +34,8 @@ const initialState = (isPoC = false) => ({
   entities: {
     patient: getter({
       firstName: 'Patient',
-      mobilePhoneNumber: 'mobilePhoneNumber',
+      cellPhoneNumber: 'cellPhoneNumber',
+      id: 'TestId',
     }),
     getIn: () => getter(initialState(isPoC).entities.patient),
   },

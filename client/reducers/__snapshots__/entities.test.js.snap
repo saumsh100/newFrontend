@@ -182,6 +182,11 @@ Immutable.Map {
     "isCollection": true,
     "models": Immutable.Map {},
   },
+  "superadmins": Immutable.Record {
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
   "patientTimelineEvents": Immutable.Record {
     "isFetching": false,
     "isCollection": true,
@@ -328,6 +333,11 @@ Immutable.Map {
     "models": Immutable.Map {},
   },
   "services": Immutable.Record {
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "superadmins": Immutable.Record {
     "isFetching": false,
     "isCollection": true,
     "models": Immutable.Map {},
@@ -482,6 +492,11 @@ Immutable.Map {
     "isCollection": true,
     "models": Immutable.Map {},
   },
+  "superadmins": Immutable.Record {
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
   "patientTimelineEvents": Immutable.Record {
     "isFetching": false,
     "isCollection": true,
@@ -558,6 +573,7 @@ Immutable.Map {
         "bookingWidgetButtonLabel": null,
         "destinationPhoneNumber": null,
         "enterpriseId": null,
+        "externalId": null,
         "weeklyScheduleId": null,
         "unit": null,
         "canSendReminders": null,
@@ -693,6 +709,11 @@ Immutable.Map {
     "models": Immutable.Map {},
   },
   "services": Immutable.Record {
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "superadmins": Immutable.Record {
     "isFetching": false,
     "isCollection": true,
     "models": Immutable.Map {},
@@ -773,6 +794,7 @@ Immutable.Map {
         "bookingWidgetButtonLabel": null,
         "destinationPhoneNumber": null,
         "enterpriseId": null,
+        "externalId": null,
         "weeklyScheduleId": null,
         "unit": null,
         "canSendReminders": null,
@@ -908,6 +930,11 @@ Immutable.Map {
     "models": Immutable.Map {},
   },
   "services": Immutable.Record {
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "superadmins": Immutable.Record {
     "isFetching": false,
     "isCollection": true,
     "models": Immutable.Map {},

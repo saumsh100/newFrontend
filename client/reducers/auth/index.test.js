@@ -1,9 +1,8 @@
-
 import { fromJS } from 'immutable';
 import reducer, {
   initialState,
   loginSuccess,
-  logout,
+  authLogout,
   adapterPermissionsSet,
   isAdapterPermissionEnabledSelector,
 } from './index';
@@ -31,7 +30,7 @@ describe('auth reducer', () => {
     sessionId: 'd15fbddc-f306-49e1-b736-78cb6a6166d4',
   });
 
-  const logoutAction = logout(undefined);
+  const logoutAction = authLogout(undefined);
 
   const adapterPermissionsSetAction = adapterPermissionsSet({
     'can-add-patient': true,
@@ -48,8 +47,12 @@ describe('auth reducer', () => {
   test('selectors works', () => {
     const adapterPermissions = fromJS(adapterPermissionsSetAction.payload);
     expect(isAdapterPermissionEnabledSelector(adapterPermissions, 'can-add-patient')).toEqual(true);
-    expect(isAdapterPermissionEnabledSelector(adapterPermissions, 'can-update-appointment')).toEqual(false);
-    expect(isAdapterPermissionEnabledSelector(adapterPermissions, 'can-set-ismissing')).toEqual(true);
+    expect(
+      isAdapterPermissionEnabledSelector(adapterPermissions, 'can-update-appointment'),
+    ).toEqual(false);
+    expect(isAdapterPermissionEnabledSelector(adapterPermissions, 'can-set-ismissing')).toEqual(
+      true,
+    );
   });
   test('reducer works', () => {
     expect(reducer(initialState, {})).toEqual(initialState);

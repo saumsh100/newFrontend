@@ -14,26 +14,6 @@ Object {
 }
 `;
 
-exports[`alerts reducer reducer works 1`] = `
-Immutable.Map {
-  "123-456": Immutable.Alerts {
-    "id": "123-456",
-    "title": "test alert",
-    "body": "test body",
-    "subText": "",
-    "type": "failed",
-    "time": 3000,
-    "sticky": false,
-    "caller": false,
-    "clickable": false,
-    "browserAlert": false,
-    "isFetching": false,
-  },
-}
-`;
-
-exports[`alerts reducer reducer works 2`] = `Immutable.Map {}`;
-
 exports[`alerts reducer removeAlert 1`] = `
 Object {
   "payload": Object {

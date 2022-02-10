@@ -1,6 +1,4 @@
-
-import omit from 'lodash/omit';
-import reducer, { initialState, createAlert, removeAlert } from './alerts';
+import { createAlert, removeAlert } from './alerts';
 
 const createAlertAction = createAlert({
   alert: {
@@ -25,12 +23,5 @@ describe('alerts reducer', () => {
 
   test('removeAlert', () => {
     expect(removeAlertAction).toMatchSnapshot();
-  });
-
-  test('reducer works', () => {
-    expect(reducer(initialState, {})).toEqual(initialState);
-    const omitedCreate = omit(reducer(initialState, createAlertAction), ['"123-456".lastUpdated']);
-    expect(omitedCreate.deleteIn(['123-456', 'lastUpdated'])).toMatchSnapshot();
-    expect(reducer(initialState, removeAlertAction)).toMatchSnapshot();
   });
 });
