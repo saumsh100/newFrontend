@@ -99,9 +99,7 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
         label="Notification Email(s)"
         validate={[validateEmails]}
         data-test-id="notificationEmails"
-        onChange={() => {
-          onNotificationEmailsChange();
-        }}
+        onChange={onNotificationEmailsChange}
       />
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>

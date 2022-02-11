@@ -49,7 +49,7 @@ class General extends Component {
     const notificationEmailsArr = values.notificationEmails.split(',').map((val) => val.trim());
     const valuesMap = Map({
       ...values,
-      phoneNumber: validateNoSpace(values.phoneNumber),
+      phoneNumber: values.phoneNumber?validateNoSpace(values.phoneNumber):null,
       notificationEmails: notificationEmailsArr,
     });
     const modifiedAccount = activeAccount.merge(valuesMap);
