@@ -11,18 +11,21 @@ import { useSubscriptionNotification } from '../../GraphQLForms/useSubscribeSubm
 
 const FormsNotificationButton = (props) => {
   const [count, setCount] = useState(0);
-
   const practiceId = props?.account?.id || '';
-
+  const activeAccount = props?.activeAccount?.id;
   const { data } = useGetNotificationsCount(practiceId);
   const { data: updatedNotificationCount } = useSubscriptionNotification();
 
   useEffect(() => {
     if (data?.countAllNotActionedSubmissions || updatedNotificationCount?.submissionNotification) {
-      setCount(
-        updatedNotificationCount?.submissionNotification?.count ||
-          data.countAllNotActionedSubmissions,
-      );
+      if (practiceId === activeAccount) {
+        setCount(
+          updatedNotificationCount?.submissionNotification?.count !== 0
+            ? updatedNotificationCount?.submissionNotification?.count ||
+                data.countAllNotActionedSubmissions
+            : '',
+        );
+      }
     }
   }, [data?.countAllNotActionedSubmissions, updatedNotificationCount?.submissionNotification]);
 
@@ -42,8 +45,9 @@ const FormsNotificationButton = (props) => {
   );
 };
 
-const mapStateToProps = ({ auth }) => ({
+const mapStateToProps = ({ entities, auth }) => ({
   account: auth.get('account').toJS(),
+  activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -58,6 +62,7 @@ function mapDispatchToProps(dispatch) {
 FormsNotificationButton.propTypes = {
   account: PropTypes.shape(accountShape).isRequired,
   push: PropTypes.func.isRequired,
+  activeAccount: PropTypes.shape(accountShape).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormsNotificationButton);
