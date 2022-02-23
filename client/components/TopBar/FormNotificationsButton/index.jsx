@@ -18,7 +18,7 @@ const FormsNotificationButton = (props) => {
 
   useEffect(() => {
     if (data?.countAllNotActionedSubmissions || updatedNotificationCount?.submissionNotification) {
-      if (practiceId === activeAccount) {
+      if (activeAccount === updatedNotificationCount?.submissionNotification?.practiceId) {
         setCount(
           updatedNotificationCount?.submissionNotification?.count !== 0
             ? updatedNotificationCount?.submissionNotification?.count ||
