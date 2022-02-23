@@ -59,6 +59,9 @@ const isAWeekendDay = (day) => week.weekends.includes(day);
 const isOneHourApart = (startDate, endDate) =>
   (getHoursFromInterval({ startDate, endDate }) || 0) === 1;
 
+const isHalfHourApart = (startDate, endDate) =>
+  (getHoursFromInterval({ startDate, endDate }) || 0) === 0.5;
+
 /**
  * Formats a list of times in a more readable way.
  *
@@ -76,8 +79,8 @@ export const waitlistTimesFormatter = (times, timezone) => {
       return time;
     }
 
-    const prevTime = isOneHourApart(arr[i - 1], curr);
-    const nextTime = isOneHourApart(curr, arr[i + 1]);
+    const prevTime = isOneHourApart(arr[i - 1], curr) || isHalfHourApart(arr[i - 1], curr);
+    const nextTime = isOneHourApart(curr, arr[i + 1]) || isHalfHourApart(curr, arr[i + 1]);
 
     if (prevTime && nextTime) {
       return acc;
@@ -161,14 +164,16 @@ export const waitlistDatesFormatter = (days) => {
  * @return {object}
  * @param waitlist
  */
-export const batchUpdateFactory = (waitlist) => (state = false, waitListIDs = []) =>
-  waitlist.reduce(
-    (acc, curr) => ({
-      ...acc,
-      [curr.id]: waitListIDs.includes(curr.id) ? state : false,
-    }),
-    {},
-  );
+export const batchUpdateFactory =
+  (waitlist) =>
+  (state = false, waitListIDs = []) =>
+    waitlist.reduce(
+      (acc, curr) => ({
+        ...acc,
+        [curr.id]: waitListIDs.includes(curr.id) ? state : false,
+      }),
+      {},
+    );
 
 export const mergeData = (data, dataset) =>
   data.map((v) => ({
@@ -183,42 +188,6 @@ export const generateWaitlistHours = (timezone, start = 7, end = 21, hourInterva
     end,
     hourInterval,
   });
-
-export const generateWaitlistHoursOnlyTime = (
-  timezone,
-  start = 7,
-  end = 21,
-  hourInterval = 0.5,
-) => {
-  const a = generateTimeOptions({
-    timezone,
-    start,
-    end,
-    hourInterval,
-  });
-
-  return a.map((x) => ({ ...x, value: x.order }));
-};
-
-export const getTimeOnly = (value) => {
-  try {
-    const newValue = value.split(' GMT')[0];
-    const date = new Date(newValue);
-    const hourPrefix = date.getHours() < 10 ? '0' : '';
-    const minutePrefix = date.getMinutes() < 10 ? '0' : '';
-    return hourPrefix + date.getHours() + minutePrefix + date.getMinutes();
-  } catch {
-    return null;
-  }
-};
-
-/**
- * returns formated date like  Wed Dec 22 2021 08:30:00 GMT-0800 (PST)
- * @param string timeStr is a time only format eg: 0830
- */
-export const getFullDummyDate = (timeStr) => {
-  return `Wed Dec 22 2021 ${timeStr[0]}${timeStr[1]}:${timeStr[2]}${timeStr[3]} GMT-0800 (PST)`;
-};
 
 export const generateTimesFilter = (timezone, start = 7, end = 21, hourInterval = 0.5) => {
   const times = generateWaitlistHours(timezone, start, end, hourInterval);

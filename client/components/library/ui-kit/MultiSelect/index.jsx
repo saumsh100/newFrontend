@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
@@ -32,8 +31,9 @@ class MultiSelect extends Component {
       ? options.filter(({ value }) => selected.includes(value)).map(({ value }) => value)
       : [];
     const arrayIfString = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
-    return (selectedItems.length > 0 ? selectedItems : arrayIfString).map(value =>
-      this.handleSelection({ value }));
+    return (selectedItems.length > 0 ? selectedItems : arrayIfString).map((value) => {
+      return this.handleSelection({ value });
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -44,14 +44,6 @@ class MultiSelect extends Component {
         this.setSelectedItems(newItems);
       }
     }
-  }
-
-  setSelectedItems(newItems) {
-    this.setState({
-      selectedItems: this.props.options
-        .filter(({ value }) => newItems.includes(value))
-        .map(({ value }) => value),
-    });
   }
 
   /**
@@ -67,6 +59,23 @@ class MultiSelect extends Component {
     } else {
       this.addSelectedItem(value, this.callbackHandler);
     }
+  }
+
+  handleHelperLink(hasAvailableItems) {
+    return this.setState(
+      {
+        selectedItems: hasAvailableItems ? this.props.options.map(({ value }) => value) : [],
+      },
+      this.callbackHandler,
+    );
+  }
+
+  setSelectedItems(newItems) {
+    this.setState({
+      selectedItems: this.props.options
+        .filter(({ value }) => newItems.includes(value))
+        .map(({ value }) => value),
+    });
   }
 
   callbackHandler() {
@@ -85,8 +94,8 @@ class MultiSelect extends Component {
    */
   removeItem(item, callback) {
     this.setState(
-      prevState => ({
-        selectedItems: prevState.selectedItems.filter(i => i !== item),
+      (prevState) => ({
+        selectedItems: prevState.selectedItems.filter((i) => i !== item),
       }),
       callback,
     );
@@ -99,7 +108,7 @@ class MultiSelect extends Component {
    * @param callback
    */
   addSelectedItem(item, callback) {
-    this.setState(prevState => ({ selectedItems: [...prevState.selectedItems, item] }), callback);
+    this.setState((prevState) => ({ selectedItems: [...prevState.selectedItems, item] }), callback);
   }
 
   /**
@@ -119,26 +128,19 @@ class MultiSelect extends Component {
     return changes;
   }
 
-  handleHelperLink(hasAvailableItems) {
-    return this.setState(
-      {
-        selectedItems: hasAvailableItems ? this.props.options.map(({ value }) => value) : [],
-      },
-      this.callbackHandler,
-    );
-  }
-
   render() {
     const { label, options, disabled, placeholder, selector, theme, extraPickers } = this.props;
 
-    const selectedItems = options.filter(({ value }) => this.state.selectedItems.includes(value));
+    const selectedItems = options.filter(({ value }) => {
+      return this.state.selectedItems.includes(value);
+    });
     const availableItems = options.filter(({ value }) => !this.state.selectedItems.includes(value));
     const hasAvailableItems = availableItems.length > 0;
     return (
       <Downshift
         {...this.props}
         stateReducer={this.stateReducer}
-        itemToString={item => (item ? item.label : '')}
+        itemToString={(item) => (item ? item.label : '')}
         onChange={this.handleSelection}
         selectedItem={null}
       >

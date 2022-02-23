@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -23,7 +22,7 @@ import styles from './styles.scss';
 /**
  * Checks if there are a specific route to go onclicking a card or just the default one.
  */
-const contextualUrl = location =>
+const contextualUrl = (location) =>
   (location.state && location.state.nextRoute) || '../patient-information';
 
 class SelectTimes extends React.PureComponent {
@@ -75,8 +74,9 @@ class SelectTimes extends React.PureComponent {
      */
     const checkIfIncludesTime = ({ startDate }) => waitSpotTimes.includes(startDate);
 
-    const availabilities = selectedService
-      && availabilitiesGroupedByPeriod(
+    const availabilities =
+      selectedService &&
+      availabilitiesGroupedByPeriod(
         Object.values(officeHours),
         timezone,
         selectedService.get('duration'),
@@ -91,10 +91,10 @@ class SelectTimes extends React.PureComponent {
     const timeFrameButton = (frame, label) => {
       const classes = classnames(styles.slot, styles.timeFrameButton, {
         [styles.selectedSlot]:
-          (availabilities[frame]
-            && availabilities[frame].length > 0
-            && availabilities[frame].every(checkIfIncludesTime))
-          || availabilities.total === waitSpotTimes.size,
+          (availabilities[frame] &&
+            availabilities[frame].length > 0 &&
+            availabilities[frame].every(checkIfIncludesTime)) ||
+          availabilities.total === waitSpotTimes.size,
       });
       return (
         <div className={styles.slotWrapper} key={`${label}`}>
@@ -124,14 +124,15 @@ class SelectTimes extends React.PureComponent {
      */
     const handleSelectFrameAvailability = (frame) => {
       if (frame === 'all') {
-        const frameAll = availabilities.total === waitSpotTimes.size
-          ? waitSpotTimes.clear()
-          : waitSpotTimes.union(...Object.values(selectAllStartingTimes));
+        const frameAll =
+          availabilities.total === waitSpotTimes.size
+            ? waitSpotTimes.clear()
+            : waitSpotTimes.union(...Object.values(selectAllStartingTimes));
         this.shouldShowNextButton(frameAll.size > 0);
         return this.props.setWaitSpotTimes(frameAll);
       }
       const selectAllStartingTime = selectAllStartingTimes[frame];
-      const selectedAvailabilities = selectAllStartingTime.every(v => waitSpotTimes.includes(v))
+      const selectedAvailabilities = selectAllStartingTime.every((v) => waitSpotTimes.includes(v))
         ? waitSpotTimes.subtract(selectAllStartingTime)
         : waitSpotTimes.union(selectAllStartingTime);
       this.shouldShowNextButton(selectedAvailabilities.size > 0);
@@ -159,7 +160,8 @@ class SelectTimes extends React.PureComponent {
      * @param {string} label
      */
     const timeListOnFrame = (timeframe, label) =>
-      timeframe && timeframe.length > 0 && (
+      timeframe &&
+      timeframe.length > 0 && (
         <div className={styles.timeFrameWrapper}>
           <h3 className={styles.slotsTitle}>{label}</h3>
           {timeframe.map((availability) => {
@@ -171,6 +173,7 @@ class SelectTimes extends React.PureComponent {
               <div className={styles.cardWrapper} key={`${availability.startDate}`}>
                 <Button
                   key={`${availability.startDate}`}
+                  data-value={`${availability.startDate}`}
                   onClick={() => handleAvailability(availability)}
                   className={classes}
                 >
@@ -211,12 +214,12 @@ class SelectTimes extends React.PureComponent {
 }
 
 function mapStateToProps({ availabilities, auth, entities, widgetNavigation }) {
-  const getPatientUser = availabilities.get('familyPatientUser')
-    && auth.get('familyPatients').length > 0
-    ? auth
-      .get('familyPatients')
-      .find(patient => patient.id === availabilities.get('familyPatientUser'))
-    : false;
+  const getPatientUser =
+    availabilities.get('familyPatientUser') && auth.get('familyPatients').length > 0
+      ? auth
+          .get('familyPatients')
+          .find((patient) => patient.id === availabilities.get('familyPatientUser'))
+      : false;
 
   return {
     timezone: availabilities.get('account').get('timezone'),

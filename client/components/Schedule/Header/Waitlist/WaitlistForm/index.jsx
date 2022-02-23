@@ -12,13 +12,12 @@ import styles from './styles.scss';
 import Selector from './Selector';
 import {
   convertArrayOfOptionsInMap,
-  generateWaitlistHoursOnlyTime,
+  generateWaitlistHours,
   getDayPickers,
   getTimePickers,
   getTimeSlot,
   getAllTimeSlots,
   generateDaysOfWeek,
-  getTimeOnly,
 } from '../helpers';
 import { practitionerShape } from '../../../../library/PropTypeShapes';
 
@@ -83,7 +82,6 @@ const WaitlistForm = ({
 }) => {
   const [formValues, setFormValues] = useState(setInitialState(initialState, defaultUnit));
   const [isPatientInWaitlist, setIsPatientInWaitlist] = useState(false);
-  const [selectedTimes, setSelectedTimes] = useState([]);
 
   const selectedPatient = formValues.patient || formValues.patientUser;
   const selectedDaysOfWeek = Object.entries(formValues.daysOfTheWeek)
@@ -102,21 +100,13 @@ const WaitlistForm = ({
   }, [waitlist, selectedPatient]);
 
   // TODO: use office hours instead of fixed time
-  const timeOptions = useMemo(() => generateWaitlistHoursOnlyTime(timezone), [timezone]);
-
-  useEffect(() => {
-    let newSelectedTimes = [];
-    if (formValues.availableTimes.length) {
-      newSelectedTimes = formValues.availableTimes.map((time) => {
-        if (time.length !== 4) {
-          return getTimeOnly(time);
-        }
-        return time;
-      });
-    }
-    setSelectedTimes(newSelectedTimes);
-  }, [formValues.availableTimes]);
-
+  const selectedTimes = formValues.availableTimes.map((time) => {
+    // Timezone can be anything here, it doesn't matter which one.
+    // It's for moment timezone library to do it's thing.
+    // In response we will get time converted into GMT 0 timezone
+    // based on the origanal time
+    return parseDate(new Date(time), timezone).toISOString();
+  });
   const handleAutoSuggest = (newValue) => {
     setFormValues({
       ...formValues,
@@ -164,14 +154,17 @@ const WaitlistForm = ({
     });
   };
 
+  // TODO: use office hours instead of fixed time
+
+  // Returns list of time options displayed under Preferred Times dropdown.
+  const timeOptions = useMemo(() => generateWaitlistHours(timezone), [timezone]);
+
   const onDaysOfTheWeekChange = (values) => {
     onChange('daysOfTheWeek')(convertArrayOfOptionsInMap(values, generateDaysOfWeek()));
   };
 
   const handleDayOnChange = (v) => {
-    const startOfDay = parseDate(new Date(), timezone)
-      .startOf('day')
-      .toISOString();
+    const startOfDay = parseDate(new Date(), timezone).startOf('day').toISOString();
 
     if (v >= startOfDay) {
       onChange('endDate')(parseDate(v, timezone).toString());
@@ -198,14 +191,6 @@ const WaitlistForm = ({
     }
   };
 
-  const returnFormattedValues = (v) => {
-    const result = timeOptions.find((option) => option.value === v)?.label;
-    if (result) {
-      return result;
-    }
-    return null;
-  };
-
   const timeSlots = useMemo(() => {
     const options = timeOptions.map((option) => {
       option.slot = getTimeSlot(option.label);
@@ -215,6 +200,16 @@ const WaitlistForm = ({
   }, [timeOptions]);
 
   const timePickers = getTimePickers(selectedTimes, timeSlots, onToggleTimePicker);
+
+  const compareTimeOptions = (option, v) => {
+    const dateObj = new Date(v);
+    const optionObj = new Date(option.value);
+
+    const result =
+      optionObj.getUTCHours() === dateObj.getUTCHours() &&
+      optionObj.getUTCMinutes() === dateObj.getUTCMinutes();
+    return result ? option.label : null;
+  };
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
@@ -331,7 +326,9 @@ const WaitlistForm = ({
                   disabled={disabled}
                   selected={selectedTimes}
                   placeholder="Preferred Times"
-                  formatValue={returnFormattedValues}
+                  formatValue={(v) => {
+                    return timeOptions.find((option) => compareTimeOptions(option, v))?.label;
+                  }}
                   error={error}
                   selectorProps={getToggleButtonProps()}
                   handleSelection={handleSelection}

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { toHumanCommaSeparated, capitalize } from '../../../../util/isomorphic';
 import styles from './styles.scss';
@@ -19,26 +18,22 @@ export const waitlistDates = (week) => {
     return null;
   }
 
-  return week
-    .keySeq()
-    .toArray()
-    .map(capitalize)
-    .join(', ');
+  return week.keySeq().toArray().map(capitalize).join(', ');
 };
 
 /**
  * Display a linear list of times that were selected from the user on the waitlist's steps.
  */
 export const waitlistTimes = (waitSpot, availabilities, timezone) =>
-  availabilities
-  && waitSpot.get('times').size > 0 && (
+  availabilities &&
+  waitSpot.get('times').size > 0 && (
     <span>
       {Object.keys(availabilities)
         .reduce(
           handleAvailabilitiesTimes(waitSpot.get('times').toJS(), availabilities, timezone),
           [],
         )
-        .map(text => text)}
+        .map((text) => text)}
     </span>
   );
 
@@ -121,22 +116,23 @@ export const handleAvailabilitiesTimes = (selected, availabilities, timezone) =>
           if (timesReduced.out.length > 0) {
             const excludedTimes = timesReduced.out.reduce(
               (but, time) =>
-                (time < endTimeOnTimeFrame && time > startTimeOnTimeFrame
+                time < endTimeOnTimeFrame && time > startTimeOnTimeFrame
                   ? [...but, ...[time]]
-                  : but),
+                  : but,
               [],
             );
 
-            const excludedText = excludedTimes.length > 0
-              ? `but ${excludedTimes
-                .map(el => formatReviewDates(el))
-                .reduce(toHumanCommaSeparated)}`
-              : '';
+            const excludedText =
+              excludedTimes.length > 0
+                ? `but ${excludedTimes
+                    .map((el) => formatReviewDates(el))
+                    .reduce(toHumanCommaSeparated)}`
+                : '';
             text += ` ${excludedText}`;
           }
         } else {
           boldedText = ` ${timesReduced.in
-            .map(el => formatReviewDates(el))
+            .map((el) => formatReviewDates(el))
             .reduce(toHumanCommaSeparated)}`;
         }
       } else {
@@ -170,22 +166,10 @@ const setTimeForToday = (date, timezone, today = new Date()) =>
   parseDate(date, timezone)
     .set({
       year: today.getFullYear(),
-      month: today.getMonth() + 1,
+      month: today.getMonth(),
       date: today.getDate(),
     })
     .toDate();
-
-/**
- * With the provided dailySchedule normalize the data
- * and return only the hours values.
- *
- * @param timezone
- * @returns {function({startTime?: *, endTime?: *}): {startDate: *, endDate: *}}
- */
-const normalizeDateHours = timezone => ({ startTime, endTime }) => ({
-  startDate: setTimeForToday(startTime, timezone),
-  endDate: setTimeForToday(endTime, timezone),
-});
 
 /**
  * Remove any value that does not represent a dailySchedule or a open day,
@@ -195,17 +179,25 @@ const normalizeDateHours = timezone => ({ startTime, endTime }) => ({
  * @param timezone
  * @returns {*}
  */
-const sanitizeSchedule = (schedule, timezone) =>
+
+const sanitizeScheduleForFixedDate = (schedule, timezone) =>
   schedule
-    .filter(h => h && !h.isClosed && h.endTime !== h.startTime)
-    .map(normalizeDateHours(timezone));
+    .filter((h) => h && !h.isClosed && h.endTime !== h.startTime)
+    .map(normalizeDateHoursForFixedDate(timezone));
+
+const normalizeDateHoursForFixedDate =
+  (timezone) =>
+  ({ startTime, endTime }) => ({
+    startDate: setTimeForToday(startTime, timezone, new Date('1/31/2020')),
+    endDate: setTimeForToday(endTime, timezone, new Date('1/31/2020')),
+  });
 
 /**
  * Get the earliest and the latest hours for a weeklySchedule.
  * @param dates
  * @returns *|{startDate: Date, endDate: Date}
  */
-const getStartAndEndDate = dates =>
+const getStartAndEndDate = (dates) =>
   dates.reduce(
     (acc, { startDate, endDate }) => ({
       startDate: startDate < acc.startDate ? startDate : acc.startDate,
@@ -222,9 +214,9 @@ const getStartAndEndDate = dates =>
  * @param duration
  * @returns {availabilities|{morning: Array, afternoon: Array, evening: Array, total: number}}
  */
-export const availabilitiesGroupedByPeriod = (schedule, timezone, duration) =>
-  createAvailabilitiesFromOpening({
-    ...getStartAndEndDate(sanitizeSchedule(schedule, timezone)),
+export const availabilitiesGroupedByPeriod = (schedule, timezone, duration) => {
+  return createAvailabilitiesFromOpening({
+    ...getStartAndEndDate(sanitizeScheduleForFixedDate(schedule, timezone)),
     duration,
     interval: 60,
   }).reduce(groupTimesPerPeriod(timezone), {
@@ -233,3 +225,4 @@ export const availabilitiesGroupedByPeriod = (schedule, timezone, duration) =>
     evening: [],
     total: 0,
   });
+};

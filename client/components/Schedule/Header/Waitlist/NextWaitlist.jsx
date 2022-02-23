@@ -4,7 +4,7 @@ import groupBy from 'lodash/groupBy';
 import { useSelector } from 'react-redux';
 import DialogBox from '../../../library/DialogBox';
 import WaitlistTableWithActions from './WaitlistTableWithActions';
-import { batchUpdateFactory, mergeData, getFullDummyDate } from './helpers';
+import { batchUpdateFactory, mergeData } from './helpers';
 import DraftMessage from './WaitlistMessage/DraftMessage';
 import ResponseMessage from './WaitlistMessage/ResponseMessage';
 import WaitlistForm from './WaitlistForm';
@@ -103,24 +103,23 @@ const NextWaitlist = (props) => {
     });
   }, [accountId, conversionAnalyzer, textMessage]);
 
-  const handleSubmit = (callback) => ({ patient, patientUser, ...values }) => {
-    if (values.availableTimes.length && values.availableTimes[0].length === 4) {
-      values.availableTimes = values.availableTimes.map(getFullDummyDate);
-    }
-    callback({
-      variables: {
-        input: {
-          ...values,
-          accountId,
-          patientId: patient && patient.id,
-          patientUserId: patientUser && patientUser.id,
-          id: selectedWaitSpot.id,
+  const handleSubmit =
+    (callback) =>
+    ({ patient, patientUser, ...values }) => {
+      callback({
+        variables: {
+          input: {
+            ...values,
+            accountId,
+            patientId: patient && patient.id,
+            patientUserId: patientUser && patientUser.id,
+            id: selectedWaitSpot.id,
+          },
         },
-      },
-    });
+      });
 
-    resetEditForm();
-  };
+      resetEditForm();
+    };
 
   const handleEdit = useCallback(
     (waitspotId) => () => {
