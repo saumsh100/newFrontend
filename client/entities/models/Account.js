@@ -9,6 +9,7 @@ const AccountSchema = {
   bufferAfterClosing: null,
   name: null,
   street: null,
+  isAddressUpdate: null,
   logo: null,
   fullLogoUrl: null,
   country: null,

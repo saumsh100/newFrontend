@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -13,14 +12,11 @@ class Address extends Component {
   constructor(props) {
     super(props);
     this.submit = this.submit.bind(this);
+    this.createUpdateValue = this.createUpdateValue.bind(this);
   }
 
-  submit(values) {
+  createUpdateValue(values, modifiedAccount) {
     const { activeAccount } = this.props;
-    values.city = values.city && values.city.trim();
-    values.street = values.street && values.street.trim();
-    const valuesMap = Map(values);
-    const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {
       success: { body: 'Updated Address Information' },
       error: { body: 'Address Information Update Failed' },
@@ -55,6 +51,35 @@ class Address extends Component {
       });
   }
 
+  submit(values) {
+    const { activeAccount } = this.props;
+
+    values.city = values.city && values.city.trim();
+    values.street = values.street && values.street.trim();
+    values.isAddressUpdate = !!activeAccount.addressId;
+
+    const valuesMap = Map(values);
+    const modifiedAccount = activeAccount.merge(valuesMap);
+
+    if (values.isAddressUpdate) {
+      // If the address values are updateChatId..
+      if (
+        window.confirm(
+          `Updating your practice's address (except timezone) can trigger an update to the field Google Place ID that we use to identify your practice's listing on Google. Would you like to proceed with this update?`,
+        )
+      ) {
+        // If user agrees to trigger an update to the field Google Place ID that we use to identify practice's listing on Google.
+        this.createUpdateValue(values, modifiedAccount);
+      } else {
+        // If practice disagrees (Resetting to the initial values)..
+        window.location.reload();
+      }
+    } else {
+      // If new address is created..
+      this.createUpdateValue(values, modifiedAccount);
+    }
+  }
+
   render() {
     const { activeAccount, address } = this.props;
     return (
@@ -81,6 +106,7 @@ Address.propTypes = {
     zipCode: PropTypes.string,
     state: PropTypes.string,
     timezone: PropTypes.string,
+    isAddressUpdate: PropTypes.bool,
   }),
   change: PropTypes.func.isRequired,
 };
@@ -107,8 +133,5 @@ function mapStateToProps({ entities }, { activeAccount }) {
   };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToActions,
-);
+const enhance = connect(mapStateToProps, mapDispatchToActions);
 export default enhance(Address);

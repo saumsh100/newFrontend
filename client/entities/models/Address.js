@@ -1,4 +1,3 @@
-
 import createModel from '../createModel';
 
 const AddressSchema = {
@@ -10,6 +9,7 @@ const AddressSchema = {
   zipCode: null,
   phoneNumber: null,
   timezone: null,
+  isAddressUpdate: null,
 };
 
 export default class Address extends createModel(AddressSchema, 'Address') {}
