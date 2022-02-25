@@ -34,16 +34,21 @@ Forms.propTypes = {
   user: PropTypes.shape(userShape).isRequired,
   role: PropTypes.string.isRequired,
   useFormSubmission: PropTypes.bool.isRequired,
+  useFormSubmissionSyncColumn: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ entities, auth, featureFlags }) => {
   const isDev = process.env.NODE_ENV === 'development';
+  const useFormSubmissionSyncColumn = isDev
+    ? true
+    : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-form-submission-sync-column');
   const useFormSubmission = isDev
     ? true
     : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-form-submission');
   return {
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
     useFormSubmission,
+    useFormSubmissionSyncColumn,
   };
 };
 
