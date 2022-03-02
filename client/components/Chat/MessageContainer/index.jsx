@@ -233,7 +233,6 @@ class MessageContainer extends Component {
 
   renderMessageGroup(messages) {
     const { pendingMessages, selectedPatient, phoneLookupObj } = this.props;
-    const activeAccount = this.props.activeAccount.toJS();
 
     if (!Array.isArray(messages) || messages.length < 1) {
       return null;
@@ -244,7 +243,7 @@ class MessageContainer extends Component {
       !pendingMessages.includes((pending) => pending.id === message.get('id'));
 
     return messages.filter(isPending).map((message) => {
-      const isFromPatient = message.get('from') !== activeAccount.twilioPhoneNumber;
+      const isFromPatient = message.get('smsStatus') === 'received';
       let avatarUser = selectedPatient;
 
       if (!isFromPatient) {
