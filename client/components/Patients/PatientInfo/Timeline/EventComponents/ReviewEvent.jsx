@@ -1,13 +1,15 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getFormattedDate, Star } from '../../../../library';
+
 import EventContainer from './Shared/EventContainer';
 import getEventText from './Shared/textBuilder';
 import styles from './styles.scss';
 
-export default function ReviewEvent({ data, timezone }) {
+export default function ReviewEvent({ data, timezone, smsFailed, patient }) {
   const stars = [];
+  const contactNumber = patient.cellPhoneNumber || 'cell phone number';
+  const contactMethod = 'SMS';
 
   for (let i = 0; i < data.review.stars; i += 1) {
     stars.push(<Star size={1.8} />);
@@ -27,10 +29,22 @@ export default function ReviewEvent({ data, timezone }) {
       {getEventText('english', 'reviews', 'incomplete')} {apptDate}
     </div>
   );
+  const smsFailedContent = (
+    <div className={styles.review}>
+      {getEventText('english', 'reviews', 'smsFail')({ contactMethod, apptDate, contactNumber })}
+    </div>
+  );
+  const renderContentType = () => {
+    if (smsFailed) {
+      return smsFailedContent;
+    }
+    if (data.isCompleted) {
+      return completedContent;
+    }
+    return inCompleteContent;
+  };
 
-  const content = data.isCompleted ? completedContent : inCompleteContent;
-
-  const headerData = <div className={styles.review}>{content}</div>;
+  const headerData = <div className={styles.review}>{renderContentType()}</div>;
 
   return (
     <EventContainer key={data.id} headerData={headerData} subHeaderData={data.review.description} />
@@ -51,4 +65,11 @@ ReviewEvent.propTypes = {
     isCompleted: PropTypes.bool,
   }).isRequired,
   timezone: PropTypes.string.isRequired,
+  smsFailed: PropTypes.bool,
+  patient: PropTypes.shape({
+    cellPhoneNumber: PropTypes.string,
+  }).isRequired,
+};
+ReviewEvent.defaultProps = {
+  smsFailed: false,
 };

@@ -1,4 +1,3 @@
-
 import ReviewEvent from '../ReviewEvent';
 import ReminderEvent from '../ReminderEvent';
 import CallEvent from '../CallEvent';
@@ -9,6 +8,7 @@ import FollowUpEvent from '../FollowUpEvent';
 import DueDateEvent from '../DueDateEvent';
 import RequestEvent from '../RequestEvent';
 import RecallEvent from '../RecallEvent';
+import SmsFailEvent from '../SmsFailEvent';
 
 const buildEventObj = (component, icon, iconColor, iconType) => ({
   component: [component],
@@ -28,6 +28,7 @@ const eventHashMap = {
   reminder: buildEventObj(ReminderEvent, 'bell', 'red'),
   request: buildEventObj(RequestEvent, 'calendar-check', 'green'),
   review: buildEventObj(ReviewEvent, 'star', 'yellow'),
+  smsFail: buildEventObj(SmsFailEvent, 'exclamation-triangle', 'red'),
 };
 
 function setAppointmentIcon({ isCancelled }) {

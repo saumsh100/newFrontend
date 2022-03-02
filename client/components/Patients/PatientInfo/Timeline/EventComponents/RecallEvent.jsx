@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import EventContainer from './Shared/EventContainer';
@@ -37,22 +36,34 @@ const recallIntervalHash = {
   '-18 months': '18 Months After',
 };
 
-export default function RecallEvent({ data, patient, timezone }) {
+export default function RecallEvent({ data, patient, timezone, smsFailed }) {
   if (!data.isAutomated) return <ManualRecallEvent data={data} patient={patient} />;
 
   const sentDate = getFormattedDate(data.createdAt, 'MMMM Do, YYYY h:mma', timezone);
   const typeOfRecall = data.isHygiene ? 'hygiene' : 'recall';
   const intervalText = recallIntervalHash[data.recall.interval];
   const contactMethod = contactMethodHash[data.primaryType];
-  const headerData = getEventText(
-    'english',
-    'recalls',
-    typeOfRecall,
-  )({
-    intervalText,
-    contactMethod,
-    sentDate,
-  });
+  const contactNumber = patient.cellPhoneNumber || 'cell phone number';
+  const headerData = smsFailed
+    ? getEventText(
+        'english',
+        'smsFail',
+        typeOfRecall,
+      )({
+        intervalText,
+        contactMethod,
+        sentDate,
+        contactNumber,
+      })
+    : getEventText(
+        'english',
+        'recalls',
+        typeOfRecall,
+      )({
+        intervalText,
+        contactMethod,
+        sentDate,
+      });
 
   return <EventContainer key={data.id} headerData={headerData} />;
 }
@@ -70,6 +81,11 @@ RecallEvent.propTypes = {
   patient: PropTypes.shape({
     id: PropTypes.string,
     firstName: PropTypes.string,
+    cellPhoneNumber: PropTypes.string,
   }).isRequired,
   timezone: PropTypes.string.isRequired,
+  smsFailed: PropTypes.bool,
+};
+RecallEvent.defaultProps = {
+  smsFailed: false,
 };

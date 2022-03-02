@@ -1,18 +1,17 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { getFormattedDate, Icon } from '../../../../library';
+import { patientShape } from '../../../../library/PropTypeShapes';
 import eventHashMap from './Shared/eventHashMap';
 import styles from './styles.scss';
 
 function Event(props) {
-  const { type, data, patient, timezone } = props;
+  const { type, data, patient, timezone, event } = props;
 
   const content = eventHashMap[type];
   if (!content) return false;
-
   const iconType = 'solid';
   const { component, icon, iconColor } = content;
 
@@ -24,9 +23,17 @@ function Event(props) {
             <Icon size={1} icon={icon(data)} className={styles.icon} type={iconType} />
           </div>
         </div>
-        {component.map(EventComponent => (
-          <EventComponent data={data} key={data.id} patient={patient} timezone={timezone} />
-        ))}
+        {component.map((EventComponent) => {
+          return (
+            <EventComponent
+              data={data}
+              key={data.id}
+              patient={patient}
+              timezone={timezone}
+              event={event}
+            />
+          );
+        })}
       </div>
       {type !== 'appointment' && type !== 'dueDate' && (
         <div className={styles.time}>
@@ -40,14 +47,12 @@ function Event(props) {
 }
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(Event);
+export default connect(mapStateToProps, null)(Event);
 
 Event.propTypes = {
   type: PropTypes.string.isRequired,
   timezone: PropTypes.string.isRequired,
   data: PropTypes.objectOf(PropTypes.any).isRequired,
-  patient: PropTypes.shape({}).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
+  event: PropTypes.objectOf(PropTypes.any).isRequired,
 };

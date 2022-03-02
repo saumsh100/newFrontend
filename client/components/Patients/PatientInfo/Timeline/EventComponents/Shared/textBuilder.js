@@ -1,4 +1,3 @@
-
 export default function getEventText(lang, event, key) {
   return eventLanguages[lang][event][key];
 }
@@ -16,6 +15,8 @@ const eventEnglishText = {
   reviews: {
     completed: 'left a CareCru review for the appointment on',
     incomplete: 'Review was sent out but no feedback was given for the appointment on',
+    smsFail: ({ contactMethod, apptDate, contactNumber }) =>
+      `${contactMethod} Review for the appointment on ${apptDate} failed as ${contactNumber} does not support SMS`,
   },
   dueDate: {
     upcoming: 'is due for an upcoming',
@@ -23,11 +24,22 @@ const eventEnglishText = {
     pastTense: 'appointment on',
     futureTense: 'appointment for',
   },
-
   recalls: {
     hygiene: ({ sentDate, contactMethod }) => `Sent ${contactMethod} Hygiene Recall on ${sentDate}`,
     recall: ({ intervalText, contactMethod, sentDate }) =>
       `Sent '${intervalText} Due Date' ${contactMethod} Recall on ${sentDate}`,
+    smsFail: ({ intervalText, contactMethod, sentDate, contactNumber }) =>
+      `'${intervalText} ${contactMethod} Recall on ${sentDate} failed as ${contactNumber} does not support SMS`,
+  },
+  failedsms: {
+    review: ({ contactNumber, sentDate }) =>
+      `SMS Review for appointment on ${sentDate} failed as  failed as ${contactNumber} does not support SMS`,
+    recalls: ({ contactNumber, sentDate }) =>
+      `SMS Recall on ${sentDate} failed as  failed as ${contactNumber} does not support SMS`,
+    reminder: ({ contactNumber, sentDate }) =>
+      `SMS Review for appointment on ${sentDate} failed as  failed as ${contactNumber} does not support SMS`,
+    familyReminder: ({ contactNumber, sentDate }) =>
+      `SMS Review for appointment on ${sentDate} failed as  failed as ${contactNumber} does not support SMS`,
   },
 };
 

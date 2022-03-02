@@ -1,9 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import EventDateSections from '../../PatientInfo/Timeline/EventDateSections';
 import EventModel from '../../../../entities/models/Event';
+import { patientShape } from '../../../library/PropTypeShapes';
 import { sortEvents } from '../../Shared/helpers';
 import styles from './styles.scss';
 import { getTodaysDate, getUTCDate, parseDateWithFormat } from '../../../library';
@@ -20,7 +20,7 @@ function EventsTable({ events, patient, timezone }) {
   }
 
   const eventsUpToToday = events.filter(
-    ev =>
+    (ev) =>
       getUTCDate(ev.get('metaData', timezone).createdAt).diff(getTodaysDate(timezone), 'days') < 1,
   );
   // Only displaying the latest five events
@@ -40,14 +40,14 @@ function EventsTable({ events, patient, timezone }) {
 
   // sort date sections by date descending
   const dateSections = Object.keys(dateObj)
-    .map(date => parseDateWithFormat(date, 'MMMM Do YYYY', timezone))
+    .map((date) => parseDateWithFormat(date, 'MMMM Do YYYY', timezone))
     .sort((a, b) => b.diff(a))
-    .map(date => date.format('MMMM Do YYYY'));
+    .map((date) => date.format('MMMM Do YYYY'));
 
   return (
     <div className={styles.eventsList}>
       {dateSections.length > 0 &&
-        dateSections.map(date => (
+        dateSections.map((date) => (
           <EventDateSections
             key={`eventSection_${date}`}
             dateHeader={date}
@@ -60,13 +60,10 @@ function EventsTable({ events, patient, timezone }) {
 }
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(EventsTable);
+export default connect(mapStateToProps, null)(EventsTable);
 
 EventsTable.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)).isRequired,
-  patient: PropTypes.shape({}).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
   timezone: PropTypes.string.isRequired,
 };

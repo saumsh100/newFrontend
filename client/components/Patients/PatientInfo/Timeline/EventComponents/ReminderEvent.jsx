@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import EventContainer from './Shared/EventContainer';
@@ -68,7 +67,7 @@ const renderFamilyDetails = (data, timezone) => {
   );
 };
 
-export default function ReminderEvent({ data, timezone }) {
+export default function ReminderEvent({ data, timezone, smsFailed, patient }) {
   const contactMethodHash = {
     email: 'Email',
     sms: 'SMS',
@@ -76,8 +75,8 @@ export default function ReminderEvent({ data, timezone }) {
     smart_follow_up: 'Smart Follow Up',
   };
   const contactMethod = contactMethodHash[data.primaryType];
+  const contactNumber = patient?.cellPhoneNumber || 'cell phone number';
   const intervalText = <span className={styles.reminder_interval}>{data.reminder.interval}</span>;
-
   const { sentRemindersPatients } = data;
   const {
     appointment: { startDate },
@@ -92,15 +91,16 @@ export default function ReminderEvent({ data, timezone }) {
 
   const component = (
     <div className={styles.body_header}>
-      Sent {"'"}
-      {intervalText} Before
-      {"'"} {contactMethod}{' '}
+      Sent &#39;
+      {intervalText} Before &#39; {contactMethod}{' '}
       {data.isFamily
         ? renderFamilyDetails(data, timezone)
-        : `Reminder for the appointment on ${appDate}`}
+        : showReminderMessage}
     </div>
   );
 
+  const showReminderMessage =  smsFailed ? `Reminder for the appointment on ${appDate} failed as ${contactNumber} does not support ${contactMethod}`: `Reminder for the appointment on ${appDate}`
+  
   return <EventContainer key={data.id} component={component} />;
 }
 
@@ -121,4 +121,11 @@ ReminderEvent.propTypes = {
     }),
   }).isRequired,
   timezone: PropTypes.string.isRequired,
+  smsFailed: PropTypes.bool,
+  patient: PropTypes.shape({
+    cellPhoneNumber: PropTypes.string,
+  }).isRequired,
+};
+ReminderEvent.defaultProps = {
+  smsFailed: false,
 };

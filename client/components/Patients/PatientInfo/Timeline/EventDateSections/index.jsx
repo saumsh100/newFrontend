@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -6,6 +5,7 @@ import Event from '../EventComponents';
 import PatientTimelineEvent from '../../../../../entities/models/PatientTimelineEvent';
 import styles from '../styles.scss';
 import { getTodaysDate } from '../../../../library';
+import { patientShape } from '../../../../library/PropTypeShapes';
 
 export default function EventDateSections(props) {
   const { events, dateHeader, patient, timezone } = props;
@@ -17,20 +17,31 @@ export default function EventDateSections(props) {
     showHeader = 'Today';
     dateHeaderClass = classnames(dateHeaderClass, styles.today);
   }
-
+  const getEventType = (eventData) => {
+    const eventType = eventData.get('type');
+    return !eventData.get('metaData').isSent &&
+      eventData.get('metaData').primaryType === 'sms' &&
+      (eventType === 'reminder' || eventType === 'review' || eventType === 'recall')
+      ? 'smsFail'
+      : eventType;
+  };
   return (
     <div className={styles.eventSection}>
       <div className={styles.verticalLine}>&nbsp;</div>
       <div className={dateHeaderClass}> {showHeader} </div>
-      {events.map(event => (
-        <Event
-          key={`eventSection_${event.id}`}
-          data={event.get('metaData')}
-          type={event.get('type')}
-          bgColor="secondary"
-          patient={patient}
-        />
-      ))}
+
+      {events.map((event) => {
+        return (
+          <Event
+            key={`eventSection_${event.id}`}
+            data={event.get('metaData')}
+            type={getEventType(event)}
+            event={event}
+            bgColor="secondary"
+            patient={patient}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -38,6 +49,6 @@ export default function EventDateSections(props) {
 EventDateSections.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(PatientTimelineEvent)).isRequired,
   dateHeader: PropTypes.string.isRequired,
-  patient: PropTypes.shape({}).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
   timezone: PropTypes.string.isRequired,
 };
