@@ -1,9 +1,10 @@
 #!/usr/bin/env groovy
-@Library('pipeline-library@1.0.4') _
+@Library('pipeline-library@1.0.5') _
 import com.carecru.pipeline.library.deployment.Deployment
 
 try {
-  if (version) {}
+  if (version) {
+  }
 } catch (Exception e) {
   version = null
 }
@@ -22,12 +23,9 @@ def parallelBuildDockerImage(Deployment pipeline, String environment) {
   services.each { service ->
     def appName = service.getKey()
     def dockerfilePath = service.getValue()
+    def useIdentityAccessProxy = isDevelopment(mainBranch) ? true : false
     parallelServiceNames["${appName}-dev"] = {
-      if (isDevelopment(mainBranch)) {
-        pipeline.buildDevDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment, "https://${environment}.carecru.com/backend")
-      } else {
-        pipeline.buildDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment)
-      }
+      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment, useIdentityAccessProxy)
     }
     parallelServiceNames["${appName}-test"] = {
       pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "test", frontendDirectory, "test")
@@ -50,7 +48,7 @@ def parallelDeployApp(Deployment pipeline, String environment, String ecsCluster
   services.keySet().each { appName ->
     serviceName["${appName}-ca"] = {
       pipeline.deployApplication(appName, environment, ecsClusterName, appName, environment == "prod" ? "prod_" + version : (
-        environment == "test" ? "test_" + version : version )
+        environment == "test" ? "test_" + version : version)
       )
     }
     if (isProduction()) {
@@ -67,7 +65,7 @@ def parallelDeployApp(Deployment pipeline, String environment, String ecsCluster
 
 node(jenkinsNodeExecutor) {
   try {
-    if (isValidDeploy(mainBranch) ) {
+    if (isValidDeploy(mainBranch)) {
       pipeline = new Deployment(this, getVars('environment'), mainApp)
       setVars("ca-central-1")
       pipeline.clearWorkspace()
@@ -89,7 +87,7 @@ node(jenkinsNodeExecutor) {
     currentBuild.result = "FAILURE"
   }
   finally {
-    if (isValidDeploy(mainBranch) ) {
+    if (isValidDeploy(mainBranch)) {
       pipeline.notifyBuild(getVars('frontendUrl'), notifyChannelName)
       deleteDir()
     }
