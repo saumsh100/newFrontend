@@ -9,6 +9,25 @@ import { Button } from '../../../library';
 import styles from './styles.scss';
 import { practitionerShape, appointmentShape } from '../../../library/PropTypeShapes';
 
+const PMS_MAP = {
+  OPENDENTAL: 'OpenDental',
+  DENTRIX: 'Dentrix',
+  TRACKER: 'Tracker', 
+  CLEARDENT: 'Cleardent',
+  EAGLESOFT: 'Eaglesoft',
+  DEFAULT: 'your practice management software',
+};
+
+const getAdapterType = (adapterType) => {
+  
+  if (!adapterType) return PMS_MAP.DEFAULT;
+
+  const [sanitizeAdapter] = adapterType.split('_');
+  if (!(sanitizeAdapter in PMS_MAP)) return PMS_MAP.DEFAULT;
+
+  return PMS_MAP[sanitizeAdapter];
+};
+
 const ShowMark = (props) => {
   const {
     appointment,
@@ -20,13 +39,14 @@ const ShowMark = (props) => {
     placement,
     practitioner,
     timezone,
+    adapterType,
   } = props;
   const { note, description } = appointment;
   const [isOpened, setIsOpened] = useState(false);
   const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
   const closePopover = () => setIsOpened(false);
   const togglePopover = () => setIsOpened(!isOpened);
-  const notes = description || note || '';
+  const notes = description || note || `Booked Appt: See ${adapterType} for details`;
   return (
     <Popover
       isOpen={isOpened}
@@ -106,7 +126,7 @@ ShowMark.defaultProps = {
   placement: '',
 };
 
-const mapStateToProps = ({ entities, patientTable }, { appointment }) => ({
+const mapStateToProps = ({ auth,entities, patientTable }, { appointment }) => ({
   isNoteFormActive: patientTable.get('isNoteFormActive'),
   isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
   isRecallsFormActive: patientTable.get('isRecallsFormActive'),
@@ -114,6 +134,7 @@ const mapStateToProps = ({ entities, patientTable }, { appointment }) => ({
     .getIn(['practitioners', 'models'])
     .toArray()
     .find(practitioner => practitioner.id === appointment.practitionerId),
+  adapterType:getAdapterType(auth.get('adapterType'))
 });
 
 export default connect(mapStateToProps, null)(ShowMark);
