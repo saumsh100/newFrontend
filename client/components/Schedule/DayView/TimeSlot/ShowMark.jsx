@@ -15,7 +15,9 @@ const PMS_MAP = {
   TRACKER: 'Tracker', 
   CLEARDENT: 'Cleardent',
   EAGLESOFT: 'Eaglesoft',
-  DEFAULT: 'your practice management software',
+  POWERPRACTICE: 'PowerPractice',
+  ABELDENT: 'Abeldent',
+  DEFAULT: '[PMS]',
 };
 
 const getAdapterType = (adapterType) => {
