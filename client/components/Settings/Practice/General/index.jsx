@@ -103,6 +103,7 @@ class General extends Component {
               initialValues={PracticeDetailsInitValues}
               onSubmit={this.updatePracticeData}
               role={role}
+              activeAccount={activeAccount}
             />
           </div>
           <div className={styles.drop}>

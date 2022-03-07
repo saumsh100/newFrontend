@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import { getFormValues, reduxForm } from 'redux-form';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import { Field, Tooltip } from '../../../library';
-import { emailValidate, notNegative, validateEmails } from '../../../library/Form/validate';
+import {
+  emailValidate,
+  notNegative,
+  validateEmails,
+  validateNoSpace,
+} from '../../../library/Form/validate';
 import FormButton from '../../../library/Form/FormButton';
 import Icon from '../../../library/Icon';
 import styles from './styles.scss';
+import { showAlertTimeout } from '../../../../thunks/alerts';
+import AccountModel from '../../../../entities/models/Account';
 
 const maxLength = (max) => (value) =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
@@ -20,11 +27,21 @@ const emailValidateNull = (str) => {
 };
 const maxUnitSize = (value) => value && value > 60 && 'Must be less than or equal to 60';
 
-const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
+const GeneralForm = ({
+  role,
+  formValues,
+  pristine,
+  handleSubmit,
+  change,
+  initialValues,
+  valid,
+  activeAccount,
+}) => {
   const emailValid = role === 'SUPERADMIN' ? emailValidateNull : emailValidate;
+  const istwilioPhoneNumber = !!activeAccount.get('twilioPhoneNumber');
 
-  const [phoneNumberFocusValue, setPhoneNumberFocusValue] = useState('');
   const [allowSubmit, setAllowSubmit] = useState(false);
+  const dispatch = useDispatch();
 
   function onNotificationEmailsChange(e) {
     const { useNotificationEmails } = formValues;
@@ -41,27 +58,47 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
     }
   }
 
-  function handleContactBlur(e) {
-    if (phoneNumberFocusValue !== formValues.phoneNumber) {
-      const confirmUpdate = window.confirm(
-        'Do you want your patient calls to be forwarded to this new number? ',
-      );
-      if (!confirmUpdate) {
-        change('phoneNumber', phoneNumberFocusValue);
-        setPhoneNumberFocusValue('');
-        setAllowSubmit(true);
-      } else {
+  function handleContactChange(e) {
+    const currentVal = e.target.value;
+    if (validateNoSpace(currentVal).length <= 12) {
+      change('phoneNumber', currentVal);
+      if (validateNoSpace(initialValues?.phoneNumber) !== validateNoSpace(currentVal)) {
         setAllowSubmit(false);
+      } else {
+        setAllowSubmit(true);
       }
-    } else {
-      pristine ? setAllowSubmit(true) : setAllowSubmit(false);
     }
     e.preventDefault();
   }
 
+  const handleFormSubmit = (e) => {
+    if (valid) {
+      if (istwilioPhoneNumber) {
+        const confirmUpdate = window.confirm(
+          'Do you want your patient calls to be forwarded to this new number?',
+        );
+        if (confirmUpdate) {
+          handleSubmit();
+        } else {
+          change('phoneNumber', initialValues?.phoneNumber);
+        }
+      } else {
+        handleSubmit();
+      }
+    } else {
+      dispatch(
+        showAlertTimeout({
+          alert: { body: 'There is a validation error' },
+          type: 'error',
+        }),
+      );
+    }
+    e.preventDefault();
+  };
+
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleFormSubmit}
       data-test-id="PracticeDetailsForm123"
       onChange={(e) => e.stopPropagation()}
     >
@@ -72,12 +109,7 @@ const GeneralForm = ({ role, formValues, pristine, handleSubmit, change }) => {
         label="Contact Phone Number"
         type="tel"
         data-test-id="phoneNumber"
-        onFocus={() => {
-          setPhoneNumberFocusValue(formValues.phoneNumber);
-        }}
-        onBlur={(e) => {
-          handleContactBlur(e);
-        }}
+        onChange={handleContactChange}
       />
       <Field
         name="contactEmail"
@@ -152,8 +184,13 @@ GeneralForm.propTypes = {
     notificationEmails: PropTypes.string,
     useNotificationEmails: PropTypes.bool,
   }),
+  initialValues: PropTypes.shape({
+    phoneNumber: PropTypes.string,
+  }).isRequired,
   pristine: PropTypes.bool.isRequired,
   change: PropTypes.func.isRequired,
+  valid: PropTypes.bool.isRequired,
+  activeAccount: PropTypes.instanceOf(AccountModel),
 };
 
 GeneralForm.defaultProps = {
@@ -167,6 +204,7 @@ GeneralForm.defaultProps = {
     notificationEmails: '',
     useNotificationEmails: false,
   },
+  activeAccount: null,
 };
 
 const withStateForm = connect((state) => ({
