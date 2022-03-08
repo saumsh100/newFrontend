@@ -89,6 +89,8 @@ export default function ReminderEvent({ data, timezone, smsFailed, patient }) {
     timezone,
   );
 
+  const showReminderMessage =  smsFailed ? `Reminder for the appointment on ${appDate} failed as ${contactNumber} does not support ${contactMethod}`: `Reminder for the appointment on ${appDate}`
+
   const component = (
     <div className={styles.body_header}>
       Sent &#39;
@@ -99,8 +101,6 @@ export default function ReminderEvent({ data, timezone, smsFailed, patient }) {
     </div>
   );
 
-  const showReminderMessage =  smsFailed ? `Reminder for the appointment on ${appDate} failed as ${contactNumber} does not support ${contactMethod}`: `Reminder for the appointment on ${appDate}`
-  
   return <EventContainer key={data.id} component={component} />;
 }
 
