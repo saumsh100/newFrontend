@@ -17,7 +17,6 @@ import {
   SFooter,
   Tooltip,
 } from '../../../library';
-import { isHub } from '../../../../util/hub';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import '../../../../../node_modules/emoji-mart/css/emoji-mart.css';
 import Patient from '../../../../entities/models/Patient';
@@ -93,7 +92,7 @@ class MessageTextArea extends Component {
       this.props;
     if (!chat || isPoC === null) return null;
     const hasPatient = patient && patient.id;
-    const tooltipPlacement = isHub() ? 'bottomRight' : 'top';
+    const tooltipPlacement = 'top';
     const patientFirstName = hasPatient && capitalize(patient.firstName);
     return (
       <SContainer className={styles.textAreaContainer}>

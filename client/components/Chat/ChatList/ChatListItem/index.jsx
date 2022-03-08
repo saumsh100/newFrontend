@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { formatPhoneNumber } from '../../../../util/isomorphic';
 import { Icon, ListItem, Avatar, getTodaysDate, getUTCDate } from '../../../library';
-import { toggleFlagged, selectChat, getChatCategoryCounts } from '../../../../thunks/chat';
-import { isHub } from '../../../../util/hub';
+import { toggleFlagged, selectChat } from '../../../../thunks/chat';
 import UnknownPatient from '../../unknownPatient';
 import styles from './styles.scss';
 
@@ -67,13 +66,13 @@ class ChatListItem extends Component {
 
     const mDate = getUTCDate(lastTextMessage.createdAt || chat.updatedAt, timezone);
     const daysDifference = getTodaysDate(timezone).diff(mDate, 'days');
-    const isActive = selectedChatId === chat.id && !isHub();
+    const isActive = selectedChatId === chat.id;
 
     const messageDate = daysDifference ? mDate.format('YY/MM/DD') : mDate.format('h:mma');
 
     const isUnread = chat.hasUnread;
 
-    const listItemClass = isHub() ? styles.hubListItem : styles.chatListItem;
+    const listItemClass = styles.chatListItem;
 
     return (
       <ListItem
@@ -130,7 +129,6 @@ ChatListItem.propTypes = {
   selectChat: PropTypes.func.isRequired,
   selectedChatId: PropTypes.string,
   onChatClick: PropTypes.func,
-  getChatCategoryCounts: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
 };
 
@@ -161,7 +159,6 @@ function mapDispatchToProps(dispatch) {
     {
       toggleFlagged,
       selectChat,
-      getChatCategoryCounts,
     },
     dispatch,
   );

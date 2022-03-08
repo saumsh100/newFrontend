@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import TextMessageModel from '../../../../entities/models/TextMessage';
-import { isHub } from '../../../../util/hub';
 import { getUTCDate } from '../../../library';
 import styles from './styles.scss';
 
@@ -12,8 +11,8 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
   const hasFailed = status === 'failed';
   const bodyClasses = classNames(styles.bubbleBody, {
     [styles.fromPatientBody]: isFromPatient,
-    [styles.fromClinicBodyHub]: !isFromPatient && isHub(),
-    [styles.fromClinicBody]: !isFromPatient && !isHub(),
+    [styles.fromClinicBodyHub]: !isFromPatient,
+    [styles.fromClinicBody]: !isFromPatient,
     [styles.failedMessage]: !isFromPatient && hasFailed,
   });
   const timeClasses = classNames(styles.bubbleTime, {
