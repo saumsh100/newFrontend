@@ -16,7 +16,6 @@ import {
   getTodaysDate,
 } from '../../../../library/index';
 import { Create as CreateWaitSpot } from '../../../../GraphQLWaitlist';
-import { isHub } from '../../../../../util/hub';
 import CheckboxButton from '../../../../library/CheckboxButton';
 import { availabilitiesGroupedByPeriod } from '../../../../Widget/Booking/Review/helpers';
 import PatientSearch from '../../../../PatientSearch';
@@ -153,9 +152,7 @@ class AddToWaitlist extends React.Component {
           daysOfTheWeek,
           availableTimes,
           patientId: patientSearched.id,
-          endDate: getTodaysDate(timezone)
-            .add(30, 'days')
-            .toISOString(),
+          endDate: getTodaysDate(timezone).add(30, 'days').toISOString(),
           accountId: this.props.accountId,
         },
       },
@@ -173,10 +170,11 @@ class AddToWaitlist extends React.Component {
    * @param time {String}
    */
   handleCheckboxTime(time) {
-    const availableTimes = this.state.availableTimes.includes(time)
-      ? [...this.state.availableTimes.filter((a) => a !== time)]
-      : [...this.state.availableTimes, time];
-    this.setState({ availableTimes });
+    this.setState((prevState) => ({
+      availableTimes: prevState.availableTimes.includes(time)
+        ? [...prevState.availableTimes.filter((a) => a !== time)]
+        : [...prevState.availableTimes, time],
+    }));
   }
 
   /**
@@ -238,14 +236,15 @@ class AddToWaitlist extends React.Component {
    * @returns {*}
    */
   toggleDateFrames(dates) {
-    const daysOfTheWeek = dates.reduce(
-      (acc, curr) => ({
-        ...acc,
-        [curr]: !this.hasEveryDateSelected(dates),
-      }),
-      this.state.daysOfTheWeek,
-    );
-    return this.setState({ daysOfTheWeek });
+    return this.setState((prevState) => ({
+      daysOfTheWeek: dates.reduce(
+        (acc, curr) => ({
+          ...acc,
+          [curr]: !this.hasEveryDateSelected(dates),
+        }),
+        prevState.daysOfTheWeek,
+      ),
+    }));
   }
 
   /**
@@ -254,10 +253,11 @@ class AddToWaitlist extends React.Component {
    * @param timeframe {Array}
    */
   toggleTimeFrames(timeframe) {
-    const availableTimes = this.hasEveryTimeSelected(timeframe)
-      ? this.state.availableTimes.filter((t) => !timeframe.includes(t))
-      : [...new Set([...this.state.availableTimes, ...timeframe])];
-    return this.setState({ availableTimes });
+    return this.setState((prevState) => ({
+      availableTimes: this.hasEveryTimeSelected(timeframe)
+        ? prevState.availableTimes.filter((t) => !timeframe.includes(t))
+        : [...new Set([...prevState.availableTimes, ...timeframe])],
+    }));
   }
 
   /**
@@ -305,7 +305,7 @@ class AddToWaitlist extends React.Component {
         {!availabilities ? (
           <Loading />
         ) : (
-          <div className={classNames({ [styles.responsiveFormWrapper]: isHub() })}>
+          <div>
             <Grid className={styles.addToContainer}>
               <Row className={styles.searchContainer} data-test-id="patientWrapper">
                 <Col xs={12} md={12}>
