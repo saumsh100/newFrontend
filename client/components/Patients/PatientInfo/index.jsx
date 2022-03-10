@@ -26,17 +26,16 @@ import EditDisplay from './EditDisplay';
 import TopDisplay from './TopDisplay';
 import Timeline from './Timeline';
 import LeftInfoDisplay from './LeftInfoDisplay';
-import { isHub, isResponsive } from '../../../util/hub';
+import { isResponsive } from '../../../util/hub';
 import { getEventsOffsetLimitObj } from '../Shared/helpers';
 import patientInfoQuery from './PatientInfo_Query';
 import styles from './styles.scss';
 
 const HeaderModalComponent = ({ icon, text, onClick, title }) => (
   <div
-    className={classNames({
+    className={classNames(styles.editButtonMobile, {
       [styles.editButton]: isResponsive(),
       [styles.textContainer]: !isResponsive(),
-      [styles.editButtonMobile]: !isHub(),
     })}
   >
     <div className={styles.cardTitle}> {title} </div>
@@ -64,10 +63,6 @@ class PatientInfo extends Component {
       filterOpen: false,
       tabIndex: 0,
       pageTab: 0,
-      persistedElectronData: {
-        backHandler: null,
-        title: null,
-      },
       defaultEvents: props.filters,
     };
 
@@ -151,23 +146,9 @@ class PatientInfo extends Component {
   }
 
   openModal() {
-    this.setState(
-      {
-        isOpen: true,
-        persistedElectronData: {
-          backHandler: this.props.currentBackHandler,
-          title: this.props.currentTitle,
-        },
-      },
-      () => {
-        if (!isHub()) {
-          return;
-        }
-
-        this.props.setTitle('Edit patient info');
-        this.props.setBackHandler(this.reinitializeState);
-      },
-    );
+    this.setState({
+      isOpen: true,
+    });
   }
 
   openFilter() {
@@ -201,11 +182,10 @@ class PatientInfo extends Component {
     } = this.props;
 
     const wasAllFetched = wasPatientFetched;
-
     const shouldDisplayInfoPage = !isResponsive() || this.state.pageTab === 0;
     const shouldDisplayTimelinePage = !isResponsive() || this.state.pageTab === 1;
     return (
-      <Grid className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}>
+      <Grid className={styles.mainContainer}>
         <Row>
           <Col sm={12} md={12} className={styles.topDisplay}>
             <TopDisplay
@@ -364,7 +344,6 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth }, { match 
 PatientInfo.propTypes = {
   wasPatientFetched: PropTypes.bool,
   wasStatsFetched: PropTypes.bool,
-  currentTitle: PropTypes.string,
   role: PropTypes.string,
   accountViewer: PropTypes.shape({
     id: PropTypes.string,
@@ -380,10 +359,7 @@ PatientInfo.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
   recalls: PropTypes.instanceOf(Map).isRequired,
   reminders: PropTypes.instanceOf(Map).isRequired,
-  currentBackHandler: PropTypes.func,
   selectAllTimelineFilters: PropTypes.func.isRequired,
-  setBackHandler: PropTypes.func.isRequired,
-  setTitle: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   addRemoveTimelineFilters: PropTypes.func.isRequired,
   clearAllTimelineFilters: PropTypes.func.isRequired,
@@ -394,8 +370,6 @@ PatientInfo.propTypes = {
 
 PatientInfo.defaultProps = {
   accountViewer: null,
-  currentBackHandler: (e) => e,
-  currentTitle: '',
   patient: null,
   patientStats: null,
   role: '',
