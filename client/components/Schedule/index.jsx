@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { push } from 'connected-react-router';
 import { Map, List } from 'immutable';
-import { isHub, isResponsive } from '../../util/hub';
+import { isResponsive } from '../../util/hub';
 import {
   Card,
   SBody,
@@ -247,8 +247,6 @@ class ScheduleComponent extends PureComponent {
 
     const { addNewAppointment, showSchedule, lastSummaryRequest } = this.state;
 
-    const hubRedirect = { pathname: '/requests' };
-
     let formName = 'NewAppointmentForm';
     if (selectedAppointment) {
       formName = `editAppointment_${selectedAppointment.serviceId}`;
@@ -288,7 +286,6 @@ class ScheduleComponent extends PureComponent {
           showApptSummary={showApptSummary}
           setShowApptSummary={this.setShowApptSummary}
           lastSummaryRequest={lastSummaryRequest}
-          redirect={isHub() && hubRedirect}
         />
       );
     }

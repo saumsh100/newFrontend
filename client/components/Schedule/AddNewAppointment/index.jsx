@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { change, reset } from 'redux-form';
 import { push } from 'connected-react-router';
-import { isHub } from '../../../util/hub';
 import { setTime, getDuration } from '../../library/util/TimeOptions';
 import DisplayForm from './DisplayForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
@@ -361,20 +360,18 @@ class AddNewAppointment extends Component {
     return (
       <Card className={styles.formContainer} noBorder>
         <SContainer>
-          {!isHub() && (
-            <SHeader className={styles.header}>
-              <div>{title}</div>
-              <Button
-                className={styles.close}
-                onClick={() => {
-                  this.props.reset(formName);
-                  this.props.reinitializeState();
-                }}
-              >
-                <Icon icon="times" />
-              </Button>
-            </SHeader>
-          )}
+          <SHeader className={styles.header}>
+            <div>{title}</div>
+            <Button
+              className={styles.close}
+              onClick={() => {
+                this.props.reset(formName);
+                this.props.reinitializeState();
+              }}
+            >
+              <Icon icon="times" />
+            </Button>
+          </SHeader>
           <SBody className={styles.body}>
             <DisplayForm
               key={formName}
@@ -406,19 +403,17 @@ class AddNewAppointment extends Component {
             />
           </SBody>
           <SFooter className={styles.footer}>
-            {!isHub() && (
-              <div className={styles.button_cancel}>
-                <Button
-                  onClick={() => {
-                    this.props.reset(formName);
-                    this.props.reinitializeState();
-                  }}
-                  border="blue"
-                >
-                  Cancel
-                </Button>
-              </div>
-            )}
+            <div className={styles.button_cancel}>
+              <Button
+                onClick={() => {
+                  this.props.reset(formName);
+                  this.props.reinitializeState();
+                }}
+                border="blue"
+              >
+                Cancel
+              </Button>
+            </div>
             <RemoteSubmitButton {...remoteButtonProps} color="blue">
               {buttonTitle}
             </RemoteSubmitButton>
