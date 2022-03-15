@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import isEmpty from 'lodash/isEmpty';
 import TextMessageModel from '../../../../entities/models/TextMessage';
 import { getUTCDate } from '../../../library';
 import styles from './styles.scss';
@@ -20,6 +21,7 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
     [styles.fromClinicTime]: !isFromPatient,
   });
   const body = textMessage.get('body');
+  const mediaData = textMessage.get('mediaData');
   const time = getUTCDate(textMessage.get('createdAt'), timezone).format('h:mm a');
 
   const messageBubbleCompFunc = () => {
@@ -36,9 +38,34 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
     return jsxObj;
   };
 
+  const getAllImagesFunc = () => {
+    const allImages = [];
+    if (!isEmpty(mediaData)) {
+      Object.values(mediaData).forEach((mediaObj) => {
+        if (mediaObj.url && mediaObj.contentType.startsWith('image/')) {
+          allImages.push(
+            <div>
+              <img
+                src={mediaObj.url}
+                height="200"
+                width="200"
+                alt="Not Found"
+                className={styles.showImage}
+              />
+            </div>,
+          );
+        }
+      });
+    }
+    return allImages;
+  };
+
   return (
     <div className={styles.bubbleWrapper}>
-      <div className={bodyClasses}>{body}</div>
+      <div className={bodyClasses}>
+        {body}
+        {getAllImagesFunc()}
+      </div>
       <div className={timeClasses}>{messageBubbleCompFunc()}</div>
     </div>
   );

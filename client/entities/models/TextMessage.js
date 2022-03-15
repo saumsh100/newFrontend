@@ -1,4 +1,3 @@
-
 import createModel from '../createModel';
 
 const TextMessageSchema = {
@@ -13,6 +12,7 @@ const TextMessageSchema = {
   read: null,
   user: null,
   userId: null,
+  mediaData: null,
 };
 
 export default class TextMessage extends createModel(TextMessageSchema, 'TextMessage') {
