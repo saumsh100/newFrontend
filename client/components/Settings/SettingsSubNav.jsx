@@ -130,7 +130,7 @@ function mapStateToProps({ featureFlags, auth }) {
         'use-templates-from-workflow-service-review',
       );
   const useRecallService = isDev
-    ? false
+    ? true
     : isFeatureEnabledSelector(
         featureFlags.get('flags'),
         'use-templates-from-workflow-service-recall',

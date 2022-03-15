@@ -73,7 +73,7 @@ const DonnaContainer = (props) => {
         />
         <Route path={donnaOldBase('/recalls')} component={Routes.recalls} />
         <Route path={donnaOldBase('/reviews')} component={Routes.reviews} />
-        <Route path={donnaOldBase('/old-reminders')} component={Routes.reminders} />)
+        <Route path={donnaOldBase('/old-reminders')} component={Routes.reminders} />
       </Switch>
     </Donna>
   );
@@ -141,7 +141,7 @@ function mapStateToProps({ featureFlags }) {
         'use-templates-from-workflow-service-review',
       );
   const useRecallService = isDev
-    ? false
+    ? true
     : isFeatureEnabledSelector(
         featureFlags.get('flags'),
         'use-templates-from-workflow-service-recall',

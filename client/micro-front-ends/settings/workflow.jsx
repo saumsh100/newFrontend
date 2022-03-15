@@ -52,7 +52,7 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
         'use-templates-from-workflow-service-review',
       );
   const useRecallService = isDev
-    ? false
+    ? true
     : isFeatureEnabledSelector(
         featureFlags.get('flags'),
         'use-templates-from-workflow-service-recall',
