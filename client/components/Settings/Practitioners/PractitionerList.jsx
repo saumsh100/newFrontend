@@ -225,9 +225,10 @@ PractitionerList.propTypes = {
 
 function mapStateToProps({ accountSettings }, { practitioners }) {
   const practitionerId = accountSettings.get('practitionerId');
+  const defaultPractitioners = practitioners.filter(practitioner => practitioner.isActive === true);
   const selectedPractitioner = practitionerId
     ? practitioners.get(practitionerId)
-    : practitioners.first();
+    : defaultPractitioners.first();
 
   return { selectedPractitioner };
 }
