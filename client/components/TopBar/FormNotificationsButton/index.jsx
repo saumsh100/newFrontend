@@ -33,7 +33,6 @@ const FormsNotificationButton = (props) => {
   }, [data?.countAllNotActionedSubmissions, updatedNotificationCount?.submissionNotification]);
 
   const handleNotifications = () => {
-    if (count === 0) return null;
     props.push('/settings/forms/submissions');
   };
 
