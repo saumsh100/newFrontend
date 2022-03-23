@@ -22,12 +22,12 @@ const NewUserForm = ({ sendNewUser, formName, formStyle, currentUserRole }) => {
       className={formStyle}
       form={formName}
       onSubmit={sendNewUser}
-      asyncValidate={asyncEmailValidateUser}
+      asyncValidate={asyncEmailValidateUser('tahir.ali@carecru.com')}
       ignoreSaveButton
     >
       <Field required validate={[maxLength(25)]} name="firstName" label="First Name" />
       <Field required validate={[maxLength(25)]} name="lastName" label="Last Name" />
-      <Field required validate={[emailValidate]} type="email" name="email" label="Email" />
+      <Field required validate={[emailValidate]} type="email" name="userEmail" label="Email" />
       <Field
         required
         name="role"
@@ -41,7 +41,7 @@ const NewUserForm = ({ sendNewUser, formName, formStyle, currentUserRole }) => {
       <Field
         required
         type="password"
-        name="password"
+        name="userPassword"
         validate={[passwordsValidate, passwordStrength]}
         label="Password"
       />

@@ -31,7 +31,7 @@ class EditUserForm extends Component {
           }
         >
           <Field
-            name="username"
+            name="userUsername"
             label="Email/Username"
             autocomplete="chrome-off"
             component="Input"
@@ -91,7 +91,7 @@ class EditUserForm extends Component {
         form={`${user && user.get('id')}_editUserForm`}
         initialValues={{
           sendBookingRequestEmail: user && user.get('sendBookingRequestEmail'),
-          username: user && user.get('username'),
+          userUsername: user && user.get('username'),
           role,
           isSSO: user && user.get('isSSO'),
         }}

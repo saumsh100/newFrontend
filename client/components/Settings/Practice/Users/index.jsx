@@ -1,4 +1,3 @@
-
 import Map from 'immutable';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -24,7 +23,7 @@ import NewUserForm from './NewUserForm';
 import { ADMIN_ROLE, OWNER_ROLE, SUPERADMIN_ROLE } from './user-role-constants';
 import styles from './styles.scss';
 
-const getUsersWithPermissions = usr => (permissions, editPermissionId) => {
+const getUsersWithPermissions = (usr) => (permissions, editPermissionId) => {
   const usrPermission = permissions.get(usr.permissionId);
   return (
     usrPermission && editPermissionId === usrPermission && usrPermission.get('role') === OWNER_ROLE
@@ -66,8 +65,8 @@ class Users extends Component {
   }
 
   get addUserButton() {
-    return this.props.role
-      === (SUPERADMIN_ROLE || this.props.role === OWNER_ROLE || this.props.role === ADMIN_ROLE) ? (
+    return this.props.role ===
+      (SUPERADMIN_ROLE || this.props.role === OWNER_ROLE || this.props.role === ADMIN_ROLE) ? (
       <Button
         className={styles.inviteUser}
         onClick={this.addNewUser}
@@ -76,7 +75,7 @@ class Users extends Component {
       >
         Add a User
       </Button>
-      ) : null;
+    ) : null;
   }
 
   deleteInvite(id) {
@@ -102,6 +101,12 @@ class Users extends Component {
     const url = `/api/accounts/${accountId}/newUser/`;
     entityData.accountId = accountId;
     entityData.sendingUserId = userId;
+
+    entityData.email = entityData.userEmail;
+    entityData.password = entityData.userPassword;
+
+    delete entityData.userEmail;
+    delete entityData.userPassword;
 
     this.setState({ newActive: false });
 
@@ -146,15 +151,15 @@ class Users extends Component {
       .then(() => this.props.reset('emailInvite'));
   }
 
-  sendEdit({ role, sendBookingRequestEmail, isSSO, username }) {
+  sendEdit({ role, sendBookingRequestEmail, isSSO, userUsername }) {
     this.setState({ editActive: false });
     const selectedUser = this.props.users.get(this.state.editUserId);
     const selectedUserPermission = this.props.permissions.get(selectedUser.get('permissionId'));
 
     if (
-      selectedUser.get('sendBookingRequestEmail') !== sendBookingRequestEmail
-      || selectedUser.get('isSSO') !== isSSO
-      || selectedUser.get('username') !== username
+      selectedUser.get('sendBookingRequestEmail') !== sendBookingRequestEmail ||
+      selectedUser.get('isSSO') !== isSSO ||
+      selectedUser.get('username') !== userUsername
     ) {
       const alert = {
         success: { body: 'Updated User.' },
@@ -163,9 +168,7 @@ class Users extends Component {
 
       this.props.updateEntityRequest({
         key: 'user',
-        values: { sendBookingRequestEmail,
-          isSSO,
-          username },
+        values: { sendBookingRequestEmail, isSSO, username: userUsername },
         url: `/api/users/${this.state.editUserId}/preferences`,
         alert,
       });
@@ -262,7 +265,7 @@ class Users extends Component {
     if (invites.size !== 0) {
       usersInvited = invites
         .toArray()
-        .map(invite => (
+        .map((invite) => (
           <InviteUsersList
             key={invite.id}
             id={invite.id}
