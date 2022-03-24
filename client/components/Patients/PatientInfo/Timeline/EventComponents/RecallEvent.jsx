@@ -47,13 +47,14 @@ export default function RecallEvent({ data, patient, timezone, smsFailed }) {
   const headerData = smsFailed
     ? getEventText(
         'english',
+        'recalls',
         'smsFail',
-        typeOfRecall,
       )({
         intervalText,
         contactMethod,
         sentDate,
         contactNumber,
+        typeOfRecall,
       })
     : getEventText(
         'english',

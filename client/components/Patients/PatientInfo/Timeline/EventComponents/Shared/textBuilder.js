@@ -28,18 +28,11 @@ const eventEnglishText = {
     hygiene: ({ sentDate, contactMethod }) => `Sent ${contactMethod} Hygiene Recall on ${sentDate}`,
     recall: ({ intervalText, contactMethod, sentDate }) =>
       `Sent '${intervalText} Due Date' ${contactMethod} Recall on ${sentDate}`,
-    smsFail: ({ intervalText, contactMethod, sentDate, contactNumber }) =>
-      `'${intervalText} ${contactMethod} Recall on ${sentDate} failed as ${contactNumber} does not support SMS`,
-  },
-  failedsms: {
-    review: ({ contactNumber, sentDate }) =>
-      `SMS Review for appointment on ${sentDate} failed as  failed as ${contactNumber} does not support SMS`,
-    recalls: ({ contactNumber, sentDate }) =>
-      `SMS Recall on ${sentDate} failed as  failed as ${contactNumber} does not support SMS`,
-    reminder: ({ contactNumber, sentDate }) =>
-      `SMS Review for appointment on ${sentDate} failed as  failed as ${contactNumber} does not support SMS`,
-    familyReminder: ({ contactNumber, sentDate }) =>
-      `SMS Review for appointment on ${sentDate} failed as  failed as ${contactNumber} does not support SMS`,
+    smsFail: ({ intervalText, contactMethod, sentDate, contactNumber, typeOfRecall }) => {
+      return typeOfRecall === 'recall'
+        ? `'${intervalText} Due Date' ${contactMethod} Recall on ${sentDate} failed as ${contactNumber} does not support SMS`
+        : `Hygiene ${contactMethod} Recall on ${sentDate} failed as ${contactNumber} does not support SMS`;
+    },
   },
 };
 
