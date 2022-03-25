@@ -35,6 +35,7 @@ Forms.propTypes = {
   role: PropTypes.string.isRequired,
   useFormSubmission: PropTypes.bool.isRequired,
   useFormSubmissionSyncColumn: PropTypes.bool.isRequired,
+  useCCPReSkinning: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ entities, auth, featureFlags }) => {
@@ -45,10 +46,15 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
   const useFormSubmission = isDev
     ? true
     : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-form-submission');
+  const useCCPReSkinning = isDev
+    ? true
+    : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-ccp-reskinning-ui');
+
   return {
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
     useFormSubmission,
     useFormSubmissionSyncColumn,
+    useCCPReSkinning,
   };
 };
 

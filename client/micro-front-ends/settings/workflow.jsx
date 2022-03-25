@@ -46,17 +46,18 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
         'use-templates-from-workflow-service-reminder',
       );
   const useReviewService = isDev
-    ? false
+    ? true
     : isFeatureEnabledSelector(
         featureFlags.get('flags'),
         'use-templates-from-workflow-service-review',
       );
-  const useRecallService = isDev
+  const useRecallService = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-templates-from-workflow-service-recall',
+  );
+  const useCCPReSkinning = isDev
     ? true
-    : isFeatureEnabledSelector(
-        featureFlags.get('flags'),
-        'use-templates-from-workflow-service-recall',
-      );
+    : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-ccp-reskinning-ui');
 
   return {
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
@@ -67,6 +68,7 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
     useCCPVirtualWaitRoom: !useReminderWorkflowService,
     useCCPRecall: !useRecallService,
     useCCPReview: !useReviewService,
+    useCCPReSkinning,
   };
 };
 

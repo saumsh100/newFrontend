@@ -149,12 +149,16 @@ function mapStateToProps({ featureFlags }) {
   const useFormsFromFormService = isDev
     ? true
     : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-forms-from-form-service');
+  const useCCPReSkinning = isDev
+    ? true
+    : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-ccp-reskinning-ui');
 
   return {
     useReminderWorkflowService,
     useRecallService,
     useReviewService,
     useFormsFromFormService,
+    useCCPReSkinning,
   };
 }
 
@@ -163,6 +167,7 @@ Settings.propTypes = {
   useRecallService: PropTypes.bool.isRequired,
   useReviewService: PropTypes.bool.isRequired,
   useFormsFromFormService: PropTypes.bool.isRequired,
+  useCCPReSkinning: PropTypes.bool.isRequired,
 };
 
 const enhance = connect(mapStateToProps, null);
