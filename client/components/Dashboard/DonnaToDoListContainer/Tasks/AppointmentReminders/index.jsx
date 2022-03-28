@@ -26,7 +26,11 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
         const apptKey = `${pocKey}-${pat.appointment.id}`;
         const { isPatientConfirmed } = pat.appointment;
         const { iconContainer, iconActive, flexStart, avatar } = styles;
-        const iconClass = classnames(iconContainer, { [iconActive]: isPatientConfirmed });
+        const iconClass = classnames(
+          iconContainer,
+          { [iconActive]: isPatientConfirmed },
+          styles.iconSize,
+        );
         const avatarClass = classnames(styles2.avatar, avatar, { [flexStart]: array.length > 1 });
         return (
           <div
@@ -68,9 +72,7 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
                 </span>
               </AppointmentPopover>
               <span className={iconClass}>
-                {pat.appointment.isPatientConfirmed && (
-                  <Icon icon="check" style={{ 'font-size': '10px' }} />
-                )}
+                {pat.appointment.isPatientConfirmed && <Icon icon="check" />}
               </span>
             </div>
           </div>
@@ -80,20 +82,16 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
   );
 };
 
-const appointmentMapper = ({ timezone }) => ({
-  patient,
-  reminder,
-  dependants,
-  primaryTypes,
-  sendDate,
-}) => ({
-  poc: patient,
-  primaryTypes,
-  reminder,
-  sendDate,
-  timezone,
-  appointments: [patient, ...dependants].filter(({ appointment }) => appointment),
-});
+const appointmentMapper =
+  ({ timezone }) =>
+  ({ patient, reminder, dependants, primaryTypes, sendDate }) => ({
+    poc: patient,
+    primaryTypes,
+    reminder,
+    sendDate,
+    timezone,
+    appointments: [patient, ...dependants].filter(({ appointment }) => appointment),
+  });
 
 export default function AppointmentReminders({ reminders, timezone }) {
   const toRender = orderBy(reminders, 'sendDate')

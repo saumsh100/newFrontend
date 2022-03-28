@@ -123,7 +123,7 @@ class DashboardApp extends React.Component {
               component={
                 <EmAvatarWidget
                   isCollapsed={isCollapsed}
-                  style={isCollapsed ? {} : { minWidth: 135 }}
+                  className={isCollapsed ? {} : styles.collapsedWidth}
                 />
               }
             />
