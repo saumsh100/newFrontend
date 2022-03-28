@@ -46,13 +46,7 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
           allImages.push(
             <div>
               <a href={mediaObj.url} target="_blank" rel="noreferrer">
-                <img
-                  src={mediaObj.url}
-                  height="200"
-                  width="200"
-                  alt="Not Found"
-                  className={styles.showImage}
-                />
+                <img src={mediaObj.url} alt="Not Found" className={styles.showImage} />
               </a>
             </div>,
           );
