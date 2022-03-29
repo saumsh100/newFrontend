@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
@@ -7,7 +6,7 @@ import { Card, getISODate } from '../../library';
 import DonnaToDoTabs from './DonnaToDoTabs';
 import accountShape from '../../library/PropTypeShapes/accountShape';
 import Tasks from './Tasks';
-import styles from './styles.scss';
+import styles from '../styles';
 
 class DonnaToDoListContainer extends Component {
   constructor(props) {
@@ -43,8 +42,12 @@ class DonnaToDoListContainer extends Component {
     const { account, loadingToDos, reminders, recalls, reviews, wasAccountFetched } = this.props;
 
     return (
-      <Card className={styles.card} runAnimation loaded={!loadingToDos && wasAccountFetched}>
-        <div className={styles.wrapper}>
+      <Card
+        className={styles.donnaTodoContainer_card}
+        runAnimation
+        loaded={!loadingToDos && wasAccountFetched}
+      >
+        <div className={styles.donnaTodoContainer_wrapper}>
           <DonnaToDoTabs toDoIndex={this.state.toDoIndex} changeTab={this.changeTab} />
           {wasAccountFetched && (
             <Tasks

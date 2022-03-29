@@ -1,8 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styles from '../styles.scss';
+import styles from '../../styles';
 import Patient from '../../../../entities/collections/patients';
 import Appointment from '../../../../entities/collections/appointments';
 import Practitioner from '../../../../entities/collections/practitioners';

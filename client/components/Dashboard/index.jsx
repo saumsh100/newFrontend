@@ -14,7 +14,8 @@ import RevenueContainer from './RevenueContainer';
 import { setDashboardDate } from '../../reducers/dashboard';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { fetchDonnasToDos } from '../../thunks/dashboard';
-import styles from './styles.scss';
+import { getStyles } from './styles';
+import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
 class Dashboard extends React.Component {
   componentDidMount() {
@@ -26,7 +27,8 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { users, userId } = this.props;
+    const { users, userId, useCCPReSkinning } = this.props;
+    const styles = getStyles(useCCPReSkinning);
     const user = users.get(userId);
     const userName = user ? user.get('firstName') : '';
 
@@ -69,12 +71,17 @@ class Dashboard extends React.Component {
   }
 }
 
-function mapStateToProps({ entities, dashboard, auth }) {
+function mapStateToProps({ entities, dashboard, auth, featureFlags }) {
+  const useCCPReSkinning = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'use-ccp-reskinning-ui',
+  );
   return {
     users: entities.getIn(['users', 'models']),
     dashboardDate: dashboard.get('dashboardDate'),
     dashboard,
     userId: auth.get('userId'),
+    useCCPReSkinning,
   };
 }
 
@@ -95,6 +102,7 @@ Dashboard.propTypes = {
   setDashboardDate: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   fetchDonnasToDos: PropTypes.func.isRequired,
+  useCCPReSkinning: PropTypes.bool.isRequired,
   dashboard: PropTypes.shape({
     dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
     loadingInsights: PropTypes.bool,

@@ -1,25 +1,27 @@
-.card {
-  margin-top: 15px;
+.donnaTodoContainer {
+  &_card {
+    margin-top: 15px;
 
-  @media screen and (max-width: 1164px) {
+    @media screen and (max-width: 1164px) {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      width: 100%;
+    }
+  }
+
+  &_wrapper {
     display: flex;
-    flex-direction: column;
-    height: auto;
+    flex-direction: row;
+    height: 457px;
     width: 100%;
+    @media screen and (max-width: 1164px) {
+      flex-direction: column;
+      height: 100%;
+    }
   }
-}
 
-.wrapper {
-  display: flex;
-  flex-direction: row;
-  height: 457px;
-  width: 100%;
-  @media screen and (max-width: 1164px) {
-    flex-direction: column;
-    height: 100%;
+  &_empty {
+    width: 65%;
   }
-}
-
-.empty {
-  width: 65%;
 }

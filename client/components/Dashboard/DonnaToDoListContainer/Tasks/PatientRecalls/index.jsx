@@ -4,8 +4,7 @@ import classnames from 'classnames';
 import orderBy from 'lodash/orderBy';
 import { List, ListItem, Avatar, getFormattedDate } from '../../../../library';
 import { patientShape } from '../../../../library/PropTypeShapes';
-import styles from './styles.scss';
-import styles2 from '../styles.scss';
+import styles from '../../../styles';
 import PatientPopover from '../../../../library/PatientPopover';
 
 const contactMethodHash = {
@@ -17,7 +16,7 @@ const contactMethodHash = {
 
 export default function PatientRecalls({ recalls, timezone }) {
   return (
-    <List className={styles.list}>
+    <List className={styles.patientRecalls_list}>
       {orderBy(recalls, 'sendDate').map(({ patient, primaryTypes, recall, sendDate }) => {
         const hashedTypes = primaryTypes.map((e) => contactMethodHash[e]);
         const { dueForHygieneDate, dueForRecallExamDate } = patient;
@@ -29,34 +28,47 @@ export default function PatientRecalls({ recalls, timezone }) {
         }
 
         return (
-          <ListItem className={styles.listItem} key={`donnaToDoRecalls_${patient.id}`}>
-            <div className={styles2.avatar}>
+          <ListItem
+            className={styles.patientRecalls_listItem}
+            key={`donnaToDoRecalls_${patient.id}`}
+          >
+            <div className={styles.tasks_avatar}>
               <Avatar size="sm" user={patient} />
             </div>
-            <div className={styles2.col}>
+            <div className={styles.tasks_col}>
               <span>
                 <PatientPopover patient={patient}>
                   <div>{`${patient.firstName} ${patient.lastName}`}</div>
                 </PatientPopover>
-                <div className={classnames(styles.muted, styles.lowercase)}>
+                <div
+                  className={classnames(
+                    styles.patientRecalls_muted,
+                    styles.patientRecalls_lowercase,
+                  )}
+                >
                   {`at ${getFormattedDate(sendDate, 'h:mm a', timezone)}`}
                 </div>
               </span>
             </div>
-            <div className={styles2.mediumCol}>
+            <div className={styles.tasks_mediumCol}>
               <span>
                 <div>{type}</div>
-                <div className={classnames(styles.muted, styles.lowercase)}>
+                <div
+                  className={classnames(
+                    styles.patientRecalls_muted,
+                    styles.patientRecalls_lowercase,
+                  )}
+                >
                   {`${hashedTypes.join(' & ')}`}
                 </div>
               </span>
             </div>
-            <div className={styles2.col}>
+            <div className={styles.tasks_col}>
               {dueForHygieneDate
                 ? getFormattedDate(dueForHygieneDate, 'MMM Do, YYYY', timezone)
                 : 'n/a'}
             </div>
-            <div className={styles2.col}>
+            <div className={styles.tasks_col}>
               {dueForRecallExamDate
                 ? getFormattedDate(dueForRecallExamDate, 'MMM Do, YYYY', timezone)
                 : 'n/a'}

@@ -1,11 +1,10 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IconCard } from '../../library';
 import { FilterAppointments } from '../Shared/filters';
 import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
-import styles from './styles.scss';
+import styles from '../styles';
 
 function StatsContainer({
   appointmentsCount,
@@ -59,9 +58,9 @@ function StatsContainer({
   ];
 
   return (
-    <div className={overrideClassName || styles.container}>
-      {cardsToRender.map(options => (
-        <div key={options.key} className={overrideStatClassName || styles.stat}>
+    <div className={overrideClassName || styles.statsContainer_container}>
+      {cardsToRender.map((options) => (
+        <div key={options.key} className={overrideStatClassName || styles.statsContainer_stat}>
           <IconCard {...options} />
         </div>
       ))}
@@ -109,8 +108,8 @@ function mapStateToProps(
     insightCount: dashboard.get('insightCount'),
     requestsCount: entities
       .getIn(['requests', 'models'])
-      .filter(req => !req.get('isCancelled') && !req.get('isConfirmed')).size,
-    unConfirmedPatientsCount: appointments.filter(app => !app.isPatientConfirmed).size,
+      .filter((req) => !req.get('isCancelled') && !req.get('isConfirmed')).size,
+    unConfirmedPatientsCount: appointments.filter((app) => !app.isPatientConfirmed).size,
     waitingRoomQueueLength: waitingRoomQueue ? waitingRoomQueue.length : 0,
     canSeeVirtualWaitingRoom,
   };

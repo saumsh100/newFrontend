@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -20,7 +19,7 @@ import Appointment from '../../../../../entities/collections/appointments';
 import Practitioner from '../../../../../entities/collections/practitioners';
 import Chair from '../../../../../entities/collections/chairs';
 import EnabledFeature from '../../../../library/EnabledFeature';
-import styles from './styles.scss';
+import styles from '../../../styles';
 
 function AppointmentPopover({
   patient,
@@ -36,78 +35,83 @@ function AppointmentPopover({
 
   const lastName = age ? `${patient.lastName},` : patient.lastName;
   return (
-    <Card className={styles.card} noBorder id="appPopOver">
+    <Card className={styles.appointmentPoppover_card} noBorder id="appPopOver">
       <SContainer>
-        <SHeader className={styles.header}>
+        <SHeader className={styles.appointmentPoppover_header}>
           <Avatar user={patient} size="xs" />
-          <div className={styles.header_text}>
+          <div className={styles.appointmentPoppover_header_text}>
             {patient.firstName} {lastName} {age}
           </div>
           <div
-            className={styles.closeIcon}
+            className={styles.appointmentPoppover_closeIcon}
             role="button"
             tabIndex={0}
-            onKeyDown={e => e.keyCode === 13 && closePopover}
+            onKeyDown={(e) => e.keyCode === 13 && closePopover}
             onClick={closePopover}
           >
             <Icon icon="times" />
           </div>
         </SHeader>
-        <SBody className={styles.body}>
-          <div className={styles.container}>
-            <div className={styles.subHeader}>Date</div>
-            <div className={styles.data}>{getFormattedDate(startDate, 'dddd LL', timezone)}</div>
+        <SBody className={styles.appointmentPoppover_body}>
+          <div className={styles.appointmentPoppover_container}>
+            <div className={styles.appointmentPoppover_subHeader}>Date</div>
+            <div className={styles.appointmentPoppover_data}>
+              {getFormattedDate(startDate, 'dddd LL', timezone)}
+            </div>
           </div>
 
-          <div className={styles.container}>
-            <div className={styles.subHeader}>Time</div>
-            <div className={styles.data}>
+          <div className={styles.appointmentPoppover_container}>
+            <div className={styles.appointmentPoppover_subHeader}>Time</div>
+            <div className={styles.appointmentPoppover_data}>
               {getFormattedDate(startDate, 'h:mm a', timezone)} -{' '}
               {getFormattedDate(endDate, 'h:mm a', timezone)}
             </div>
           </div>
 
           {patient.cellPhoneNumber || patient.email ? (
-            <div className={styles.container}>
-              <div className={styles.subHeader}>Patient Info</div>
+            <div className={styles.appointmentPoppover_container}>
+              <div className={styles.appointmentPoppover_subHeader}>Patient Info</div>
 
-              <div className={styles.data}>
+              <div className={styles.appointmentPoppover_data}>
                 {patient.cellPhoneNumber && <Icon icon="phone" size={0.9} />}
-                <div className={styles.data_text}>
+                <div className={styles.appointmentPoppover_data_text}>
                   {patient.cellPhoneNumber && formatPhoneNumber(patient.cellPhoneNumber)}
                 </div>
               </div>
 
-              <div className={styles.data}>
+              <div className={styles.appointmentPoppover_data}>
                 {patient.email && <Icon icon="envelope" size={0.9} />}
-                <div className={styles.data_text}>{patient.email}</div>
+                <div className={styles.appointmentPoppover_data_text}>{patient.email}</div>
               </div>
             </div>
           ) : (
-            <div className={styles.container}>
-              <div className={styles.subHeader}>Patient Info</div>
-              <div className={styles.data}>n/a</div>
+            <div className={styles.appointmentPoppover_container}>
+              <div className={styles.appointmentPoppover_subHeader}>Patient Info</div>
+              <div className={styles.appointmentPoppover_data}>n/a</div>
             </div>
           )}
 
-          <div className={styles.container}>
-            <div className={styles.subHeader}>Practitioner</div>
-            <div className={styles.data}>
+          <div className={styles.appointmentPoppover_container}>
+            <div className={styles.appointmentPoppover_subHeader}>Practitioner</div>
+            <div className={styles.appointmentPoppover_data}>
               {practitioner.firstName} {practitioner.lastName}
             </div>
           </div>
 
-          <div className={styles.container}>
-            <div className={styles.subHeader}>Chair</div>
-            <div className={styles.data}>{chair.name}</div>
+          <div className={styles.appointmentPoppover_container}>
+            <div className={styles.appointmentPoppover_subHeader}>Chair</div>
+            <div className={styles.appointmentPoppover_data}>{chair.name}</div>
           </div>
 
           {note && (
-            <div className={styles.container}>
-              <div className={styles.subHeader}>Note</div>
-              <div className={styles.data}>
-                <div className={styles.data_note}>
-                  <TextArea disabled="disabled" theme={{ group: styles.textAreaGroup }}>
+            <div className={styles.appointmentPoppover_container}>
+              <div className={styles.appointmentPoppover_subHeader}>Note</div>
+              <div className={styles.appointmentPoppover_data}>
+                <div className={styles.appointmentPoppover_data_note}>
+                  <TextArea
+                    disabled="disabled"
+                    theme={{ group: styles.appointmentPoppover_textAreaGroup }}
+                  >
                     {note}
                   </TextArea>
                 </div>
@@ -118,7 +122,7 @@ function AppointmentPopover({
         <EnabledFeature
           predicate={({ flags }) => flags.get('show-edit-appointment')}
           render={() => (
-            <SFooter className={styles.footer}>
+            <SFooter className={styles.appointmentPoppover_footer}>
               <Button
                 color="blue"
                 onClick={() => {
@@ -126,7 +130,7 @@ function AppointmentPopover({
                 }}
                 dense
                 compact
-                className={styles.editButton}
+                className={styles.appointmentPoppover_editButton}
               >
                 Edit
               </Button>

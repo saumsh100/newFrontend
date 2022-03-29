@@ -1,0 +1,111 @@
+@import '../../styles/ui.scss';
+@import '../../styles/fonts.scss';
+@import './AppsRequestsContainer/styles.scss';
+@import './AppsRequestsContainer/AppointmentsList/AppointmentPopover/styles.scss';
+@import './DonnaToDoListContainer/styles.scss';
+@import './DonnaToDoListContainer/DonnaToDoTabs/styles.scss';
+@import './DonnaToDoListContainer/Tasks/styles.scss';
+@import './DonnaToDoListContainer/Tasks/AppointmentReminders/styles.scss';
+@import './DonnaToDoListContainer/Tasks/PatientRecalls/styles.scss';
+@import './DonnaToDoListContainer/Tasks/ReviewsRequests/styles.scss';
+@import './PatientInsightsContainer/styles.scss';
+@import './PatientInsightsContainer/Insights/styles.scss';
+@import './RevenueContainer/styles.scss';
+@import './RevenueContainer/RevenueChart/styles.scss';
+@import './RevenueContainer/RevenueDisplay/styles.scss';
+@import './StatsContainer/styles.scss';
+
+.dashboard {
+  box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
+  padding: 15px;
+  width: 100%;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  padding-bottom: 15px;
+  width: 100%;
+}
+
+.userName {
+  @extend .fontMedium;
+  font-size: 19px;
+  @media screen and (max-width: 700px) {
+    display: none;
+  }
+}
+
+.dateInput {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+}
+
+.inputGroup {
+  padding: 0;
+  input {
+    background-color: $primary-white;
+    border: 0;
+    color: $primary-dark-grey;
+    padding-left: 10px;
+  }
+}
+
+.inputFilled {
+  display: none;
+}
+
+.dateIconContainer {
+  align-items: center;
+  background-color: darken($clr-bg-dark-grey, 5%);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  font-size: 14px;
+  height: 30px;
+  justify-content: center;
+  width: 30px;
+}
+
+.colPadding {
+  padding-right: 10px;
+}
+
+.colFlex {
+  display: flex;
+  flex-direction: row;
+  padding-top: 15px;
+  width: 100%;
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+  }
+}
+
+.revenueColFlex {
+  @extend .colFlex;
+  padding-top: 0;
+  @media screen and (max-width: 1266px) {
+    flex-direction: column;
+  }
+}
+
+.iconColor {
+  color: $primary-white;
+}
+
+.statsContainer {
+  display: flex;
+  width: 100%;
+}
+
+.statContainer {
+  flex: 25%;
+  padding: 0 15px 0 0;
+  &:last-child {
+    padding: 0px;
+  }
+}

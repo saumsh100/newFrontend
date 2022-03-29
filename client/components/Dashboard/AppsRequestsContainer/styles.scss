@@ -1,168 +1,168 @@
-@import '../../../styles/ui';
+.appRequestContainer {
+  &_fontMedium {
+    @extend .fontMedium;
+  }
 
-.fontMedium {
-  composes: fontMedium from '../../../styles/fonts.scss';
-}
+  &_fontDefault {
+    @extend .fontDefault;
+  }
 
-.fontDefault {
-  composes: fontDefault from '../../../styles/fonts.scss';
-}
+  &_appPopover > :global(svg.Popover-tip) {
+    fill: white;
+  }
 
-.appPopover > :global(svg.Popover-tip) {
-  fill: white;
-}
+  &_card {
+    max-width: 450px;
+    width: 40%;
+    @media screen and (max-width: 1000px) {
+      width: 100%;
+    }
+  }
 
-.card {
-  max-width: 450px;
-  width: 40%;
-  @media screen and (max-width: 1000px) {
+  &_container {
+    background-color: $primary-white;
+    height: 485px;
+    overflow: scroll;
+  }
+  &_tab {
+    background-color: $primary-grey;
+    border-right: 1px solid #e3e3e3;
+    box-sizing: border-box;
+    color: $primary-dark;
+    display: inline-flex;
+    height: 50px;
+    justify-content: center;
+    padding-top: 12px;
+    width: 50%;
+    @extend .fontMedium;
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  &_activeTab {
+    background-color: $primary-white;
+  }
+
+  &_appCard {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     width: 100%;
   }
-}
 
-.container {
-  background-color: $primary-white;
-  height: 485px;
-  overflow: scroll;
-}
-.tab {
-  background-color: $primary-grey;
-  border-right: 1px solid #e3e3e3;
-  box-sizing: border-box;
-  color: $primary-dark;
-  composes: fontMedium from '../../../styles/fonts.scss';
-  display: inline-flex;
-  height: 50px;
-  justify-content: center;
-  padding-top: 12px;
-  width: 50%;
-
-  &:last-child {
-    border-right: 0;
-  }
-}
-
-.activeTab {
-  background-color: $primary-white;
-}
-
-.appCard {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-}
-
-.noApps {
-  align-items: center;
-  color: $primary-dark-grey;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  opacity: 0.6;
-  width: 100%;
-}
-
-.appList {
-  flex: 1;
-  height: 100px;
-  min-height: 314px;
-  overflow: auto;
-  overflow-x: hidden;
-  width: 100%;
-}
-
-.appItem {
-  box-sizing: border-box;
-  color: $primary-dark;
-  cursor: pointer;
-  height: auto;
-  padding: 20px;
-}
-
-.appData {
-  color: $primary-dark;
-  font-size: $extra-small-size;
-  margin-right: 10px;
-  width: 71px;
-  @extend .fontMedium;
-
-  &_startDate {
-    margin-bottom: 2px;
+  &_noApps {
+    align-items: center;
+    color: $primary-dark-grey;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    opacity: 0.6;
+    width: 100%;
   }
 
-  &_endDate {
+  &_appList {
+    flex: 1;
+    height: 100px;
+    min-height: 314px;
+    overflow: auto;
+    overflow-x: hidden;
+    width: 100%;
   }
-}
 
-.appPatientContainer {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
+  &_appItem {
+    box-sizing: border-box;
+    color: $primary-dark;
+    cursor: pointer;
+    height: auto;
+    padding: 20px;
+  }
 
-.appPatientData {
-  border-left: 1px solid $primary-grey;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  justify-content: space-between;
-  padding-bottom: 5px;
-  padding-left: 1em;
-  padding-top: 5px;
-}
-
-.patientName {
-  composes: fontBold from '../../../styles/fonts.scss';
-  font-size: 13px;
-  padding-bottom: 3px;
-}
-
-.patientDetails {
-  align-items: flex-end;
-  color: $primary-dark-grey;
-  display: flex;
-  font-size: $extra-small-size;
-  line-height: 1.1em;
-  width: 100%;
-
-  &_lastAppt {
+  &_appData {
+    color: $primary-dark;
+    font-size: $extra-small-size;
+    margin-right: 10px;
+    width: 71px;
     @extend .fontMedium;
-    color: #a7a9ac;
+
+    &_startDate {
+      margin-bottom: 2px;
+    }
+
+    &_endDate {
+    }
   }
 
-  &_data {
-    @extend .fontMedium;
-    font-size: 12px;
+  &_appPatientContainer {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  &_appPatientData {
+    border-left: 1px solid $primary-grey;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    justify-content: space-between;
     padding-bottom: 5px;
+    padding-left: 1em;
     padding-top: 5px;
   }
 
-  &_date {
-    @extend .fontDefault;
-    opacity: 0.6;
+  &_patientName {
+    @extend .fontBold;
+    font-size: 13px;
+    padding-bottom: 3px;
   }
 
-  &_created {
-    color: #a7a9ac;
-    padding-top: 10px;
+  &_patientDetails {
+    align-items: flex-end;
+    color: $primary-dark-grey;
+    display: flex;
+    font-size: $extra-small-size;
+    line-height: 1.1em;
+    width: 100%;
+
+    &_lastAppt {
+      @extend .fontMedium;
+      color: #a7a9ac;
+    }
+
+    &_data {
+      @extend .fontMedium;
+      font-size: 12px;
+      padding-bottom: 5px;
+      padding-top: 5px;
+    }
+
+    &_date {
+      @extend .fontDefault;
+      opacity: 0.6;
+    }
+
+    &_created {
+      color: #a7a9ac;
+      padding-top: 10px;
+    }
   }
-}
 
-.appPatientConfirmed {
-  margin-left: auto;
-}
+  &_appPatientConfirmed {
+    margin-left: auto;
+  }
 
-.iconContainer {
-  background-color: $primary-grey;
-  border-radius: 50%;
-  color: $primary-blue;
-  font-size: 10px;
-  height: 10px;
-  padding: 3px;
-  width: 10px;
+  &_iconContainer {
+    background-color: $primary-grey;
+    border-radius: 50%;
+    color: $primary-blue;
+    font-size: 10px;
+    height: 10px;
+    padding: 3px;
+    width: 10px;
+  }
 }

@@ -1,102 +1,102 @@
-@import '../../../../../styles/ui';
-
-.card {
-  box-shadow: 0 5px 25px 2px rgba(209, 209, 209, 0.6);
-  min-width: 300px;
-  width: auto;
-}
-
-.header {
-  align-items: center;
-  background-color: #313843;
-  color: $primary-white;
-  display: flex;
-  height: 40px;
-  padding-left: 15px;
-  padding-right: 15px;
-
-  &_text {
-    composes: fontDefault from '../../../../../styles/fonts.scss';
-    font-size: 15px;
-    margin-right: 10px;
-    padding-left: 5px;
+.appointmentPoppover {
+  &_card {
+    box-shadow: 0 5px 25px 2px rgba(209, 209, 209, 0.6);
+    min-width: 300px;
+    width: auto;
   }
-}
 
-.closeIcon {
-  color: $primary-grey;
-  composes: fontMediumSize from '../../../../../styles/fonts.scss';
-  margin-left: auto;
+  &_header {
+    align-items: center;
+    background-color: #313843;
+    color: $primary-white;
+    display: flex;
+    height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
 
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.body {
-  background-color: $primary-white;
-  height: auto;
-  max-height: 290px;
-  max-width: 285px;
-  min-height: 200px;
-  padding: 15px 15px 0;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.subHeader {
-  composes: subHeaderExtraSmall from '../../../../../styles/fonts.scss';
-  padding-bottom: 2px;
-}
-
-.data {
-  align-items: center;
-  composes: fontMedium from '../../../../../styles/fonts.scss';
-  display: flex;
-  font-size: 13px;
-  padding-bottom: 2px;
-
-  &_note {
-    max-height: 88px;
-    overflow: auto;
-    width: 100%;
-
-    textarea {
-      border-bottom: 0;
-      color: black;
-      font-family: $medium-font;
-      height: auto;
-      padding: 0;
+    &_text {
+      @extend .fontDefault;
+      font-size: 15px;
+      margin-right: 10px;
+      padding-left: 5px;
     }
   }
 
-  &_text {
-    padding-left: 5px;
-    padding-top: 1px;
+  &_closeIcon {
+    color: $primary-grey;
+    margin-left: auto;
+    @extend .fontMediumSize;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
-}
 
-.textAreaGroup {
-  padding: 0;
-}
+  &_body {
+    background-color: $primary-white;
+    height: auto;
+    max-height: 290px;
+    max-width: 285px;
+    min-height: 200px;
+    padding: 15px 15px 0;
+  }
 
-.footer {
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: flex-end;
-  padding: 15px;
-  width: 100%;
-}
+  &_container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
 
-.editButton {
-  margin-left: 5px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &_subHeader {
+    @extend .subHeaderExtraSmall;
+    padding-bottom: 2px;
+  }
+
+  &_data {
+    align-items: center;
+    display: flex;
+    font-size: 13px;
+    padding-bottom: 2px;
+    @extend .fontMedium;
+
+    &_note {
+      max-height: 88px;
+      overflow: auto;
+      width: 100%;
+
+      textarea {
+        border-bottom: 0;
+        color: black;
+        font-family: $medium-font;
+        height: auto;
+        padding: 0;
+      }
+    }
+
+    &_text {
+      padding-left: 5px;
+      padding-top: 1px;
+    }
+  }
+
+  &_textAreaGroup {
+    padding: 0;
+  }
+
+  &_footer {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+    width: 100%;
+  }
+
+  &_editButton {
+    margin-left: 5px;
+  }
 }

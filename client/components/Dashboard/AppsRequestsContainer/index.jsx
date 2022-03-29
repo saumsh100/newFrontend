@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { push } from 'connected-react-router';
@@ -8,14 +7,14 @@ import { Map } from 'immutable';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { FilterAppointments, FilterPatients } from '../Shared/filters';
 import { Card, Tabs, Tab, getISODate, getDate } from '../../library';
-import { selectedRequestBuilder } from '../../../components/Utils';
-import Requests from '../../../components/Requests';
+import { selectedRequestBuilder } from '../../Utils';
+import Requests from '../../Requests';
 import DashboardWaitingRoomContainer from '../../WaitingRoom/DashboardWaitingRoomContainer';
 import RequestsModel from '../../../entities/models/Request';
 import AppointmentsList from './AppointmentsList';
 import { selectAppointment, setScheduleDate } from '../../../actions/schedule';
 import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
-import styles from './styles.scss';
+import styles from '../styles';
 
 class AppsRequestsContainer extends Component {
   constructor(props) {
@@ -180,43 +179,43 @@ class AppsRequestsContainer extends Component {
       : [displayRequests, displayApps][index];
 
     return (
-      <Card runAnimation loaded={isLoaded} className={styles.card}>
+      <Card runAnimation loaded={isLoaded} className={styles.appRequestContainer_card}>
         <div>
           {isLoaded &&
             (canSeeVirtualWaitingRoom ? (
-              <Tabs index={index} onChange={i => this.setState({ index: i })} noUnderLine>
+              <Tabs index={index} onChange={(i) => this.setState({ index: i })} noUnderLine>
                 <Tab
                   label={`${waitingRoomQueueLength} Waiting Room`}
-                  className={styles.tab}
-                  activeClass={styles.activeTab}
+                  className={styles.appRequestContainer_tab}
+                  activeClass={styles.appRequestContainer_activeTab}
                 />
                 <Tab
                   label={`${filteredRequests.length} Online Req`}
-                  className={styles.tab}
-                  activeClass={styles.activeTab}
+                  className={styles.appRequestContainer_tab}
+                  activeClass={styles.appRequestContainer_activeTab}
                 />
                 <Tab
                   label={`${appointments.size} Appointments`}
-                  className={styles.tab}
-                  activeClass={styles.activeTab}
+                  className={styles.appRequestContainer_tab}
+                  activeClass={styles.appRequestContainer_activeTab}
                 />
               </Tabs>
             ) : (
-              <Tabs index={index} onChange={i => this.setState({ index: i })} noUnderLine>
+              <Tabs index={index} onChange={(i) => this.setState({ index: i })} noUnderLine>
                 <Tab
                   label={`${filteredRequests.length} Online Requests`}
-                  className={styles.tab}
-                  activeClass={styles.activeTab}
+                  className={styles.appRequestContainer_tab}
+                  activeClass={styles.appRequestContainer_activeTab}
                 />
                 <Tab
                   label={`${appointments.size} Appointments`}
-                  className={styles.tab}
-                  activeClass={styles.activeTab}
+                  className={styles.appRequestContainer_tab}
+                  activeClass={styles.appRequestContainer_activeTab}
                 />
               </Tabs>
             ))}
         </div>
-        <div className={styles.container}>{display}</div>
+        <div className={styles.appRequestContainer_container}>{display}</div>
       </Card>
     );
   }
@@ -252,12 +251,12 @@ function mapStateToProps(
     timezone,
   );
 
-  const appPatientIds = filteredAppointments.map(app => app.get('patientId')).toArray();
+  const appPatientIds = filteredAppointments.map((app) => app.get('patientId')).toArray();
 
   const patients = FilterPatients(entities.getIn(['patients', 'models']), appPatientIds);
 
   const filteredRequests = requests
-    .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'))
+    .filter((req) => !req.get('isCancelled') && !req.get('isConfirmed'))
     .toArray();
 
   const sortedRequests = filteredRequests.sort(dateFilter);

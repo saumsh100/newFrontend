@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getFormattedDate } from '../../../library';
-import styles from '../styles.scss';
+import styles from '../../styles';
 import { appointmentShape } from '../../../library/PropTypeShapes';
 
 function AppointmentData(props) {

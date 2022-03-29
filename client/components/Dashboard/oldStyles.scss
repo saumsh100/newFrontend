@@ -1,4 +1,19 @@
+@import '../../styles/fonts.scss';
 @import '../../styles/ui.scss';
+@import './AppsRequestsContainer/styles.scss';
+@import './AppsRequestsContainer/AppointmentsList/AppointmentPopover/styles.scss';
+@import './DonnaToDoListContainer/styles.scss';
+@import './DonnaToDoListContainer/DonnaToDoTabs/styles.scss';
+@import './DonnaToDoListContainer/Tasks/styles.scss';
+@import './DonnaToDoListContainer/Tasks/AppointmentReminders/styles.scss';
+@import './DonnaToDoListContainer/Tasks/PatientRecalls/styles.scss';
+@import './DonnaToDoListContainer/Tasks/ReviewsRequests/styles.scss';
+@import './PatientInsightsContainer/styles.scss';
+@import './PatientInsightsContainer/Insights/styles.scss';
+@import './RevenueContainer/styles.scss';
+@import './RevenueContainer/RevenueChart/styles.scss';
+@import './RevenueContainer/RevenueDisplay/styles.scss';
+@import './StatsContainer/styles.scss';
 
 .dashboard {
   box-sizing: border-box;
@@ -16,7 +31,7 @@
 }
 
 .userName {
-  composes: fontMedium from '../../styles/fonts.scss';
+  @extend .fontMedium;
   font-size: 19px;
   @media screen and (max-width: 700px) {
     display: none;

@@ -10,7 +10,7 @@ import {
   isDateValid,
   PatientPopover,
 } from '../../../library';
-import styles from './styles.scss';
+import styles from '../../styles';
 
 /**
  * displayInsightDiv renders the insight with a header and an optional sub header.
@@ -20,13 +20,13 @@ import styles from './styles.scss';
  */
 function displayInsightDiv(header, subHeader) {
   return (
-    <div className={styles.insight}>
-      <div className={styles.insightBody}>
-        <div className={styles.displayFlex}>
-          <div className={styles.iconContainer}>&#x25CF;</div>
-          <div className={styles.insightHeader}>{header}</div>
+    <div className={styles.insights_insight}>
+      <div className={styles.insights_insightBody}>
+        <div className={styles.insights_displayFlex}>
+          <div className={styles.insights_iconContainer}>&#x25CF;</div>
+          <div className={styles.insights_insightHeader}>{header}</div>
         </div>
-        {subHeader && <div className={styles.insightSubHeader}>{subHeader}</div>}
+        {subHeader && <div className={styles.insights_insightSubHeader}>{subHeader}</div>}
       </div>
     </div>
   );
@@ -40,8 +40,8 @@ function displayInsightDiv(header, subHeader) {
  */
 function displaySubHeaderDiv(content, index) {
   return (
-    <div className={styles.displayFlexSubHeader} key={`subHeaderDiv_${index}`}>
-      <div className={styles.insightSubHeaderList}>{content}</div>
+    <div className={styles.insights_displayFlexSubHeader} key={`subHeaderDiv_${index}`}>
+      <div className={styles.insights_insightSubHeaderList}>{content}</div>
     </div>
   );
 }
@@ -58,7 +58,7 @@ function buildFamilyData(insightObj, patient, timezone) {
 
   const header = (
     <div>
-      <span className={styles.patientName}>{patient.firstName}</span>
+      <span className={styles.insights_patientName}>{patient.firstName}</span>
       {` has ${numOfFam} ${totalFamilyMember} due for Recare.`}
     </div>
   );
@@ -96,7 +96,7 @@ function buildConfirmData(insightObj, patient, gender) {
   const { confirmAttempts, cellPhoneNumber } = insightObj.value;
   const header = (
     <div>
-      Call <span className={styles.patientName}>{patient.firstName}</span> at{' '}
+      Call <span className={styles.insights_patientName}>{patient.firstName}</span> at{' '}
       {formatPhoneNumber(cellPhoneNumber)} to confirm {gender} appointment.
     </div>
   );
@@ -108,7 +108,7 @@ function buildConfirmData(insightObj, patient, gender) {
 
   const subHeaderDiv = total > 0 && (
     <div>
-      <span className={styles.patientName}>{patient.firstName} </span>
+      <span className={styles.insights_patientName}>{patient.firstName} </span>
       has not yet confirmed {gender} appointment despite CareCru&apos;s {total} attempt
       {total > 1 && 's'}. (
       {buildAttemptData({
@@ -154,8 +154,8 @@ function buildAttemptData(countObj) {
 function buildMissingEmailData(patient, gender) {
   const header = (
     <div>
-      Ask <span className={styles.patientName}>{patient.firstName}</span> for {gender} email to
-      receive email reminders.
+      Ask <span className={styles.insights_patientName}>{patient.firstName}</span> for {gender}{' '}
+      email to receive email reminders.
     </div>
   );
   return displayInsightDiv(header);
@@ -170,8 +170,8 @@ function buildMissingEmailData(patient, gender) {
 function buildMissingPhoneData(patient, gender) {
   const header = (
     <div>
-      Ask <span className={styles.patientName}>{patient.firstName}</span> for {gender} cell phone
-      number to receive sms reminders.
+      Ask <span className={styles.insights_patientName}>{patient.firstName}</span> for {gender} cell
+      phone number to receive sms reminders.
     </div>
   );
   return displayInsightDiv(header);
@@ -208,41 +208,41 @@ export default function InsightList(props) {
   });
 
   return (
-    <div className={styles.outerInsightsWrapper}>
-      <div className={styles.innerInsightsWrapper}>
-        <div className={styles.insightsList}>
-          <div className={styles.appBody}>
+    <div className={styles.insights_outerInsightsWrapper}>
+      <div className={styles.insights_innerInsightsWrapper}>
+        <div className={styles.insights_insightsList}>
+          <div className={styles.insights_appBody}>
             <AppointmentPopover scrollId={scrollId} appointment={appointment} patient={patient}>
-              <div className={styles.apptData}>
-                <div className={styles.apptData_time}>
+              <div className={styles.insights_apptData}>
+                <div className={styles.insights_apptData_time}>
                   {getFormattedDate(appointment.startDate, 'h:mm a', timezone)}
                 </div>
-                <div className={styles.apptData_date}>
+                <div className={styles.insights_apptData_date}>
                   {getFormattedDate(appointment.startDate, 'MMM DD', timezone)}
                 </div>
               </div>
             </AppointmentPopover>
           </div>
 
-          <div className={styles.patientInfo_name}>
+          <div className={styles.insights_patientInfo_name}>
             <PatientPopover scrollId={scrollId} patient={patient}>
-              <div className={styles.patientNameAvatar}>
+              <div className={styles.insights_patientNameAvatar}>
                 <Avatar
                   user={patient}
                   size="sm"
                   noPadding
-                  className={styles.patientNameAvatar_avatar}
+                  className={styles.insights_patientNameAvatar_avatar}
                 />
 
-                <div className={styles.patientNameAvatar_text}>
-                  <div className={styles.patientInfo_firstLast}>{patient.firstName}</div>
-                  <div className={styles.patientInfo_firstLast}>{patient.lastName}</div>
+                <div className={styles.insights_patientNameAvatar_text}>
+                  <div className={styles.insights_patientInfo_firstLast}>{patient.firstName}</div>
+                  <div className={styles.insights_patientInfo_firstLast}>{patient.lastName}</div>
                 </div>
               </div>
             </PatientPopover>
           </div>
 
-          <div className={styles.insightContainer}>
+          <div className={styles.insights_insightContainer}>
             {displayPatientConfirmed}
             {displayFamilyRecare}
             {displayEmailInsight}

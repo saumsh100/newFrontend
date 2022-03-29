@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -6,7 +5,7 @@ import { AppointmentPopover, Card, List, ListItem } from '../../../library';
 import PatientData from './PatientData';
 import AppointmentData from './AppointmentData';
 import { SortByStartDate } from '../../../library/util/SortEntities';
-import styles from '../styles.scss';
+import styles from '../../styles';
 
 const AppointmentsList = (props) => {
   const { patients, appointments, chairs, practitioners } = props;

@@ -7,8 +7,7 @@ import patientShape from '../../../../library/PropTypeShapes/patient';
 import { List, ListItem, Icon, Avatar, getFormattedDate } from '../../../../library';
 import PatientPopover from '../../../../library/PatientPopover';
 import AppointmentPopover from '../../../../library/AppointmentPopover';
-import styles from './styles.scss';
-import styles2 from '../styles.scss';
+import styles from '../../../styles';
 
 const sortPatientAppointmentsByStartdate = (
   { appointment: { startDate: a } },
@@ -21,7 +20,10 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
   const pocKey = `${poc.id}-${primaryTypeText}-${reminder.interval}`;
 
   return (
-    <ListItem className={classnames(styles.listItem, styles.border)} key={pocKey}>
+    <ListItem
+      className={classnames(styles.appointmentReminder_listItem, styles.appointmentReminder_border)}
+      key={pocKey}
+    >
       {appointments.sort(sortPatientAppointmentsByStartdate).map((pat, i, array) => {
         const apptKey = `${pocKey}-${pat.appointment.id}`;
         const { isPatientConfirmed } = pat.appointment;
@@ -29,43 +31,59 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
         const iconClass = classnames(
           iconContainer,
           { [iconActive]: isPatientConfirmed },
-          styles.iconSize,
+          styles.appointmentReminder_iconSize,
         );
-        const avatarClass = classnames(styles2.avatar, avatar, { [flexStart]: array.length > 1 });
+        const avatarClass = classnames(styles.tasks_avatar, avatar, {
+          [flexStart]: array.length > 1,
+        });
         return (
           <div
-            className={classnames(styles.listItemWrapper, { [styles.single]: array.length === 1 })}
+            className={classnames(styles.appointmentReminder_listItemWrapper, {
+              [styles.appointmentReminder_single]: array.length === 1,
+            })}
             key={apptKey}
           >
             <div className={avatarClass}>{i === 0 && <Avatar size="sm" user={poc} />}</div>
-            <div className={classnames(styles2.col, styles.flexStart)}>
+            <div className={classnames(styles.tasks_col, styles.appointmentReminder_flexStart)}>
               {i === 0 && (
                 <span>
                   <PatientPopover patient={poc}>
                     <div>{`${poc.firstName} ${poc.lastName}`}</div>
                   </PatientPopover>
-                  <div className={classnames(styles.muted, styles.lowercase)}>
+                  <div
+                    className={classnames(
+                      styles.appointmentReminder_muted,
+                      styles.appointmentReminder_lowercase,
+                    )}
+                  >
                     {`at ${getFormattedDate(sendDate, 'h:mm a', timezone)}`}
                   </div>
                 </span>
               )}
             </div>
-            <div className={classnames(styles2.smallCol, styles.flexStart)}>
+            <div
+              className={classnames(styles.tasks_smallCol, styles.appointmentReminder_flexStart)}
+            >
               {i === 0 && (
                 <span>
                   <div>{`${reminder.interval}`}</div>
-                  <div className={classnames(styles.muted, styles.lowercase)}>
+                  <div
+                    className={classnames(
+                      styles.appointmentReminder_muted,
+                      styles.appointmentReminder_lowercase,
+                    )}
+                  >
                     {`${primaryTypeText === 'phone' ? 'voice' : primaryTypeText}`}
                   </div>
                 </span>
               )}
             </div>
-            <div className={classnames(styles.flexStart, styles2.col)}>
+            <div className={classnames(styles.appointmentReminder_flexStart, styles.tasks_col)}>
               <PatientPopover patient={pat}>
                 <span>{`${pat.firstName} ${pat.lastName}`}</span>
               </PatientPopover>
             </div>
-            <div className={classnames(styles2.col, styles.flexStart)}>
+            <div className={classnames(styles.tasks_col, styles.appointmentReminder_flexStart)}>
               <AppointmentPopover patient={pat} appointment={pat.appointment}>
                 <span>
                   {getFormattedDate(pat.appointment.startDate, 'MMM Do - h:mm A', timezone)}
@@ -98,7 +116,11 @@ export default function AppointmentReminders({ reminders, timezone }) {
     .map(appointmentMapper({ timezone }))
     .map(componentMapper);
 
-  return <List className={styles.list}>{toRender.map((component) => component)}</List>;
+  return (
+    <List className={styles.appointmentReminder_list}>
+      {toRender.map((component) => component)}
+    </List>
+  );
 }
 
 AppointmentReminders.propTypes = {

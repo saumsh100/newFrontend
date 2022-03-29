@@ -1,119 +1,121 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/fonts.scss';
 
-.container {
-  height: 100%;
-  width: 50%;
-  @media screen and (max-width: 1164px) {
+.tasks {
+  &_container {
+    height: 100%;
+    width: 50%;
+    @media screen and (max-width: 1164px) {
+      width: 100%;
+    }
+  }
+  &_countHeader {
+    align-items: center;
+    background-color: $primary-blue;
+    border: 0;
+    color: $primary-white;
+    display: flex;
+    font-size: 23px;
+    height: 50px;
+    padding: 0 20px;
+    @media screen and (max-width: 1000px) {
+      font-size: 15px;
+    }
+
+    &_count {
+      @extend .fontBold;
+    }
+  }
+
+  &_header {
+    align-items: center;
+    background-color: $primary-grey;
+    border: 0;
+    box-sizing: border-box;
+    color: $primary-blue !important;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    padding: 0 20px;
+    text-transform: uppercase;
     width: 100%;
   }
-}
-.countHeader {
-  align-items: center;
-  background-color: $primary-blue;
-  border: 0;
-  color: $primary-white;
-  display: flex;
-  font-size: 23px;
-  height: 50px;
-  padding: 0 20px;
-  @media screen and (max-width: 1000px) {
-    font-size: 15px;
+
+  &_body {
+    height: 341px;
   }
 
-  &_count {
-    composes: fontBold from '../../../../styles/fonts.scss';
+  &_colStyling {
+    align-items: center;
+    color: inherit;
+    display: flex;
+    font-size: 10px;
+    justify-content: center;
+    text-align: center;
+    @extend .fontMedium;
   }
-}
 
-.header {
-  align-items: center;
-  background-color: $primary-grey;
-  border: 0;
-  box-sizing: border-box;
-  color: $primary-blue !important;
-  display: flex;
-  flex-direction: row;
-  height: 50px;
-  padding: 0 20px;
-  text-transform: uppercase;
-  width: 100%;
-}
-
-.body {
-  height: 341px;
-}
-
-.colStyling {
-  align-items: center;
-  color: inherit;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  display: flex;
-  font-size: 10px;
-  justify-content: center;
-  text-align: center;
-}
-
-.col {
-  flex: 1;
-  @extend .colStyling;
-  @media screen and (max-width: 1000px) {
-    box-sizing: border-box;
+  &_col {
     flex: 1;
-    font-size: 8px;
-    padding-right: 5px;
+    @extend .tasks_colStyling;
+    @media screen and (max-width: 1000px) {
+      box-sizing: border-box;
+      flex: 1;
+      font-size: 8px;
+      padding-right: 5px;
+    }
   }
-}
 
-.waitlistCol {
-  color: black;
-  flex: 1;
-  @extend .colStyling;
-  @media screen and (max-width: 1000px) {
-    box-sizing: border-box;
+  &_waitlistCol {
+    color: black;
     flex: 1;
-    font-size: 8px;
-    padding-right: 5px;
+    @extend .tasks_colStyling;
+    @media screen and (max-width: 1000px) {
+      box-sizing: border-box;
+      flex: 1;
+      font-size: 8px;
+      padding-right: 5px;
+    }
   }
-}
 
-.smallCol {
-  @extend .colStyling;
-  text-transform: uppercase;
-  width: 90px;
-  @media screen and (max-width: 1000px) {
-    box-sizing: border-box;
-    flex: 1;
-    font-size: 8px;
-    width: unset;
+  &_smallCol {
+    @extend .tasks_colStyling;
+    text-transform: uppercase;
+    width: 90px;
+    @media screen and (max-width: 1000px) {
+      box-sizing: border-box;
+      flex: 1;
+      font-size: 8px;
+      width: unset;
+    }
   }
-}
 
-.mediumCol {
-  @extend .colStyling;
-  text-transform: uppercase;
-  width: 140px;
-  @media screen and (max-width: 1000px) {
-    box-sizing: border-box;
-    flex: 1;
-    font-size: 8px;
-    width: unset;
+  &_mediumCol {
+    @extend .tasks_colStyling;
+    text-transform: uppercase;
+    width: 140px;
+    @media screen and (max-width: 1000px) {
+      box-sizing: border-box;
+      flex: 1;
+      font-size: 8px;
+      width: unset;
+    }
   }
-}
 
-.avatar {
-  @extend .colStyling;
-  width: 65px;
-  @media screen and (max-width: 1000px) {
-    display: none;
+  &_avatar {
+    @extend .tasks_colStyling;
+    width: 65px;
+    @media screen and (max-width: 1000px) {
+      display: none;
+    }
   }
-}
 
-.noReminders {
-  align-items: center;
-  color: $primary-dark-grey;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  opacity: 0.6;
-  width: 100%;
+  &_noReminders {
+    align-items: center;
+    color: $primary-dark-grey;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    opacity: 0.6;
+    width: 100%;
+  }
 }

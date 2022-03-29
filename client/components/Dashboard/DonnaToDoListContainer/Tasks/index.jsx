@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
@@ -6,7 +5,7 @@ import { SContainer, SHeader, SBody } from '../../../library';
 import AppointmentReminders from './AppointmentReminders';
 import ReviewsRequests from './ReviewsRequests';
 import PatientRecalls from './PatientRecalls';
-import styles from './styles.scss';
+import styles from '../../styles';
 import Account from '../../../../entities/models/Account';
 
 const toDoListNames = [
@@ -17,31 +16,31 @@ const toDoListNames = [
 ];
 
 const AppointmentRemindersHeader = () => (
-  <SHeader className={styles.header}>
-    <div className={styles.avatar} />
-    <div className={styles.col}>Contact</div>
-    <div className={styles.smallCol}>Type</div>
-    <div className={styles.col}>Patient</div>
-    <div className={styles.col}>Appointment</div>
+  <SHeader className={styles.tasks_header}>
+    <div className={styles.tasks_avatar} />
+    <div className={styles.tasks_col}>Contact</div>
+    <div className={styles.tasks_smallCol}>Type</div>
+    <div className={styles.tasks_col}>Patient</div>
+    <div className={styles.tasks_col}>Appointment</div>
   </SHeader>
 );
 
 const PatientRecallsHeader = () => (
-  <SHeader className={styles.header}>
-    <div className={styles.avatar} />
-    <div className={styles.col}>Contact</div>
-    <div className={styles.mediumCol}>Type</div>
-    <div className={styles.col}>Due for Hygiene</div>
-    <div className={styles.col}>Due for Recall</div>
+  <SHeader className={styles.tasks_header}>
+    <div className={styles.tasks_avatar} />
+    <div className={styles.tasks_col}>Contact</div>
+    <div className={styles.tasks_mediumCol}>Type</div>
+    <div className={styles.tasks_col}>Due for Hygiene</div>
+    <div className={styles.tasks_col}>Due for Recall</div>
   </SHeader>
 );
 
 const ReviewRequestHeader = () => (
-  <SHeader className={styles.header}>
-    <div className={styles.avatar} />
-    <div className={styles.col}>Contact</div>
-    <div className={styles.smallCol}>Channel</div>
-    <div className={styles.col}>Appointment</div>
+  <SHeader className={styles.tasks_header}>
+    <div className={styles.tasks_avatar} />
+    <div className={styles.tasks_col}>Contact</div>
+    <div className={styles.tasks_smallCol}>Channel</div>
+    <div className={styles.tasks_col}>Appointment</div>
   </SHeader>
 );
 
@@ -86,8 +85,8 @@ const getCurrentTaskList = ({
 
   return {
     count: 0,
-    header: <SHeader className={styles.header} />,
-    body: <div className={styles.noReminders}>No {toDoListNames[toDoIndex]}</div>,
+    header: <SHeader className={styles.tasks_header} />,
+    body: <div className={styles.tasks_noReminders}>No {toDoListNames[toDoIndex]}</div>,
   };
 };
 
@@ -115,16 +114,16 @@ export default function Tasks({
   });
 
   return (
-    <SContainer className={styles.container}>
-      <SHeader className={styles.countHeader}>
-        <span className={styles.countHeader_count}>
+    <SContainer className={styles.tasks_container}>
+      <SHeader className={styles.tasks_countHeader}>
+        <span className={styles.tasks_countHeader_count}>
           {count}
           &nbsp;
         </span>{' '}
         {toDoListNames[toDoIndex]}
       </SHeader>
       {header}
-      <SBody className={styles.body}>{body}</SBody>
+      <SBody className={styles.tasks_body}>{body}</SBody>
     </SContainer>
   );
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Tabs, Tab } from '../../../library';
-import styles from './styles.scss';
+import styles from '../../styles';
 
 const OFFSET_HEIGHT = 37;
 
@@ -43,38 +43,72 @@ class DonnaToDoTabs extends Component {
 
   render() {
     return (
-      <div className={styles.container}>
-        <div className={styles.header}>Donna&apos;s To-Do List</div>
-        <div className={styles.body}>
-          <div className={styles.toDosList}>
+      <div className={styles.donnaTodoTabs_container}>
+        <div className={styles.donnaTodoTabs_header}>Donna&apos;s To-Do List</div>
+        <div className={styles.donnaTodoTabs_body}>
+          <div className={styles.donnaTodoTabs_toDosList}>
             <Tabs
               index={this.props.toDoIndex}
               onChange={(i) => this.props.changeTab(i)}
-              className={styles.tabs}
+              className={styles.donnaTodoTabs_tabs}
             >
               <Tab
                 label="Appointment Reminders"
-                className={styles.tab}
-                activeClass={styles.activeTab}
+                className={styles.donnaTodoTabs_tab}
+                activeClass={styles.donnaTodoTabs_activeTab}
               />
-              <Tab label="Patient Recalls" className={styles.tab} activeClass={styles.activeTab} />
+              <Tab
+                label="Patient Recalls"
+                className={styles.donnaTodoTabs_tab}
+                activeClass={styles.donnaTodoTabs_activeTab}
+              />
               <Tab
                 label="Review Requests"
-                className={styles.tab}
-                activeClass={styles.activeTab}
+                className={styles.donnaTodoTabs_tab}
+                activeClass={styles.donnaTodoTabs_activeTab}
                 data-test-id="reviewRequestsTab"
               />
             </Tabs>
           </div>
 
-          <div className={styles.imageWrapper}>
+          <div className={styles.donnaTodoTabs_imageWrapper}>
             <img src="/images/donna.png" height="335px" width="338px" alt="Donna" />
-            <div className={classNames(styles.dynamicLines, styles.lineStyle)} />
-            <div className={classNames(styles.dynamicLines, styles.lineStyle2)} />
-            <div className={classNames(styles.dynamicLines, styles.lineStyle3)} />
-            <div className={classNames(styles.dynamicLines, styles.lineStyle4)} />
-            <div className={classNames(styles.dynamicLines, styles.lineStyle5)} />
-            <div className={classNames(styles.dynamicLines, styles.lineStyle6)} />
+            <div
+              className={classNames(
+                styles.donnaTodoTabs_dynamicLines,
+                styles.donnaTodoTabs_lineStyle,
+              )}
+            />
+            <div
+              className={classNames(
+                styles.donnaTodoTabs_dynamicLines,
+                styles.donnaTodoTabs_lineStyle2,
+              )}
+            />
+            <div
+              className={classNames(
+                styles.donnaTodoTabs_dynamicLines,
+                styles.donnaTodoTabs_lineStyle3,
+              )}
+            />
+            <div
+              className={classNames(
+                styles.donnaTodoTabs_dynamicLines,
+                styles.donnaTodoTabs_lineStyle4,
+              )}
+            />
+            <div
+              className={classNames(
+                styles.donnaTodoTabs_dynamicLines,
+                styles.donnaTodoTabs_lineStyle5,
+              )}
+            />
+            <div
+              className={classNames(
+                styles.donnaTodoTabs_dynamicLines,
+                styles.donnaTodoTabs_lineStyle6,
+              )}
+            />
           </div>
         </div>
       </div>

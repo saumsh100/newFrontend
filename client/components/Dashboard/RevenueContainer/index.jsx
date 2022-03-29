@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -11,23 +10,21 @@ import AccountModel from '../../../entities/models/Account';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { Card, getTodaysDate, getISODate, getFormattedDate } from '../../library';
 
-import styles from './styles.scss';
+import styles from '../styles';
 
-const filterBooked = (startOfCurrentDay, endOfCurrentDay) => key =>
+const filterBooked = (startOfCurrentDay, endOfCurrentDay) => (key) =>
   key !== 'average' && (key < endOfCurrentDay || key === startOfCurrentDay);
 
-const filterEstimated = endOfCurrentDay => key => key !== 'average' && key >= endOfCurrentDay;
+const filterEstimated = (endOfCurrentDay) => (key) => key !== 'average' && key >= endOfCurrentDay;
 
-const filterStartOfDay = startOfCurrentDay => key => key !== 'average' && key !== startOfCurrentDay;
+const filterStartOfDay = (startOfCurrentDay) => (key) =>
+  key !== 'average' && key !== startOfCurrentDay;
 
 function getFutureOrCurrentDayPosition(dataKeys, startOfCurrentDay, endOfCurrentDay) {
   const filteredData = dataKeys.filter(filterEstimated(endOfCurrentDay)).sort(sortAsc);
 
   return filteredData.length
-    ? dataKeys
-      .filter(filterStartOfDay(startOfCurrentDay))
-      .sort(sortAsc)
-      .indexOf(filteredData[0])
+    ? dataKeys.filter(filterStartOfDay(startOfCurrentDay)).sort(sortAsc).indexOf(filteredData[0])
     : -1;
 }
 
@@ -35,21 +32,21 @@ function generateDataPointsBeforeToday(data, dataKeys, startOfCurrentDay, endOfC
   return dataKeys
     .filter(filterBooked(startOfCurrentDay, endOfCurrentDay))
     .sort(sortAsc)
-    .map(key => Math.floor(data[key]));
+    .map((key) => Math.floor(data[key]));
 }
 
 function generateDataPointsAfterToday(data, dataKeys, endOfCurrentDay) {
   return dataKeys
     .filter(filterEstimated(endOfCurrentDay))
     .sort(sortAsc)
-    .map(key => Math.floor(data[key]));
+    .map((key) => Math.floor(data[key]));
 }
 
 function generateLabels(dataKeys, timezone, startOfCurrentDay) {
   return dataKeys
     .filter(filterStartOfDay(startOfCurrentDay))
     .sort(sortAsc)
-    .map(key => [getFormattedDate(key, 'ddd', timezone), getFormattedDate(key, 'DD', timezone)]);
+    .map((key) => [getFormattedDate(key, 'ddd', timezone), getFormattedDate(key, 'DD', timezone)]);
 }
 
 function renderDisplay(revenueData, account) {
@@ -174,10 +171,10 @@ class RevenueContainer extends Component {
     const wasAllFetched = wasRevenueFetched && wasAccountFetched;
     return (
       <Card
-        className={styles.revenueContainer}
+        className={styles.revenueContainer_revenueContainer}
         runAnimation
         loaded={wasAllFetched}
-        loaderStyle={styles.loader}
+        loaderStyle={styles.revenueContainer_loader}
       >
         {wasAllFetched && renderDisplay(revenueData.get('data'), account)}
         {wasAllFetched && renderChart(revenueData.get('data'), account)}
@@ -192,8 +189,10 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps({ apiRequests, entities, auth }) {
   const revenueData = apiRequests.get('revenueFetch') && apiRequests.get('revenueFetch').data;
-  const wasAccountFetched = apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
-  const wasRevenueFetched = apiRequests.get('revenueFetch') && apiRequests.get('revenueFetch').wasFetched;
+  const wasAccountFetched =
+    apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
+  const wasRevenueFetched =
+    apiRequests.get('revenueFetch') && apiRequests.get('revenueFetch').wasFetched;
 
   return {
     timezone: auth.get('timezone'),

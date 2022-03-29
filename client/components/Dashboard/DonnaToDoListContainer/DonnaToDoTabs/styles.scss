@@ -1,194 +1,194 @@
-@import '../../../../styles/ui';
-
-.container {
-  border-right: 1px solid $primary-grey;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 20px;
-  padding-right: 0;
-  width: 50%;
-  @media screen and (max-width: 1164px) {
-    padding-right: 20px;
-    width: 100%;
-  }
-  @media screen and (max-width: 1000px) {
-    min-height: 0;
-  }
-}
-
-.body {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  height: 100%;
-  position: relative;
-  width: 100%;
-}
-
-.header {
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  font-size: 23px;
-  padding-bottom: 20px;
-}
-
-.toDosList {
-  display: flex;
-  @media screen and (max-width: 1164px) {
+.donnaTodoTabs {
+  &_container {
+    border-right: 1px solid $primary-grey;
+    box-sizing: border-box;
     display: flex;
-    width: 100%;
-  }
-}
-
-.imageWrapper {
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  position: relative;
-
-  img {
-    z-index: 3;
-  }
-
-  @media screen and (min-width: 2400px) {
-    img {
-      height: 420px;
-      width: 420px;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    padding-right: 0;
+    width: 50%;
+    @media screen and (max-width: 1164px) {
+      padding-right: 20px;
+      width: 100%;
+    }
+    @media screen and (max-width: 1000px) {
+      min-height: 0;
     }
   }
 
-  @media screen and (max-width: 1360px) {
-    img {
-      height: 240px;
-      width: 240px;
-    }
-  }
-
-  @media screen and (max-width: 1260px) {
-    img {
-      height: 220px;
-      width: 220px;
-    }
-  }
-
-  @media screen and (max-width: 1164px) {
-    img {
-      bottom: 0;
-      height: 300px;
-      position: absolute;
-      right: 10px;
-      width: 300px;
-    }
-  }
-
-  @media screen and (max-width: 825px) {
-    display: none;
-  }
-}
-
-.tabs {
-  flex: 1;
-  nav {
+  &_body {
     display: flex;
     flex: 1;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-direction: row;
     height: 100%;
-    width: 229px;
+    position: relative;
+    width: 100%;
+  }
+
+  &_header {
+    @extend .fontMedium;
+    font-size: 23px;
+    padding-bottom: 20px;
+  }
+
+  &_toDosList {
+    display: flex;
     @media screen and (max-width: 1164px) {
-      align-items: center;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      width: 60%;
-    }
-    @media screen and (max-width: 825px) {
-      align-items: center;
-      flex-direction: row;
-      justify-content: center;
+      display: flex;
       width: 100%;
     }
   }
-}
 
-.tab {
-  align-items: center;
-  border: 1px solid $primary-grey;
-  box-sizing: border-box;
-  color: $primary-dark-grey;
-  composes: fontDefault from '../../../../styles/fonts.scss';
-  display: flex;
-  flex: none;
-  font-size: 13px;
-  height: 15%;
-  justify-content: center;
-  margin-bottom: 37px;
-  padding: 10px;
-  text-align: center;
-  width: 100%;
-  @media screen and (max-width: 1164px) {
-    height: 44.65%;
-    margin-bottom: 20px;
-    width: 40%;
-  }
-  @media screen and (max-width: 825px) {
+  &_imageWrapper {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
     flex: 1;
-    height: 100%;
-    margin: 3px;
+    justify-content: center;
+    position: relative;
+
+    img {
+      z-index: 3;
+    }
+
+    @media screen and (min-width: 2400px) {
+      img {
+        height: 420px;
+        width: 420px;
+      }
+    }
+
+    @media screen and (max-width: 1360px) {
+      img {
+        height: 240px;
+        width: 240px;
+      }
+    }
+
+    @media screen and (max-width: 1260px) {
+      img {
+        height: 220px;
+        width: 220px;
+      }
+    }
+
+    @media screen and (max-width: 1164px) {
+      img {
+        bottom: 0;
+        height: 300px;
+        position: absolute;
+        right: 10px;
+        width: 300px;
+      }
+    }
+
+    @media screen and (max-width: 825px) {
+      display: none;
+    }
   }
-}
 
-.activeTab {
-  background-color: $primary-blue;
-  border-color: $primary-blue;
-  color: $primary-white;
-  font-family: $dashboard-font;
-}
-
-.dynamicLines {
-  background-color: $primary-blue;
-  position: absolute;
-  @media screen and (max-width: 1164px) {
-    display: none;
+  &_tabs {
+    flex: 1;
+    nav {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      flex-wrap: wrap;
+      height: 100%;
+      width: 229px;
+      @media screen and (max-width: 1164px) {
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        width: 60%;
+      }
+      @media screen and (max-width: 825px) {
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+      }
+    }
   }
-}
 
-.lineStyle {
-  height: 2px;
-  left: 0;
-  top: 27.79375px;
-  width: 23%;
-}
-.lineStyle2 {
-  height: 83.8729px;
-  left: 23%;
-  top: 27.7937px;
-  width: 2px;
-}
-.lineStyle3 {
-  height: 2px;
-  left: 23%;
-  top: 111.667px;
-  width: 15%;
-}
-.lineStyle4 {
-  height: 2px;
-  left: 65%;
-  top: 111.667px;
-  width: 20%;
-}
-.lineStyle5 {
-  height: 83.3812px;
-  left: 85%;
-  top: 111.667px;
-  width: 2px;
-}
-.lineStyle6 {
-  height: 2px;
-  left: 85%;
-  top: 195.048px;
-  width: 15%;
+  &_tab {
+    align-items: center;
+    border: 1px solid $primary-grey;
+    box-sizing: border-box;
+    color: $primary-dark-grey;
+    display: flex;
+    flex: none;
+    font-size: 13px;
+    height: 15%;
+    justify-content: center;
+    margin-bottom: 37px;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+    @extend .fontDefault;
+    @media screen and (max-width: 1164px) {
+      height: 44.65%;
+      margin-bottom: 20px;
+      width: 40%;
+    }
+    @media screen and (max-width: 825px) {
+      flex: 1;
+      height: 100%;
+      margin: 3px;
+    }
+  }
+
+  &_activeTab {
+    background-color: $primary-blue;
+    border-color: $primary-blue;
+    color: $primary-white;
+    font-family: $dashboard-font;
+  }
+
+  &_dynamicLines {
+    background-color: $primary-blue;
+    position: absolute;
+    @media screen and (max-width: 1164px) {
+      display: none;
+    }
+  }
+
+  &_lineStyle {
+    height: 2px;
+    left: 0;
+    top: 27.79375px;
+    width: 23%;
+  }
+  &_lineStyle2 {
+    height: 83.8729px;
+    left: 23%;
+    top: 27.7937px;
+    width: 2px;
+  }
+  &_lineStyle3 {
+    height: 2px;
+    left: 23%;
+    top: 111.667px;
+    width: 15%;
+  }
+  &_lineStyle4 {
+    height: 2px;
+    left: 65%;
+    top: 111.667px;
+    width: 20%;
+  }
+  &_lineStyle5 {
+    height: 83.3812px;
+    left: 85%;
+    top: 111.667px;
+    width: 2px;
+  }
+  &_lineStyle6 {
+    height: 2px;
+    left: 85%;
+    top: 195.048px;
+    width: 15%;
+  }
 }

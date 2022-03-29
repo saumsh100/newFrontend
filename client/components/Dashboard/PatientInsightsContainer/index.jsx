@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -11,7 +10,7 @@ import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import accountShape from '../../library/PropTypeShapes/accountShape';
 import { fetchInsights } from '../../../thunks/dashboard';
 import { FilterPatients, FilterAppointments } from '../Shared/filters';
-import styles from './styles.scss';
+import styles from '../styles';
 
 class PatientInsightsContainer extends Component {
   componentDidMount() {
@@ -30,11 +29,16 @@ class PatientInsightsContainer extends Component {
   render() {
     const { insights, appointments, patients, wasAccountFetched, account } = this.props;
 
-    const allFetched = !this.props.loadingInsights && this.props.dashAppointmentsFetched && wasAccountFetched;
+    const allFetched =
+      !this.props.loadingInsights && this.props.dashAppointmentsFetched && wasAccountFetched;
 
     return (
-      <Card className={styles.card} runAnimation loaded={allFetched}>
-        <div className={styles.container}>
+      <Card
+        className={styles.patientInsightContainer_insight_card}
+        runAnimation
+        loaded={allFetched}
+      >
+        <div className={styles.patientInsightContainer_insight_container}>
           {allFetched && (
             <InsightsHeader insightCount={this.props.insightCount} insights={insights} />
           )}
@@ -59,9 +63,11 @@ function mapStateToProps({ apiRequests, dashboard, entities, auth }) {
   const insights = dashboard.get('insights');
   const insightCount = dashboard.get('insightCount');
 
-  const wasAccountFetched = apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
+  const wasAccountFetched =
+    apiRequests.get('dashAccount') && apiRequests.get('dashAccount').wasFetched;
 
-  const dashAppointmentsFetched = apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
+  const dashAppointmentsFetched =
+    apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
 
   const appointments = entities.getIn(['appointments', 'models']);
   const practitioners = entities.getIn(['practitioners', 'models']);
@@ -73,7 +79,7 @@ function mapStateToProps({ apiRequests, dashboard, entities, auth }) {
     timezone,
   );
 
-  const appPatientIds = filteredAppointments.map(app => app.get('patientId')).toArray();
+  const appPatientIds = filteredAppointments.map((app) => app.get('patientId')).toArray();
   const patients = FilterPatients(entities.getIn(['patients', 'models']), appPatientIds);
   const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 

@@ -1,310 +1,310 @@
-@import '../../../../styles/ui';
+.insights {
+  &_body {
+    box-sizing: border-box;
+    height: 100%;
 
-.body {
-  box-sizing: border-box;
-  height: 100%;
-
-  overflow: auto;
-  padding-top: 20px;
-  width: 100%;
-
-  @media screen and (max-width: 420px) {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-
-.header {
-  align-items: center;
-  border-bottom: 0;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  display: flex;
-  font-size: 23px;
-  padding: 20px 20px 15px 40px;
-
-  &_count {
-    align-items: center;
-    background-color: $primary-yellow;
-    border-radius: 50%;
-    color: $primary-white;
-    composes: fontDefault from '../../../../styles/fonts.scss';
-    display: flex;
-    font-size: 14px;
-    height: 15px;
-    justify-content: center;
-    margin-right: 8px;
-    padding: 6px;
-    width: 15px;
-  }
-
-  @media screen and (max-width: 1254px) {
-    padding: 20px;
-  }
-
-  @media screen and (max-width: 420px) {
-    padding-left: 15px;
-  }
-}
-
-.outerInsightsWrapper {
-  align-items: center;
-  border-bottom: 1px solid $primary-grey;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  padding: 30px 40px 25px;
-  width: 100%;
-
-  @media screen and (max-width: 1254px) {
-    height: auto;
-    padding: 20px;
-  }
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    border-bottom: 0;
-  }
-}
-
-.innerInsightsWrapper {
-  @media screen and (max-width: 1254px) {
-    border-left: 0;
-    padding-left: 0;
-  }
-  height: 100%;
-
-  min-height: 35px;
-}
-
-.insightsList {
-  display: flex;
-  flex-direction: row;
-
-  @media screen and (max-width: 1174px) {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-}
-
-.insightContainer {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  margin-left: 25px;
-  @media screen and (max-width: 1174px) {
-    margin-left: 0;
-  }
-}
-
-.insight {
-  box-sizing: border-box;
-  padding-bottom: 20px;
-
-  &:last-child {
-    padding-bottom: 0;
-  }
-
-  @media screen and (max-width: 1174px) {
-    padding-bottom: 10px;
-  }
-}
-
-.insightBody {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.iconContainer {
-  color: $primary-yellow;
-  min-width: 18px;
-  width: 18px;
-
-  &_sub {
-    min-width: 18px;
-    opacity: 0.6;
-    padding-top: 5px;
-    width: 18px;
-  }
-}
-
-.displayFlex {
-  align-items: center;
-  display: flex;
-  width: 100%;
-}
-
-.displayFlexSubHeader {
-  align-items: center;
-  display: flex;
-  width: 100%;
-
-  @media screen and (max-width: 420px) {
-    margin-left: 0;
-  }
-}
-
-.insightHeader {
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  font-size: $small-size;
-}
-
-.insightSubHeader {
-  box-sizing: border-box;
-  color: $light-grey;
-  composes: fontDefault from '../../../../styles/fonts.scss';
-  font-size: $small-size;
-  width: 100%;
-
-  @media screen and (max-width: 1174px) {
+    overflow: auto;
+    padding-top: 20px;
     width: 100%;
+
+    @media screen and (max-width: 420px) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
-}
 
-.insightSubHeaderList {
-  box-sizing: border-box;
-  color: $primary-dark-grey;
-  composes: fontDefault from '../../../../styles/fonts.scss';
-  font-size: 11px;
-  opacity: 0.6;
-  padding-left: 18px;
-  padding-top: 5px;
-
-  @media screen and (max-width: 1174px) {
-  }
-}
-
-.patientName {
-  text-transform: capitalize;
-}
-
-.patientInfo {
-  &_name {
+  &_header {
     align-items: center;
-    border-left: 1px solid #efefef;
-    composes: fontMedium from '../../../../styles/fonts.scss';
+    border-bottom: 0;
+    display: flex;
+    font-size: 23px;
+    padding: 20px 20px 15px 40px;
+    @extend .fontMedium;
+
+    &_count {
+      align-items: center;
+      background-color: $primary-yellow;
+      border-radius: 50%;
+      color: $primary-white;
+      display: flex;
+      font-size: 14px;
+      height: 15px;
+      justify-content: center;
+      margin-right: 8px;
+      padding: 6px;
+      width: 15px;
+      @extend .fontDefault;
+    }
+
+    @media screen and (max-width: 1254px) {
+      padding: 20px;
+    }
+
+    @media screen and (max-width: 420px) {
+      padding-left: 15px;
+    }
+  }
+
+  &_outerInsightsWrapper {
+    align-items: center;
+    border-bottom: 1px solid $primary-grey;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    padding: 30px 40px 25px;
+    width: 100%;
+
+    @media screen and (max-width: 1254px) {
+      height: auto;
+      padding: 20px;
+    }
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  &_innerInsightsWrapper {
+    @media screen and (max-width: 1254px) {
+      border-left: 0;
+      padding-left: 0;
+    }
+    height: 100%;
+
+    min-height: 35px;
+  }
+
+  &_insightsList {
+    display: flex;
+    flex-direction: row;
+
+    @media screen and (max-width: 1174px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  &_insightContainer {
     display: flex;
     flex-direction: column;
-    font-size: 15px;
+    height: 100%;
     justify-content: center;
-    line-height: 1.2em;
-    margin-left: 15px;
-    padding-left: 40px;
-    white-space: nowrap;
+    margin-left: 25px;
+    @media screen and (max-width: 1174px) {
+      margin-left: 0;
+    }
+  }
+
+  &_insight {
+    box-sizing: border-box;
+    padding-bottom: 20px;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    @media screen and (max-width: 1174px) {
+      padding-bottom: 10px;
+    }
+  }
+
+  &_insightBody {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &_iconContainer {
+    color: $primary-yellow;
+    min-width: 18px;
+    width: 18px;
+
+    &_sub {
+      min-width: 18px;
+      opacity: 0.6;
+      padding-top: 5px;
+      width: 18px;
+    }
+  }
+
+  &_displayFlex {
+    align-items: center;
+    display: flex;
+    width: 100%;
+  }
+
+  &_displayFlexSubHeader {
+    align-items: center;
+    display: flex;
+    width: 100%;
+
+    @media screen and (max-width: 420px) {
+      margin-left: 0;
+    }
+  }
+
+  &_insightHeader {
+    @extend .fontMedium;
+    font-size: $small-size;
+  }
+
+  &_insightSubHeader {
+    box-sizing: border-box;
+    color: $light-grey;
+    font-size: $small-size;
+    width: 100%;
+    @extend .fontDefault;
+
+    @media screen and (max-width: 1174px) {
+      width: 100%;
+    }
+  }
+
+  &_insightSubHeaderList {
+    box-sizing: border-box;
+    color: $primary-dark-grey;
+    font-size: 11px;
+    opacity: 0.6;
+    padding-left: 18px;
+    padding-top: 5px;
+    @extend .fontDefault;
+
+    @media screen and (max-width: 1174px) {
+    }
+  }
+
+  &_patientName {
+    text-transform: capitalize;
+  }
+
+  &_patientInfo {
+    &_name {
+      align-items: center;
+      border-left: 1px solid #efefef;
+      display: flex;
+      flex-direction: column;
+      font-size: 15px;
+      justify-content: center;
+      line-height: 1.2em;
+      margin-left: 15px;
+      padding-left: 40px;
+      white-space: nowrap;
+      @extend .fontMedium;
+
+      @media screen and (max-width: 1174px) {
+        align-items: flex-start;
+        border-left: 0;
+        flex: 0 0 25%;
+        margin-bottom: 15px;
+      }
+
+      @media screen and (max-width: 440px) {
+        margin-left: unset;
+        max-width: unset;
+        min-width: unset;
+        padding-left: unset;
+      }
+    }
+
+    &_firstLast {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &_otherInfo {
+      color: $primary-dark-grey;
+      font-size: 10px;
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      @extend .fontMedium;
+    }
+
+    &_avatarContainer {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &_patientNameAvatar {
+    align-items: center;
+    display: flex;
+
+    &_avatar {
+      @media screen and (max-width: 475px) {
+        display: none;
+      }
+    }
+
+    &_text {
+      margin-left: 20px;
+      max-width: 95px;
+      min-width: 95px;
+
+      @media screen and (max-width: 440px) {
+        margin-left: unset;
+        max-width: unset;
+        min-width: unset;
+      }
+    }
+  }
+
+  &_insightCount {
+    align-items: center;
+    background-color: $primary-yellow;
+    border-radius: 12px;
+    color: $primary-white;
+    display: flex;
+    font-size: 12px;
+    height: 12px;
+    justify-content: center;
+    padding: 5px;
+    text-align: center;
+    width: 12px;
+    @extend .fontMedium;
+  }
+
+  &_appBody {
+    align-items: center;
+    color: $primary-dark;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 
     @media screen and (max-width: 1174px) {
       align-items: flex-start;
-      border-left: 0;
-      flex: 0 0 25%;
-      margin-bottom: 15px;
-    }
-
-    @media screen and (max-width: 440px) {
-      margin-left: unset;
-      max-width: unset;
-      min-width: unset;
-      padding-left: unset;
+      flex: 0 0 10%;
+      margin: 0;
     }
   }
 
-  &_firstLast {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &_otherInfo {
-    color: $primary-dark-grey;
-    composes: fontMedium from '../../../../styles/fonts.scss';
-    font-size: 10px;
-    max-width: 160px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &_avatarContainer {
-    align-items: center;
+  &_apptData {
+    align-items: left;
     display: flex;
-    justify-content: space-between;
-  }
-}
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left;
+    width: 100px;
+    @extend .fontMedium;
 
-.patientNameAvatar {
-  align-items: center;
-  display: flex;
+    &_time {
+      font-size: 15px;
+    }
 
-  &_avatar {
-    @media screen and (max-width: 475px) {
-      display: none;
+    &_date {
+      color: #929293;
+      font-size: $extra-small-size;
+      text-transform: uppercase;
     }
   }
 
-  &_text {
-    margin-left: 20px;
-    max-width: 95px;
-    min-width: 95px;
-
-    @media screen and (max-width: 440px) {
-      margin-left: unset;
-      max-width: unset;
-      min-width: unset;
-    }
+  &_removePadding {
+    padding: 0 !important;
   }
-}
-
-.insightCount {
-  align-items: center;
-  background-color: $primary-yellow;
-  border-radius: 12px;
-  color: $primary-white;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  display: flex;
-  font-size: 12px;
-  height: 12px;
-  justify-content: center;
-  padding: 5px;
-  text-align: center;
-  width: 12px;
-}
-
-.appBody {
-  align-items: center;
-  color: $primary-dark;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  @media screen and (max-width: 1174px) {
-    align-items: flex-start;
-    flex: 0 0 10%;
-    margin: 0;
-  }
-}
-
-.apptData {
-  align-items: left;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  text-align: left;
-  width: 100px;
-
-  &_time {
-    font-size: 15px;
-  }
-
-  &_date {
-    color: #929293;
-    font-size: $extra-small-size;
-    text-transform: uppercase;
-  }
-}
-
-.removePadding {
-  padding: 0 !important;
 }

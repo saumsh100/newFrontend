@@ -1,9 +1,8 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Form, Field, IconButton } from '../../library';
-import styles from '../styles.scss';
+import styles from '../styles';
 
 class HeaderUserDate extends Component {
   constructor(props) {

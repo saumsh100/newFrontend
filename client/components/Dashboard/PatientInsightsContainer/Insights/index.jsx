@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import InsightList from './InsightList';
-import styles from './styles.scss';
+import styles from '../../styles';
 import { SortByStartDate } from '../../../library/util/SortEntities';
 
 export default function Insights(props) {
@@ -38,7 +38,7 @@ export default function Insights(props) {
   });
 
   return (
-    <div className={styles.body} id={scrollId}>
+    <div className={styles.insights_body} id={scrollId}>
       {displayInsights}
     </div>
   );

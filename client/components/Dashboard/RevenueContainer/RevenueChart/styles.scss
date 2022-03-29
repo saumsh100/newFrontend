@@ -1,38 +1,38 @@
-@import '../../../../styles/ui';
+.revenueChart {
+  &_chart {
+    background-color: #3b4552;
+    flex: 1;
+    height: 100%;
+    position: relative;
+    width: 300px;
 
-.chart {
-  background-color: #3b4552;
-  flex: 1;
-  height: 100%;
-  position: relative;
-  width: 300px;
+    @media screen and (max-width: 1266px) {
+      height: unset;
+    }
 
-  @media screen and (max-width: 1266px) {
-    height: unset;
-  }
+    @media screen and (max-width: 529px) {
+      width: unset;
+    }
 
-  @media screen and (max-width: 529px) {
-    width: unset;
-  }
+    canvas {
+      box-sizing: border-box;
+      padding: 20px 20px 0;
 
-  canvas {
-    box-sizing: border-box;
-    padding: 20px 20px 0;
-
-    @media screen and (max-width: 2500px) {
-      padding: 20px;
+      @media screen and (max-width: 2500px) {
+        padding: 20px;
+      }
     }
   }
-}
 
-.noRevenue {
-  align-items: center;
-  color: $primary-white;
-  display: flex;
-  font-size: $extra-small-size;
-  height: 100%;
-  justify-content: center;
-  opacity: 0.6;
-  text-align: center;
-  width: 100%;
+  &_noRevenue {
+    align-items: center;
+    color: $primary-white;
+    display: flex;
+    font-size: $extra-small-size;
+    height: 100%;
+    justify-content: center;
+    opacity: 0.6;
+    text-align: center;
+    width: 100%;
+  }
 }

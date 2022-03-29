@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Line } from 'react-chartjs-2';
 import colorMap from '../../../library/util/colorMap';
-import styles from './styles.scss';
+import styles from '../../styles';
 
 const generateChartOptions = () => {
   const ticks = {
@@ -136,19 +135,17 @@ const generateDataSet = (labels, billedData, estimatedData) => ({
 });
 
 export default function RevenueChart(props) {
-  const {
-    labels, billedData, estimatedData, isValid,
-  } = props;
+  const { labels, billedData, estimatedData, isValid } = props;
 
   return (
-    <div className={styles.chart}>
+    <div className={styles.revenueChart_chart}>
       {isValid ? (
         <Line
           options={generateChartOptions()}
           data={generateDataSet(labels, billedData, estimatedData)}
         />
       ) : (
-        <div className={styles.noRevenue}> No Revenue </div>
+        <div className={styles.revenueChart_noRevenue}> No Revenue </div>
       )}
     </div>
   );
