@@ -103,9 +103,7 @@ function main() {
   document.documentElement.style.setProperty(
     '--bookingWidgetPrimaryColorDarker',
     `rgb(${darkerColor(
-      hexToRgbA(__CARECRU_WIDGET_PRIMARY_COLOR__, 1)
-        .slice(5, -4)
-        .split(','),
+      hexToRgbA(__CARECRU_WIDGET_PRIMARY_COLOR__, 1).slice(5, -4).split(','),
       -10,
     )})`,
   );
