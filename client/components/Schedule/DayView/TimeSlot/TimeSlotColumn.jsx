@@ -4,7 +4,7 @@ import React from 'react';
 import styles from '../styles.scss';
 
 export default function TimeSlotColumn(props) {
-  const { prefixKey, timeSlots, timeSlotHeight } = props;
+  const { prefixKey, timeSlots } = props;
 
   return (
     <div>
@@ -12,7 +12,6 @@ export default function TimeSlotColumn(props) {
         <div
           key={`${btoa(prefixKey + i)}`}
           className={styles.timeSlotColumnItem}
-          style={timeSlotHeight}
         />
       ))}
     </div>
@@ -26,7 +25,4 @@ TimeSlotColumn.propTypes = {
       position: PropTypes.number,
     }),
   ).isRequired,
-  timeSlotHeight: PropTypes.shape({
-    height: PropTypes.number,
-  }).isRequired,
 };

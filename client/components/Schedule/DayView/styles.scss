@@ -50,9 +50,10 @@
   color: $inactive-color;
   font-weight: $large-weight;
   height: inherit;
+  min-width: 70px;
   overflow: hidden;
   position: relative;
-  width: 100px;
+  width: 70px;
 }
 
 .timeColumnItem {
@@ -60,14 +61,12 @@
   color: $primary-dark;
   display: flex;
   font-size: 10px;
+  height: 75px;
   justify-content: center;
   overflow: hidden;
 
   &_time {
     position: absolute;
-  }
-
-  &_icon {
   }
 }
 
@@ -80,6 +79,7 @@
 .timeSlotColumn {
   box-sizing: border-box;
   flex: 1;
+  min-width: 150px;
   position: relative;
 }
 
@@ -90,6 +90,7 @@
   border-left: 0;
   border-top: 0;
   box-sizing: border-box;
+  height: 75px;
   justify-content: center;
   opacity: 1;
   overflow: hidden;

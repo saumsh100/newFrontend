@@ -13,16 +13,12 @@ const getDateValues = (value, timezone) => {
   };
 };
 
-const CurrentDate = ({ currentDate, leftColumnWidth, timezone, children }) => {
+const CurrentDate = ({ currentDate, timezone, children }) => {
   const { date, month, weekday } = getDateValues(currentDate, timezone);
   return (
     <div className={styles.container}>
       <div
         className={styles.monthDay}
-        style={{
-          width: leftColumnWidth,
-          minWidth: leftColumnWidth,
-        }}
       >
         <div className={styles.number}>{date}</div>
         <div className={styles.month}>{month}</div>
@@ -36,7 +32,6 @@ const CurrentDate = ({ currentDate, leftColumnWidth, timezone, children }) => {
 CurrentDate.propTypes = {
   currentDate: PropTypes.string.isRequired,
   timezone: PropTypes.string.isRequired,
-  leftColumnWidth: PropTypes.number.isRequired,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 };
 

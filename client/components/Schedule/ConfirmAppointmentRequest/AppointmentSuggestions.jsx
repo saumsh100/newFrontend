@@ -6,6 +6,7 @@ import { formatPhoneNumber } from '../../../util/isomorphic';
 import { selectAppointmentShape } from '../../library/PropTypeShapes';
 import { Icon, Button, Avatar, SHeader, getTodaysDate } from '../../library';
 import SameAppointment from './SameAppointment';
+import classNames from 'classnames';
 import styles from './styles.scss';
 
 const AppointmentSuggestions = (props) => {
@@ -32,6 +33,7 @@ const AppointmentSuggestions = (props) => {
   const birthDate = patientUser.get('birthDate');
   const age = birthDate ? `, ${getTodaysDate(timezone).diff(birthDate, 'years')}` : '';
   const patientUserPhone = patientUser.phoneNumber || patientUser.cellPhoneNumber;
+  const cursor = selectedApp ? styles.cursor_pointer : styles.cursor_not_allowed;
   const onClickCreate = () => {
     if (apptWrite) {
       createAppointment();
@@ -101,8 +103,7 @@ const AppointmentSuggestions = (props) => {
         </Button>
         <Button
           color={selectedApp ? 'blue' : 'grey'}
-          style={{ cursor: selectedApp ? 'pointer' : 'not-allowed' }}
-          className={styles.buttonContainer_yes}
+          className={classNames(styles.buttonContainer_yes, cursor)}
           onClick={() => {
             if (!selectedApp) return null;
 

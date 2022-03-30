@@ -70,15 +70,11 @@ const renderDisplayComponent = params => (item, index, array) => {
 };
 
 export default function TimeSlot(props) {
-  const { timeSlots, timeSlotHeight, items, minWidth, startHour, unit, entityId, timezone } = props;
-
-  const timeSlotContentStyle = {
-    minWidth: `${minWidth}px`,
-  };
+  const { timeSlots, timeSlotHeight, items, startHour, unit, entityId, timezone } = props;
 
   return (
-    <div style={timeSlotContentStyle} className={styles.timeSlotColumn}>
-      <TimeSlotColumn prefixKey={entityId} timeSlots={timeSlots} timeSlotHeight={timeSlotHeight} />
+    <div className={styles.timeSlotColumn}>
+      <TimeSlotColumn prefixKey={entityId} timeSlots={timeSlots} />
 
       {items &&
         items
@@ -98,7 +94,6 @@ export default function TimeSlot(props) {
 
 TimeSlot.propTypes = {
   startHour: PropTypes.number.isRequired,
-  minWidth: PropTypes.number.isRequired,
   timeSlots: PropTypes.arrayOf(
     PropTypes.shape({
       position: PropTypes.number,

@@ -189,7 +189,6 @@ class DayViewBody extends Component {
           <TimeColumn
             timeSlots={timeSlots}
             timeSlotHeight={timeSlotHeight}
-            leftColumnWidth={leftColumnWidth}
             timeComponentDidMount={this.timeComponent}
           />
           {scheduleView === 'chair' ? chairsSlot : practitionersSlot}

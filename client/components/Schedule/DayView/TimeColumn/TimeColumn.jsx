@@ -5,15 +5,10 @@ import styles from '../styles.scss';
 import { getDate } from '../../../library';
 
 export default function TimeColumn(props) {
-  const { timeSlots, timeSlotHeight, leftColumnWidth, timeComponentDidMount } = props;
-
-  const timeColumnStyle = {
-    width: leftColumnWidth,
-    minWidth: leftColumnWidth,
-  };
+  const { timeSlots, timeSlotHeight, timeComponentDidMount } = props;
 
   return (
-    <div style={timeColumnStyle} className={styles.timeColumn} ref={timeComponentDidMount}>
+    <div className={styles.timeColumn} ref={timeComponentDidMount}>
       {timeSlots.map((slot, index) => {
         const maxTop = index * timeSlotHeight.height;
         const key = `timeColumnItem-${index}`;
@@ -22,7 +17,7 @@ export default function TimeColumn(props) {
         };
 
         return (
-          <div key={key} style={timeSlotHeight} className={styles.timeColumnItem}>
+          <div key={key}  className={styles.timeColumnItem}>
             {index > 0 ? (
               <div className={styles.timeColumnItem_time} style={timePosition}>
                 {getDate({
@@ -41,13 +36,11 @@ export default function TimeColumn(props) {
 TimeColumn.propTypes = {
   timeSlots: PropTypes.arrayOf(PropTypes.shape({ position: PropTypes.number.isRequired })),
   timeSlotHeight: PropTypes.shape({ height: PropTypes.number.isRequired }),
-  leftColumnWidth: PropTypes.number,
   timeComponentDidMount: PropTypes.shape({ current: PropTypes.any }),
 };
 
 TimeColumn.defaultProps = {
   timeSlots: null,
   timeSlotHeight: null,
-  leftColumnWidth: null,
   timeComponentDidMount: null,
 };

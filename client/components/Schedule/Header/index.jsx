@@ -97,7 +97,6 @@ class Header extends Component {
       timezone,
     } = this.props;
 
-    const leftColumnWidth = schedule.get('leftColumnWidth');
     const scheduleDate = schedule.get('scheduleDate');
     const currentDate = getUTCDate(scheduleDate, timezone);
 
@@ -106,7 +105,6 @@ class Header extends Component {
         <CurrentDate
           timezone={timezone}
           currentDate={scheduleDate}
-          leftColumnWidth={leftColumnWidth}
         >
           <div className={styles.changeDay}>
             <IconButton
