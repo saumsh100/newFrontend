@@ -11,7 +11,7 @@ const AppointmentsList = (props) => {
   const { patients, appointments, chairs, practitioners } = props;
 
   if (!appointments.size) {
-    return <div className={styles.noApps}>No Appointments</div>;
+    return <div className={styles.appRequestContainer_noApps}>No Appointments</div>;
   }
 
   const sortedApps = appointments.sort(SortByStartDate);
