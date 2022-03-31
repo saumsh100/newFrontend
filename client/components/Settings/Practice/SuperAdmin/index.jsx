@@ -191,6 +191,7 @@ class SuperAdmin extends Component {
         .then((response) => {
           const entities = getEntities(response);
           const twilioNumber = entities[1].twilioPhoneNumber;
+          const callrail = entities[1].callrailId || entities[1].callrailIdV3;
           if (sendingValuesCreate.integrations[0].type === 'twilio') {
             return twilioNumber
               ? this.props.showAlertTimeout({
@@ -200,6 +201,17 @@ class SuperAdmin extends Component {
               : this.props.showAlertTimeout({
                   type: 'error',
                   alert: { body: 'Failed to fully enable Twilio API' },
+                });
+          }
+          if (sendingValuesCreate.integrations[0].type === 'callrail') {
+            return callrail
+              ? this.props.showAlertTimeout({
+                  type: 'success',
+                  alert: { body: 'Callrail API integrated successfully' },
+                })
+              : this.props.showAlertTimeout({
+                  type: 'error',
+                  alert: { body: 'Failed to fully enable CallRail API' },
                 });
           }
         });
