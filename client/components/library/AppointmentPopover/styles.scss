@@ -13,7 +13,7 @@
 }
 
 .appPopover > :global(svg.Popover-tip) {
-  fill: white;
+  fill: $color-white;
 }
 
 .card {
@@ -140,6 +140,7 @@
 }
 
 .editButton {
+  background-color: $primary-blue;
   margin-left: 5px;
 }
 

@@ -17,8 +17,8 @@ const AppointmentsList = (props) => {
   const sortedApps = appointments.sort(SortByStartDate);
 
   return (
-    <Card noBorder className={styles.appCard}>
-      <List className={styles.appList} id="appListDiv">
+    <Card noBorder className={styles.appRequestContainer_appCard}>
+      <List className={styles.appRequestContainer_appList} id="appListDiv">
         {sortedApps.valueSeq().map((app) => {
           const patient = patients.get(app.patientId);
           const chair = chairs.get(app.chairId);
@@ -34,7 +34,7 @@ const AppointmentsList = (props) => {
               scrollId="appListDiv"
             >
               <ListItem
-                className={styles.appItem}
+                className={styles.appRequestContainer_appItem}
                 onDoubleClick={() => props.handleEditAppointment(app.id)}
                 onClick={() => {
                   props.handleAppointmentClick(app.id);

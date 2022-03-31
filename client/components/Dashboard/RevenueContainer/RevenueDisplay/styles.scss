@@ -50,14 +50,14 @@
     width: 100%;
 
     &_dollar {
-      color: #4f5966;
+      color: $color-greyish-blue;
       font-size: 28px;
       margin-right: 3px;
     }
   }
 
   &_yesterdayContainer {
-    color: #4f5966;
+    color: $color-greyish-blue;
     display: flex;
     flex-direction: row;
     font-size: 13px;
@@ -67,7 +67,7 @@
   &_yesterdayLeft {
     @extend .fontMedium;
     align-items: center;
-    border-right: 1px solid #4f5966;
+    border-right: 1px solid $color-greyish-blue;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -114,7 +114,7 @@
 
   &_average {
     align-items: center;
-    background-color: #4f5966;
+    background-color: $color-greyish-blue;
     display: flex;
     flex-direction: column;
     height: 80px;
@@ -139,7 +139,7 @@
     }
 
     &_dollar {
-      color: black;
+      color: $color-black;
       font-size: $extra-small-size;
       margin-right: 2px;
     }

@@ -124,7 +124,6 @@ function AppointmentPopover({
           render={() => (
             <SFooter className={styles.appointmentPoppover_footer}>
               <Button
-                color="blue"
                 onClick={() => {
                   handleEditAppointment(appointment.id);
                 }}

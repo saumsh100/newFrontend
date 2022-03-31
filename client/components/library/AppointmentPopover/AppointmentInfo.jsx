@@ -184,7 +184,6 @@ const AppointmentInfo = (props) => {
             render={() => (
               <SFooter className={styles.footer}>
                 <Button
-                  color="blue"
                   dense
                   compact
                   className={styles.editButton}

@@ -8,8 +8,8 @@ import { appointmentShape } from '../../../library/PropTypeShapes';
 function AppointmentData(props) {
   const { appointment, timezone } = props;
   return (
-    <div className={styles.appData}>
-      <div className={styles.appData_startDate}>
+    <div className={styles.appRequestContainer_appData}>
+      <div className={styles.appRequestContainer_appData_startDate}>
         {getFormattedDate(appointment.startDate, 'h:mm A', timezone)}
       </div>
       <div>{getFormattedDate(appointment.endDate, 'h:mm A', timezone)}</div>

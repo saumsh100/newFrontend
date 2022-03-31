@@ -13,18 +13,22 @@ function PatientData(props) {
   const age = getTodaysDate(timezone).diff(patient.birthDate, 'years') || '';
   const lastName = age ? `${patient.lastName},` : patient.lastName;
   return (
-    <div className={styles.appPatientContainer}>
-      <div className={styles.appPatientData}>
-        <div className={styles.patientName}>
+    <div className={styles.appRequestContainer_appPatientContainer}>
+      <div className={styles.appRequestContainer_appPatientData}>
+        <div className={styles.appRequestContainer_patientName}>
           {patient.firstName} {lastName} {age}
         </div>
 
-        <div className={styles.patientDetails}>
-          <div className={styles.patientDetails_data}>{practitioner.getPrettyName()}</div>
+        <div className={styles.appRequestContainer_patientDetails}>
+          <div className={styles.appRequestContainer_patientDetails_data}>
+            {practitioner.getPrettyName()}
+          </div>
         </div>
-        <div className={styles.patientDetails}>
-          <span className={styles.patientDetails_lastAppt}>Last Appt:&nbsp;</span>
-          <span className={styles.patientDetails_date}>
+        <div className={styles.appRequestContainer_patientDetails}>
+          <span className={styles.appRequestContainer_patientDetails_lastAppt}>
+            Last Appt:&nbsp;
+          </span>
+          <span className={styles.appRequestContainer_patientDetails_date}>
             {patient.lastApptDate
               ? getFormattedDate(patient.lastApptDate, ' MMM D, YYYY', timezone)
               : ' n/a'}
@@ -32,9 +36,9 @@ function PatientData(props) {
         </div>
       </div>
 
-      <div className={styles.appPatientConfirmed}>
-        {appointment.isPatientConfirmed ? (
-          <div className={styles.iconContainer}>
+      <div className={styles.appRequestContainer_appPatientConfirmed}>
+        {appointment.appRequestContainer_isPatientConfirmed ? (
+          <div className={styles.appRequestContainer_iconContainer}>
             <Icon icon="check" />
           </div>
         ) : null}

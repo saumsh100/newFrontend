@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -27,7 +26,7 @@ const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, tim
 
   const patientPhone = isPatientUser ? 'phoneNumber' : 'cellPhoneNumber';
 
-  const emptyData = subHeader => (
+  const emptyData = (subHeader) => (
     <div className={styles.container}>
       <div className={styles.subHeader}>{subHeader}</div>
       <div className={styles.data}>n/a</div>
@@ -49,7 +48,7 @@ const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, tim
                 onClick={onClick}
                 className={classNames(styles.patientLink, styles.textWhite)}
                 onDoubleClick={() => editPatient(patient.id)}
-                onKeyDown={e => e.keyCode === 13 && onClick()}
+                onKeyDown={(e) => e.keyCode === 13 && onClick()}
               >
                 <span className={styles.header_text}>
                   {`${patient.firstName} ${patient.lastName}`}
@@ -146,7 +145,6 @@ const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, tim
         <SFooter className={styles.footer}>
           {!isPatientUser && (
             <Button
-              color="blue"
               onClick={() => editPatient(patient.id)}
               dense
               compact

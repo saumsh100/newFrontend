@@ -25,7 +25,7 @@
 .patientPopover {
   z-index: 9998;
   & > :global(svg.Popover-tip) {
-    fill: white;
+    fill: $color-white;
   }
 }
 
@@ -180,6 +180,7 @@
 }
 
 .editButton {
+  background-color: $primary-blue;
   margin-left: 5px;
 }
 
