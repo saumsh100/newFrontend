@@ -38,7 +38,7 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
     return jsxObj;
   };
 
-  const getAllImagesFunc = () => {
+  const getAllMediaFunc = () => {
     const allImages = [];
     if (!isEmpty(mediaData)) {
       Object.values(mediaData).forEach((mediaObj) => {
@@ -51,6 +51,15 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
             </div>,
           );
         }
+        if (mediaObj.url && mediaObj.contentType.startsWith('video/')) {
+          allImages.push(
+            <div>
+              <video width="320" height="240" controls>
+                <source src={mediaObj.convertedUrl || mediaObj.url} type="video/mp4" />
+              </video>
+            </div>,
+          );
+        }
       });
     }
     return allImages;
@@ -60,7 +69,7 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
     <div className={styles.bubbleWrapper}>
       <div className={bodyClasses}>
         {body}
-        {getAllImagesFunc()}
+        {getAllMediaFunc()}
       </div>
       <div className={timeClasses}>{messageBubbleCompFunc()}</div>
     </div>
