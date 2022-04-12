@@ -18,6 +18,9 @@ import {
   setSelectedServiceId,
   setUTMParams,
   setReferrerURL,
+  setGACookie,
+  setGCLAWCookie,
+  setTymbrelFormCookie,
 } from '../../reducers/availabilities';
 import styles from './styles.scss';
 
@@ -30,6 +33,22 @@ const b = ({ pathname }, path, size = 5) =>
     .filter((v, index) => index < size)
     .concat(path)
     .join('/');
+
+function getCookie(cName) {
+  let cValue = ` ${document.cookie}`;
+  let cStart = cValue.indexOf(` ${cName}=`);
+  if (cStart === -1) {
+    cValue = null;
+  } else {
+    cStart = cValue.indexOf('=', cStart) + 1;
+    let cEnd = cValue.indexOf(';', cStart);
+    if (cEnd === -1) {
+      cEnd = cValue.length;
+    }
+    cValue = decodeURI(cValue.substring(cStart, cEnd));
+  }
+  return cValue;
+}
 
 class Widget extends Component {
   constructor() {
@@ -60,6 +79,15 @@ class Widget extends Component {
     // Get and set ref query param
     const referrerURL = queryVars.ref;
     this.props.setReferrerURL(referrerURL);
+
+    // Get the cookies and set in redux states.
+    const gACookie = getCookie('_ga');
+    const gCLAWCookie = getCookie('_gcl_aw');
+    const tymbrelFormCookie = getCookie('tymbrel_form_cookies');
+
+    this.props.setGACookie(gACookie);
+    this.props.setGCLAWCookie(gCLAWCookie);
+    this.props.setTymbrelFormCookie(tymbrelFormCookie);
   }
 
   componentDidUpdate(prevProps) {
@@ -195,6 +223,9 @@ function mapDispatchToProps(dispatch) {
       setUTMParams,
       refreshFirstStepData,
       setReferrerURL,
+      setGACookie,
+      setGCLAWCookie,
+      setTymbrelFormCookie,
     },
     dispatch,
   );
@@ -213,6 +244,9 @@ Widget.propTypes = {
   setUTMParams: PropTypes.func.isRequired,
   floatingButtonText: PropTypes.string.isRequired,
   setReferrerURL: PropTypes.func.isRequired,
+  setGACookie: PropTypes.func.isRequired,
+  setGCLAWCookie: PropTypes.func.isRequired,
+  setTymbrelFormCookie: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Widget));

@@ -60,6 +60,9 @@ export function createRequest() {
       familyPatientUser,
       utmParams,
       referrerURL,
+      gaCookie,
+      gclAwCookie,
+      tymbrelFormCookie,
     } = state.availabilities.toJS();
 
     const { patientUser } = state.auth.toJS();
@@ -84,6 +87,9 @@ export function createRequest() {
       utmCampaign: utmParams?.utm_campaign,
       utmMedium: utmParams?.utm_medium,
       documentReferrer: referrerURL,
+      gaCookie,
+      gclAwCookie,
+      tymbrelFormCookie,
     };
 
     if (selectedPractitionerId) {

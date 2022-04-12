@@ -50,6 +50,10 @@ export const SET_TIMEFRAME = `${reducerName}SET_TIMEFRAME`;
 export const UPDATE_DAYS_OF_THE_WEEK = `${reducerName}UPDATE_DAYS_OF_THE_WEEK `;
 export const SET_IS_RECALL = `${reducerName}SET_IS_RECALL `;
 export const SET_REFERRER_URL = `${reducerName}SET_REFERRER_URL`;
+export const SET_GA_COOKIE = `${reducerName}SET_GA_COOKIE`;
+export const SET_GCL_AW_COOKIE = `${reducerName}SET_GCL_AW_COOKIE`;
+export const SET_TYMBREL_FORM_COOKIE = `${reducerName}SET_TYMBREL_FORM_COOKIE`;
+
 /**
  * ACTIONS
  */
@@ -71,20 +75,19 @@ export const setSelectedPractitionerId = createAction(SET_SELECTED_PRACTITIONER_
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 export const updateDaysOfTheWeek = createAction(UPDATE_DAYS_OF_THE_WEEK);
 export const setReferrerURL = createAction(SET_REFERRER_URL);
+export const setGACookie = createAction(SET_GA_COOKIE);
+export const setGCLAWCookie = createAction(SET_GCL_AW_COOKIE);
+export const setTymbrelFormCookie = createAction(SET_TYMBREL_FORM_COOKIE);
 
 function getStartTimeForToday(account) {
   return parseDate(new Date(), account.timezone).add(1, 'hours');
 }
 
 function getFloorDate(date) {
-  return getUTCDate(date)
-    .startOf('day')
-    .toISOString();
+  return getUTCDate(date).startOf('day').toISOString();
 }
 
-let selectedStartDate = getTodaysDate()
-  .add(1, 'hours')
-  .toISOString();
+let selectedStartDate = getTodaysDate().add(1, 'hours').toISOString();
 
 const refreshableState = {
   familyPatientUser: null,
@@ -273,12 +276,8 @@ export default handleActions(
     },
 
     [SIX_DAYS_SHIFT](state, action) {
-      const {
-        selectedStartDay,
-        selectedEndDay,
-        practitionerId,
-        retrievedFirstTime,
-      } = action.payload;
+      const { selectedStartDay, selectedEndDay, practitionerId, retrievedFirstTime } =
+        action.payload;
       return state.merge({
         [practitionerId]: {
           selectedEndDay,
@@ -375,9 +374,17 @@ export default handleActions(
 
       return newState;
     },
-
     [SET_REFERRER_URL](state, action) {
       return state.set('referrerURL', action.payload);
+    },
+    [SET_GA_COOKIE](state, action) {
+      return state.set('gaCookie', action.payload);
+    },
+    [SET_GCL_AW_COOKIE](state, action) {
+      return state.set('gclAwCookie', action.payload);
+    },
+    [SET_TYMBREL_FORM_COOKIE](state, action) {
+      return state.set('tymbrelFormCookie', action.payload);
     },
   },
   createInitialWidgetState(),
