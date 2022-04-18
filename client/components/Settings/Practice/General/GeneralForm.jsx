@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getFormValues, reduxForm } from 'redux-form';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import { Field, Tooltip } from '../../../library';
@@ -13,7 +13,6 @@ import {
 import FormButton from '../../../library/Form/FormButton';
 import Icon from '../../../library/Icon';
 import styles from './styles.scss';
-import { showAlertTimeout } from '../../../../thunks/alerts';
 import AccountModel from '../../../../entities/models/Account';
 
 const maxLength = (max) => (value) =>
@@ -34,14 +33,13 @@ const GeneralForm = ({
   handleSubmit,
   change,
   initialValues,
-  valid,
   activeAccount,
 }) => {
   const emailValid = role === 'SUPERADMIN' ? emailValidateNull : emailValidate;
   const istwilioPhoneNumber = !!activeAccount.get('twilioPhoneNumber');
+  const [pristineValue, setPristineValue] = useState(pristine);
 
   const [allowSubmit, setAllowSubmit] = useState(false);
-  const dispatch = useDispatch();
 
   function onNotificationEmailsChange(e) {
     const { useNotificationEmails } = formValues;
@@ -58,40 +56,41 @@ const GeneralForm = ({
     }
   }
 
-  function handleContactChange(e) {
-    const currentVal = e.target.value;
-    if (validateNoSpace(currentVal).length <= 12) {
-      change('phoneNumber', currentVal);
-      if (validateNoSpace(initialValues?.phoneNumber) !== validateNoSpace(currentVal)) {
-        setAllowSubmit(false);
+  function validatePhoneNumber() {
+    let validation = false;
+    if (formValues.phoneNumber) {
+      if (validateNoSpace(formValues.phoneNumber).length <= 12) {
+        validation = true;
+      } else {
+        validation = false;
+      }
+    }
+    return validation;
+  }
+
+  function handleContactBlur(e) {
+    if (initialValues.phoneNumber !== validateNoSpace(formValues.phoneNumber)) {
+      if (istwilioPhoneNumber) {
+        const confirmUpdate = window.confirm(
+          'Do you want your patient calls to be forwarded to this new number? ',
+        );
+        if (!confirmUpdate) {
+          change('phoneNumber', initialValues.phoneNumber);
+        } else {
+          setAllowSubmit(false);
+        }
       } else {
         setAllowSubmit(true);
       }
+    } else {
+      pristine ? setAllowSubmit(false) : setAllowSubmit(true);
     }
     e.preventDefault();
   }
 
   const handleFormSubmit = (e) => {
-    if (valid) {
-      if (istwilioPhoneNumber) {
-        const confirmUpdate = window.confirm(
-          'Do you want your patient calls to be forwarded to this new number?',
-        );
-        if (confirmUpdate) {
-          handleSubmit();
-        } else {
-          change('phoneNumber', initialValues?.phoneNumber);
-        }
-      } else {
-        handleSubmit();
-      }
-    } else {
-      dispatch(
-        showAlertTimeout({
-          alert: { body: 'There is a validation error' },
-          type: 'error',
-        }),
-      );
+    if (validatePhoneNumber) {
+      handleSubmit();
     }
     e.preventDefault();
   };
@@ -100,7 +99,7 @@ const GeneralForm = ({
     <form
       onSubmit={handleFormSubmit}
       data-test-id="PracticeDetailsForm123"
-      onChange={(e) => e.stopPropagation()}
+      onBlur={(e) => e.stopPropagation()}
     >
       <Field name="name" label="Name" validate={[maxLength25]} data-test-id="name" />
       <Field name="website" label="Website" data-test-id="website" />
@@ -109,7 +108,17 @@ const GeneralForm = ({
         label="Contact Phone Number"
         type="tel"
         data-test-id="phoneNumber"
-        onChange={handleContactChange}
+        onFocus={() => {
+          setPristineValue(pristine);
+        }}
+        onBlur={(e) => {
+          handleContactBlur(e);
+        }}
+        onChange={(e) => {
+          validateNoSpace(e.target.value) !== initialValues.phoneNumber
+            ? setAllowSubmit(false)
+            : setAllowSubmit(pristineValue);
+        }}
       />
       <Field
         name="contactEmail"
@@ -131,7 +140,9 @@ const GeneralForm = ({
         label="Notification Email(s)"
         validate={[validateEmails]}
         data-test-id="notificationEmails"
-        onChange={onNotificationEmailsChange}
+        onChange={(e) => {
+          onNotificationEmailsChange(e);
+        }}
       />
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
@@ -189,7 +200,6 @@ GeneralForm.propTypes = {
   }).isRequired,
   pristine: PropTypes.bool.isRequired,
   change: PropTypes.func.isRequired,
-  valid: PropTypes.bool.isRequired,
   activeAccount: PropTypes.instanceOf(AccountModel),
 };
 
