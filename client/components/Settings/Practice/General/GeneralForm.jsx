@@ -80,7 +80,7 @@ const GeneralForm = ({
           setAllowSubmit(false);
         }
       } else {
-        setAllowSubmit(true);
+        setAllowSubmit(false);
       }
     } else {
       pristine ? setAllowSubmit(false) : setAllowSubmit(true);
