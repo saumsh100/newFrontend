@@ -23,12 +23,13 @@ def parallelBuildDockerImage(Deployment pipeline, String environment) {
   services.each { service ->
     def appName = service.getKey()
     def dockerfilePath = service.getValue()
-    def useIdentityAccessProxy = isDevelopment(mainBranch) ? true : false
+    def useIdentityAccessProxy = isDevelopment(mainBranch) || isTest() ? true : false
     parallelServiceNames["${appName}-dev"] = {
       pipeline.buildDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment, useIdentityAccessProxy)
     }
     parallelServiceNames["${appName}-test"] = {
-      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "test", frontendDirectory, "test")
+      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "test", frontendDirectory, "test", useIdentityAccessProxy)
+
     }
     parallelServiceNames["${appName}-prod-ca"] = {
       pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod", frontendDirectory, "my")
