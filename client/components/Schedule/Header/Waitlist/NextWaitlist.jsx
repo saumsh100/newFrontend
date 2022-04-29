@@ -25,7 +25,7 @@ export const WAITLIST_STATE = {
   form: 3,
 };
 
-const NextWaitlist = (props) => {
+const NextWaitlist = ({onOverlayClick,...props}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const { account, practitioners } = useCallback(
     useSelector(({ auth, entities }) => ({
@@ -44,7 +44,7 @@ const NextWaitlist = (props) => {
   );
   const batchUpdate = useCallback(
     (state = false, waitListIDs) => batchUpdateFactory(props.waitlist)(state, waitListIDs),
-    [props.waitlist],
+    [],
   );
 
   const { timezone, id: accountId, name, unit } = account.toJS();
@@ -138,10 +138,16 @@ const NextWaitlist = (props) => {
   const goToAddWaitListForm = useCallback(() => setWaitListState(WAITLIST_STATE.form), []);
   const setWaitListToInitialState = useCallback(() => setWaitListState(WAITLIST_STATE.initial), []);
 
+  const onClose = () => {
+    setSelectedWaitlistMap(batchUpdate);
+    onOverlayClick();
+  };
+
   return (
     <>
       <WaitlistTableWithActions
         {...props}
+        onOverlayClick={onClose}
         practitioners={practitioners}
         batchUpdate={batchUpdate}
         onEdit={handleEdit}
