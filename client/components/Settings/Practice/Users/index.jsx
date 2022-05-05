@@ -78,6 +78,19 @@ class Users extends Component {
     ) : null;
   }
 
+  get addConnectorUserButton() {
+    return this.props.role === SUPERADMIN_ROLE ? (
+      <Button
+        className={styles.inviteUser}
+        onClick={this.addNewUser}
+        data-test-id="addUserButton"
+        secondary
+      >
+        Add a Connector User
+      </Button>
+    ) : null;
+  }
+
   deleteInvite(id) {
     const { accountId } = this.props;
 
@@ -392,7 +405,9 @@ class Users extends Component {
         <Row className={styles.mainHead}>
           <Header className={styles.header} contentHeader title={`Users in ${practiceName}`} />
           <div className={styles.buttonContainer}>
-            {this.addUserButton}
+            {this.props.isEnterpriseManagementAuthEnabled
+              ? this.addConnectorUserButton
+              : this.addUserButton}
             {!userIsSSO && (
               <Button
                 className={styles.inviteUser}
@@ -453,13 +468,14 @@ Users.propTypes = {
   users: PropTypes.instanceOf(Map).isRequired,
   permissions: PropTypes.instanceOf(Map).isRequired,
   invites: PropTypes.instanceOf(Map).isRequired,
+  isEnterpriseManagementAuthEnabled: PropTypes.bool.isRequired,
 };
 
 Users.defaultProps = {
   practiceName: '',
 };
 
-function mapStateToProps({ entities, auth }) {
+function mapStateToProps({ entities, auth, featureFlags }) {
   return {
     accountId: auth.get('accountId'),
     userId: auth.getIn(['user', 'id']),
@@ -469,6 +485,10 @@ function mapStateToProps({ entities, auth }) {
     permissions: entities.getIn(['permissions', 'models']),
     practiceName: entities.getIn(['accounts', 'models', auth.get('accountId'), 'name']),
     invites: entities.getIn(['invites', 'models']),
+    isEnterpriseManagementAuthEnabled: featureFlags.getIn([
+      'flags',
+      'enterprise-management-authentication',
+    ]),
   };
 }
 
