@@ -64,6 +64,8 @@ const AccountSchema = {
   onlineBookingUrl: null,
   canSendRemindersToInactivePatients: null,
   useRecallWithoutOnlineBooking: null,
+  vendastaSrIdEnabled: null,
+  vendastaMsIdEnabled: null,
 };
 
 export default class Account extends createModel(AccountSchema, 'Account') {

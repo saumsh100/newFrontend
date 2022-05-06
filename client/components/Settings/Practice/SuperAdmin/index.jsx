@@ -5,6 +5,7 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import each from 'lodash/each';
+import find from 'lodash/find';
 import { Header, Button, DialogBox, getFormattedDate } from '../../../library';
 import { validateNoSpace } from '../../../library/Form/validate';
 import {
@@ -173,7 +174,7 @@ class SuperAdmin extends Component {
       });
     }
 
-    if (sendingValuesCreate.integrations[0]) {
+    if (sendingValuesCreate.integrations.length) {
       this.props.showAlertTimeout({
         type: 'success',
         alert: {
@@ -182,7 +183,7 @@ class SuperAdmin extends Component {
         },
       });
 
-      await this.props
+      this.props
         .createEntityRequest({
           key: 'accounts',
           url: `/api/accounts/${activeAccount.id}/integrations`,
@@ -192,34 +193,52 @@ class SuperAdmin extends Component {
           const entities = getEntities(response);
           const twilioNumber = entities[1].twilioPhoneNumber;
           const callrail = entities[1].callrailId || entities[1].callrailIdV3;
-          if (sendingValuesCreate.integrations[0].type === 'twilio') {
-            return twilioNumber
-              ? this.props.showAlertTimeout({
-                  type: 'success',
-                  alert: { body: 'Twilio number created and call forwarding set up successfully' },
-                })
-              : this.props.showAlertTimeout({
-                  type: 'error',
-                  alert: { body: 'Failed to fully enable Twilio API' },
-                });
+          const { vendastaMsIdEnabled } = entities[1];
+          const { vendastaSrIdEnabled } = entities[1];
+          const successAPIs = [];
+          const failedAPIs = [];
+          let successAlert;
+          let errorAlert;
+          if (find(sendingValuesCreate.integrations, { type: 'twilio' })) {
+            if (twilioNumber) successAPIs.push('twilio');
+            else failedAPIs.push('twilio');
           }
-          if (sendingValuesCreate.integrations[0].type === 'callrail') {
-            return callrail
-              ? this.props.showAlertTimeout({
-                  type: 'success',
-                  alert: { body: 'Callrail API integrated successfully' },
-                })
-              : this.props.showAlertTimeout({
-                  type: 'error',
-                  alert: { body: 'Failed to fully enable CallRail API' },
-                });
+          if (find(sendingValuesCreate.integrations, { type: 'callrail' })) {
+            if (callrail) successAPIs.push('callrail');
+            else failedAPIs.push('callrail');
           }
+
+          if (
+            find(sendingValuesCreate.integrations, { type: 'vendasta', reputationManagement: true })
+          ) {
+            if (vendastaSrIdEnabled) successAPIs.push('reputation management');
+            else failedAPIs.push('reputation management');
+          }
+          if (find(sendingValuesCreate.integrations, { type: 'vendasta', listings: true })) {
+            if (vendastaMsIdEnabled) successAPIs.push('directory listings');
+            else failedAPIs.push('directory listings');
+          }
+
+          if (successAPIs.length)
+            successAlert = this.props.showAlertTimeout({
+              type: 'success',
+              alert: {
+                body: `Service integration for ${successAPIs.join(', ')} is successful`,
+              },
+            });
+          if (failedAPIs.length)
+            errorAlert = this.props.showAlertTimeout({
+              type: 'error',
+              alert: { body: `Failed to fully enable ${failedAPIs.join(',')} API(s)` },
+            });
+
+          this.props.reset('apis');
+          return successAlert && errorAlert;
         });
-      this.props.reset('apis');
     }
 
-    if (sendingValuesDelete.integrations[0]) {
-      await this.props
+    if (sendingValuesDelete.integrations.length) {
+      this.props
         .deleteEntityRequest({
           key: 'accounts',
           url: `/api/accounts/${activeAccount.id}/integrations`,

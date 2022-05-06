@@ -8,8 +8,9 @@ import styles from './styles.scss';
 
 export default function AddAccounts({ onSubmit, activeAccount }) {
   const initialValues = {
-    reputationManagement: !!activeAccount.get('vendastaSrId'),
-    listings: !!activeAccount.get('vendastaMsId'),
+    reputationManagement:
+      !!activeAccount.get('vendastaSrId') || !!activeAccount.get('vendastaSrIdEnabled'),
+    listings: !!activeAccount.get('vendastaMsId') || !!activeAccount.get('vendastaMsIdEnabled'),
     canSendReminders: !!activeAccount.get('twilioPhoneNumber'),
     callTracking: !!activeAccount.get('callrailId') || !!activeAccount.get('callrailIdV3'),
   };
