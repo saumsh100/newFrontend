@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -19,9 +18,19 @@ const filterNameMap = {
 const FilterTags = ({ patientTable, removeTag }) => {
   /* eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
   const { limit, page, order, segment, ...filters } = patientTable.get('filters').toJS();
+
+  /*deleting the status from filters in case of follow ups patient report*/
+  if (
+    segment &&
+    typeof segment !== 'undefined' &&
+    (segment[0] === 'followUps' || segment[0] === 'myFollowUps')
+  ) {
+    delete filters.status;
+  }
+
   return (
     <div className={styles.tagsContainer}>
-      {Object.keys(filters || {}).map(filter => (
+      {Object.keys(filters || {}).map((filter) => (
         <div key={`filterTag_${filter}`} className={styles.tagBody}>
           <div className={styles.tagText}>
             {filter in filterNameMap

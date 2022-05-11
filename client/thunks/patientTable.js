@@ -1,4 +1,3 @@
-
 import each from 'lodash/each';
 import { push } from 'connected-react-router';
 import { reset } from 'redux-form';
@@ -17,6 +16,15 @@ export const fetchPatientTableData = () => async (dispatch, getState) => {
         isHoH: true,
         authUserId: auth.get('userId'),
       };
+      /*deleting the status from params in case of follow ups patient report*/
+      if (
+        params &&
+        params.segment &&
+        typeof params.segment !== 'undefined' &&
+        (params.segment[0] === 'followUps' || params.segment[0] === 'myFollowUps')
+      ) {
+        delete params.status;
+      }
       const {
         data: { entities },
       } = await httpClient().get('/api/table/search', { params });
@@ -58,7 +66,7 @@ const patientTableFilterForms = [
  */
 export const jumpToMyFollowUps = () => (dispatch) => {
   dispatch(removeAllFilters());
-  patientTableFilterForms.map(form => dispatch(reset(form)));
+  patientTableFilterForms.map((form) => dispatch(reset(form)));
   dispatch(
     addFilter({
       page: 0,
