@@ -44,3 +44,9 @@ export const bookingWidgetHttpClient = config =>
     baseURL: `${apiHost}/my`,
     ...config,
   });
+
+  export const httpClientbookingWidget = (config) =>
+  buildHttpClient(getTokenBookingWidget, {
+    baseURL: isOnDevice() ? getApiUrl() : apiHost,
+    ...config,
+  });

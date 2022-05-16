@@ -15,3 +15,14 @@
     flex: 1;
   }
 }
+
+.disabled {
+  background-color: #e4e4e4;
+  color: #b4b4b5;
+  cursor: not-allowed;
+
+  &:hover {
+    border: none;
+    color: #b4b4b5;
+  }
+}

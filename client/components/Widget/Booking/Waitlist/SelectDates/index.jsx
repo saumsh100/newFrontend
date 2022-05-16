@@ -1,10 +1,11 @@
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import classnames from 'classnames';
+import configure from '../../../../../store/reviewsStore';
+import connectStoreToHost from '../../../../../widget/connectStoreToHost';
 import { week, frames, dayToFrame, capitalize } from '../../../../../util/isomorphic';
 import {
   updateDaysOfTheWeek,
@@ -19,7 +20,15 @@ import {
 } from '../../../../../reducers/widgetNavigation';
 import Button from '../../../../library/Button';
 import styles from './styles.scss';
+import { getEndOfTheMonth, getStartOfTheMonth } from '../../../../library/util/datetime/helpers';
+import { getFinalDailyHours } from './thunks';
 
+const store = configure({
+  initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle
+});
+
+connectStoreToHost(store);
+window.store = store;
 /**
  * Next default route for this component
  */
@@ -38,14 +47,20 @@ class SelectDates extends PureComponent {
       [frames.all]: getSelectedDaysOfTheWeek(waitSpot).size === 7,
       [frames.weekdays]: isFullFrame(frames.weekdays, waitSpot),
       [frames.weekends]: isFullFrame(frames.weekends, waitSpot),
+      baseSchedule: {},
+      isLoading: true,
+      month: new Date(),
+      weekDays: false,
+      weekEnds: false,
     };
-
+    this.getSchedule = this.getSchedule.bind(this);
     this.shouldShowNextButton = this.shouldShowNextButton.bind(this);
     this.handleAvailableDays = this.handleAvailableDays.bind(this);
     this.handleSelectFrameAvailability = this.handleSelectFrameAvailability.bind(this);
   }
 
   componentDidMount() {
+    this.getSchedule();
     const { waitSpot, ...props } = this.props;
 
     props.setText();
@@ -66,10 +81,6 @@ class SelectDates extends PureComponent {
     }
   }
 
-  shouldShowNextButton(should) {
-    return should ? this.props.showButton() : this.props.hideButton();
-  }
-
   /**
    * Extracts dates on a date-range and also set these date to the reducer.
    *
@@ -78,7 +89,7 @@ class SelectDates extends PureComponent {
   handleAvailableDays(day) {
     const { waitSpot } = this.props;
 
-    const finalWaitSpot = waitSpot.updateIn(['daysOfTheWeek', day], d => !d);
+    const finalWaitSpot = waitSpot.updateIn(['daysOfTheWeek', day], (d) => !d);
 
     const selectedDays = getSelectedDaysOfTheWeek(finalWaitSpot);
 
@@ -103,21 +114,23 @@ class SelectDates extends PureComponent {
     const selectedDays = getSelectedDaysOfTheWeek(waitSpot);
 
     this.setState(
-      prevState =>
-        (frame === frames.all
+      (prevState) =>
+        frame === frames.all
           ? {
-            [frames.all]: !prevState.all,
-            [frames.weekdays]: !prevState.all,
-            [frames.weekends]: !prevState.all,
-          }
+              [frames.all]: !prevState.all,
+              [frames.weekdays]: !prevState.all,
+              [frames.weekends]: !prevState.all,
+            }
           : {
-            [frames.all]: selectedDays.size + week[frame].length === 7,
-            [frames[frame]]: !prevState[frame],
-          }),
+              [frames.all]: selectedDays.size + week[frame].length === 7,
+              [frames[frame]]: !prevState[frame],
+            },
       () => {
         const finalWaitSpot = waitSpot.withMutations((w) => {
           week[frame].forEach((key) => {
-            w.setIn(['daysOfTheWeek', key], this.state[frame]);
+            if (this.state.baseSchedule[key].isClosed === false) {
+              w.setIn(['daysOfTheWeek', key], this.state[frame]);
+            }
           });
         });
 
@@ -126,6 +139,29 @@ class SelectDates extends PureComponent {
         return this.props.updateDaysOfTheWeek(finalWaitSpot.get('daysOfTheWeek'));
       },
     );
+  }
+
+  /**
+   * Fetch the schedule to the provided month.
+   *
+   * @returns {*}
+   */
+  getSchedule(month = this.state.month) {
+    const accountId = store.getState().availabilities?.get('account')?.get('id');
+
+    return getFinalDailyHours({
+      accountId,
+      startDate: getStartOfTheMonth(month),
+      endDate: getEndOfTheMonth(month),
+    }).then(({ data }) => {
+      const { weeklySchedule } = data;
+      return this.setState({ baseSchedule: weeklySchedule }, () =>
+        setTimeout(() => this.setState({ isLoading: false }), 1000),);
+    });
+  }
+
+  shouldShowNextButton(should) {
+    return should ? this.props.showButton() : this.props.hideButton();
   }
 
   render() {
@@ -163,29 +199,64 @@ class SelectDates extends PureComponent {
         <div className={styles.contentWrapper}>
           <div className={styles.container}>
             <div className={styles.timeFrameWrapper}>
-              {timeFrameButton(frames.all, 'All Days')}
-              {timeFrameButton(frames.weekdays, 'Weekdays')}
-              {timeFrameButton(frames.weekends, 'Weekends')}
+              {week[frames.all].map((day) => {
+                if (this.state.baseSchedule[day] !== undefined) {
+                  const { isClosed } = this.state.baseSchedule[day];
+
+                  if ((day === 'saturday' || day === 'sunday') && !isClosed) {
+                    return this.setState({ weekEnds: true });
+                  }
+
+                  if (
+                    (day === 'monday' ||
+                      day === 'tuesday' ||
+                      day === 'wednesday' ||
+                      day === 'thursday' ||
+                      day === 'friday') &&
+                    !isClosed
+                  ) {
+                    return this.setState({ weekDays: true });
+                  }
+                }
+                return null;
+              })}
+
+              {this.state.weekDays !== true && this.state.weekEnds !== true && (
+                <>{timeFrameButton(frames.all, 'All Day')}</>
+              )}
+
+              {this.state.weekDays === true && <>{timeFrameButton(frames.weekdays, 'Weekdays')}</>}
+
+              {this.state.weekEnds === true && <>{timeFrameButton(frames.weekends, 'Weekends')}</>}
             </div>
             <div className={styles.contentWrapper}>
               <span className={styles.helper}>Or</span>
               <div className={styles.timeFrameWrapper}>
                 {week[frames.all].map((day) => {
-                  const { slot, selectedSlot } = styles;
-                  return (
-                    <div className={styles.cardWrapper} key={day}>
-                      <Button
-                        onClick={() => this.handleAvailableDays(day)}
-                        className={classnames({
-                          [slot]: true,
-                          [styles.timeFrameButton]: true,
-                          [selectedSlot]: waitSpot.getIn(['daysOfTheWeek', day]),
-                        })}
-                      >
-                        {capitalize(day)}
-                      </Button>
-                    </div>
-                  );
+                  if (this.state.baseSchedule[day] !== undefined) {
+                    const { isClosed } = this.state.baseSchedule[day];
+
+                    const { slot, selectedSlot } = styles;
+                    return (
+                      <div className={styles.cardWrapper} key={day}>
+                        {day && !isClosed ? (
+                          <Button
+                            onClick={() => this.handleAvailableDays(day)}
+                            className={classnames({
+                              [slot]: true,
+                              [styles.timeFrameButton]: true,
+                              [selectedSlot]: waitSpot.getIn(['daysOfTheWeek', day]),
+                            })}
+                          >
+                            {capitalize(day)}
+                          </Button>
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    );
+                  }
+                  return null;
                 })}
               </div>
             </div>
@@ -195,7 +266,6 @@ class SelectDates extends PureComponent {
     );
   }
 }
-
 function mapStateToProps({ availabilities, entities, widgetNavigation }) {
   return {
     timezone: availabilities.get('account').get('timezone'),

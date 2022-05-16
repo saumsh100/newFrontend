@@ -14,10 +14,7 @@ export default function SchedulingPreviewForm({ activeAccount }) {
 
   const hostname =
     window.location.hostname.split('.').length === 3
-      ? window.location.hostname
-          .split('.')
-          .slice(1)
-          .join('.')
+      ? window.location.hostname.split('.').slice(1).join('.')
       : window.location.hostname;
   const subDomain = process.env.MY_SUBDOMAIN;
 
