@@ -238,7 +238,8 @@ class SuperAdmin extends Component {
           this.props.reset('apis');
           return successAlert && errorAlert;
         });
-    } else if (sendingValuesDelete.integrations.length) {
+    }
+    if (sendingValuesDelete.integrations.length) {
       this.props.showAlertTimeout({
         type: 'success',
         alert: {
