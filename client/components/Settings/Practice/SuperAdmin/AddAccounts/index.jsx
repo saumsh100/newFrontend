@@ -22,6 +22,7 @@ export default function AddAccounts({ onSubmit, activeAccount }) {
       onSubmit={onSubmit}
       initialValues={initialValues}
       alignSave="left"
+      data-test-id="apis"
     >
       <Grid className={styles.accountOptions}>
         <Row className={styles.accountOptions_row}>
@@ -35,6 +36,7 @@ export default function AddAccounts({ onSubmit, activeAccount }) {
                 <Field component="Toggle" name="reputationManagement" />
               </div>
             </div>
+
             <div className={styles.displayFlex}>
               <span className={styles.icon}>
                 <Icon icon="star" />
@@ -44,6 +46,7 @@ export default function AddAccounts({ onSubmit, activeAccount }) {
                 <Field component="Toggle" name="listings" />
               </div>
             </div>
+
             <div className={styles.displayFlex}>
               <span className={styles.icon}>
                 <Icon icon="clock" />
@@ -53,6 +56,7 @@ export default function AddAccounts({ onSubmit, activeAccount }) {
                 <Field component="Toggle" name="canSendReminders" />
               </div>
             </div>
+
             <div className={styles.displayFlex}>
               <span className={styles.icon}>
                 <Icon icon="phone" />

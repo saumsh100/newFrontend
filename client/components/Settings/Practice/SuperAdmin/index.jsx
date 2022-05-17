@@ -90,6 +90,7 @@ class SuperAdmin extends Component {
 
   async updateApis(values) {
     const { activeAccount, address } = this.props;
+
     const {
       callrailId,
       callrailIdV3,
@@ -99,7 +100,10 @@ class SuperAdmin extends Component {
       vendastaSrId,
       website,
     } = activeAccount;
+
     const { city, state, country, zipCode, street, timezone } = address;
+
+    // Values from AddAccounts...
     const { reputationManagement, listings, callTracking, canSendReminders } = values;
 
     const sendingValuesCreate = { integrations: [] };
@@ -231,20 +235,44 @@ class SuperAdmin extends Component {
               type: 'error',
               alert: { body: `Failed to fully enable ${failedAPIs.join(',')} API(s)` },
             });
-
           this.props.reset('apis');
           return successAlert && errorAlert;
         });
-    }
-
-    if (sendingValuesDelete.integrations.length) {
+    } else if (sendingValuesDelete.integrations.length) {
+      this.props.showAlertTimeout({
+        type: 'success',
+        alert: {
+          title: 'Service Delete requested',
+          body: 'Delete in progress, check back in a minute.',
+        },
+      });
       this.props
         .deleteEntityRequest({
           key: 'accounts',
           url: `/api/accounts/${activeAccount.id}/integrations`,
           values: sendingValuesDelete,
         })
-        .then(() => this.props.reset('apis'));
+        .then((response) => {
+          this.forceUpdate();
+
+          if (response !== {} || response !== undefined) {
+            this.props.showAlertTimeout({
+              type: 'success',
+              alert: {
+                title: 'Success',
+                body: 'Service Delete request is successful.',
+              },
+            });
+          } else {
+            this.props.showAlertTimeout({
+              type: 'error',
+              alert: {
+                title: 'error',
+                body: 'Failed to Delete Service request.',
+              },
+            });
+          }
+        });
     }
     return null;
   }

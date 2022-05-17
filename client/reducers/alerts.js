@@ -35,7 +35,7 @@ export default handleActions(
         subText: alert.subText || '',
         type,
         caller: alert.caller || false,
-        time: 1000,
+        time: 3000,
         sticky: alert.sticky || false,
         browserAlert: alert.browserAlert || false,
         clickable: alert.clickable || false,
