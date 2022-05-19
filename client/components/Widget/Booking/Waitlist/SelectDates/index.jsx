@@ -251,7 +251,16 @@ class SelectDates extends PureComponent {
                             {capitalize(day)}
                           </Button>
                         ) : (
-                          ''
+                          <Button
+                            className={classnames({
+                              [styles.disabledButton]: true,
+                              [slot]: true,
+                              [styles.timeFrameButton]: true,
+                              [selectedSlot]: waitSpot.getIn(['daysOfTheWeek', day]),
+                            })}
+                          >
+                            {capitalize(day)}
+                          </Button>
                         )}
                       </div>
                     );

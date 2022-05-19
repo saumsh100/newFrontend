@@ -3,6 +3,7 @@
 .cardWrapper {
   @extend .cardWrapper;
   flex: 0 50%;
+
   @media (min-width: 576px) {
     flex: 0 25%;
   }
@@ -11,12 +12,24 @@
 .slotWrapper {
   @extend .cardWrapper;
   flex: 1;
+
   @media (min-width: 350px) {
     flex: 1;
   }
 }
 
 .disabled {
+  background-color: #e4e4e4;
+  color: #b4b4b5;
+  cursor: not-allowed;
+
+  &:hover {
+    border: none;
+    color: #b4b4b5;
+  }
+}
+
+.disabledButton {
   background-color: #e4e4e4;
   color: #b4b4b5;
   cursor: not-allowed;
