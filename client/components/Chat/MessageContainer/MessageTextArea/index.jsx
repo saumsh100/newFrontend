@@ -43,20 +43,20 @@ class MessageTextArea extends Component {
     this.props.push(`/patients/${patient.id}`);
   };
 
+  contactPoC() {
+    const { poc } = this.props;
+    this.props.selectChatOrCreate(poc);
+  }
+
   addEmoji(emoji) {
     const { chat, textBoxValue } = this.props;
     const messageArea = document.getElementsByName('message')[0];
-    const caretPossition = messageArea.selectionStart;
+    const caretPossition = messageArea?.selectionStart;
     const newMessage = `${textBoxValue.slice(0, caretPossition)}${emoji.native}${textBoxValue.slice(
       caretPossition,
     )}`;
     this.props.change(`chatMessageForm_${chat.id}`, 'message', newMessage);
-    this.emojiDropdown.current.props.clickToogle();
-  }
-
-  contactPoC() {
-    const { poc } = this.props;
-    this.props.selectChatOrCreate(poc);
+    this.emojiDropdown?.current.props.clickToogle();
   }
 
   renderSendButton() {
@@ -91,9 +91,11 @@ class MessageTextArea extends Component {
     const { chat, canSend, error, isPoC, patient, poc, isPhoneNoAvailable, phoneLookupObj } =
       this.props;
     if (!chat || isPoC === null) return null;
+
     const hasPatient = patient && patient.id;
     const tooltipPlacement = 'top';
     const patientFirstName = hasPatient && capitalize(patient.firstName);
+
     return (
       <SContainer className={styles.textAreaContainer}>
         {isPoC && hasPatient && phoneLookupObj?.isSMSEnabled === false && (
@@ -169,7 +171,7 @@ class MessageTextArea extends Component {
         <>
           <SBody className={styles.textAreaBody}>
             <Form
-              destroyOnUnmount
+              destroyOnUnmount={false}
               ignoreSaveButton
               key={`chatMessageForm_${chat.id}`}
               form={`chatMessageForm_${chat.id}`}

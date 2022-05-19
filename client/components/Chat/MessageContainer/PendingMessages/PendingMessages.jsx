@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -9,8 +8,8 @@ import { getTodaysDate, getUTCDate } from '../../../library';
 
 const PendingMessages = ({ timezone }) => {
   const dispatch = useDispatch();
-  const pendingMessages = useSelector(state => state.chat.get('pendingMessages'));
-  const chatId = useSelector(state => state.chat.get('selectedChatId'));
+  const pendingMessages = useSelector((state) => state.chat.get('pendingMessages'));
+  const chatId = useSelector((state) => state.chat.get('selectedChatId'));
   let aMomentAgo = getTodaysDate(timezone).subtract(10, 'seconds');
 
   useInterval(() => {
@@ -19,9 +18,9 @@ const PendingMessages = ({ timezone }) => {
   }, 10000);
 
   return pendingMessages
-    .filter(pending => pending.chatId === chatId)
-    .filter(pending => getUTCDate(pending.addedAt, timezone).isAfter(aMomentAgo))
-    .map(pending => (
+    .filter((pending) => pending.chatId === chatId)
+    .filter((pending) => getUTCDate(pending.addedAt, timezone).isAfter(aMomentAgo))
+    .map((pending) => (
       <PendingMessage key={`${pending.addedAt}-${pending.message}`} body={pending.message} />
     ));
 };
