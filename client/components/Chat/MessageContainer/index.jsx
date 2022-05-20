@@ -150,7 +150,7 @@ class MessageContainer extends Component {
     this.setState({ sendingMessage: true });
     const accountId = this.props.activeAccount.id;
     const {
-      selectedPatient: { cellPhoneNumber, id },
+      selectedPatient: { cellPhoneNumber, id, isProspect },
       selectedChat: { id: chatId },
       userId,
     } = this.props;
@@ -160,6 +160,10 @@ class MessageContainer extends Component {
       cellPhoneNumber,
       id,
     };
+
+    // Here we are receiving isProspect=true only if selected phone number is not associated
+    // to any patient and we have received an online request from this number
+    if (isProspect) patient.id = null;
 
     const request = {
       addedAt: Date.now(),
@@ -442,6 +446,7 @@ MessageContainer.propTypes = {
   selectedPatient: PropTypes.shape({
     id: PropTypes.string,
     cellPhoneNumber: PropTypes.string,
+    isProspect: PropTypes.bool,
   }),
   userId: PropTypes.string.isRequired,
   totalChatMessages: PropTypes.number.isRequired,
