@@ -34,7 +34,7 @@ def parallelBuildDockerImage(Deployment pipeline, String environment) {
       pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "demo", frontendDirectory, "demo")
     }
     parallelServiceNames["${appName}-prod-ca"] = {
-      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod", frontendDirectory, "my")
+      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod", frontendDirectory, "my", useIdentityAccessProxy)
     }
     parallelServiceNames["${appName}-prod-us"] = {
       pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "prod-us", frontendDirectory, "my", useIdentityAccessProxy)
