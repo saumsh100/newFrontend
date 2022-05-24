@@ -87,15 +87,15 @@ const HelpTextLookupTable = {
     followUp: 'No follow ups scheduled after today',
   },
   'Follow Ups': {
-    status: 'Active',
-    description: 'Active patients who have an incomplete follow up',
+    status: 'Active and Inactive',
+    description: 'Active and Inactive patients who have an incomplete follow up',
     communication: null,
     followUp: 'Follow up scheduled',
   },
   'My Follow Ups (Past 30 Days)': {
-    status: 'Active',
+    status: 'Active and Inactive',
     description:
-      'Active patients who have an incomplete follow up that was due to be completed in the last 30 days and is assigned to me',
+      'Active and Inactive patients who have an incomplete follow up that was due to be completed in the last 30 days and is assigned to me',
     communication: null,
     followUp: 'Follow up scheduled',
   },
