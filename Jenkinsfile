@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-@Library('pipeline-library@1.0.5') _
+@Library('pipeline-library@1.0.9') _
 import com.carecru.pipeline.library.deployment.Deployment
 
 try {
@@ -23,9 +23,9 @@ def parallelBuildDockerImage(Deployment pipeline, String environment) {
   services.each { service ->
     def appName = service.getKey()
     def dockerfilePath = service.getValue()
-    def useIdentityAccessProxy = isDevelopment(mainBranch) || isTest() || isProduction() ? true : false
+    def useIdentityAccessProxy = true
     parallelServiceNames["${appName}-dev"] = {
-      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, environment, frontendDirectory, environment, useIdentityAccessProxy)
+      pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "dev", frontendDirectory, "dev", useIdentityAccessProxy)
     }
     parallelServiceNames["${appName}-test"] = {
       pipeline.buildDockerImageForFrontend(appName, dockerfilePath, "test", frontendDirectory, "test", useIdentityAccessProxy)
