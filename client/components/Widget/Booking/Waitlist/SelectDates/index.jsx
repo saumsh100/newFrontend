@@ -52,6 +52,7 @@ class SelectDates extends PureComponent {
       month: new Date(),
       weekDays: false,
       weekEnds: false,
+      allDay: false,
     };
     this.getSchedule = this.getSchedule.bind(this);
     this.shouldShowNextButton = this.shouldShowNextButton.bind(this);
@@ -204,7 +205,7 @@ class SelectDates extends PureComponent {
                   const { isClosed } = this.state.baseSchedule[day];
 
                   if ((day === 'saturday' || day === 'sunday') && !isClosed) {
-                    return this.setState({ weekEnds: true });
+                    return this.setState({ weekEnds: true, allDay: true });
                   }
 
                   if (
@@ -221,9 +222,7 @@ class SelectDates extends PureComponent {
                 return null;
               })}
 
-              {this.state.weekDays !== true && this.state.weekEnds !== true && (
-                <>{timeFrameButton(frames.all, 'All Day')}</>
-              )}
+              {this.state.allDay === true && <>{timeFrameButton(frames.all, 'All Day')}</>}
 
               {this.state.weekDays === true && <>{timeFrameButton(frames.weekdays, 'Weekdays')}</>}
 
