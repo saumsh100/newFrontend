@@ -40,6 +40,13 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Request Socket
        */
       socket.on('request.created', (data) => {
+        DesktopNotification.showNotification('Appointment Request', {
+          body: `You have an appointment request.`,
+          onClick: () => {
+            dispatch(push('/requests'));
+          },
+        });
+
         dispatch(
           receiveEntities({
             key: 'requests',
