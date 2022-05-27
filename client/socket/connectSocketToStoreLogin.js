@@ -15,8 +15,11 @@ export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
   const { dispatch } = store;
 
+  const { auth } = store.getState();
+  const activeAccountId = auth.get('accountId');
+
   socket
-    .emit('authenticate', { token: jwtToken })
+    .emit('authenticate', { token: jwtToken, activeAccountId })
     .on('authenticated', () => {
       console.log('client/socket/connectSocketToStoreLogin.js: Socket connected and authenticated');
 

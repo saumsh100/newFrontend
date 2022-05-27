@@ -1,4 +1,3 @@
-
 import io from 'socket.io-client'; // eslint-disable-line import/no-extraneous-dependencies
 import { getSocketUrl } from '../util/hub';
 
@@ -10,7 +9,11 @@ class Socket {
   }
 
   connect() {
-    this.socket = io.connect(`${getSocketUrl()}/dash`, { transports: ['websocket'] });
+    let socketUri = '/dash';
+    if (process.env.NODE_ENV === 'development') {
+      socketUri = 'backend/dash';
+    }
+    this.socket = io.connect(`${getSocketUrl()}${socketUri}`, { transports: ['websocket'] });
 
     this.socket.on('reconnect_attempt', () => {
       this.socket.io.opts.transports = ['websocket', 'polling'];
