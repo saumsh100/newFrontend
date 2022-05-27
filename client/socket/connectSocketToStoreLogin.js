@@ -324,5 +324,13 @@ export default function connectSocketToStoreLogin(store, socket) {
     .on('unauthorized', (msg) => {
       console.log('unauthorized: ', JSON.stringify(msg.data));
       throw new Error(msg.data.type);
+    })
+    .on('disconnect', () => {
+      console.log('socket: disconnect');
+    })
+    .on('reconnect', () => {
+      console.log('socket: reconnect');
+
+      socket.emit('authenticate', { activeAccountId });
     });
 }
