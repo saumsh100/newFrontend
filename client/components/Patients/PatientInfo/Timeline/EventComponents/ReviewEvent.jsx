@@ -8,7 +8,7 @@ import styles from './styles.scss';
 
 export default function ReviewEvent({ data, timezone, smsFailed, patient }) {
   const stars = [];
-  const contactNumber = patient.cellPhoneNumber || 'cell phone number';
+  const contactNumber = patient?.cellPhoneNumber || 'cell phone number';
   const contactMethod = 'SMS';
 
   for (let i = 0; i < data.review.stars; i += 1) {

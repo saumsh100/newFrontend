@@ -43,7 +43,7 @@ export default function RecallEvent({ data, patient, timezone, smsFailed }) {
   const typeOfRecall = data.isHygiene ? 'hygiene' : 'recall';
   const intervalText = recallIntervalHash[data.recall.interval];
   const contactMethod = contactMethodHash[data.primaryType];
-  const contactNumber = patient.cellPhoneNumber || 'cell phone number';
+  const contactNumber = patient?.cellPhoneNumber || 'cell phone number';
   const headerData = smsFailed
     ? getEventText(
         'english',
