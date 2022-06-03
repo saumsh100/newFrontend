@@ -35,6 +35,7 @@ import { httpClient } from '../util/httpClient';
 import { isHub } from '../util/hub';
 import { createEntityRequest, fetchEntitiesRequest, updateEntityRequest } from './fetchEntities';
 import determineProspectForChat from './prospects';
+import DesktopNotification from '../util/desktopNotification';
 
 const { CancelToken } = axios;
 
@@ -102,6 +103,29 @@ export function addMessage(message) {
       if (chatPageActive) {
         dispatch(markAsRead(selectedChatId));
       }
+    }
+
+    if (!chatPageActive) {
+      const { chats, textMessages, patients } = message.entities;
+      const chatId = message.result;
+      const conversation = chats[chatId];
+      const { patientId } = conversation;
+      const lastTextMessageId = conversation.textMessages[conversation.textMessages.length - 1];
+      const { body, read } = textMessages[lastTextMessageId];
+
+      if (read) {
+        return;
+      }
+
+      const { firstName, lastName } = patients[patientId];
+      const messageHeading = `New message from ${firstName} ${lastName}`;
+
+      DesktopNotification.showNotification(messageHeading, {
+        body,
+        onClick: () => {
+          dispatch(push(`/chat/${chatId}`));
+        },
+      });
     }
   };
 }
