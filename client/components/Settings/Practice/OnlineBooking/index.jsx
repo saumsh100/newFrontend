@@ -38,7 +38,7 @@ class OnlineBooking extends Component {
   }
 
   render() {
-    const { activeAccount, role } = this.props;
+    const { activeAccount, role, onlineSchedulerFlag } = this.props;
 
     if (!activeAccount) {
       return null;
@@ -48,13 +48,13 @@ class OnlineBooking extends Component {
     const port = location.port ? `:${location.port}` : '';
     const hostname =
       window.location.hostname.split('.').length === 3
-        ? window.location.hostname
-            .split('.')
-            .slice(1)
-            .join('.')
+        ? window.location.hostname.split('.').slice(1).join('.')
         : window.location.hostname;
     const subDomain = process.env.MY_SUBDOMAIN;
-    const snippet = `<script type="text/javascript" src="${location.protocol}//${subDomain}.${hostname}${port}/widgets/${activeAccount.id}/cc.js"></script>`;
+    const domainURL = onlineSchedulerFlag
+      ? process.env.ONLINE_SCHEDULER_URL
+      : `${location.protocol}//${subDomain}.${hostname}${port}`;
+    const snippet = `<script type="text/javascript" src="${domainURL}/widgets/${activeAccount.id}/cc.js"></script>`;
 
     return (
       <SettingsCard title="Online Booking" bodyClass={styles.onlineBookingBody}>
@@ -72,7 +72,11 @@ class OnlineBooking extends Component {
         </div>
         <div className={styles.formContainer}>
           <Header title="Online Scheduling Widget Preview" contentHeader />
-          <SchedulingPreviewForm activeAccount={activeAccount} />
+          <SchedulingPreviewForm
+            activeAccount={activeAccount}
+            domainURL={domainURL}
+            onlineSchedulerFlag={onlineSchedulerFlag}
+          />
         </div>
         {(role === 'SUPERADMIN' || role === 'OWNER') && (
           <>
@@ -98,12 +102,14 @@ OnlineBooking.propTypes = {
   activeAccount: PropTypes.instanceOf(accountModel).isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   role: PropTypes.string.isRequired,
+  onlineSchedulerFlag: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps({ entities, auth }) {
+function mapStateToProps({ entities, auth, featureFlags }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const role = auth.get('role');
-  return activeAccount ? { activeAccount, role } : {};
+  const onlineSchedulerFlag = featureFlags.getIn(['flags', 'enable-separate-online-scheduler']);
+  return activeAccount ? { activeAccount, role, onlineSchedulerFlag } : {};
 }
 
 function mapDispatchToProps(dispatch) {

@@ -5,7 +5,7 @@ import FormButton from '../../../library/Form/FormButton';
 import AccountShape from '../../../library/PropTypeShapes/accountShape';
 import styles from './styles.scss';
 
-export default function SchedulingPreviewForm({ activeAccount }) {
+export default function SchedulingPreviewForm({ activeAccount, domainURL, onlineSchedulerFlag }) {
   const [viewingPreview, setViewingPreview] = useState(false);
   const [loadingIFrame, setloadingIFrame] = useState(false);
 
@@ -17,6 +17,10 @@ export default function SchedulingPreviewForm({ activeAccount }) {
       ? window.location.hostname.split('.').slice(1).join('.')
       : window.location.hostname;
   const subDomain = process.env.MY_SUBDOMAIN;
+
+  const domainNameURL = onlineSchedulerFlag
+    ? domainURL
+    : `${window.location.protocol}//${subDomain}.${hostname}`;
 
   return (
     <>
@@ -45,7 +49,7 @@ export default function SchedulingPreviewForm({ activeAccount }) {
             height="100%"
             style={loadingIFrame ? { display: 'none' } : {}}
             title="Online Scheduling Widget Preview"
-            src={`${window.location.protocol}//${subDomain}.${hostname}/widgets/${activeAccount.id}/app/book`}
+            src={`${domainNameURL}/widgets/${activeAccount.id}/app/book`}
             onLoad={() => setloadingIFrame(false)}
           />
         )}
@@ -56,4 +60,6 @@ export default function SchedulingPreviewForm({ activeAccount }) {
 
 SchedulingPreviewForm.propTypes = {
   activeAccount: PropTypes.shape(AccountShape).isRequired,
+  domainURL: PropTypes.string.isRequired,
+  onlineSchedulerFlag: PropTypes.bool.isRequired,
 };
