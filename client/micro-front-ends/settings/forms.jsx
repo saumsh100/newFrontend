@@ -49,12 +49,16 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
   const useCCPReSkinning = isDev
     ? true
     : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-ccp-reskinning-ui');
+  const useFormSubmissionFilter = isDev
+    ? true
+    : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-form-submission-filter');
 
   return {
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
     useFormSubmission,
     useFormSubmissionSyncColumn,
     useCCPReSkinning,
+    useFormSubmissionFilter,
   };
 };
 
