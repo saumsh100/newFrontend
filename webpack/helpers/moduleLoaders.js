@@ -38,7 +38,8 @@ const getStyleLoaders = (cssOptions, isSass = false) => {
 
   const loaders = [
     (isEnvDevelopment || isSass) && require.resolve('style-loader'),
-    isEnvProduction && !isSass && {
+    isEnvProduction &&
+      !isSass && {
         loader: MiniCssExtractPlugin.loader,
         // css is located in `static/css`, use '../../' to locate index.html folder
         // in production `paths.publicUrlOrPath` can be a relative path
@@ -49,22 +50,24 @@ const getStyleLoaders = (cssOptions, isSass = false) => {
       options: cssOptions,
     },
     {
-      loader: require.resolve('postcss-loader'),
+      loader: 'postcss-loader',
       options: {
-        ident: 'postcss',
-        plugins: () => [
-          require('postcss-flexbugs-fixes'),
-          require('postcss-preset-env')({
-            features: {
-              customProperties: false,
-            },
-            autoprefixer: {
-              flexbox: 'no-2009',
-            },
-            stage: 3,
-          }),
-          postcssNormalize(),
-        ],
+        postcssOptions: {
+          plugins: [
+            require('postcss-flexbugs-fixes'),
+
+            [
+              'postcss-preset-env',
+              {
+                features: {
+                  'custom-properties': false,
+                },
+                stage: 3,
+              },
+            ],
+            postcssNormalize(),
+          ],
+        },
         sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
       },
     },

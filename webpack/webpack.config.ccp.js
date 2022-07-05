@@ -33,6 +33,8 @@ const pluginsForDevOrProd = () => {
   return [];
 };
 
+const sharedDeps = ['react', 'react-dom', '@carecru/component-library'];
+
 const getHTMLWebpackPluginConfig = !isEnvProduction
   ? {
       minify: {
@@ -58,20 +60,12 @@ const webpackConfig = merge(common, {
       remotes: {
         EM_MFE: `EM_MFE@${process.env.ENTERPRISE_MANAGEMENT_HOST}/remoteEntry.js`,
       },
-      shared: {
-        react: {
-          singleton: true,
-          eager: true,
-        },
-        'react-dom': {
-          singleton: true,
-          eager: true,
-        },
-        '@carecru/component-library': {
-          singleton: true,
-          eager: true,
-        },
-      },
+      shared: sharedDeps.reduce((acc, dep) => {
+        return {
+          ...acc,
+          [dep]: { singleton: true, eager: true },
+        };
+      }, {}),
     }),
     new HtmlWebpackPlugin({
       inject: true,
