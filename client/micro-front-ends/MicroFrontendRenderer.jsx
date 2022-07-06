@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import Proptypes from 'prop-types';
 import { ErrorBoundary } from 'react-error-boundary';
-import classnames from 'classnames';
 
 const styles = {
   display: 'flex',
@@ -22,15 +21,12 @@ const MicroFrontendRenderer = ({
   fallbackMessage,
   load,
   ContainerTag,
-  className,
 }) => {
   return (
     load && (
       <Suspense fallback={fallbackMessage}>
         <ErrorBoundary FallbackComponent={errorFallback}>
-          <ContainerTag className={classnames('mfe-container', className)}>
-            {component}
-          </ContainerTag>
+          <ContainerTag className="mfe-container">{component}</ContainerTag>
         </ErrorBoundary>
       </Suspense>
     )
@@ -42,7 +38,6 @@ MicroFrontendRenderer.defaultProps = {
   fallbackMessage: 'Loading...',
   errorFallback: ErrorFallback,
   ContainerTag: 'div',
-  className: '',
 };
 
 MicroFrontendRenderer.propTypes = {
@@ -51,7 +46,6 @@ MicroFrontendRenderer.propTypes = {
   errorFallback: Proptypes.func,
   component: Proptypes.element.isRequired,
   ContainerTag: Proptypes.string,
-  className: Proptypes.string,
 };
 
 export default MicroFrontendRenderer;

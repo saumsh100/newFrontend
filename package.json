@@ -11,7 +11,6 @@
     "/dist"
   ],
   "scripts": {
-    "preinstall": "npm cache clean --force && npm cache verify",
     "build": "npm run client:build",
     "clean:assets": "rm -rf build",
     "clean:modules": "rm -rf node_modules",
@@ -50,12 +49,10 @@
     "@babel/plugin-transform-react-display-name": "^7.12.13",
     "@babel/preset-env": "^7.13.9",
     "@babel/preset-react": "^7.12.13",
-    "@carecru/component-library": "^2.1.1",
+    "@carecru/component-library": "1.0.0-alpha.2",
     "@loadable/component": "^5.15.2",
     "@welldone-software/why-did-you-render": "^6.0.5",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
-    "ag-grid-community": "^27.3.0",
-    "ag-grid-react": "^27.3.0",
     "axios": "^0.21.4",
     "babel-loader": "^8.2.2",
     "babel-plugin-named-asset-import": "^0.3.7",
@@ -88,7 +85,7 @@
     "jwt-decode": "^2.1.0",
     "ldclient-js": "^1.5.1",
     "lodash": "^4.17.20",
-    "mini-css-extract-plugin": "^2.6.1",
+    "mini-css-extract-plugin": "^0.12.0",
     "moment": "^2.29.1",
     "moment-range": "^3.1.1",
     "moment-timezone": "^0.5.33",
@@ -97,12 +94,12 @@
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "pino": "^6.11.1",
     "pino-pretty": "^4.7.1",
-    "postcss": "^8.4.14",
+    "postcss": "^7.0.36",
     "postcss-flexbugs-fixes": "^4.2.1",
-    "postcss-loader": "^7.0.0",
+    "postcss-loader": "^3.0.0",
     "postcss-normalize": "^8.0.1",
-    "postcss-preset-env": "^7.7.2",
-    "postcss-safe-parser": "^6.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "postcss-safe-parser": "^5.0.2",
     "prop-types": "^15.5.9",
     "push.js": "^1.0.9",
     "query-string": "^4.3.4",
@@ -200,17 +197,5 @@
     "twilio-run": "^2.9.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-dev-server": "^4.0.0"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }

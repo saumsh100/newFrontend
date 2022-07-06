@@ -1,3 +1,4 @@
+
 import 'raf/polyfill';
 import 'normalize.css';
 import 'rc-tooltip/assets/bootstrap.css';
@@ -5,7 +6,3 @@ import 'react-dd-menu/dist/react-dd-menu.min.css';
 import 'react-toggle/style.css';
 import '../styles/popover.scss';
 import '../styles/default.scss';
-import '@carecru/component-library/dist/scss/font.scss';
-import '@carecru/component-library/dist/carecru.css';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';

@@ -17,10 +17,6 @@ import Loader from '../components/Loader';
 import { browserHistory as history } from '../store/factory';
 import LoginSSO from '../components/LoginSSO';
 import RecoveryTokenInvalid from '../components/ForgotPassword/ResetPassword/RecoveryTokenInvalid';
-import MicroFrontendRenderer from '../micro-front-ends/MicroFrontendRenderer';
-
-// eslint-disable-next-line import/no-unresolved
-const EMApp = loadable(() => import('EM_MFE/App'));
 
 const Routes = {
   dashboard: loadable(() => import('../components/Dashboard')),
@@ -57,6 +53,9 @@ const DashboardRouter = ({
   isSSO,
   navigationPreferences,
 }) => {
+  // Dynamically import component library css when Enterprise Management phase 2 is featureflag is enabled
+  if (enterpriseManagementPhaseTwoActive) import('@carecru/component-library/dist/carecru.css');
+
   if (!navigationPreferences) return null;
 
   const getNavigationPreference = (page) => navigationPreferences[page] !== 'disabled';
@@ -173,25 +172,13 @@ const DashboardRouter = ({
           <Route
             exact
             path="/recovery-token-invalid"
-            render={(props) => (isAuth ? <Redirect to="/" /> : <RecoveryTokenInvalid {...props} />)}
+            render={(props) => (isAuth ? <Redirect to="/" /> : <RecoveryTokenInvalid {...props}/>)}
           />
           <Route
             exact
             path={resetTest}
             render={(props) => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)}
           />
-          {enterpriseManagementPhaseTwoActive && isSuperAdmin && (
-            <Route
-              path="/enterprise-management"
-              render={() => (
-                <MicroFrontendRenderer
-                  load
-                  className="em-mfe-container"
-                  component={<EMApp basepath="/enterprise-management" />}
-                />
-              )}
-            />
-          )}
           <Route exact path="/redirect" render={ExternalRedirector} />
           <Route path="/" component={Dashboard} />
         </Switch>
