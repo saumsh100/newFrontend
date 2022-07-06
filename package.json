@@ -11,6 +11,7 @@
     "/dist"
   ],
   "scripts": {
+    "preinstall": "npm cache clean --force && npm cache verify",
     "build": "npm run client:build",
     "clean:assets": "rm -rf build",
     "clean:modules": "rm -rf node_modules",
@@ -87,7 +88,7 @@
     "jwt-decode": "^2.1.0",
     "ldclient-js": "^1.5.1",
     "lodash": "^4.17.20",
-    "mini-css-extract-plugin": "^0.12.0",
+    "mini-css-extract-plugin": "^2.6.1",
     "moment": "^2.29.1",
     "moment-range": "^3.1.1",
     "moment-timezone": "^0.5.33",
