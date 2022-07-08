@@ -102,10 +102,17 @@ export function createRequest() {
 
     return bookingWidgetHttpClient()
       .post('/requests', params)
-      .then(() => {
-        dispatch(setIsSuccessfulBooking(true));
-        window.iframeClient && window.iframeClient.sendEvent('completeBooking');
-      })
+      .then(
+        ({
+          data: {
+            entities: { requests },
+          },
+        }) => {
+          dispatch(setIsSuccessfulBooking(true));
+          window.iframeClient && window.iframeClient.sendEvent('completeBooking');
+          return Object.keys(requests)[0];
+        },
+      )
       .catch((err) => {
         console.log('FAILED REQUEST!');
         console.log(err);
@@ -113,7 +120,7 @@ export function createRequest() {
   };
 }
 
-export function createWaitSpot() {
+export function createWaitSpot(requestId) {
   return function (dispatch, getState) {
     const state = getState();
     const {
@@ -123,6 +130,7 @@ export function createWaitSpot() {
       selectedServiceId,
       selectedPractitionerId,
       familyPatientUser,
+      notes,
     } = state.availabilities.toJS();
 
     const params = {
@@ -137,6 +145,9 @@ export function createWaitSpot() {
       practitionerId: selectedPractitionerId !== '' ? selectedPractitionerId : null,
 
       endDate: selectedAvailability && selectedAvailability.startDate,
+      note: notes,
+      source: 'widget',
+      requestId,
     };
 
     return bookingWidgetHttpClient()

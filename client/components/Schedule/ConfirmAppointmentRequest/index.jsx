@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -75,6 +74,10 @@ class ConfirmAppointmentRequest extends Component {
           reinitializeState();
         });
     } else {
+      const modifiedAppointment = selectedAppointment.requestModel.set(
+        'appointmentId',
+        this.state.selectedApp.id,
+      );
       const alertRequestUpdate = {
         success: { body: `Request updated for ${patient.getFullName()}` },
         error: { body: `Request failed for ${patient.getFullName()} Failed` },
@@ -82,7 +85,7 @@ class ConfirmAppointmentRequest extends Component {
       this.props
         .updateEntityRequest({
           key: 'requests',
-          model: selectedAppointment.requestModel,
+          model: modifiedAppointment,
           alert: alertRequestUpdate,
         })
         .then(() => reinitializeState());

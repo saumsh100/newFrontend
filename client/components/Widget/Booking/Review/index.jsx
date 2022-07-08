@@ -64,16 +64,16 @@ class Review extends PureComponent {
   /**
    * Manages if we should create a waitlist and an availability or both
    */
-  submitRequest() {
+  async submitRequest() {
     const { dateAndTime, hasWaitList, history, ...props } = this.props;
-
-    const creationPromises = [
-      ...(dateAndTime ? [props.createRequest()] : []),
-      ...(hasWaitList ? [props.createWaitSpot()] : []),
-    ];
-    return Promise.all(creationPromises)
-      .then(() => history.push('./complete'))
-      .catch((err) => console.error('Creating request failed', err));
+    try {
+      let requestId;
+      if (dateAndTime) requestId = await props.createRequest();
+      if (hasWaitList) await props.createWaitSpot(requestId);
+      history.push('./complete');
+    } catch (err) {
+      console.error('Creating request failed', err);
+    }
   }
 
   render() {
@@ -249,8 +249,9 @@ class Review extends PureComponent {
             {patientUser && (
               <SummaryItem
                 label="Insurance Member ID & Group ID"
-                value={`${patientUser.insuranceMemberId ||
-                  NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`}
+                value={`${patientUser.insuranceMemberId || NOT_PROVIDED_TEXT} - ${
+                  patientUser.insuranceGroupId || NOT_PROVIDED_TEXT
+                }`}
                 link={b('patient-information')}
               />
             )}
