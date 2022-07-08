@@ -26,7 +26,7 @@ export default function ReviewRequests({ reviews, timezone, reviewsChannels }) {
               <Avatar size="sm" user={patient} />
             </div>
             <div className={styles.tasks_col}>
-              <span>
+              <span className={styles.reviewsRequest_flexStart}>
                 <PatientPopover patient={patient}>
                   <div>{`${patient.firstName} ${patient.lastName}`}</div>
                 </PatientPopover>
@@ -45,13 +45,16 @@ export default function ReviewRequests({ reviews, timezone, reviewsChannels }) {
               <AppointmentPopover patient={patient} appointment={appointment}>
                 <span>{getFormattedDate(appointment.startDate, 'MMM Do - h:mm A', timezone)}</span>
               </AppointmentPopover>
-              <span
-                className={classnames(styles.reviewsRequest_iconContainer, {
-                  [styles.reviewsRequest_iconActive]: appointment.isPatientConfirmed,
-                })}
-              >
-                {appointment.isPatientConfirmed && <Icon icon="check" />}
-              </span>
+              {appointment.isPatientConfirmed && (
+                <span
+                  className={classnames(
+                    styles.reviewsRequest_iconContainer,
+                    styles.reviewsRequest_iconActive,
+                  )}
+                >
+                  <Icon icon="check" />
+                </span>
+              )}
             </div>
           </ListItem>
         );

@@ -1,19 +1,30 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Map, List } from 'immutable';
 import Popover from 'react-popover';
 import { connect } from 'react-redux';
-import { IconButton, Button, SHeader, Modal, getUTCDate } from '../../library/index';
+import classNames from 'classnames';
+import {
+  IconButton,
+  SHeader,
+  Modal,
+  getUTCDate,
+  Icon,
+  EnabledFeature,
+  SwitchToggler,
+  StandardButton,
+  Tooltip,
+} from '../../library/index';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
 import CurrentDate from './CurrentDate';
 import { setScheduleView } from '../../../actions/schedule';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
 import { Delete as DeleteWaitSpot, MassDelete } from '../../GraphQLWaitlist';
-import EnabledFeature from '../../library/EnabledFeature';
-import styles from './styles.scss';
-import Tooltip from '../../Tooltip';
+import styles from './reskin-styles.scss';
 
 const confirmDelete = (ids) =>
   window.confirm(
@@ -102,29 +113,32 @@ class Header extends Component {
 
     return (
       <SHeader className={styles.headerContainer}>
-        <CurrentDate
-          timezone={timezone}
-          currentDate={scheduleDate}
-        >
+        <CurrentDate timezone={timezone} currentDate={scheduleDate}>
           <div className={styles.changeDay}>
-            <IconButton
-              icon="angle-left"
-              size={1.3}
-              onClick={() => this.props.previousDay(currentDate)}
-              className={styles.changeDay_left}
-              data-test-id="button_previousDay"
-            />
-            <IconButton
-              icon="angle-right"
-              size={1.3}
-              onClick={() => this.props.nextDay(currentDate)}
-              className={styles.changeDay_right}
-            />
+            <div className={styles.changeDay_left_container}>
+              <IconButton
+                icon="angle-left"
+                onClick={() => this.props.previousDay(currentDate)}
+                className={styles.changeDay_left}
+                data-test-id="button_previousDay"
+              />
+            </div>
+            <div className={styles.changeDay_right_container}>
+              <IconButton
+                icon="angle-right"
+                onClick={() => this.props.nextDay(currentDate)}
+                className={styles.changeDay_right}
+              />
+            </div>
           </div>
 
-          <Button border="blue" onClick={() => this.props.setCurrentDay(new Date())} dense compact>
+          <StandardButton
+            onClick={() => this.props.setCurrentDay(new Date())}
+            variant="secondary"
+            className={styles.headerLinks_waitlist}
+          >
             Today
-          </Button>
+          </StandardButton>
           <div className={styles.header}>
             <Popover
               isOpen={this.state.openFilters}
@@ -145,19 +159,23 @@ class Header extends Component {
             >
               <Tooltip
                 trigger={['hover']}
-                body={<div className={styles.data}>Filter schedule by practitioner or chair</div>}
+                overlay={
+                  <div className={styles.data}>Filter schedule by practitioner or chair</div>
+                }
                 placement="left"
               >
-                <div className={styles.headerLinks}>
-                  <IconButton
-                    dense
-                    compact
-                    border="blue"
-                    onClick={this.toggleFilters}
+                <div
+                  role="button"
+                  className={classNames(styles.headerLinks, styles.filterContainer)}
+                  onClick={this.toggleFilters}
+                >
+                  <StandardButton
                     icon="filter"
-                    size={1}
                     className={styles.headerLinks_icon}
-                  />
+                    variant="secondary"
+                  >
+                    <Icon icon="caret-down" className={styles.headerLinks_caretDown} />
+                  </StandardButton>
                 </div>
               </Tooltip>
             </Popover>
@@ -165,45 +183,41 @@ class Header extends Component {
             <EnabledFeature
               predicate={({ userRole }) => userRole === 'SUPERADMIN'}
               render={() => (
-                <Button
-                  dense
-                  compact
-                  color="blue"
+                <StandardButton
                   onClick={showSchedule}
                   className={styles.headerLinks_waitlist}
+                  variant="primary"
                 >
                   Debug Schedule
-                </Button>
+                </StandardButton>
               )}
             />
 
-            <Button
-              dense
-              compact
-              border="blue"
+            <StandardButton
               className={styles.headerLinks_waitlist}
               onClick={this.toggleWaitlist}
               data-test-id="button_headerWaitlist"
+              variant="secondary"
             >
               Waitlist
-            </Button>
-
-            <Button onClick={this.setView} border="blue" iconRight="exchange" dense compact>
-              {scheduleView === 'chair' ? 'Practitioner View' : 'Chair View'}
-            </Button>
+            </StandardButton>
+            <SwitchToggler
+              onChange={this.setView}
+              rightLabel="Chair View"
+              leftLabel="Practitioner View"
+              checked={scheduleView === 'practitioner'}
+            />
             <EnabledFeature
               predicate={({ noAppointmentWrite }) => !noAppointmentWrite}
               render={() => (
-                <Button
-                  dense
-                  compact
-                  color="blue"
+                <StandardButton
                   onClick={addNewAppointment}
                   className={styles.headerLinks_add}
+                  icon="plus"
                   data-test-id="button_appointmentQuickAdd"
                 >
                   Quick Add
-                </Button>
+                </StandardButton>
               )}
             />
             <Modal

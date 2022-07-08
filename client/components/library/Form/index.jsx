@@ -7,11 +7,9 @@ import FieldArray from './FieldArray';
 import FormSection from './FormSection';
 import FormButton from './FormButton';
 import RemoteSubmitButton from './RemoteSubmitButton';
-import { isHub } from '../../../util/hub';
 import DashboardStyles from './styles.scss';
-import ElectronStyles from './Electron/styles.scss';
 
-const styles = isHub() ? ElectronStyles : DashboardStyles;
+const styles = DashboardStyles;
 
 function Form(props) {
   const {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '../library';
-import styles from './error-page.scss';
+import styles from './reskin-styles.scss';
 
-export default function index() {
+export default function ErrorPage() {
   const tryAgainHandler = () => {
     window.location.reload();
   };
@@ -11,7 +11,7 @@ export default function index() {
     <div className={styles.errorWrapper}>
       <div className={styles.contentWrapper}>
         <div>
-          <img className={styles.errorImg} src="/images/ErrorMessage.png" alt="Error!" />
+          <img className={styles.errorImg} src="/images/ErrorMessage.svg" alt="Error!" />
         </div>
         <div className={styles.header}>Uh oh, something went wrong...</div>
         <div className={styles.supportText}>

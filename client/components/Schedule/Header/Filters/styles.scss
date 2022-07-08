@@ -23,7 +23,7 @@
   &__title {
     font-size: $title-size;
     //padding-left: 15px;
-    font-weight: $large-weight;
+    font-weight: $bold-weight;
     justify-content: center;
     padding-right: 15px;
   }
@@ -135,7 +135,7 @@
     text-transform: uppercase;
     //padding: 2px;
     &__all {
-      font-weight: $large-weight;
+      font-weight: $bold-weight;
     }
   }
 

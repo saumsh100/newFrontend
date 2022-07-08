@@ -1,7 +1,5 @@
-
-@import '../../../styles/ui.scss';
+@import '../../../styles/ui-reskin.scss';
 
 .selectedRouterListItem {
-  color: black !important;
-  font-family: $medium-font;
+  color: $color-lavender-500;
 }

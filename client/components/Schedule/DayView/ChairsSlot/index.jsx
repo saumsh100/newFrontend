@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -26,7 +25,6 @@ export default function ChairsSlot(props) {
     scrollComponentDidMountChair,
     timezone,
   } = props;
-
   const filteredPractitionerIds = schedule.get('practitionersFilter');
 
   return (
@@ -52,7 +50,7 @@ export default function ChairsSlot(props) {
                 }
 
                 const practitionerData = practitionersArray.find(
-                  prac => prac.id === app.get('practitionerId'),
+                  (prac) => prac.id === app.get('practitionerId'),
                 );
 
                 return {
@@ -74,7 +72,7 @@ export default function ChairsSlot(props) {
                 minWidth={schedule.get('columnWidth')}
                 startHour={startHour}
                 endHour={endHour}
-                items={filteredAppointments.concat(events.filter(e => e.chairId === chair.id))}
+                items={filteredAppointments.concat(events.filter((e) => e.chairId === chair.id))}
                 selectAppointment={selectAppointment}
                 scheduleView={schedule.get('scheduleView')}
                 selectedAppointment={schedule.get('selectedAppointment')}

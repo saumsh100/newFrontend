@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map, List } from 'immutable';
@@ -28,17 +27,27 @@ export default function Filters(props) {
     });
 
   const filteredChairs = filteredAppointments.length
-    ? chairs.filter(ch => chairColumns[ch.id])
+    ? chairs.filter((ch) => chairColumns[ch.id])
     : chairs;
   const filteredPracs = filteredAppointments.length
-    ? practitioners.filter(prac => pracColumns[prac.id])
+    ? practitioners.filter((prac) => pracColumns[prac.id])
     : practitioners;
 
-  const selectedFilters = {
-    chairsFilter: schedule.toJS().chairsFilter,
-    practitionersFilter: schedule.toJS().practitionersFilter,
-    remindersFilter: schedule.toJS().remindersFilter,
+  const getOnlySelectedFilters = () => {
+    const { chairsFilter, practitionersFilter } = schedule.toJS();
+    return {
+      chairsFilter: filteredChairs
+        .toArray()
+        .filter((chair) => chairsFilter.indexOf(chair.id) > -1)
+        .map((chair) => chair.id),
+      practitionersFilter: filteredPracs
+        .toArray()
+        .filter((chair) => practitionersFilter.indexOf(chair.id) > -1)
+        .map((practitioner) => practitioner.id),
+      remindersFilter: schedule.toJS().remindersFilter,
+    };
   };
+  const selectedFilters = getOnlySelectedFilters();
 
   const entities = {
     chairsFilter: filteredChairs,

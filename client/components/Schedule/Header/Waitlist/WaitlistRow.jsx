@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { capitalize } from '../../../../util/isomorphic';
@@ -57,7 +56,7 @@ const WaitlistRow = ({
     <td className={tableStyles.col}>{nextApptDate}</td>
     <td className={tableStyles.col} data-width="sm">
       <DropdownMenu
-        labelComponent={props => (
+        labelComponent={(props) => (
           <Button {...props} className={tableStyles.ellipsisButton}>
             <EllipsisIcon />
           </Button>

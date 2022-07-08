@@ -1,0 +1,38 @@
+@import '../../../styles/ui-reskin';
+
+.formNotificationsWrapper {
+  align-items: center;
+  background-color: $color-lavender-050 !important;
+  border: 1px solid $color-lavender-500;
+  border-radius: 15% !important;
+  box-sizing: border-box;
+  display: flex;
+  font-size: $small-size;
+  height: 35px !important;
+  justify-content: center;
+  margin-left: 20px !important;
+  margin-right: 20px !important;
+  width: 28px !important;
+
+  &:hover {
+    background-color: $color-lavender-150 !important;
+    cursor: pointer;
+  }
+
+  > div > div {
+    align-items: center;
+    border-radius: 1.2em;
+    display: flex;
+    height: 1.2em;
+    justify-content: center;
+    min-width: 1.2em;
+    right: -16px;
+    top: -18px;
+  }
+}
+
+.formNotifications {
+  color: $color-lavender-500;
+  font-size: 1.2em !important;
+  margin-left: 1px;
+}

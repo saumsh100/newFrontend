@@ -1,7 +1,7 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin';
 
 .card {
-  background: #fafafa;
+  background: $super-white;
   height: 100%;
   width: 100%;
 }
@@ -12,8 +12,9 @@
 }
 
 .imageContainer {
-  background-color: #e6e6e6;
+  background-color: $super-white;
   background-size: 100%;
+  border-radius: 4px 4px 0px 0px;
   height: 40%;
   opacity: 1;
 
@@ -29,7 +30,8 @@
 }
 
 .dataContainer {
-  background-color: #fafafa;
+  background-color: $super-white;
+  border-radius: 4px;
   display: flex;
   height: 60%;
   position: relative;
@@ -46,10 +48,20 @@
   justify-content: flex-end;
 }
 
+.avatarUser {
+  background: linear-gradient(310.85deg, #948da5 3.59%, #78708d 97.31%);
+  font-weight: $bold-weight;
+}
 .avatarContainer {
-  background-color: #fafafa;
-  border-right: 1px solid $primary-grey;
-  width: 30%;
+  background-color: $super-white;
+  border-radius: 4px;
+  border-right: 1px solid $color-lavender-100;
+  flex: 1 2;
+  &_actionsButton {
+    line-height: normal;
+    margin-top: 8px;
+  }
+
   &_avatar {
     left: 0;
     padding-left: 40px;
@@ -64,12 +76,13 @@
     padding-top: 27px;
     &_nameAge {
       align-items: center;
-      color: #505c68;
-      composes: fontMedium from '../../../../styles/fonts.scss';
+      color: $color-purple-600;
       display: flex;
-      font-size: $extra-medium-size;
+      font-size: $xxx-medium-size;
+      font-weight: $bold-weight;
       height: 25px;
       justify-items: center;
+      line-height: 36px;
       margin-bottom: 2px;
       white-space: nowrap;
       &_name {
@@ -77,30 +90,27 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-
-      &_age {
-      }
     }
 
     &_email {
-      composes: subHeaderSmall from '../../../../styles/fonts.scss';
-      font-size: 11px;
-      font-style: italic;
-      line-height: 11px;
+      color: $color-grey-400;
+      font-size: $small-size;
+      font-weight: $medium-weight;
+      line-height: 16px;
       margin-top: 8px;
     }
 
     &_phone {
-      composes: subHeaderSmall from '../../../../styles/fonts.scss';
-      font-size: 11px;
-      font-style: italic;
-      line-height: 11px;
+      color: $color-grey-400;
+      font-size: $small-size;
+      font-weight: $medium-weight;
+      line-height: 16px;
       margin-top: 8px;
     }
 
     &_icon {
-      composes: subHeaderSmall from '../../../../styles/fonts.scss';
-      line-height: 11px;
+      color: $color-grey-400;
+      line-height: 16px;
       margin-top: 8px;
       padding-right: 10px;
     }
@@ -110,8 +120,7 @@
       border: 1px solid transparent;
       border-radius: 20px;
       box-sizing: border-box;
-      color: #fff;
-      composes: subHeaderExtraSmall from '../../../../styles/fonts.scss';
+      color: red;
       display: inline-flex;
       height: 18px;
       justify-content: center;
@@ -125,15 +134,15 @@
       }
 
       &_inactive {
-        background-color: rgba($primary-darkgrey, 0.1);
-        border-color: $primary-darkgrey;
-        color: $primary-darkgrey;
+        background-color: $color-purple-050;
+        border-color: $color-grey-400;
+        color: $color-grey-400;
       }
 
       &_active {
-        background-color: rgba($primary-blue, 0.15);
-        border-color: $primary-blue;
-        color: $primary-blue;
+        background-color: $color-teal-050;
+        border-color: $color-teal-700;
+        color: $color-teal-700;
       }
     }
   }
@@ -165,9 +174,9 @@
 
 .rightContainer {
   display: flex;
+  flex: 2 1;
   flex-direction: column;
   justify-content: center;
-  width: 70%;
   &_content {
     padding: 20px 20px 20px 30px;
   }
@@ -184,8 +193,7 @@
 }
 
 .fontStyle {
-  color: $primary-dark !important;
-  composes: fontMedium from '../../../../styles/fonts.scss';
+  color: $color-purple-600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

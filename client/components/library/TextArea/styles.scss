@@ -16,7 +16,6 @@ $empty-grey: darken(lightgrey, 5%);
   box-sizing: border-box;
   color: $primary-darkgrey;
   display: block;
-  font-family: $dashboard-font;
   font-size: 12px;
   height: 60px;
   padding: 10px 0;
@@ -37,14 +36,13 @@ $empty-grey: darken(lightgrey, 5%);
 
 // TODO: figure out how to stack the CSS to make sure we dont have to use !important
 .filled {
-  font-size: 10px !important;
+  font-size: 12px !important;
   left: 0 !important;
   top: 6px !important;
 }
 
 .label {
   color: $empty-grey;
-  font-family: $medium-font;
   font-size: $small-size;
   font-weight: normal;
   pointer-events: none;

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -12,7 +13,6 @@ const MessageBubble = ({ isFromPatient, textMessage, timezone }) => {
   const hasFailed = status === 'failed';
   const bodyClasses = classNames(styles.bubbleBody, {
     [styles.fromPatientBody]: isFromPatient,
-    [styles.fromClinicBodyHub]: !isFromPatient,
     [styles.fromClinicBody]: !isFromPatient,
     [styles.failedMessage]: !isFromPatient && hasFailed,
   });

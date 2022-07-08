@@ -83,7 +83,7 @@
 
   &_appData {
     color: $primary-dark;
-    font-size: $extra-small-size;
+    font-size: $x-small-size;
     margin-right: 10px;
     width: 71px;
     @extend .fontMedium;
@@ -125,7 +125,7 @@
     align-items: flex-end;
     color: $primary-dark-grey;
     display: flex;
-    font-size: $extra-small-size;
+    font-size: $x-small-size;
     line-height: 1.1em;
     width: 100%;
 

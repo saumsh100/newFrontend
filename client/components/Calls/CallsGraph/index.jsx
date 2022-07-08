@@ -1,8 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Record } from 'immutable';
-import { LineChart, DateTimeObj } from '../../library';
+import { LineChart } from '../../library';
 import styles from './styles.scss';
 
 function CallsGraph(props) {
@@ -17,9 +16,10 @@ function CallsGraph(props) {
 
   const ticks = {
     fontSize: 14,
-    fontFamily: 'Gotham-Book',
-    fontColor: '#206477',
-    padding: 20,
+    fontFamily: 'Inter',
+    fontStyle: 'bold',
+    fontColor: '#241158',
+    padding: 8,
     maxRotation: 0,
     autoSkip: false,
     beginAtZero: true,
@@ -54,16 +54,20 @@ function CallsGraph(props) {
   const lineChartOptions = {
     maintainAspectRatio: false,
     responsive: true,
+    borderWidth: 3,
     scales: {
       yAxes: [
         {
           ticks,
           gridLines: {
             beginAtZero: true,
+            display: true,
             drawTicks: false,
+            color: '#dedbff',
             tickMarkLength: 20,
             offsetGridLines: false,
-            display: true,
+            zeroLineColor: '#dedbff',
+            drawBorder: true,
           },
         },
       ],
@@ -81,24 +85,29 @@ function CallsGraph(props) {
         paddingTop: 30,
       },
     },
+    layout: {
+      padding: {
+        left: 0,
+        right: 0,
+        top: 8,
+        bottom: 0,
+      },
+    },
   };
 
   const dataSets = [
     {
       label: 'Calls Received',
-      color: 'dark',
+      color: 'lavender500',
       data: newY,
       fill: false,
-      pointColor: 'white',
-      pointHoverColor: 'white',
+      pointColor: 'purple050',
+      pointHoverColor: 'lavender200',
     },
   ];
 
   return (
     <div className={styles.callsGraphContainer}>
-      <div className={styles.subHeader}>
-        {props.startDate.format('MMMM DD, YYYY')} - {props.endDate.format('MMMM DD, YYYY')}
-      </div>
       <div className={styles.callGraph}>
         <LineChart
           displayTooltips
@@ -113,8 +122,6 @@ function CallsGraph(props) {
 }
 
 CallsGraph.propTypes = {
-  startDate: PropTypes.instanceOf(DateTimeObj).isRequired,
-  endDate: PropTypes.instanceOf(DateTimeObj).isRequired,
   callGraphStats: PropTypes.instanceOf(Record).isRequired,
 };
 

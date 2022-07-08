@@ -1,14 +1,13 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin.scss';
 
 .textAreaContainer {
-  background-color: $primary-white;
-  border: 1px solid $chat-border-color;
+  background-color: $super-white;
+  border: 1px solid $color-lavender-100;
   position: relative;
 }
 
 .textAreaBody {
   > div {
-    height: 100%;
     > form {
       height: 100%;
     }
@@ -17,49 +16,46 @@
 
 .pocButton {
   align-self: flex-start;
-  background: $primary-blue;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: $small-size;
   padding: 12px 24px;
 }
 
 .textAreaPoC {
   animation: fadeIn 0.5s ease;
-  background: $color-white;
-  border: 2px solid $info;
+  background: $super-white;
+  border: 1px solid $color-purple-300;
   border-radius: 4px;
   bottom: 0;
   display: flex;
   justify-content: center;
   left: 0;
   overflow: hidden;
+  padding: 16px;
   position: absolute;
   right: 0;
   top: 0;
   z-index: 10;
   .notPoC {
+    color: $color-purple-400;
     display: flex;
     flex-direction: column;
+    font-size: $x-medium-size;
     justify-content: center;
-    max-width: 315px;
     padding: 0 10px;
+    width: 500px;
     p {
       line-height: 1.5;
       margin-top: 0;
-      strong {
-        font-family: $medium-font;
-      }
     }
   }
   .pocHelper {
     border-bottom: 1px solid;
     cursor: pointer;
-    font-family: $medium-font;
   }
   .donnaImg {
     display: none;
-    margin-right: -10px;
-    max-height: 120%;
+    max-height: 80%;
     width: auto;
     @media (min-width: 1220px) {
       display: block;
@@ -96,13 +92,13 @@
       background-color: transparent;
 
       i {
-        color: $primary-blue;
+        color: $color-lavender-500;
       }
     }
   }
 
   i {
-    color: #bcbcbc;
+    color: $color-lavender-500;
     cursor: pointer;
     font-size: calc(1.2rem * 1.6) !important;
   }
@@ -128,11 +124,11 @@
   }
 
   .emoji-mart-anchors {
-    background: $chat-tabs-color;
+    background: $color-grey-100;
     border-radius: 0;
     border-top-left-radius: 4px !important;
     border-top-right-radius: 4px !important;
-    color: #2a3843 !important;
+    color: $color-grey-400 !important;
     margin-bottom: -1px;
     margin-left: -18px;
     margin-right: -18px;
@@ -153,8 +149,8 @@
     }
 
     .emoji-mart-anchor-selected {
-      background-color: white;
-      color: black !important;
+      background-color: $super-white;
+      color: $color-grey-600 !important;
       svg {
         fill: currentColor !important;
       }
@@ -166,20 +162,18 @@
   }
 
   .emoji-mart-search input {
-    background-color: $primary-grey !important;
-    border: none !important;
-    border-radius: 0 !important;
+    background-color: $super-white !important;
+    border: 1px solid $color-purple-200 !important;
+    border-radius: 4px !important;
     box-sizing: border-box;
-    font-family: Gotham-Book;
-    font-size: 14px !important;
+    font-size: $small-size !important;
     height: 30px;
     padding-left: 20px !important;
   }
 
   .emoji-mart-category-label span {
-    color: $primary-dark;
-    font-family: Gotham-Medium;
-    font-weight: bolder;
+    color: $color-purple-600;
+    font-weight: $normal-weight;
   }
 }
 
@@ -198,12 +192,12 @@
     height: 100%;
     padding: 0;
     > textarea {
-      border-bottom: 1px solid $chat-border-color;
-      color: $primary-dark;
+      border-bottom: 1px solid $color-lavender-100;
+      color: $color-purple-200;
       height: 100%;
       padding: 15px;
       &::placeholder {
-        color: $primary-gray;
+        color: $color-purple-200;
       }
     }
   }
@@ -220,7 +214,7 @@
 
 .sendIcon {
   align-items: center;
-  color: darken($primary-blue, 10%);
+  color: $color-lavender-500;
   cursor: pointer;
   display: flex;
   margin-left: auto;
@@ -232,19 +226,18 @@
 
   > label {
     cursor: pointer;
-    font-family: $medium-font;
-    font-size: 12px;
+    font-size: $small-size;
     margin-left: 5px;
   }
 
   &:hover {
-    color: $primary-blue;
+    color: $color-lavender-550;
   }
 }
 
 .sendIconDisabled {
   @extend .sendIcon;
-  color: $primary-gray;
+  color: $color-grey-200;
   cursor: not-allowed;
   > i {
     cursor: not-allowed;
@@ -252,9 +245,5 @@
 
   > label {
     cursor: not-allowed;
-  }
-
-  &:hover {
-    color: $primary-gray;
   }
 }

@@ -1,11 +1,11 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import classNames from 'classnames';
 
 import { createEntityRequest } from '../../../../../thunks/fetchEntities';
-import { Button, ListItem } from '../../../../library';
+import { StandardButton as Button, ListItem } from '../../../../library';
 import { MANAGER_ROLE } from '../user-role-constants';
 
 class InviteUsersList extends Component {
@@ -49,7 +49,7 @@ class InviteUsersList extends Component {
     } = this.props;
     const button =
       currentUserRole !== MANAGER_ROLE && !userIsSSO ? (
-        <Button onClick={onDelete} className={editStyles}>
+        <Button onClick={onDelete} className={classNames(editStyles)} icon="times" variant="danger">
           Cancel Invitation
         </Button>
       ) : null;
@@ -64,7 +64,12 @@ class InviteUsersList extends Component {
           </p>
         </div>
         {!userIsSSO && (
-          <Button onClick={() => this.resendInvite(id)} className={editStyles}>
+          <Button
+            onClick={() => this.resendInvite(id)}
+            className={editStyles}
+            icon="envelope"
+            variant="secondary"
+          >
             Resend Invitation
           </Button>
         )}
@@ -98,11 +103,8 @@ const mapStateToProps = ({ entities }) => ({
   accountId: entities.getIn(['accounts', 'models']).first().id,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ createEntityRequest }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ createEntityRequest }, dispatch);
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(InviteUsersList);

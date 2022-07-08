@@ -1,9 +1,8 @@
-
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox } from '../../../../library';
 
-import styles from '../styles.scss';
+import styles from '../reskin-styles.scss';
 
 const sortAlphabetical = (a, b) => {
   if (a.name && a.name.toLowerCase() < b.name.toLowerCase()) return -1;
@@ -40,25 +39,26 @@ export default function FilterEntities(props) {
       <div className={styles.filter_options__title}>{label}</div>
       <div className={styles.filter_options__item}>
         {showAllCheck}
-        {sortedEntities.toArray().map((entity, index) => {
+        {sortedEntities.toArray().map((entity) => {
           if (!entity) {
             return null;
           }
-
-          const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
+          const entityId = entity.get('id');
+          const checked = selectedFilterItem.indexOf(entityId) > -1;
           return (
-            <div key={index} className={styles.filter_options__checkLabelContainer}>
+            <div key={entityId} className={styles.filter_options__checkLabelContainer}>
               <Checkbox
                 key={entity.get(display)}
                 checked={checked}
-                onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
+                onChange={() => handleEntityCheck(checked, entityId, filterKey)}
               />
-              <div
+              <button
+                type="button"
                 className={styles.filter_options__label}
-                onClick={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
+                onClick={() => handleEntityCheck(checked, entityId, filterKey)}
               >
                 {entity.get(display)}
-              </div>
+              </button>
             </div>
           );
         })}
@@ -68,12 +68,12 @@ export default function FilterEntities(props) {
 }
 
 FilterEntities.propTypes = {
-  display: PropTypes.string,
-  label: PropTypes.string,
-  filterKey: PropTypes.string,
-  allChecked: PropTypes.bool,
-  entities: PropTypes.array,
-  selectedFilterItem: PropTypes.array,
-  handleAllCheck: PropTypes.func,
-  handleEntityCheck: PropTypes.func,
+  display: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  filterKey: PropTypes.string.isRequired,
+  allChecked: PropTypes.bool.isRequired,
+  entities: PropTypes.arrayOf.isRequired,
+  selectedFilterItem: PropTypes.arrayOf.isRequired,
+  handleAllCheck: PropTypes.func.isRequired,
+  handleEntityCheck: PropTypes.func.isRequired,
 };

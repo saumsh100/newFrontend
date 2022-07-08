@@ -7,7 +7,7 @@ import Popover from 'react-popover';
 import PropTypes from 'prop-types';
 import PatientProfile from './PatientProfile';
 import { patientShape } from '../PropTypeShapes';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { getOrCreateChatForPatient } from '../../../thunks/chat';
 
 class PatientPopover extends Component {

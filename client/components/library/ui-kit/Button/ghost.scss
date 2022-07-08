@@ -1,34 +1,37 @@
-@import '../../../../styles/ui.scss';
-@import '../../../../styles/ui-kit.scss';
+@import '../../../../styles/ui-reskin.scss';
 
 .button {
-  @extend .ui-kit-smoother;
-  @extend .fx;
-  background-color: $white;
-  border: 1px solid $grey-lighter;
-  border-radius: $rounded;
-  box-shadow: $shadow;
-  color: $grey-dark;
+  background-color: $super-white;
+  border: 1px solid $color-grey-100;
+  border-radius: 4px;
+  box-shadow: $box-shadow-2;
+  color: $color-grey-400;
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 12px;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  line-height: 20px;
   min-width: 120px;
   outline: none;
-  padding: 11px 16px;
+  padding: 8px 20px;
   text-align: center;
   width: 100%;
 
   &:hover,
   &:focus {
-    @extend .fx;
-    border-color: $grey;
-    color: $grey-darker;
+    background-color: $color-lavender-050;
+    border-color: $color-lavender-400;
+    color: $color-lavender-400;
   }
 
   &[disabled] {
-    background-color: $grey-lighter;
-    color: $grey-dark;
+    background-color: $color-grey-100;
+    color: $color-grey-200;
     cursor: not-allowed;
   }
+}
+
+.active {
+  background-color: $color-lavender-050;
+  border-color: $color-lavender-500;
+  color: $color-lavender-500;
 }

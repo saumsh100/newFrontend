@@ -1,45 +1,42 @@
-@import '../../../styles/ui.scss';
-@import '../../../styles/ui-kit.scss';
-@import './color';
+@import '../../../styles/ui-reskin.scss';
 
 .backDrop {
   animation: none;
-  background: $calendar-backdrop;
-  border: 1px solid $calendar-grey;
   opacity: 0.7;
 }
 
 .modal {
-  background: $calendar-background;
-  border: 1px solid $grey-lighter;
+  background: $super-white;
+  border: 1px solid $color-purple-600;
   border-radius: 4px;
-  box-shadow: $shadow;
+  box-shadow: drop-shadow(2px 2px 32px rgba(7, 0, 82, 0.24));
 }
 
-.header {
-  padding: 24px 24px 0;
+.title {
+  align-items: center;
+  background-color: $color-purple-400;
+  color: $color-lavender-050;
+  display: flex;
+  font-size: $x-medium-size;
+  font-weight: $bold-weight;
+  height: 45px;
+  margin: -1px -1px 0 -1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
 
-  .title {
-    color: $teal;
-    font-size: 16px;
-    letter-spacing: 0;
-    margin: 0 0 10px;
-    padding: 0;
-  }
-
-  .helper {
-    color: $calendar-grey;
-    font-size: 11px;
-    line-height: 1.5;
-    margin: 0 0 16px;
-  }
+.helper {
+  color: $color-purple-600;
+  font-size: $medium-size;
+  font-weight: $normal-weight;
+  line-height: 1.5;
+  margin: 10px 10px 16px;
 }
 
 .content {
   padding: 0 24px 24px;
 
   .groupWrapper {
-    color: $calendar-grey;
     margin-bottom: 16px;
   }
 
@@ -58,11 +55,11 @@
     align-items: center;
     display: flex;
     flex-wrap: wrap;
+    margin-top: 15px;
     width: 100%;
 
     .inputs {
       align-items: center;
-      color: $calendar-grey;
       display: flex;
       font-size: 11px;
       line-height: 1.5;
@@ -75,10 +72,19 @@
   }
 
   .delete {
-    background: transparent;
-    color: $grey-dark;
+    background: $super-white;
+    border: 1px solid $error-500;
+    border-radius: 4px;
+    box-shadow: $box-shadow-4;
+    color: $error-500;
     margin-left: 10px;
     padding: 8px 10px;
+    width: 70px;
+
+    &:hover {
+      background: $error-100 !important;
+      color: $error-600 !important;
+    }
 
     &.disabled {
       display: none;
@@ -87,70 +93,81 @@
     svg {
       width: 12px;
     }
-
-    &:hover {
-      color: $calendar-grey;
-    }
   }
 
   .spacer {
-    color: $calendar-grey;
-    font-size: 11px;
+    color: $color-purple-600;
+    font-size: $medium-size;
+    font-weight: $medium-weight;
     margin: 0 12px;
     text-align: center;
     text-transform: uppercase;
   }
 
   .label {
-    color: $calendar-grey;
+    align-items: center;
+    color: $color-purple-600;
     display: flex;
-    font-size: 12px;
+    font-size: $medium-size;
+    font-weight: $medium-weight;
     margin-bottom: 8px;
   }
 
   .addBreak {
-    background: $white;
-    border: 1px solid $grey-lighter;
+    background: $super-white;
+    border: 1px solid $color-lavender-500;
     border-radius: 4px;
-    box-shadow: $shadow;
-    color: $grey-dark;
-    font-size: 12px;
+    box-shadow: $box-shadow-4;
+    color: $color-lavender-500;
+    font-size: $medium-size;
+    font-weight: $medium-weight;
     text-align: center;
+    &:hover {
+      background-color: $color-lavender-100;
+    }
   }
 }
 
 .errorMessage {
-  color: $red;
+  color: $color-red;
   font-size: 11px;
   margin: 8px 0 0 0;
 }
 
 .labelButton {
   background: transparent;
-  color: $grey-dark;
-  font-size: 11px;
-  font-weight: bold;
+  color: $color-lavender-500;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
   padding: 0;
+  &:hover {
+    background-color: $color-lavender-100;
+  }
+  i,
+  svg {
+    margin-left: 8px;
+  }
 }
 
 .optionButton {
-  background: $white;
-  color: $grey-dark;
+  background: $super-white;
+  color: $color-grey-400;
   display: block;
-  font-size: 10px;
+  font-size: $small-size;
+  font-weight: $medium-weight;
   margin: 0;
   padding: 10px;
   text-align: left;
   width: 100%;
 
   &:hover {
-    background: $calendar-background;
-    color: $teal-dark;
+    background: $color-lavender-050;
+    color: $color-purple-400;
   }
 }
 
 .closeMessage {
-  color: $grey-dark;
+  color: $color-purple-600;
   font-size: 12px;
   font-style: italic;
   margin: 4px 0 16px;
@@ -158,15 +175,16 @@
 
 .optionMenu {
   > div {
-    background: $white;
+    background: $super-white;
     border-radius: 4px;
-    box-shadow: $shadow;
     overflow: hidden;
     padding: 0;
 
     > ul {
-      background: $white;
-      box-shadow: none !important;
+      background: $super-white;
+      border: 1px solid $color-lavender-200;
+      border-radius: 4px;
+      filter: drop-shadow($box-shadow-3);
     }
   }
 }
@@ -176,42 +194,31 @@
 }
 
 .dropdownWrapper {
-  margin-left: 8px;
+  margin-left: 4px;
 }
 
 .footer {
-  border-top: 1px solid $grey-lighter;
+  border-top: 1px solid $color-lavender-100;
   padding: 12px 24px;
   text-align: right;
-
-  .save {
-    background: $teal;
-    border-radius: 4px;
-    box-shadow: $shadow;
-    margin-left: 8px;
-    transition: all 0.2s ease-in;
-
-    &:hover {
-      background: $teal-dark;
-      transition: all 0.2s ease-in;
-    }
-  }
-
-  .cancel {
-    background: transparent;
-    border-radius: 4px;
-    color: $grey-dark;
-    transition: all 0.2s ease-in;
-
-    &:hover {
-      background: $white;
-      box-shadow: $shadow;
-      transition: all 0.2s ease-in;
-    }
-  }
 }
 
 .selectWrapper {
   position: relative;
   width: 100%;
+}
+
+.closeIcon {
+  background-color: transparent;
+  border: none;
+  color: $color-lavender-150;
+  font-weight: $normal-weight;
+  margin-left: auto;
+  width: 30px;
+  &:hover {
+    color: $super-white;
+  }
+}
+.cancelButton {
+  margin-right: 10px;
 }

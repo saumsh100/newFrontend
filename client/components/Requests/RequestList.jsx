@@ -11,7 +11,7 @@ import Requests from '../../entities/models/Request';
 import { List, Media, Icon, getFormattedTime } from '../library';
 import { checkIfUsersEqual } from '../Utils';
 import { isHub } from '../../util/hub';
-import styles from './styles.scss';
+import styles from '../Dashboard/styles'
 import {
   updateEntityRequest,
   deleteEntityRequest,

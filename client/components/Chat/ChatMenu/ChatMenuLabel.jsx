@@ -1,16 +1,14 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './styles.scss';
-import { Icon } from '../../library';
+import styles from './reskin-styles.scss';
+import { StandardButton } from '../../library/index';
 
 export default function ChatMenuLabel({ label, count, ...rest }) {
   return (
-    <div className={styles.chatDropDown} {...rest}>
-      <span className={styles.chatLabel}>
+    <div {...rest}>
+      <StandardButton className={styles.chatDropDown} variant="secondary" iconRight="caret-up">
         {label} {count(label)}
-      </span>
-      <Icon icon="caret-up" type="solid" />
+      </StandardButton>
     </div>
   );
 }

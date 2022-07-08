@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
@@ -6,9 +5,7 @@ import omit from 'lodash/omit';
 import styles from './styles.scss';
 
 export default function CardHeader(props) {
-  const {
-    className, children, title, count, buttons,
-  } = props;
+  const { className, children, title, count, requests } = props;
 
   const classes = classNames(className, styles.cardHeader);
 
@@ -24,7 +21,13 @@ export default function CardHeader(props) {
   let titleComponent = null;
   if (title) {
     titleComponent = (
-      <div className={classes.title || styles.title}>{title}</div>
+      <div
+        className={classNames(classes.title || styles.title, {
+          [styles.titleRequests]: requests,
+        })}
+      >
+        {title}
+      </div>
     );
   }
 
@@ -42,6 +45,18 @@ export default function CardHeader(props) {
   );
 }
 
+CardHeader.defaultProps = {
+  className: '',
+  count: null,
+  requests: false,
+  'data-test-id': null,
+};
+
 CardHeader.propTypes = {
   count: PropTypes.number,
+  requests: PropTypes.bool,
+  className: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string.isRequired,
+  'data-test-id': PropTypes.string,
 };

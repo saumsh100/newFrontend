@@ -1,9 +1,8 @@
-
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Checkbox from '../../Checkbox';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const List = ({
   isOpen,
@@ -23,11 +22,11 @@ const List = ({
         checked={hasSelectedItems}
         showIndeterminate={hasAvailableItems}
         label="Select All"
-        labelClassNames={styles.cbLabel}
+        labelClassNames={styles.selectedcbLabel}
         onChange={onChangeAll}
       />
       {extraPickers &&
-        extraPickers.map(picker => (
+        extraPickers.map((picker) => (
           <Checkbox
             key={picker.label}
             checked={picker.checked}
@@ -41,11 +40,11 @@ const List = ({
     {hasSelectedItems && (
       <div className={styles.selectionGroup}>
         <span className={styles.selectionTitle}>Selected</span>
-        {selectedItems.map(item => (
+        {selectedItems.map((item) => (
           <Checkbox
             checked
             label={item.label}
-            labelClassNames={styles.cbLabel}
+            labelClassNames={styles.selectedcbLabel}
             containerClasses={styles.cbContainer}
             onChange={() => handleSelection(item)}
           />
@@ -55,7 +54,7 @@ const List = ({
     {hasAvailableItems && (
       <div className={styles.selectionGroup}>
         <span className={styles.selectionTitle}>Unselected</span>
-        {availableItems.map(item => (
+        {availableItems.map((item) => (
           <Checkbox
             label={item.label}
             labelClassNames={styles.cbLabel}

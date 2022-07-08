@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { formatPhoneNumber } from '../../../util/isomorphic';
-import { Card, SContainer, SHeader, SBody, Avatar, Icon, IconButton } from '..';
+import { Card, SContainer, SHeader, SBody, Avatar, Icon } from '..';
 import { patientShape } from '../PropTypeShapes';
 import styles from './styles.scss';
 import { getFormattedDate, getTodaysDate } from '../util/datetime';
@@ -14,15 +13,17 @@ const PatientUserProfile = ({ patient, closePopover, timezone }) => {
   return (
     <Card className={styles.card} noBorder id="appPopOver">
       <SContainer>
-        <SHeader className={styles.header}>
+        <SHeader className={styles.patientHeader}>
           <Avatar user={patient} size="xs" />
           <div>
-            <span className={styles.header_text}>{`${patient.firstName} ${patient.lastName}`}</span>
-            {age !== null && <span className={styles.header_age}>{`, ${age}`}</span>}
+            <span
+              className={styles.patientHeader_text}
+            >{`${patient.firstName} ${patient.lastName}`}</span>
+            {age !== null && <span className={styles.patientHeader_age}>{`, ${age}`}</span>}
           </div>
-          <div className={styles.closeIcon}>
-            <IconButton icon="times" onClick={closePopover} />
-          </div>
+          <button type="button" className={styles.closeIcon} onClick={closePopover}>
+            <Icon icon="times" size={1.2} />
+          </button>
         </SHeader>
         <SBody className={styles.body}>
           {patient.gender ? (

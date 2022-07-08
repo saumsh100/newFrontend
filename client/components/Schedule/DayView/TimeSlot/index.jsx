@@ -1,24 +1,22 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import TimeSlotColumn from './TimeSlotColumn';
 import ShowAppointment from './ShowAppointment';
 import ShowMark from './ShowMark';
-import styles from '../styles.scss';
+import styles from '../reskin-styles.scss';
 import {
   calculateAppointmentTop,
   intersectingAppointments,
   sortAppsByStartDate,
   buildAppointmentProps,
 } from './helpers';
-import { hexToRgbA } from '../../../library/util/colorMap';
 
 /**
  * Function to calculate the intersection of appointments,
  * build the props and set the correct component to render
  * @param {*} params
  */
-const renderDisplayComponent = params => (item, index, array) => {
+const renderDisplayComponent = (params) => (item, index, array) => {
   const {
     timeSlotHeight,
     startHour,
@@ -30,6 +28,7 @@ const renderDisplayComponent = params => (item, index, array) => {
     scheduleView,
     unit,
     timezone,
+    fontColor,
   } = params;
 
   const intersectingApps = intersectingAppointments(array, item.startDate, item.endDate, timezone);
@@ -43,6 +42,7 @@ const renderDisplayComponent = params => (item, index, array) => {
     columnIndex,
     numOfColumns,
     minWidth,
+    fontColor,
   };
 
   return item.mark || item.event ? (
@@ -53,7 +53,9 @@ const renderDisplayComponent = params => (item, index, array) => {
       timezone={timezone}
       {...buildAppointmentProps({
         ...defaultApptParams,
-        backgroundColor: hexToRgbA('#d8d8d8', 1),
+        backgroundColor: '#EFEEF2',
+        fontColor: '#564C70',
+        iconColor: '#241158',
       })}
     />
   ) : (

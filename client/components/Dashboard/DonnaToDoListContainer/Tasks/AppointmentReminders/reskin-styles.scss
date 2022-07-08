@@ -1,0 +1,115 @@
+.appointmentReminder {
+  &_list {
+    box-sizing: border-box;
+    padding: 5px 20px 0;
+  }
+
+  &_listItem {
+    border-bottom: none;
+    color: $color-purple-600;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    padding: 10px 0 0;
+
+    &:hover {
+      background-color: unset;
+      cursor: default;
+    }
+  }
+
+  &_center {
+    align-self: center;
+    height: 100%;
+  }
+
+  &_flexStart {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_avatar {
+    padding-bottom: 11px;
+  }
+
+  &_border {
+    border-bottom: 1px solid #efefef;
+  }
+
+  &_listItemWrapper {
+    display: flex;
+    height: 40px;
+    padding: 10px 0px;
+    width: 100%;
+    &.single {
+      height: 40px;
+    }
+  }
+
+  &_muted {
+    font-size: 10px;
+    font-weight: $medium-weight;
+    line-height: 20px;
+  }
+
+  &_type {
+    color: $color-grey-400;
+  }
+
+  &_contactAt {
+    color: $color-purple-400;
+  }
+
+  &_lowercase {
+    text-transform: lowercase;
+  }
+  &_reminderinterval {
+    color: $color-grey-400;
+    font-size: $small-size;
+    font-weight: $bold-weight;
+  }
+  &_iconContainer {
+    background-color: $color-lavender-200;
+    border-radius: 50%;
+    color: $super-white;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: $heavy-weight;
+    height: 12px;
+    margin: 0 0 0 10px;
+    width: 12px;
+    .icon {
+      align-items: center;
+      display: flex;
+      padding: 1px;
+      text-align: center;
+    }
+  }
+
+  &_icon {
+    background-color: $color-lavender-200;
+    border-radius: 50%;
+    color: $super-white;
+    font-size: 8px;
+    font-weight: $bold-weight;
+    margin-left: 10px;
+    padding: 2px;
+  }
+
+  &_fakeIcon {
+    margin-left: 10px;
+    width: 12px;
+  }
+
+  &_dateAndTime {
+    color: $color-purple-400;
+    font-size: $small-size;
+    font-weight: $bold-weight;
+    line-height: 16px;
+    vertical-align: center;
+    &:hover {
+      color: $color-lavender-500;
+    }
+  }
+}

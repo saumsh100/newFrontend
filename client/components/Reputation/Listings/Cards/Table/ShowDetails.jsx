@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.scss';
@@ -26,16 +25,17 @@ export default function ShowDetails(props) {
   return (
     <div className={styles.showDetails}>
       {matchKeys.map((mk) => {
-        let colorStyle = {};
         const displayData = data[mk];
-
-        if (!matches[mk] && mk !== 'country' && mk !== 'website') {
-          colorStyle = { color: '#FF715A' };
-        }
 
         return (
           <div className={styles.showDetails_info} key={mk}>
-            <div className={styles.showDetails_text} style={colorStyle}>
+            <div
+              className={
+                mk === 'city' || mk === 'phone'
+                  ? styles.showDetails_detailStyle
+                  : styles.showDetails_text
+              }
+            >
               {displayData}
             </div>
           </div>
@@ -51,9 +51,11 @@ export default function ShowDetails(props) {
 }
 
 ShowDetails.propTypes = {
-  listingData: PropTypes.arrayOf(PropTypes.shape({
-    anchorData: PropTypes.objectOf(PropTypes.string),
-    anchorDataMatches: PropTypes.objectOf(PropTypes.bool),
-  })).isRequired,
+  listingData: PropTypes.arrayOf(
+    PropTypes.shape({
+      anchorData: PropTypes.objectOf(PropTypes.string),
+      anchorDataMatches: PropTypes.objectOf(PropTypes.bool),
+    }),
+  ).isRequired,
   url: PropTypes.string.isRequired,
 };

@@ -1,9 +1,7 @@
-@import '../../../styles/ui.scss';
-@import '../../../styles/ui-kit.scss';
-@import './color';
+@import '../../../styles/ui-reskin.scss';
 
 .container {
-  background-color: $white;
+  background-color: $super-white;
   border: 0;
   box-sizing: border-box;
   display: flex;
@@ -57,7 +55,7 @@
 }
 
 .caption {
-  color: $grey-dark;
+  color: $color-purple-600;
   display: table-caption;
   font-size: 15px;
   height: calc(1.5rem * 1.6);
@@ -70,15 +68,16 @@
 }
 
 .weekdaysRow {
-  border: 1px solid $grey-lighter;
+  border: 1px solid $color-grey-100;
   display: table-row;
 }
 
 .weekday {
   border: 0;
-  color: $calendar-grey-lighter;
+  color: $color-purple-300;
   display: table-cell;
-  font-size: 11px;
+  font-size: $small-size;
+  font-weight: $normal-weight;
   padding: 15px 0;
   text-align: center;
   text-transform: uppercase;
@@ -105,14 +104,14 @@
 }
 
 .day {
-  background: $white;
-  border: 1px solid $grey-lighter;
+  background: $super-white;
+  border: 1px solid $color-grey-100;
   border-radius: 0;
-  color: $calendar-grey;
+  color: $color-purple-300;
   cursor: pointer;
   display: table-cell;
-  font-size: 11px;
-  font-weight: 500;
+  font-size: $small-size;
+  font-weight: $bold-weight;
   text-align: right;
   transition: all 0.2s ease-in;
   vertical-align: middle;
@@ -123,11 +122,11 @@
   }
 
   &:hover:not(.outside) {
-    background-color: $primary-grey;
+    background-color: $color-grey-100;
   }
 
   &:not([aria-disabled='true']):hover {
-    background: $white;
+    background: $color-lavender-050;
   }
 }
 
@@ -136,31 +135,31 @@
 }
 
 .today {
-  color: $calendar-orange;
+  color: $color-salmon-400;
   font-weight: 500;
 }
 
 .disabled {
-  background-color: $grey-lighter;
-  color: $calendar-outside;
+  background-color: $color-grey-400;
+  color: $color-grey-200;
   cursor: default;
 }
 
 .selected {
-  background-color: $teal;
+  background-color: $color-lavender-500;
   border-radius: 0;
-  color: $primary-white;
+  color: $super-white;
 }
 
 .outside {
   background: repeating-linear-gradient(
     45deg,
-    $white,
-    $white 10px,
-    $calendar-closed 10px,
-    $calendar-closed 20px
+    $super-white,
+    $super-white 10px,
+    $color-grey-050 10px,
+    $color-grey-050 20px
   );
-  color: $calendar-outside;
+
   cursor: default;
 }
 
@@ -179,29 +178,32 @@
 }
 
 .rangePickerDaySelected {
-  background-color: $teal-light;
+  background-color: $color-lavender-050;
   border-radius: 0;
-  color: $primary-white;
+  color: $color-purple-600;
 }
 
 .rangePickerDayDisabled {
-  background-color: $grey-lighter;
-  color: $calendar-grey-lighter;
+  background-color: $color-grey-200;
+  color: $color-grey-400;
   cursor: pointer;
 }
 
 .selectedDay {
   @extend .day;
-  box-shadow: inset 0 0 0 1px $calendar-orange;
+  box-shadow: inset 0 0 0 2px $color-lavender-400;
   transition: all 0.2s ease-in;
 }
 
 .closedDay {
   @extend .day;
-  background: $calendar-closed;
-
+  background: $color-grey-050;
   &:not([aria-disabled='true']):hover {
-    background: $calendar-closed;
+    background: $color-grey-100;
+  }
+
+  &:hover {
+    background: $color-grey-050;
   }
 }
 

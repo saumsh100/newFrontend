@@ -1,9 +1,8 @@
-
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';
 import SegmentButton from '../../../../../library/SegmentButton';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { NOT_SET_LABEL, NOT_SET_OPTION } from '../consts';
 
 const PractitionersSegment = ({ practitionerRule, updatePractitioners }) => {
@@ -11,8 +10,7 @@ const PractitionersSegment = ({ practitionerRule, updatePractitioners }) => {
     () =>
       practitionerRule.rule
         .reduce((pract, curr) => {
-          pract.push({ label: curr.label,
-            value: curr.id });
+          pract.push({ label: curr.label, value: curr.id });
           return pract;
         }, [])
         .concat(NOT_SET_OPTION),
@@ -21,14 +19,14 @@ const PractitionersSegment = ({ practitionerRule, updatePractitioners }) => {
 
   const handleSelectePractitioner = (practitionerIds) => {
     practitionerIds.forEach((id) => {
-      const practitioner = practitionerRule.rule.find(pract => pract.id === id);
+      const practitioner = practitionerRule.rule.find((pract) => pract.id === id);
       if (practitioner) {
         practitioner.selected = true;
       }
     });
 
     practitionerRule.rule
-      .filter(pract => !practitionerIds?.includes(pract?.id))
+      .filter((pract) => !practitionerIds?.includes(pract?.id))
       .forEach((pract) => {
         pract.selected = false;
       });
@@ -47,7 +45,7 @@ const PractitionersSegment = ({ practitionerRule, updatePractitioners }) => {
       if (pract.label === NOT_SET_LABEL && practitionerRule.showNotSet) {
         return true;
       }
-      return practitionerRule.rule.find(p => p.id === pract.value)?.selected;
+      return practitionerRule.rule.find((p) => p.id === pract.value)?.selected;
     })
     .reduce((arr, curr) => {
       arr.push(curr.value);

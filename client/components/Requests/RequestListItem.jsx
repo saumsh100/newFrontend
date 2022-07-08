@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Popover from 'react-popover';
@@ -6,7 +5,7 @@ import { ListItem, getFormattedTime, getUTCDate } from '../library';
 import { checkIfUsersEqual } from '../Utils';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
-import styles from './styles.scss';
+import styles from '../Dashboard/styles'
 import RequestPopover from './RequestPopover';
 import PatientUser from '../../entities/models/PatientUser';
 import Practitioner from '../../entities/models/Practitioners';

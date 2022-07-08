@@ -1,4 +1,4 @@
-@import '../../../../styles/ui-kit';
+@import '../../../../styles/ui-reskin.scss';
 
 .wrapper {
   max-width: 460px;
@@ -6,21 +6,31 @@
 }
 
 .dateWrapper {
-  margin: 0 8px;
-  position: relative;
+  color: $color-grey-400;
 
-  > span {
-    color: $grey-dark;
-    display: block;
-    font-family: $inter;
-    padding: 0 8px;
+  display: block;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  line-height: 20px;
+  margin: 0 8px;
+  padding: 0 8px;
+  position: relative;
+  .active {
+    background-color: $color-lavender-050;
   }
 }
 
+.rightSide {
+  display: flex;
+  flex: 2 1;
+  flex-direction: column;
+}
+
 .dayRangeWrapper {
-  background: $white;
-  border-radius: $rounded;
-  box-shadow: $shadow-md;
+  background: $super-white;
+  border: 1px solid $color-lavender-200;
+  border-radius: 4px;
+  box-shadow: $box-shadow-3;
   display: flex;
   flex-direction: column;
   margin-top: 4px;
@@ -40,28 +50,23 @@
 }
 
 .placeholder {
-  color: $grey-light;
-  font-family: $inter;
+  color: $color-grey-100;
   font-size: 13px;
   font-weight: 400;
 }
 
 .dayRangeInputWrapper {
   align-items: center;
-  background: $white;
-  border: 1px solid $grey-lighter;
-  border-radius: $rounded;
-  box-shadow: $shadow;
+  border: 1px solid $color-grey-200;
+  border-radius: 4px;
   box-sizing: border-box;
-  color: $grey-dark;
+  color: $color-grey-400;
   cursor: pointer;
   display: flex;
-  font-family: $inter;
   font-size: 13px;
   -webkit-font-smoothing: antialiased;
   line-height: 40px;
   padding: 0 16px;
-  @extend .fx;
 
   @media (min-width: 576px) {
     min-width: 420px;
@@ -73,12 +78,22 @@
 
   &.active,
   &:hover {
-    @extend .fx;
-    border-color: $grey-dark;
+    background-color: $color-lavender-050 !important;
+    border-color: $color-lavender-500 !important;
+    color: $color-lavender-500 !important;
+    i {
+      color: $color-lavender-500;
+    }
+  }
+
+  &:hover {
+    .dateWrapper {
+      color: $color-lavender-500 !important;
+    }
   }
 
   svg {
-    color: $grey-dark;
+    color: $color-grey-400;
     height: 14px;
     margin-left: auto;
     width: 14px;
@@ -95,31 +110,34 @@
 
   .dateInput {
     border: 0;
-    border-radius: $rounded;
+    border-radius: 4px;
     box-sizing: border-box;
-    color: $grey-dark;
+    color: $color-grey-400;
     cursor: pointer;
-    font-family: $inter;
-    font-weight: 400;
+
+    font-size: $medium-size;
+    font-weight: $medium-weight;
     height: 32px;
     left: 0;
-    line-height: 37px;
+    line-height: 20px;
     margin: 0;
     max-width: 140px;
     opacity: 0;
     padding: 0;
     position: absolute;
     text-align: center;
-    top: 4px;
+    top: -6px;
     width: 100%;
 
     &.active {
+      color: $color-lavender-500;
       opacity: 1;
     }
 
     &.activeElement,
     &:focus {
-      background: $teal-lightest;
+      background-color: $color-lavender-050 !important;
+      color: $color-lavender-500;
       opacity: 1;
     }
 
@@ -134,13 +152,13 @@
 }
 
 .helpersWrapper {
-  background: $grey-lightest;
-  border-right: 1px solid $grey-lighter;
+  background: $color-grey-050;
+  border-right: 1px solid $color-grey-100;
   box-sizing: border-box;
   display: flex;
-  flex: 1;
+  flex: 1 2;
   flex-direction: column;
-  max-height: 280px;
+  max-height: 295px;
   max-width: 230px;
   min-width: 160px;
   overflow: scroll;
@@ -154,7 +172,36 @@
 .labelWrapper {
   align-items: center;
   display: flex;
+  position: relative;
   width: 100%;
+}
+
+.dateInputGroup {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+.calendarIcon {
+  color: $color-grey-400;
+  font-size: $x-medium-size;
+  font-weight: $normal-weight;
+  width: 14px;
+  &_active {
+    color: $color-lavender-500;
+    font-size: $x-medium-size;
+    font-weight: $normal-weight;
+    width: 14px;
+  }
+}
+
+.typeName {
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  line-height: 20px;
 }
 
 .main {
@@ -163,7 +210,7 @@
 }
 
 .footer {
-  border-top: 1px solid $grey-lighter;
+  border-top: 1px solid $color-grey-100;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -173,6 +220,7 @@
 
   > button {
     margin-right: 8px;
+    width: 96px;
   }
 
   button {

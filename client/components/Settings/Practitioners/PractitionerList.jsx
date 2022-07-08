@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -6,10 +5,11 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../reducers/accountSettings';
-import { Card, Button, SContainer, SHeader, SBody } from '../../library';
+import { Card, Button, SContainer, SBody } from '../../library';
 import PractitionerTabs from './PractitionerTabs';
 import PractitionerItem from './PractitionerItem';
-import PractitionerListFilter, { practitionerFilterOptions } from './PractitionerListFilter';
+import PractitionersHeader from './PractitionersHeader';
+import { practitionerFilterOptions } from './PractitionerListFilter';
 import CreatePractitionerForm from './CreatePractitionerForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import DialogBox from '../../library/DialogBox';
@@ -55,9 +55,26 @@ class PractitionerList extends Component {
   }
 
   setActive() {
-    const active = this.state.active !== true;
-    this.setState({ active });
+    const { active } = this.state;
+    this.setState({ active: !active });
   }
+
+  updateFilter = ({ name, filterFunction }) => {
+    const { practitioners } = this.props;
+    this.setState(
+      (prevState) => ({
+        ...prevState,
+        filter: {
+          name,
+          apply: filterFunction,
+        },
+      }),
+      () => {
+        const firstInList = filterFunction(practitioners).toArray()[0];
+        firstInList && this.props.setPractitionerId({ id: firstInList.get('id') });
+      },
+    );
+  };
 
   createPractitioner(values) {
     const { services } = this.props;
@@ -69,7 +86,7 @@ class PractitionerList extends Component {
 
     let serviceIds = [];
     if (services) {
-      serviceIds = services.toArray().map(service => service.get('id'));
+      serviceIds = services.toArray().map((service) => service.get('id'));
     }
 
     const alert = {
@@ -105,23 +122,6 @@ class PractitionerList extends Component {
     this.setState({ active: false });
   }
 
-  updateFilter = ({ name, filterFunction }) => {
-    const { practitioners } = this.props;
-    this.setState(
-      prevState => ({
-        ...prevState,
-        filter: {
-          name,
-          apply: filterFunction,
-        },
-      }),
-      () => {
-        const firstInList = filterFunction(practitioners).toArray()[0];
-        firstInList && this.props.setPractitionerId({ id: firstInList.get('id') });
-      },
-    );
-  };
-
   render() {
     const { practitioners, services } = this.props;
     const { activePractitioner } = this.state;
@@ -148,67 +148,58 @@ class PractitionerList extends Component {
 
     return (
       <div className={styles.practMainContainer}>
-        <Card className={styles.listCardStyles} noBorder>
-          <SContainer>
-            <SHeader className={styles.listHeader}>
-              <div className={styles.displayFlexCenter}>
-                <Button
-                  onClick={this.setActive}
-                  className={styles.addPractitionerButton}
-                  data-test-id="button_addPractitioner"
-                  secondary
-                >
-                  Add New Practitioner
-                </Button>
-              </div>
-              <div className={styles.practitionerListFilterWrapper}>
-                <PractitionerListFilter
-                  practitioners={practitioners}
-                  filterName={this.state.filter.name}
-                  updateFilter={this.updateFilter}
-                />
-                <div className={styles.badgeCount}>{practitionerCount}</div>
-              </div>
-              <DialogBox
-                active={this.state.active}
-                onEscKeyDown={this.setActive}
-                onOverlayClick={this.setActive}
-                title="Add New Practitioner"
-                actions={actions}
-              >
-                <CreatePractitionerForm formName={formName} onSubmit={this.createPractitioner} />
-              </DialogBox>
-            </SHeader>
-            <SBody>
-              {activePractitioner &&
-                filteredPractitioners
-                  .toArray()
-                  .map(practitioner => (
-                    <PractitionerItem
-                      key={practitioner.get('id')}
-                      id={practitioner.get('id')}
-                      practitionerId={activePractitioner.get('id')}
-                      practitioner={practitioner}
-                      fullName={practitioner.getFullName()}
-                      setPractitionerId={this.props.setPractitionerId}
-                      data-test-id={`${practitioner.get('firstName')}${practitioner.get(
-                        'lastName',
-                      )}`}
-                    />
-                  ))}
-            </SBody>
-          </SContainer>
-        </Card>
-        {activePractitioner && (
-          <Card className={styles.practDataContainer} noBorder>
-            <PractitionerTabs
-              key={activePractitioner.get('id')}
-              practitioner={activePractitioner}
-              setPractitionerId={this.props.setPractitionerId}
-              services={services}
-            />
+        <PractitionersHeader
+          practitioners={practitioners}
+          setActive={this.setActive}
+          listFilterProp={{
+            filterName: this.state.filter.name,
+            updateFilter: this.updateFilter,
+            practitionerCount,
+          }}
+        />
+        <DialogBox
+          active={this.state.active}
+          onEscKeyDown={this.setActive}
+          onOverlayClick={this.setActive}
+          title="Add New Practitioner"
+          actions={actions}
+        >
+          <CreatePractitionerForm formName={formName} onSubmit={this.createPractitioner} />
+        </DialogBox>
+        <div className={styles.listContainer}>
+          <Card className={styles.listCardStyles} noBorder>
+            <SContainer>
+              <SBody>
+                {activePractitioner &&
+                  filteredPractitioners
+                    .toArray()
+                    .map((practitioner) => (
+                      <PractitionerItem
+                        key={practitioner.get('id')}
+                        id={practitioner.get('id')}
+                        practitionerId={activePractitioner.get('id')}
+                        practitioner={practitioner}
+                        fullName={practitioner.getFullName()}
+                        setPractitionerId={this.props.setPractitionerId}
+                        data-test-id={`${practitioner.get('firstName')}${practitioner.get(
+                          'lastName',
+                        )}`}
+                      />
+                    ))}
+              </SBody>
+            </SContainer>
           </Card>
-        )}
+          {activePractitioner && (
+            <Card className={styles.practDataContainer} noBorder>
+              <PractitionerTabs
+                key={activePractitioner.get('id')}
+                practitioner={activePractitioner}
+                setPractitionerId={this.props.setPractitionerId}
+                services={services}
+              />
+            </Card>
+          )}
+        </div>
       </div>
     );
   }
@@ -225,7 +216,9 @@ PractitionerList.propTypes = {
 
 function mapStateToProps({ accountSettings }, { practitioners }) {
   const practitionerId = accountSettings.get('practitionerId');
-  const defaultPractitioners = practitioners.filter(practitioner => practitioner.isActive === true);
+  const defaultPractitioners = practitioners.filter(
+    (practitioner) => practitioner.isActive === true,
+  );
   const selectedPractitioner = practitionerId
     ? practitioners.get(practitionerId)
     : defaultPractitioners.first();
@@ -243,8 +236,5 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 export default enhance(PractitionerList);

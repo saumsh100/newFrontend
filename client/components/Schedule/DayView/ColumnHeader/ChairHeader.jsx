@@ -1,15 +1,18 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 export default function ChairHeader(props) {
-  const { scheduleView, chair } = props;
+  const { chair } = props;
 
-  return <div className={styles.chairContainer}>{chair.name}</div>;
+  return (
+    <div className={styles.chairContainer}>
+      <img src="images/icons/chair-office.svg" alt="office chair icon" />
+      <p>{chair.name}</p>
+    </div>
+  );
 }
 
 ChairHeader.propTypes = {
-  scheduleView: PropTypes.string,
-  chair: PropTypes.object,
+  chair: PropTypes.shape.isRequired,
 };

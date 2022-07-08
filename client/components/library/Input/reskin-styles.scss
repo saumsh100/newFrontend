@@ -1,0 +1,181 @@
+@import '../../../styles/ui-reskin.scss';
+
+$error-color: $color-salmon-600;
+$active-color: $color-purple-400;
+$empty-grey: darken(lightgrey, 5%);
+
+.group {
+  padding: 20px 0;
+  position: relative;
+}
+
+.widgetInput {
+  &:hover:not(.rounded) {
+    border-color: var(--primaryColor) !important;
+  }
+}
+
+.input {
+  background-color: transparent;
+  border: none;
+
+  box-sizing: border-box;
+  color: $color-purple-600;
+  display: block;
+  font-family: $font-inter;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  height: 30px;
+  width: 100%;
+  &:not(.rounded) {
+    border-bottom: 1px solid $color-lavender-100;
+  }
+
+  &::placeholder {
+    color: $color-grey-200;
+    font-style: italic;
+    font-weight: 200;
+  }
+  &:focus {
+    color: $color-purple-600;
+    outline: none;
+  }
+
+  &:focus ~ .label {
+    color: $color-grey-400;
+    // Bring the label above the input when focused / filled in
+    @extend .filled;
+  }
+  &:hover:not(.rounded) {
+    border-bottom: 1px solid $color-lavender-400;
+  }
+}
+
+.noBorderInput {
+  border: none;
+}
+
+.rounded {
+  border-radius: 4px;
+}
+
+.inputWrapper {
+  position: relative;
+}
+.icon {
+  bottom: 30px;
+  opacity: 0.5;
+  position: absolute;
+  right: 0;
+}
+
+.erroredInput {
+  border-bottom: 1px solid $error-color !important;
+  &::placeholder {
+    color: red !important;
+  }
+}
+
+// TODO: figure out how to stack the CSS to make sure we dont have to use !important
+.filled {
+  font-size: $small-size !important;
+  left: 0 !important;
+  top: 5px !important;
+}
+
+.hideLabel {
+  display: none;
+}
+
+.label {
+  color: $color-grey-400;
+  font-size: $medium-size;
+  font-weight: $normal-weight;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 26px;
+  transition: 0.2s ease all;
+}
+
+.primaryColorBorder {
+  border-bottom: 1px solid $color-purple-400;
+}
+
+.erroredLabel {
+  color: $error-color !important;
+}
+
+.erroredIcon {
+  color: $error-color !important;
+}
+
+.dayPickerBar {
+  display: block;
+  position: relative;
+  width: 100%;
+  &:before,
+  &:after {
+    background: $active-color;
+    bottom: 0;
+    content: '';
+    height: 2px;
+    left: 50%;
+    position: absolute;
+    transition: 0.3s ease all;
+    width: 0;
+  }
+}
+
+.input:focus ~ .dayPickerBar {
+  &:before,
+  &:after {
+    left: 0;
+    width: calc(100% + 30px);
+  }
+}
+
+.bar:not(.rounded) {
+  display: block;
+  position: relative;
+  width: 100%;
+  &:before,
+  &:after {
+    bottom: 0;
+    content: '';
+    height: 1px;
+    position: absolute;
+    transition: 0.2s ease all;
+    width: 0;
+  }
+
+  &:before {
+    left: 50%;
+  }
+
+  &:after {
+    right: 50%;
+  }
+}
+
+// Show animation on focus
+.input:focus ~ .bar {
+  &:before,
+  &:after {
+    width: 50%;
+  }
+}
+
+.error {
+  color: $error-color;
+  font-size: 11px;
+  font-weight: normal;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 51px;
+}
+
+.hidden {
+  display: none;
+}

@@ -21,7 +21,7 @@ import { availabilitiesGroupedByPeriod } from '../../../../Widget/Booking/Review
 import PatientSearch from '../../../../PatientSearch';
 import { loadWeeklySchedule } from '../../../../../thunks/waitlist';
 import Loading from '../../../../library/Loading';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const timeFrameOptions = ['morning', 'afternoon', 'evening'];
 

@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
 import SegmentButton from '../../../../../library/SegmentButton';
 import { Checkbox } from '../../../../../library';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const UnitSegment = ({ unitsRule, updateUnitsRule }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +13,7 @@ const UnitSegment = ({ unitsRule, updateUnitsRule }) => {
   const selectedOptionsLen = countActiveOptions();
 
   useEffect(() => {
-    const validUnitsRange = Object.values(unitsFilter).filter(e => e !== null).length > 0;
+    const validUnitsRange = Object.values(unitsFilter).filter((e) => e !== null).length > 0;
     if (showNotSet || validUnitsRange) {
       updateUnitsRule({
         ...unitsRule,
@@ -30,7 +29,7 @@ const UnitSegment = ({ unitsRule, updateUnitsRule }) => {
   }, [unitsFilter, showNotSet]);
 
   function toggleIsOpen() {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   }
 
   function onUnitsRangeChangeHandler(key, val) {
@@ -62,7 +61,7 @@ const UnitSegment = ({ unitsRule, updateUnitsRule }) => {
 
   function countActiveOptions() {
     let count = 0;
-    const unitsFilterInUse = Object.values(unitsFilter).filter(val => val !== null).length > 0;
+    const unitsFilterInUse = Object.values(unitsFilter).filter((val) => val !== null).length > 0;
     if (!isActive) {
       return count;
     }
@@ -107,7 +106,7 @@ const UnitSegment = ({ unitsRule, updateUnitsRule }) => {
                   step={1}
                   min={0}
                   value={unitsFilter.min || ''}
-                  onChange={e => onUnitsRangeChangeHandler('min', e.target.value)}
+                  onChange={(e) => onUnitsRangeChangeHandler('min', e.target.value)}
                 />
               </label>
               <label className={styles.unitsLabel}>
@@ -118,7 +117,7 @@ const UnitSegment = ({ unitsRule, updateUnitsRule }) => {
                   step={1}
                   min={0}
                   value={unitsFilter.max || ''}
-                  onChange={e => onUnitsRangeChangeHandler('max', e.target.value)}
+                  onChange={(e) => onUnitsRangeChangeHandler('max', e.target.value)}
                 />
               </label>
             </div>

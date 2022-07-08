@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,7 +8,7 @@ import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { StyleExtender } from '../Utils/Themer';
 import FetchPatients from '../GraphQLPatientSearch/fetchPatients';
 import composeSearchQuery from '../GraphQLPatientSearch/composeSearchQuery';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const baseTheme = { suggestionsContainerOpen: styles.containerOpen };
 
@@ -58,37 +57,41 @@ class PatientSearch extends Component {
 
   async searchPatients(value, fetchPatients) {
     const { data } = await fetchPatients({ search: value });
-    const suggestions = data.accountViewer.patients.edges.map(v => v.node);
+    const suggestions = data.accountViewer.patients.edges.map((v) => v.node);
     this.setState({ suggestions });
   }
 
   render() {
-    const { inputProps, theme, focusInputOnMount, timezone } = this.props;
+    const { inputProps, theme, focusInputOnMount, timezone, noBorder } = this.props;
     const { suggestions, value } = this.state;
 
-    const finalInputProps = Object.assign({}, inputProps, {
+    const finalInputProps = {
+      ...inputProps,
       value: value || '',
       onChange: this.onInputChange,
-      classStyles: classNames(inputProps.classStyles, styles.toInput),
-    });
+      classStyles: classNames(inputProps.classStyles, styles.toInput, {
+        [styles.toInput]: !noBorder,
+        [styles.noBorderToInput]: noBorder,
+      }),
+    };
 
     const newTheme = StyleExtender(theme, baseTheme);
-    const setSearchData = refetch => data => refetch(composeSearchQuery(data));
-    const suggestion = patient => SuggestionBox(patient, timezone);
-
+    const setSearchData = (refetch) => (data) => refetch(composeSearchQuery(data));
+    const suggestion = (patient) => SuggestionBox(patient, timezone);
     return (
       <FetchPatients>
         {({ refetch }) => (
           <AutoCompleteForm
             data-test-id={this.props['data-test-id']}
             suggestions={suggestions}
-            getSuggestions={val => this.searchPatients(val, setSearchData(refetch))}
+            getSuggestions={(val) => this.searchPatients(val, setSearchData(refetch))}
             onSuggestionSelected={this.onSuggestionSelected}
-            getSuggestionValue={p => p.firstName}
+            getSuggestionValue={(p) => p.firstName}
             inputProps={finalInputProps}
             theme={newTheme}
             focusInputOnMount={focusInputOnMount}
             renderSuggestion={suggestion}
+            noBorder={noBorder}
           />
         )}
       </FetchPatients>
@@ -103,6 +106,7 @@ PatientSearch.propTypes = {
   theme: PropTypes.objectOf(PropTypes.string),
   focusInputOnMount: PropTypes.bool,
   'data-test-id': PropTypes.string,
+  noBorder: PropTypes.bool,
 };
 
 PatientSearch.defaultProps = {
@@ -110,12 +114,10 @@ PatientSearch.defaultProps = {
   inputProps: {},
   theme: {},
   'data-test-id': '',
+  noBorder: false,
 };
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-const mapDispatchToProps = dispatch => bindActionCreators({ fetchEntitiesRequest }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchEntitiesRequest }, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientSearch);
+export default connect(mapStateToProps, mapDispatchToProps)(PatientSearch);

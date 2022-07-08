@@ -1,10 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import Button from '../../library/Button';
+import Button from '../components/Button';
 import { hideButton } from '../../../reducers/widgetNavigation';
 import { historyShape } from '../../library/PropTypeShapes/routerShapes';
 import { BackButtonSVG } from '../SVGs';
@@ -38,9 +37,4 @@ BackButton.propTypes = {
   hideButton: PropTypes.func.isRequired,
 };
 
-export default withRouter(
-  connect(
-    null,
-    mapDispatchToProps,
-  )(BackButton),
-);
+export default withRouter(connect(null, mapDispatchToProps)(BackButton));

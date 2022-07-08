@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Account from '../../../../../entities/models/Account';
 import { generateCallRailKey, removeCallRailKey } from '../../../../../thunks/settings';
 import Field from '../../../../library/Form/Field';
-import { Grid, Col, Row, Button } from '../../../../library';
+import { Grid, Col, Row, StandardButton as Button } from '../../../../library';
 import style from '../styles.scss';
 
 function CallRail({ activeAccount, ...props }) {
@@ -37,7 +37,8 @@ function CallRail({ activeAccount, ...props }) {
             className={style.inlineButton}
           />
           <Button
-            icon="times"
+            icon="trash"
+            variant="danger"
             onClick={removeConfirmation}
             disabled={!hasCallRailId}
             className={style.inlineButton}

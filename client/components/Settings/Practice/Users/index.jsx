@@ -12,7 +12,7 @@ import {
   fetchEntities,
   updateEntityRequest,
 } from '../../../../thunks/fetchEntities';
-import { Button, DialogBox, Header, List, Row } from '../../../library';
+import { StandardButton as Button, DialogBox, Header, List, Row } from '../../../library';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import SettingsCard from '../../Shared/SettingsCard';
 import ActiveUsersList from './ActiveUsersList';
@@ -71,9 +71,22 @@ class Users extends Component {
         className={styles.inviteUser}
         onClick={this.addNewUser}
         data-test-id="addUserButton"
+        icon="plus"
+      >
+        Add a Connector User
+      </Button>
+    ) : null;
+  }
+
+  get addConnectorUserButton() {
+    return this.props.role === SUPERADMIN_ROLE ? (
+      <Button
+        className={styles.inviteUser}
+        onClick={this.addNewUser}
+        data-test-id="addUserButton"
         secondary
       >
-        Add a User
+        Add a Connector User
       </Button>
     ) : null;
   }
@@ -301,14 +314,13 @@ class Users extends Component {
         label: 'Cancel',
         onClick: this.reinitializeStateInviteUser,
         component: Button,
-        props: { border: 'blue' },
+        props: { variant: 'secondary' },
       },
       {
         label: 'Save',
         onClick: this.sendInvite,
         component: RemoteSubmitButton,
         props: {
-          color: 'blue',
           form: formName,
         },
       },
@@ -319,14 +331,13 @@ class Users extends Component {
         label: 'Cancel',
         onClick: this.reinitializeStateNewUser,
         component: Button,
-        props: { border: 'blue' },
+        props: { variant: 'secondary' },
       },
       {
         label: 'Save',
         onClick: this.sendNewUser,
         component: RemoteSubmitButton,
         props: {
-          color: 'blue',
           form: 'newUser',
         },
       },
@@ -337,13 +348,13 @@ class Users extends Component {
         label: 'Cancel',
         onClick: this.reinitializeState,
         component: Button,
-        props: { border: 'blue' },
+        props: { variant: 'secondary' },
       },
       {
         label: 'Save',
         component: RemoteSubmitButton,
         props: {
-          color: 'blue',
+          variant: 'primary',
           form: `${this.state.editUserId}_editUserForm`,
         },
       },
@@ -414,6 +425,7 @@ class Users extends Component {
                 onClick={this.addUser}
                 data-test-id="inviteUserButton"
                 secondary
+                icon="plus"
               >
                 Invite a User
               </Button>

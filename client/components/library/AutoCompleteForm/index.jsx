@@ -1,10 +1,9 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
 import omit from 'lodash/omit';
 import debounce from 'lodash/debounce';
-import { Input } from '../';
+import { Input } from '..';
 import { StyleExtender } from '../../Utils/Themer';
 import baseTheme from './theme.scss';
 
@@ -52,6 +51,8 @@ class AutoCompleteForm extends Component {
       props.className = this.props.className;
     }
     props.theme = this.props.theme;
+    props.noBorder = this.props.noBorder;
+    const isSmallSearch = props.placeholder === 'Search...';
 
     return (
       <Input
@@ -62,6 +63,8 @@ class AutoCompleteForm extends Component {
         }}
         data-test-id={this.props['data-test-id']}
         ref={() => props.ref(this.inputComponent)}
+        rounded={isSmallSearch}
+        noBorder={props.noBorder}
       />
     );
   }
@@ -99,6 +102,7 @@ AutoCompleteForm.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   refCallBack: PropTypes.func,
   'data-test-id': PropTypes.string,
+  noBorder: PropTypes.bool,
 };
 
 AutoCompleteForm.defaultProps = {
@@ -111,7 +115,8 @@ AutoCompleteForm.defaultProps = {
   label: '',
   renderSuggestionsContainer: undefined,
   'data-test-id': '',
-  refCallBack: e => e,
+  refCallBack: (e) => e,
+  noBorder: false,
 };
 
 export default AutoCompleteForm;

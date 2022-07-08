@@ -1,9 +1,9 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin.scss';
 
-.mainContainer {
-  background: white;
+.patientTableMainContainer {
+  background: $super-white;
   box-sizing: border-box;
-  height: 100%;
+  max-height: 830px;
   overflow: hidden;
   width: 100%;
 
@@ -19,18 +19,16 @@
   }
 }
 
-.subHeader {
-  color: $primary-dark;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  font-size: 15px !important;
-  padding-top: 20px;
+.mainContainer {
+  height: 100%;
+  @extend .patientTableMainContainer;
+}
 
-  @media screen and (max-width: 576px) {
-    font-family: $dashboard-font;
-    font-size: 13px !important;
-    font-weight: 700;
-    padding-bottom: 8px;
-  }
+.subHeader {
+  color: $color-purple-600;
+  font-size: $medium-size;
+  font-weight: $bold-weight;
+  line-height: 20px;
 }
 
 .lastAppointmentHeader {
@@ -53,9 +51,9 @@
   }
 }
 
-.continuingCareSection {
-  border-bottom: 1px solid $primary-grey;
-  margin-bottom: 20px;
+.divider {
+  background-color: $color-grey-150;
+  margin: 16px 0px;
 }
 
 .infoRow {
@@ -77,23 +75,19 @@
       &:last-child {
         color: #616b75;
         flex: 1;
-        font-family: $dashboard-font !important;
         text-align: right;
       }
     }
   }
 }
 
-.text {
-  composes: fontMedium from '../../../../styles/fonts.scss';
-}
 .grid {
+  background-color: $super-white-100;
   box-sizing: border-box;
-  padding: 45px 35px 0px;
+  padding: 40px 16px;
 }
 
 .row {
-  border-bottom: 1px solid $primary-grey;
   padding-bottom: 20px;
   padding-top: 15px;
 }
@@ -138,26 +132,10 @@
   padding-top: 20px;
 }
 
-.tab {
-  background-color: $primary-grey;
-  border-right: 1px solid #e3e3e3;
-  box-sizing: border-box;
-  color: $primary-dark;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  display: inline-flex;
-  height: 50px;
-  justify-content: center;
-  padding-top: 12px;
-  width: 50%;
-
-  &:last-child {
-    border-right: 0;
-  }
-}
-
 .activeTab {
-  background-color: $primary-white;
+  background-color: $super-white-100;
   border-bottom: none;
+  color: $color-purple-600;
   transition: ease 0.2s all;
 }
 
@@ -168,68 +146,11 @@
   width: 80%;
 }
 
-.iconContainer {
-  span {
-    padding-left: 10px;
-  }
-
-  color: $primary-darkgrey;
-  cursor: pointer;
-
-  &_caret {
-    color: $primary-dark;
-  }
-}
-
-.ddList {
-  width: 250px;
-}
-
-.ddListItem {
-  background: white;
-  padding: 10px;
-  &:hover {
-    background-color: white !important;
-  }
-}
-
-.infoPadding {
-  padding-top: 25px;
-}
-
-.textContainer {
-  display: flex;
-}
-.hiddenText {
-  margin-left: auto;
-}
-
-.textEdit {
-  align-items: center;
-  color: $primary-darkgrey;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  display: flex;
-  padding-top: 10px;
-
-  &:hover {
-    color: $primary-blue;
-    cursor: pointer;
-  }
-
-  &_text {
-  }
-
-  &_icon {
-    padding-right: 5px;
-  }
-}
-
 .noData {
   align-items: center;
-  color: $primary-dark-grey;
-  composes: fontMedium from '../../../../styles/fonts.scss';
+  color: $color-grey-400;
   display: flex;
-  font-size: $extra-small-size;
+  font-size: $x-small-size;
   height: 652px;
   justify-content: center;
   opacity: 0.6;
@@ -245,11 +166,13 @@
 }
 
 .content {
+  background-color: $super-white-100;
   height: 100%;
   max-height: unset;
   overflow: auto;
+  width: 100%;
 }
 
-.sectionWrapper {
-  padding-top: 20px;
+.langugae {
+  margin: 16px 0px;
 }

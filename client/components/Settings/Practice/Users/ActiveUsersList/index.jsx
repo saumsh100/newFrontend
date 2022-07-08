@@ -1,10 +1,9 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import User from '../../../../../entities/models/User';
-import { Avatar, ListItem, IconButton } from '../../../../library';
+import { Avatar, ListItem, IconButton, Icon } from '../../../../library';
 import { deleteEntityRequest } from '../../../../../thunks/fetchEntities';
 import styles from '../styles.scss';
 import { MANAGER_ROLE, SUPERADMIN_ROLE, OWNER_ROLE, ADMIN_ROLE } from '../user-role-constants';
@@ -126,7 +125,8 @@ class ActiveUsersList extends Component {
               </p>
             </div>
             <p className={styles.email}>
-              {activeUser.getUsername()} - {this.roleDisplay}
+              {activeUser.getUsername()} - <Icon icon="user" className={styles.userIcon} />
+              {this.roleDisplay}
             </p>
           </div>
         </div>
@@ -157,9 +157,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  null,
-  mapDispatchToProps,
-);
+const enhance = connect(null, mapDispatchToProps);
 
 export default enhance(ActiveUsersList);

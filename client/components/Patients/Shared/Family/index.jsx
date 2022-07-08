@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -8,7 +7,7 @@ import { getTodaysDate, getUTCDate } from '../../../library';
 
 const isMemberHead = (member, head) => head && member.ccId === head.ccId;
 
-const sortFamilyMembers = head => (a, b) => {
+const sortFamilyMembers = (head) => (a, b) => {
   if (isMemberHead(a, head)) return -1;
   return isMemberHead(b, head) ? 1 : 0;
 };
@@ -52,7 +51,7 @@ const renderFamilyMembers = (head, timezone) => (node, i, arr) => {
 
 const Family = ({ family, render, timezone }) => {
   const { head } = family;
-  const members = family.members.edges.map(v => v.node);
+  const members = family.members.edges.map((v) => v.node);
 
   return (
     <div
@@ -64,10 +63,7 @@ const Family = ({ family, render, timezone }) => {
 };
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(Family);
+export default connect(mapStateToProps, null)(Family);
 
 Family.propTypes = {
   family: PropTypes.shape({

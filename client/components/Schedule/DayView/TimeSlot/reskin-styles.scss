@@ -1,0 +1,141 @@
+@import '../../../../styles/ui-reskin.scss';
+
+.appointmentContainer {
+  align-items: stretch;
+  background: none;
+  border: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font: inherit;
+  outline: inherit;
+  padding: 0;
+  position: absolute;
+  text-align: left;
+}
+
+.hoverStyle-salmon400 {
+  &:hover {
+    background-color: $color-salmon-400;
+  }
+}
+.hoverStyle-lavender400 {
+  &:hover {
+    background-color: $color-lavender-400;
+  }
+}
+.hoverStyle-yellow500 {
+  &:hover {
+    background-color: $color-yellow-500;
+  }
+}
+.hoverStyle-teal500 {
+  &:hover {
+    background-color: $color-teal-500;
+  }
+}
+
+.showAppointment {
+  border: 1px solid $super-white;
+  border-style: solid;
+  box-sizing: border-box;
+  margin-bottom: 2px;
+  overflow: hidden;
+  padding: 4px;
+  transition: 300ms all cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+
+.showMark {
+  cursor: default;
+}
+
+.mark {
+  cursor: default;
+  font-size: $x-small-size;
+  letter-spacing: 0.5px;
+  overflow: auto;
+  &_note {
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 16px;
+    white-space: normal;
+  }
+}
+
+.box {
+  font-size: 10px;
+  line-height: 16px;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.nameContainer {
+  color: inherit;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+
+  &_name {
+    @extend .box;
+    font-size: $x-small-size;
+    font-weight: 700;
+  }
+
+  &_hours {
+    @extend .box;
+    flex: 1;
+    font-weight: 500;
+    min-width: 56px;
+  }
+}
+
+.icon {
+  align-items: center;
+  display: flex;
+  float: right;
+  font-size: $small-size;
+  font-weight: 900;
+  height: 16px;
+  margin: 0px 8px;
+  i {
+    align-items: center;
+    display: flex;
+  }
+}
+
+.paddingText {
+  padding-right: 5px;
+}
+
+.appPopover > :global(svg.Popover-tip) {
+  fill: white;
+}
+
+.patientNotFound {
+  color: red;
+}
+
+.patientNotFoundIcon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.salmon400 {
+  color: $color-salmon-400;
+}
+
+.lavender400 {
+  color: $color-lavender-400;
+}
+
+.yellow500 {
+  color: $color-yellow-500;
+}
+
+.teal500 {
+  color: $color-teal-500;
+}

@@ -1,7 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Grid, Col } from '../library';
+import { Row, Col, Card } from '../library';
 import style from './style.scss';
 
 export default function FormGenerator({ page, parameters, componentProps }) {
@@ -19,7 +18,7 @@ export default function FormGenerator({ page, parameters, componentProps }) {
 
       return (
         !hideElement && (
-          <div className={style.col} key={formComponent.name}>
+          <div key={formComponent.name}>
             <Element {...elementProps} />
           </div>
         )
@@ -36,7 +35,7 @@ export default function FormGenerator({ page, parameters, componentProps }) {
       const elementProps = componentProps[formComponent.component];
 
       return (
-        <Row end="xs" key={formComponent.name} className={style.row}>
+        <Row end="xs" key={formComponent.name}>
           <Col>
             <Element {...elementProps} />
           </Col>
@@ -45,10 +44,10 @@ export default function FormGenerator({ page, parameters, componentProps }) {
     });
 
   return (
-    <Grid className={style.gridWrapper}>
-      <Row className={style.mainRowWrapper}>{sameRowComponents}</Row>
+    <Card className={style.mainRowWrapper}>
+      {sameRowComponents}
       {newRowComponents}
-    </Grid>
+    </Card>
   );
 }
 

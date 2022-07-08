@@ -1,11 +1,12 @@
-@import '../../../../../styles/ui';
-@import '../../../../../styles/fonts';
+@import '../../../../../styles/ui-reskin.scss';
 
 .total {
   height: 210px;
   &__header {
     border-bottom: 0px;
+    color: $color-grey-400;
     display: flex;
+    font-size: $xxx-medium-size;
     padding: 15px 10px;
     padding-left: 20px;
   }
@@ -47,14 +48,15 @@
       margin-bottom: 5px;
     }
     &_text {
-      color: $primary-dark;
-      composes: subHeaderMedium from '../../../../../styles/fonts.scss';
+      color: $color-purple-400;
+      font-weight: $bold-weight;
     }
     &_data {
-      color: lighten($primary-darkgrey, 20%);
+      color: $color-grey-300;
+      font-weight: $bold-weight;
     }
     &_total {
-      color: $primary-blue;
+      color: $color-purple-400;
       display: flex;
       justify-content: space-between;
     }

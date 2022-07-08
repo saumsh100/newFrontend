@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { isHub } from '../../../util/hub';
-import styles from './styles.scss';
+import styles from '../styles';
 import Icon from '../Icon';
 import { Button } from '..';
 import { SContainer, SHeader, SBody, SFooter } from '../Layout/index';
@@ -24,9 +24,9 @@ class DialogBody extends Component {
     return (
       <SHeader className={styles.header}>
         <div className={styles.title}>{title}</div>
-        <Button className={styles.closeIcon} onClick={this.deactivate}>
+        <div className={styles.closeIcon} onClick={this.deactivate}>
           <Icon icon="times" />
-        </Button>
+        </div>
       </SHeader>
     );
   }
@@ -47,7 +47,7 @@ class DialogBody extends Component {
               <action.component
                 key={`action_${action.label}`}
                 onClick={action.onClick}
-                className={styles.action}
+                className={classNames(styles.action, styles[action.type])}
                 {...action.props}
               >
                 {action.label}

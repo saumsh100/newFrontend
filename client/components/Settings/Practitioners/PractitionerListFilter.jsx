@@ -1,23 +1,24 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Button, DropdownMenu, Icon, MenuItem } from '../../library';
+import { StandardButton as Button, DropdownMenu, MenuItem } from '../../library';
 import styles from './styles.scss';
 import { practitionerShape } from '../../library/PropTypeShapes';
 
 export const practitionerFilterOptions = {
   'All Practitioners': {
     label: 'All',
-    filter: practitioners => practitioners,
+    filter: (practitioners) => practitioners,
   },
   'Active Practitioners': {
     label: 'Active',
-    filter: practitioners => practitioners.filter(practitioner => practitioner.isActive === true),
+    filter: (practitioners) =>
+      practitioners.filter((practitioner) => practitioner.isActive === true),
   },
   'Inactive Practitioners': {
     label: 'Inactive',
-    filter: practitioners => practitioners.filter(practitioner => practitioner.isActive === false),
+    filter: (practitioners) =>
+      practitioners.filter((practitioner) => practitioner.isActive === false),
   },
 };
 
@@ -33,10 +34,12 @@ export default function PractitionerListFilter(props) {
     <DropdownMenu
       align="left"
       className={styles.practitionerListFilter}
-      labelComponent={cb => (
-        <Button {...cb} className={styles.labelButton}>
-          {props.filterName}
-          <Icon icon="caret-down" className={styles.labelButtonIcon} />
+      labelComponent={(cb) => (
+        <Button {...cb} iconRight="caret-down" variant="secondary" className={styles.button}>
+          <div className={styles.button_content}>
+            <p>{props.filterName}</p>{' '}
+            <div className={styles.button_badge}>{props.practitioners.size}</div>
+          </div>
         </Button>
       )}
     >

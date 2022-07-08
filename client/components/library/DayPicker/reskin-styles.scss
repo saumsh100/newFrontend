@@ -1,0 +1,179 @@
+@import '../../../styles/ui-reskin.scss';
+
+.outerContainer {
+  background-color: $super-white;
+  height: 100%;
+  width: 100%;
+}
+
+.helpersContainer {
+  box-shadow: 0 0 4px 0 rgba(black, 0.5);
+  display: flex;
+}
+
+.closeButton {
+  height: 25px;
+  left: 220px;
+  margin-left: auto;
+  position: absolute;
+  width: 25px;
+  z-index: 2000;
+
+  i {
+    font-size: 0.75em !important;
+  }
+}
+
+.calendarContainer {
+  background-color: $super-white;
+  border: 0;
+  -webkit-box-pack: center;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: center;
+  outline: none;
+  padding: calc(1rem * 1.6) calc(1rem * 1.6) calc(0.5rem * 1.6);
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 100%;
+}
+
+.helperFooter {
+  background-color: $super-white;
+  box-sizing: border-box;
+  padding: 14px;
+}
+
+.helpersWrapper {
+  border-bottom: 1px solid $color-lavender-100;
+  border-right: 1px solid $color-lavender-100;
+  box-sizing: border-box;
+  max-width: 250px;
+  padding: 6px 14px 14px;
+}
+
+.helperFieldsWrapper {
+  display: flex;
+
+  > div {
+    padding: 0;
+
+    &:first-of-type {
+      padding-right: 20px;
+    }
+  }
+}
+
+.helperLabel {
+  color: $color-grey-400;
+  display: block;
+  font-size: $small-size;
+  font-weight: 500;
+  line-height: 14px;
+}
+
+.dateInput {
+  position: relative;
+}
+
+.calendarIcon {
+  position: absolute;
+  right: 0;
+}
+
+.wrapperRange {
+  background-color: $super-white;
+  border: 1px solid $color-grey-200;
+
+  div:first-child {
+    border: 0;
+  }
+}
+
+.rangeInputContainer {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.popOverBody {
+  > div {
+    margin-right: 41px;
+  }
+}
+
+.inputGroup {
+  border: 1px solid $color-lavender-100;
+  border-radius: 4px;
+  padding-bottom: 0;
+  padding-top: 0;
+  width: 140px;
+
+  input {
+    cursor: pointer;
+    text-align: center;
+  }
+}
+
+.withShadow {
+  box-shadow: $box-shadow-2;
+}
+
+.helperButton {
+  background: $super-white;
+  box-shadow: 0 0 2px 0 rgba($color-lavender-500, 0.7);
+  color: $color-purple-600;
+  font-size: 11px;
+  line-height: 13px;
+  margin: 8px 0 0;
+  text-align: center;
+  width: 100%;
+
+  &.activeButton {
+    background: $color-lavender-500;
+    color: $super-white;
+  }
+
+  &:hover {
+    background: $color-lavender-100;
+  }
+}
+
+.buttonContainer {
+  align-items: center;
+  border-right: 1px solid $color-lavender-500;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  width: 100%;
+
+  button {
+    width: 100%;
+  }
+}
+
+.arrowTo {
+  color: $color-grey-400;
+  font-weight: $normal-weight;
+  margin: 0 10px;
+}
+
+.start {
+  opacity: 0.75;
+}
+
+.end {
+  opacity: 0.75;
+}
+
+.zIndex {
+  z-index: 999999;
+}

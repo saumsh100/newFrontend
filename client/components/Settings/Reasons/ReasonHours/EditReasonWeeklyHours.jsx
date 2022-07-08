@@ -7,7 +7,7 @@ import renderList from './renderList';
 import ActiveScheduleModifiers from './ActiveScheduleModifiers';
 import { hasError } from '../../../library/ScheduleCalendar/EditSchedule';
 import styles from '../../../library/ScheduleCalendar/modal.scss';
-import ui from '../../../../styles/ui-kit.scss';
+import ui from './styles.scss';
 
 const options = [
   {
@@ -33,7 +33,7 @@ const theme = {
   erroredInput: ui.dropdown__errorInput,
 };
 
-const EditReasonWeeklyHours = props => (
+const EditReasonWeeklyHours = (props) => (
   <Modal
     active={props.isModalVisible}
     onEscKeyDown={props.hideModal}
@@ -55,7 +55,7 @@ const EditReasonWeeklyHours = props => (
                 options={options}
                 data-test-id="reason-weekly-hours"
                 onChange={props.handleOverrideDropdownChange}
-                renderValue={value => options.find(option => option.value === value).label}
+                renderValue={(value) => options.find((option) => option.value === value).label}
                 value={props.active}
                 strict={false}
                 renderList={renderList}
@@ -65,7 +65,7 @@ const EditReasonWeeklyHours = props => (
           </div>
           <ActiveScheduleModifiers {...props}>
             {(option, index) =>
-              (props.active === 'breaks' ? (
+              props.active === 'breaks' ? (
                 <InputGroup
                   isAllow
                   isRemovable
@@ -77,7 +77,7 @@ const EditReasonWeeklyHours = props => (
                   theme={theme}
                   startTime={option.startTime}
                   endTime={option.endTime}
-                  onChange={update => props.updateBreakTime(index, update)}
+                  onChange={(update) => props.updateBreakTime(index, update)}
                 />
               ) : (
                 <InputGroup
@@ -91,9 +91,9 @@ const EditReasonWeeklyHours = props => (
                   theme={theme}
                   startTime={option.startTime}
                   endTime={option.endTime}
-                  onChange={update => props.updateAvailabilities(index, update)}
+                  onChange={(update) => props.updateAvailabilities(index, update)}
                 />
-              ))
+              )
             }
           </ActiveScheduleModifiers>
         </div>

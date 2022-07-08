@@ -1,15 +1,19 @@
 @import '../../../styles/ui';
 @import '../../../styles/fonts';
+@import '../../../styles/ui-reskin.scss';
 
 .filters {
+  &__item {
+    margin-left: 12px;
+  }
   &__checkFilter {
     align-items: center;
-    color: lighten($primary-darkgrey, 20%);
-    composes: subHeader from '../../../styles/fonts.scss';
+    color: $color-purple-600;
     display: flex;
     flex-direction: column;
+    font-weight: $normal-weight;
     justify-content: center;
-    padding: 12px 50px;
+    padding: 12px 20px;
     @media screen and (max-width: 1000px) {
       padding: 12px 20px;
     }
@@ -17,7 +21,6 @@
       align-items: center;
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
       width: 100%;
       div {
         display: inline-block;
@@ -27,17 +30,15 @@
 
   &__header {
     align-items: center;
+    color: $color-purple-600;
     display: flex;
     flex-direction: row;
-    //margin: 10px 0;
     margin: 10px 0 10px 15px;
     &__left {
-      //width: 55%;
       display: flex;
       flex-direction: row;
-      font-family: $medium-font;
       font-size: $medium-size;
-      font-weight: $large-weight;
+      font-weight: $bold-weight;
       justify-content: flex-end;
       span {
         margin-left: 10px;
@@ -48,7 +49,7 @@
       display: flex;
       flex-direction: row;
       font-size: $small-size;
-      font-weight: $large-weight;
+      font-weight: $bold-weight;
       margin-left: auto;
       margin-right: 10px;
       span {
@@ -56,7 +57,7 @@
       }
 
       > button {
-        padding: 0;
+        border: none;
       }
     }
   }
@@ -79,12 +80,11 @@
 
   &__title {
     align-items: flex-end;
-    background-color: $primary-grey;
-    color: $primary-dark;
+    color: $color-purple-600;
     display: flex;
     flex-direction: row;
     font-size: $medium-size;
-    font-weight: $large-weight;
+    font-weight: $medium-weight;
     padding: 10px 20px;
     text-transform: capitalize;
 
@@ -92,7 +92,7 @@
       align-items: center;
       border-radius: 10px;
       border-radius: 50%;
-      color: $primary-white;
+      color: $super-white;
       display: flex;
       flex-direction: column;
       height: 20px;
@@ -116,7 +116,6 @@
       border: 0;
       border: none;
       color: $primary-darkgrey;
-      font-family: $dashboard-font;
       font-size: $medium-size;
       margin: 0 auto;
       margin-left: -4px;

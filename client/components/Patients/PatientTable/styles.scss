@@ -1,4 +1,5 @@
 @import '../../../styles/ui.scss';
+@import '../../../styles/ui-reskin.scss';
 
 .mainContainer {
   box-sizing: border-box;
@@ -6,20 +7,12 @@
   flex-direction: column;
   height: 100%;
   min-width: 1280px;
-  padding: 20px;
+  padding: 16px;
   width: 100%;
 }
 
 .tableProps {
   background: red;
-}
-
-.subHeaderMedium {
-  composes: subHeaderMedium from '../../../styles/fonts.scss';
-}
-
-.subHeader {
-  composes: subHeader from '../../../styles/fonts.scss';
 }
 
 .crownIcon {
@@ -48,7 +41,6 @@
   }
   &_subHeader {
     color: $primary-darkgrey;
-    composes: subHeader from '../../../styles/fonts.scss';
     display: flex;
     padding-top: 10px;
   }
@@ -57,9 +49,6 @@
     font-size: 18px;
     padding-left: 15px;
   }
-}
-
-.rowHeader {
 }
 
 .rowTable {
@@ -108,12 +97,14 @@
   width: 100%;
 
   &_text {
-    align-items: center;
-    display: flex;
-    height: 100%;
-    justify-content: left;
-    text-transform: uppercase;
-    width: 100%;
+    color: $color-purple-600;
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
+    word-wrap: break-word;
   }
 }
 
@@ -127,19 +118,20 @@
 }
 
 .cellText {
-  color: #636363;
-  @extend .subHeader;
+  color: $color-purple-600;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+
   &_lastAppt {
-    color: #636363;
+    color: $color-purple-600;
     padding-top: 3px;
-    @extend .subHeader;
   }
+
   &_revenue {
-    color: #636363;
-    @extend .subHeader;
+    color: $color-purple-600;
   }
   &_status {
-    @extend .subHeader;
+    color: $color-purple-600;
   }
 }
 
@@ -164,7 +156,6 @@
   background: white;
   border-right: none !important;
   display: flex;
-  font-family: $medium-font;
   justify-content: center;
 }
 
@@ -209,8 +200,11 @@
 }
 
 :global(.ReactTable .-pagination) {
-  border-top: 1px solid $primary-grey;
-  color: $primary-darkgrey;
+  border-top: 1px solid $color-lavender-100;
+  color: $Primary-Grey-3-400;
+  font-family: $font-inter;
+  font-size: $medium-size;
+  font-weight: $normal-weight;
 }
 
 :global(.ReactTable .-pagination .-btn) {

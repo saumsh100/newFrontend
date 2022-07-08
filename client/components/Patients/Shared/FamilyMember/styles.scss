@@ -1,7 +1,7 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin.scss';
 
 @mixin withBorder {
-  border-bottom: 1px solid #efefef;
+  border-bottom: 1px solid $super-white-100;
   content: '';
   display: block;
   margin: 0 auto;
@@ -9,29 +9,24 @@
 }
 
 .familyMember {
-  margin-bottom: 30px;
-
   &_withBorder:after {
     @include withBorder;
     width: 100%;
   }
 
   &_row {
-    padding-bottom: 15px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 16px;
   }
 
   &_name {
-    font-size: $medium-plus-size;
-    padding-right: 8px;
-    vertical-align: baseline;
-  }
-
-  &_fontStyle {
-    color: $primary-dark !important;
-    composes: fontMedium from '../../../../styles/fonts.scss';
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: $x-medium-size;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    text-align: left;
   }
 
   &_head {
@@ -39,7 +34,8 @@
   }
 
   &_headColumn {
-    text-align: center;
+    margin-right: 16px;
+    padding-top: 16px;
   }
 }
 
@@ -55,7 +51,6 @@
   }
 
   &_row {
-    margin-bottom: 5px;
     &_head {
       padding: 0;
     }
@@ -67,38 +62,41 @@
   }
 
   &_bullet {
-    color: $inactive-color;
-    font-size: $extra-small-size;
+    color: $color-salmon-500;
+    font-size: $x-small-size;
     padding: 0 10px;
   }
 
   &_button {
-    background: none;
-    border: none;
-    color: $primary-blue-green;
-    composes: fontMedium from '../../../../styles/fonts.scss';
-    cursor: pointer;
-    display: inline-block;
-    font-size: $extra-small-size;
-    padding: 0;
-    &:hover {
-      text-decoration: underline;
+    font-weight: $medium-weight;
+    &_remove {
+      border-color: $error-500;
+      color: $error-500;
+      &:hover {
+        background-color: $error-200;
+      }
     }
-  }
-
-  button.familyMember_config_button_remove {
-    color: $primary-red;
   }
 }
 
 .patientLink {
-  color: $primary-blue;
+  align-items: center;
+  background: transparent;
+
+  border: none;
+
+  color: $color-purple-600;
+
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  font-size: $medium-size;
+  font-weight: $bold-weight;
+  justify-content: flex-start;
+  line-height: 20px;
+
+  padding: 0;
   transition: all 0.1s ease-in-out;
-  &:hover {
-    color: lighten($primary-blue, 10%);
-    transform: scale(1.02);
-  }
   &:focus {
     outline: none;
   }
@@ -106,4 +104,8 @@
 .actionIcon {
   font-size: 1.1em !important;
   margin-right: 8px;
+}
+
+.actionsButtonSmall {
+  margin-right: 16px;
 }

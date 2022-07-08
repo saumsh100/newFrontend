@@ -1,10 +1,8 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { withState } from 'recompose';
-import { Card, Checkbox, Search, Form, Button } from '../../library';
+import { Card, StandardButton as Button } from '..';
 import FilterForm from './FilterForm';
-import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
 
 class Filters extends Component {
@@ -12,23 +10,6 @@ class Filters extends Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.clearAll = this.clearAll.bind(this);
-  }
-
-  clearAll() {
-    const { change, filterKey, initialValues } = this.props;
-
-    const firstKey = Object.keys(initialValues)[0];
-    const firstKeys = Object.keys(initialValues[firstKey]);
-    const secondKey = Object.keys(initialValues)[1];
-    const secondKeys = Object.keys(initialValues[secondKey]);
-
-    firstKeys.map((fk) => {
-      change(filterKey, `${firstKey}.${fk}`, false);
-    });
-
-    secondKeys.map((sk) => {
-      change(filterKey, `${secondKey}.${sk}`, false);
-    });
   }
 
   handleSubmit(values) {
@@ -97,15 +78,27 @@ class Filters extends Component {
     }
   }
 
+  clearAll() {
+    const { change, filterKey, initialValues } = this.props;
+
+    const firstKey = Object.keys(initialValues)[0];
+    const firstKeys = Object.keys(initialValues[firstKey]);
+    const secondKey = Object.keys(initialValues)[1];
+    const secondKeys = Object.keys(initialValues[secondKey]);
+
+    firstKeys.map((fk) => {
+      change(filterKey, `${firstKey}.${fk}`, false);
+    });
+
+    secondKeys.map((sk) => {
+      change(filterKey, `${secondKey}.${sk}`, false);
+    });
+  }
+
   render() {
-    const {
-      filters,
-      selectAll,
-      setAll,
-      initialValues,
-      reset,
-      filterKey,
-    } = this.props;
+    const { filters, selectAll, initialValues, reset, filterKey } = this.props;
+
+    console.log(selectAll,"selectAll")
 
     return (
       <Card className={styles.card}>
@@ -116,10 +109,10 @@ class Filters extends Component {
               <span>Filters</span>
             </div>
             <div className={styles.filters__header__right}>
-              <Button flat onClick={() => reset(filterKey)}>
+              <Button variant="flat" onClick={() => reset(filterKey)}>
                 Select All
               </Button>
-              <Button flat onClick={() => this.clearAll()}>
+              <Button variant="flat" onClick={() => this.clearAll()}>
                 Clear All
               </Button>
             </div>
@@ -138,7 +131,11 @@ class Filters extends Component {
 }
 
 Filters.propTypes = {
-  filters: PropTypes.arrayOf(Object),
+  filters: PropTypes.arrayOf(Object).isRequired,
+  filterKey: PropTypes.string.isRequired,
+  initialValues: PropTypes.object,
+  reset: PropTypes.func.isRequired,
+  selectAll: PropTypes.bool.isRequired,
 };
 
 const enhance = withState('selectAll', 'setAll', false);

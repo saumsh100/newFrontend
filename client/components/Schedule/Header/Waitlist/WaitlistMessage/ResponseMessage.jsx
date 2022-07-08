@@ -1,10 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import groupBy from 'lodash/groupBy';
 import PreviewMessage from './PreviewMessage';
 import PatientTooltip from './PatientTooltip';
-import { Button, Icon } from '../../../../library';
+import { Button } from '../../../../library';
 import styles from './styles.scss';
 
 const ResponseMessage = ({ sentMessages, goToWaitlistTable, textMessage }) => {
@@ -13,20 +12,6 @@ const ResponseMessage = ({ sentMessages, goToWaitlistTable, textMessage }) => {
 
   return (
     <div className={styles.responseMessageContainer}>
-      <div>
-        <div
-          className={styles.redirect}
-          onClick={goToWaitlistTable}
-          role="button"
-          tabIndex={0}
-          onKeyUp={e => e.keyCode === 13 && goToWaitlistTable}
-        >
-          <div className={styles.iconWrapper}>
-            <Icon size={1} icon="chevron-left" />
-          </div>
-          Cancel and return to waitlist
-        </div>
-      </div>
       <div className={styles.heading}>
         {success.length > 0 && (
           <span>

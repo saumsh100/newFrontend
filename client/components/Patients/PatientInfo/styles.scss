@@ -1,72 +1,14 @@
-@import '../../../styles/ui.scss';
-
-@mixin responsiveMainContainer {
-  max-width: none !important;
-  min-width: auto !important;
-  padding: 10px !important;
-}
-
-@mixin containerSections {
-  background: $primary-white;
-  display: block;
-  padding: 0;
-  width: 100%;
-}
-
-.responsiveContainer {
-  @media screen and (max-width: 576px) {
-    @include responsiveMainContainer;
-
-    .body,
-    .topDisplay,
-    .infoDisplay,
-    .timeline {
-      @include containerSections;
-    }
-
-    .topDisplay {
-      height: 150px;
-      max-height: none;
-    }
-
-    .tabsSection {
-      display: block;
-    }
-  }
-}
+@import '../../../styles/ui-reskin.scss';
 
 .tabsSection {
   display: none;
-}
-
-.tab {
-  background: $primary-white;
-  border: 1px solid $electron-chat-tabs-border;
-  font-family: $medium-font;
-  font-size: 11px;
-  height: 30px;
-  text-transform: uppercase;
-}
-
-.activeTab {
-  @extend .tab;
-  border: none !important;
-  border-top: 1px solid $electron-chat-tabs-border !important;
-}
-
-.inactiveTab {
-  @extend .tab;
-  background-color: $chat-tabs-color;
-  color: $primary-dark;
 }
 
 .mainContainer {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 100%;
   margin: 0 auto;
-  //overflow: auto;
   max-width: 1566px;
   min-width: 1200px;
   padding: 35px 15px 15px;
@@ -74,8 +16,12 @@
   @media screen and (max-width: 1366px) {
     padding-top: 15px;
   }
+}
 
-  @extend .responsiveContainer;
+.sideCard {
+  padding: 0px 16px 16px;
+  position: sticky;
+  top: 8px;
 }
 
 .body {
@@ -101,21 +47,17 @@
 
 .infoDisplay {
   display: flex;
+  flex: 1 2;
   flex-direction: column;
   padding-right: 15px;
-  width: 455px;
 }
 
 .timeline {
+  background-color: $super-white;
   display: flex;
-  flex: 1;
+  flex: 2 1;
   flex-direction: column;
-  &_header {
-    color: $primary-darkgrey;
-    composes: fontMedium from '../../../styles/fonts.scss';
-    padding-bottom: 10px;
-    padding-top: 25px;
-  }
+  max-height: 900px;
 }
 
 .loadingContainer {
@@ -127,7 +69,6 @@
 }
 
 .textContainer {
-  display: flex;
   flex-direction: row;
   margin-bottom: 10px;
   margin-top: 10px;
@@ -136,29 +77,12 @@
 }
 
 .cardTitle {
-  composes: fontMedium from '../../../styles/fonts.scss';
-  font-size: 15px;
-}
-
-.textHeader {
-  align-items: center;
-  background: none;
-  color: $primary-darkgrey;
-  composes: fontMedium from '../../../styles/fonts.scss';
-  display: flex;
-  margin-left: auto;
-  padding-bottom: 2px;
-
-  &:hover {
-    color: $primary-blue;
-    cursor: pointer;
-  }
-
-  &_text {
-  }
-
-  &_icon {
-    padding-right: 5px;
+  color: $color-grey-400;
+  font-size: $xx-medium-size;
+  font-weight: $medium-weight;
+  line-height: 30px;
+  &_timeline {
+    padding: 0px 16px;
   }
 }
 
@@ -194,50 +118,20 @@
       z-index: 2;
     }
   }
-
-  i {
-    color: $primary-white;
-    font-weight: 900;
-  }
-
-  &:before {
-    background-color: $empty-grey;
-    border-radius: 50%;
-    content: '';
-    display: block;
-    height: 25px;
-    position: absolute;
-    top: 0;
-    width: 25px;
-    z-index: 1;
-  }
 }
 
 .editButtonMobile {
-  top: 125px;
-  z-index: 10;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 }
 
-.notesForm {
-  textarea {
-    background-color: $primary-lightgrey !important;
-    color: black;
-    font-size: 14px;
-    height: 100px;
-    line-height: 1.5em;
-    padding: 10px;
-  }
-
-  span[class*='error'] {
-    bottom: 5px;
-    top: unset;
-  }
-
-  > div[class*='toggleWrapper'] {
-    margin-bottom: 10px;
-    > label {
-      color: $primary-darkgrey;
-      margin-right: 10px;
-    }
+.headerModalButton {
+  background-color: transparent;
+  border: none;
+  font-weight: $bold-weight;
+  &:hover {
+    background-color: transparent;
+    color: $color-lavender-550;
   }
 }

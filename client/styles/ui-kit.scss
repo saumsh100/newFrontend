@@ -65,7 +65,6 @@ $yellow-dark: #e3a83b;
 
   &__input {
     color: $grey-dark;
-    font-family: $inter;
     font-size: 13px;
     font-weight: 500;
   }
@@ -85,7 +84,6 @@ $yellow-dark: #e3a83b;
   &__listItem {
     border: 0;
     color: $grey-dark;
-    font-family: $inter;
     font-size: 13px;
     font-weight: 500;
     justify-content: flex-start;
@@ -116,7 +114,6 @@ $yellow-dark: #e3a83b;
 .modal {
   &__title {
     color: $teal-dark;
-    font-family: $inter;
     font-size: 18px;
     font-weight: 500;
     margin: 0;
@@ -125,7 +122,6 @@ $yellow-dark: #e3a83b;
 
   &__helper {
     color: $grey-dark;
-    font-family: $inter;
     font-size: 14px;
     font-weight: 500;
     margin: 18px 0 12px;
@@ -138,7 +134,6 @@ $yellow-dark: #e3a83b;
     box-shadow: $shadow;
     color: $grey-dark;
     display: block;
-    font-family: $inter;
     font-size: 13px;
     font-weight: 500;
     margin-top: 8px;
@@ -150,7 +145,6 @@ $yellow-dark: #e3a83b;
     border: 1px solid transparent;
     border-radius: 4px;
     color: $grey-dark;
-    font-family: $inter;
     font-size: 14px;
     font-weight: 500;
     padding: 12px 20px;
@@ -168,7 +162,6 @@ $yellow-dark: #e3a83b;
     background: $teal;
     border-radius: 4px;
     box-shadow: $shadow;
-    font-family: $inter;
     font-size: 14px;
     font-weight: 500;
     margin-left: 8px;
@@ -195,7 +188,6 @@ $yellow-dark: #e3a83b;
 
   &__label {
     color: $grey;
-    font-family: $inter;
     font-size: 12px;
     font-weight: normal;
   }
@@ -204,7 +196,6 @@ $yellow-dark: #e3a83b;
 .fieldLabel {
   color: $grey-light;
   display: block;
-  font-family: $inter;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.02px;

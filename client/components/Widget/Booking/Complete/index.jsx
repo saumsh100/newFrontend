@@ -3,7 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { Button, getFormattedDate } from '../../../library';
+import { getFormattedDate } from '../../../library';
+import { Button } from '../../components';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
@@ -49,8 +50,9 @@ function Complete({
       selectedService.get('duration'),
     );
 
-  const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId ||
-    NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`;
+  const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId || NOT_PROVIDED_TEXT} - ${
+    patientUser.insuranceGroupId || NOT_PROVIDED_TEXT
+  }`;
   return (
     <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>

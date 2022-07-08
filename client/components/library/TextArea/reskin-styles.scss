@@ -1,0 +1,130 @@
+@import '../../../styles/ui-reskin.scss';
+
+.group {
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid $color-lavender-100;
+  box-sizing: border-box;
+  color: $color-purple-200 !important;
+  display: block;
+  font-size: $small-size;
+  height: 60px;
+  line-height: 16px;
+  padding: 10px 0;
+  resize: none;
+  transition: 0.2s ease all;
+  width: 100%;
+
+  &:focus {
+    background-color: $super-white !important;
+    color: $color-purple-600 !important;
+    outline: none;
+  }
+
+  &:focus ~ .label {
+    color: $color-lavender-500;
+  }
+}
+
+.erroredInput {
+  border-bottom: 1px solid $error-color;
+}
+
+// TODO: figure out how to stack the CSS to make sure we dont have to use !important
+.filled {
+  font-size: $small-size !important;
+  font-weight: 500 !important;
+  left: 0 !important;
+  top: 6px !important;
+}
+
+.label {
+  color: $color-grey-400;
+  font-weight: normal;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+.labelWrapper {
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.primaryColorBorder {
+  border-bottom: 1px solid $color-lavender-100;
+}
+
+.theme {
+  &_primaryWhiteLabel {
+    color: $super-white;
+  }
+  &_primaryWhiteInput {
+    border-bottom: 1px solid $super-white;
+  }
+
+  &_primaryGreyLabel {
+    color: $color-grey-200;
+  }
+  &_primaryGreyInput {
+    border-bottom: 1px solid $color-grey-200;
+    color: $color-grey-200;
+
+    &:focus ~ .label {
+      color: $super-white;
+    }
+  }
+
+  &_primaryWhiteBorder {
+    border-color: $super-white;
+  }
+}
+
+.erroredLabel {
+  color: $error-color;
+}
+
+.bar {
+  display: block;
+  position: relative;
+  width: 100%;
+  &:before,
+  &:after {
+    background: $color-lavender-400;
+    bottom: 0;
+    content: '';
+    height: 1px;
+    position: absolute;
+    transition: 0.2s ease all;
+    width: 0;
+  }
+
+  &:before {
+    left: 50%;
+  }
+
+  &:after {
+    right: 50%;
+  }
+}
+
+// Show animation on focus
+.input:focus ~ .bar {
+  &:before,
+  &:after {
+    width: 50%;
+  }
+}
+
+.error {
+  color: $error-color;
+  font-size: 11px;
+  font-weight: normal;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 62px;
+}

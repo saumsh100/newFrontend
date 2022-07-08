@@ -1,4 +1,54 @@
-@import '../../../styles/ui.scss';
+@import '../../../styles/ui-reskin.scss';
+
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.servicesHeader {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 23.5px;
+
+  &_counter {
+    align-items: center;
+
+    background-color: $super-white;
+    border: 1px solid $color-grey-150;
+    border-radius: 4px;
+    box-shadow: $box-shadow-3;
+
+    color: $color-purple-600;
+    display: flex;
+    flex-direction: row;
+    font-size: $xxx-medium-size;
+    height: 51px;
+    justify-content: center;
+    width: 160px;
+
+    &_badge {
+      align-items: center;
+      background-color: $color-grey-300;
+      border-radius: 50%;
+
+      color: $super-white;
+      display: flex;
+      font-size: $medium-size;
+      font-weight: $bold-weight;
+
+      height: 20px;
+      justify-content: center;
+      line-height: $xxx-medium-size;
+
+      margin-left: 8px;
+      text-align: center;
+      width: 22px;
+    }
+  }
+}
 
 .servicesMainContainer {
   display: flex;
@@ -11,15 +61,12 @@
   margin-right: 15px;
   max-width: 270px;
   min-width: 270px;
-  padding-top: 20px;
   width: 270px;
 }
 
 .modalContainer {
   align-items: center;
-  background: $primary-white;
   border-bottom: 1px solid;
-  border-bottom-color: $primary-grey;
   display: inline-block;
   justify-content: center;
   width: 100%;
@@ -48,26 +95,32 @@
 }
 
 .servicesListItem {
+  color: $color-grey-400;
   display: -webkit-box;
-  height: 40px;
+  height: 62px;
   padding: 30px;
 
   &_text {
-    composes: listItemHeader from '../../../styles/fonts.scss';
-    font-size: 12px;
-    line-height: 13px;
+    font-size: $small-size;
+    font-weight: $semi-bold-weight;
+    letter-spacing: 0.06em;
+    line-height: 23px;
+
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: uppercase;
     white-space: normal;
+    &_active {
+      color: $color-lavender-500;
+    }
   }
 
   &_duration {
-    composes: subHeaderExtraSmall from '../../../styles/fonts.scss';
-    line-height: 11px;
-    padding-top: 10px;
+    font-weight: $medium-weight;
+    line-height: 16px;
 
     &_text {
-      color: $primary-dark;
+      color: $color-purple-600;
     }
   }
 
@@ -109,7 +162,6 @@
     width: 230px;
 
     &_text {
-      font-family: $medium-font;
       padding-bottom: 5px;
     }
 
@@ -145,14 +197,6 @@
   overflow: unset;
 }
 
-.serviceHeaderContainer {
-  align-items: center;
-  border-bottom: 1px solid;
-  border-bottom-color: $primary-lightgrey;
-  display: flex;
-  margin-left: 15px;
-}
-
 .trashButton {
   margin-left: auto;
 }
@@ -171,13 +215,15 @@
   min-width: 100px;
   width: 40%;
 
-  &__createRow {
-  }
-
   &_hiddenText {
     align-content: center;
     align-items: center;
+
+    color: $color-purple-600;
     display: flex;
+    font-size: $medium-size;
+    font-weight: $medium-weight;
+    line-height: 20px;
     padding-bottom: 25px;
     width: 230px;
 
@@ -186,7 +232,7 @@
     }
 
     &_toggle {
-      margin-left: auto;
+      margin-left: 30px;
     }
   }
 
@@ -209,7 +255,7 @@
 }
 
 .scheduleWrapper {
-  border: 1px solid #efefef;
+  border: 1px solid $color-grey-100;
   border-radius: 4px;
   min-height: 300px;
   width: 100%;
@@ -220,4 +266,13 @@
 }
 .tooltipBody {
   width: 200px;
+}
+
+.tab {
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  line-height: 20px;
+  &_active {
+    border-bottom: 2px solid $color-lavender-500;
+  }
 }

@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from 'react';
 import { List } from 'immutable';
 import PropTypes from 'prop-types';
@@ -11,7 +10,8 @@ import { change, formValueSelector, submit, touch } from 'redux-form';
 import classNames from 'classnames';
 import { logout } from '../../../../thunks/patientAuth';
 import carriers from './insurance_carriers';
-import { Field, Form, IconButton, Loading } from '../../../library';
+import { Form, IconButton, Loading } from '../../../library';
+import { Field } from '../../components';
 import {
   addNewFamilyPatient,
   fetchFamilyPatients,
@@ -39,7 +39,7 @@ import {
   showButton,
 } from '../../../../reducers/widgetNavigation';
 import { dropdownTheme, inputTheme } from '../../theme';
-import Button from '../../../library/Button';
+import Button from '../../components/Button';
 import styles from './styles.scss';
 
 /**
@@ -60,7 +60,7 @@ const genders = [
  * @param erroWrapper
  * @returns {string|undefined}
  */
-const getError = erroWrapper =>
+const getError = (erroWrapper) =>
   erroWrapper && Object.keys(erroWrapper).length > 0 && Object.keys(erroWrapper)[0];
 
 const NEW_PATIENT = 'new';
@@ -72,7 +72,7 @@ const FORM_NAME = 'patientInformation';
  * @param {{label, value}} data
  * @param {string} value
  */
-const validateField = (data, value) => data.find(item => item.value === value);
+const validateField = (data, value) => data.find((item) => item.value === value);
 
 const defaultValues = {
   birthDate: '',
@@ -141,6 +141,26 @@ class PatientInformation extends PureComponent {
     return this.props.setFamilyPatientUser(patientId);
   }
 
+  /**
+   * Check if the user is changing the form,
+   * but did not select any patient yet set the patientUser to a new-one.
+   *
+   * @param {object} values
+   */
+  handleFormChanges(values) {
+    // clear insuranceMemberId, insuranceGroupId
+    // if insurance carrier is "Pay for myself"
+    const { insuranceCarrier } = values;
+    if (insuranceCarrier === 'Pay for myself') {
+      this.props.change(FORM_NAME, 'insuranceGroupId', null);
+      this.props.change(FORM_NAME, 'insuranceMemberId', null);
+    }
+
+    if (values && !values.patientUser) {
+      this.props.change(FORM_NAME, 'patientUser', NEW_PATIENT);
+    }
+  }
+
   async updateUserProfile(values) {
     const { selectedFamilyPatientUserId, location } = this.props;
 
@@ -176,26 +196,6 @@ class PatientInformation extends PureComponent {
       }
     }
     return false;
-  }
-
-  /**
-   * Check if the user is changing the form,
-   * but did not select any patient yet set the patientUser to a new-one.
-   *
-   * @param {object} values
-   */
-  handleFormChanges(values) {
-    // clear insuranceMemberId, insuranceGroupId
-    // if insurance carrier is "Pay for myself"
-    const { insuranceCarrier } = values;
-    if (insuranceCarrier === 'Pay for myself') {
-      this.props.change(FORM_NAME, 'insuranceGroupId', null);
-      this.props.change(FORM_NAME, 'insuranceMemberId', null);
-    }
-
-    if (values && !values.patientUser) {
-      this.props.change(FORM_NAME, 'patientUser', NEW_PATIENT);
-    }
   }
 
   scrollTo(name) {
@@ -234,7 +234,7 @@ class PatientInformation extends PureComponent {
 
     const patients = familyPatients
       .sort(SortByFirstName)
-      .map(patient => ({
+      .map((patient) => ({
         value: patient.id,
         label: `${patient.firstName} ${patient.lastName}`,
       }))
@@ -250,7 +250,7 @@ class PatientInformation extends PureComponent {
      *
      * @param {object} values
      */
-    const asyncEmailValidation = values =>
+    const asyncEmailValidation = (values) =>
       patientIsUser &&
       patientUser &&
       patientUser.email &&
@@ -332,11 +332,11 @@ class PatientInformation extends PureComponent {
                     required
                     className={styles.ddMenu}
                     theme={dropdownTheme(styles)}
-                    validateValue={value => validateField(patients, value) || value === null}
-                    renderValue={value =>
-                      (value === 'Someone Else' || value === ''
+                    validateValue={(value) => validateField(patients, value) || value === null}
+                    renderValue={(value) =>
+                      value === 'Someone Else' || value === ''
                         ? value
-                        : patients.find(patient => patient.value === value).label)
+                        : patients.find((patient) => patient.value === value).label
                     }
                     options={patients}
                     data-test-id="gender"
@@ -391,8 +391,8 @@ class PatientInformation extends PureComponent {
                     label="Gender"
                     component={SuggestionSelect}
                     theme={dropdownTheme(styles)}
-                    validateValue={value => validateField(genders, value)}
-                    renderValue={value =>
+                    validateValue={(value) => validateField(genders, value)}
+                    renderValue={(value) =>
                       (validateField(genders, value) && validateField(genders, value).label) || ''
                     }
                     options={genders}
@@ -434,10 +434,10 @@ class PatientInformation extends PureComponent {
                             component={SuggestionSelect}
                             theme={dropdownTheme(styles)}
                             required
-                            validateValue={value =>
+                            validateValue={(value) =>
                               validateField(carriers, value) || value === null
                             }
-                            renderValue={value =>
+                            renderValue={(value) =>
                               (validateField(carriers, value) &&
                                 validateField(carriers, value).label) ||
                               ''
@@ -475,7 +475,7 @@ class PatientInformation extends PureComponent {
   }
 }
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       addNewFamilyPatient,
@@ -501,16 +501,16 @@ const mapStateToProps = ({ auth, availabilities, widgetNavigation, ...state }) =
   const familyPatients = auth.get('familyPatients');
 
   const patientId = availabilities.get('familyPatientUser') || auth.get('patientUser').get('id');
-  const patientIndex = familyPatients.findIndex(i => i.id === patientId);
+  const patientIndex = familyPatients.findIndex((i) => i.id === patientId);
   const patientUser = patientIndex > -1 ? auth.getIn(['familyPatients', patientIndex]) : false;
   const initialValues = patientUser
     ? {
-      ...defaultValues,
-      ...patientUser.toJS(),
-      birthDate: patientUser.getBirthDate(),
-      patientUser: patientId,
-      insuranceCarrier: patientUser.insuranceCarrier || carriers[0].value,
-    }
+        ...defaultValues,
+        ...patientUser.toJS(),
+        birthDate: patientUser.getBirthDate(),
+        patientUser: patientId,
+        insuranceCarrier: patientUser.insuranceCarrier || carriers[0].value,
+      }
     : defaultValues;
   return {
     familyPatients,
@@ -524,7 +524,7 @@ const mapStateToProps = ({ auth, availabilities, widgetNavigation, ...state }) =
         : '',
     isCustomCarrier:
       patientInfoForm &&
-      !carriers.find(carrier => carrier.label === selector(state, 'insuranceCarrier')),
+      !carriers.find((carrier) => carrier.label === selector(state, 'insuranceCarrier')),
     isLoading: familyPatients.size === 0,
     patientUser,
     userName: auth.get('patientUser').getFullName(),
@@ -582,9 +582,4 @@ PatientInformation.defaultProps = {
   patientUser: false,
 };
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(PatientInformation),
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PatientInformation));

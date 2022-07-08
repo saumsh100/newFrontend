@@ -1,9 +1,7 @@
-@import '../../../../styles/ui.scss';
+@import '../../../../styles/ui-reskin.scss';
 
 .patientSub {
-  //padding-left: 35px;
-  background: #fafafa;
-  border-top: 1px solid $primary-lightgrey;
+  background: $super-white;
   box-sizing: border-box;
   height: 100%;
   min-width: 550px;
@@ -19,21 +17,17 @@
 
 .dataTable {
   display: flex;
+  flex: 1 2;
   flex-direction: column;
-  height: 100%;
-  min-width: 460px;
-  padding-bottom: 15px;
-  padding-left: 35px;
-  width: 40%;
+  margin: 16px;
+  padding: 0 16px 16px 16px;
 }
 
 .timeLineTable {
   display: flex;
-  flex: 1;
+  flex: 2 1;
   flex-direction: column;
-  height: 100%;
-  padding-bottom: 15px;
-  padding-left: 8px;
+  margin: 16px;
 }
 
 .card {
@@ -44,10 +38,10 @@
 }
 
 .eventsCard {
-  border-top: 0;
+  background-color: $super-white-100;
+  border: none;
+  border-top: 1px solid $color-grey-150;
   height: 100%;
-  margin-left: 7.5px;
-  margin-right: 35px;
   overflow: auto;
 }
 
@@ -58,9 +52,10 @@
 }
 
 .headerText {
-  color: $primary-dark;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  font-size: 16px;
+  color: $color-grey-400;
+  font-size: $x-medium-size;
+  font-weight: $medium-weight;
+  line-height: 30px;
 }
 
 .timeLineHeader {
@@ -71,13 +66,17 @@
   padding-top: 20px;
 }
 
+.timelineTitle {
+  @extend .headerText;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+
 .patientInfoHeader {
   @extend .header;
+  align-items: center;
   justify-content: space-between;
-  padding-bottom: 10px;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 20px;
 
   &_title {
     @extend .headerText;
@@ -93,19 +92,32 @@
   position: relative;
 }
 
-.lineEventContainer:last-child {
-  div.verticalLine {
-    display: none;
+.eventSectionContainer {
+  position: relative;
+}
+.eventVerticalLineTop {
+  background-image: linear-gradient($color-purple-300 33%, rgba(255, 255, 255, 0) 0%);
+  background-size: 3px 10px;
+  height: 85px;
+  left: 19px;
+  position: absolute;
+  top: -8px;
+  width: 2px;
+  &_invisible {
+    width: 0;
   }
 }
-
-.verticalLine {
-  border-left: 1px dashed darken($primary-grey, 10%);
-  height: 100%;
-  left: 14px;
+.eventVerticalLineBottom {
+  background-image: linear-gradient($color-purple-300 33%, rgba(255, 255, 255, 0) 0%);
+  background-size: 3px 11px;
+  bottom: 8px;
+  height: 66px;
+  left: 19px;
   position: absolute;
-  top: 24px;
-  z-index: 0;
+  width: 2px;
+  &_invisible {
+    width: 0;
+  }
 }
 
 .eventsList {
@@ -114,15 +126,8 @@
   z-index: 2;
 }
 
-.subHeader {
-  color: $primary-darkgrey;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  padding-top: 20px;
-}
-
 .subHeaderSmall {
-  color: $primary-darkgrey;
-  composes: fontExtraSmall from '../../../../styles/fonts.scss';
+  color: $color-grey-400;
   font-style: italic;
   padding-top: 10px;
 }
@@ -171,7 +176,7 @@
   position: relative;
 
   &_text {
-    color: $inactive-color;
+    color: $color-grey-400;
     font-size: 12px;
     left: 50%;
     line-height: 1.5em;
@@ -192,21 +197,6 @@
   justify-content: center;
   position: relative;
   width: 100%;
-}
-
-.signal {
-
-  animation: pulsate 0.7s ease-out;
-  animation-iteration-count: infinite;
-  border: 5px solid $primary-dark;
-  border-radius: 30px;
-  height: 30px;
-  //left: 50%;
-  //margin: -15px 0 0 -15px;
-  opacity: 0;
-  //position: absolute;
-  //top: 50%;
-  width: 30px;
 }
 
 @keyframes pulsate {
@@ -273,8 +263,4 @@
   display: flex;
   margin: auto;
   padding: 0px 4px;
-}
-
-.containerClass {
-  border-top: 0;
 }

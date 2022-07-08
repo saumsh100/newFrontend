@@ -1,6 +1,6 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { ListItem } from '../../library';
 import styles from './styles.scss';
 
@@ -15,9 +15,7 @@ class ServiceListItem extends Component {
   }
 
   render() {
-    const {
-      service, serviceId, id, duration,
-    } = this.props;
+    const { service, serviceId, id, duration } = this.props;
 
     const selectItem = serviceId === id;
 
@@ -29,12 +27,15 @@ class ServiceListItem extends Component {
         data-test-id={service}
       >
         <div>
-          <div className={styles.servicesListItem_text}>{service}</div>
+          <div
+            className={classNames(styles.servicesListItem_text, {
+              [styles.servicesListItem_text_active]: selectItem,
+            })}
+          >
+            {service}
+          </div>
           <div className={styles.servicesListItem_duration}>
-            Duration:{' '}
-            <span className={styles.servicesListItem_duration_text}>
-              {duration} min
-            </span>
+            Duration: <span className={styles.servicesListItem_duration_text}>{duration} min</span>
           </div>
         </div>
       </ListItem>
@@ -43,10 +44,11 @@ class ServiceListItem extends Component {
 }
 
 ServiceListItem.propTypes = {
-  setServiceId: PropTypes.func,
-  service: PropTypes.string,
-  serviceId: PropTypes.string,
-  duration: PropTypes.number,
+  setServiceId: PropTypes.func.isRequired,
+  service: PropTypes.string.isRequired,
+  serviceId: PropTypes.string.isRequired,
+  duration: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default ServiceListItem;

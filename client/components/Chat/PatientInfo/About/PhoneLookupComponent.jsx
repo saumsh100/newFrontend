@@ -11,7 +11,7 @@ const PhoneLookupComponent = ({ phoneLookupObj, preferences }) => {
   const isGreenSmsStyle = phoneLookupObj?.isSMSEnabled && smsPreference;
   const isGreenVoiceStyle = phoneLookupObj?.isVoiceEnabled && phonePreference;
   return (
-    <div>
+    <div className={styles.phoneBadgeContainer}>
       <span
         className={classnames(styles.lookupLabel, styles.smsPaddingStyling, {
           [styles.greyLookupLabel]: !isGreenSmsStyle,

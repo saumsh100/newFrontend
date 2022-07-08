@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import { parse } from 'query-string';
 import Header from './Header';
 import FloatingButton from './FloatingButton';
-import Button from '../library/Button';
+import Button from './components/Button';
 import { setIsClicked } from '../../reducers/widgetNavigation';
 import { locationShape, historyShape } from '../library/PropTypeShapes/routerShapes';
 import { AccountTabSVG, FindTimeSVG, ReviewBookSVG } from './SVGs';
@@ -58,7 +58,7 @@ class Widget extends Component {
   }
 
   componentDidMount() {
-    const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
+    const color = this.props.account.get('bookingWidgetPrimaryColor') || '#574BD2';
     document.documentElement.style.setProperty('--primaryColor', color);
     document.documentElement.style.setProperty('--primaryButtonColor', color);
 

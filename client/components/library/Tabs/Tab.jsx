@@ -1,10 +1,9 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Tooltip from '../../Tooltip';
 import Icon from '../Icon';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const Tab = ({
   className,
@@ -47,10 +46,10 @@ const Tab = ({
   return (
     <label
       className={classes}
-      onKeyDown={e => e.keyCode === 13 && onClick(e, index)}
+      onKeyDown={(e) => e.keyCode === 13 && onClick(e, index)}
       role="button"
       tabIndex={0}
-      onClick={e => onClick(e, index)}
+      onClick={(e) => onClick(e, index)}
       id={id}
       htmlFor={id}
     >

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, isDateValid, getFormattedDate } from '../../../../library';
+import { Grid, Row, Col, isDateValid, getFormattedDate, Divider } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import ContactSection from './ContactSection';
@@ -26,21 +26,23 @@ function PersonalTab({ patient, timezone }) {
       <div className={styles.subHeader}>Basic</div>
       <Row className={styles.row}>
         <Col xs={6}>
-          <InfoDump label="GENDER" data={patient.gender} />
+          <InfoDump label="Gender" data={patient.gender} />
         </Col>
         <Col xs={6}>
-          <InfoDump label="BIRTHDAY" data={birthDateData} />
+          <InfoDump label="Birthday" data={birthDateData} />
         </Col>
       </Row>
+      <Divider className={styles.divider} />
       <ContactSection patient={patient} className={styles.sectionWrapper} />
-      <Row className={styles.row}>
+      <Row>
         <Col xs={6}>
-          <InfoDump label="ADDRESS" component={componentAddress} />
+          <InfoDump label="Address" component={componentAddress} />
         </Col>
       </Row>
-      <Row className={styles.row}>
+
+      <Row>
         <Col xs={6}>
-          <InfoDump label="LANGUAGE" data={patient.language} />
+          <InfoDump label="Language" data={patient.language} className={styles.langugae} />
         </Col>
       </Row>
     </Grid>

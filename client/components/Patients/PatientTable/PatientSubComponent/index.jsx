@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Query } from '@apollo/client/react/components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Card } from '../../../library';
+import { Card, StandardButton as Button } from '../../../library';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import { deleteAllEntity } from '../../../../reducers/entities';
 import { setIsNoteFormActive } from '../../../../reducers/patientTable';
@@ -14,10 +14,7 @@ import { getEventsOffsetLimitObj } from '../../Shared/helpers';
 import PatientActionsDropdown from '../../PatientInfo/ActionsDropdown';
 import patientInfoQuery from '../../PatientInfo/PatientInfo_Query';
 import LeftInfoDisplay from '../../PatientInfo/LeftInfoDisplay';
-import Icon from '../../../library/Icon';
-import Button from '../../../library/Button';
 import styles from './styles.scss';
-import ui from '../../../../styles/ui-kit.scss';
 
 class PatientSubComponent extends Component {
   constructor(props) {
@@ -57,20 +54,14 @@ class PatientSubComponent extends Component {
     return (
       <div className={styles.patientSub}>
         <div className={styles.content}>
-          <div className={styles.dataTable}>
+          <Card className={styles.dataTable}>
             <div className={styles.patientInfoHeader}>
-              <div className={styles.patientInfoHeader_title}>Patient Info</div>
+              <div className={styles.timelineTitle}>Patient Info</div>
               <PatientActionsDropdown
                 patient={patient}
                 align="right"
                 render={(props) => (
-                  <Button
-                    className={`${styles.actionsButtonNormal} ${styles.actionsButton} ${ui.modal__save} `}
-                    {...props}
-                  >
-                    <div className={styles.actionText}>Actions</div>
-                    <Icon className={styles.actionIcon} icon="caret-down" type="solid" />
-                  </Button>
+                  <Button title="Actions" variant="primary" iconRight="caret-down" {...props} />
                 )}
               />
             </div>
@@ -82,10 +73,10 @@ class PatientSubComponent extends Component {
               handleTabChange={this.handleTabChange}
               activeAccount={activeAccount}
             />
-          </div>
-          <div className={styles.timeLineTable}>
-            <div className={styles.timeLineHeader}>Timeline & Activities</div>
-            <Card
+          </Card>
+          <Card className={styles.timeLineTable}>
+            <div className={styles.timelineTitle}>Timeline & Activities</div>
+            <div
               className={styles.eventsCard}
               runAnimation
               loaded={wasFetched}
@@ -99,8 +90,8 @@ class PatientSubComponent extends Component {
                   patient={patient}
                 />
               )}
-            </Card>
-          </div>
+            </div>
+          </Card>
         </div>
       </div>
     );

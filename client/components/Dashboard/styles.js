@@ -2,10 +2,10 @@
 import oldStyles from './oldStyles.scss';
 import newStyles from './newStyles.scss';
 
-let selectedStyle = oldStyles;
+let selectedStyle = newStyles;
 
 const getStyles = (isFeatureFlagOn = false) => {
-  const styles = isFeatureFlagOn ? newStyles : oldStyles;
+  const styles = true ? newStyles : oldStyles;
   selectedStyle = styles;
   return styles;
 };

@@ -1,9 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Button } from '../../../../library';
+import { Modal } from '../../../../library';
+import { Button } from '../../../components';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { resetWaitlist } from '../../../../../reducers/availabilities';
 import { hideButton } from '../../../../../reducers/widgetNavigation';
@@ -72,7 +72,4 @@ Join.propTypes = {
   toCloseModal: PropTypes.func.isRequired,
 };
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(Join);
+export default connect(null, mapDispatchToProps)(Join);

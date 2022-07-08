@@ -1,9 +1,7 @@
-@import '../../../styles/ui.scss';
-@import '../../../styles/ui-kit.scss';
-@import '../ScheduleCalendar/color';
+@import '../../../styles/ui-reskin.scss';
 
 .placeholder {
-  color: $grey-dark;
+  color: $color-grey-400;
   font-size: 12px;
   font-style: italic;
   font-weight: normal;
@@ -13,12 +11,12 @@
 .input {
   align-items: center;
   -webkit-appearance: none;
-  background: $white;
-  border: 1px solid $grey-lighter;
+  background: $super-white;
+  border: 1px solid $color-grey-200;
   border-radius: 4px;
-  box-shadow: $shadow;
+  box-shadow: $box-shadow-2;
   box-sizing: border-box;
-  color: $calendar-grey;
+  color: $color-grey-400;
   display: flex;
   font-size: 14px;
   font-weight: 500;
@@ -28,8 +26,12 @@
   width: 100%;
 
   &:focus {
-    border-color: $grey-dark;
+    border-color: $color-grey-300;
     transition: all 0.2s ease;
+  }
+
+  &:hover {
+    background-color: $color-lavender-100;
   }
 
   &:focus ~ .label {
@@ -46,7 +48,7 @@
 
   .item {
     align-items: center;
-    background: $grey-lighter;
+    background: $super-white;
     border-radius: 4px;
     display: flex;
     flex: 0 0 auto;
@@ -57,36 +59,36 @@
     text-align: left;
 
     .remove {
-      color: $grey-dark;
+      color: $color-grey-300;
       margin-left: 8px;
     }
   }
 }
 
 .disabled {
-  background: $grey-lighter !important;
+  background: $color-grey-100 !important;
   box-shadow: none;
 
   &:hover {
-    background: $grey-lighter !important;
-    color: $calendar-grey !important;
+    background: $color-grey-200 !important;
+    color: $color-grey-400 !important;
   }
 
   .item {
-    background: $calendar-background;
+    background: $super-white;
 
     &:hover {
-      background: $calendar-background;
+      background: $super-white;
     }
   }
 }
 
 .error {
-  border-color: $red;
+  border-color: $error-500;
 
   &:hover,
   &:focus {
-    border-color: $red;
+    border-color: $error-500;
   }
 }
 
@@ -96,7 +98,7 @@
 }
 
 .iconWrapper {
-  color: $grey-dark;
+  color: $color-grey-400;
   min-width: 30px;
 }
 
@@ -107,10 +109,10 @@
 }
 
 .list {
-  background: $white;
-  border: 1px solid $grey-lighter;
+  background: $super-white;
+  border: 1px solid $color-grey-200;
   border-top: 0;
-  box-shadow: $shadow;
+  box-shadow: $box-shadow-2;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
@@ -137,17 +139,15 @@
 
 .option {
   align-items: center;
-  background-color: $primary-white;
+  background-color: $super-white;
   border: 0;
   border-bottom: 1px solid;
-  border-bottom-color: $primary-grey;
+  border-bottom-color: $color-grey-200;
   box-sizing: border-box;
-  color: $grey-dark;
-  color: #6e6e6e;
+  color: $color-grey-400;
   cursor: pointer;
   display: flex;
 
-  font-family: $inter;
   font-size: $small-size;
   font-size: 13px;
   height: calc(2.5rem * 1.6);
@@ -161,8 +161,8 @@
   width: 100%;
 
   &:hover {
-    background-color: $primary-lightgrey !important;
-    color: $primary-dark !important;
+    background-color: $color-lavender-050 !important;
+    color: $color-grey-400 !important;
     cursor: pointer;
   }
 }
@@ -174,8 +174,8 @@
   text-align: center;
 
   &:hover {
-    background-color: $primary-white !important;
-    color: $calendar-grey !important;
+    background-color: $super-white !important;
+    color: $color-grey-400 !important;
     cursor: auto;
   }
 }
@@ -202,12 +202,11 @@ button.linkButton {
   width: 100%;
 }
 .selectionGroup {
-  border-top: 1px solid $grey-lighter;
+  border-top: 1px solid $color-grey-300;
   padding-top: 6px;
 }
 .selectionTitle {
-  color: $grey-dark;
-  font-family: $inter;
+  color: $color-grey-400;
   font-size: 9px;
   margin: 12px 0;
 }

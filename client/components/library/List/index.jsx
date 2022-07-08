@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import omit from 'lodash/omit';
 import classNames from 'classnames';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 export function List(props) {
   const classes = classNames(props.className, styles.list);
@@ -19,9 +18,7 @@ List.defaultProps = {
 };
 
 export function ListItem(props) {
-  const {
-    className, disabledClass, selectedClass, selectItem,
-  } = props;
+  const { className, disabledClass, selectedClass, selectItem } = props;
 
   const classes = classNames(className, {
     [styles.disabledListItem]: props.disabled,

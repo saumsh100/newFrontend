@@ -1,10 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { capitalize } from '../../../../../util/isomorphic';
 import Icon from '../../../../library/Icon';
 import Input from '../../../../library/Input';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const Selector = ({
   disabled,
@@ -51,7 +50,7 @@ Selector.defaultProps = {
   placeholder: 'Selector a value',
   selected: [],
   error: false,
-  formatValue: v => capitalize(v),
+  formatValue: (v) => capitalize(v),
   isEditable: true,
 };
 

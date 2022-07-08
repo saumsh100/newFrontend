@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid';
 import DayPicker from 'react-day-picker';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Calendar from '../Icons/Calendar';
 import PopoverConfirm from '../Button/PopoverConfirm';
 import GhostButton from '../Button/GhostButton';
 import DayRangeInput from './DayRangeInput';
@@ -11,6 +10,7 @@ import dayPickerClasses from './dayPickerClasses';
 import defaultHelpers from './defaultRangeHelpers';
 import dayPicker from './dayPicker.scss';
 import ui from '../../../../styles/ui-kit.scss';
+import { Icon } from '../..';
 import styles from './styles.scss';
 import { getDate, getUTCDate, parseDate } from '../../util/datetime';
 
@@ -19,9 +19,7 @@ const defaultTypeName = 'Custom';
 const valueToDate = (value, timezone) => value && parseDate(value, timezone).toDate();
 
 const formatDate = (value, timezone, format = undefined) =>
-  getUTCDate(value)
-    .local()
-    .format(format);
+  getUTCDate(value).local().format(format);
 
 const isInvalidRange = (date, isFromInput, state) =>
   isFromInput ? date > state.end : date < state.start;
@@ -114,6 +112,7 @@ class DayRangeWithHelpers extends Component {
    */
   handleDayClick(day) {
     day = formatDate(day, this.props.timezone);
+    console.log(this.state.start);
     if (!this.state.activeElement) {
       const key = !this.state.start || day < this.state.start ? 'start' : 'end';
       return this.setDateValues(key, day);
@@ -168,6 +167,12 @@ class DayRangeWithHelpers extends Component {
       },
     );
   }
+
+  handleDateButtonClick = () => {
+    this.setState({
+      activeElement: 'fromInput',
+    });
+  };
 
   /**
    * Checks if the clicked DOM element is not part of the DayRangePicker and if picker is visible,
@@ -250,14 +255,8 @@ class DayRangeWithHelpers extends Component {
   }
 
   render() {
-    const {
-      helpers,
-      label,
-      placeholder,
-      placeholderEnd,
-      placeholderStart,
-      showOutsideDays,
-    } = this.props;
+    const { helpers, label, placeholder, placeholderEnd, placeholderStart, showOutsideDays } =
+      this.props;
 
     return (
       <div>
@@ -282,44 +281,52 @@ class DayRangeWithHelpers extends Component {
               onClick={this.handleClickWrapper}
             >
               {this.state.start ? (
-                <div className={styles.labelWrapper}>
-                  <strong>{this.state.typeName}</strong>
-                  <div className={styles.dateWrapper}>
-                    <span>{formatDate(this.state.start, this.props.timezone, 'll')}</span>
-                    <DayRangeInput
-                      placeholder={placeholderStart}
-                      name="fromInput"
-                      isActive={this.state.activeElement === 'fromInput'}
-                      defaultValue={formatDate(this.state.start, this.props.timezone, 'll')}
-                      onBlur={(e) => this.handleInputBlur(e, 'start')}
-                      onChange={(e) => this.handleInputChange(e, 'start')}
-                      onClick={() =>
-                        this.handleClickInputElement(this.fromInput.current, this.state.start)
-                      }
-                      onFocus={this.showDayRange}
-                      refCallback={this.fromInput}
-                    />
+                <div className={styles.dateInputGroup}>
+                  <div className={styles.labelWrapper}>
+                    <strong className={styles.typeName}>{this.state.typeName}</strong>
+                    <div className={styles.dateWrapper}>
+                      <span>{formatDate(this.state.start, this.props.timezone, 'll')}</span>
+                      <DayRangeInput
+                        placeholder={placeholderStart}
+                        name="fromInput"
+                        isActive={this.state.activeElement || this.state.isOpen}
+                        defaultValue={formatDate(this.state.start, this.props.timezone, 'll')}
+                        onBlur={(e) => this.handleInputBlur(e, 'start')}
+                        onChange={(e) => this.handleInputChange(e, 'start')}
+                        onClick={() =>
+                          this.handleClickInputElement(this.fromInput.current, this.state.start)
+                        }
+                        onFocus={this.showDayRange}
+                        refCallback={this.fromInput}
+                      />
+                    </div>
+                    -
+                    <div className={styles.dateWrapper}>
+                      <span>
+                        {this.state.end && formatDate(this.state.end, this.props.timezone, 'll')}
+                      </span>
+                      <DayRangeInput
+                        placeholder={placeholderEnd}
+                        name="toInput"
+                        isActive={this.state.activeElement || this.state.isOpen}
+                        defaultValue={formatDate(this.state.end, this.props.timezone, 'll')}
+                        onBlur={(e) => this.handleInputBlur(e, 'end')}
+                        onChange={(e) => this.handleInputChange(e, 'end')}
+                        onClick={() =>
+                          this.handleClickInputElement(this.toInput.current, this.state.end)
+                        }
+                        onFocus={this.showDayRange}
+                        refCallback={this.toInput}
+                      />
+                    </div>
                   </div>
-                  -
-                  <div className={styles.dateWrapper}>
-                    <span>
-                      {this.state.end && formatDate(this.state.end, this.props.timezone, 'll')}
-                    </span>
-                    <DayRangeInput
-                      placeholder={placeholderEnd}
-                      name="toInput"
-                      isActive={this.state.activeElement === 'toInput'}
-                      defaultValue={formatDate(this.state.end, this.props.timezone, 'll')}
-                      onBlur={(e) => this.handleInputBlur(e, 'end')}
-                      onChange={(e) => this.handleInputChange(e, 'end')}
-                      onClick={() =>
-                        this.handleClickInputElement(this.toInput.current, this.state.end)
-                      }
-                      onFocus={this.showDayRange}
-                      refCallback={this.toInput}
-                    />
-                  </div>
-                  <Calendar />
+                  <Icon
+                    icon="calendar-alt"
+                    className={classnames({
+                      [styles.calendarIcon_active]: this.state.activeElement || this.state.isOpen,
+                      [styles.calendarIcon]: !(this.state.activeElement || this.state.isOpen),
+                    })}
+                  />
                 </div>
               ) : (
                 <span className={styles.placeholder}>{placeholder}</span>
@@ -334,6 +341,7 @@ class DayRangeWithHelpers extends Component {
                 <div className={styles.helpersWrapper}>
                   {helpers.map((helper) => (
                     <GhostButton
+                      active={this.state.typeName === helper.label}
                       key={uuid()}
                       onClick={() => {
                         this.setDateValues('start', helper.start, helper.label);
@@ -345,26 +353,28 @@ class DayRangeWithHelpers extends Component {
                     </GhostButton>
                   ))}
                 </div>
-                <DayPicker
-                  onDayClick={this.handleDayClick}
-                  showOutsideDays={showOutsideDays}
-                  classNames={dayPickerClasses}
-                  selectedDays={[
-                    {
-                      from: valueToDate(this.state.start, this.props.timezone),
-                      to: valueToDate(this.state.end, this.props.timezone),
-                    },
-                  ]}
-                  modifiers={{
-                    [dayPicker.start]: valueToDate(this.state.start, this.props.timezone),
-                    [dayPicker.end]: valueToDate(this.state.end, this.props.timezone),
-                  }}
-                  month={this.state.visibleMonth}
-                  timezone={this.props.timezone}
-                />
-              </div>
-              <div className={styles.footer}>
-                <PopoverConfirm onClick={this.confirmRangeChanges}>Done</PopoverConfirm>
+                <div className={styles.rightSide}>
+                  <DayPicker
+                    onDayClick={this.handleDayClick}
+                    showOutsideDays={showOutsideDays}
+                    classNames={dayPickerClasses}
+                    selectedDays={[
+                      {
+                        from: valueToDate(this.state.start, this.props.timezone),
+                        to: valueToDate(this.state.end, this.props.timezone),
+                      },
+                    ]}
+                    modifiers={{
+                      [dayPicker.start]: valueToDate(this.state.start, this.props.timezone),
+                      [dayPicker.end]: valueToDate(this.state.end, this.props.timezone),
+                    }}
+                    month={this.state.visibleMonth}
+                    timezone={this.props.timezone}
+                  />
+                  <div className={styles.footer}>
+                    <PopoverConfirm onClick={this.confirmRangeChanges}>Done</PopoverConfirm>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

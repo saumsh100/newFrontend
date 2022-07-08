@@ -11,7 +11,7 @@ import LoginForm from './LoginForm';
 import CopyrightFooter from './CopyrightFooter';
 import { locationShape } from '../library/PropTypeShapes/routerShapes';
 import EnabledFeature from '../library/EnabledFeature';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const switchLocations = {
   'carecru.ca': {
@@ -50,6 +50,10 @@ class Login extends Component {
       });
   }
 
+  onForgotPassword = () => {
+    this.props.push('/forgot');
+  };
+
   render() {
     // eslint-disable-next-line no-unused-vars
     const { [window.location.hostname]: _, ...option } = switchLocations;
@@ -57,6 +61,11 @@ class Login extends Component {
     return (
       <DocumentTitle title="CareCru | Login">
         <div className={styles.backDrop}>
+          <img
+            src="/images/carecru-logo-negative.svg"
+            alt="carecru logo"
+            className={styles.logoImage}
+          />
           <EnabledFeature
             predicate={({ flags }) => flags.get('datacenter-switcher') && this.props.hasError}
             render={() => (
@@ -70,23 +79,8 @@ class Login extends Component {
             )}
           />
           <Card className={styles.loginForm}>
-            <div className={styles.logoContainer}>
-              <img className={styles.loginLogo} src="/images/logo_black.png" alt="CareCru Logo" />
-            </div>
-            <LoginForm onSubmit={this.handleLogin} />
-            <div className={styles.forgotPassword}>
-              <div
-                className={styles.forgotPassword_text}
-                tabIndex={0}
-                onKeyDown={(e) => e.keyCode === 13 && this.props.push('/forgot')}
-                role="button"
-                onClick={() => {
-                  this.props.push('/forgot');
-                }}
-              >
-                Forgot your password?
-              </div>
-            </div>
+            <h1 className={styles.title}>Sign In</h1>
+            <LoginForm onSubmit={this.handleLogin} onForgotPassword={this.onForgotPassword} />
           </Card>
           <EnabledFeature
             predicate={({ flags }) => flags.get('show-maintenance-banner')}

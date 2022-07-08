@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { isResponsive } from '../../../../util/hub';
-import { Grid, Row, Col, Avatar, Badge, Icon } from '../../../library';
+import { Grid, Row, Col, Avatar, Badge, Icon, StandardButton as Button } from '../../../library';
 import HygieneData from '../HygieneColumn';
 import RecallData from '../RecallColumn';
 import InfoDump from '../InfoDump';
@@ -26,19 +26,19 @@ class FamilyMember extends React.Component {
           ...this.props.patient,
         }}
         render={({ onClick }) => (
-          <div
-            role="button"
+          <button
+            type="button"
             tabIndex={0}
             className={styles.patientLink}
             onDoubleClick={() => this.props.push(`/patients/${this.props.node.ccId}`)}
             onClick={onClick}
             onKeyDown={(e) => e.keyCode === 13 && onClick()}
           >
-            <span className={styles.familyMember_name}>{`${fullName}, ${age}`}</span>
-            <span className={styles.actionsButtonSmall}>
+            <p className={styles.familyMember_name}>{`${fullName}, ${age}`}</p>
+            <div className={styles.actionsButtonSmall}>
               <Icon icon="caret-down" type="solid" className={styles.actionIcon} />
-            </span>
-          </div>
+            </div>
+          </button>
         )}
       />
     );
@@ -56,15 +56,16 @@ class FamilyMember extends React.Component {
 
   renderButton(text, handler, remove = false) {
     return (
-      <button
-        type="button"
+      <Button
         className={classNames([styles.familyMember_config_button], {
           [styles.familyMember_config_button_remove]: remove,
         })}
         onClick={handler}
+        variant="secondary"
+        icon={remove ? 'times' : null}
       >
         {text}
-      </button>
+      </Button>
     );
   }
 
@@ -113,28 +114,28 @@ class FamilyMember extends React.Component {
 
     return (
       <Row>
-        <Col xs={2} md={3} className={styles.familyMember_headColumn}>
+        <div xs={1} md={2} className={styles.familyMember_headColumn}>
           <Avatar user={patient} size={avatarSize} />
-        </Col>
+        </div>
         <Col xs={10} md={9}>
-          <Row className={styles.familyMember_row} middle="xs" start="xs">
+          <div className={styles.familyMember_row} middle="xs" start="xs">
             <Col>{this.renderNameAge(fullName, age)}</Col>
             <Col>{this.renderDisplayHead()}</Col>
+          </div>
+          <Row className={styles.familyMember_row}>
+            <Col xs={6}>
+              <InfoDump label="Last Appt" data={lastApp} />
+            </Col>
+            <Col xs={6}>
+              <InfoDump label="Due For Hygiene" component={HygieneData(recallHygieneData)} />
+            </Col>
           </Row>
           <Row className={styles.familyMember_row}>
             <Col xs={6}>
-              <InfoDump label="LAST APPT" data={lastApp} />
+              <InfoDump label="Next Appt" data={nextApp} />
             </Col>
             <Col xs={6}>
-              <InfoDump label="DUE FOR HYGIENE" component={HygieneData(recallHygieneData)} />
-            </Col>
-          </Row>
-          <Row className={styles.familyMember_row}>
-            <Col xs={6}>
-              <InfoDump label="NEXT APPT" data={nextApp} />
-            </Col>
-            <Col xs={6}>
-              <InfoDump label="DUE FOR RECALL" component={RecallData(recallHygieneData)} />
+              <InfoDump label="Due For Recall" component={RecallData(recallHygieneData)} />
             </Col>
           </Row>
         </Col>

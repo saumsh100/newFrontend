@@ -1,6 +1,7 @@
 @import '../../styles/fonts.scss';
 @import '../../styles/ui.scss';
 @import '../../styles/ui-kit.scss';
+@import '../../styles/ui-reskin.scss';
 @import './AppsRequestsContainer/styles.scss';
 @import './AppsRequestsContainer/AppointmentsList/AppointmentPopover/styles.scss';
 @import './DonnaToDoListContainer/styles.scss';
@@ -15,6 +16,9 @@
 @import './RevenueContainer/RevenueChart/styles.scss';
 @import './RevenueContainer/RevenueDisplay/styles.scss';
 @import './StatsContainer/styles.scss';
+@import '../Requests/styles.scss';
+@import '../WaitingRoom/WaitingRoomList/WaitingRoomListItem/styles.scss';
+@import '../WaitingRoom/NotifyPatientForm/styles.scss';
 
 .dashboard {
   box-sizing: border-box;

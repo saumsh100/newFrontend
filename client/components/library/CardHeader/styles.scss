@@ -1,10 +1,9 @@
-@import '../../../styles/ui.scss';
-@import '../../../styles/fonts.scss';
+@import '../../../styles/ui-reskin.scss';
 
 .cardHeader {
   align-items: center;
   border-bottom: 1px solid;
-  border-bottom-color: #efefef;
+  border-bottom-color: $color-lavender-100;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
@@ -20,19 +19,26 @@
   }
 }
 
+.titleRequests {
+  color: $color-purple-600;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+}
+
 .displayFlex {
   align-items: center;
   display: flex;
 }
 
 .cardCount {
-  color: $primary-dark;
-  composes: cardHeaderCount from '../../../styles/fonts.scss';
-  display: inline-block;
-  padding-right: 5px;
+  color: $color-purple-600;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  margin-right: 8px;
 }
 
 .title {
-  composes: cardHeaderTitle from '../../../styles/fonts.scss';
   display: inline-block;
 }

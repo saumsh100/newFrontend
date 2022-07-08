@@ -86,10 +86,10 @@ class Reviews extends Component {
     let constructBigComment = reviewsList.toJS();
 
     constructBigComment = constructBigComment
-      .filter(review => filterSources.indexOf(review.sourceName) > -1 && review)
-      .filter(review => filterRatings.indexOf(review.rating) > -1 && review);
+      .filter((review) => filterSources.indexOf(review.sourceName) > -1 && review)
+      .filter((review) => filterRatings.indexOf(review.rating) > -1 && review);
 
-    constructBigComment = constructBigComment.map(review => ({
+    constructBigComment = constructBigComment.map((review) => ({
       icon: review.sourceName,
       publishedDate: review.publishedDateTime,
       headerLinkName: review.reviewerName,
@@ -128,6 +128,7 @@ class Reviews extends Component {
 
     return (
       <div id="reviewsContainerRep">
+        <header className={styles.reviewHeader}>Reviews</header>
         <Grid className={styles.reviews}>
           <Row className={styles.reviews__wrapper}>
             <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>

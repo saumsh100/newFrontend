@@ -1,14 +1,22 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import Family from '../../../Shared/Family';
 import FamilyMember from '../../../Shared/FamilyMember';
 import { patientUserShape } from '../../../../library/PropTypeShapes';
+import { Divider } from '../../../../library';
+import styles from '../styles.scss';
 
 const FamilyTab = ({ family }) => (
   <Family
     family={family}
-    render={familyMembers => familyMembers.map(familyMember => <FamilyMember {...familyMember} />)}
+    render={(familyMembers) =>
+      familyMembers.map((familyMember, index) => (
+        <>
+          <FamilyMember {...familyMember} />
+          {index + 1 === familyMember.length && <Divider className={styles.divider} />}
+        </>
+      ))
+    }
   />
 );
 

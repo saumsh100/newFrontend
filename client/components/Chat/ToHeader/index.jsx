@@ -43,7 +43,7 @@ const mapStateToProps = ({ entities, chat }) => {
       container: styles.autocompleteContainer,
       suggestionsContainerOpen: styles.suggestionsContainer,
     },
-    toInputProps: { placeholder: 'To: Type name of patient' },
+    toInputProps: { placeholder: 'To: Type Name of patient' },
     selectedPatient:
       patients.get(selectedPatientId) ||
       (selectedChat && UnknownPatient(selectedChat.patientPhoneNumber, prospect)),

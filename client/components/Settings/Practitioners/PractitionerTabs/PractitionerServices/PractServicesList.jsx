@@ -1,39 +1,34 @@
-
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import { Field } from '../../../../library';
 import styles from './styles.scss';
 
-class PractServicesList extends Component {
-  constructor(props) {
-    super(props);
-  }
+const PractServicesList = (props) => {
+  const { service, index } = props;
 
-  render() {
-    const { service, fieldValue, index } = this.props;
+  let showComponent = null;
 
-    let showComponent = null;
-
-    if (service) {
-      showComponent = (
+  if (service) {
+    showComponent = (
+      <div className={styles.formContainer_service} data-test-id={`${service.get('name')}Toggle`}>
+        <span className={styles.formContainer_service_name}>{service.get('name')}</span>
         <div
-          className={styles.formContainer_service}
-          data-test-id={`${service.get('name')}Toggle`}
+          className={styles.formContainer_service_toggle}
+          data-test-id={`toggle_pracService_${index}`}
         >
-          <span className={styles.formContainer_service_name}>
-            {service.get('name')}
-          </span>
-          <div
-            className={styles.formContainer_service_toggle}
-            data-test-id={`toggle_pracService_${index}`}
-          >
-            <Field component="Toggle" name={service.get('id')} />
-          </div>
+          <Field component="Toggle" name={service.get('id')} />
         </div>
-      );
-    }
-    return <div>{showComponent}</div>;
+      </div>
+    );
   }
-}
+  return <div>{showComponent}</div>;
+};
+
+PractServicesList.propTypes = {
+  service: PropTypes.shape({
+    get: PropTypes.func,
+  }).isRequired,
+  index: PropTypes.number.isRequired,
+};
 
 export default PractServicesList;

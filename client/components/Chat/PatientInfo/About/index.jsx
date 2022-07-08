@@ -2,7 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { formatPhoneNumber, capitalize } from '../../../../util/isomorphic';
-import { Grid, Row, Col, PointOfContactBadge, getTodaysDate, getUTCDate } from '../../../library';
+import {
+  Grid,
+  Row,
+  Col,
+  PointOfContactBadge,
+  getTodaysDate,
+  getUTCDate,
+  Divider,
+} from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';
 import PatientModel from '../../../../entities/models/Patient';
@@ -42,11 +50,13 @@ const About = ({ patient, timezone, phoneLookupObj }) => {
               <Content title="City" value={(patient.address && patient.address.city) || 'n/a'} />
             </Col>
           </Row>
+          <Divider className={styles.divider} />
           <Row className={styles.otherSection}>
             <Col xs={12}>
               <Content
                 title="Cellphone Number"
                 value={formatPhoneNumber(patient.cellPhoneNumber) || 'n/a'}
+                noMarginBottom
               >
                 {() =>
                   !patient.isUnknown &&

@@ -1,0 +1,55 @@
+@import '../../../../../../styles/ui-reskin.scss';
+.waitListTableHeaderWrapper {
+  background-color: $color-purple-050;
+  display: flex;
+  padding: 32px 24px 26px 32px;
+}
+
+.waitListTableHeaderTitle {
+  background: $super-white;
+  border: 1px solid $color-grey-150;
+  border-radius: 4px;
+  box-shadow: $box-shadow-3;
+  box-sizing: border-box;
+  color: $color-purple-600;
+  font-family: $font-inter;
+  font-size: $xxx-medium-size;
+  font-weight: $medium-weight;
+  margin-left: -48px;
+  margin-top: 34px;
+  padding: 8px 16px;
+}
+
+.closeButton {
+  font-weight: 500;
+  margin-left: 82%;
+  margin-top: 18px;
+}
+
+.redirect {
+  color: $color-purple-300;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: $medium-size;
+  font-weight: $bold-weight;
+  &:hover {
+    color: $color-lavender-500;
+  }
+  &:active {
+    color: $color-lavender-550;
+  }
+}
+
+.iconWrapper {
+  color: $color-purple-300;
+  font-size: $small-size;
+  font-weight: $normal-weight;
+  margin: 2px 8px 0px 0px;
+  text-align: right;
+  &:hover {
+    color: $color-lavender-500;
+  }
+  &:active {
+    color: $color-lavender-550;
+  }
+}

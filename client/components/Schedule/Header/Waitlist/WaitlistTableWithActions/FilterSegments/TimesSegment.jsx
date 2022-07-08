@@ -1,4 +1,3 @@
-
 import React, { useMemo, memo, useCallback } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -6,7 +5,7 @@ import PropTypes from 'prop-types';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';
 import { generateWaitlistHours, getAllTimeSlots, getTimePickers, getTimeSlot } from '../../helpers';
 import SegmentButton from '../../../../../library/SegmentButton';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { NOT_SET_LABEL, NOT_SET_OPTION } from '../consts';
 
 const TimesSegment = ({ timezone, timesRule, updateSelectedTimes }) => {
@@ -21,7 +20,7 @@ const TimesSegment = ({ timezone, timesRule, updateSelectedTimes }) => {
       });
 
       selectedTimesKeys
-        .filter(key => !times.find(time => time === key))
+        .filter((key) => !times.find((time) => time === key))
         .forEach((key) => {
           selectedTimes[key] = false;
         });
@@ -37,22 +36,23 @@ const TimesSegment = ({ timezone, timesRule, updateSelectedTimes }) => {
   );
 
   // TODO: use office hours instead of fixed time
-  const timeOptions = useMemo(() => generateWaitlistHours(timezone).concat(NOT_SET_OPTION), [
-    timezone,
-  ]);
+  const timeOptions = useMemo(
+    () => generateWaitlistHours(timezone).concat(NOT_SET_OPTION),
+    [timezone],
+  );
 
-  const getSelectedOptions = useMemo(() => selectedTimesKeys.filter(time => selectedTimes[time]), [
-    selectedTimes,
-    selectedTimesKeys,
-  ]);
+  const getSelectedOptions = useMemo(
+    () => selectedTimesKeys.filter((time) => selectedTimes[time]),
+    [selectedTimes, selectedTimesKeys],
+  );
 
   const onToggleTimePicker = useCallback(
     (data) => {
-      const allChecked = data.every(time =>
-        selectedTimesKeys.filter(key => selectedTimes[key]).includes(time));
+      const allChecked = data.every((time) =>
+        selectedTimesKeys.filter((key) => selectedTimes[key]).includes(time),);
       const newValue = selectedTimesKeys
-        .filter(time => selectedTimes[time])
-        .filter(time => !data.includes(time));
+        .filter((time) => selectedTimes[time])
+        .filter((time) => !data.includes(time));
       if (allChecked) {
         handleSelectedTimesChange(newValue);
       } else {
@@ -95,7 +95,7 @@ const TimesSegment = ({ timezone, timesRule, updateSelectedTimes }) => {
       selector={(disabled, selectedItems, error, getToggleButtonProps) => {
         const toggleButtonProps = getToggleButtonProps();
         const activeState = toggleButtonProps['aria-expanded'] && 'active';
-        const selectedOptionsLen = Object.values(selectedTimes).filter(val => val).length;
+        const selectedOptionsLen = Object.values(selectedTimes).filter((val) => val).length;
         return (
           <SegmentButton
             buttonState={activeState || dirtyState}

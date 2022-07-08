@@ -77,7 +77,7 @@ const emailValidate = (value) => {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   if (!value || !re.test(String(value).toLowerCase())) {
-    return 'Invalid email address';
+    return 'Please enter a valid email address';
   }
 };
 
@@ -158,6 +158,9 @@ const passwordsMatch = (values) => {
 
 const maxLength = (max) => (value) =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
+
+const passMinLength = (min) => (value) =>
+  value && value.length < min ? `Password length must be at least ${min} characters` : undefined;
 
 const asyncEmailValidateUser = ({ email }) =>
   email &&
@@ -251,6 +254,7 @@ export {
   asyncEmailPasswordReset,
   asyncEmailValidateUser,
   maxLength,
+  passMinLength,
   emailValidate,
   phoneNumberValidate,
   validateNoSpace,

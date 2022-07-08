@@ -1,18 +1,17 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 import PatientPopover from '../../library/PatientPopover';
 import RequestPopoverLoader from '../../library/RequestPopoverLoader';
+import styles from './styles.scss';
 
 export default function PatientName({ selectedPatient }) {
   const { isUnknown, isProspect, firstName, lastName, cellPhoneNumber } = selectedPatient;
   if (!isUnknown) {
+    const fullName = `${firstName} ${lastName}`;
     return (
       <PatientPopover patient={selectedPatient}>
-        <span>
-          {firstName} {lastName}
-        </span>
+        <h2 className={styles.title}>{fullName}</h2>
       </PatientPopover>
     );
   }

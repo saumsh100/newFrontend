@@ -37,7 +37,7 @@ function PatientData(props) {
       </div>
 
       <div className={styles.appRequestContainer_appPatientConfirmed}>
-        {appointment.appRequestContainer_isPatientConfirmed ? (
+        {appointment.isPatientConfirmed ? (
           <div className={styles.appRequestContainer_iconContainer}>
             <Icon icon="check" />
           </div>

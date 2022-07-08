@@ -1,0 +1,145 @@
+@import '../../../../../../styles/ui-reskin.scss';
+
+.listWrapper {
+  border: 1px solid $color-lavender-200;
+  border-radius: 4px;
+  box-sizing: border-box;
+  filter: drop-shadow($box-shadow-2);
+  margin-top: 10px;
+  min-height: 300px;
+  width: 350px;
+  z-index: 99999;
+}
+
+.alignRight {
+  transform: translateX(-200px) !important;
+}
+
+.popOverCard {
+  background: $super-white;
+  border: 1px solid $color-lavender-200;
+  border-radius: 4px;
+  border-top: 0;
+  box-sizing: border-box;
+  display: flex;
+  filter: drop-shadow($box-shadow-2);
+  flex-wrap: wrap;
+  height: 164px;
+  margin-top: 10px;
+  overflow-y: auto;
+  width: 336px;
+  z-index: 99999;
+}
+
+.tooltip_Popover {
+  z-index: 999999;
+
+  > :global(svg.Popover-tip) {
+    fill: $super-white;
+  }
+}
+
+.row {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 16px;
+}
+
+.unitInputsWrapper {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.unitsLabel {
+  display: flex;
+  flex-direction: column;
+}
+
+.unitsLabelText {
+  color: $color-grey-400;
+  margin: 8px 0;
+}
+
+.unitsInput {
+  border: 1px solid $color-lavender-200;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: 40px;
+  padding-left: 16px;
+  width: 144px;
+
+  &:hover {
+    border: 1px solid $color-lavender-400;
+  }
+  &:focus,
+  &:focus-visible {
+    border: 1px solid $color-lavender-500;
+  }
+}
+
+.clearButton {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: $color-lavender-500;
+  cursor: pointer;
+  height: 12px;
+  margin: 4px 0 8px auto;
+}
+
+.unsetUnitLabel {
+  color: $color-purple-400;
+}
+
+.waitlistSearchInputWrapper {
+  position: relative;
+}
+
+.waitlistSearchInputWrapper:hover .waitlistSearchInputIcon {
+  color: $color-lavender-500;
+}
+
+.waitlistSearchInput {
+  border: 1px solid $color-purple-200;
+  border-radius: 4px;
+  color: $color-purple-400;
+  font-size: $small-size;
+  font-weight: $normal-weight;
+  height: 32px;
+  letter-spacing: 0.7px;
+  outline: none;
+  padding: 0 20px 0 37px;
+  transition: all 0.2s ease-in 0s;
+  width: 200px;
+
+  &:hover {
+    background-color: $color-lavender-050;
+    border: 1px solid $color-lavender-500;
+  }
+
+  &:focus {
+    background-color: $super-white;
+    border: 1px solid $color-lavender-500;
+  }
+
+  &::placeholder {
+    color: $color-grey-300;
+  }
+}
+
+.waitlistSearchInputIcon {
+  color: $color-grey-400;
+  font-size: $small-size;
+  font-weight: $normal-weight;
+  left: 16px;
+  position: absolute;
+  top: 11px;
+
+  &:focus {
+    color: $color-lavender-500;
+  }
+}

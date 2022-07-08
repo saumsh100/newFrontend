@@ -1,6 +1,4 @@
-@import '../../../styles/ui.scss';
-
-$empty-grey: darken(lightgrey, 5%);
+@import '../../../styles/ui-reskin.scss';
 
 .wrapper {
   padding: 20px 0;
@@ -12,13 +10,11 @@ $empty-grey: darken(lightgrey, 5%);
   align-items: center;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid $disabled-color;
+  border-bottom: 1px solid $color-purple-100;
   box-sizing: border-box;
   color: initial;
-  //padding: 5px 5px 5px 0px;
   cursor: pointer;
   display: flex;
-  font-family: $dashboard-font;
   font-size: $medium-size;
   height: 30px;
   padding: 0;
@@ -32,7 +28,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .primaryWhiteBorder {
-  border-bottom: 1px solid $primary-white;
+  border-bottom: 1px solid $super-white;
 }
 
 .theme {
@@ -41,44 +37,42 @@ $empty-grey: darken(lightgrey, 5%);
     letter-spacing: 2px;
   }
   &_primaryBlueBorder {
-    border-bottom: 1px solid $primary-blue;
+    border-bottom: 1px solid $color-lavender-500;
   }
   &_primaryBlueCaret {
-    color: $primary-blue !important;
+    color: $color-lavender-500 !important;
   }
 }
 
 .active {
-  border-bottom: 1px solid $primary-dark;
+  border-bottom: 1px solid $color-lavender-500;
 }
 
 .toggleDivDisabled {
   @extend .toggleDiv;
-  border-bottom: 1px solid $disabled-color;
-  color: $disabled-color;
+  border-bottom: 1px solid $color-purple-100;
+  color: $color-grey-400;
   cursor: not-allowed;
   .caretIconWrapper {
-    color: $disabled-color;
+    color: $color-grey-400;
   }
 }
 
 .optionDiv {
-  font-family: $dashboard-font !important;
   padding: 0 !important;
   white-space: normal !important;
 }
 
 .optionListItem {
   align-items: center;
-  background-color: $primary-white;
+  background-color: $super-white;
   border: 0;
-  border-bottom: 1px solid;
-  border-bottom-color: $primary-grey;
-  color: $primary-dark;
+  border-bottom: 1px solid $color-lavender-050;
+  color: $color-grey-400;
   cursor: pointer;
 
   display: flex;
-  font-size: $small-size;
+
   height: calc(2.5rem * 1.6);
   justify-content: center;
   letter-spacing: 0;
@@ -89,9 +83,8 @@ $empty-grey: darken(lightgrey, 5%);
   text-overflow: ellipsis;
   width: 100%;
   &:hover {
-    background-color: lighten($primary-grey, 5%);
-    background-color: $primary-lightgrey !important;
-    color: $primary-dark !important;
+    background-color: $color-grey-050;
+    color: $color-lavender-500 !important;
     cursor: pointer;
   }
 }
@@ -102,7 +95,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .selectedListItem {
-  border-left: $selection-border $primary-color;
+  border-left: $color-lavender-500;
   padding-left: 15px;
 }
 
@@ -115,7 +108,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .caretIconWrapper {
-  color: $primary-darkgrey;
+  color: $color-grey-400;
   margin-left: auto;
   transition: color 500ms ease-out;
   z-index: 1;
@@ -124,19 +117,19 @@ $empty-grey: darken(lightgrey, 5%);
 .timesIconWrapper {
   background: transparent;
   border: 0;
-  color: $primary-darkgrey;
+  color: $color-grey-400;
   cursor: pointer;
   margin-left: auto;
   padding: 0;
   transition: color 500ms ease-out;
   z-index: 1;
   &:hover {
-    color: $primary-dark;
+    color: $color-lavender-500;
   }
 }
 
 .activeIcon {
-  color: $primary-dark;
+  color: $color-lavender-500;
 }
 
 .noBorder {
@@ -144,9 +137,9 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .label {
-  color: $empty-grey;
-  font-size: $medium-size;
-  font-weight: normal;
+  color: $color-grey-400;
+  font-size: $small-size;
+  font-weight: $normal-weight;
   left: 0;
   pointer-events: none;
   position: absolute;
@@ -155,7 +148,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .filled {
-  font-size: $extra-small-size !important;
+  font-size: $x-small-size !important;
   left: 0 !important;
   position: absolute;
   top: -10px !important;
@@ -166,7 +159,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .activeLabel {
-  color: $primary-dark;
+  color: $color-lavender-500;
 }
 
 .searchInput {
@@ -176,7 +169,7 @@ $empty-grey: darken(lightgrey, 5%);
 
 .error {
   bottom: -16px;
-  color: red;
+  color: $error-200;
   font-size: 11px;
   font-weight: normal;
   letter-spacing: 0.5px;
@@ -192,26 +185,25 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .errorIcon {
-  color: red;
+  color: $error-200;
 }
 
 .errorLabel {
-  color: red;
+  color: $error-200;
 }
 
 .errorToggleDiv {
-  border-bottom-color: red;
+  border-bottom-color: $error-200;
 }
 
 .inputToggler {
   border: 0;
-  font-family: $dashboard-font;
   width: 100%;
   &:focus {
     outline: none;
   }
   &::placeholder {
-    color: $inactive-color;
+    color: $color-grey-150;
     font-style: italic;
     font-weight: 200;
   }

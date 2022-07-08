@@ -18,7 +18,7 @@ import {
   setIsClicked,
   setText,
 } from '../../../../../reducers/widgetNavigation';
-import Button from '../../../../library/Button';
+import Button from '../../../components/Button';
 import styles from './styles.scss';
 import { getEndOfTheMonth, getStartOfTheMonth } from '../../../../library/util/datetime/helpers';
 import { getFinalDailyHours } from './thunks';

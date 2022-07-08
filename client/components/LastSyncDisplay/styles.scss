@@ -1,16 +1,8 @@
-
-@import '../../styles/ui.scss';
-
-.base {
-  font-family: $medium-font;
-}
-
+@import '../../styles/ui-reskin.scss';
 .on {
-  @extend .base;
-  color: $primary-green;
+  color: $color-purple-600;
 }
 
 .off {
-  @extend .base;
-  color: $primary-red;
+  color: $color-grey-400;
 }

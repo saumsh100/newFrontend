@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { v4 as uuid } from 'uuid';
 import isEqual from 'lodash/isEqual';
@@ -103,7 +102,7 @@ class EditSchedule extends Component {
   sanitizeScheduleTimeValues(schedule, timezone) {
     const activeChairIDs = this.props.chairs.toArray().map(({ id }) => id);
     // only show chairs that are active
-    const selectedChairIds = schedule.chairIds.filter(id => activeChairIDs.includes(id));
+    const selectedChairIds = schedule.chairIds.filter((id) => activeChairIDs.includes(id));
     return {
       ...schedule,
       chairIds: selectedChairIds,
@@ -112,11 +111,11 @@ class EditSchedule extends Component {
       endTime: getFormattedTime(schedule.endTime, timezone),
       breaks:
         schedule.breaks.length > 0
-          ? schedule.breaks.map(b => ({
-            ...b,
-            startTime: getFormattedTime(b.startTime, timezone),
-            endTime: getFormattedTime(b.endTime, timezone),
-          }))
+          ? schedule.breaks.map((b) => ({
+              ...b,
+              startTime: getFormattedTime(b.startTime, timezone),
+              endTime: getFormattedTime(b.endTime, timezone),
+            }))
           : [],
     };
   }
@@ -125,7 +124,7 @@ class EditSchedule extends Component {
    * Adds a new break into the breaks array.
    */
   addBreak() {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       breaks: [
         ...prevState.breaks,
         {
@@ -143,7 +142,7 @@ class EditSchedule extends Component {
    * @param value
    */
   updateBreakTime(index, value) {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       breaks: prevState.breaks.map((b, i) => ({
         ...b,
         ...(i === index ? value : null),
@@ -181,38 +180,38 @@ class EditSchedule extends Component {
     const toValidate = [
       ...(!this.state.isClosed
         ? [
-          {
-            startTime: this.state.startTime,
-            endTime: this.state.endTime,
-          },
-        ]
+            {
+              startTime: this.state.startTime,
+              endTime: this.state.endTime,
+            },
+          ]
         : []),
       ...this.state.breaks,
     ];
     // true = has error, false = no error
     const ErrorStateArr = toValidate.map(
-      validate => Object.values(hasError(validate, this.props.timezone)).filter(v => v).length > 0,
+      (validate) =>
+        Object.values(hasError(validate, this.props.timezone)).filter((v) => v).length > 0,
     );
-    return ErrorStateArr.filter(d => d).length > 0;
+    return ErrorStateArr.filter((d) => d).length > 0;
   }
 
   render() {
     const { timezone, isModalVisible, handleUpdateSchedule, selectedDay, chairs } = this.props;
     const items = chairs.toJS();
     const options = Object.values(items)
-      .filter(e => e.isActive)
+      .filter((e) => e.isActive)
       .map(({ id, name }) => ({
         value: id,
         label: name,
       }));
 
-    const getSelectedItems = selectedItems =>
+    const getSelectedItems = (selectedItems) =>
       selectedItems
-        .map(value => ({ value,
-          label: items[value].name }))
+        .map((value) => ({ value, label: items[value].name }))
         .sort(({ label: a }, { label: b }) => sortAsc(a, b));
 
-    const getAvailableOptions = selectedItems =>
+    const getAvailableOptions = (selectedItems) =>
       options
         .filter(({ value }) => !selectedItems.includes(value))
         .sort(({ label: a }, { label: b }) => sortAsc(a, b));
@@ -228,7 +227,12 @@ class EditSchedule extends Component {
         {isModalVisible && (
           <div>
             <div className={styles.header}>
-              <h1 className={styles.title}>{this.props.title}</h1>
+              <h1 className={styles.title}>
+                {this.props.title}
+                <button type="button" className={styles.closeIcon} onClick={this.hideModal}>
+                  <Icon icon="times" size={1.2} />
+                </button>
+              </h1>
               <p className={styles.helper}>
                 If there are fields disabled, it is because {this.props.pmsName} does not allow
                 Donna to update that information. Therefore, this needs to be edited in{' '}
@@ -241,8 +245,8 @@ class EditSchedule extends Component {
                   <span className={styles.label}>Chairs</span>
                   <div className={styles.group}>
                     <MultiSelect
-                      onChange={chairIds => this.setState({ chairIds })}
-                      itemToString={item => (item ? item.label : '')}
+                      onChange={(chairIds) => this.setState({ chairIds })}
+                      itemToString={(item) => (item ? item.label : '')}
                       initialSelectedItem={this.state.chairIds}
                     >
                       {({
@@ -282,14 +286,14 @@ class EditSchedule extends Component {
                 </div>
               )}
               <div className={styles.groupWrapper}>
-                <span className={styles.label}>
-                  Office Hours{' '}
+                <div className={styles.label}>
+                  <span>Office Hours </span>
                   <div className={styles.dropdownWrapper}>
                     <EnabledFeature
                       predicate={({ flags }) =>
-                        (selectedDay
+                        selectedDay
                           ? flags.get('connector-update-practitioner-dailySchedules')
-                          : flags.get('connector-update-practitioner-weeklySchedule'))
+                          : flags.get('connector-update-practitioner-weeklySchedule')
                       }
                       fallback={() => (
                         <div className={styles.labelButton}>
@@ -299,9 +303,9 @@ class EditSchedule extends Component {
                       render={() => (
                         <DropdownMenu
                           align="left"
-                          labelComponent={props => (
+                          labelComponent={(props) => (
                             <Button {...props} compact className={styles.labelButton}>
-                              {this.state.isClosed ? 'Closed' : 'Opened'}{' '}
+                              {this.state.isClosed ? 'Closed' : 'Opened'}
                               <Icon icon="chevron-down" size={0.8} className={styles.labelIcon} />
                             </Button>
                           )}
@@ -323,7 +327,7 @@ class EditSchedule extends Component {
                       )}
                     />
                   </div>
-                </span>
+                </div>
                 <EnabledFeature
                   predicate={() => true}
                   render={({ flags }) => {
@@ -342,7 +346,7 @@ class EditSchedule extends Component {
                             error={hasError(this.state, timezone)}
                             startTime={this.state.startTime}
                             endTime={this.state.endTime}
-                            onChange={update => this.setState(update)}
+                            onChange={(update) => this.setState(update)}
                           />
                         )}
                       </div>
@@ -370,7 +374,7 @@ class EditSchedule extends Component {
                             isAllow={isAllow}
                             startTime={b.startTime}
                             endTime={b.endTime}
-                            onChange={update => this.updateBreakTime(index, update)}
+                            onChange={(update) => this.updateBreakTime(index, update)}
                           />
                         </div>
                       );
@@ -379,9 +383,9 @@ class EditSchedule extends Component {
                 ))}
                 <EnabledFeature
                   predicate={({ flags }) =>
-                    (selectedDay
+                    selectedDay
                       ? flags.get('connector-update-practitioner-dailySchedules')
-                      : flags.get('connector-update-practitioner-weeklySchedule'))
+                      : flags.get('connector-update-practitioner-weeklySchedule')
                   }
                   render={() => (
                     <Button onClick={this.addBreak} className={styles.addBreak}>
@@ -395,9 +399,9 @@ class EditSchedule extends Component {
             <div className={styles.footer}>
               <EnabledFeature
                 predicate={({ flags }) =>
-                  flags.get('connector-update-practitioner-dailySchedule-chairIds')
-                  || flags.get('connector-update-practitioner-dailySchedules')
-                  || flags.get('connector-update-practitioner-weeklySchedule')
+                  flags.get('connector-update-practitioner-dailySchedule-chairIds') ||
+                  flags.get('connector-update-practitioner-dailySchedules') ||
+                  flags.get('connector-update-practitioner-weeklySchedule')
                 }
                 fallback={() => (
                   <Button className={styles.cancel} onClick={this.hideModal}>
@@ -406,11 +410,10 @@ class EditSchedule extends Component {
                 )}
                 render={() => (
                   <div>
-                    <Button className={styles.cancel} onClick={this.hideModal}>
+                    <Button onClick={this.hideModal} border="blue">
                       Cancel
                     </Button>
                     <Button
-                      className={styles.save}
                       disabled={this.hasAnyError()}
                       onClick={() => handleUpdateSchedule(this.state)}
                     >
@@ -450,7 +453,7 @@ EditSchedule.propTypes = {
   chairs: PropTypes.instanceOf(Map),
   pmsName: PropTypes.string.isRequired,
   schedule: PropTypes.shape({
-    breaks: PropTypes.arrayOf(PropTypes.any),
+    breaks: PropTypes.arrayOf(),
     chairIds: PropTypes.arrayOf(PropTypes.string),
     endTime: PropTypes.string,
     isClosed: PropTypes.bool,

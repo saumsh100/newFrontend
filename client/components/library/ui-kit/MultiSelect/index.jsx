@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import Selector from './Selector';
 import List from './List';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 class MultiSelect extends Component {
   constructor(props) {

@@ -1,4 +1,5 @@
-@import '../../../styles/ui.scss';
+@import '../../../styles/ui-reskin.scss';
+@import '../../../styles/reskin-font.scss';
 
 @mixin formContainer-mixin() {
   height: 100%;
@@ -30,11 +31,10 @@
 
 .header {
   align-items: center;
-  background-color: #313843;
+  background-color: $color-purple-400;
   border-bottom: 0;
   box-sizing: border-box;
-  color: $primary-white;
-  composes: fontMedium from '../../../styles/fonts.scss';
+  color: $super-white;
   display: flex;
   font-size: 18px;
   height: 43px;
@@ -44,7 +44,7 @@
 }
 
 .footer {
-  border-top: 1px solid $primary-grey;
+  border-top: 1px solid $color-lavender-150;
   display: flex;
   justify-content: flex-end;
   padding: 20px;
@@ -55,16 +55,13 @@
 }
 
 .searchInput {
-  composes: fontDefault from '../../../styles/fonts.scss';
-
   > input {
     box-sizing: border-box;
     width: 100%;
   }
 
   input::placeholder {
-    color: #a7a9ac;
-    font-family: $dashboard-font;
+    color: $color-grey-200;
     font-size: 15px;
   }
 }
@@ -97,13 +94,12 @@
 
 .suggestionContainer {
   align-items: center;
-  color: $primary-dark;
+  color: $color-purple-600;
   display: flex;
   padding: 10px;
 
   &_details {
-    color: #a7a9ac;
-    composes: fontDefault from '../../../styles/fonts.scss';
+    color: $color-purple-600;
     display: flex;
     flex-direction: column;
     line-height: 1.3;
@@ -111,7 +107,7 @@
   }
 
   &_fullName {
-    color: $primary-dark;
+    color: $color-purple-600;
     font-size: 12px;
   }
 
@@ -121,7 +117,7 @@
 }
 
 .iconAuto {
-  color: #2f3844;
+  color: $color-lavender-500;
   font-size: 1em !important;
   margin-right: 20px;
   opacity: 1;
@@ -234,13 +230,12 @@
   }
 
   label {
-    font-family: $dashboard-font !important;
   }
 }
 
 .checkBox {
   &:before {
-    border-color: $primary-dark !important;
+    border-color: $color-purple-600 !important;
     border-radius: 3px !important;
     height: 10px !important;
     width: 10px !important;
@@ -296,6 +291,9 @@
   cursor: pointer;
   margin-left: auto;
   padding: 0;
+  &:hover {
+    background: $color-purple-400;
+  }
 }
 
 .hideLabel {
@@ -303,7 +301,7 @@
 }
 
 .valueFont {
-  composes: fontMedium from '../../../styles/fonts.scss';
+  @extend .font-Medium;
 }
 
 .hidden {

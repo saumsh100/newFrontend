@@ -1,14 +1,14 @@
-
 import React, { Component } from 'react';
-import PractServicesList from './PractServicesList';
-import { Form, Toggle } from '../../../../library';
+import PropTypes from 'prop-types';
 import { change } from 'redux-form';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
+import { Form, Toggle } from '../../../../library';
+import PractServicesList from './PractServicesList';
 import styles from './styles.scss';
 
 function checkValues(obj) {
-  return Object.keys(obj).every(key => obj[key]);
+  return Object.keys(obj).every((key) => obj[key]);
 }
 
 class PractServicesForm extends Component {
@@ -21,27 +21,29 @@ class PractServicesForm extends Component {
     e.stopPropagation();
     const { formName, values, allServices } = this.props;
 
-    const actions = Object.keys(values).map(key => change(formName, key, !allServices));
+    const actions = Object.keys(values).map((key) => change(formName, key, !allServices));
 
     this.props.dispatch(batchActions(actions));
   }
 
   render() {
-    const { services, practitioner, initialValues, formName, values } = this.props;
+    const { services, practitioner, initialValues, formName } = this.props;
 
     let showComponent = null;
 
     if (services) {
       showComponent = (
         <div className={styles.formContainer}>
-          <div className={styles.allContainer}>
-            <div className={styles.allText}>All Reasons</div>
-            <div className={styles.allToggle}>
-              <Toggle
-                name="allServices"
-                onChange={this.setAllServices}
-                checked={this.props.allServices}
-              />
+          <div className={styles.formContainer_content}>
+            <div className={styles.formContainer_service}>
+              <div className={styles.formContainer_service_name}>All Reasons</div>
+              <div className={styles.formContainer_service_toggle}>
+                <Toggle
+                  name="allServices"
+                  onChange={this.setAllServices}
+                  checked={this.props.allServices}
+                />
+              </div>
             </div>
           </div>
           <Form
@@ -57,6 +59,7 @@ class PractServicesForm extends Component {
             <div className={styles.formContainer_content}>
               {services.toArray().map((service, index) => (
                 <PractServicesList
+                  // eslint-disable-next-line react/no-array-index-key
                   key={`${practitioner.get('id')}${index}`}
                   service={service}
                   index={index}
@@ -87,7 +90,15 @@ function mapStateToProps({ form }, { formName }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  null,
-)(PractServicesForm);
+PractServicesForm.propTypes = {
+  services: PropTypes.shape.isRequired,
+  practitioner: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  formName: PropTypes.string.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  allServices: PropTypes.bool.isRequired,
+  values: PropTypes.shape.isRequired,
+};
+
+export default connect(mapStateToProps, null)(PractServicesForm);

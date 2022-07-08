@@ -1,0 +1,184 @@
+.appRequestContainer {
+  &_fontMedium {
+    @extend .font-Medium;
+  }
+
+  &_appPopover > :global(svg.Popover-tip) {
+    fill: $super-white;
+  }
+
+  &_card {
+    max-width: 450px;
+    width: 40%;
+    @media screen and (max-width: 1000px) {
+      width: 100%;
+    }
+  }
+
+  &_container {
+    background-color: $super-white;
+    border-radius: 0 0 5px 5px;
+    height: 485px;
+  }
+
+  &_tab {
+    background-color: $color-purple-100;
+    border-right: 1px solid $chat-tabs-border-color;
+    box-sizing: border-box;
+    color: $color-purple-600;
+    display: inline-flex;
+    font-size: $medium-size;
+    height: 50px;
+    justify-content: center;
+    padding-top: 12px;
+    width: 50%;
+    @extend .font-Medium;
+
+    &:first-child {
+      border-radius: 5px 0 0 0;
+    }
+    &:last-child {
+      border-radius: 0 5px 0 0;
+      border-right: 0;
+    }
+
+    &:hover {
+      background-color: $color-purple-050;
+    }
+  }
+
+  &_activeTab {
+    background-color: $super-white;
+
+    &:hover {
+      background-color: $super-white;
+    }
+  }
+
+  &_appCard {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+
+  &_noApps {
+    align-items: center;
+    color: $color-grey-300;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    opacity: 0.6;
+    width: 100%;
+  }
+
+  &_appList {
+    flex: 1;
+    height: 100px;
+    min-height: 314px;
+    overflow: auto;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  &_appItem {
+    box-sizing: border-box;
+    color: $primary-dark;
+    cursor: pointer;
+    height: auto;
+    padding: 20px;
+    &:hover {
+      background-color: $color-lavender-050;
+    }
+  }
+
+  &_appData {
+    color: $color-purple-600;
+    font-size: $small-size;
+    font-weight: 700;
+    margin-right: 10px;
+    width: 71px;
+    @extend .font-Medium;
+
+    &_startDate {
+      margin-bottom: 2px;
+    }
+  }
+
+  &_appPatientContainer {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  &_appPatientData {
+    border-left: 1px solid $primary-grey;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    justify-content: space-between;
+    padding-bottom: 5px;
+    padding-left: 1em;
+    padding-top: 5px;
+  }
+
+  &_patientName {
+    color: $color-purple-600;
+    font-size: $medium-size;
+    font-weight: 500;
+    padding-bottom: 3px;
+  }
+
+  &_patientDetails {
+    align-items: flex-end;
+    color: $color-purple-400;
+    display: flex;
+    font-size: $small-size;
+    font-weight: 700;
+    line-height: 1.1em;
+    width: 100%;
+
+    &_lastAppt {
+      color: $color-purple-300;
+    }
+
+    &_data {
+      color: $color-purple-400;
+      font-size: $small-size;
+      font-weight: 700;
+      padding-bottom: 5px;
+      padding-top: 5px;
+    }
+
+    &_date {
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    &_created {
+      color: $light-grey;
+      padding-top: 10px;
+    }
+  }
+
+  &_appPatientConfirmed {
+    margin-left: auto;
+  }
+
+  &_iconContainer {
+    background-color: $color-lavender-200;
+    border-radius: 50%;
+    color: $super-white;
+    font-size: $small-size;
+    font-weight: $heavy-weight;
+    height: 12px;
+    margin-left: 10px;
+    padding: 3px;
+    text-align: center;
+    width: 12px;
+  }
+}

@@ -15,7 +15,7 @@ import {
 import withAuthProps from '../../../hocs/withAuthProps';
 import { removeApplied, applySegment } from '../../../actions/segments';
 import styles from './enterprise-page.scss';
-import AddSegment from '../AddSegment/';
+import AddSegment from "../AddSegment";
 import DateRangeCompare from '../DateRangeCompare';
 import { fetchEntities } from '../../../thunks/fetchEntities';
 
@@ -85,7 +85,7 @@ class EnterprisePage extends React.Component {
     );
 
     // Does this need to be a function?
-    const DateRangeTarget = props => (
+    const DateRangeTarget = (props) => (
       <VButton
         {...props}
         title="Date Range"
@@ -120,7 +120,7 @@ class EnterprisePage extends React.Component {
                 <DropdownSelect
                   className={styles.dropdown}
                   align="left"
-                  options={this.props.segments.toArray().map(segment => ({
+                  options={this.props.segments.toArray().map((segment) => ({
                     label: segment.name,
                     value: segment,
                   }))}
@@ -200,14 +200,14 @@ EnterprisePage.propTypes = {
   segmentName: PropTypes.string,
 };
 
-const stateToProps = state => ({
+const stateToProps = (state) => ({
   applied: state.segments.applied,
   rawWhere: state.segments.rawWhere,
   segments: state.entities.get('segments').get('models'),
   segmentName: state.segments.name,
 });
 
-const actionsToProps = dispatch =>
+const actionsToProps = (dispatch) =>
   bindActionCreators(
     {
       removeApplied,

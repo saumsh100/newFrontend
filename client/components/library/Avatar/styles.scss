@@ -4,7 +4,7 @@ $extraSmall-size: calc(1.5rem * 1.6);
 $small-size: calc(2.3rem * 1.6);
 $medium-size: calc(3rem * 1.6);
 $large-size: calc(5rem * 1.6);
-$extra-Large-size: calc(7.75rem * 1.6);
+$x-jumbo-size: calc(7.75rem * 1.6);
 
 .avatar {
   align-items: center;
@@ -76,10 +76,10 @@ $extra-Large-size: calc(7.75rem * 1.6);
 
 .xl {
   font-size: 45px;
-  height: $extra-Large-size;
-  min-height: $extra-Large-size;
-  min-width: $extra-Large-size;
-  width: $extra-Large-size;
+  height: $x-jumbo-size;
+  min-height: $x-jumbo-size;
+  min-width: $x-jumbo-size;
+  width: $x-jumbo-size;
 }
 
 .text {

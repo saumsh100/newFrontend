@@ -7,25 +7,27 @@ import styles from '../../styles';
 const convertToLocaleString = (number) => (number ? number.toLocaleString('en') : '0');
 
 export default function RevenueDisplay(props) {
-  const { billedData, average, timezone, dates, estimatedData } = props;
+  const { billedData, average, timezone, estimatedData, dashboardDate } = props;
 
-  const lastDate = dates[dates.length - 1];
-  const currentDate = getTodaysDate(timezone).endOf('day').toISOString();
+  const currentDate = getTodaysDate(timezone).startOf('day').toISOString();
 
-  const isCurrentDay = lastDate === currentDate;
+  const isCurrentDay =
+    getFormattedDate(dashboardDate, 'MM/DD/yyyy', timezone) ===
+    getFormattedDate(currentDate, 'MM/DD/yyyy', timezone);
+  const avg = Math.floor(average);
 
   const todaysData = !estimatedData.length || isCurrentDay ? billedData[billedData.length - 1] : 0;
   let yestData = billedData[billedData.length - 2];
-  let todayText = "Today's";
+  let todayText = '';
   let showYestText = true;
+  const isSameWeek = getTodaysDate(timezone).isSame(dashboardDate, 'week');
 
-  const avg = Math.floor(average);
-
-  if (!isCurrentDay && avg) {
-    const isSameWeek = getTodaysDate(timezone).isSame(lastDate, 'week');
-    todayText = isSameWeek
-      ? `${getFormattedDate(lastDate, 'ddd', timezone)}.`
-      : `${getFormattedDate(lastDate, 'MMM Do', timezone)}`;
+  if (isCurrentDay) {
+    todayText = "Today's";
+  } else if (isSameWeek && dashboardDate < currentDate) {
+    todayText = getFormattedDate(dashboardDate, 'ddd', timezone);
+  } else {
+    todayText = getFormattedDate(dashboardDate, 'MMM Do', timezone);
   }
 
   // eslint-disable-next-line no-mixed-operators
@@ -43,14 +45,13 @@ export default function RevenueDisplay(props) {
     [styles.revenueDisplay_zero]: percentage === 0,
   });
 
-  const icon = percentage < 0 ? 'caret-down' : 'caret-up';
+  const icon = percentage < 0 ? 'arrow-down' : 'arrow-up';
+  const todaysProductionText = `${todayText} Billed Production`;
 
   return (
     <div className={styles.revenueDisplay_revenueDisplay}>
       <div className={styles.revenueDisplay_revenueDisplayTop}>
-        <div className={styles.revenueDisplay_todaysProductionText}>
-          {todayText} Billed Production
-        </div>
+        <div className={styles.revenueDisplay_todaysProductionText}>{todaysProductionText}</div>
         <div className={styles.revenueDisplay_todaysProductionValue}>
           <span className={styles.revenueDisplay_todaysProductionValue_dollar}>$</span>
           {convertToLocaleString(todaysData)}
@@ -94,5 +95,5 @@ RevenueDisplay.propTypes = {
   estimatedData: PropTypes.arrayOf(PropTypes.number).isRequired,
   average: PropTypes.number.isRequired,
   timezone: PropTypes.string.isRequired,
-  dates: PropTypes.arrayOf(PropTypes.string).isRequired,
+  dashboardDate: PropTypes.string.isRequired,
 };

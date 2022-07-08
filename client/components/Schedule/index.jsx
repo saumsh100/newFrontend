@@ -29,7 +29,7 @@ import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 import AssignPatientToChatDialog from '../Patients/AssignPatientToChatDialog';
 import { selectAppointmentShape, practitionerShape } from '../library/PropTypeShapes';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 class ScheduleComponent extends PureComponent {
   constructor(props) {

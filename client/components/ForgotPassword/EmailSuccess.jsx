@@ -1,36 +1,38 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Card, Button } from '../library';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 export default function EmailSuccess(props) {
   const { email, push } = props;
 
   return (
-    <div className={styles.backDrop}>
-      <Card className={styles.loginForm}>
-        <div className={styles.logoContainer}>
-          <img className={styles.loginLogo} src="/images/logo_black.png" alt="CareCru Logo" />
-        </div>
-        <p>
-          We&apos;ve sent an email to <span className={styles.email}>{email}</span> with password
-          reset instructions.
-        </p>
-        <p>
-          If the email doesn&apos;t show up soon, please check your spam folder. We sent the email
-          from <span className={styles.email}>noreply@carecru.com</span>.
-        </p>
+    <Card className={styles.loginForm}>
+      <h1 className={styles.title}>Recovery Email has been sent</h1>
+      <p className={styles.text}>
+        We’ve sent an email to <span className={styles.email}>{email}</span> with the recovery link.
+        Please make sure to check your spam folder as well. We sent the email from{' '}
+        <span className={styles.email}>noreply@carecru.com</span>.
+      </p>
+      <div className={styles.buttonContainer}>
+        {/* <Button
+          onClick={() => handleResend()}
+          className={styles.displayCenter}
+          border="blue"
+          disable={resented}
+        >
+          Resend Email
+        </Button> */}
         <Button
           onClick={() => {
             push('/login');
           }}
           className={styles.displayCenter}
         >
-          Return to Login
+          Return to Sign In
         </Button>
-      </Card>
-    </div>
+      </div>
+    </Card>
   );
 }
 

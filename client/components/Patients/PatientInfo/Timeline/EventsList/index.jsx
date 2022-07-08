@@ -1,6 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import PatientTimelineEvent from '../../../../../entities/models/PatientTimelineEvent';
@@ -17,7 +17,7 @@ function EventsList({ events, filters, patient, timezone }) {
       </div>
     );
   }
-  const filteredEvents = events.filter(event => filters.indexOf(event.get('type')) > -1);
+  const filteredEvents = events.filter((event) => filters.indexOf(event.get('type')) > -1);
 
   const sortedEvents = sortEvents(filteredEvents);
 
@@ -25,7 +25,7 @@ function EventsList({ events, filters, patient, timezone }) {
 
   sortedEvents
     .filter(
-      ev =>
+      (ev) =>
         getUTCDate(ev.get('metaData').createdAt, timezone).diff(getTodaysDate(timezone), 'days') <
         1,
     )
@@ -42,31 +42,40 @@ function EventsList({ events, filters, patient, timezone }) {
 
   // sort date sections by date descending
   const dateSections = Object.keys(dateObj)
-    .map(date => parseDateWithFormat(date, 'MMMM Do YYYY', timezone))
+    .map((date) => parseDateWithFormat(date, 'MMMM Do YYYY', timezone))
     .sort((a, b) => b.diff(a))
-    .map(date => date.format('MMMM Do YYYY'));
+    .map((date) => date.format('MMMM Do YYYY'));
 
   return (
     <div className={styles.eventsList}>
       {dateSections.length > 0 &&
-        dateSections.map(date => (
-          <EventDateSections
-            key={`eventSection_${date}`}
-            dateHeader={date}
-            events={dateObj[date]}
-            patient={patient}
-            timezone={timezone}
-          />
+        dateSections.map((date, index) => (
+          <div className={styles.eventSectionContainer}>
+            <div
+              className={classnames(styles.eventVerticalLineTop, {
+                [styles.eventVerticalLineTop_invisible]: index === 0,
+              })}
+            />
+            <EventDateSections
+              key={`eventSection_${date}`}
+              dateHeader={date}
+              events={dateObj[date]}
+              patient={patient}
+              timezone={timezone}
+            />
+            <div
+              className={classnames(styles.eventVerticalLineBottom, {
+                [styles.eventVerticalLineBottom_invisible]: index + 1 === dateSections.length,
+              })}
+            />
+          </div>
         ))}
     </div>
   );
 }
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(EventsList);
+export default connect(mapStateToProps, null)(EventsList);
 
 EventsList.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(PatientTimelineEvent)),

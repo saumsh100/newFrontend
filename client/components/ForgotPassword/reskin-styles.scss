@@ -1,0 +1,130 @@
+@import '../../styles/ui-reskin.scss';
+
+.backDrop {
+  background-image: url('../../../public/images/reskin-login-bg.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.title {
+  color: $color-purple-600;
+  font-family: $font-inter;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.loginForm {
+  margin: 100px auto 0;
+  padding: 30px 50px;
+  width: 417px;
+  z-index: 200;
+  @media screen and (min-height: 720px) {
+    transform: translateY(-150px);
+  }
+  @media screen and (max-width: $medium-screen-width) {
+    width: 60%;
+  }
+}
+
+.logoContainer {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.loginLogo {
+  width: 100px;
+}
+
+.submitButton {
+  width: 100%;
+}
+
+.text {
+  color: $color-purple-600;
+  font-size: $medium-size;
+  font-weight: 400;
+  line-height: 24px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.textLogin {
+  cursor: pointer;
+  padding-top: 15px;
+  text-align: center;
+}
+
+.input {
+  margin-bottom: 32px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.button {
+  height: 40px;
+  margin-left: 16px;
+}
+
+.textError {
+  @extend .text;
+  color: $error-400;
+}
+
+.textSuccess {
+  background-color: $color-success-500;
+  padding: 10px;
+}
+
+.textSuccess2 {
+  padding: 10px;
+  text-align: center;
+}
+
+.submitText {
+  text-align: center;
+}
+
+.displayCenter {
+  height: 40px;
+  margin-top: 32px;
+  width: 50%;
+}
+
+.email {
+  color: $color-purple-600;
+  font-weight: 700;
+}
+
+.noMarginErrorMessage {
+  color: $error-400;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  margin: -28px 0 0 0;
+}
+.errorMessage {
+  color: $error-400;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  margin: -8px 0 16px 0;
+}
+
+.submitButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  min-height: 40px;
+  &_button {
+    font-size: $medium-size;
+    font-weight: 500;
+    line-height: 24px;
+  }
+}

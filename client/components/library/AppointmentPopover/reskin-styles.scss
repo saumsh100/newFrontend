@@ -1,0 +1,211 @@
+@import '../../../styles/ui-reskin.scss';
+@import '../../../styles/ui.scss';
+@import '../../../styles/reskin-font.scss';
+
+.appLink {
+  color: $color-purple-300;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    color: $color-lavender-500;
+    transform: scale(1.02);
+  }
+}
+
+.appPopover > :global(svg.Popover-tip) {
+  fill: $super-white;
+}
+
+.header {
+  color: $super-white;
+  padding-left: 15px;
+  padding-right: 15px;
+  &_text {
+    font-size: $x-medium-size;
+    font-weight: $bold-weight;
+    padding-left: 14px;
+    padding-top: 4px;
+  }
+}
+
+.card {
+  box-shadow: $card-shadow !important;
+  min-width: 300px;
+  width: auto;
+}
+
+.appointmentHeader {
+  align-items: center;
+  background-color: $color-purple-400;
+  border-radius: 4px 4px 0px 0px;
+  color: $color-lavender-150;
+  display: flex;
+  font-size: $x-medium-size;
+  height: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  &_text {
+    font-weight: $bold-weight;
+    padding-left: 14px;
+    padding-top: 4px;
+  }
+
+  &_age {
+    font-weight: $bold-weight;
+  }
+
+  &_actionsButtonSmall {
+    font-weight: $heavy-weight;
+    margin-top: 0;
+    padding: 8px 12px;
+    width: 40px;
+  }
+
+  &_calendarIcon {
+    font-weight: $normal-weight;
+  }
+}
+
+.appointmentPatientLink {
+  color: $color-lavender-150;
+  cursor: pointer;
+  font-family: $font-inter;
+  transition: all 0.1s ease-in-out;
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    color: white;
+    transform: scale(1.02);
+  }
+}
+.closeIcon {
+  background-color: transparent;
+  border: none;
+  color: $color-lavender-150;
+  font-weight: $normal-weight;
+  margin-left: auto;
+  width: 30px;
+  &:hover {
+    color: $super-white;
+  }
+}
+
+.body {
+  background-color: $super-white;
+  height: auto;
+  max-height: 390px;
+  max-width: 300px;
+  min-height: 200px;
+  padding: 15px 15px 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 10px;
+  }
+}
+
+.subHeader {
+  @extend .font-subHeaderExtraSmall;
+  font-weight: 400;
+  padding-bottom: 5px;
+}
+
+.infoArrow {
+  display: inline;
+  margin-left: 10px;
+}
+
+.dataLink {
+  font-size: 13px;
+  padding: 0 0 2px;
+
+  @at-root button#{&},
+    a#{&} {
+    color: $color-grey-400;
+    cursor: pointer;
+    text-decoration: none;
+
+    &,
+    &:active,
+    &:focus {
+      border: none;
+      outline: none;
+    }
+
+    &:hover {
+      color: $color-lavender-500;
+    }
+  }
+}
+
+.data {
+  @extend .font-Medium;
+  align-items: center;
+  color: $color-purple-600;
+  display: flex;
+  font-size: $medium-size;
+  font-weight: 500;
+  line-height: 20px;
+  padding: 0 0 2px;
+
+  &_note {
+    max-height: 88px;
+    overflow: auto;
+    width: 100%;
+
+    textarea {
+      border-bottom: 0;
+      color: $color-purple-600 !important;
+      font-weight: $medium-weight;
+      height: auto;
+      padding: 0;
+    }
+  }
+
+  &_text {
+    padding-left: 5px;
+    padding-top: 1px;
+  }
+}
+.data_icon {
+  color: $color-purple-400;
+  font-weight: $normal-weight;
+}
+
+.textAreaGroup {
+  padding: 0 !important;
+}
+
+.footer {
+  align-items: center;
+  border-radius: 0px 0px 4px 4px;
+  border-top: 1px solid $primary-grey;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px;
+  width: 100%;
+}
+
+.editButton {
+  background-color: $color-lavender-500;
+  margin-left: 5px;
+}
+
+.popoverErrorMessage {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.popoverErrorIcon {
+  margin-right: 5px;
+}

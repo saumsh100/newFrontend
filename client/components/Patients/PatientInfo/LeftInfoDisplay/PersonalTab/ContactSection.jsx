@@ -22,7 +22,7 @@ export default function ContactSection(props) {
       <div className={styles.subHeader}>Contact</div>
       <Row className={styles.row}>
         <Col xs={12} className={styles.cellPhoneRow}>
-          <InfoDump label="Cellphone NUMBER" data={formatPhoneNumber(patient.cellPhoneNumber)}>
+          <InfoDump label="Cellphone Number" data={formatPhoneNumber(patient.cellPhoneNumber)}>
             {() =>
               patient.cellPhoneNumber && (
                 <PointOfContactBadge patientId={patient.id} channel="phone" />
@@ -38,21 +38,21 @@ export default function ContactSection(props) {
         </Col>
         <Col xs={6} className={styles.paddingPhones}>
           <InfoDump
-            label="Mobile Phone NUMBER"
+            label="Mobile Phone Number"
             data={formatPhoneNumber(patient.mobilePhoneNumber)}
           />
         </Col>
         <Col xs={6} className={styles.paddingPhones}>
-          <InfoDump label="Other Phone NUMBER" data={formatPhoneNumber(patient.otherPhoneNumber)} />
+          <InfoDump label="Other Phone Number" data={formatPhoneNumber(patient.otherPhoneNumber)} />
         </Col>
         <Col xs={6} className={styles.paddingPhones}>
-          <InfoDump label="HOME NUMBER" data={formatPhoneNumber(patient.homePhoneNumber)} />
+          <InfoDump label="home Number" data={formatPhoneNumber(patient.homePhoneNumber)} />
         </Col>
         <Col xs={6} className={styles.paddingPhones}>
-          <InfoDump label="WORK NUMBER" data={formatPhoneNumber(patient.workPhoneNumber)} />
+          <InfoDump label="Work Number" data={formatPhoneNumber(patient.workPhoneNumber)} />
         </Col>
         <Col xs={12} className={styles.emailRow}>
-          <InfoDump label="EMAIL" data={patient.email} type="email">
+          <InfoDump label="Email" data={patient.email} type="email">
             {() => patient.email && <PointOfContactBadge patientId={patient.id} channel="email" />}
           </InfoDump>
         </Col>

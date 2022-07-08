@@ -1,4 +1,4 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin';
 
 .bubbleWrapper {
   max-width: 350px;
@@ -11,7 +11,6 @@
 .bubbleBody {
   border-radius: 18px;
   line-height: 18px;
-  // font-size: 13px;
   padding: 6px 12px;
   text-align: left;
   white-space: pre-wrap;
@@ -19,24 +18,27 @@
 }
 
 .fromPatientBody {
-  background-color: white;
+  background-color: $color-purple-100;
   border-bottom-left-radius: 0;
+  color: $color-purple-600;
+  font-size: $small-size;
+  font-weight: $medium-weight;
+  line-height: 16px;
 }
 
 .fromClinicBody {
-  background-color: $primary-blue;
+  background-color: $color-lavender-500;
   border-bottom-right-radius: 0;
-  color: white;
-}
-
-.fromClinicBodyHub {
-  @extend .fromClinicBody;
-  background: $electron-chat-message-bg-clinic;
+  color: $super-white;
+  font-size: $small-size;
+  font-weight: $medium-weight;
+  line-height: 16px;
 }
 
 .bubbleTime {
-  color: $primary-gray;
-  font-size: 9px;
+  color: $color-grey-300;
+  font-size: $small-size;
+  font-weight: $bold-weight;
   padding-top: 5px;
 }
 
@@ -58,7 +60,7 @@
 }
 
 .notValidNoMessage__Body {
-  color: $danger-color;
+  color: $error-400;
   font-size: 9px;
   line-height: 11px;
   opacity: 1;

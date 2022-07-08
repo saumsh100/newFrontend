@@ -1,29 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './headerStyles.scss';
-import waitlistTableStyles from '../styles.scss';
-import { IconButton } from '../../../../../library';
+import styles from './reskin-headerStyles.scss';
+import waitlistTableStyles from '../reskin-styles.scss';
+import { Icon, IconButton } from '../../../../../library';
 
 const WaitListTableHeader = ({ exitFullScreen, segmentedWaitList, isFilterActive, waitlist }) => (
   <div className={styles.waitListTableHeaderWrapper}>
+    <div
+      className={styles.redirect}
+      onClick={exitFullScreen}
+      role="button"
+      tabIndex={0}
+      onKeyUp={(e) => e.keyCode === 13 && exitFullScreen}
+    >
+      <div className={styles.iconWrapper}>
+        <Icon size={1} icon="chevron-left" />
+      </div>
+      Back
+    </div>
+
     <div className={styles.waitListTableHeaderTitle}>
       {segmentedWaitList?.length && isFilterActive ? (
         <>
           <span className={waitlistTableStyles.waitListCountWrapper}>
             {segmentedWaitList?.length}
           </span>{' '}
-          of {waitlist?.length} in Waitlist
+          of {waitlist?.length} In Waitlist
         </>
       ) : (
         <>
           <span className={waitlistTableStyles.waitListCountWrapper}>
             {segmentedWaitList?.length}
           </span>{' '}
-          in Waitlist
+          In Waitlist
         </>
       )}
     </div>
-    <IconButton icon="times" size={1.5} onClick={exitFullScreen} className={styles.closeButton} />
+    <IconButton icon="times" size={2.5} onClick={exitFullScreen} className={styles.closeButton} />
   </div>
 );
 

@@ -1,7 +1,6 @@
-
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import styles from '../styles.scss';
+import React from 'react';
+import styles from '../reskin-styles.scss';
 import { Checkbox, CheckboxImage } from '../../../../library';
 import { SortByFirstName } from '../../../../library/util/SortEntities';
 
@@ -19,7 +18,16 @@ export default function FilterPractitioners(props) {
     return null;
   }
 
-  const colors = ['red', 'blue-green', 'yellow', 'green'];
+  const colors = [
+    'salmon200',
+    'lavender200',
+    'yellow200',
+    'teal200',
+    'salmon200',
+    'lavender200',
+    'yellow200',
+    'teal200',
+  ];
   const colorLen = colors.length;
   const colorArray = [];
 
@@ -33,18 +41,20 @@ export default function FilterPractitioners(props) {
 
   const reset = Math.ceil((practitionersSort.length - colorLen) / colorLen);
 
-  for (let j = 0; j <= reset; j++) {
-    for (let i = 0; i < colorLen; i++) {
+  for (let j = 0; j <= reset; j += 1) {
+    for (let i = 0; i < colorLen; i += 1) {
       colorArray.push(colors[i]);
     }
   }
 
-  practitionersSort = practitionersSort.map((prac, index) =>
-    Object.assign({}, prac.toJS ? prac.toJS() : prac, { color: colorArray[index] }));
+  practitionersSort = practitionersSort.map((practitioner, index) => ({
+    ...(practitioner.toJS ? practitioner.toJS() : practitioner),
+    color: colorArray[index],
+  }));
 
   return (
     <div>
-      <div className={styles.filter_options__title}>Practitioners</div>
+      <div className={styles.filter_options__title}>Practitioners:</div>
       <ul className={styles.filter_practitioner__wrapper}>
         <Checkbox
           hidden
@@ -70,7 +80,6 @@ export default function FilterPractitioners(props) {
             </div>
           );
           const url = pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null;
-
           return (
             <div key={pr.id} className={styles.filter_practitioner__list}>
               <CheckboxImage
@@ -96,10 +105,10 @@ export default function FilterPractitioners(props) {
 }
 
 FilterPractitioners.propTypes = {
-  filterKey: PropTypes.string,
-  allChecked: PropTypes.bool,
-  practitioners: PropTypes.shape({}),
-  selectedFilterItem: PropTypes.array,
-  handleAllCheck: PropTypes.func,
-  handleEntityCheck: PropTypes.func,
+  filterKey: PropTypes.string.isRequired,
+  allChecked: PropTypes.bool.isRequired,
+  practitioners: PropTypes.shape.isRequired,
+  selectedFilterItem: PropTypes.arrayOf.isRequired,
+  handleAllCheck: PropTypes.func.isRequired,
+  handleEntityCheck: PropTypes.func.isRequired,
 };

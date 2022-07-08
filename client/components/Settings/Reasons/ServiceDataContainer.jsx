@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
+import classNames from 'classnames';
 import ServiceDataItem from './ServiceDataItem';
 import { updateEntityRequest, deleteEntityRequest } from '../../../thunks/fetchEntities';
 import SettingsCard from '../Shared/SettingsCard';
-import { Card, Header, IconButton, Tab, Tabs, Tooltip } from '../../library';
+import { Card, IconButton, Tab, Tabs, Tooltip } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
 import ReasonWeeklyHoursWrapper from './ReasonHours/Wrapper';
 import styles from './styles.scss';
@@ -92,8 +93,20 @@ class ServiceDataContainer extends Component {
           }
           subHeader={
             <Tabs index={this.state.index} onChange={(index) => this.setState({ index })}>
-              <Tab label="Reason Settings" data-test-id="tab_practitionerBasicData" />
-              <Tab label="Override Availabilities" data-test-id="tab_practitionerOfficeHours" />
+              <Tab
+                label="Reason Settings"
+                data-test-id="tab_practitionerBasicData"
+                className={classNames(styles.tab, {
+                  [styles.tab_active]: this.state.index === 0,
+                })}
+              />
+              <Tab
+                label="Override Availabilities"
+                data-test-id="tab_practitionerOfficeHours"
+                className={classNames(styles.tab, {
+                  [styles.tab_active]: this.state.index === 1,
+                })}
+              />
             </Tabs>
           }
         >
@@ -108,7 +121,6 @@ class ServiceDataContainer extends Component {
               />
             </Tab>
             <Tab label=" ">
-              <Header title="Override Availabilities" contentHeader />
               <EnabledFeature
                 predicate={({ flags }) => flags.get('reason-schedule-component')}
                 render={() => <ReasonWeeklyHoursWrapper reason={selectedService} />}

@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import PatientUser from '../../entities/models/PatientUser';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { getFormattedDate, getTodaysDate } from '../library';
 
 const RequestData = ({

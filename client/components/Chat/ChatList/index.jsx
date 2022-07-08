@@ -10,7 +10,7 @@ import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
 import { Avatar, Icon, ListItem } from '../../library';
 import { sortByFieldAsc } from '../../library/util/SortEntities';
 import ChatListItem from './ChatListItem';
-import listItemStyles from './ChatListItem/styles.scss';
+import listItemStyles from './ChatListItem/reskin-styles.scss';
 import ChatListSkeleton from './ChatListSkeleton';
 
 class ChatListContainer extends Component {

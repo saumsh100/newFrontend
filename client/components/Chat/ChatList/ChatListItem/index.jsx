@@ -6,7 +6,7 @@ import { formatPhoneNumber } from '../../../../util/isomorphic';
 import { Icon, ListItem, Avatar, getTodaysDate, getUTCDate } from '../../../library';
 import { toggleFlagged, selectChat } from '../../../../thunks/chat';
 import UnknownPatient from '../../unknownPatient';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 class ChatListItem extends Component {
   constructor(props) {
@@ -81,7 +81,7 @@ class ChatListItem extends Component {
         selectItem={isActive}
         onClick={this.selectChat}
       >
-        <div>{this.renderStar(chat.isFlagged, this.toggleFlag)}</div>
+        <div className={styles.renderStar}>{this.renderStar(chat.isFlagged, this.toggleFlag)}</div>
         <div className={styles.avatar}>
           <Avatar size="sm" user={patient} />
         </div>
@@ -90,7 +90,7 @@ class ChatListItem extends Component {
             <div className={isUnread ? styles.fullNameUnread : styles.fullName}>
               {this.renderPatient()}
             </div>
-            <div className={styles.time}>{messageDate}</div>
+            <div className={isUnread ? styles.unreadTime : styles.time}>{messageDate}</div>
           </div>
           <div
             data-test-id="chat_lastMessage"

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,7 +5,8 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
 import { parse, stringify } from 'query-string';
-import { Link, Form, Field, Button } from '../../../../library';
+import { Link, Form } from '../../../../library';
+import { Field, Button } from '../../../components';
 import { login } from '../../../../../thunks/patientAuth';
 import { updateReview } from '../../../../../thunks/reviews';
 import { locationShape } from '../../../../library/PropTypeShapes/routerShapes';
@@ -20,7 +20,7 @@ function Login(props) {
    *
    * @param {object} values
    */
-  const handleLogin = values =>
+  const handleLogin = (values) =>
     props.login(values).catch(({ response }) => {
       throw new SubmissionError({
         email: response.data,
@@ -28,7 +28,7 @@ function Login(props) {
       });
     });
 
-  const b = path =>
+  const b = (path) =>
     props.location.pathname
       .split('/')
       .filter((v, index) => index < 4)
@@ -108,9 +108,4 @@ Login.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
 };
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(Login),
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));

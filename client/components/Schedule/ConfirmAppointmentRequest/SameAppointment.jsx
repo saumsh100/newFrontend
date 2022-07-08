@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {
-  Button,
   getUTCDate,
   getFormattedTime,
   Avatar,
@@ -12,7 +11,7 @@ import {
 } from '../../library';
 import { appointmentShape } from '../../library/PropTypeShapes';
 import Patient from '../../../entities/models/Patient';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import Item from './Item';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 
@@ -32,7 +31,7 @@ const SameAppointment = (props) => {
   const patientPhone = patient.mobilePhoneNumber || patient.cellPhoneNumber;
   const patientEmail = patient.email;
   return (
-    <Button
+    <div
       className={classNames(styles.dataContainer, styles.singleItem, {
         [styles.appointmentIsSelected]: appointment.id === (selectedApp && selectedApp.id),
       })}
@@ -66,7 +65,7 @@ const SameAppointment = (props) => {
         </div>
         <div className={styles.itemContainer}>
           <Item
-            title="DATE"
+            title="Date"
             index="DATE"
             value={appointmentDate}
             extra={[
@@ -76,10 +75,10 @@ const SameAppointment = (props) => {
               },
             ]}
           />
-          <Item title="TIME" index="TIME" value={getFormattedTime(startDate, endDate, timezone)} />
+          <Item title="Time" index="TIME" value={getFormattedTime(startDate, endDate, timezone)} />
         </div>
       </div>
-    </Button>
+    </div>
   );
 };
 

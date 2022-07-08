@@ -1,0 +1,214 @@
+@import '../../../../styles/ui-reskin.scss';
+
+.schedule_filter {
+  background-color: $super-white;
+  border: 1px solid $color-lavender-100;
+  border-radius: 4px;
+  box-shadow: 0 0 25px 1px rgba(209, 209, 209, 0.5);
+  width: 302px;
+}
+
+.filter_header {
+  align-items: center;
+  border: none;
+
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  max-height: 40px;
+  padding: 16px;
+
+  @media screen and (max-width: 1350px) {
+    justify-content: space-between;
+  }
+
+  &__title {
+    color: $color-purple-600;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+  }
+
+  &__icon {
+    color: $color-purple-600;
+    font-size: $medium-size;
+    font-weight: 400;
+    margin-right: 12px;
+  }
+
+  &__allButton {
+    background-color: $super-white;
+    border: none;
+    border-radius: 4px;
+    color: $color-lavender-500;
+    cursor: pointer;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    height: 20px;
+    line-height: 16px;
+
+    &:disabled {
+      color: $color-grey-200;
+      cursor: default;
+    }
+  }
+
+  &_actionableButton {
+    @extend .filter_header__allButton;
+    &:hover {
+      background-color: $color-lavender-050;
+      cursor: pointer;
+    }
+  }
+
+  &__link {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+
+    &__selectText {
+      @extend .filter_header__allButton;
+      margin-right: 8px;
+    }
+
+    &__clearText {
+      @extend .filter_header__allButton;
+    }
+  }
+}
+
+.bodyContainer {
+  background: $super-white;
+  display: flex;
+  flex: 1;
+  padding: 0;
+  width: 100%;
+}
+
+.filter_practitioner {
+  background: $super-white;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  max-height: 240px;
+  overflow-y: scroll;
+  padding: 16px;
+
+  &__name {
+    color: $color-purple-600;
+    font-size: 10px;
+    font-size: $medium-size;
+    font-weight: 500;
+    line-height: 20px;
+    margin-bottom: 4px;
+  }
+
+  &__type {
+    color: $color-grey-400;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 14px;
+  }
+
+  &__title {
+    color: $color-purple-400;
+    font-size: 9px;
+    line-height: 30px;
+    margin-left: 5px;
+    text-transform: uppercase;
+  }
+
+  &__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    list-style: none;
+    padding: 0;
+    width: 100%;
+
+    & > .filter_practitioner__list + .filter_practitioner__list {
+      margin-left: 16px;
+    }
+    & > .filter_practitioner__list:last-child {
+      margin-right: 10px;
+    }
+  }
+
+  &__list {
+    align-items: center;
+    display: flex;
+    flex: 0 0 23%;
+    flex-direction: column;
+    font-size: $small-size;
+    margin: 8px 8px;
+    min-width: 58px;
+    text-align: center;
+    word-break: break-word;
+  }
+}
+
+.filter_options {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  &__title {
+    color: $color-purple-400;
+    font-size: $small-size;
+    font-weight: 400;
+    line-height: 16px;
+    text-transform: capitalize;
+  }
+
+  &__checkLabelContainer {
+    align-items: center;
+    display: flex;
+    margin-bottom: 16px;
+    text-transform: capitalize;
+    &:nth-last-child(-n + 2) {
+      margin-bottom: 0;
+    }
+    &__all {
+      font-weight: 700;
+    }
+  }
+
+  &__label {
+    background-color: transparent;
+    border: none;
+    color: $color-purple-400;
+    cursor: pointer;
+    font-size: $small-size;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: start;
+    word-break: break-word;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 10px;
+
+    select {
+      background: none;
+      border: none;
+      border-bottom: 1px $color-lavender-500 solid;
+      font-size: initial;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.fillContainer {
+  width: 100%;
+}
+
+.divider {
+  background-color: $color-lavender-100;
+}

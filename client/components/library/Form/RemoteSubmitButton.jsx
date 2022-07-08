@@ -1,11 +1,11 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import omit from 'lodash/omit';
 import { submit, isInvalid, isPristine } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Button from '../Button';
+import Button from '../StandardButton';
+import styles from './styles.scss';
 
 function RemoteSubmitButton(props) {
   const { form, removePristineCheck } = props;
@@ -20,6 +20,8 @@ function RemoteSubmitButton(props) {
       disabled={props.isInValid || (!removePristineCheck ? props.isPristine : false)}
       {...newProps}
       onClick={newOnClick}
+      variant="primary"
+      className={styles.remoteSubmitButton}
     >
       {props.children}
     </Button>

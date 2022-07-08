@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import BackButton from './BackButton';
-import Button from '../../library/Button';
+import Button from '../components/Button';
 import { closeBookingModal } from '../../../thunks/availabilities';
 import { historyShape, locationShape } from '../../library/PropTypeShapes/routerShapes';
 import { BackButtonSVG, CloseBookingModalSVG } from '../SVGs';

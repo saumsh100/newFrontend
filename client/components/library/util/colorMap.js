@@ -13,6 +13,10 @@ export default {
   facebookBlue: '#395998',
   lightBlue: '#8CBCD6',
   white: '#FFFFFF',
+  lavender500: '#574bd2',
+  lavender150: '#dedbff',
+  lavender200: '#c7c2ff',
+  purple050: '#f1f0f5',
 };
 
 export const hexToRgbA = (hex, opacity) => {
@@ -29,7 +33,7 @@ export const hexToRgbA = (hex, opacity) => {
 };
 
 export const darkerColor = (c, n) =>
-  c.map(d => {
+  c.map((d) => {
     let b = Number(d);
     return (b += n) < 0 ? 0 : b > 255 ? 255 : b | 0;
   });

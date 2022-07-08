@@ -1,18 +1,17 @@
-@import '../../styles/ui.scss';
+@import '../../styles/ui-reskin.scss';
 
 .callsContainer {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 15px;
+  padding: 16px;
   width: 100%;
 }
 
 .cardGraph {
   box-sizing: border-box;
-  margin-bottom: 15px;
-  min-height: 405px;
+  margin-bottom: 16px;
 }
 
 .cardTable {
@@ -33,25 +32,30 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 30px 30px 0;
+  margin-bottom: 16px;
   width: 100%;
 }
 
 .headerGraph_title {
-  color: $primary-dark;
-  composes: fontMedium from '../../styles/fonts.scss';
-  font-size: 25px;
+  color: $color-purple-600;
+  font-size: $xxx-medium-size;
+  font-weight: $medium-weight;
+  line-height: $x-large-size;
+
+  padding: 8px 16px;
 }
 
-.headerGraph_calendar {
+.graphDateInfo {
+  align-items: center;
   display: flex;
-  justify-content: flex-end;
-  width: 200px;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 30px 24px 0px;
+}
 
-  div {
-    cursor: pointer;
-    &:hover {
-      color: $primary-red;
-    }
-  }
+.subHeader {
+  color: $color-purple-400;
+  font-size: $x-medium-size;
+  font-weight: $medium-weight;
+  line-height: $xxx-medium-size;
 }

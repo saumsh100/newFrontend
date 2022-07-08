@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import pick from 'lodash/pick';
@@ -17,11 +16,9 @@ import {
   getFinalDailyHours,
   updateFinalDailyHours,
 } from './thunks';
-import { getFormattedDate, parseDate, Toggle } from '../../../../library';
+import { getFormattedDate, parseDate } from '../../../../library';
 import chairShape from '../../../../library/PropTypeShapes/chairShape';
-import EnabledFeature from '../../../../library/EnabledFeature';
 import calendarDay from '../../../../library/ScheduleCalendar/calendarDay';
-import styles from '../../../../library/ScheduleCalendar/day.scss';
 
 class PractitionerHoursCalendar extends Component {
   constructor(props) {
@@ -58,6 +55,149 @@ class PractitionerHoursCalendar extends Component {
     this.getSchedule();
   }
 
+  /**
+   * It either select a day or unselect the same day.
+   *
+   * @param date {Date}
+   * @param callback
+   */
+  handleDayClick(date, callback) {
+    const { selectedDay: selectDayState } = this.state;
+    const selectedDay = selectDayState && selectDayState.getTime() === date.getTime() ? null : date;
+    this.setState(
+      {
+        selectedDay,
+        selectedDailySchedule: selectedDay
+          ? Object.values(this.getFeaturedDay(selectedDay))[0]
+          : null,
+      },
+      callback,
+    );
+  }
+
+  /**
+   * Event that handles the doubleClick on a calendar Day;
+   * @param day
+   * @param handleEditSchedule
+   * @return {function(): void}
+   */
+  handleDoubleClick(day, handleEditSchedule) {
+    return () =>
+      this.handleDayClick(day, () =>
+        handleEditSchedule(getFormattedDate(day, 'dddd', this.props.timezone).toLowerCase()),);
+  }
+
+  /**
+   * Update a dailySchedule, if isClosed is true, set the startTime and endTime to the same value.
+   *
+   * @param isClosed
+   * @param id
+   * @param date
+   * @param isDailySchedule
+   * @param schedule
+   * @param callback {function}
+   * @returns {Promise<any | never>}
+   */
+  handleUpdateSchedule({ id, date, isDailySchedule, ...schedule }, callback) {
+    const baseBody = pick(schedule, ['startTime', 'endTime', 'breaks', 'chairIds']);
+    return updateFinalDailyHours(id, {
+      ...baseBody,
+      endTime: baseBody.endTime,
+      startTime: baseBody.startTime,
+      breaks: baseBody.breaks,
+    })
+      .then(() => {
+        this.getSchedule(this.state.month);
+        const body =
+          date && isDailySchedule
+            ? `Updated holiday hours for ${this.props.practitioner.getPrettyName()} on ${getFormattedDate(
+                date,
+                'dddd, MMMM Do',
+                this.props.timezone,
+              )}`
+            : `Updated default schedule for ${this.props.practitioner.getPrettyName()}`;
+        this.props.showAlertTimeout({
+          alert: { body },
+          type: 'success',
+        });
+      })
+      .then(callback);
+  }
+
+  /**
+   * This function handles the creation or deletion of schedule,
+   * being either daily or weekly schedules.
+   *
+   * If date is null, the logic represents a weekly logic, otherwise is a daily logic.
+   * Assuming the structure described above we have the id for the (weekly/daily)Schedule.
+   *
+   * The checked param represents the action that was take.
+   * If it is true, means that the user clicked to add an override
+   * otherwise the intention is to remove an existing one.
+   *
+   * @param schedule {Object}
+   * @param date {Date|null}
+   */
+  async handleCreateCustomSchedule({ date = null } = {}) {
+    try {
+      date
+        ? await createDailyHours(
+            this.props.practitioner.get('id'),
+            date.toISOString().split('T')[0],
+          )
+        : await createPractitionerWeeklyHours(this.props.practitioner);
+      this.getSchedule().then(() => {
+        this.setState((prevState) => ({
+          selectedDailySchedule: prevState.selectedDay
+            ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
+            : null,
+        }));
+        const body = date
+          ? `Created holiday hours for ${this.props.practitioner.getPrettyName()} on ${getFormattedDate(
+              date,
+              'dddd, MMMM Do',
+              this.props.timezone,
+            )}`
+          : `Created default schedule for ${this.props.practitioner.getPrettyName()}`;
+
+        this.props.showAlertTimeout({
+          alert: { body },
+          type: 'success',
+        });
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async handleRemoveOverrideHours({ date = null, scheduleId } = {}) {
+    try {
+      date
+        ? await deleteDailyHours(scheduleId)
+        : await deletePractitionerWeeklyHours(this.props.practitioner);
+      this.getSchedule().then(() => {
+        this.setState((prevState) => ({
+          selectedDailySchedule: prevState.selectedDay
+            ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
+            : null,
+        }));
+        const body = date
+          ? `Deleted holiday hours for ${this.props.practitioner.getPrettyName()} on ${getFormattedDate(
+              date,
+              'dddd, MMMM Do',
+              this.props.timezone,
+            )}`
+          : `Deleted default schedule for ${this.props.practitioner.getPrettyName()}`;
+        this.props.showAlertTimeout({
+          alert: { body },
+          type: 'success',
+        });
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   onChangeMonth(month) {
     this.setState(
       {
@@ -89,7 +229,7 @@ class PractitionerHoursCalendar extends Component {
       endDate: getEndOfTheMonth(month),
     }).then(({ data }) =>
       this.setState({ baseSchedule: data }, () =>
-        setTimeout(() => this.setState({ isLoading: false }), 1000)));
+        setTimeout(() => this.setState({ isLoading: false }), 1000),),);
   }
 
   getFeaturedDay(date = this.state.selectedDay) {
@@ -107,12 +247,13 @@ class PractitionerHoursCalendar extends Component {
    *
    */
   scheduleMap() {
-    const normalizedSchedule = this.state.selectedDay && this.state.selectedDailySchedule.isDailySchedule
-      ? this.getFeaturedDay()
-      : {
-        ...this.state.baseSchedule.weeklySchedule,
-        ...(this.state.selectedDay ? this.getFeaturedDay() : null),
-      };
+    const normalizedSchedule =
+      this.state.selectedDay && this.state.selectedDailySchedule.isDailySchedule
+        ? this.getFeaturedDay()
+        : {
+            ...this.state.baseSchedule.weeklySchedule,
+            ...(this.state.selectedDay ? this.getFeaturedDay() : null),
+          };
     const parsedWeeklySchedule = pick(normalizedSchedule, [
       'sunday',
       'monday',
@@ -137,73 +278,6 @@ class PractitionerHoursCalendar extends Component {
       }),
       {},
     );
-  }
-
-  /**
-   * It either select a day or unselect the same day.
-   *
-   * @param date {Date}
-   * @param callback
-   */
-  handleDayClick(date, callback) {
-    const selectedDay = this.state.selectedDay && this.state.selectedDay.getTime() === date.getTime() ? null : date;
-    this.setState(
-      {
-        selectedDay,
-        selectedDailySchedule: selectedDay
-          ? Object.values(this.getFeaturedDay(selectedDay))[0]
-          : null,
-      },
-      callback,
-    );
-  }
-
-  /**
-   * Event that handles the doubleClick on a calendar Day;
-   * @param day
-   * @param handleEditSchedule
-   * @return {function(): void}
-   */
-  handleDoubleClick(day, handleEditSchedule) {
-    return () =>
-      this.handleDayClick(day, () =>
-        handleEditSchedule(getFormattedDate(day, 'dddd', this.props.timezone).toLowerCase()));
-  }
-
-  /**
-   * Update a dailySchedule, if isClosed is true, set the startTime and endTime to the same value.
-   *
-   * @param isClosed
-   * @param id
-   * @param date
-   * @param isDailySchedule
-   * @param schedule
-   * @param callback {function}
-   * @returns {Promise<any | never>}
-   */
-  handleUpdateSchedule({ id, date, isDailySchedule, ...schedule }, callback) {
-    const baseBody = pick(schedule, ['startTime', 'endTime', 'breaks', 'chairIds']);
-    return updateFinalDailyHours(id, {
-      ...baseBody,
-      endTime: baseBody.endTime,
-      startTime: baseBody.startTime,
-      breaks: baseBody.breaks,
-    })
-      .then(() => {
-        this.getSchedule(this.state.month);
-        const body = date && isDailySchedule
-          ? `Updated holiday hours for ${this.props.practitioner.getPrettyName()} on ${getFormattedDate(
-            date,
-            'dddd, MMMM Do',
-            this.props.timezone,
-          )}`
-          : `Updated default schedule for ${this.props.practitioner.getPrettyName()}`;
-        this.props.showAlertTimeout({
-          alert: { body },
-          type: 'success',
-        });
-      })
-      .then(callback);
   }
 
   /**
@@ -238,108 +312,11 @@ class PractitionerHoursCalendar extends Component {
     );
   }
 
-  /**
-   * This function handles the creation or deletion of schedule,
-   * being either daily or weekly schedules.
-   *
-   * If date is null, the logic represents a weekly logic, otherwise is a daily logic.
-   * Assuming the structure described above we have the id for the (weekly/daily)Schedule.
-   *
-   * The checked param represents the action that was take.
-   * If it is true, means that the user clicked to add an override
-   * otherwise the intention is to remove an existing one.
-   *
-   * @param schedule {Object}
-   * @param date {Date|null}
-   */
-  async handleCreateCustomSchedule({ date = null } = {}) {
-    try {
-      date
-        ? await createDailyHours(
-          this.props.practitioner.get('id'),
-          date.toISOString().split('T')[0],
-        )
-        : await createPractitionerWeeklyHours(this.props.practitioner);
-      this.getSchedule().then(() => {
-        this.setState(prevState => ({
-          selectedDailySchedule: prevState.selectedDay
-            ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
-            : null,
-        }));
-        const body = date
-          ? `Created holiday hours for ${this.props.practitioner.getPrettyName()} on ${getFormattedDate(
-            date,
-            'dddd, MMMM Do',
-            this.props.timezone,
-          )}`
-          : `Created default schedule for ${this.props.practitioner.getPrettyName()}`;
-
-        this.props.showAlertTimeout({
-          alert: { body },
-          type: 'success',
-        });
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  async handleRemoveOverrideHours({ date = null, scheduleId } = {}) {
-    try {
-      date
-        ? await deleteDailyHours(scheduleId)
-        : await deletePractitionerWeeklyHours(this.props.practitioner);
-      this.getSchedule().then(() => {
-        this.setState(prevState => ({
-          selectedDailySchedule: prevState.selectedDay
-            ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
-            : null,
-        }));
-        const body = date
-          ? `Deleted holiday hours for ${this.props.practitioner.getPrettyName()} on ${getFormattedDate(
-            date,
-            'dddd, MMMM Do',
-            this.props.timezone,
-          )}`
-          : `Deleted default schedule for ${this.props.practitioner.getPrettyName()}`;
-        this.props.showAlertTimeout({
-          alert: { body },
-          type: 'success',
-        });
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   render() {
     const { timezone, chairs } = this.props;
 
     return (
       <div>
-        <EnabledFeature
-          predicate={() => true}
-          render={({ flags }) => {
-            const isAllow = this.state.baseSchedule.isCustomSchedule
-              ? flags.get('connector-delete-practitioner-weeklySchedule')
-              : flags.get('connector-create-practitioner-weeklySchedule');
-            return (
-              <div className={styles.customScheduleWrapper}>
-                <span>Set Custom</span>
-                <Toggle
-                  disabled={!isAllow}
-                  checked={this.state.baseSchedule.isCustomSchedule}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      return this.handleCreateCustomSchedule();
-                    }
-                    return this.handleRemoveOverrideHours();
-                  }}
-                />
-              </div>
-            );
-          }}
-        />
         <ScheduleCalendar
           editChairs
           baseSchedule={this.state.baseSchedule}
@@ -385,6 +362,6 @@ const mapStateToProps = ({ auth, entities }) => {
   return { timezone: activeAccount.get('timezone') };
 };
 
-const mapActionsToProps = dispatch => bindActionCreators({ showAlertTimeout }, dispatch);
+const mapActionsToProps = (dispatch) => bindActionCreators({ showAlertTimeout }, dispatch);
 
 export default connect(mapStateToProps, mapActionsToProps)(PractitionerHoursCalendar);

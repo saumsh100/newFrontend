@@ -1,0 +1,134 @@
+@import '../../../styles/ui-reskin.scss';
+
+.suggestionsContainer {
+  background: $super-white;
+  border-radius: 5px;
+  height: auto;
+  position: relative;
+  width: 700px;
+}
+
+.trashIcon {
+  color: $color-lavender-500;
+  font-size: 1.4em;
+  position: absolute;
+  right: 5px;
+  top: 15px;
+  &:hover {
+    color: darken($color-lavender-500, 5%);
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .patientSpeel {
+    color: $color-purple-600;
+    flex: 0 0 auto;
+    font-family: $font-inter;
+    font-size: $medium-size;
+    font-weight: $medium-weight;
+    line-height: 1.5;
+    padding: 0 0 20px;
+  }
+
+  .suggestionsList {
+    flex: 1 0 auto;
+    height: auto;
+    @media screen and (max-width: 450px) {
+    }
+
+    .patientSelected {
+      &.singleSuggestion {
+        background-color: $color-lavender-150;
+        border: 1px solid $color-lavender-500;
+        border-radius: 4px;
+        box-shadow: 1px 1px 4px rgba(7, 0, 82, 0.06);
+        box-sizing: border-box;
+        color: $color-purple-600;
+        .patientContainer {
+          &_fullName {
+            color: $color-purple-600;
+            font-family: $font-inter;
+            font-size: $medium-size;
+            font-weight: $bold-weight;
+          }
+        }
+      }
+    }
+
+    .singleSuggestion {
+      align-items: center;
+      background: $super-white-200;
+      border: 1px solid $color-purple-200;
+      border-radius: 4px;
+      color: $color-purple-600;
+      cursor: pointer;
+      display: flex;
+      height: auto;
+      margin-bottom: 10px;
+      text-align: left;
+      width: 100%;
+      &:hover:not(.patientSelected) {
+        background: $color-lavender-050;
+        border: 1px solid $color-lavender-500;
+        border-radius: 4px;
+        box-shadow: 1px 1px 4px rgba(7, 0, 82, 0.06);
+        box-sizing: border-box;
+      }
+
+      .suggestionsListItem {
+        display: flex;
+        line-height: 1.5em;
+      }
+    }
+  }
+
+  .createPatientButtonContainer {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    padding-top: 20px;
+  }
+}
+
+.patientContainer {
+  align-content: center;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  font-size: $x-medium-size;
+  justify-content: center;
+
+  &_img {
+    margin-right: 20px;
+  }
+
+  &_fullName {
+    color: $color-purple-600;
+    font-size: $medium-size;
+    padding-bottom: 5px;
+  }
+}
+
+.data {
+  align-items: center;
+  color: $color-grey-400;
+  display: flex;
+  font-size: $small-size;
+  font-weight: $medium-weight;
+  padding-bottom: 4px;
+  &_text {
+    padding-left: 5px;
+  }
+}
+
+.connectButton {
+  margin-left: 10px;
+}
+
+.dataIcon {
+  font-weight: 400;
+}

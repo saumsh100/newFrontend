@@ -1,10 +1,10 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Tabs, Tab, IconButton } from '../../../library';
+import classNames from 'classnames';
+import { Tabs, Tab, StandardButton, Divider } from '../../../library';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
 import PractitionerServices from './PractitionerServices';
@@ -42,15 +42,8 @@ class PractitionerTabs extends Component {
     });
   }
 
-  updatePractitioner(modifiedPractitioner, alert) {
-    this.props.updateEntityRequest({
-      key: 'practitioners',
-      model: modifiedPractitioner,
-      alert,
-    });
-    if (!modifiedPractitioner.isActive) {
-      this.props.setPractitionerId({ id: null });
-    }
+  handleTabChange(index) {
+    this.setState({ index });
   }
 
   deletePractitioner() {
@@ -67,8 +60,15 @@ class PractitionerTabs extends Component {
     }
   }
 
-  handleTabChange(index) {
-    this.setState({ index });
+  updatePractitioner(modifiedPractitioner, alert) {
+    this.props.updateEntityRequest({
+      key: 'practitioners',
+      model: modifiedPractitioner,
+      alert,
+    });
+    if (!modifiedPractitioner.isActive) {
+      this.props.setPractitionerId({ id: null });
+    }
   }
 
   render() {
@@ -81,17 +81,16 @@ class PractitionerTabs extends Component {
     let filteredTimeOffs = null;
     if (timeOffs) {
       filteredTimeOffs = timeOffs.filter(
-        timeOff => timeOff.practitionerId === practitioner.get('id'),
+        (timeOff) => timeOff.practitionerId === practitioner.get('id'),
       );
     }
     let filteredRecurringTimeOffs = null;
 
     if (recurringTimeOffs) {
       filteredRecurringTimeOffs = recurringTimeOffs.filter(
-        recurringTimeOff => recurringTimeOff.practitionerId === practitioner.get('id'),
+        (recurringTimeOff) => recurringTimeOff.practitionerId === practitioner.get('id'),
       );
     }
-
     const serviceIds = practitioner.get('services');
     return (
       <SettingsCard
@@ -105,15 +104,16 @@ class PractitionerTabs extends Component {
               practitioner={practitioner}
               updatePractitioner={this.updatePractitioner}
             />
+            <Divider vertical className={styles.divider} />
             {role === 'SUPERADMIN' && (
-              <div className={styles.trashButton}>
-                <IconButton
-                  iconType="solid"
-                  icon="trash"
-                  onClick={this.deletePractitioner}
-                  data-test-id="deletePractitioner"
-                />
-              </div>
+              <StandardButton
+                iconType="light"
+                icon="trash"
+                onClick={this.deletePractitioner}
+                data-test-id="deletePractitioner"
+                variant="danger"
+                className={styles.trashButton}
+              />
             )}
           </div>
         }
@@ -122,11 +122,41 @@ class PractitionerTabs extends Component {
             predicate={({ userRole }) => userRole === 'SUPERADMIN'}
             render={() => (
               <Tabs index={this.state.index} onChange={this.handleTabChange}>
-                <Tab label="Basic" data-test-id="tab_practitionerBasicData" />
-                <Tab label="Practitioner Schedule" data-test-id="tab_practitionerOfficeHours" />
-                <Tab label="Reasons" data-test-id="tab_practitionerServices" />
-                <Tab label="Time Off" data-test-id="tab_practitionerTimeOff" />
-                <Tab label="Recurring Time Off" data-test-id="tab_practitionerRecurringTimeOff" />
+                <Tab
+                  label="Basic"
+                  data-test-id="tab_practitionerBasicData"
+                  className={classNames(styles.tab, {
+                    [styles.tab_active]: this.state.index === 0,
+                  })}
+                />
+                <Tab
+                  label="Practitioner Schedule"
+                  data-test-id="tab_practitionerOfficeHours"
+                  className={classNames(styles.tab, {
+                    [styles.tab_active]: this.state.index === 1,
+                  })}
+                />
+                <Tab
+                  label="Reasons"
+                  data-test-id="tab_practitionerServices"
+                  className={classNames(styles.tab, {
+                    [styles.tab_active]: this.state.index === 2,
+                  })}
+                />
+                <Tab
+                  label="Time Off"
+                  data-test-id="tab_practitionerTimeOff"
+                  className={classNames(styles.tab, {
+                    [styles.tab_active]: this.state.index === 3,
+                  })}
+                />
+                <Tab
+                  label="Recurring Time Off"
+                  data-test-id="tab_practitionerRecurringTimeOff"
+                  className={classNames(styles.tab, {
+                    [styles.tab_active]: this.state.index === 4,
+                  })}
+                />
               </Tabs>
             )}
             fallback={() => (
@@ -190,9 +220,9 @@ function mapStateToProps({ auth, entities }, { practitioner }) {
     : null;
   const weeklySchedule = entities.getIn(['weeklySchedules', 'models']).get(weeklyScheduleId);
   const allTimeOffs = entities.getIn(['practitionerRecurringTimeOffs', 'models']);
-  const timeOffs = allTimeOffs.filter(timeOff => !timeOff.toJS().interval);
+  const timeOffs = allTimeOffs.filter((timeOff) => !timeOff.toJS().interval);
 
-  const recurringTimeOffs = allTimeOffs.filter(timeOff => timeOff.toJS().interval);
+  const recurringTimeOffs = allTimeOffs.filter((timeOff) => timeOff.toJS().interval);
 
   return {
     chairs: entities.getIn(['chairs', 'models']),
@@ -234,7 +264,4 @@ PractitionerTabs.defaultProps = {
   weeklySchedule: null,
 };
 
-export default connect(
-  mapStateToProps,
-  mapActionsToProps,
-)(PractitionerTabs);
+export default connect(mapStateToProps, mapActionsToProps)(PractitionerTabs);

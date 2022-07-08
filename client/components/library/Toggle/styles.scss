@@ -1,17 +1,20 @@
-@import '../../../styles/ui';
+@import '../../../styles/ui-reskin.scss';
 
 :global {
   .CareCruToggle {
-    &:hover {
+    &:hover:not(.react-toggle--disabled) {
       .react-toggle-track {
-        background-color: darken($primary-darkgrey, 2%);
+        background-color: $color-grey-300;
       }
     }
 
     .react-toggle-track {
-      background-color: $primary-darkgrey;
+      background-color: $color-grey-200;
       height: 12px;
       width: 26px;
+      &:hover {
+        background-color: $color-grey-200;
+      }
     }
 
     .react-toggle-thumb {
@@ -44,7 +47,7 @@
     &--red.react-toggle--checked {
       &:hover {
         .react-toggle-track {
-          background-color: var(--primaryButtonColor);
+          background-color: $color-lavender-550;
         }
       }
 
@@ -60,48 +63,48 @@
     &--green.react-toggle--checked {
       &:hover {
         .react-toggle-track {
-          background-color: darken($primary-green, 2%);
+          background-color: $color-lavender-550;
         }
       }
 
       .react-toggle-track {
-        background-color: $primary-green;
+        background-color: var(--primaryButtonColor);
       }
 
       .react-toggle-thumb {
-        border-color: $primary-green;
+        border-color: var(--primaryButtonColor);
       }
     }
 
     &--yellow.react-toggle--checked {
       &:hover {
         .react-toggle-track {
-          background-color: darken($primary-yellow, 2%);
+          background-color: $color-lavender-550;
         }
       }
 
       .react-toggle-track {
-        background-color: $primary-yellow;
+        background-color: var(--primaryButtonColor);
       }
 
       .react-toggle-thumb {
-        border-color: $primary-yellow;
+        border-color: var(--primaryButtonColor);
       }
     }
 
     &--electron.react-toggle--checked {
       &:hover {
         .react-toggle-track {
-          background-color: $electron-button-primary;
+          background-color: $color-lavender-550;
         }
       }
 
       .react-toggle-track {
-        background-color: $electron-button-primary;
+        background-color: var(--primaryButtonColor);
       }
 
       .react-toggle-thumb {
-        border-color: $electron-button-primary;
+        border-color: var(--primaryButtonColor);
       }
     }
   }
@@ -119,6 +122,6 @@
 
 .theme {
   &_primaryBlueBackground {
-    background-color: $primary-blue;
+    background-color: $color-lavender-500;
   }
 }

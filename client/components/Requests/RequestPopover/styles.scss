@@ -1,7 +1,17 @@
-@import '../../../styles/ui';
+@import '../../../styles/reskin-font.scss';
+// @import '../../../styles/ui.scss';
+
+$primary-button-color: $color-lavender-500;
+$primary-button-color-hover: $color-lavender-550;
+$primary-button-text-color: $super-white;
+
+$secondary-button-color: $super-white;
+$secondary-button-color-hover: $color-lavender-050;
+$secondary-button-text-color: $color-lavender-500;
+$secondary-button-border-color: $color-lavender-500;
 
 .card {
-  box-shadow: 0 5px 25px 2px rgba(209, 209, 209, 0.6);
+  box-shadow: $card-shadow;
   min-width: 270px;
   width: auto;
   z-index: 5001;
@@ -23,15 +33,15 @@
 
 .header {
   align-items: center;
-  background-color: #313843;
-  color: $primary-white;
+  background-color: $color-purple-400;
+  border-radius: 4px 4px 0px 0px;
+  color: $color-lavender-150;
   display: flex;
   height: 45px;
   padding-left: 15px;
   padding-right: 15px;
 
   &_text {
-    composes: fontDefault from '../../../styles/fonts.scss';
     font-size: 15px;
     margin-right: 10px;
     padding-left: 5px;
@@ -45,8 +55,7 @@
 
 .closeIcon {
   background: none;
-  color: $primary-grey;
-  composes: fontMediumSize from '../../../styles/fonts.scss';
+  color: $color-lavender-150;
   font-size: 14px;
   margin-left: auto;
   padding: 1px 7px 2px;
@@ -92,31 +101,30 @@
 }
 
 .subHeader {
-  composes: subHeaderExtraSmall from '../../../styles/fonts.scss';
+  color: $color-purple-400;
   padding-bottom: 5px;
-  text-transform: uppercase;
 }
 
 .subHeaderMobile {
   @extend .header;
-  background-color: $primary-grey;
+  background-color: $color-purple-400;
   justify-content: center;
   z-index: 1;
   &_text {
     @extend .header_text;
     background: none;
-    color: $primary-blue-green;
+    color: $color-lavender-150;
     cursor: auto;
   }
 }
 
 .data {
   align-items: center;
-  composes: fontMedium from '../../../styles/fonts.scss';
+  color: $color-purple-600;
   display: flex;
-  font-size: 13px;
-  padding-bottom: 8px;
-
+  font-size: $medium-size;
+  font-weight: 500;
+  margin-bottom: 8px;
   &_note {
     max-height: 40px;
     overflow: auto;
@@ -129,20 +137,20 @@
 }
 .multilineData {
   @extend .data;
-  align-items: flex-start;
   .data_text {
     padding-top: 0;
   }
 }
 
 .subData {
-  color: $primary-dark-grey;
-  composes: fontExtraSmall from '../../../styles/fonts.scss';
+  color: $color-lavender-500;
+  @extend .font-subHeaderExtraSmall;
 }
 
 .footer {
   align-items: center;
-  border-top: 1px solid $primary-grey;
+  border-radius: 0px 0px 4px 4px;
+  border-top: 1px solid $color-lavender-150;
   box-sizing: border-box;
   display: flex;
   justify-content: flex-end;
@@ -163,18 +171,12 @@
   }
 }
 
-.blurredHub {
-  @include blurred-mixin();
-  top: 42px;
-}
-
 .blurred {
   @include blurred-mixin();
   top: 90px;
 }
 
 .actionButtonMobile {
-  composes: fontDefault from '../../../styles/fonts.scss';
   font-size: 20px;
   height: auto;
   padding: 12px 13px;
@@ -190,7 +192,7 @@
 .actionOverlayButtonMobile {
   align-items: center;
   background: none;
-  color: $primary-white;
+  color: $super-white;
   display: flex;
   margin-bottom: 10px;
   padding: 0 0.5em;
@@ -198,36 +200,52 @@
 }
 
 .actionOverlayButtonIconMobile {
-  background: $primary-white;
+  background: $super-white;
   border-radius: 20px;
-  color: $primary-blue-green;
+  color: $super-white;
   margin-right: 10px;
   padding: 7px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    background: $primary-blue-green;
-    color: $primary-white;
+    background: $color-lavender-500;
+    color: $super-white;
   }
 }
 
-.editButton {
+.primaryButton {
+  background-color: $primary-button-color;
+  border-radius: 4px;
+  color: $primary-button-text-color;
   margin-left: 5px;
+  &:hover {
+    background: $primary-button-color-hover;
+  }
+}
+
+.secondaryButton {
+  background-color: $secondary-button-color;
+  border: 1px solid $secondary-button-border-color;
+  border-radius: 4px;
+  color: $secondary-button-text-color;
+  &:hover {
+    background-color: $secondary-button-color-hover;
+  }
 }
 
 .requestedAt {
-  color: #808081;
-  composes: fontDefault from '../../../styles/fonts.scss';
-  font-size: $extra-small-size;
+  color: $color-grey-400;
+
+  font-size: $x-small-size;
 
   &_diffUserContainer {
     margin-bottom: 5px;
   }
 
   &_byDiffUser {
-    color: $primary-dark;
-    composes: fontDefault from '../../../styles/fonts.scss';
-    font-size: $extra-small-size;
+    color: $color-purple-400;
+
+    font-size: $x-small-size;
     opacity: 1;
   }
 

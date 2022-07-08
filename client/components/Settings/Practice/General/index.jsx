@@ -9,7 +9,7 @@ import DisplayName from './DisplayName';
 
 import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 import { uploadLogo, deleteLogo } from '../../../../thunks/accounts';
-import { Dropzone, AccountLogo, Button, Header } from '../../../library';
+import { Dropzone, AccountLogo, StandardButton as Button, Header, Icon } from '../../../library';
 import { validateNoSpace } from '../../../library/Form/validate';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
@@ -49,7 +49,7 @@ class General extends Component {
     const notificationEmailsArr = values.notificationEmails.split(',').map((val) => val.trim());
     const valuesMap = Map({
       ...values,
-      phoneNumber: values.phoneNumber?validateNoSpace(values.phoneNumber):null,
+      phoneNumber: values.phoneNumber ? validateNoSpace(values.phoneNumber) : null,
       notificationEmails: notificationEmailsArr,
     });
     const modifiedAccount = activeAccount.merge(valuesMap);
@@ -110,10 +110,15 @@ class General extends Component {
             <Header title="Logo" contentHeader />
             <Dropzone onDrop={this.uploadLogo} loaded={!this.state.uploading}>
               <AccountLogo account={activeAccount} size="original" />
-              <p>Drop logo here or click to select file.</p>
+              <div className={styles.mainText}>
+                <Icon icon="cloud-upload" className={styles.cloudIcon} />
+                <p className={styles.title}>
+                  Drag and Drop your logo here or click to select file.
+                </p>
+              </div>
             </Dropzone>
             {activeAccount.fullLogoUrl && (
-              <Button className={styles.deleteLogo} onClick={this.deleteLogo}>
+              <Button className={styles.deleteLogo} onClick={this.deleteLogo} variant="secondary">
                 Remove Logo
               </Button>
             )}

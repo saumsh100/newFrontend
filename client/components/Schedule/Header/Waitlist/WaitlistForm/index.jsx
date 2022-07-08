@@ -1,14 +1,14 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { week, capitalize } from '../../../../../util/isomorphic';
-import { Button, Icon, Input, parseDate } from '../../../../library';
+import { Button, Input, parseDate } from '../../../../library';
 import DropdownSelect from '../../../../library/DropdownSelect';
 import DayPicker from '../../../../library/DayPicker';
 import PatientSearch from '../../../../PatientSearch';
 import { SelectedPatient } from '../AddToWaitlist';
 import MultiSelect from '../../../../library/ui-kit/MultiSelect';
 import FormWarning from '../../../../library/Form/FormWarning';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import Selector from './Selector';
 import {
   convertArrayOfOptionsInMap,
@@ -219,20 +219,6 @@ const WaitlistForm = ({
 
   return (
     <div className={styles.waitlistFormContainer}>
-      <div>
-        <div
-          className={styles.redirect}
-          onClick={goToWaitlistTable}
-          role="button"
-          tabIndex={0}
-          onKeyUp={(e) => e.keyCode === 13 && goToWaitlistTable}
-        >
-          <div className={styles.iconWrapper}>
-            <Icon size={1} icon="chevron-left" />
-          </div>
-          Cancel and return to waitlist
-        </div>
-      </div>
       {isNewWaitSpot && isPatientInWaitlist && (
         <div className={styles.alreadyInWaitlist}>
           <FormWarning
@@ -243,7 +229,11 @@ const WaitlistForm = ({
           />
         </div>
       )}
-      <div className={styles.heading}>{isNewWaitSpot ? 'Add to Waitlist' : 'Update Wait Spot'}</div>
+      <div className={styles.heading}>
+        {isNewWaitSpot
+          ? 'This will add an existing patientin your practice Waitlist'
+          : 'Update Wait Spot'}
+      </div>
       <form id="waitlist-form" onSubmit={handleSubmitForm} className={styles.waitlistFormWrapper}>
         <div className={styles.waitlistForm}>
           <div className={styles.waitlistFormColumnLeft}>
@@ -265,6 +255,7 @@ const WaitlistForm = ({
                   classStyles: styles.patientSearchInput,
                   placeholder: 'Add Patient *',
                 }}
+                noBorder
               />
             )}
             <MultiSelect

@@ -1,0 +1,223 @@
+@import '../../../../styles/ui-reskin.scss';
+
+.placeholder {
+  color: $color-purple-300;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+}
+
+.input {
+  align-items: center;
+  -webkit-appearance: none;
+  background: $super-white;
+  border: 1px solid $color-purple-100;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: $color-grey-400;
+  display: flex;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  min-height: 40px;
+  padding: 0 8px 0 16px;
+  transition: all 0.2s ease;
+  width: 100%;
+
+  &:active {
+    background: $color-lavender-100;
+    border: 1px solid $color-lavender-500;
+    color: $color-lavender-500;
+    transition: all 0.2s ease;
+  }
+
+  &:focus ~ .label {
+    @extend .filled;
+  }
+
+  &:hover {
+    background: $color-lavender-050;
+    border: 1px solid $color-lavender-500;
+    color: $color-lavender-500;
+  }
+}
+
+.value {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+  overflow: auto;
+  padding: 8px 0;
+
+  .item {
+    align-items: center;
+    color: $color-grey-200;
+    display: flex;
+    flex: 0 0 auto;
+
+    font-size: 13px;
+    font-weight: normal;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.disabled {
+  background: $color-grey-100;
+  box-shadow: none;
+
+  .item {
+    background: $color-grey-100;
+  }
+}
+
+.error {
+  border-color: $error-500;
+
+  &:hover,
+  &:focus {
+    border-color: $error-500;
+  }
+}
+
+.fieldLabel {
+  color: $color-grey-100;
+  display: block;
+  font-size: $small-screen-width;
+  font-weight: $normal-weight;
+  letter-spacing: 0.02px;
+  line-height: 12px;
+  margin-bottom: 8px;
+  margin-top: 0;
+  width: 100%;
+  &.error {
+    color: $error-500;
+  }
+}
+
+.iconWrapper {
+  color: $color-grey-100;
+  min-width: 30px;
+}
+
+.filled {
+  font-size: $small-size;
+  left: 16px;
+  top: 12px;
+}
+
+.list {
+  background: $super-white;
+  border: 1px solid $color-lavender-200;
+  border-top: 0;
+  box-shadow: $box-shadow-2;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  margin-top: 4px;
+  max-height: 300px;
+  opacity: 0;
+  overflow-y: auto;
+  padding: 6px 12px;
+  position: absolute;
+  transform: translateY(-15px);
+  transition: all 0.2s ease;
+  visibility: hidden;
+  width: 100%;
+  z-index: 100;
+
+  &.active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.2s ease;
+    visibility: visible;
+  }
+}
+
+.option {
+  align-items: center;
+  background-color: $super-white;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+
+  font-size: $small-size;
+  font-size: 13px;
+  height: calc(2.5rem * 1.6);
+  justify-content: flex-start;
+  letter-spacing: 0;
+  overflow: hidden;
+  padding-left: 12px;
+  padding-right: 12px;
+  text-align: center;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.fallback {
+  @extend .option;
+  font-style: italic;
+  justify-content: center;
+  text-align: center;
+
+  &:hover {
+    background-color: $super-white;
+    color: $color-grey-100;
+    cursor: auto;
+  }
+}
+
+.labelSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectWrapper {
+  position: relative;
+  width: 100%;
+}
+
+button.linkButton {
+  background-color: transparent;
+  margin-bottom: 8px;
+  text-align: right;
+}
+
+.selectAll {
+  display: flex;
+  flex-wrap: wrap;
+}
+.selectionGroup {
+  border-top: 1px solid $color-lavender-100;
+  display: block;
+  padding-top: 6px;
+  width: 100%;
+}
+.selectionTitle {
+  color: $color-grey-600;
+  font-family: $font-inter;
+  font-size: $small-size;
+  font-weight: $normal-weight;
+  margin: 12px 0;
+}
+
+.selectedcbLabel {
+  @extend .selectionTitle;
+  color: $color-purple-600;
+  font-family: $font-inter;
+  font-size: $small-size;
+  font-weight: $normal-weight;
+  margin-left: 8px;
+}
+
+.cbLabel {
+  @extend .selectionTitle;
+  color: $color-purple-400;
+  font-family: $font-inter;
+  font-size: $small-size;
+  font-weight: $normal-weight;
+  margin-left: 8px;
+}
+.cbContainer {
+  margin-bottom: 16px;
+}

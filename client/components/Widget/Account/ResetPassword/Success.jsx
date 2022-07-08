@@ -1,8 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Button from '../../../library/Button';
+import Button from '../../components/Button';
 import styles from './styles.scss';
 import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 

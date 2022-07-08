@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import RDropdownMenu, { NestedDropdownMenu as RNestedDropdownMenu } from 'react-dd-menu';
 import Icon from '../Icon';
 import { ListItem } from '../List';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { Tooltip } from '..';
 
 export const DropdownMenu = React.forwardRef(

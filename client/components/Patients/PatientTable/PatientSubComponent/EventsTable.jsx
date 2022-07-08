@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
 import EventDateSections from '../../PatientInfo/Timeline/EventDateSections';
 import EventModel from '../../../../entities/models/Event';
@@ -47,13 +48,25 @@ function EventsTable({ events, patient, timezone }) {
   return (
     <div className={styles.eventsList}>
       {dateSections.length > 0 &&
-        dateSections.map((date) => (
-          <EventDateSections
-            key={`eventSection_${date}`}
-            dateHeader={date}
-            events={dateObj[date]}
-            patient={patient}
-          />
+        dateSections.map((date, index) => (
+          <div className={styles.eventSectionContainer}>
+            <div
+              className={classnames(styles.eventVerticalLineTop, {
+                [styles.eventVerticalLineTop_invisible]: index === 0,
+              })}
+            />
+            <EventDateSections
+              key={`eventSection_${date}`}
+              dateHeader={date}
+              events={dateObj[date]}
+              patient={patient}
+            />
+            <div
+              className={classnames(styles.eventVerticalLineBottom, {
+                [styles.eventVerticalLineBottom_invisible]: index + 1 === dateSections.length,
+              })}
+            />
+          </div>
         ))}
     </div>
   );

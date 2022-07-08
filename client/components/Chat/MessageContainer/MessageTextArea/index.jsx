@@ -7,7 +7,7 @@ import { getFormValues, submit, change } from 'redux-form';
 import capitalize from 'lodash/capitalize';
 import { Picker } from 'emoji-mart';
 import {
-  Button,
+  StandardButton as Button,
   DropdownMenu,
   Form,
   Field,
@@ -101,7 +101,7 @@ class MessageTextArea extends Component {
         {isPoC && hasPatient && phoneLookupObj?.isSMSEnabled === false && (
           <div className={styles.textAreaPoC}>
             <img
-              src="/images/donna.png"
+              src="/images/donna-poc.png"
               height="335px"
               width="338px"
               alt="Donna"
@@ -121,7 +121,7 @@ class MessageTextArea extends Component {
         {!isPoC && hasPatient && (
           <div className={styles.textAreaPoC}>
             <img
-              src="/images/donna.png"
+              src="/images/donna-poc.png"
               height="335px"
               width="338px"
               alt="Donna"
@@ -151,7 +151,7 @@ class MessageTextArea extends Component {
         {!isPhoneNoAvailable && hasPatient && (
           <div className={styles.textAreaPoC}>
             <img
-              src="/images/donna.png"
+              src="/images/donna-poc.png"
               height="335px"
               width="338px"
               alt="Donna"

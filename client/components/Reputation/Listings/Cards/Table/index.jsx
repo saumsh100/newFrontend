@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { List, ListItem, Card, Icon } from '../../../../library';
@@ -18,9 +17,7 @@ class Table extends Component {
   }
 
   render() {
-    const { borderColor, cardTitle, data } = this.props;
-
-    const { detailsModeActive } = this.state;
+    const { data } = this.props;
 
     return (
       <Card className={styles.mostLoyal}>
@@ -77,7 +74,13 @@ class Table extends Component {
                             </div>
                           </div>
                           <div className={styles.data__item_right}>
-                            <div onClick={this.toggleDetailes} className={styles.data__item_table}>
+                            <div
+                              onClick={this.toggleDetailes}
+                              className={styles.data__item_table}
+                              role="button"
+                              tabIndex={0}
+                              onKeyDown={(e) => e.keyCode === 13 && this.toggleDetailes()}
+                            >
                               <div className={styles.table__text}>{accurateListing}</div>
                               {!obj.listing.length ? null : (
                                 <div className={styles.table__button}>
@@ -104,6 +107,6 @@ class Table extends Component {
   }
 }
 
-Table.propTypes = { data: PropTypes.arrayOf(PropTypes.object) };
+Table.propTypes = { data: PropTypes.arrayOf(PropTypes.object).isRequired };
 
 export default Table;

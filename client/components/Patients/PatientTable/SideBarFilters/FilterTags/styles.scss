@@ -1,4 +1,5 @@
-@import '../../../../../styles/ui';
+@import '../../../../../styles/ui-reskin.scss';
+@import '../../../../../styles/reskin-font.scss';
 
 .tagsContainer {
   display: flex;
@@ -11,10 +12,15 @@
 
 .tagBody {
   align-items: center;
-  background: $primary-blue;
+  border: 1px solid $color-lavender-500;
+  border-radius: 44px;
+  box-shadow: $box-shadow-4;
   box-sizing: border-box;
+  color: $super-white;
   display: flex;
   flex: 0 0 1;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
   justify-content: space-between;
   margin: 5px 5px 5px 0;
   padding: 8px;
@@ -22,15 +28,15 @@
 }
 
 .tagText {
-  color: $primary-white;
-  composes: fontMedium from '../../../../../styles/fonts.scss';
+  color: $color-lavender-500;
   padding-right: 10px;
+  @extend .font-Medium;
 }
 
 .closeIcon {
-  color: $primary-white;
+  color: $color-lavender-500;
   &:hover {
-    color: darken($primary-white, 10%);
+    color: $color-lavender-550;
     cursor: pointer;
   }
 }

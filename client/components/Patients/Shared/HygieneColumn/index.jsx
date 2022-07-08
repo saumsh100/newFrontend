@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import patientShape from '../../../library/PropTypeShapes/patient';
@@ -19,7 +18,7 @@ export default function HygieneColumn(props) {
 
   return (
     <div className={styles.displayFlex}>
-      <div className={`${styles.date} ${className}`}>{hygieneDueDate.format('MMM DD YYYY')}</div>
+      <div className={`${styles.date} ${className}`}>{hygieneDueDate.format('MMM DD, YYYY')}</div>
       <div className={dotStyle}>&nbsp;</div>
     </div>
   );

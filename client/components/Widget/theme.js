@@ -1,7 +1,7 @@
-
 export function inputTheme(input) {
   return {
     bar: input.bar,
+    dayPickerBar: input.dayPickerBar,
     error: input.error,
     erroredInput: input.erroredInput,
     erroredLabel: input.erroredLabel,

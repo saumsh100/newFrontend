@@ -1,0 +1,14 @@
+@import '../../../styles/ui-reskin.scss';
+
+$card-box-shadow: 0px 0px 8px rgba(7, 0, 82, 0.08);
+
+.card {
+  background-color: $super-white;
+  border: 1px solid $color-grey-150;
+  border-radius: 5px;
+  box-shadow: $card-box-shadow;
+}
+
+.noBorder {
+  border: 0;
+}

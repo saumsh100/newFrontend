@@ -7,10 +7,8 @@
 }
 
 .enterpriseLabel {
-  font-family: 'Gotham-Medium', sans-serif;
   margin-bottom: 15px;
   span {
-    font-family: 'Gotham-Bold', sans-serif;
   }
 }
 
@@ -99,7 +97,7 @@
 
   &_text {
     color: $primary-darkgrey;
-    font-weight: $large-weight;
+    font-weight: $bold-weight;
     width: 210px;
   }
 

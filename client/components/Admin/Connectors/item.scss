@@ -1,4 +1,3 @@
-
 @import '../../../styles/ui.scss';
 
 $li-border-color: $primary-darkgrey;
@@ -12,7 +11,7 @@ $li-border-color: $primary-darkgrey;
 }
 
 .listItem {
-  height: 50px;
+  height: 60px;
   padding: 10px;
 }
 
@@ -35,15 +34,25 @@ $li-border-color: $primary-darkgrey;
     margin-left: auto;
   }
 }
+.nameContainer {
+  display: flex;
+  flex-direction: column;
+  max-height: 50px;
+}
 
 .name {
-  font-family: $medium-font;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
   font-size: 16px;
+  -webkit-line-clamp: 2;
+  margin: 0px;
+  overflow: hidden;
 }
 
 .id {
   color: $primary-darkgrey;
   font-size: 12px;
+  margin: 0px;
 }
 
 .lastSync {

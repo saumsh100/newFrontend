@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
@@ -12,14 +11,13 @@ import {
   SFooter,
   Avatar,
   Icon,
-  IconButton,
   Button,
   PointOfContactBadge,
   getUTCDate,
   getTodaysDate,
 } from '..';
 import { patientShape } from '../PropTypeShapes';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, timezone }) => {
   const age = patient.birthDate ? getTodaysDate(timezone).diff(patient.birthDate, 'years') : null;
@@ -37,7 +35,7 @@ const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, tim
   return (
     <Card className={styles.card} noBorder id="appPopOver">
       <SContainer>
-        <SHeader className={styles.header}>
+        <SHeader className={styles.patientHeader}>
           <Avatar user={patient} size="xs" />
           <ActionsDropdown
             patient={patient}
@@ -46,21 +44,27 @@ const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, tim
                 role="button"
                 tabIndex={0}
                 onClick={onClick}
-                className={classNames(styles.patientLink, styles.textWhite)}
+                className={styles.patientHeader_patientLink}
                 onDoubleClick={() => editPatient(patient.id)}
                 onKeyDown={(e) => e.keyCode === 13 && onClick()}
               >
-                <span className={styles.header_text}>
-                  {`${patient.firstName} ${patient.lastName}`}
-                </span>
-                {age !== null && <span className={styles.header_age}>{`, ${age}`}</span>}
-                <Icon icon="caret-down" type="solid" className={styles.actionIcon} />
+                <div className={styles.patientHeader_link}>
+                  <span className={styles.patientHeader_text}>
+                    {`${patient.firstName} ${patient.lastName}`}
+                  </span>
+                  {age !== null && <span className={styles.patientHeader_age}>{`, ${age}`}</span>}
+                  <Icon
+                    icon="caret-down"
+                    type="solid"
+                    className={styles.patientHeader_actionIcon}
+                  />
+                </div>
               </div>
             )}
           />
-          <div className={styles.closeIcon}>
-            <IconButton icon="times" onClick={closePopover} />
-          </div>
+          <button type="button" className={styles.closeIcon} onClick={() => closePopover()}>
+            <Icon icon="times" size={1.2} />
+          </button>
         </SHeader>
         <SBody className={styles.body}>
           {patient.gender ? (
@@ -144,12 +148,7 @@ const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, tim
 
         <SFooter className={styles.footer}>
           {!isPatientUser && (
-            <Button
-              onClick={() => editPatient(patient.id)}
-              dense
-              compact
-              className={styles.editButton}
-            >
+            <Button onClick={() => editPatient(patient.id)} dense compact>
               Edit Patient
             </Button>
           )}

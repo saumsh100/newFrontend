@@ -1,17 +1,16 @@
-
-@import '../../../styles/ui.scss';
+@import '../../../styles/ui-reskin.scss';
 
 .iconButton {
   background-color: transparent !important;
 
-  border-radius: 0 !important;
-  color: #B4B4B4;
+  border-radius: 0;
+  color: $color-grey-200;
   font-size: 1.4em;
   padding: 0 !important;
-  width: 50px !important;
+  width: 50px;
 
   &:hover {
-    background-color: inherit !important;
-    color: $primary-blue;
+    background-color: inherit;
+    color: $color-lavender-500;
   }
 }

@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -8,7 +7,7 @@ import { change, reset } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';
-import { Icon, Card, Button } from '../../../library';
+import { Icon, Card, StandardButton as Button } from '../../../library';
 import DemographicsForm from './Demographics';
 import AppointmentsForm from './Appointments';
 import PractitionersForm from './Practitioners';
@@ -23,7 +22,7 @@ import { addFilter, removeFilter, removeAllFilters } from '../../../../reducers/
 import fetchEntities from '../../../../thunks/fetchEntities/fetchEntities';
 import styles from './styles.scss';
 
-const forms = flags => ({
+const forms = (flags) => ({
   demographics: {
     validateForm: () => true,
     headerTitle: 'Demographics',
@@ -65,22 +64,22 @@ const forms = flags => ({
       : CommunicationsForm,
     initialValues: flags['communication-settings-filter-form']
       ? {
-        recallCommunicationPreference: '',
-        reminderCommunicationPreference: '',
-        reviewCommunicationPreference: '',
-        emailCommunicationPreference: '',
-        smsCommunicationPreference: '',
-        phoneCommunicationPreference: '',
-      }
+          recallCommunicationPreference: '',
+          reminderCommunicationPreference: '',
+          reviewCommunicationPreference: '',
+          emailCommunicationPreference: '',
+          smsCommunicationPreference: '',
+          phoneCommunicationPreference: '',
+        }
       : {
-        lastReminderSent: '',
-        lastRecareSent: '',
-        reviews: '',
-      },
+          lastReminderSent: '',
+          lastRecareSent: '',
+          reviews: '',
+        },
     props: {},
   },
   reminders: {
-    validateForm: ({ sentReminders }) => sentReminders.filter(value => !!value).length === 4,
+    validateForm: ({ sentReminders }) => sentReminders.filter((value) => !!value).length === 4,
     headerTitle: 'Reminders',
     formComponent: flags['communication-settings-filter-form'] && TouchpointsSettingsForm,
     props: { fieldName: 'sentReminders' },
@@ -89,7 +88,7 @@ const forms = flags => ({
     },
   },
   recalls: {
-    validateForm: ({ sentRecalls }) => sentRecalls.filter(value => !!value).length === 4,
+    validateForm: ({ sentRecalls }) => sentRecalls.filter((value) => !!value).length === 4,
     headerTitle: 'Recalls',
     formComponent: flags['communication-settings-filter-form'] && TouchpointsSettingsForm,
     props: { fieldName: 'sentRecalls' },
@@ -98,7 +97,7 @@ const forms = flags => ({
     },
   },
   followUps: {
-    validateForm: ({ patientFollowUps }) => patientFollowUps.filter(value => !!value).length >= 1,
+    validateForm: ({ patientFollowUps }) => patientFollowUps.filter((value) => !!value).length >= 1,
     headerTitle: 'Follow Ups',
     formComponent: flags['communication-settings-filter-form'] && FollowUpsSettingsForm,
     props: {},
@@ -136,8 +135,8 @@ class SideBarFilters extends Component {
       return hasValue
         ? true
         : Object.keys(value.registeredFields)
-          .map(v => v.split('.')[0])
-          .includes(filter);
+            .map((v) => v.split('.')[0])
+            .includes(filter);
     });
     const selectedForm = forms(flags)[form];
     const initialValue = filter === 'status' ? '' : selectedForm.initialValues[filter];
@@ -162,7 +161,7 @@ class SideBarFilters extends Component {
       segment: this.props.filters.segment,
       order: this.props.filters.order,
     });
-    Object.keys(this.props.filterForms).map(form => this.props.reset(form));
+    Object.keys(this.props.filterForms).forEach((form) => this.props.reset(form));
     this.props.setFilterCallback();
   }
 
@@ -170,7 +169,7 @@ class SideBarFilters extends Component {
     const parsedFilters = Object.entries(values)
       .filter(([, value]) => {
         if (Array.isArray(value)) {
-          return value.filter(v => !!v).length >= 1 && validateForm(values);
+          return value.filter((v) => !!v).length >= 1 && validateForm(values);
         }
         return value.trim() !== '';
       })
@@ -198,24 +197,26 @@ class SideBarFilters extends Component {
   render() {
     const { filters, flags, timezone } = this.props;
     const { expandedForm } = this.state;
-    const hasFiltersOn = filters && filters.size > 0;
 
     return (
       <Card className={styles.sideBar}>
         <div className={styles.header}>
-          <div className={styles.header_icon}>
-            <Icon icon="filter" size={1.5} />
+          <div className={styles.filterTitle}>
+            <div className={styles.header_icon}>
+              <Icon icon="filter" size={1.5} />
+            </div>
+            <div className={styles.header_text}> Filter </div>
           </div>
-          <div className={styles.header_text}> Filter </div>
           <Button
             className={classnames({
               [styles.header_clearText]: true,
-              [styles.header_clearTextDark]: hasFiltersOn,
+              [styles.header_clearTextDark]: Object.keys(filters).length > 5,
             })}
             onClick={this.clearTags}
-          >
-            Reset
-          </Button>
+            variant="secondary"
+            title="Reset"
+            disabled={!(Object.keys(filters).length > 5)}
+          />
         </div>
 
         <FilterTags filterTags={filters} removeTag={this.removeTag} />
@@ -235,7 +236,9 @@ class SideBarFilters extends Component {
                 <FilterForm
                   initialValues={value.initialValues}
                   formName={key}
-                  formValueCallback={formValues => this.formHandler(formValues, value.validateForm)}
+                  formValueCallback={(formValues) =>
+                    this.formHandler(formValues, value.validateForm)
+                  }
                 >
                   <value.formComponent {...value.props} timezone={timezone} />
                 </FilterForm>
@@ -257,9 +260,11 @@ SideBarFilters.propTypes = {
   reset: PropTypes.func.isRequired,
   flags: PropTypes.objectOf(PropTypes.any).isRequired,
   filters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
-  filterForms: PropTypes.objectOf(PropTypes.shape({ registeredFields: PropTypes.object }))
-    .isRequired,
+  filterForms: PropTypes.objectOf(
+    PropTypes.shape({ registeredFields: PropTypes.shape, values: PropTypes.shape }),
+  ).isRequired,
   timezone: PropTypes.string.isRequired,
+  values: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 SideBarFilters.defaultProps = { filters: new Map() };
@@ -267,7 +272,7 @@ SideBarFilters.defaultProps = { filters: new Map() };
 const mapStateToProps = ({ patientTable, form, featureFlags, auth }) => {
   const flags = featureFlags.get('flags').toJS();
   const filterForms = Object.keys(form)
-    .filter(key => Object.keys(forms(flags)).includes(key))
+    .filter((key) => Object.keys(forms(flags)).includes(key))
     .reduce(
       (obj, key) => ({
         ...obj,
@@ -286,7 +291,7 @@ const mapStateToProps = ({ patientTable, form, featureFlags, auth }) => {
   };
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       addFilter,
@@ -299,7 +304,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SideBarFilters);
+export default connect(mapStateToProps, mapDispatchToProps)(SideBarFilters);

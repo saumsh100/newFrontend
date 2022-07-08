@@ -1,11 +1,10 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import PatientTimelineEvent from '../../../../entities/models/PatientTimelineEvent';
-import { Card, InfiniteScroll } from '../../../library';
+import { InfiniteScroll } from '../../../library';
 import { fetchEntities } from '../../../../thunks/fetchEntities';
 import { getEventsOffsetLimitObj } from '../../Shared/helpers';
 import EventList from './EventsList';
@@ -69,7 +68,7 @@ class Timeline extends Component {
     const hasMore = events.length > this.state.eventsLength && !this.state.loaded;
 
     return (
-      <Card className={styles.card} runAnimation loaded={wasAllFetched && !this.state.loaded}>
+      <div className={styles.card} runAnimation loaded={wasAllFetched && !this.state.loaded}>
         {wasAllFetched && (
           <div className={styles.eventsContainer} style={style}>
             <InfiniteScroll
@@ -84,7 +83,7 @@ class Timeline extends Component {
             </InfiniteScroll>
           </div>
         )}
-      </Card>
+      </div>
     );
   }
 }
@@ -95,7 +94,7 @@ function mapStateToProps({ entities, apiRequests }, { patientId }) {
 
   const events = entities
     .getIn(['patientTimelineEvents', 'models'])
-    .filter(event => event.get('patientId') === patientId)
+    .filter((event) => event.get('patientId') === patientId)
     .toArray();
 
   return {
@@ -126,7 +125,4 @@ Timeline.defaultProps = {
   events: [],
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Timeline);
+export default connect(mapStateToProps, mapDispatchToProps)(Timeline);

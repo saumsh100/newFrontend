@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Popover from 'react-popover';
@@ -9,7 +8,7 @@ import Input from '../Input';
 import IconButton from '../IconButton';
 import { dayPickerTheme } from './defaultTheme';
 import { StyleExtender } from '../../Utils/Themer';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import {
   getDate,
   getTodaysDate,
@@ -25,7 +24,7 @@ const convertValueToDate = (value) => {
   };
 
   if (Array.isArray(value)) {
-    return value.map(v => toDateObject(v));
+    return value.map((v) => toDateObject(v));
   }
   return toDateObject(value);
 };
@@ -44,12 +43,8 @@ class DayPicker extends Component {
     const dates = getDate(day).format('YYYY-MM-DD');
 
     day = timezone
-      ? parseDate(dates, timezone)
-        .add(12, 'hours')
-        .toISOString()
-      : getDate(day)
-        .subtract(12, 'hours')
-        .toISOString();
+      ? parseDate(dates, timezone).add(12, 'hours').toISOString()
+      : getDate(day).subtract(12, 'hours').toISOString();
     if (disabled) {
       return;
     }
@@ -72,7 +67,7 @@ class DayPicker extends Component {
   }
 
   togglePopOver() {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   }
 
   handleInputChange(e) {
@@ -91,16 +86,8 @@ class DayPicker extends Component {
   }
 
   render() {
-    const {
-      target,
-      TargetComponent,
-      tipSize,
-      iconClassName,
-      value,
-      noTarget,
-      theme,
-      timezone,
-    } = this.props;
+    const { target, TargetComponent, tipSize, iconClassName, value, noTarget, theme, timezone } =
+      this.props;
 
     let displayValue;
 
@@ -129,8 +116,8 @@ class DayPicker extends Component {
       <Input
         {...newPickerProps}
         value={displayValue}
-        onChange={e => e.preventDefault()}
-        onKeyDown={e => this.handleClose(e)}
+        onChange={(e) => e.preventDefault()}
+        onKeyDown={(e) => this.handleClose(e)}
         onFocus={this.togglePopOver}
         data-test-id={this.props['data-test-id']}
       />
@@ -202,7 +189,7 @@ DayPicker.propTypes = {
 };
 
 DayPicker.defaultProps = {
-  onChange: e => e,
+  onChange: (e) => e,
   target: null,
   iconClassName: '',
   multiple: false,
@@ -210,7 +197,7 @@ DayPicker.defaultProps = {
   'data-test-id': '',
   tipSize: 12,
   noTarget: false,
-  handleThisInput: e => e,
+  handleThisInput: (e) => e,
   value: '',
   theme: {},
   month: new Date(getTodaysDate().year(), getTodaysDate().month()),

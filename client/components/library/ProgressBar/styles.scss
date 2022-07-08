@@ -1,4 +1,3 @@
-
 @import '../../../styles/ui';
 
 $h: 80px;
@@ -10,7 +9,7 @@ $br-bar: ($h - $p) / 2;
   background-color: $primary-dark;
   border-radius: $br;
   box-sizing: border-box;
-	height: $h;
+  height: $h;
   overflow: hidden;
   padding: 3px;
   width: 100%;
@@ -21,9 +20,8 @@ $br-bar: ($h - $p) / 2;
   background-color: white;
   border-radius: $br-bar;
   box-sizing: border-box;
-	color: $primary-dark;
+  color: $primary-dark;
   display: flex;
-  font-family: $medium-font;
   height: 100%;
   justify-content: center;
   min-width: 5%;

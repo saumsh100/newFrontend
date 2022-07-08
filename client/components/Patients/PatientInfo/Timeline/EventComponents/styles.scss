@@ -1,11 +1,10 @@
-@import '../../../../../styles/ui';
+@import '../../../../../styles/ui-reskin.scss';
 
-$event-grey: lighten($primary-dark-grey, 10%);
+$event-grey: $color-grey-400;
 
 .eventWrapper {
   display: flex;
   flex-direction: column;
-  padding-bottom: 20px;
   position: relative;
   width: 100%;
   &:first-child {
@@ -26,14 +25,22 @@ $event-grey: lighten($primary-dark-grey, 10%);
   z-index: 2;
 }
 
+.verticalLine {
+  background-image: linear-gradient($color-purple-300 33%, rgba(255, 255, 255, 0) 0%);
+  background-size: 3px 10px;
+  height: 100%;
+  width: 2px;
+  &_invisible {
+    width: 0;
+  }
+}
+
 .iconContainer {
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 100%;
   justify-content: center;
-  padding-right: 20px;
-  padding-top: 15px;
+  margin-right: 24px;
 
   @media screen and (max-width: 576px) {
     padding-right: 10px;
@@ -42,32 +49,44 @@ $event-grey: lighten($primary-dark-grey, 10%);
 }
 
 .icon {
-  color: $primary-dark-grey;
+  color: $color-purple-200;
+  font-size: $x-medium-size;
 }
 
 .bgIcon {
   align-items: center;
-  background: white;
-  border: 2px solid $primary-blue;
+  background: $super-white;
+  border: 2px solid $color-purple-200;
   border-radius: 100%;
-  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.3);
   display: flex;
-  height: 30px;
   justify-content: center;
-  width: 30px;
+  min-height: 42px;
+  width: 42px;
 }
 
 .greenBorder {
-  border-color: $primary-green;
+  border: 5px solid $color-success-200;
+  i {
+    color: $color-success-400;
+  }
 }
 .blueBorder {
-  border-color: $primary-blue;
+  border: 5px solid $color-purple-200;
+  i {
+    color: $color-purple-300;
+  }
 }
 .redBorder {
-  border-color: $primary-color;
+  border: 5px solid $error-200;
+  i {
+    color: $error-400;
+  }
 }
 .yellowBorder {
-  border-color: $primary-yellow;
+  border: 5px solid $warning-200;
+  i {
+    color: $warning-400;
+  }
 }
 
 .dot {
@@ -85,19 +104,19 @@ $event-grey: lighten($primary-dark-grey, 10%);
 }
 
 .dotGrey {
-  background: $primary-gray;
+  background: $color-purple-200;
   @extend .dotDisplay;
 }
 .dotRed {
-  background: $primary-color;
+  background: $error-200;
   @extend .dotDisplay;
 }
 .dotYellow {
-  background: $primary-yellow;
+  background: $warning-200;
   @extend .dotDisplay;
 }
 .dotGreen {
-  background: $primary-green;
+  background: $color-success-200;
   @extend .dotDisplay;
 }
 
@@ -112,32 +131,29 @@ $event-grey: lighten($primary-dark-grey, 10%);
 }
 
 .body {
-  @extend .secondaryBgColor;
-  border: 1px solid $primary-grey;
+  background-color: $super-white-200;
+  border: 1px solid $color-grey-150;
   border-radius: 5px;
   line-height: 1.5em;
+  margin-bottom: 20px;
   padding: 20px;
   width: 100%;
 
   &_header {
-    composes: fontMedium from '../../../../../styles/fonts.scss';
-    line-height: 1.5em;
+    color: $color-grey-400;
+    font-size: $medium-size;
+    font-weight: $medium-weight;
+    line-height: 20px;
   }
 
   &_editable {
     background: none;
     border: none;
     color: inherit;
-    font-family: $dashboard-font;
     margin-bottom: -1px;
     outline: inherit;
     padding: 0;
     text-align: left;
-    > div {
-      &:before {
-        font-family: $medium-font;
-      }
-    }
 
     &:hover {
       cursor: pointer;
@@ -147,7 +163,6 @@ $event-grey: lighten($primary-dark-grey, 10%);
           color: $event-grey;
           content: 'Edit';
           display: inline-block;
-          font-family: $medium-font;
           font-size: 10px;
           font-style: normal;
           margin-left: 10px;
@@ -158,13 +173,15 @@ $event-grey: lighten($primary-dark-grey, 10%);
   }
 
   &_subHeader {
-    color: $primary-darkgrey;
+    color: $color-grey-400;
   }
 
   &_subHeaderItalic {
-    color: $primary-darkgrey;
-    composes: fontSmall from '../../../../../styles/fonts.scss';
+    color: $color-purple-300;
+    font-size: $small-size;
     font-style: italic;
+    font-weight: $medium-weight;
+    line-height: 20px;
   }
 
   @media screen and (max-width: 576px) {
@@ -183,16 +200,18 @@ $event-grey: lighten($primary-dark-grey, 10%);
 .time {
   bottom: 25px;
   display: flex;
-  padding-right: 3px;
+  padding-right: 8px;
   padding-top: 8px;
   position: absolute;
   right: 5px;
   width: 100%;
   z-index: 2;
   &_text {
-    color: $event-grey;
-    composes: fontExtraSmall from '../../../../../styles/fonts.scss';
-    font-size: 9px;
+    color: $color-grey-300;
+    font-size: $small-size;
+    font-weight: $medium-weight;
+    letter-spacing: 0.02em;
+    line-height: 16px;
     margin-left: auto;
   }
 }
@@ -201,17 +220,12 @@ $event-grey: lighten($primary-dark-grey, 10%);
   line-height: 1.5em;
   width: 100%;
 
-  &_header {
-    composes: fontMedium from '../../../../../styles/fonts.scss';
-  }
-
   &_subHeader {
-    color: $primary-darkgrey;
+    color: $color-purple-200;
   }
 
   &_subHeaderItalic {
-    color: $primary-darkgrey;
-    composes: fontSmall from '../../../../../styles/fonts.scss';
+    color: $color-purple-200;
     font-style: italic;
   }
 
@@ -239,18 +253,10 @@ $event-grey: lighten($primary-dark-grey, 10%);
   display: flex;
 }
 
-.primaryBgColor {
-  background-color: white;
-}
-
-.secondaryBgColor {
-  background-color: #fafafa;
-}
-
 .review {
   display: inline-block;
   &_stars {
-    color: $primary-yellow;
+    color: $warning-400;
     margin-bottom: 5px;
   }
 }
@@ -276,7 +282,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   }
 
   &_name {
-    color: $primary-dark-grey;
+    color: $color-purple-200;
   }
 
   &_appDetails {
@@ -284,7 +290,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   }
 
   &_appDate {
-    color: $primary-darkgrey;
+    color: $color-grey-300;
     display: flex;
     font-size: 10px;
     justify-content: space-between;
@@ -292,7 +298,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   }
 
   &_appDateHeaders {
-    color: $primary-dark;
+    color: $color-purple-200;
     margin-right: 5px;
   }
 
@@ -304,14 +310,15 @@ $event-grey: lighten($primary-dark-grey, 10%);
 .noteHeaderWrapper {
   color: $event-grey;
   &:before {
-    color: $primary-dark;
+    color: $color-grey-400;
     content: 'Note: ';
-    font-style: normal;
+    font-size: $medium-size;
+    font-weight: $bold-weight;
+    line-height: 20px;
   }
 }
 
 .followUpHeaderWrapper {
-  font-family: $medium-font;
 }
 
 .note {
@@ -331,7 +338,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   top: 5px;
   &:hover {
     .trashIcon {
-      color: $primary-color;
+      color: $color-salmon-400;
     }
   }
 }
@@ -346,5 +353,4 @@ $event-grey: lighten($primary-dark-grey, 10%);
 }
 
 .recallHeader {
-  font-family: $medium-font;
 }

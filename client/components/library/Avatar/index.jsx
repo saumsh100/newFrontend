@@ -1,9 +1,8 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import { Icon } from '../';
-import styles from './styles.scss';
+import { Icon } from '..';
+import styles from './reskin-styles.scss';
 
 const generateInitials = (firstName, lastName) =>
   `${(firstName || '').charAt(0)}${(lastName || '').charAt(0)}`;
@@ -21,18 +20,17 @@ export default function Avatar({
   if (size) {
     classes = classNames(styles[size], classes);
   }
-
   const url = user.fullAvatarUrl || user.avatarUrl;
   const centerContent = url ? (
     <img className={styles.img} src={url} alt={user.firstName} />
   ) : (
-    <span className={styles.text}>
+    <div className={classNames(styles.text, styles[size])}>
       {!user.isUnknown || user.isProspect ? (
         generateInitials(user.firstName, user.lastName)
       ) : (
         <Icon icon="user" type="solid" />
       )}
-    </span>
+    </div>
   );
 
   if (!isPatient) {
@@ -56,7 +54,7 @@ export default function Avatar({
         onClick={onClick}
         role="button"
         tabIndex={0}
-        onKeyDown={e => e.keyCode === 13 && onClick}
+        onKeyDown={(e) => e.keyCode === 13 && onClick}
       >
         {centerContent}
       </div>
@@ -66,7 +64,7 @@ export default function Avatar({
 
 Avatar.defaultProps = {
   isPatient: true,
-  onClick: e => e,
+  onClick: (e) => e,
   className: '',
   size: 'md',
   bgColor: '',
@@ -79,6 +77,10 @@ Avatar.propTypes = {
   user: PropTypes.shape({
     avatarUrl: PropTypes.string,
     firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    isUnknown: PropTypes.bool,
+    isProspect: PropTypes.bool,
+    fullAvatarUrl: PropTypes.string,
   }).isRequired,
   size: PropTypes.string,
   isPatient: PropTypes.bool,

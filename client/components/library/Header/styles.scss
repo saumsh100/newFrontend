@@ -1,27 +1,19 @@
-
-@import '../../../styles/ui.scss';
-@import '../../../styles/fonts';
+@import '../../../styles/ui-reskin.scss';
 
 .plainHeader {
   box-sizing: border-box;
-  // display: flex;
-  // align-items: center;
   padding: 10px 5px 10px 0;
   text-transform: capitalize;
 }
 
-.displayFlex {
-  //display: flex;
-  //align-items: center;
-}
-
 .headerTitle {
+  color: $color-purple-600;
   display: inline-block;
-  @extend .header;
+  font-size: $xxx-medium-size;
+  font-weight: $medium-weight;
 }
 
 .lightHeader {
-  font-family: $dashboard-font;
-  font-size: 22px;
-  font-weight: 500;
+  font-size: $xx-medium-size;
+  font-weight: $medium-weight;
 }

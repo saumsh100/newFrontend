@@ -19,33 +19,34 @@ const buildHttpClient = (getToken, requestConfig = {}) => {
 
       return config;
     },
-    error =>
+    (error) =>
       // Do something with request error
       Promise.reject(error),
   );
 
   // Add a response interceptor
   instance.interceptors.response.use(
-    response => response,
-    error => Promise.reject(error),
+    (response) => response,
+    (error) => Promise.reject(error),
   );
 
   return instance;
 };
 
-export const httpClient = config =>
+export const httpClient = (config) =>
   buildHttpClient(getTokenDefault, {
     baseURL: isOnDevice() ? getApiUrl() : apiHost,
     ...config,
   });
 
-export const bookingWidgetHttpClient = config =>
+export const bookingWidgetHttpClient = (config) =>
   buildHttpClient(getTokenBookingWidget, {
     baseURL: `${apiHost}/my`,
     ...config,
   });
 
-  export const httpClientbookingWidget = (config) =>
+
+export const httpClientbookingWidget = (config) =>
   buildHttpClient(getTokenBookingWidget, {
     baseURL: isOnDevice() ? getApiUrl() : apiHost,
     ...config,

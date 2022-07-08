@@ -1,7 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const AdaptiveLogo = ({ imagePath, description, isCollapsed }) => (
   <div className={!isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed}>

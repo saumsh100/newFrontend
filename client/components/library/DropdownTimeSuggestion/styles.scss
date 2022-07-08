@@ -15,7 +15,6 @@ $empty-grey: darken(lightgrey, 5%);
   //padding: 5px 5px 5px 0px;
   cursor: pointer;
   display: flex;
-  font-family: $dashboard-font;
   font-size: $medium-size;
   height: 30px;
   position: relative;
@@ -59,7 +58,6 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .optionDiv {
-  font-family: $dashboard-font !important;
   padding: 0 !important;
   white-space: normal !important;
 }
@@ -104,6 +102,7 @@ $empty-grey: darken(lightgrey, 5%);
 
 .toggleValueDiv {
   align-items: center;
+  background: transparent;
   display: flex;
   user-select: none;
   width: 100%;
@@ -153,7 +152,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .filled {
-  font-size: $extra-small-size !important;
+  font-size: $x-small-size !important;
   left: 0 !important;
   position: absolute;
   top: -10px !important;
@@ -203,7 +202,6 @@ $empty-grey: darken(lightgrey, 5%);
 
 .inputToggler {
   border: 0;
-  font-family: $dashboard-font;
   width: 100%;
   &:focus {
     outline: none;
@@ -219,6 +217,7 @@ $empty-grey: darken(lightgrey, 5%);
   }
 }
 .groupFull {
+  background-color: transparent;
   padding: 0;
   width: 100%;
 }

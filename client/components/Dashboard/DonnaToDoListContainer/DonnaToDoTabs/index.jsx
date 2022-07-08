@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Tabs, Tab } from '../../../library';
-import styles from '../../styles';
+import styles from './reskin-styles.scss';
 
 const OFFSET_HEIGHT = 37;
 
 const INDEX_HEIGHT = 55.5875;
+
+const DIV_HEIGHT = 335 / 3;
 
 const setToDoTabLineStartingPosition = (toDoIndex) => {
   const scaledHeight = INDEX_HEIGHT * (toDoIndex + 1);
@@ -25,6 +26,8 @@ class DonnaToDoTabs extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      lineWidth: 23,
+      startingPosition: 0,
       toDoIndex: 0,
     };
   }
@@ -42,73 +45,91 @@ class DonnaToDoTabs extends Component {
   }
 
   render() {
+    let top = `${this.state.startingPosition}px`;
+
+    let height = `${DIV_HEIGHT - this.state.startingPosition}px`;
+
+    const lineStyle = {
+      top: `${this.state.startingPosition}px`,
+      left: 0,
+      width: `${this.state.lineWidth}%`,
+      height: '0px',
+    };
+
+    if (this.state.startingPosition > DIV_HEIGHT) {
+      top = `${DIV_HEIGHT}px`;
+      height = `${this.state.startingPosition - DIV_HEIGHT + 0}px`;
+    }
+
+    const lineStyle2 = {
+      top,
+      left: `${this.state.lineWidth}%`,
+      width: '0px',
+      height,
+    };
+
+    const lineStyle3 = {
+      top: `${DIV_HEIGHT}px`,
+      left: `${this.state.lineWidth}%`,
+      width: '15%',
+      height: '0px',
+    };
+
+    const lineStyle4 = {
+      top: `${DIV_HEIGHT}px`,
+      left: '65%',
+      width: '20%',
+      height: '0px',
+    };
+
+    const lineStyle5 = {
+      top: `${DIV_HEIGHT}px`,
+      left: '85%',
+      width: '0px',
+      height: `${INDEX_HEIGHT * 1.5}px`,
+    };
+
+    const multipleHeight = INDEX_HEIGHT * 1.5;
+    const lineStyle6 = {
+      top: `${DIV_HEIGHT + multipleHeight}px`,
+      left: '85%',
+      width: '15%',
+      height: '0px',
+    };
+
     return (
-      <div className={styles.donnaTodoTabs_container}>
-        <div className={styles.donnaTodoTabs_header}>Donna&apos;s To-Do List</div>
-        <div className={styles.donnaTodoTabs_body}>
-          <div className={styles.donnaTodoTabs_toDosList}>
+      <div className={styles.container}>
+        <div className={styles.header}>Donna&apos;s To-Do List</div>
+        <div className={styles.body}>
+          <div className={styles.toDosList}>
             <Tabs
               index={this.props.toDoIndex}
               onChange={(i) => this.props.changeTab(i)}
-              className={styles.donnaTodoTabs_tabs}
+              className={styles.tabs}
             >
               <Tab
                 label="Appointment Reminders"
-                className={styles.donnaTodoTabs_tab}
-                activeClass={styles.donnaTodoTabs_activeTab}
+                className={styles.tab}
+                activeClass={styles.activeTab}
               />
-              <Tab
-                label="Patient Recalls"
-                className={styles.donnaTodoTabs_tab}
-                activeClass={styles.donnaTodoTabs_activeTab}
-              />
+              <Tab label="Patient Recalls" className={styles.tab} activeClass={styles.activeTab} />
               <Tab
                 label="Review Requests"
-                className={styles.donnaTodoTabs_tab}
-                activeClass={styles.donnaTodoTabs_activeTab}
+                className={styles.tab}
+                activeClass={styles.activeTab}
                 data-test-id="reviewRequestsTab"
               />
             </Tabs>
           </div>
 
-          <div className={styles.donnaTodoTabs_imageWrapper}>
+          <div className={styles.imageWrapper}>
             <img src="/images/donna.png" height="335px" width="338px" alt="Donna" />
-            <div
-              className={classNames(
-                styles.donnaTodoTabs_dynamicLines,
-                styles.donnaTodoTabs_lineStyle,
-              )}
-            />
-            <div
-              className={classNames(
-                styles.donnaTodoTabs_dynamicLines,
-                styles.donnaTodoTabs_lineStyle2,
-              )}
-            />
-            <div
-              className={classNames(
-                styles.donnaTodoTabs_dynamicLines,
-                styles.donnaTodoTabs_lineStyle3,
-              )}
-            />
-            <div
-              className={classNames(
-                styles.donnaTodoTabs_dynamicLines,
-                styles.donnaTodoTabs_lineStyle4,
-              )}
-            />
-            <div
-              className={classNames(
-                styles.donnaTodoTabs_dynamicLines,
-                styles.donnaTodoTabs_lineStyle5,
-              )}
-            />
-            <div
-              className={classNames(
-                styles.donnaTodoTabs_dynamicLines,
-                styles.donnaTodoTabs_lineStyle6,
-              )}
-            />
+            <div style={lineStyle} className={styles.dynamicLines} />
+            <div style={lineStyle2} className={styles.dynamicLines} />
+            <div style={lineStyle3} className={styles.dynamicLines} />
+            <div style={lineStyle4} className={styles.dynamicLines} />
+            <div style={lineStyle5} className={styles.dynamicLines} />
+            <div style={lineStyle6} className={styles.dynamicLines} />
           </div>
         </div>
       </div>

@@ -70,7 +70,7 @@ function buildFamilyData(insightObj, patient, timezone) {
             ? calculateAge(famMember.birthDate, timezone)
             : null;
           const subHeaderDiv = (
-            <div>
+            <div className={styles.insights_familyData}>
               {famMember.firstName} {famMember.lastName}
               {famMemberAge && `, ${famMemberAge} years old, `} was due for recare on{' '}
               {getFormattedDate(famMember.dateDue, 'MMM Do YYYY', timezone)}

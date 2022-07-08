@@ -1,0 +1,95 @@
+@import '../../../styles/ui-reskin.scss';
+
+.baseButton {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: $small-size;
+  font-weight: $medium-weight;
+  padding: 8px 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.primary {
+  @extend .baseButton;
+  background-color: $color-lavender-500;
+  border: none;
+  color: $super-white;
+  &:hover {
+    background-color: $color-lavender-550;
+  }
+}
+
+.secondary {
+  @extend .baseButton;
+  background-color: $super-white;
+  border: 1px solid $color-lavender-500;
+  border-radius: 4px;
+  box-shadow: $box-shadow-4;
+  color: $color-lavender-500;
+
+  &:hover {
+    background-color: $color-lavender-100;
+  }
+}
+
+.disabled {
+  @extend .baseButton;
+  background-color: $color-grey-100;
+  border: 1px solid $color-grey-200;
+  color: $color-grey-200;
+  cursor: default;
+  padding: 6px 16px;
+}
+
+.icon {
+  margin-right: 4px;
+}
+
+.success {
+  @extend .baseButton;
+  background-color: $color-success-400;
+  color: $super-white;
+  font-size: $x-medium-size;
+  font-weight: $medium-weight;
+}
+
+.iconRight {
+  margin-left: 4px;
+}
+
+.danger {
+  @extend .baseButton;
+  background-color: $super-white;
+  border: 1px solid $error-500;
+  border-radius: 4px;
+  box-shadow: $box-shadow-4;
+  color: $error-500;
+  &:hover {
+    background-color: $error-100;
+    color: $error-600;
+  }
+}
+
+.flat {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  color: $color-grey-200;
+  display: flex;
+  font-size: $x-small-size;
+  font-weight: $bold-weight;
+
+  &:not(.disabled) {
+    &:hover {
+      background-color: transparent;
+      color: $color-lavender-500;
+    }
+  }
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}

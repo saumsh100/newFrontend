@@ -1,16 +1,23 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { PractitionerAvatar, Form, Field, Dropzone, Header, Button } from '../../../../library';
+import {
+  PractitionerAvatar,
+  Form,
+  Field,
+  Dropzone,
+  Header,
+  Button,
+  Icon,
+} from '../../../../library';
 import { uploadAvatar, deleteAvatar } from '../../../../../thunks/practitioners';
 import { practitionerShape } from '../../../../library/PropTypeShapes';
 import styles from '../../styles.scss';
 
-const maxLength = max => value =>
-  (value && value.length > max ? `Must be ${max} characters or less` : undefined);
+const maxLength = (max) => (value) =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined;
 const maxLength25 = maxLength(25);
 
 class PractitionerBasicData extends Component {
@@ -120,7 +127,12 @@ class PractitionerBasicData extends Component {
           <Header title="Avatar" contentHeader />
           <Dropzone onDrop={this.uploadAvatar} loaded={!this.state.uploading}>
             <PractitionerAvatar practitioner={initialValues} size="xl" />
-            <p>Drop avatar here or click to select file.</p>
+            <div className={styles.mainText}>
+              <Icon icon="cloud-upload" className={styles.cloudIcon} />
+              <p className={styles.title}>
+                Drag and Drop your avatar here or click to select file.
+              </p>
+            </div>
           </Dropzone>
           {initialValues.fullAvatarUrl && (
             <Button className={styles.deleteAvatar} onClick={this.deleteAvatar}>
@@ -152,7 +164,4 @@ PractitionerBasicData.propTypes = {
   updatePractitioner: PropTypes.func.isRequired,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PractitionerBasicData);
+export default connect(mapStateToProps, mapDispatchToProps)(PractitionerBasicData);

@@ -132,15 +132,14 @@
     }
 
     &_text {
-      font-family: $dashboard-font;
-      font-size: $extra-small-size;
+      font-size: $x-small-size;
       text-align: center;
       width: 100%;
     }
 
     &_dollar {
       color: $color-black;
-      font-size: $extra-small-size;
+      font-size: $x-small-size;
       margin-right: 2px;
     }
   }

@@ -1,8 +1,10 @@
+@import '../../../../../../styles/ui-reskin.scss';
+
 .waitListTableFooterWrapper {
   align-items: center;
-  background: white;
+  background: $super-white;
   border-radius: 0 0 4px 4px;
-  box-shadow: 0px -1px 6px 0px rgba(104, 110, 116, 0.1);
+  box-shadow: $box-shadow-1;
   display: flex;
   height: 64px;
   justify-content: space-between;
@@ -16,25 +18,34 @@
 }
 
 .sendButton {
-  background: rgb(21, 75, 110);
+  background: $color-lavender-500;
   border: none;
   border-radius: 4px;
   box-shadow: 1px 1px 2px 0 rgba(104, 110, 116, 0.11);
-  color: white;
+  color: $super-white;
   cursor: pointer;
-  font-family: 'Gotham-Book', sans-serif;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
   height: 38px;
-  margin: 0 70px;
+  margin-right: 120px;
   min-width: 192px;
 }
 
 .removeButton {
-  background: none;
-  color: rgb(220, 53, 53);
-  font-size: 13px;
-  font-weight: 500;
+  background: $super-white;
+  border: 1px solid $error-500;
+  border-radius: 4px;
+  box-shadow: $box-shadow-4;
+  color: $error-500;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
   letter-spacing: 0.02px;
   line-height: 14px;
   margin: 0 12px;
   min-width: 131px;
+}
+
+.trashButton {
+  font-weight: $normal-weight;
+  margin-right: 12px;
 }

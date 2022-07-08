@@ -1,5 +1,4 @@
-@import '../../../../../styles/ui';
-@import '../../../../../styles/fonts';
+@import '../../../../../styles/ui-reskin.scss';
 
 .score {
   align-items: center;
@@ -9,25 +8,26 @@
   justify-content: center;
   text-align: center;
   &__header {
-    border-bottom: 1px solid $primary-lightgrey;
+    border-bottom: 1px solid $color-lavender-150;
     padding-bottom: 10px;
     width: 80%;
     &_count {
-      color: $primary-blue;
-      composes: fontExtraLarge from '../../../../../styles/fonts.scss';
+      color: $color-grey-500;
+      font-size: $xxx-large-size;
+      font-weight: $bold-weight;
     }
     &_title {
-      color: $primary-dark;
-      composes: fontMediumLarge from '../../../../../styles/fonts.scss';
+      color: $color-grey-400;
+      font-size: $xxx-medium-size;
     }
   }
   &__body {
     padding-top: 10px;
     width: 80%;
     &_listing {
-      color: lighten($primary-darkgrey, 20%);
-      composes: subHeaderSmall from '../../../../../styles/fonts.scss';
+      color: $color-grey-300;
       display: flex;
+      font-weight: $bold-weight;
       justify-content: space-between;
       margin-bottom: 10px;
       span:last-child {

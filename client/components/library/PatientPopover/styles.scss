@@ -1,5 +1,5 @@
-@import '../../../styles/ui';
-@import '../../../styles/fonts';
+@import '../../../styles/ui.scss';
+@import '../../../styles/fonts.scss';
 
 .patientLink {
   color: $primary-blue;
@@ -30,7 +30,8 @@
 }
 
 .patientPopoverTitle {
-  font-family: $medium-font;
+  font-size: $small-size;
+  font-weight: $bold-weight;
 }
 
 .card {
@@ -106,7 +107,7 @@
   background-color: $primary-white;
   height: auto;
   max-height: 290px;
-  max-width: 285px;
+  max-width: 575px;
   min-height: 200px;
   padding: 15px 15px 10px;
 }
@@ -142,7 +143,6 @@
     textarea {
       border-bottom: 0;
       color: black;
-      font-family: $medium-font;
       height: auto;
       padding: 0;
     }

@@ -1,8 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { Icon } from '../../library';
+import { StandardButton } from '../../library';
 import styles from './styles.scss';
 
 export default function ToggleChatButton({ toggleChat, isChatOpen }) {
@@ -11,19 +9,13 @@ export default function ToggleChatButton({ toggleChat, isChatOpen }) {
       className={styles.toggleChatWrapper}
       role="button"
       tabIndex={0}
-      onKeyDown={e => e.keyCode === 13 && toggleChat()}
+      onKeyDown={(e) => e.keyCode === 13 && toggleChat()}
       onClick={toggleChat}
     >
       {isChatOpen ? (
-        <>
-          <Icon className={styles.toggleIcon} icon="check" />
-          <span>Close</span>
-        </>
+        <StandardButton variant="primary" onClick={toggleChat} title="Close" icon="check" />
       ) : (
-        <>
-          <Icon className={classNames(styles.toggleIcon, styles.redoIcon)} icon="redo-alt" />
-          <span>Reopen</span>
-        </>
+        <StandardButton variant="primary" onClick={toggleChat} title="Reopen" icon="redo-alt" />
       )}
     </div>
   );

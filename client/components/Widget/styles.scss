@@ -2,7 +2,6 @@
 
 .reviewsWidgetContainer {
   display: flex;
-  font-family: Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   height: 100%;
   justify-content: center;
@@ -54,7 +53,6 @@
 }
 
 .service {
-  font-family: 'Roboto', sans-serif;
   font-size: 12px;
   padding-bottom: 5px;
 }
@@ -91,7 +89,6 @@
 
 .actionButton {
   border-radius: 4px;
-  font-family: 'Roboto', sans-serif;
   font-size: 14px;
   font-weight: 500;
   min-height: 41px;
@@ -125,7 +122,6 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    font-family: inherit;
     justify-content: center;
     margin: 0;
     padding: 0;

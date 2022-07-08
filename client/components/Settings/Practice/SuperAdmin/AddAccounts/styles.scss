@@ -1,21 +1,16 @@
-@import '../../../../../styles/ui';
+@import '../../../../../styles/ui-reskin.scss';
 
 .mainContainer {
   animation: fadeinform 0.9s;
-  background: $primary-white;
-  //border-radius: 10px;
+  background: $super-white;
   padding: 10px;
   position: relative;
-}
-
-.logo {
 }
 
 .header {
   align-items: center;
   box-sizing: border-box;
-  color: $primary-dark;
-  composes: fontMediumLarge from '../../../../../styles/fonts.scss';
+  color: $color-purple-600;
   display: flex;
   &_text {
     padding-left: 10px;
@@ -68,9 +63,6 @@
   z-index: 1000000;
 }
 
-.clinicDetailsContainer {
-}
-
 .selectEnterprise {
   align-items: center;
   display: flex;
@@ -96,9 +88,10 @@
   width: 100%;
 
   &_text {
-    color: $primary-darkgrey;
-    font-weight: $large-weight;
-    padding-left: 20px;
+    color: $color-purple-600;
+    font-size: $medium-size;
+    font-weight: $medium-weight;
+    margin-left: 10px;
     width: 210px;
   }
   &_row {
@@ -120,7 +113,10 @@
 }
 
 .icon {
+  font-size: $small-size;
+  font-weight: $normal-weight;
   width: 10px;
+  $color: $color-purple-300;
 }
 
 @keyframes fadeinform {

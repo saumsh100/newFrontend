@@ -48,7 +48,6 @@
     display: flex;
     flex: 0 0 auto;
 
-    font-family: $inter;
     font-size: 13px;
     font-weight: normal;
     justify-content: space-between;
@@ -140,7 +139,6 @@
   cursor: pointer;
   display: flex;
 
-  font-family: $inter;
   font-size: $small-size;
   font-size: 13px;
   height: calc(2.5rem * 1.6);
@@ -201,7 +199,6 @@ button.linkButton {
 }
 .selectionTitle {
   color: $grey-dark;
-  font-family: $inter;
   font-size: 9px;
   margin: 12px 0;
 }

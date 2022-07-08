@@ -1,14 +1,11 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Card } from '../index';
-import styles from './styles.scss';
+import styles from '../styles';
 
 export default function IconCard(props) {
-  const {
-    className, count, title, color, src, alt,
-  } = props;
+  const { className, count, title, color, src, alt } = props;
 
   const classes = classNames(className, styles.iconCard, {
     [styles[`${color}Background`]]: color,
@@ -17,10 +14,7 @@ export default function IconCard(props) {
   return (
     <Card className={classes} noBorder>
       <div className={styles.iconCard__wrapper}>
-        <div
-          className={styles.iconCard__count}
-          data-test-id={`statCard_${title}`}
-        >
+        <div className={styles.iconCard__count} data-test-id={`statCard_${title}`}>
           {count}
         </div>
         <div className={styles.iconCard__title}>{title}</div>

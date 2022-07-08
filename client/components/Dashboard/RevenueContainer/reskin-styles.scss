@@ -1,0 +1,33 @@
+.revenueContainer {
+  &_revenueContainer {
+    background-color: $color-purple-750;
+    border-top: 0;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    margin-right: 10px;
+    min-height: 317px;
+    padding: 4px;
+
+    @media screen and (max-width: 1266px) {
+      margin-bottom: 15px;
+      margin-right: 0;
+    }
+
+    @media screen and (max-width: 768px) {
+      margin-bottom: 10px;
+      margin-right: 0;
+      min-height: 240px;
+    }
+
+    @media screen and (max-width: 494px) {
+      flex-direction: column;
+      margin-bottom: 10px;
+      margin-right: 0;
+    }
+  }
+
+  &_loader {
+    height: 2px;
+  }
+}

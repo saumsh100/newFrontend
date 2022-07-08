@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,16 +12,16 @@ const LastAppointmentSection = ({ patient, className, timezone }) => (
     <div className={styles.lastAppointmentHeader}>Last Appointment</div>
     <Row className={styles.appointmentsRow}>
       <Col xs={6}>
-        <InfoDump label="HYGIENE" data={validDateValue(patient.lastHygieneDate, timezone)} />
+        <InfoDump label="Hygiene" data={validDateValue(patient.lastHygieneDate, timezone)} />
       </Col>
       <Col xs={6}>
-        <InfoDump label="RECALL" data={validDateValue(patient.lastRecallDate, timezone)} />
+        <InfoDump label="Recall" data={validDateValue(patient.lastRecallDate, timezone)} />
       </Col>
     </Row>
     <Row className={styles.appointmentsRow}>
       <Col xs={6}>
         <InfoDump
-          label="RESTORATIVE"
+          label="Restorative"
           data={validDateValue(patient.lastRestorativeDate, timezone)}
         />
       </Col>
@@ -31,10 +30,7 @@ const LastAppointmentSection = ({ patient, className, timezone }) => (
 );
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-export default connect(
-  mapStateToProps,
-  null,
-)(LastAppointmentSection);
+export default connect(mapStateToProps, null)(LastAppointmentSection);
 
 LastAppointmentSection.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,

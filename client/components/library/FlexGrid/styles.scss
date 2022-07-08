@@ -1,5 +1,5 @@
-@import "../../../styles/ui.scss";
-@import "../../../styles/fonts.scss";
+@import '../../../styles/ui.scss';
+@import '../../../styles/fonts.scss';
 
 .sideByside {
   border-top: 5px solid $inactive-color;
@@ -7,7 +7,7 @@
   margin: 0 5px 5px;
   padding: 10px;
   &__title {
-    @extend .font-medium
+    @extend .font-medium;
   }
 
   &__body {
@@ -22,11 +22,10 @@
     align-items: flex-start;
     display: flex;
     justify-content: center;
-
   }
 
   &__icon {
-    color: #8CBCD6;
+    color: $primary-light-blue;
     font-size: $jumbo-size;
     margin-right: 10px;
   }
@@ -59,13 +58,12 @@
 
   &__vote_icons {
     color: $primary-blue;
-    font-size: $extra-medium-size;
+    font-size: $xxx-medium-size;
     margin-right: 20px;
   }
 
   &__vote_icons_text {
     color: $primary-dark;
-    font-family: "Gotham-Book";
     margin-left: 10px;
   }
 
@@ -75,36 +73,33 @@
     justify-content: center;
     margin-bottom: 20px;
     width: 100%;
-    @media screen and (max-width: 800px){
+    @media screen and (max-width: 800px) {
       align-items: center;
       border: none;
       flex-direction: column;
       justify-content: space-between;
       margin: 0;
-
     }
     .sideByside__item:not(:last-child) {
       border-right: 1px solid $primary-grey;
-      @media screen and (max-width: 800px){
+      @media screen and (max-width: 800px) {
         border: none;
       }
     }
   }
-
 }
 
 @media (max-width: 450px) {
   .sideByside {
     &__icon {
-      font-size: $extra-medium-size;
+      font-size: $xxx-medium-size;
     }
     &__count {
-      font-size: $extra-medium-size;
-      font-weight: $small-weight;
+      font-size: $xxx-medium-size;
+      font-weight: $normal-weight;
     }
   }
 }
-
 
 @media (max-width: 320px) {
   .sideByside {

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -10,7 +9,7 @@ export default function Tooltip(props) {
   const classes = classNames(className, styles.tooltip);
   const newProps = {
     ...props,
-    className: classes,
+    classes
   };
 
   return <RCTooltip {...newProps} />;

@@ -1,4 +1,4 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin.scss';
 
 .patientRow {
   align-items: center;
@@ -9,12 +9,14 @@
   width: 100%;
 }
 .name {
-  color: lighten($primary-blue, 10%);
-  composes: subHeader from '../../../../styles/fonts.scss';
+  color: $color-purple-300;
+  font-size: $small-size;
+  font-weight: $bold-weight;
+  line-height: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   &:hover {
-    color: $primary-blue;
+    color: $color-purple-400;
     cursor: pointer;
   }
 }
@@ -23,4 +25,5 @@
   align-items: center;
   display: flex;
   justify-content: flex-start;
+  margin-right: 8px;
 }

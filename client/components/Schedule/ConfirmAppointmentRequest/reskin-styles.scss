@@ -1,0 +1,379 @@
+@import '../../../styles/ui.scss';
+@import '../../../styles/ui-reskin.scss';
+@import '../../../styles/fonts.scss';
+@import '../../../styles/reskin-font.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  overflow: auto;
+}
+
+.subHeader {
+  @extend .subHeaderExtraSmall;
+}
+.listItemHeader {
+  @extend .listItemHeader;
+}
+
+.boldTitle {
+  @extend .font-Bold;
+}
+
+.text {
+  flex: 0 0 auto;
+  text-align: left;
+}
+
+.bold {
+  color: $color-purple-600;
+  font-size: $medium-size;
+  font-weight: $bold-weight;
+  @extend .font-Medium;
+}
+
+.dataContainer {
+  align-items: center;
+  background: none;
+  background-color: $super-white-200;
+  border: 1px solid $color-purple-200;
+  border-radius: 4px;
+  color: $color-purple-600;
+  display: flex;
+  font-size: $medium-size;
+  font-weight: 500;
+  height: auto;
+  margin-bottom: 10px;
+  text-align: left;
+
+  @media screen and (max-width: 1300px) {
+    padding-top: 10px;
+  }
+
+  &_body {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: row;
+    line-height: 1.5em;
+    padding-left: 15px;
+    width: 100%;
+    @media screen and (max-width: 1300px) {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  &_bodyEmail {
+    align-items: center;
+    color: $color-purple-600;
+    flex-direction: column;
+    font-size: $medium-size;
+    font-weight: $normal-weight;
+    margin-top: 20px;
+  }
+
+  &_contactInfo {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    padding-left: 20px;
+    @extend .subHeader;
+    @media screen and (max-width: 1300px) {
+      align-items: flex-start;
+      margin-left: 0;
+      padding-left: 0;
+    }
+    &_email {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &_contactInfoEmail {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin-left: 0;
+    @extend .subHeader;
+  }
+
+  &_patientInfo {
+    color: $primary-dark;
+    &_fullName {
+      @extend .boldTitle;
+    }
+
+    &_date {
+      @extend .boldTitle;
+    }
+
+    &_createdAt {
+      @extend .subHeader;
+      font-size: 10px;
+    }
+  }
+}
+
+.appointmentIsSelected {
+  .summaryData {
+    .itemContainer {
+      .contactItem {
+        align-items: center;
+        color: $color-purple-600;
+        display: flex;
+        font-size: $small-size;
+        font-weight: 500;
+        width: 50%;
+        .icon {
+          font-weight: 400;
+          padding-right: 6px;
+        }
+      }
+    }
+  }
+
+  &.dataContainer {
+    background-color: $color-lavender-150;
+    border: 1px solid $color-lavender-500;
+    border-radius: 4px;
+    box-shadow: 1px 1px 4px rgba(7, 0, 82, 0.06);
+    box-sizing: border-box;
+    color: $color-purple-600;
+
+    .dataContainer {
+      &_patientInfo {
+        &_fullName,
+        &_date,
+        &_createdAt {
+          color: $color-purple-600;
+          font-weight: 500;
+        }
+      }
+      &_contactItem {
+        color: $color-purple-600;
+      }
+    }
+  }
+}
+
+.containerApp {
+  align-items: flex-start;
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.sameAppList {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+
+.singleItem {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  &:hover {
+    background-color: $color-lavender-050;
+    border: 1px solid $color-lavender-500;
+  }
+}
+
+.singleItemEmail {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.5;
+  padding-top: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.selected {
+  background: $primary-grey;
+  border-left: 2px solid;
+  border-left-color: $primary-color;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  width: 100%;
+
+  &_yes {
+    margin-left: 5px;
+  }
+}
+
+.radio {
+  margin-right: 20px;
+}
+
+.userCard {
+  .header {
+    align-items: center;
+    color: $color-purple-600;
+    display: flex;
+    font-size: $medium-size;
+    font-weight: $bold-weight;
+    margin-bottom: 5px;
+    padding: 10px 0 5px;
+  }
+  .container {
+    padding: 5px;
+
+    .data {
+      align-items: center;
+      display: flex;
+      font-size: 13px;
+      padding-bottom: 4px;
+
+      &_text {
+        color: $color-purple-600;
+        padding-left: 5px;
+      }
+    }
+  }
+}
+
+.summeryText {
+  color: $color-purple-600;
+  font-family: $font-inter;
+  font-size: $medium-size;
+  font-weight: 500;
+}
+
+.summery {
+  background-color: $color-grey-050;
+  border: 1px solid $color-grey-100;
+  border-radius: 0px 0px 4px 4px;
+  box-sizing: border-box;
+  margin-top: 24px;
+}
+
+.border {
+  border-bottom: 1px solid $color-grey-150;
+  margin-left: 13px;
+  margin-right: 13px;
+  padding-top: 6px;
+}
+
+.summaryData {
+  color: $color-purple-600;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  width: 100%;
+  .header {
+    border: 0;
+  }
+  .header_text {
+    padding-left: 8px;
+  }
+  .itemContainer {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 12px;
+    .item {
+      padding-bottom: 6px;
+      padding-top: 10px;
+      width: 50%;
+      .title {
+        color: $color-purple-400;
+        font-size: $small-size;
+        font-weight: $normal-weight;
+        padding-bottom: 4px;
+        padding-top: 6px;
+      }
+    }
+    .contactItem {
+      align-items: center;
+      color: $color-grey-400;
+      display: flex;
+      font-size: $small-size;
+      width: 50%;
+      .icon {
+        padding-right: 6px;
+      }
+    }
+  }
+  .appointment_itemContainer {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 3px;
+    .item {
+      padding-bottom: 6px;
+      padding-top: 10px;
+      width: 50%;
+      .title {
+        color: $color-purple-400;
+        font-size: $small-size;
+        font-weight: $normal-weight;
+        padding-bottom: 4px;
+        padding-top: 6px;
+        text-transform: capitalize;
+      }
+    }
+    .contactItem {
+      align-items: center;
+      color: $color-grey-400;
+      display: flex;
+      font-size: $medium-weight;
+      font-weight: 500;
+      width: 50%;
+      .icon {
+        font-weight: 400;
+        padding-right: 6px;
+      }
+    }
+  }
+}
+
+.infoContainer {
+  padding: 4px;
+  @extend .container;
+}
+
+.summaryTitle {
+  color: $color-purple-400;
+  font-size: $medium-size;
+  padding-left: 8px;
+  padding-top: 12px;
+  @extend .boldTitle;
+}
+
+.fullName {
+  padding-left: 6px;
+  @extend .subHeader;
+}
+
+.textBtn {
+  margin-top: 20px;
+  padding: 6px 8px;
+  width: 18%;
+}
+
+.cursor_pointer {
+  cursor: pointer;
+}
+
+.cursor_not_allowed {
+  cursor: not-allowed;
+}
+.note {
+  color: $color-purple-600;
+  font-family: $font-inter;
+  font-size: $medium-size;
+  font-weight: $normal-weight;
+}
+.show_caretDown {
+  color: $color-lavender-500;
+  font-weight: $heavy-weight;
+  margin-left: 4px;
+  width: 12px;
+}

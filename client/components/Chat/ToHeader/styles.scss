@@ -1,8 +1,8 @@
-@import '../../../styles/ui';
+@import '../../../styles/ui-reskin.scss';
 
 @mixin headingButtons {
   background: transparent !important;
-  color: $primary-dark !important;
+  color: $color-purple-600 !important;
   flex: 1;
   font-size: 28px;
   font-weight: 100 !important;
@@ -13,6 +13,18 @@
 .wrapper {
   display: flex;
   height: 100%;
+}
+
+.title {
+  color: $color-purple-600;
+  font-family: $font-inter;
+  font-size: $xxx-medium-size;
+  font-weight: $medium-weight;
+  line-height: 36px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  word-wrap: break-word;
 }
 
 .menuButton {
@@ -44,7 +56,7 @@
 }
 
 .infoArrow {
-  color: $primary-gray;
+  color: $color-purple-200;
   display: none;
   font-size: 20px !important;
   margin-left: 10px;
@@ -68,7 +80,6 @@
 }
 
 .patientInfoName {
-  font-family: $medium-font;
   font-size: 16px;
   margin-left: 10px;
   vertical-align: middle;
@@ -87,20 +98,9 @@
   top: 50px;
 }
 
-.hubWrapper {
-  .patientInfoName,
-  .infoArrow {
-    color: $electron-chat-top-bar-name;
-  }
-
-  .patientInfoWrapper {
-    margin-left: 0;
-  }
-}
-
 .toggleChatWrapper {
   align-items: center;
-  color: $primary-dark;
+  color: $color-purple-600;
   cursor: pointer;
   display: flex;
   font-size: 14px;
@@ -113,12 +113,10 @@
   user-select: none;
 
   &:focus {
-    color: $primary-blue;
     outline: none;
   }
 
   &:hover {
-    color: $primary-blue;
     transition: all 0.2s ease;
   }
 }

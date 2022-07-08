@@ -1,24 +1,27 @@
 import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import tableStyles from '../tableStyles.scss';
-import styles from './styles.scss';
-import { Button, DropdownMenu, Checkbox } from '../../../../library';
+import styles from './reskin-styles.scss';
+import { Button, DropdownMenu, Checkbox, Icon } from '../../../../library';
 import EllipsisIcon from '../EllipsisIcon';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import Tooltip from '../../../../Tooltip';
+// import { Icon } from '@carecru/component-library';
 
 export const ManageCell = ({ value }) => (
   <DropdownMenu
     labelComponent={(props) => (
-      <Button {...props} className={tableStyles.ellipsisButton}>
+      <div {...props} className={tableStyles.ellipsisButton}>
         <EllipsisIcon />
-      </Button>
+      </div>
     )}
   >
     <Button className={tableStyles.actionItem} onClick={value.onEdit(value.id)}>
-      Edit
+      <Icon icon="edit" />
+      <span className={tableStyles.text}>Edit</span>
     </Button>
     <Button className={tableStyles.actionItem} onClick={value.onRemove}>
+      <Icon icon="trash" />
       Delete
     </Button>
   </DropdownMenu>
@@ -60,7 +63,7 @@ export const FirstNameCell = ({ value }) => {
   return (
     patient && (
       <PopOverComponent patient={patient} zIndex={9999}>
-        <div>{`${patient.firstName}`}</div>
+        <div style={{ textAlign: 'center' }}>{`${patient.firstName}`}</div>
       </PopOverComponent>
     )
   );
@@ -73,7 +76,7 @@ export const LastNameCell = ({ value }) => {
   return (
     patient && (
       <PopOverComponent patient={patient} zIndex={9999}>
-        <div>{`${patient.lastName}`}</div>
+        <div style={{ textAlign: 'center' }}>{`${patient.lastName}`}</div>
       </PopOverComponent>
     )
   );

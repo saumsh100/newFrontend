@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,7 +9,8 @@ import {
   passwordsMatch,
   passwordStrength,
 } from '../../../library/Form/validate';
-import { Link, Form, Field, Button } from '../../../library';
+import { Link, Form } from '../../../library';
+import { Field, Button } from '../../components';
 import { createPatient } from '../../../../thunks/patientAuth';
 import { inputTheme } from '../../theme';
 import styles from './styles.scss';
@@ -98,9 +98,4 @@ SignUp.propTypes = {
   createPatient: PropTypes.func.isRequired,
 };
 
-export default withRouter(
-  connect(
-    null,
-    mapDispatchToProps,
-  )(SignUp),
-);
+export default withRouter(connect(null, mapDispatchToProps)(SignUp));

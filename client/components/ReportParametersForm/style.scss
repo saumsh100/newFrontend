@@ -1,24 +1,15 @@
-@import '../../styles/ui.scss';
-
-.row {
-  margin-bottom: 10px;
-}
-
-.wrapper {
-  height: 100%;
-}
-
-.gridWrapper {
-  height: auto;
-  padding: 0;
-}
+@import '../../styles/ui-reskin.scss';
 
 .mainRowWrapper {
-  @extend .row;
-  background: $primary-lightgray;
-  border-radius: 0 0 4px 4px;
+  align-items: center;
+
+  background: $color-grey-050;
   box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
-  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 16px;
 
   & > div {
     padding-left: 10px;
@@ -43,9 +34,5 @@
 }
 
 .navDropdownListWrapper {
-  background-color: $primary-white;
-  border-radius: 4px 4px 0 0;
-  box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
-  margin-bottom: 1px;
-  padding: 22px 24px;
+  margin-bottom: 16px;
 }

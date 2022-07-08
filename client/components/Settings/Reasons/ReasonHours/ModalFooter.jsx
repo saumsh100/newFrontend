@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '../../../library';
+import { StandardButton as Button } from '../../../library';
 import styles from '../../../library/ScheduleCalendar/modal.scss';
-import ui from '../../../../styles/ui-kit.scss';
 
 const ModalFooter = ({ hideModal, disableUpdate, updateReason }) => (
   <div className={styles.footer}>
-    <Button className={ui.modal__cancel} onClick={hideModal}>
+    <Button className={styles.cancelButton} onClick={hideModal} variant="secondary">
       Cancel
     </Button>
-    <Button className={ui.modal__save} disabled={disableUpdate} onClick={updateReason}>
+    <Button disabled={disableUpdate} onClick={updateReason}>
       Update
     </Button>
   </div>

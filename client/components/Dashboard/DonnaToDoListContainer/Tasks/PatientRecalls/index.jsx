@@ -36,7 +36,7 @@ export default function PatientRecalls({ recalls, timezone }) {
               <Avatar size="sm" user={patient} />
             </div>
             <div className={styles.tasks_col}>
-              <span>
+              <span className={styles.patientRecalls_textBlocks}>
                 <PatientPopover patient={patient}>
                   <div>{`${patient.firstName} ${patient.lastName}`}</div>
                 </PatientPopover>
@@ -44,6 +44,7 @@ export default function PatientRecalls({ recalls, timezone }) {
                   className={classnames(
                     styles.patientRecalls_muted,
                     styles.patientRecalls_lowercase,
+                    styles.patientRecalls_atTime,
                   )}
                 >
                   {`at ${getFormattedDate(sendDate, 'h:mm a', timezone)}`}
@@ -51,8 +52,8 @@ export default function PatientRecalls({ recalls, timezone }) {
               </span>
             </div>
             <div className={styles.tasks_mediumCol}>
-              <span>
-                <div>{type}</div>
+              <span className={styles.patientRecalls_textBlocks}>
+                <div className={styles.patientRecalls_fontWeightMedium}>{type}</div>
                 <div
                   className={classnames(
                     styles.patientRecalls_muted,
@@ -63,12 +64,12 @@ export default function PatientRecalls({ recalls, timezone }) {
                 </div>
               </span>
             </div>
-            <div className={styles.tasks_col}>
+            <div className={classnames(styles.tasks_col, styles.patientRecalls_fontWeightMedium)}>
               {dueForHygieneDate
                 ? getFormattedDate(dueForHygieneDate, 'MMM Do, YYYY', timezone)
                 : 'n/a'}
             </div>
-            <div className={styles.tasks_col}>
+            <div className={classnames(styles.tasks_col, styles.patientRecalls_fontWeightMedium)}>
               {dueForRecallExamDate
                 ? getFormattedDate(dueForRecallExamDate, 'MMM Do, YYYY', timezone)
                 : 'n/a'}

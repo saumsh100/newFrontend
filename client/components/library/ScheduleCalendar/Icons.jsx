@@ -1,8 +1,7 @@
-
 import React from 'react';
 
 export const ArrowIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="14">
+  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9">
     <path fillRule="nonzero" d="M.71 1.35L2.05 0l6.618 6.667-6.619 6.666-1.338-1.35 5.276-5.316z" />
   </svg>
 );

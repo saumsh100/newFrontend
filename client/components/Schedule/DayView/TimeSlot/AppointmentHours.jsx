@@ -1,8 +1,7 @@
-
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { getUTCDate } from '../../../library';
 
 /**
@@ -33,8 +32,9 @@ const buildHoursFormat = (startDate, timezone, endDate = null) => {
   endDate = getUTCDate(endDate, timezone);
 
   const afternoon = 12;
-  const addAtoFormat = (startDate.get('hour') >= afternoon && endDate.get('hour') >= afternoon)
-    || (startDate.get('hour') < afternoon && endDate.get('hour') < afternoon);
+  const addAtoFormat =
+    (startDate.get('hour') >= afternoon && endDate.get('hour') >= afternoon) ||
+    (startDate.get('hour') < afternoon && endDate.get('hour') < afternoon);
 
   return `${shortenTime(startDate, !addAtoFormat)} - ${shortenTime(endDate)}`;
 };
@@ -47,7 +47,7 @@ const buildHoursFormat = (startDate, timezone, endDate = null) => {
  * @param {boolean} inline
  */
 const buildHoursString = (startDate, endDate, timezone, inline = false) =>
-  (inline ? buildHoursFormat(startDate, timezone) : buildHoursFormat(startDate, timezone, endDate));
+  inline ? buildHoursFormat(startDate, timezone) : buildHoursFormat(startDate, timezone, endDate);
 
 /**
  * Hours presenter component

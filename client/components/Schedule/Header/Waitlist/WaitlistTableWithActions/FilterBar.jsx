@@ -11,7 +11,7 @@ import { applyAllFilters, dayOfWeekFilter, patientSearch } from './filterFunctio
 import TimesSegment from './FilterSegments/TimesSegment';
 import { generatePractitionersFilter, generateTimesFilter } from '../helpers';
 import { sortPractitionersAlphabetical } from '../../../../Utils';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { practitionerShape } from '../../../../library/PropTypeShapes';
 
 /* eslint-disable react-hooks/exhaustive-deps */

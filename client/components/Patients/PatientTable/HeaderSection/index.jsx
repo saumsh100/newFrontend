@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -9,7 +8,7 @@ import NewPatientForm from './NewPatientForm';
 import AssignPatientToChatDialog from '../../AssignPatientToChatDialog';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import SmartFilters from './SmartFilters';
-import styles from '../styles.scss';
+import styles from '../reskin-styles.scss';
 
 const initialState = {
   active: false,
@@ -25,22 +24,6 @@ class HeaderSection extends Component {
     this.setActive = this.setActive.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  setActive() {
-    this.setState({ active: true });
-  }
-
-  openAssignPatientToChatModal(patient) {
-    this.setState({
-      patient,
-      assignPatientToChatModalActive: true,
-    });
-  }
-
-  reinitializeState() {
-    this.props.reset(this.state.formName);
-    this.setState(initialState);
   }
 
   handleSubmit(values) {
@@ -65,6 +48,22 @@ class HeaderSection extends Component {
         }
         return this.reinitializeState();
       });
+  }
+
+  setActive() {
+    this.setState({ active: true });
+  }
+
+  openAssignPatientToChatModal(patient) {
+    this.setState({
+      patient,
+      assignPatientToChatModalActive: true,
+    });
+  }
+
+  reinitializeState() {
+    this.props.reset(this.state.formName);
+    this.setState(initialState);
   }
 
   render() {
@@ -129,7 +128,7 @@ const mapStateToProps = ({ auth }) => ({
   apptWrite: !nonApptWritePMS(auth.get('adapterType')),
 });
 
-const mapActionsToProps = dispatch =>
+const mapActionsToProps = (dispatch) =>
   bindActionCreators(
     {
       reset,

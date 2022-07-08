@@ -1,15 +1,14 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DropdownMenu, List, ListItem } from '../../../../library';
+import { DropdownMenu, List, MenuItem } from '../../../../library';
 import { addFilter } from '../../../../../reducers/patientTable';
 import { fetchPatientTableData } from '../../../../../thunks/patientTable';
 import HelpText from './HelpText';
 import Tooltip from '../../../../Tooltip';
 import Icon from '../../../../library/Icon';
-import styles from '../../styles.scss';
+import styles from '../../reskin-styles.scss';
 
 class SmartFilters extends Component {
   constructor(props) {
@@ -35,10 +34,11 @@ class SmartFilters extends Component {
   }
 
   getActiveSmartFilter([segment, ...args], segments = []) {
-    const baseSegment = segments.filter(s => s.segment === segment);
-    const selectedSegment = args.length === 0
-      ? baseSegment.find(s => !s.value)
-      : baseSegment.find(s => s.value && s.value.every(v => args.includes(v)));
+    const baseSegment = segments.filter((s) => s.segment === segment);
+    const selectedSegment =
+      args.length === 0
+        ? baseSegment.find((s) => !s.value)
+        : baseSegment.find((s) => s.value && s.value.every((v) => args.includes(v)));
     return selectedSegment && selectedSegment.label;
   }
 
@@ -73,7 +73,7 @@ class SmartFilters extends Component {
 
     const segmentsToJS = (segments && segments.toJS()) || [];
     const activeSegmentLabel = this.getActiveSmartFilter(selectedSegment, segmentsToJS);
-    const filterMenu = p => (
+    const filterMenu = (p) => (
       <div {...p} className={styles.filterMenuButton}>
         <div className={styles.header_title}>
           {activeSegmentLabel}
@@ -86,21 +86,22 @@ class SmartFilters extends Component {
 
     return (
       <div>
-        <DropdownMenu labelComponent={filterMenu} data-test-id="dropDown_smartFilters">
+        <DropdownMenu
+          labelComponent={filterMenu}
+          data-test-id="dropDown_smartFilters"
+          className={styles.dropdownMenu}
+        >
           <div className={styles.filterContainer}>
             <List className={styles.smartFilter} data-test-id="smartFiltersList">
               {segmentsToJS.map(({ label, ...filter }, index) => {
-                const borderStyle = (label === activeSegmentLabel && { borderLeft: '3px solid #FF715A' }) || {};
                 return (
-                  <ListItem
-                    className={styles.filterItem}
+                  <MenuItem
                     onClick={() => this.setSmartFilter(filter)}
-                    style={borderStyle}
                     data-test-id={`option_${index}`}
                     key={`smartFilter_${label}`}
                   >
                     {label}
-                  </ListItem>
+                  </MenuItem>
                 );
               })}
             </List>
@@ -143,7 +144,7 @@ const mapStateToProps = ({ patientTable, featureFlags }) => {
   };
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       addFilter,

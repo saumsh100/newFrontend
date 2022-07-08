@@ -11,7 +11,7 @@ import accountShape from '../library/PropTypeShapes/accountShape';
 import EnabledFeature from '../library/EnabledFeature';
 import AdaptiveLogo from './AdaptiveLogo';
 import MyFollowUpsButton from './MyFollowUpsButton';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import FormNotificationsButton from './FormNotificationsButton';
 
 const UserMenu = ({ user, activeAccount, enterprise, role, multipleAccounts, ...props }) => {
@@ -21,12 +21,12 @@ const UserMenu = ({ user, activeAccount, enterprise, role, multipleAccounts, ...
   return (
     <Button flat {...props} className={styles.userMenuButton}>
       <div className={styles.userContainer}>
+        <Avatar className={styles.userAvatar} user={user.toJS()} isPatient={false} size="sm" />
         <div className={styles.userMenuGreeting}>
           <div className={styles.greeting}>Hello, {user.get('firstName')}</div>
           <div className={styles.businessName}>{businessName}</div>
         </div>
-        <Avatar className={styles.userAvatar} user={user.toJS()} isPatient={false} size="sm" />
-        <Icon icon="caret-down" type="solid" />
+        <Icon icon="caret-down" type="solid" className={styles.userMenuIcon} />
       </div>
     </Button>
   );
@@ -187,8 +187,8 @@ class TopBar extends Component {
             <AdaptiveLogo
               imagePath={
                 !isCollapsed
-                  ? '/images/dentalcorp_logo.png'
-                  : '/images/dentalcorp_logo_collapsed.png'
+                  ? '/images/dentalcorp_logo.svg'
+                  : '/images/dentalcorp_logo_collapsed.svg'
               }
               description="DentalCorp logo"
               isCollapsed={isCollapsed}
@@ -197,13 +197,17 @@ class TopBar extends Component {
           fallback={
             <AdaptiveLogo
               imagePath={
-                !isCollapsed ? '/images/carecru_logo.png' : '/images/carecru_logo_collapsed.png'
+                !isCollapsed
+                  ? '/images/carecru_logo_reskin.svg'
+                  : '/images/carecru_logo_collapsed_reskin.svg'
               }
               description="CareCru logo"
               isCollapsed={isCollapsed}
             />
           }
         />
+        <div className={styles.fullVerticalDivider} />
+
         <IconButton
           icon="bars"
           className={styles.hamburger}
@@ -211,11 +215,15 @@ class TopBar extends Component {
         />
         <div className={styles.rightContainer}>
           <div className={styles.searchContainer}>
-            <div className={styles.wrapper}>
+            <div
+              className={classNames(styles.wrapper, {
+                [styles.openWrapper]: !this.props.isSearchCollapsed,
+              })}
+            >
               <IconButton
                 icon="search"
-                className={classNames({
-                  [styles.searchIconWrapper]: true,
+                topBarSearch
+                className={classNames(styles.searchIconWrapper, {
                   [styles.iconSearchOpen]: !isSearchCollapsed,
                 })}
                 iconClassName={styles.searchIcon}
@@ -252,7 +260,7 @@ class TopBar extends Component {
                 return shouldShowOwner || shouldShowSuperAdmin;
               }}
               render={
-                <li data-test-id="dropDown_accounts">
+                <li data-test-id="dropDown_accounts" className={styles.dropDownAccountLi}>
                   <DropdownMenu
                     className={styles.accountsDropdownMenu}
                     labelComponent={ActiveAccountButton}
@@ -260,10 +268,11 @@ class TopBar extends Component {
                   >
                     <div>{accounts.map(renderAccountItem)}</div>
                   </DropdownMenu>
+                  <div className={styles.verticalDivider} />
                 </li>
               }
             />
-            <li>
+            <li className={styles.dropDownAccountLi}>
               <DropdownMenu
                 className={styles.userDropdownMenu}
                 labelComponent={(props) => (
@@ -310,6 +319,7 @@ class TopBar extends Component {
                   Sign Out
                 </MenuItem>
               </DropdownMenu>
+              <div className={styles.verticalDivider} />
             </li>
             <EnabledFeature
               predicate={({ flags }) => flags.get('use-form-submission')}

@@ -8,7 +8,7 @@ import eventHashMap from './Shared/eventHashMap';
 import styles from './styles.scss';
 
 function Event(props) {
-  const { type, data, patient, timezone, event } = props;
+  const { type, data, patient, timezone, event, order, length } = props;
 
   const content = eventHashMap[type];
   if (!content) return false;
@@ -19,9 +19,19 @@ function Event(props) {
     <div className={styles.eventWrapper}>
       <div className={styles.event}>
         <div className={styles.iconContainer}>
+          <div
+            className={classnames(styles.verticalLine, {
+              [styles.verticalLine_invisible]: order === 0,
+            })}
+          />
           <div className={classnames(styles.bgIcon, { [styles[`${iconColor}Border`]]: iconColor })}>
             <Icon size={1} icon={icon(data)} className={styles.icon} type={iconType} />
           </div>
+          <div
+            className={classnames(styles.verticalLine, {
+              [styles.verticalLine_invisible]: length === order + 1,
+            })}
+          />
         </div>
         {component.map((EventComponent) => {
           return (
@@ -55,4 +65,6 @@ Event.propTypes = {
   data: PropTypes.objectOf(PropTypes.any).isRequired,
   patient: PropTypes.shape(patientShape).isRequired,
   event: PropTypes.objectOf(PropTypes.any).isRequired,
+  order: PropTypes.number.isRequired,
+  length: PropTypes.number.isRequired,
 };

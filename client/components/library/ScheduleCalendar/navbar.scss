@@ -1,44 +1,55 @@
-@import '../../../styles/ui.scss';
-@import '../../../styles/ui-kit.scss';
-@import './color';
+@import '../../../styles/ui-reskin.scss';
 
 .top {
+  margin-top: -20px;
   position: absolute;
   width: 100%;
   z-index: 1;
 }
 
 .container {
+  align-items: center;
+  display: flex;
   height: 30px;
-  margin: 0 auto;
-  position: relative;
-  width: 250px;
 }
 
-.nav {
-  position: absolute;
+.leftContainer {
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
   width: 100%;
 }
 
+.nav {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .baseNavButton {
+  align-items: center;
   background-color: transparent;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
   border: 0;
-  color: $calendar-grey-lighter;
+  color: $color-lavender-500;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
   height: 20px;
   outline: none;
   padding: 0;
-  position: absolute;
-  top: 1px;
   transition: all 0.2s ease-in;
   width: 40px;
 
   &:hover {
-    color: $grey-dark;
-    transition: all 0.2s ease-out;
+    color: $color-lavender-500;
+  }
+
+  &:focus {
+    color: $color-lavender-600;
   }
 
   svg {
@@ -50,7 +61,7 @@
 
 .prev {
   @extend .baseNavButton;
-  left: 0;
+  left: 150px;
 
   svg {
     transform: rotate(180deg);
@@ -59,39 +70,58 @@
 
 .next {
   @extend .baseNavButton;
-  right: 0;
+  right: -110px;
 }
 
 .schedule {
+  align-items: center;
   bottom: 0;
+  display: flex;
+  flex-direction: row;
   position: absolute;
   right: 0;
+  top: 14px;
 }
 
 .showDrawer {
-  background: $white;
-  border: 1px solid $grey-lighter;
+  background: $super-white;
+  border: 1px solid $color-lavender-500;
   border-radius: 4px;
-  box-shadow: $shadow;
-  color: $calendar-grey;
+  color: $color-lavender-500;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1;
   outline: none;
   padding: 8px 10px;
   transition: all 0.2s ease-in;
 
+  &:hover {
+    background: $color-lavender-050;
+    border-radius: 4px;
+  }
+
   &.active {
-    background: $teal-dark;
-    color: $white;
-    transition: all 0.2s ease-in;
+    background: $color-lavender-100;
+    border: 1px solid $color-lavender-500;
   }
 }
 
 .month {
-  color: $calendar-grey;
-  font-size: 20px;
-  line-height: 1;
-  margin: 0;
-  text-align: center;
+  color: $color-purple-400;
+  font-family: $font-inter;
+  font-size: $xx-medium-size;
+  font-weight: $bold-weight;
+  margin-right: 8px;
+  min-width: 200px;
+  text-align: left;
+}
+.DetailsIcon {
+  margin-right: 5px;
+}
+
+.divider {
+  background-color: $color-lavender-150;
+  height: 32px;
+  margin: 0px 16px;
 }

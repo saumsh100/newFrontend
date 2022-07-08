@@ -1,30 +1,30 @@
-@import '../../../styles/ui.scss';
-@import '../../../styles/ui-kit.scss';
-@import './color';
+@import '../../../styles/ui-reskin.scss';
 
 .scheduleWrapper {
+  background: $super-white;
+  border: 1px solid $color-grey-100;
   cursor: pointer;
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 4px;
   padding: 16px;
   transition: all 0.2s ease-in;
 
   &:focus {
+    border: 1px solid $color-grey-100;
     outline: none;
   }
 
   &:hover {
-    background: $calendar-background;
-    transition: all 0.2s ease-in;
+    background: $color-lavender-050;
+    border: 1px solid $color-lavender-100;
   }
 
   &.scheduleFeatured {
-    box-shadow: inset 0 0 0 1px $calendar-orange;
+    box-shadow: inset 0 0 0 1px $color-grey-100;
   }
 
   &.scheduleOverride {
-    background: $calendar-override;
+    background: $color-yellow-100;
   }
 }
 
@@ -39,10 +39,10 @@
 }
 
 .times {
-  color: $calendar-grey;
+  color: $color-purple-300;
   flex: 4;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: $x-medium-size;
+  font-weight: $medium-weight;
   text-align: right;
 
   span {
@@ -51,24 +51,24 @@
 }
 
 .date {
-  color: $calendar-grey;
+  color: $color-purple-300;
   flex: 0;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: $x-medium-size;
+  font-weight: $semi-bold-weight;
 }
 
 .breakTitle {
-  color: $grey-dark;
+  color: $color-purple-300;
   flex: 0;
-  font-size: 11px;
-  font-weight: 500;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
 }
 
 .breaks {
-  color: $grey-dark;
+  color: $color-purple-300;
   display: flex;
-  font-size: 11px;
-  font-weight: 500;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
   margin: 8px 0 0;
   width: 100%;
 
@@ -93,24 +93,9 @@
   flex: 0;
 }
 
-.settings {
-  background: transparent;
-  color: $grey-dark;
-  flex: 0;
-  margin: 0;
-  padding: 0;
-  text-align: right;
-  transition: all 0.2s ease-in;
-
-  &:hover {
-    color: $calendar-grey;
-    transition: all 0.2s ease-in;
-  }
-}
-
 .edit {
   align-items: flex-start;
-  color: $grey-dark;
+  color: $color-purple-200;
   justify-content: center;
   transition: all 0.2s ease-in;
   svg {
@@ -118,7 +103,7 @@
     width: 12px;
   }
   &:hover {
-    color: $grey-dark;
+    color: $color-purple-300;
     transition: all 0.2s ease-in;
   }
 }

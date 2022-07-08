@@ -1,10 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 import { getFormattedDate, Icon } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const Info = ({
   patient,
@@ -27,7 +26,7 @@ const Info = ({
 
         {user.birthDate && (
           <div className={styles.data}>
-            <Icon icon="birthday-cake" size={0.9} type="solid" />
+            <Icon icon="birthday-cake" type="solid" className={styles.requestIcon} />
             <div className={styles.data_text}>
               {getFormattedDate(user.birthDate, 'MMMM Do, YYYY', timezone)}
             </div>
@@ -36,14 +35,14 @@ const Info = ({
 
         {title === 'Requester Info' && user.gender && (
           <div className={styles.data}>
-            <Icon icon="venus-mars" size={0.9} type="solid" />
+            <Icon icon="venus-mars" type="solid" className={styles.requestIcon} />
             <div className={styles.data_text}>{`${user.gender}`.charAt(0).toUpperCase()}</div>
           </div>
         )}
 
         {user.phoneNumber && (
           <div className={styles.data}>
-            <Icon icon="phone" size={0.9} type="solid" />
+            <Icon icon="phone" type="solid" className={styles.requestIcon} />
             <div className={styles.data_text}>
               {user.phoneNumber[0] === '+' ? formatPhoneNumber(user.phoneNumber) : user.phoneNumber}
             </div>
@@ -52,7 +51,7 @@ const Info = ({
 
         {user.email && (
           <div className={styles.data}>
-            <Icon icon="envelope" size={0.9} type="solid" />
+            <Icon icon="envelope" type="solid" className={styles.requestIcon} />
             <div className={styles.data_text}>{user.email}</div>
           </div>
         )}
@@ -61,7 +60,7 @@ const Info = ({
           predicate={({ flags }) => flags.get('booking-widget-insurance')}
           render={() => (
             <div className={styles.multilineData}>
-              {carrier && <Icon icon="medkit" size={0.9} type="solid" />}
+              {carrier && <Icon icon="medkit" type="solid" className={styles.requestIcon} />}
               <div className={styles.data_text}>
                 {carrier || 'n/a'}
                 {(memberId || groupId) && (

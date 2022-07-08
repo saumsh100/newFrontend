@@ -1,0 +1,203 @@
+@import '../../../styles/ui-reskin.scss';
+@import '../../../styles/reskin-font.scss';
+
+.patientLink {
+  color: $color-lavender-150;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    color: $color-lavender-500;
+    transform: scale(1.02);
+  }
+}
+
+.requestLink {
+  color: $color-lavender-150;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  &:hover {
+    color: $color-lavender-500;
+  }
+}
+.patientPopover {
+  z-index: 9998;
+  & > :global(svg.Popover-tip) {
+    fill: $super-white;
+  }
+}
+
+.patientPopoverTitle {
+  color: $color-purple-400;
+  font-size: $small-size;
+  font-weight: $bold-weight;
+  text-align: start;
+}
+
+.card {
+  box-shadow: -2px 0 45px -12px rgba(0, 0, 0, 0.75);
+  min-width: 300px;
+  width: auto;
+}
+
+.dataLink {
+  @extend .font-Medium;
+
+  @at-root button#{&},
+    a#{&} {
+    color: $super-white;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &,
+    &:active,
+    &:focus {
+      border: none;
+      outline: none;
+    }
+
+    &:hover {
+      color: $color-grey-100;
+      transition: color 0.3s ease;
+    }
+  }
+}
+
+.patientHeader {
+  align-items: center;
+  background-color: $color-purple-400;
+  color: $color-lavender-150;
+  display: flex;
+  font-size: $x-medium-size;
+  height: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  &_link {
+    padding-top: 10px;
+    &:hover {
+      color: $super-white;
+    }
+  }
+
+  &_text {
+    @extend .font-Medium;
+    font-size: $x-medium-size;
+    font-weight: $bold-weight;
+    margin-right: 10px;
+    padding-left: 5px;
+  }
+
+  &_age {
+    margin-right: 10px;
+  }
+}
+
+.closeIcon {
+  background: transparent;
+  border: none;
+  color: $color-lavender-150;
+  cursor: pointer;
+  font-size: $x-medium-size;
+  font-weight: $normal-weight;
+  margin-left: auto;
+  padding: 0;
+  width: 30px;
+
+  &:hover {
+    color: $super-white;
+  }
+}
+
+.body {
+  background-color: $super-white;
+  height: auto;
+  max-height: 290px;
+  max-width: 575px;
+  min-height: 200px;
+  padding: 15px 15px 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.subHeader {
+  @extend .font-subHeaderExtraSmall;
+  font-weight: $normal-weight;
+  padding-bottom: 5px;
+}
+
+.data {
+  @extend .font-Medium;
+  align-items: center;
+  color: $color-purple-600;
+  display: flex;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  padding: 0 0 2px;
+
+  &_note {
+    max-height: 88px;
+    overflow: auto;
+    width: 100%;
+
+    textarea {
+      border-bottom: 0;
+      color: $color-purple-600 !important;
+      height: auto;
+      padding: 0;
+    }
+  }
+
+  &_text {
+    padding-left: 5px;
+    padding-top: 1px;
+  }
+}
+
+.textAreaGroup {
+  padding: 0;
+}
+
+.footer {
+  align-items: center;
+  border-top: 1px solid $color-grey-150;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px;
+  width: 100%;
+}
+
+.chatButton {
+  color: $color-lavender-100;
+  padding: 5px !important;
+
+  &:hover {
+    background-color: $color-lavender-050 !important;
+    color: $super-white;
+    transition: color 0.3s ease;
+  }
+}
+
+.basicText {
+  text-transform: capitalize;
+}
+
+.textWhite {
+  color: $color-lavender-100;
+  &:hover {
+    color: $super-white;
+    transform: scale(1.02);
+  }
+}

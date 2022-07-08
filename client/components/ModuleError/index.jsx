@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './module-error.scss';
+import styles from './reskin-styles.scss';
 import { Button } from '../library';
 
 export default function index() {

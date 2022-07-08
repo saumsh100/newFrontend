@@ -1,0 +1,41 @@
+@import '../../styles/ui-reskin.scss';
+
+.rightSectionContainer {
+  background-color: $color-purple-050;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
+  padding-top: $top-nav-height;
+  transition: ease 0.3s all;
+  width: 100%;
+}
+
+.fullWidth {
+  // padding-left: 0;
+}
+
+.notFullWidth {
+  padding-left: $side-nav-width;
+}
+
+.mainRegionContainerCollapsed {
+  @media screen and (max-width: $medium-screen-width) {
+    padding-left: 0;
+  }
+
+  @media screen and (min-width: $medium-screen-width) {
+    padding-left: $mini-side-nav-width;
+  }
+}
+
+.mainRegionContainer {
+  @media screen and (max-width: $medium-screen-width) {
+    padding-left: 0;
+  }
+
+  @media screen and (min-width: $medium-screen-width) {
+    padding-left: $side-nav-width;
+  }
+}

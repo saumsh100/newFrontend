@@ -1,0 +1,164 @@
+@import '../../../../../styles/ui-reskin.scss';
+.waitlistTable {
+  border: none;
+  color: $color-grey-400;
+  flex: 1;
+  min-width: unset;
+  overflow: hidden;
+
+  * {
+    .rt-thead {
+      position: sticky;
+    }
+  }
+
+  :global .pagination-bottom {
+    & .-previous,
+    & .-next,
+    & .-center {
+      flex: none !important;
+      font-size: $medium-size;
+      font-weight: $normal-weight;
+
+      & .-pageInfo .-pageJump input {
+        border: 1px solid $color-purple-100;
+        border-radius: 4px;
+        box-shadow: $box-shadow-2;
+        color: $Primary-Grey-3-600;
+        font-size: $medium-size;
+        font-weight: $normal-weight;
+        height: 40px;
+        margin-left: 8px;
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+.manageCell {
+  overflow: visible !important;
+}
+
+.waitSpotCheckboxWrapper {
+  display: flex;
+  justify-content: flex-end;
+  * {
+    box-sizing: content-box;
+  }
+}
+
+$width: 6px;
+$height: 4px;
+
+.caretButton {
+  border-bottom: $height/2 solid transparent;
+  border-left: $width/2 solid transparent;
+  border-right: $width/2 solid transparent;
+  border-top: $height/2 solid transparent;
+  content: '';
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.bottomCaretButton {
+  @extend .caretButton;
+  border-top: $height solid #686e74;
+}
+
+.topCaretButton {
+  @extend .caretButton;
+  border-bottom: $height solid #686e74;
+}
+
+.thead-order {
+  color: #686e74;
+}
+
+.theadDesc {
+  @extend .thead-order;
+  &:after {
+    @extend .bottomCaretButton;
+    margin-left: 5px;
+    margin-top: 3px;
+  }
+}
+
+.theadAsc {
+  @extend .thead-order;
+  &:after {
+    @extend .topCaretButton;
+    margin-left: 5px;
+    margin-top: -2px;
+  }
+}
+
+.filterBarWrapper {
+  display: flex;
+  margin-left: auto;
+  padding: 0 16px;
+}
+
+.segmentWrapper {
+  margin-left: 16px;
+}
+
+.addButton {
+  align-items: center;
+  background: $super-white;
+  border: 1px solid $color-lavender-500;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: $color-lavender-500;
+  cursor: pointer;
+  display: block;
+  font-size: $small-size;
+  font-weight: $normal-weight;
+  outline: none;
+  padding: 6px 8px;
+  position: relative;
+  text-align: left;
+  transition: all 0.2s ease-in 0s;
+  width: 26px;
+
+  &:hover {
+    background: $color-lavender-100;
+    color: $color-lavender-500;
+  }
+
+  &:active {
+    background: $color-lavender-050;
+    color: $color-lavender-500;
+  }
+}
+
+.waitListCountWrapper {
+  align-items: center;
+  background: $color-yellow-600;
+  border-radius: 1000px;
+  color: $super-white;
+  display: inline-flex;
+  font-size: $small-size;
+  font-weight: $bold-weight;
+  height: 16px;
+  height: 18px;
+  justify-content: center;
+  letter-spacing: 0px;
+  min-width: 25px;
+}
+
+.paginationComp {
+  color: #154b6e;
+  cursor: pointer;
+  font-size: 20px;
+  &[disabled] {
+    color: #efefef;
+    cursor: not-allowed;
+    opacity: 1;
+  }
+}
+.separator {
+  border-right: 1px solid $color-lavender-150;
+  height: 30px;
+  margin-right: 15px;
+}

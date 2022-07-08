@@ -1,4 +1,4 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin';
 
 @mixin familyMemberContainerMobile-mobile {
   padding: 30px 0 0;
@@ -6,8 +6,9 @@
 
 .familyMemberContainer {
   box-sizing: border-box;
+  max-height: 780px;
   overflow: visible;
-  padding: 50px 25px 0;
+  padding: 34px 16px;
 
   @media screen and (max-width: 576px) {
     @include familyMemberContainerMobile-mobile;

@@ -1,10 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Account from '../../../../../entities/models/Account';
-import { Field, Button, Grid, Row, Col } from '../../../../library';
+import { Field, StandardButton as Button, Grid, Row, Col } from '../../../../library';
 import { generateVendastaKey, deleteVendastaKey } from '../../../../../thunks/settings';
 import styles from '../styles.scss';
 
@@ -37,7 +36,8 @@ function VendastaInfo({ activeAccount, ...props }) {
             className={styles.inlineButton}
           />
           <Button
-            icon="times"
+            icon="trash"
+            variant="danger"
             disabled={!vendastaId}
             onClick={removeConfirmation}
             className={styles.inlineButton}
@@ -54,7 +54,7 @@ VendastaInfo.propTypes = {
   deleteVendastaKey: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       generateVendastaKey,
@@ -63,7 +63,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(VendastaInfo);
+export default connect(null, mapDispatchToProps)(VendastaInfo);

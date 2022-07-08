@@ -6,4 +6,4 @@ export const getFinalDailyHours = ({ accountId, startDate, endDate }) =>
       startDate,
       endDate,
     },
-  });
+});

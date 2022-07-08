@@ -49,7 +49,7 @@ function generateLabels(dataKeys, timezone, startOfCurrentDay) {
     .map((key) => [getFormattedDate(key, 'ddd', timezone), getFormattedDate(key, 'DD', timezone)]);
 }
 
-function renderDisplay(revenueData, account) {
+function renderDisplay(revenueData, account, dashboardDate) {
   const revenue = revenueData.toJS();
   const isValid = revenue.average;
 
@@ -60,7 +60,6 @@ function renderDisplay(revenueData, account) {
   const endOfCurrentDay = currentDay.endOf('day').toISOString();
 
   const dataKeys = Object.keys(revenue);
-  const sortedDates = dataKeys.filter(filterStartOfDay(startOfCurrentDay)).sort(sortAsc);
 
   const billedData = generateDataPointsBeforeToday(
     revenue,
@@ -69,15 +68,14 @@ function renderDisplay(revenueData, account) {
     endOfCurrentDay,
   );
   const estimatedData = generateDataPointsAfterToday(revenue, dataKeys, endOfCurrentDay);
-
   return (
     <RevenueDisplay
-      dates={sortedDates}
       billedData={billedData}
       isValid={isValid}
       estimatedData={estimatedData}
       average={revenue.average}
       timezone={timezone}
+      dashboardDate={dashboardDate}
     />
   );
 }
@@ -166,7 +164,8 @@ class RevenueContainer extends Component {
   }
 
   render() {
-    const { revenueData, wasRevenueFetched, wasAccountFetched, account } = this.props;
+    const { revenueData, wasRevenueFetched, wasAccountFetched, account, dashboardDate } =
+      this.props;
 
     const wasAllFetched = wasRevenueFetched && wasAccountFetched;
     return (
@@ -176,7 +175,7 @@ class RevenueContainer extends Component {
         loaded={wasAllFetched}
         loaderStyle={styles.revenueContainer_loader}
       >
-        {wasAllFetched && renderDisplay(revenueData.get('data'), account)}
+        {wasAllFetched && renderDisplay(revenueData.get('data'), account, dashboardDate)}
         {wasAllFetched && renderChart(revenueData.get('data'), account)}
       </Card>
     );

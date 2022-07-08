@@ -1,14 +1,14 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { Card, Button } from '../../library';
+import { Card } from '../../library';
 import ResetPasswordForm from './ResetPasswordForm';
 import { resetUserPassword } from '../../../thunks/auth';
-import styles from '../styles.scss';
+import styles from '../reskin-styles.scss';
 import CopyrightFooter from '../../Login/CopyrightFooter/index';
+import SuccessChange from './SuccessChange';
 
 class ResetPassword extends Component {
   constructor(props) {
@@ -28,33 +28,25 @@ class ResetPassword extends Component {
     });
   }
 
+  backToLoginScreen() {
+    this.props.push('/login');
+  }
+
   render() {
     const { submitted } = this.state;
     const display = submitted ? (
-      <div>
-        <div className={styles.textSuccess2}>Password Successfully Changed!</div>
-        <Button onClick={() => this.props.push('/login')} className={styles.displayCenter}>
-          Return to Login
-        </Button>
-      </div>
+      <SuccessChange backToLoginScreen={() => this.props.push('/login')} />
     ) : (
-      <ResetPasswordForm
-        onSubmit={this.handleSubmit}
-        saveButtonProps={{
-          fluid: true,
-          title: 'Reset Password',
-        }}
-      />
+      <>
+        <h1 className={styles.title}>Reset Password</h1>
+        <p className={styles.text}>Enter a new password for the CareCru account.</p>
+        <ResetPasswordForm onSubmit={this.handleSubmit} />
+      </>
     );
 
     return (
       <div className={styles.backDrop}>
-        <Card className={styles.loginForm}>
-          <div className={styles.logoContainer}>
-            <img className={styles.loginLogo} src="/images/logo_black.png" alt="CareCru Logo" />
-          </div>
-          {display}
-        </Card>
+        <Card className={styles.loginForm}>{display}</Card>
         <CopyrightFooter />
       </div>
     );
@@ -79,9 +71,6 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  null,
-  mapActionsToProps,
-);
+const enhance = connect(null, mapActionsToProps);
 
 export default enhance(ResetPassword);

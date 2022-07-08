@@ -1,0 +1,102 @@
+.appointmentPoppover {
+  &_card {
+    box-shadow: $box-shadow-dashboard;
+    min-width: 300px;
+    width: auto;
+  }
+
+  &_header {
+    align-items: center;
+    background-color: $color-dark-blue;
+    color: $primary-white;
+    display: flex;
+    height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    &_text {
+      @extend .font-Medium;
+      font-size: 15px;
+      margin-right: 10px;
+      padding-left: 5px;
+    }
+  }
+
+  &_closeIcon {
+    color: $primary-grey;
+    margin-left: auto;
+    @extend .fontMediumSize;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &_body {
+    background-color: $primary-white;
+    height: auto;
+    max-height: 290px;
+    max-width: 285px;
+    min-height: 200px;
+    padding: 15px 15px 0;
+  }
+
+  &_container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &_subHeader {
+    @extend .subHeaderExtraSmall;
+    padding-bottom: 2px;
+  }
+
+  &_data {
+    align-items: center;
+    display: flex;
+    font-size: 13px;
+    padding-bottom: 2px;
+    @extend .font-Medium;
+
+    &_note {
+      max-height: 88px;
+      overflow: auto;
+      width: 100%;
+
+      textarea {
+        border-bottom: 0;
+        color: $color-purple-600 !important;
+        height: auto;
+        padding: 0;
+      }
+    }
+
+    &_text {
+      padding-left: 5px;
+      padding-top: 1px;
+    }
+  }
+
+  &_textAreaGroup {
+    padding: 0;
+  }
+
+  &_footer {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+    width: 100%;
+  }
+
+  &_editButton {
+    background-color: $primary-blue;
+    margin-left: 5px;
+  }
+}

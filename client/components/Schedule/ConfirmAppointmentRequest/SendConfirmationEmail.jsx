@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '../../library';
 import Patient from '../../../entities/models/Patient';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const SendConfirmationEmail = (props) => {
   const { confirmRequest, patient } = props;

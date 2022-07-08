@@ -25,6 +25,7 @@ class HeaderUserDate extends Component {
     const dateTheme = {
       group: styles.inputGroup,
       filled: styles.inputFilled,
+      dayPicker: styles.dateInputRow,
     };
     const userDisplay = user === '' ? 'Welcome Back!' : `Welcome Back, ${user}`;
 
@@ -52,16 +53,19 @@ class HeaderUserDate extends Component {
                 this.handleChange(newValue);
               }}
               timezone={this.props.timezone}
+              dashboardDayPicker
+              iconComponent={
+                <div className={styles.dateIconContainer}>
+                  <IconButton
+                    iconType="solid"
+                    icon="calendar-alt"
+                    onClick={this.handleFocus}
+                    className={styles.iconColor}
+                  />
+                </div>
+              }
             />
           </Form>
-          <div className={styles.dateIconContainer}>
-            <IconButton
-              iconType="solid"
-              icon="calendar"
-              onClick={this.handleFocus}
-              className={styles.iconColor}
-            />
-          </div>
         </div>
       </div>
     );

@@ -1,0 +1,57 @@
+@import '../../../styles/ui-reskin.scss';
+
+.sideLabel {
+  align-items: center;
+  background-color: $super-white-100;
+  border: 1px solid $color-lavender-500;
+
+  color: $color-purple-300;
+  cursor: pointer;
+  display: flex;
+  font-size: 12px;
+  font-weight: 500;
+  height: 28px;
+  line-height: 16px;
+
+  padding: 6px 10px;
+
+  transition: all 0.2s ease-in 0s;
+  &:first-child {
+    border-right: none;
+  }
+  &:hover:not(.checked) {
+    background-color: $color-grey-100;
+    color: $color-purple-600;
+  }
+}
+
+.switchToggler {
+  align-items: center;
+  display: flex;
+  height: 28px;
+
+  transition: all 0.1s ease-in 0s;
+  white-space: nowrap;
+
+  width: auto;
+
+  &_left {
+    border-radius: 4px 0 0 4px;
+    @extend .sideLabel;
+    &_checked {
+      @extend .checked;
+    }
+  }
+  &_right {
+    border-radius: 0 4px 4px 0;
+    @extend .sideLabel;
+    &_checked {
+      @extend .checked;
+    }
+  }
+}
+.checked {
+  background-color: $color-lavender-050;
+  color: $color-lavender-500;
+  cursor: default;
+}

@@ -1,4 +1,3 @@
-
 import {
   APPOITMENT_POSITION_LEFT_PADDING,
   APPOITMENT_WIDTH_LEFT_PADDING,
@@ -22,11 +21,13 @@ export const intersectingAppointments = (appointments, startDate, endDate, timez
     const appStartDate = getUTCDate(app.startDate, timezone);
     const appEndDate = getUTCDate(app.endDate, timezone);
 
-    const dateIntersectsApp = sDate.isBetween(appStartDate, appEndDate, null, '[)')
-      || eDate.isBetween(appStartDate, appEndDate, null, '(]');
+    const dateIntersectsApp =
+      sDate.isBetween(appStartDate, appEndDate, null, '[)') ||
+      eDate.isBetween(appStartDate, appEndDate, null, '(]');
 
-    const appIntersectsDates = appStartDate.isBetween(sDate, eDate, null, '()')
-      || appEndDate.isBetween(sDate, eDate, null, '()');
+    const appIntersectsDates =
+      appStartDate.isBetween(sDate, eDate, null, '()') ||
+      appEndDate.isBetween(sDate, eDate, null, '()');
 
     return dateIntersectsApp || appIntersectsDates;
   });
@@ -86,7 +87,7 @@ export const setPopoverPlacement = (columnIndex, numOfColumns, minWidth) => {
  * @param {*} params
  * @returns {appoitment} a new appointment with height and top positioning properties
  */
-export const calculateAppointmentTop = params => (appointment) => {
+export const calculateAppointmentTop = (params) => (appointment) => {
   const { startHour, timeSlotHeight, unit, timezone } = params;
 
   const { startDate, endDate, customBufferTime } = appointment;
@@ -107,7 +108,7 @@ export const calculateAppointmentTop = params => (appointment) => {
   );
 
   appointment.top = `${appointment.topCalc + positionTopPadding}px`;
-  appointment.height = `${appointment.heightCalc - 0.1}px`;
+  appointment.height = `${appointment.heightCalc - 1}px`;
 
   // set the minimum height to display the hours below the name. Set to 30 min
   appointment.displayDurationHeight = calculateHeight(30, timeSlotHeight.height);
@@ -131,6 +132,8 @@ export const buildAppointmentProps = (params) => {
     numOfColumns,
     minWidth,
     backgroundColor,
+    iconColor,
+    fontColor,
   } = params;
 
   const {
@@ -164,30 +167,34 @@ export const buildAppointmentProps = (params) => {
 
   const left = appPosition > 0 ? multiAppLineLeft : `${splitRow}%`;
 
-  const multiAppLineWidth = appPosition > 0
-    ? `calc(${100 / rowSort.length}%)`
-    : `calc(${100 / rowSort.length}% - ${APPOITMENT_WIDTH_LEFT_PADDING}px)`;
+  const multiAppLineWidth =
+    appPosition > 0
+      ? `calc(${100 / rowSort.length}%)`
+      : `calc(${100 / rowSort.length}% - ${APPOITMENT_WIDTH_LEFT_PADDING}px)`;
 
-  const width = rowSort.length > 1
-    ? multiAppLineWidth
-    : `calc(${100}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)`;
+  const width =
+    rowSort.length > 1
+      ? multiAppLineWidth
+      : `calc(${100}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)`;
 
   const containerStyle = {
     top,
     width,
     left,
   };
-
   // main app style
   const appStyle = {
     height,
     backgroundColor: backgroundColor || practitionerData.color,
+    color: fontColor || practitionerData.fontColor,
+    iconColor: iconColor || practitionerData.iconColor,
     zIndex: appPosition,
   };
 
-  const placement = numOfColumns === 1
-    ? APPOITMENT_POPOVER_DEFAULT_PLACEMENT
-    : setPopoverPlacement(columnIndex, numOfColumns, minWidth);
+  const placement =
+    numOfColumns === 1
+      ? APPOITMENT_POPOVER_DEFAULT_PLACEMENT
+      : setPopoverPlacement(columnIndex, numOfColumns, minWidth);
 
   return {
     rowSort,

@@ -1,14 +1,14 @@
+@import '../../../styles/ui-reskin.scss';
 .dropzone {
-	border: 1px #666 dashed;
-	border-radius: 5px;
-	height: 200px;
-	overflow: hidden;
-	padding: 10px;
-	position: relative;
-	text-align: center;
-	width: 200px;
-	:global .loader {
-		height: 100% !important;
-	}
+  border: 3px $color-purple-100 dashed;
+  border-radius: 4px;
+  height: 235px;
+  overflow: hidden;
+  padding: 10px;
+  position: relative;
+  text-align: center;
+  width: 200px;
+  :global .loader {
+    height: 100% !important;
+  }
 }
-

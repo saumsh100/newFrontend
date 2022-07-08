@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -6,13 +5,13 @@ import Popover from 'react-popover';
 import { connect } from 'react-redux';
 import AppointmentInfo from '../../../library/AppointmentPopover/AppointmentInfo';
 import { Button } from '../../../library';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { practitionerShape, appointmentShape } from '../../../library/PropTypeShapes';
 
 const PMS_MAP = {
   OPENDENTAL: 'OpenDental',
   DENTRIX: 'Dentrix',
-  TRACKER: 'Tracker', 
+  TRACKER: 'Tracker',
   CLEARDENT: 'Cleardent',
   EAGLESOFT: 'Eaglesoft',
   POWERPRACTICE: 'PowerPractice',
@@ -21,7 +20,6 @@ const PMS_MAP = {
 };
 
 const getAdapterType = (adapterType) => {
-  
   if (!adapterType) return PMS_MAP.DEFAULT;
 
   const [sanitizeAdapter] = adapterType.split('_');
@@ -128,15 +126,15 @@ ShowMark.defaultProps = {
   placement: '',
 };
 
-const mapStateToProps = ({ auth,entities, patientTable }, { appointment }) => ({
+const mapStateToProps = ({ auth, entities, patientTable }, { appointment }) => ({
   isNoteFormActive: patientTable.get('isNoteFormActive'),
   isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
   isRecallsFormActive: patientTable.get('isRecallsFormActive'),
   practitioner: entities
     .getIn(['practitioners', 'models'])
     .toArray()
-    .find(practitioner => practitioner.id === appointment.practitionerId),
-  adapterType:getAdapterType(auth.get('adapterType'))
+    .find((practitioner) => practitioner.id === appointment.practitionerId),
+  adapterType: getAdapterType(auth.get('adapterType')),
 });
 
 export default connect(mapStateToProps, null)(ShowMark);

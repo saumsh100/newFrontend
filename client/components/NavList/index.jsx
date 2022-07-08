@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Nav, NavItem, Link, Icon } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
 import EnabledFeature from '../library/EnabledFeature';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
 function NavList({
@@ -41,25 +41,26 @@ function NavList({
     disabled = disabled || type === 'disabled';
     classes = classNames(classes, {
       [styles.disabledItem]: disabled,
-      [styles.navItemEMPhaseTwo]: enterpriseManagementPhaseTwoActive,
     });
 
     const labelComponent = (
       <div className={classNames(inactiveLabelClass, { [styles.hiddenLabel]: isCollapsed })}>
-        {label}
+        <p className={styles.labelText}>{label}</p>
       </div>
     );
 
     return (
       <Link to={path} disabled={disabled} href={path}>
         <NavItem className={classes}>
-          <Icon
-            icon={icon}
-            className={styles.icon}
-            size={enterpriseManagementPhaseTwoActive ? 1 : 1.5}
-            type={iconType}
-            badgeText={badge}
-          />
+          <div className={styles.iconContainer}>
+            <Icon
+              icon={icon}
+              className={styles.icon}
+              size={enterpriseManagementPhaseTwoActive ? 1 : 1.5}
+              type={iconType}
+              badgeText={badge}
+            />
+          </div>
           {labelComponent}
         </NavItem>
       </Link>
@@ -135,7 +136,7 @@ function NavList({
       <li className={styles.multiple_nav__item}>
         <div className={styles.multiple_nav__wrapper}>
           <Link to={path} className={className} disabled={disabled} href={path}>
-            {label}
+            <p className={styles.labelText}>{label}</p>
           </Link>
         </div>
       </li>

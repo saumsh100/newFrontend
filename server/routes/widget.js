@@ -37,7 +37,7 @@ widgetsRouter.get('/:accountId/cc.js', async (req, res, next) => {
     );
     js = js.replace(
       new RegExp('__CARECRU_WIDGET_PRIMARY_COLOR__', 'g'),
-      basicAccount.bookingWidgetPrimaryColor || '#FF715A',
+      basicAccount.bookingWidgetPrimaryColor || '#574BD2',
     );
     js = js.replace(
       new RegExp('__CARECRU_WIDGET_BUTTON_LABEL__', 'g'),

@@ -1,0 +1,81 @@
+@import '../../styles/ui';
+@import '../../styles/ui-reskin.scss';
+@import '../../styles/reskin-font.scss';
+
+.wrapper {
+  height: 100%;
+}
+
+.toInput {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0;
+  &:not(.noBorderToInput) {
+    border: 1px solid $color-purple-200;
+  }
+
+  > input::placeholder {
+    color: $color-grey-300;
+  }
+
+  > input {
+    background: $super-white;
+    height: 100%;
+    padding-left: 20px;
+  }
+
+  &:hover:not(.noBorderToInput) {
+    background: $color-lavender-050;
+    border: 1px solid $color-lavender-500;
+    > input {
+      border: none;
+    }
+  }
+
+  &:focus-within:not(.noBorderToInput) {
+    background: $super-white;
+    border: 1px solid $color-lavender-500;
+    > input {
+      border: none;
+    }
+  }
+}
+
+.noBorderToInput {
+  > input {
+    border: none;
+    border-bottom: 1px solid $color-lavender-200;
+  }
+}
+
+.containerOpen {
+  top: 30px;
+  > ul {
+    max-height: 300px;
+  }
+}
+
+.suggestionContainer {
+  align-items: center;
+  color: $primary-dark;
+  display: flex;
+  padding: 10px;
+
+  &_details {
+    color: #a7a9ac;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+    padding-left: 10px;
+    @extend .font-Medium;
+  }
+
+  &_fullName {
+    color: $color-purple-600;
+    font-size: $medium-size;
+  }
+
+  &_date {
+    font-size: 10px;
+  }
+}

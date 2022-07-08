@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -11,7 +10,7 @@ import { getOrCreateChatForPatient } from '../../../thunks/chat';
 import { selectAppointment, setScheduleDate } from '../../../actions/schedule';
 import { appointmentShape, patientShape, practitionerShape, chairShape } from '../PropTypeShapes';
 import Appointments from '../../../entities/models/Appointments';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { getISODate } from '../util/datetime';
 
 class AppointmentPopover extends Component {
@@ -19,9 +18,9 @@ class AppointmentPopover extends Component {
     super(props);
     this.state = { isOpen: false };
 
-    this.setOpen = this.setOpen.bind(this);
     this.closeOnScroll = this.closeOnScroll.bind(this);
     this.handleEditAppointment = this.handleEditAppointment.bind(this);
+    this.setOpen = this.setOpen.bind(this);
     this.editPatient = this.editPatient.bind(this);
   }
 
@@ -110,8 +109,8 @@ class AppointmentPopover extends Component {
         onOuterAction={() => !isAnyFormActive && this.setOpen(false)}
       >
         <div className={styles.appLink} onDoubleClick={this.handleEditAppointment}>
-          {React.Children.map(children, patientLink =>
-            React.cloneElement(patientLink, { onClick: () => this.setOpen(true) }))}
+          {React.Children.map(children, (patientLink) =>
+            React.cloneElement(patientLink, { onClick: () => this.setOpen(true) }),)}
         </div>
       </Popover>
     );
@@ -153,11 +152,11 @@ function mapStateToProps({ entities, dashboard, chat, patientTable, auth }, { ap
   const practitioner = entities
     .getIn(['practitioners', 'models'])
     .toArray()
-    .find(prac => prac.id === appointment.practitionerId);
+    .find((prac) => prac.id === appointment.practitionerId);
   const chair = entities
     .getIn(['chairs', 'models'])
     .toArray()
-    .find(ch => ch.id === appointment.chairId);
+    .find((ch) => ch.id === appointment.chairId);
 
   return {
     chair,

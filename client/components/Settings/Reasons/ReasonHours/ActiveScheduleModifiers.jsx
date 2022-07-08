@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import { sort } from '../../../../util/isomorphic';
-import { Button } from '../../../library';
+import { StandardButton as Button } from '../../../library';
 import styles from '../../../library/ScheduleCalendar/modal.scss';
-import ui from '../../../../styles/ui-kit.scss';
+import ui from './styles.scss';
 
 const ActiveScheduleModifiers = ({ active, data, addTimeItem, children }) =>
   active !== 'isClosed' && (
@@ -19,7 +19,7 @@ const ActiveScheduleModifiers = ({ active, data, addTimeItem, children }) =>
             {children(option, index)}
           </div>
         ))}
-      <Button onClick={() => addTimeItem(active)} className={ui.modal__add__button}>
+      <Button onClick={() => addTimeItem(active)} className={ui.addButton} variant="secondary">
         {active === 'breaks' ? 'Add Time Off' : 'Add Start Time'}
       </Button>
     </div>

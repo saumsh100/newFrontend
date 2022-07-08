@@ -1,0 +1,38 @@
+@import '../../../styles/ui-reskin.scss';
+
+.chatMenuWrapper {
+  align-items: center;
+  background: $color-grey-050;
+  cursor: pointer;
+  display: flex;
+  height: 74px;
+  justify-content: center;
+  line-height: 0;
+  width: 350px;
+}
+
+.chatDropDown {
+  align-items: center;
+  border-radius: 4px;
+  display: flex;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  height: 34px;
+  justify-content: center;
+  margin: 10px 17px;
+  width: 310px;
+
+  &_icon {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 28px;
+    padding: 6px 7.5px;
+    i {
+      font-weight: 400;
+    }
+    i + i {
+      font-weight: 900;
+    }
+  }
+}

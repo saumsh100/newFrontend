@@ -24,7 +24,6 @@ const EnterpriseForm = (props) => {
   const accountsPath = (path = '') => enterprisesPath(`/${enterprise.id}${path}`);
 
   const onSubmit = (entityData) => {
-    console.log('here');
     const key = 'accounts';
     const promise = isCreate
       ? props.createEntityRequest({

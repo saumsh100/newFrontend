@@ -1,10 +1,9 @@
-
 import React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
 import withTheme from '../../../hocs/withTheme';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 function TextArea(props) {
   const { label, value, error, borderColor, theme, classStyles } = props;
@@ -22,11 +21,12 @@ function TextArea(props) {
   });
   return (
     <div className={classNames(theme.group, classStyles)}>
-      <textarea className={inputClassName} {...inputProps} />
-      <span className={theme.bar} />
       <div className={theme.labelWrapper}>
         <span className={labelClass}>{label}</span>
       </div>
+      <textarea className={inputClassName} {...inputProps} />
+      <span className={theme.bar} />
+
       {error && <span className={theme.error}>{error}</span>}
     </div>
   );

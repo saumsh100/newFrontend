@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, RemoteSubmitButton, DialogBox } from '../../../library';
@@ -24,16 +23,16 @@ export default function FormModal({
           onClick: onToggle,
           label: 'Cancel',
           component: Button,
-          props: { color: 'darkgrey' },
+          type: 'secondary',
         },
         {
           label: isUpdate ? 'Update' : 'Add',
           component: RemoteSubmitButton,
           props: {
-            color: 'blue',
             form: formName,
             removePristineCheck: true,
           },
+          type: 'primary',
         },
       ]}
     >

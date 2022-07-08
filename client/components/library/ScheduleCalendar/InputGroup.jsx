@@ -1,13 +1,11 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import DropdownTimeSuggestion from '../DropdownTimeSuggestion';
 import { dropdownTheme } from '../../Widget/theme';
-import { DeleteIcon } from './Icons';
 import styles from './modal.scss';
 import schedule from './schedule.scss';
-import { Button } from '../index';
+import { IconButton } from '../index';
 import { parseDateWithFormat } from '../util/datetime';
 
 export const validFormats = ['LT', 'HH:mm:ss.SSS[Z]', 'hh:mm:ssZ'];
@@ -57,10 +55,10 @@ const InputGroup = ({
       <DropdownTimeSuggestion
         options={timeOptions}
         key="startTime"
-        onChange={value => onChange({ startTime: value })}
+        onChange={(value) => onChange({ startTime: value })}
         value={startTime}
-        renderValue={value => renderTimeValue(value, timezone)}
-        formatValue={value => formatTimeField(value, timezone)}
+        renderValue={(value) => renderTimeValue(value, timezone)}
+        formatValue={(value) => formatTimeField(value, timezone)}
         disabled={!isAllow}
         error={error.inputStart}
         strict={false}
@@ -73,10 +71,10 @@ const InputGroup = ({
           options={timeOptions}
           key="endTime"
           renderList={renderList}
-          onChange={value => onChange({ endTime: value })}
+          onChange={(value) => onChange({ endTime: value })}
           value={endTime}
-          renderValue={value => renderTimeValue(value, timezone)}
-          formatValue={value => formatTimeField(value, timezone)}
+          renderValue={(value) => renderTimeValue(value, timezone)}
+          formatValue={(value) => formatTimeField(value, timezone)}
           strict={false}
           disabled={!isAllow}
           error={error.inputEnd}
@@ -84,13 +82,12 @@ const InputGroup = ({
         />,
       ]}
       {isRemovable && (
-        <Button
+        <IconButton
+          icon="trash"
           className={classNames(styles.delete, { [styles.disabled]: !isAllow })}
           disabled={!isAllow}
           onClick={onClick}
-        >
-          <DeleteIcon />
-        </Button>
+        />
       )}
     </div>
     {error.inputGroup && <span className={styles.errorMessage}>{error.inputGroup}</span>}

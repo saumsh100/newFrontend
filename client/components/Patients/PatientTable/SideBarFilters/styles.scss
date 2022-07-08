@@ -1,7 +1,7 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin';
 
 .sideBar {
-  background: $primary-white;
+  background: $super-white;
   height: auto;
   margin-bottom: 20px;
   margin-left: 15px;
@@ -11,33 +11,35 @@
 .header {
   align-items: center;
   display: flex;
+  justify-content: space-between;
   width: 100%;
 
   &_text {
-    composes: fontMedium from '../../../../styles/fonts.scss';
+    color: $color-purple-600;
     font-size: 19px;
+    font-size: $x-medium-size;
+    font-weight: $bold-weight;
     padding-left: 10px;
   }
 
   &_clearText {
-    background: initial;
-    color: darken($primary-grey, 10%);
-    composes: fontSmall from '../../../../styles/fonts.scss';
-    cursor: pointer;
-    margin: 0 0 0 auto;
-    padding: 0;
+    background-color: transparent;
+    border: none;
+    color: $color-lavender-500;
     &:hover {
-      color: $primary-blue;
+      background-color: transparent;
     }
   }
 
   &_clearTextDark {
-    color: $primary-dark-grey;
-    cursor: pointer;
-    &:hover {
-      color: $primary-blue;
-    }
+    color: $color-lavender-500;
   }
+}
+
+.filterTitle {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
 }
 
 .filtersContainer {
@@ -49,18 +51,32 @@
 
 .filterHeader {
   align-items: center;
-  background: #efefef;
+  background: $super-white;
+  border: 1px solid $color-purple-100;
   box-sizing: border-box;
-  color: initial;
-  composes: fontMedium from '../../../../styles/fonts.scss';
+  color: $color-purple-400;
   cursor: pointer;
   display: flex;
+  font-size: 14px;
+  font-weight: 500;
   height: 40px;
   justify-content: space-between;
+  line-height: 20px;
   padding: 10px;
   width: 100%;
   &_icon {
     padding-right: 10px;
+    &_open {
+      color: $color-lavender-500;
+      padding-right: 10px;
+    }
+  }
+  &:hover {
+    background: $color-lavender-050;
+  }
+
+  &_isOpen {
+    color: $color-lavender-500;
   }
 }
 
@@ -114,25 +130,18 @@
     padding-right: 26px;
     width: 167px;
   }
-
-  &_numberInput {
-    //padding-top: 6px;
-  }
 }
 
 .formHeader {
-  color: $primary-blue;
-  composes: fontMedium from '../../../../styles/fonts.scss';
+  color: $color-purple-600;
 }
 
 .formHeaderInput {
-  color: $primary-blue;
-  composes: fontMedium from '../../../../styles/fonts.scss';
+  color: $color-purple-600;
 }
 
 .formSubHeader {
-  color: $primary-darkgrey;
-  composes: fontExtraSmall from '../../../../styles/fonts.scss';
+  color: $color-purple-300;
   padding-top: 5px;
 }
 .ddSelect {
@@ -171,8 +180,8 @@
 }
 
 .input {
-  background-color: white;
-  border: 1px solid $primary-grey;
+  background-color: $super-white;
+  border: 1px solid $color-purple-200;
   padding-left: 4px;
   width: 100%;
 }
@@ -180,7 +189,6 @@
 .group {
   box-sizing: border-box;
   input::placeholder {
-    font-family: $medium-font;
     font-size: 12px;
     padding-left: 16px;
   }

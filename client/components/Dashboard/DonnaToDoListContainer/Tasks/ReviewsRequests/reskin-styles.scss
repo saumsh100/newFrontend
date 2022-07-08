@@ -1,0 +1,54 @@
+.reviewsRequest {
+  &_list {
+    box-sizing: border-box;
+    padding: 5px 20px 0;
+  }
+
+  &_listItem {
+    color: $color-purple-600 !important;
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+
+    &:hover {
+      background-color: unset;
+      cursor: default;
+    }
+  }
+
+  &_flexStart {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_muted {
+    font-size: 10px;
+    font-weight: $medium-weight;
+    line-height: 20px;
+  }
+
+  &_lowercase {
+    text-transform: lowercase;
+  }
+
+  &_iconContainer {
+    background-color: $color-lavender-200;
+    border-radius: 50%;
+    color: $super-white;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: $heavy-weight;
+    height: 12px;
+    margin: 0 0 0 10px;
+    width: 12px;
+    .icon {
+      align-items: center;
+      display: flex;
+      padding: 1px;
+      text-align: center;
+    }
+  }
+}

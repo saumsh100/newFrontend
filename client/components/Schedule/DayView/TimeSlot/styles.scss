@@ -34,7 +34,7 @@
 
 .mark {
   cursor: default;
-  font-size: $extra-small-size;
+  font-size: $x-small-size;
   letter-spacing: 0.5px;
   overflow: auto;
   &_note {
@@ -72,7 +72,7 @@
   &_name {
     @extend .box;
     composes: subHeaderMediumSmall from '../../../../styles/fonts.scss';
-    font-size: $extra-small-size;
+    font-size: $x-small-size;
   }
 
   &_hours {
@@ -87,7 +87,7 @@
   color: $primary-white;
   display: flex;
   float: right;
-  font-size: $extra-small-size;
+  font-size: $x-small-size;
   opacity: 0.6;
   padding-left: 2px;
 }

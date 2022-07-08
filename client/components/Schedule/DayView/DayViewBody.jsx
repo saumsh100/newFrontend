@@ -1,4 +1,3 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -9,7 +8,7 @@ import TimeColumn from './TimeColumn/TimeColumn';
 import PractitionersSlot from './PractitionersSlot';
 import ColumnHeader from './ColumnHeader/index';
 import ChairsSlot from './ChairsSlot';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { SortByFirstName, SortByName } from '../../library/util/SortEntities';
 import { parseDate, SBody, SContainer, SHeader } from '../../library';
 
@@ -110,27 +109,60 @@ class DayViewBody extends Component {
     }
 
     const timeSlotHeight = {
-      height: schedule.get('timeSlotHeight'),
+      height: 48,
     };
-
     // Setting the colors for each practitioner
     const sortedPractitioners = practitioners.toArray().sort(SortByFirstName);
 
-    const colors = ['#FF715A', '#347283', '#FFC45A', '#2CC4A7'];
+    const colors = [
+      '#FFF5F5',
+      '#F1F0FF',
+      '#FFFBF5',
+      '#F7FDFC',
+      '#FCEDED',
+      '#ECEBFF',
+      '#FDF7EC',
+      '#F0FAF8',
+    ];
+    const fontColors = [
+      '#641112',
+      '#0A007A',
+      '#6E4A07',
+      '#16453D',
+      '#641112',
+      '#0A007A',
+      '#6E4A07',
+      '#16453D',
+    ];
+    const iconColors = [
+      'salmon400',
+      'lavender400',
+      'yellow500',
+      'teal500',
+      'salmon400',
+      'lavender400',
+      'yellow500',
+      'teal500',
+    ];
+
     const colorLen = colors.length;
     const reset = Math.ceil((sortedPractitioners.length - colorLen) / colorLen);
 
     for (let j = 1; j <= reset; j += 1) {
       for (let i = 0; i < sortedPractitioners.length - colorLen; i += 1) {
         colors.push(colors[i]);
+        fontColors.push(fontColors[i]);
+        iconColors.push(iconColors[i]);
       }
     }
 
-    let practitionersArray = sortedPractitioners.map((prac, index) =>
-      Object.assign({}, prac.toJS(), {
-        color: colors[index],
-        prettyName: prac.getPrettyName(),
-      }));
+    let practitionersArray = sortedPractitioners.map((prac, index) => ({
+      ...prac.toJS(),
+      color: colors[index],
+      fontColor: fontColors[index],
+      iconColor: iconColors[index],
+      prettyName: prac.getPrettyName(),
+    }));
 
     // Display the practitioners that have been checked on the filters card.
     const checkedPractitioners = schedule.get('practitionersFilter');
@@ -146,7 +178,7 @@ class DayViewBody extends Component {
     const chairsArray = chairs
       .toArray()
       .sort(SortByName)
-      .filter(chair => checkedChairs.indexOf(chair.id) > -1 && chair.isActive);
+      .filter((chair) => checkedChairs.indexOf(chair.id) > -1 && chair.isActive);
 
     const slotProps = {
       timeSlots,

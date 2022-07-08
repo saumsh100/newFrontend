@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -17,8 +16,9 @@ import {
   getFormattedTime,
   getUTCDate,
   getTodaysDate,
+  Icon,
 } from '../../library';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import Item from './Item';
 import MoreSummary from './MoreSummary';
 
@@ -94,19 +94,19 @@ const AppointmentSummary = (props) => {
               </div>
             </SHeader>
           </div>
-          <div className={styles.itemContainer}>
-            <Item title="DATE" index="DATE" value={appointmentDate} />
+          <div className={styles.appointment_itemContainer}>
+            <Item title="Date" index="DATE" value={appointmentDate} />
             <Item
-              title="TIME"
+              title="Time"
               index="TIME"
               value={getFormattedTime(startDate, endDate, timezone)}
             />
             {(firstShow || showMore) && (
-              <Item title="APPOINTMENT TYPE" index="APPOINTMENT TYPE" value={serviceName} />
+              <Item title="Appointment Type" index="APPOINTMENT TYPE" value={serviceName} />
             )}
             {(firstShow || showMore) && (
               <Item
-                title="PRACTITIONER"
+                title="Practitioner"
                 index="PRACTITIONER"
                 value={practitioner?.getPrettyName() || 'No Preference'}
               />
@@ -117,13 +117,24 @@ const AppointmentSummary = (props) => {
         {(firstShow || showMore) && <MoreSummary {...props} />}
 
         {!firstShow && (
-          <div
+          <Button
+            border="blue"
             role="presentation"
             className={styles.textBtn}
             onClick={() => setShowMore(!showMore)}
           >
-            {showMore ? 'Show less ▲' : 'Show more ▼'}
-          </div>
+            {showMore ? (
+              <>
+                Show less
+                <Icon icon="caret-up" className={styles.show_caretDown} />
+              </>
+            ) : (
+              <>
+                Show more
+                <Icon icon="caret-down" className={styles.show_caretDown} />
+              </>
+            )}
+          </Button>
         )}
       </div>
       <div className={styles.buttonContainer}>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -46,7 +45,7 @@ const CallListItem = (props) => {
         <Icon
           icon="phone"
           data-fa-transform="rotate-90"
-          type="solid"
+          type="light"
           size={1.3}
           className={phoneClass}
         />
@@ -57,9 +56,6 @@ const CallListItem = (props) => {
           <div>
             <PatientPopover patient={patient} isPatientUser={false}>
               <div className={styles.patientStyle}>
-                <div>
-                  <Icon icon="user-circle" />
-                </div>
                 <span className={styles.callerName}>{callerName}</span>
               </div>
             </PatientPopover>
@@ -67,7 +63,7 @@ const CallListItem = (props) => {
           </div>
         ) : (
           <div className={styles.callerInfo}>
-            <div>{callerName || 'Unknown'}</div>
+            <div className={styles.callerName}>{callerName || 'Unknown'}</div>
             <div className={styles.callerNum}>{formatPhoneNumber(callerNum)}</div>
           </div>
         )}
@@ -77,8 +73,8 @@ const CallListItem = (props) => {
       <div className={styles.col}>{callerCity}</div>
       <div className={styles.col}>
         {recording && (
-          <div className={styles.volumeIcon}>
-            <Icon icon="volume-up" type="solid" />
+          <div className={styles.volumeIconContainer}>
+            <Icon icon="volume-up" type="light" className={styles.volumeIcon} />
           </div>
         )}
       </div>

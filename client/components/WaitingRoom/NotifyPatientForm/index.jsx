@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field, Button } from '../../library';
-import styles from './styles.scss';
+import styles from '../../Dashboard/styles';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 
 export default function NotifyPatientForm({
@@ -103,7 +103,9 @@ export default function NotifyPatientForm({
 
 NotifyPatientForm.propTypes = {
   displayNameOption: PropTypes.oneOf(['firstName', 'prefName']).isRequired,
-  waitingRoomPatient: PropTypes.shape({}).isRequired,
+  waitingRoomPatient: PropTypes.shape({
+    patient: PropTypes.object,
+  }).isRequired,
   defaultTemplate: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   formName: PropTypes.string.isRequired,

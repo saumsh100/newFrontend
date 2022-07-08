@@ -1,11 +1,10 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import styles from './styles.scss';
 import classNames from 'classnames';
 import { push } from 'connected-react-router';
+import styles from './styles.scss';
 import { Card, CodeSnippet, Header } from '../library';
 
 function Typography(props) {
@@ -16,9 +15,7 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.fontMedium}>.fontMedium</span>
         <CodeSnippet
-          codeSnippet={
-            '{font-family: Gotham Medium; font-size: 14px; font-weight: 500;}'
-          }
+          codeSnippet="{font-family: Inter, sans serif; font-size: 14px; font-weight: 500;}"
           hideClipBoard
         />
       </div>
@@ -26,9 +23,7 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.fontJumbo}>.fontJumbo</span>
         <CodeSnippet
-          codeSnippet={
-            '{font-family: Gotham Medium; font-size: 73px; font-weight: 600; letter-spacing: 0.5px;}'
-          }
+          codeSnippet="{font-family: Inter, sans serif; font-size: 73px; font-weight: 600; letter-spacing: 0.5px;}"
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/intelligence')}>
@@ -39,9 +34,7 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.cardHeaderCount}>.cardHeaderCount</span>
         <CodeSnippet
-          codeSnippet={
-            '{font-size: 25px; font-weight: 600; letter-spacing: 0.5px;}'
-          }
+          codeSnippet="{font-size: 25px; font-weight: 600; letter-spacing: 0.5px;}"
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/')}>
@@ -52,9 +45,7 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.cardHeaderTitle}>.cardHeaderTitle</span>
         <CodeSnippet
-          codeSnippet={
-            '{font-family: Gotham Medium; font-size: 16px; letter-spacing: 0.5px;}'
-          }
+          codeSnippet="{font-family: Inter, sans serif; font-size: 16px; letter-spacing: 0.5px;}"
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/')}>
@@ -65,9 +56,7 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.header}>.header</span>
         <CodeSnippet
-          codeSnippet={
-            '{font-size: 25px; font-weight: 600; letter-spacing: 0.5px;}'
-          }
+          codeSnippet="{font-size: 25px; font-weight: 600; letter-spacing: 0.5px;}"
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/settings')}>
@@ -78,18 +67,13 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.listItemHeader}>.listItemHeader</span>
         <CodeSnippet
-          codeSnippet={
-            '{font-family: Gotham Medium; color: #2e3845; letter-spacing: 0.5px;}'
-          }
+          codeSnippet="{font-family: Inter, sans serif; color: #2e3845; letter-spacing: 0.5px;}"
           hideClipBoard
         />
-        <div
-          className={styles.examples}
-          onClick={() => push('/settings/practitioners')}
-        >
+        <div className={styles.examples} onClick={() => push('/settings/practitioners')}>
           <span>
-            - patient name on dashboard-sentReminders-list or practitioner name
-            on settings-practitioners-list .
+            - patient name on dashboard-sentReminders-list or practitioner name on
+            settings-practitioners-list .
           </span>
         </div>
       </div>
@@ -97,7 +81,7 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.subHeader}>.subHeader</span>
         <CodeSnippet
-          codeSnippet={'{color: darken(lightgrey, 5%); letter-spacing: 0.5px;}'}
+          codeSnippet="{color: darken(lightgrey, 5%); letter-spacing: 0.5px;}"
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/')}>
@@ -108,23 +92,18 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.subHeaderSmall}>.subHeaderSmall</span>
         <CodeSnippet
-          codeSnippet={'{color: #959596; font-size: 12px; letter-spacing: 0.5px;}'}
+          codeSnippet="{color: #959596; font-size: 12px; letter-spacing: 0.5px;}"
           hideClipBoard
         />
-        <div
-          className={styles.examples}
-          onClick={() => push('/patients/messages')}
-        >
-          <span>
-            - text message on patients-messages-list, below the name .
-          </span>
+        <div className={styles.examples} onClick={() => push('/patients/messages')}>
+          <span>- text message on patients-messages-list, below the name .</span>
         </div>
       </div>
 
       <div className={styles.padding}>
         <span className={styles.subHeaderExtraSmall}>.subHeaderExtraSmall</span>
         <CodeSnippet
-          codeSnippet={'{color: #959596; font-size: 10px; letter-spacing: 0.5px;}'}
+          codeSnippet="{color: #959596; font-size: 10px; letter-spacing: 0.5px;}"
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/patients/list')}>
@@ -135,9 +114,7 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.subHeaderMedium}>.subHeaderMedium</span>
         <CodeSnippet
-          codeSnippet={
-            '{color: darken(lightgrey, 5%); font-size: 12px; letter-spacing: 0.5px;}'
-          }
+          codeSnippet="{color: darken(lightgrey, 5%); font-size: 12px; letter-spacing: 0.5px;}"
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/patients/list')}>
@@ -146,13 +123,9 @@ function Typography(props) {
       </div>
 
       <div className={styles.padding}>
-        <span className={styles.subHeaderMediumSmall}>
-          .subHeaderMediumSmall
-        </span>
+        <span className={styles.subHeaderMediumSmall}>.subHeaderMediumSmall</span>
         <CodeSnippet
-          codeSnippet={
-            '{font-family: Gotham Medium; font-size: 12px; color: #959596; letter-spacing: 0.5px;}'
-          }
+          codeSnippet="{font-family: Inter, sans serif; font-size: 12px; color: #959596; letter-spacing: 0.5px;}"
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/patients/list')}>
@@ -163,13 +136,10 @@ function Typography(props) {
       <div className={styles.padding}>
         <span className={styles.tab}>.tab</span>
         <CodeSnippet
-          codeSnippet={'{ font-family: Gotham Medium; color: #959596; }'}
+          codeSnippet="{ font-family: Inter, sans serif; color: #959596; }"
           hideClipBoard
         />
-        <div
-          className={styles.examples}
-          onClick={() => push('/settings/practitioners')}
-        >
+        <div className={styles.examples} onClick={() => push('/settings/practitioners')}>
           <span>- settings sub-pages and setting-practitioners.</span>
         </div>
       </div>
@@ -191,10 +161,7 @@ function Typography(props) {
           <br />
           <div>- Import the font.scss file.</div>
           <br />
-          <div>
-            - Extend the font class into your local style sheet (eg: @extend
-            .jumboFont).
-          </div>
+          <div>- Extend the font class into your local style sheet (eg: @extend .jumboFont).</div>
         </div>
         <br />
         <div>
@@ -205,8 +172,8 @@ function Typography(props) {
           <div>- No import required</div>
           <br />
           <div>
-            - In your local style sheet use composes function. (eg: composes:
-            jumboFont from "sass-loader!../../font.scss")
+            - In your local style sheet use composes function. (eg: composes: jumboFont from
+            "sass-loader!../../font.scss")
           </div>
         </div>
       </div>
@@ -223,9 +190,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  null,
-  mapDispatchToProps,
-);
+const enhance = connect(null, mapDispatchToProps);
 
 export default enhance(Typography);

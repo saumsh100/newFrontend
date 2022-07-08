@@ -1,5 +1,6 @@
-@import '../../../../../styles/ui';
-@import '../WaitlistForm/styles';
+@import '../../../../../styles/ui.scss';
+@import '../WaitlistForm/styles.scss';
+@import '../../../../../styles/ui-reskin.scss';
 
 .draftMessageContainer {
   display: flex;
@@ -50,14 +51,13 @@
 }
 
 .tooltipWrapper {
-  background: $primary-white;
-  border: 1px solid $primary-grey;
+  background: $super-white;
+  border: 1px solid $color-lavender-200;
   border-radius: 4px;
-  box-shadow: 2px 2px 8px 0 rgba(128, 128, 128, 0.16);
-  color: $primary-dark;
+  box-shadow: $box-shadow-2;
+  color: $color-grey-400;
   display: flex;
   flex-direction: column;
-  font-family: $medium-font;
   font-size: 12px;
   min-width: 200px;
   padding-top: 6px;
@@ -65,32 +65,35 @@
 
 .columnBody {
   align-items: center;
-  background: $chat-lightgrey;
+  background: $color-grey-050;
+  border: 1px solid $color-lavender-100;
   display: flex;
   height: 263px;
   justify-content: center;
 }
 
 .heading {
-  color: #2e3845;
-  font-family: $medium-font;
-  font-size: 16px;
+  color: $color-purple-600;
+  font-size: $x-medium-size;
   -webkit-font-smoothing: antialiased;
-  font-weight: 500;
+  font-weight: $medium-weight;
   margin: 20px 0 20px 40px;
 }
 
 .patientName {
   padding: 5px 16px 10px;
+
+  &:not(:nth-last-of-type(1)) {
+    border-bottom: 1px solid $color-lavender-100;
+  }
 }
 
 .patientTooltip {
   background-color: transparent;
-  color: $primary-blue;
-  font-family: $medium-font;
-  font-size: 16px;
+  color: $color-purple-300;
+  font-size: $x-medium-size;
   -webkit-font-smoothing: antialiased;
-  font-weight: 500;
+  font-weight: $bold-weight;
   line-height: 19px;
   margin: 0 4px 0 0;
   padding: 0;
@@ -98,11 +101,17 @@
   &:last-child {
     margin: 0 4px 0 0;
   }
+  &:hover {
+    color: $color-lavender-500;
+  }
+  &:active,
+  &:focus {
+    color: $color-lavender-500;
+  }
 }
 
 .legend {
-  color: #959595;
-  font-family: $book-font;
+  color: $color-grey-400;
   font-size: 11px;
   font-weight: 300;
   margin: 8px 0;

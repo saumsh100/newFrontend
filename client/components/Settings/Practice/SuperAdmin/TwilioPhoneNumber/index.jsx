@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Account from '../../../../../entities/models/Account';
 import { generateTwilioNumber, removeTwilioNumber } from '../../../../../thunks/settings';
 import Field from '../../../../library/Form/Field';
-import { Grid, Col, Row, Button, Tooltip } from '../../../../library';
+import { Grid, Col, Row, StandardButton as Button, Tooltip } from '../../../../library';
 import style from '../styles.scss';
 
 function TwilioPhoneNumber({ activeAccount, ...props }) {
@@ -54,7 +54,8 @@ function TwilioPhoneNumber({ activeAccount, ...props }) {
         <Col xs={3} className={style.buttonsWrapper}>
           {buttonWithTooltip}
           <Button
-            icon="times"
+            icon="trash"
+            variant="danger"
             onClick={removeConfirmation}
             disabled={!hasTwilioPhoneNumber}
             className={style.inlineButton}

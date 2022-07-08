@@ -1,0 +1,59 @@
+@import '../../styles/ui-reskin.scss';
+.errorWrapper {
+  align-items: center;
+  background-color: $color-lavender-050;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  padding: 20px;
+  text-align: center;
+  .contentWrapper {
+    width: 400px;
+  }
+}
+
+.header {
+  color: $color-purple-400;
+  font-size: $xxx-medium-size;
+  font-weight: $bold-weight;
+  margin: 28px 0px 16px 0px;
+  padding-right: 10px;
+  text-align: start;
+}
+.errorImg {
+  height: 159px;
+  width: 234px;
+}
+.supportText {
+  color: $color-grey-400;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 39px;
+  max-width: 382px;
+}
+.retryButton {
+  align-items: center;
+  background: $color-lavender-500;
+  border-radius: 4px;
+  color: $super-white;
+  display: flex;
+  font-size: $small-size;
+  font-weight: 500;
+  height: 34px;
+  justify-content: center;
+  margin-top: 30px;
+  width: 153px;
+}
+.bottomText {
+  bottom: 10px;
+  color: $color-grey-400;
+  font-size: $medium-size;
+  padding: 30px;
+  position: absolute;
+}
+.highlight {
+  color: $color-lavender-500;
+  font-weight: bold;
+  text-decoration: none;
+}

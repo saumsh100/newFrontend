@@ -1,10 +1,9 @@
-
 import React from 'react';
 import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import LoadingBar from '../LoadingBar';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 export default function Card(props) {
   const { children, className, noBorder, runAnimation, loaded, loaderStyle } = props;

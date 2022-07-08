@@ -1,6 +1,3 @@
-@import '../../../styles/ui';
-@import '../../../styles/fonts';
-
 .appLink {
   color: $primary-blue;
   cursor: pointer;
@@ -113,7 +110,6 @@
     textarea {
       border-bottom: 0;
       color: black;
-      font-family: $medium-font;
       height: auto;
       padding: 0;
     }

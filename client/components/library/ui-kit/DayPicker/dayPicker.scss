@@ -1,4 +1,4 @@
-@import '../../../../styles/ui-kit';
+@import '../../../../styles/ui-reskin.scss';
 
 .dayPickerContainer {
   box-sizing: border-box;
@@ -8,11 +8,10 @@
 
   div[role='heading'] {
     div {
-      color: $grey-dark;
-      font-family: $inter;
-      font-size: 13px;
+      color: $color-purple-300;
+      font-size: $medium-size;
       -webkit-font-smoothing: antialiased;
-      font-weight: 500;
+      font-weight: $bold-weight;
       margin-bottom: 20px;
     }
   }
@@ -26,28 +25,27 @@
         text-align: center;
 
         abbr[title] {
-          color: $grey-dark;
-          font-family: $inter;
-          font-size: 10px;
-          font-weight: 400;
+          color: $color-purple-400;
+          font-size: $small-size;
+          font-weight: $normal-weight;
           text-decoration: none;
         }
       }
 
       .day,
       > div {
-        border-radius: $rounded;
-        color: $grey-dark;
+        border-radius: 4px;
+        color: $color-purple-600;
         cursor: pointer;
         flex: 1;
-        font-family: $inter;
+        font-size: $small-size;
         font-size: 12px;
         -webkit-font-smoothing: antialiased;
+        font-weight: $medium-weight;
         line-height: 26px;
         margin-bottom: 4px;
         min-height: 26px;
         text-align: center;
-        @extend .fx;
 
         &:focus {
           outline: none;
@@ -55,51 +53,45 @@
 
         &:not([aria-disabled='true']):not([role='columnheader']):not(.start):not(.end) {
           &:hover {
-            @extend .fx;
-            background: $teal-lightest;
+            background: $color-lavender-150;
           }
         }
 
         &.selected {
-          background: $teal-lightest;
+          background: $color-lavender-100;
           border-radius: 0;
         }
 
         &.start {
-          border-bottom-left-radius: $rounded;
-          border-top-left-radius: $rounded;
+          border-bottom-left-radius: 4px;
+          border-top-left-radius: 4px;
         }
 
         &.end {
-          border-bottom-right-radius: $rounded;
-          border-top-right-radius: $rounded;
+          border-bottom-right-radius: 4px;
+          border-top-right-radius: 4px;
         }
 
         &.start,
         &.end {
-          background: $teal;
-          color: $white;
-          @extend .fx;
-          &:hover {
-            @extend .fx;
-            background: $teal-dark;
-          }
+          background: $color-lavender-500;
+          color: $super-white;
         }
       }
 
       .outside {
-        color: $grey-light;
+        color: $color-grey-200;
       }
     }
   }
 }
 
 .navBar {
-  background: $grey-lightest;
+  background: $super-white;
 
   .navButtonNext,
   .navButtonPrev {
-    background: url("data:image/svg+xml,%3Csvg width='7' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.635.59A.275.275 0 0 1 .838.514c.085 0 .16.025.228.076l5.307 5.332c.068.05.102.118.102.203a.241.241 0 0 1-.102.203L1.066 11.66a.371.371 0 0 1-.228.076.275.275 0 0 1-.203-.076l-.508-.508a.241.241 0 0 1-.102-.203c0-.084.034-.16.102-.228l4.596-4.596L.127 1.529a.316.316 0 0 1-.102-.228c0-.085.034-.153.102-.203L.635.59z' fill='%23AAA' fill-rule='evenodd'/%3E%3C/svg%3E%0A")
+    background: url("data:image/svg+xml,%3Csvg width='11' height='11' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.635.59A.275.275 0 0 1 .838.514c.085 0 .16.025.228.076l5.307 5.332c.068.05.102.118.102.203a.241.241 0 0 1-.102.203L1.066 11.66a.371.371 0 0 1-.228.076.275.275 0 0 1-.203-.076l-.508-.508a.241.241 0 0 1-.102-.203c0-.084.034-.16.102-.228l4.596-4.596L.127 1.529a.316.316 0 0 1-.102-.228c0-.085.034-.153.102-.203L.635.59z' fill='%23574BD2' fill-rule='evenodd'/%3E%3C/svg%3E%0A")
       no-repeat center 0;
     background-size: contain;
     cursor: pointer;
@@ -109,17 +101,12 @@
     opacity: 0.65;
     position: absolute;
     right: 16px;
-    top: 16px;
-    width: 16px;
-    @extend .fx;
-    &:hover {
-      opacity: 1;
-      @extend .fx;
-    }
+    top: 17.5px;
+    width: 12px;
   }
 
   .navButtonPrev {
-    background: url("data:image/svg+xml,%3Csvg width='7' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.865.59a.275.275 0 0 0-.203-.076.371.371 0 0 0-.228.076L.127 5.922a.241.241 0 0 0-.102.203c0 .085.034.152.102.203l5.307 5.332c.067.05.143.076.228.076a.275.275 0 0 0 .203-.076l.508-.508a.241.241 0 0 0 .102-.203.316.316 0 0 0-.102-.228L1.777 6.125l4.596-4.596a.316.316 0 0 0 .102-.228.241.241 0 0 0-.102-.203L5.865.59z' fill='%23AAA' fill-rule='evenodd'/%3E%3C/svg%3E")
+    background: url("data:image/svg+xml,%3Csvg width='11' height='11' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.865.59a.275.275 0 0 0-.203-.076.371.371 0 0 0-.228.076L.127 5.922a.241.241 0 0 0-.102.203c0 .085.034.152.102.203l5.307 5.332c.067.05.143.076.228.076a.275.275 0 0 0 .203-.076l.508-.508a.241.241 0 0 0 .102-.203.316.316 0 0 0-.102-.228L1.777 6.125l4.596-4.596a.316.316 0 0 0 .102-.228.241.241 0 0 0-.102-.203L5.865.59z' fill='%23574BD2' fill-rule='evenodd'/%3E%3C/svg%3E")
       no-repeat center 0;
     background-size: contain;
     margin-right: 24px;

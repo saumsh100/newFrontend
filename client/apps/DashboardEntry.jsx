@@ -101,7 +101,7 @@ load()(store.dispatch).then(() => {
 
   const renderApp = () =>
     render(
-      <ErrorBoundary FallbackComponent={ErrorPage}>
+      <ErrorBoundary FallbackComponent={ErrorPage} onError={(e) => console.log(e)}>
         <App {...appProps} />
       </ErrorBoundary>,
       document.getElementById('root'),

@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
@@ -6,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { capitalize, range, week } from '../../../../util/isomorphic';
-import { Button, parseDateWithFormat, Toggle } from '../../../library';
+import { Button, parseDateWithFormat, Toggle, Icon } from '../../../library';
 import EditIcon from '../EditIcon';
 import FetchReasonHours from '../../../GraphQL/ReasonHours/fetchReasonHours';
 import Service from '../../../../entities/models/Service';
@@ -39,10 +38,10 @@ class ReasonHours extends PureComponent {
     try {
       const variables = checked
         ? {
-          accountId: reason.get('accountId'),
-          reasonId: reason.get('id'),
-          date: new Date(),
-        }
+            accountId: reason.get('accountId'),
+            reasonId: reason.get('id'),
+            date: new Date(),
+          }
         : { reasonWeeklyHoursId: reason.get('reasonWeeklyHoursId') };
       const { data } = await callback({ variables });
       this.props.updateEntity({
@@ -67,10 +66,10 @@ class ReasonHours extends PureComponent {
     return (
       <div className={styles.reasonHours}>
         <div className={styles.toggleWrapper}>
-          <p className={styles.toggleTitle}>Availabilities Override</p>
+          <p className={styles.toggleTitle}>Override Availabilities </p>
           <div className={styles.servicesPractForm_all_toggle}>
             <ReasonWeeklyHoursToggle id={this.props.reason.get('reasonWeeklyHoursId')}>
-              {commit => (
+              {(commit) => (
                 <Toggle
                   name="allPractitioners"
                   onChange={({ target: { checked } }) =>
@@ -86,13 +85,13 @@ class ReasonHours extends PureComponent {
           {({ loading, error, data }) => {
             if (loading) return <Loader isLoaded={loading} />;
             if (error) return `Error!: ${error}`;
-            const dateOptions = weekDay => data.reasonWeeklyHours[weekDay];
-            const isClosed = weekDay => dateOptions(weekDay).isClosed;
+            const dateOptions = (weekDay) => data.reasonWeeklyHours[weekDay];
+            const isClosed = (weekDay) => dateOptions(weekDay).isClosed;
             return (
               !!this.props.reason.get('reasonWeeklyHoursId') && (
                 <div className={styles.wrapper}>
                   <div className={styles.header}>
-                    {week.all.map(weekDay => (
+                    {week.all.map((weekDay) => (
                       <div className={styles.weekDayWrapper} key={uuid()}>
                         <span className={styles.weekDay}>{capitalize(weekDay)}</span>
                         <Button
@@ -111,7 +110,7 @@ class ReasonHours extends PureComponent {
                   <div className={styles.body}>
                     <div className={styles.subHeader}>
                       <div className={styles.availabilityTitle}>Availability</div>
-                      {week.all.map(weekDay => (
+                      {week.all.map((weekDay) => (
                         <div
                           key={uuid()}
                           className={classNames({
@@ -119,12 +118,13 @@ class ReasonHours extends PureComponent {
                             [styles.notAvailable]: isClosed(weekDay),
                           })}
                         >
+                          <Icon icon="check-circle" className={styles.checked_circle} />
                           {isClosed(weekDay) ? 'Not Available' : 'Available'}
                         </div>
                       ))}
                     </div>
                     <div className={styles.hours}>
-                      {range(rangeStartTime, rangeEndTime).map(timeSlot => (
+                      {range(rangeStartTime, rangeEndTime).map((timeSlot) => (
                         <div className={styles.hour} key={uuid()}>
                           <span>
                             {parseDateWithFormat(
@@ -138,7 +138,7 @@ class ReasonHours extends PureComponent {
                     </div>
                     <div className={styles.daysWrapper}>
                       <div className={styles.days}>
-                        {week.all.map(weekDay => (
+                        {week.all.map((weekDay) => (
                           <div className={styles.column} key={uuid()}>
                             {range(rangeStartTime, rangeEndTime).map(() => (
                               <div className={styles.row} key={uuid()} />
@@ -182,6 +182,6 @@ ReasonHours.propTypes = {
 };
 
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
-const mapActionsToProps = dispatch => bindActionCreators({ updateEntity }, dispatch);
+const mapActionsToProps = (dispatch) => bindActionCreators({ updateEntity }, dispatch);
 
 export default connect(mapStateToProps, mapActionsToProps)(ReasonHours);

@@ -1,0 +1,110 @@
+@import '../../../styles/ui.scss';
+
+.card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  border-bottom: 0;
+}
+
+.scrollDiv {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: scroll;
+  width: 100%;
+
+  &::-webkit-scrollbar {
+    background: transparent;
+    height: 8px;
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    min-height: 40px;
+  }
+}
+
+.dayView {
+  align-items: stretch;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  overflow: hidden;
+  //border-top: 1px solid $primary-grey;
+}
+
+.timeColumn {
+  border-right: 0.13em solid $primary-grey;
+  box-sizing: border-box;
+  color: $inactive-color;
+  height: inherit;
+  min-width: 70px;
+  overflow: hidden;
+  position: relative;
+  width: 70px;
+}
+
+.timeColumnItem {
+  box-sizing: border-box;
+  color: $primary-dark;
+  display: flex;
+  font-size: 10px;
+  height: 75px;
+  justify-content: center;
+  overflow: hidden;
+
+  &_time {
+    font-weight: 500;
+    position: absolute;
+  }
+}
+
+.timeSlot {
+  box-sizing: border-box;
+  display: inline-flex;
+  min-width: 100%;
+}
+
+.timeSlotColumn {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 150px;
+  position: relative;
+}
+
+.timeSlotColumnItem {
+  align-items: center;
+  animation: fadein 0.5s ease;
+  border: 0.13em solid $primary-grey;
+  border-left: 0;
+  border-top: 0;
+  box-sizing: border-box;
+  height: 48px;
+  justify-content: center;
+  opacity: 1;
+  overflow: hidden;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.paddingText {
+  padding-right: 5px;
+}

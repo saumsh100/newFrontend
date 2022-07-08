@@ -1,18 +1,40 @@
-@import '../../../styles/ui';
+@import '../../../styles/ui-reskin.scss';
 
 .codeSnippet {
-  background-color: #fefbf3;
-  border: 1px solid;
-  border-color: $primary-darkgrey;
-  border-radius: 8px;
+  background-color: $super-white-200;
+  border: 1px solid $color-lavender-500;
+  border-radius: 4px 0px 0px 4px;
+  box-shadow: 1px 1px 4px rgba(222, 213, 246, 0.1);
+  color: $color-purple-400;
   height: auto;
   padding: 10px;
 
   &_code {
-    font-size: 12px;
+    font-size: $medium-size;
     font-weight: $medium-weight;
     white-space: pre-wrap;
     word-break: break-all;
     word-wrap: break-word;
+  }
+}
+
+.iconContainer {
+  background: $super-white;
+  border: 1px solid $color-lavender-500;
+  border-left: 0;
+
+  i {
+    color: $color-lavender-500;
+  }
+
+  &:hover {
+    background: $color-lavender-050;
+  }
+
+  &:active {
+    background: $color-lavender-100;
+  }
+  &:focus {
+    background: $super-white;
   }
 }

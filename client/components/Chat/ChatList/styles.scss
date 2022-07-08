@@ -143,7 +143,6 @@
   border-bottom: 1.5px solid rgba(211, 211, 211, 0.5);
   border-top: 5px solid $primary-darkgrey;
   color: #b4b4b5;
-  font-family: 'Gotham-Book';
   font-size: 16px;
   font-weight: 900;
   height: 10vh;
@@ -166,7 +165,6 @@
 .time {
   color: $inactive-color;
   flex: 1 0 100%;
-  font-family: 'Gotham-Medium';
   font-size: 12px;
   margin-top: 10px;
   text-align: center;
@@ -174,7 +172,6 @@
 
 .timeChat {
   color: lighten($inactive-color, 10%);
-  font-family: 'Gotham-Medium';
   font-size: 0.8em;
   position: absolute;
   right: 10px;
@@ -191,7 +188,6 @@
 
 .patientName {
   color: #2e3845;
-  font-family: 'Gotham-Book';
   font-size: 16px;
   font-weight: 900;
   margin: 15px auto;
@@ -232,7 +228,6 @@
   background-color: #ff715a;
   border-radius: 15px;
   color: #fafafa;
-  font-family: 'Gotham-Book';
   font-size: 14px;
   margin: 10px 0;
   padding: 20px;
@@ -249,7 +244,6 @@
 
 .marginText {
   color: $inactive-color;
-  font-family: 'Gotham-Medium';
   font-size: 12px;
   margin: 20px;
   width: 14%;
@@ -268,7 +262,6 @@
   background-color: $primary-grey;
   border-radius: 15px;
   color: darken($primary-darkgrey, 20%);
-  font-family: 'Gotham-Book';
   font-size: 16px;
   margin: 10px 0;
   padding: 20px;
@@ -292,13 +285,11 @@
 .fullName {
   //font-weight: 900;
   composes: header from '../../../styles/fonts.scss';
-  //font-family: "Gotham-Book";
   //font-size: 18px;
   margin: 10px 0;
 }
 
 .fullName2 {
-  font-family: 'Gotham-Book';
   font-size: 18px;
   font-weight: 900;
   margin: 10px 0;
@@ -311,7 +302,6 @@
 
 .contact {
   color: #bfbfbf;
-  font-family: 'Gotham-Medium';
   font-size: 14px;
   font-weight: 200;
   margin-top: 10px;
@@ -361,7 +351,7 @@
 
   &_title {
     font-size: 18px;
-    font-weight: $large-weight;
+    font-weight: $bold-weight;
     padding-left: 30px;
     padding-top: 20px;
   }

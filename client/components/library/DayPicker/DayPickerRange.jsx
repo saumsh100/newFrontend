@@ -1,4 +1,3 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -10,7 +9,7 @@ import Icon from '../Icon';
 import Button from '../Button';
 import { StyleExtender } from '../../Utils/Themer';
 import { rangePickerTheme } from './defaultTheme';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { getISODate, getUTCDate, isDateValid } from '../util/datetime';
 
 function isSelectingFirstDay(startDate, endDate, day) {
@@ -21,8 +20,8 @@ function isSelectingFirstDay(startDate, endDate, day) {
 
 function isSameAsInitialDates(initFrom, initTo, startDate, endDate, timezone) {
   return (
-    getISODate(initFrom, timezone) === getISODate(startDate, timezone)
-    && getISODate(initTo, timezone) === getISODate(endDate, timezone)
+    getISODate(initFrom, timezone) === getISODate(startDate, timezone) &&
+    getISODate(initTo, timezone) === getISODate(endDate, timezone)
   );
 }
 
@@ -58,30 +57,6 @@ class DayPickerRange extends Component {
     };
   }
 
-  closePopOver() {
-    this.setState({ isOpen: false });
-  }
-
-  openPopOver() {
-    if (this.fromInput.current === document.activeElement) {
-      this.setState({
-        fromInputFocused: true,
-        toInputFocused: false,
-      });
-    }
-
-    if (this.toInput.current === document.activeElement) {
-      this.setState({
-        fromInputFocused: false,
-        toInputFocused: true,
-      });
-    }
-
-    if (!this.state.isOpen) {
-      this.setState({ isOpen: true });
-    }
-  }
-
   /**
    * handleDayClick sets the start-date or end-date based on
    * what input is in focus.
@@ -95,8 +70,8 @@ class DayPickerRange extends Component {
     const { disabledDays } = this.props;
 
     if (
-      (disabledDays.before && DateUtils.isDayBefore(pickedDay, disabledDays.before))
-      || (disabledDays.after && DateUtils.isDayAfter(pickedDay, disabledDays.after))
+      (disabledDays.before && DateUtils.isDayBefore(pickedDay, disabledDays.before)) ||
+      (disabledDays.after && DateUtils.isDayAfter(pickedDay, disabledDays.after))
     ) {
       return null;
     }
@@ -156,10 +131,10 @@ class DayPickerRange extends Component {
     }
 
     if (
-      !from
-      || (from
-        && to
-        && (DateUtils.isDayBefore(pickedDay, from) || DateUtils.isDayAfter(pickedDay, to)))
+      !from ||
+      (from &&
+        to &&
+        (DateUtils.isDayBefore(pickedDay, from) || DateUtils.isDayAfter(pickedDay, to)))
     ) {
       this.setState(
         {
@@ -179,10 +154,10 @@ class DayPickerRange extends Component {
 
     // If both dates are set and the user clicks on a date between these dates
     if (
-      from
-      && to
-      && DateUtils.isDayAfter(pickedDay, from)
-      && DateUtils.isDayBefore(pickedDay, to)
+      from &&
+      to &&
+      DateUtils.isDayAfter(pickedDay, from) &&
+      DateUtils.isDayBefore(pickedDay, to)
     ) {
       this.setState(
         {
@@ -214,12 +189,10 @@ class DayPickerRange extends Component {
 
     let fromDate = from;
     if (
-      maxDays
-      && getUTCDate(from, timezone).diff(getUTCDate(day, timezone), 'days') * -1 > maxDays
+      maxDays &&
+      getUTCDate(from, timezone).diff(getUTCDate(day, timezone), 'days') * -1 > maxDays
     ) {
-      fromDate = getUTCDate(day, timezone)
-        .subtract(maxDays, 'days')
-        .toDate();
+      fromDate = getUTCDate(day, timezone).subtract(maxDays, 'days').toDate();
     }
 
     return this.setState(
@@ -240,8 +213,8 @@ class DayPickerRange extends Component {
     const { disabledDays } = this.props;
 
     if (
-      (disabledDays.before && DateUtils.isDayBefore(day, disabledDays.before))
-      || (disabledDays.after && DateUtils.isDayAfter(day, disabledDays.after))
+      (disabledDays.before && DateUtils.isDayBefore(day, disabledDays.before)) ||
+      (disabledDays.after && DateUtils.isDayAfter(day, disabledDays.after))
     ) {
       return '';
     }
@@ -270,6 +243,30 @@ class DayPickerRange extends Component {
     );
   }
 
+  closePopOver() {
+    this.setState({ isOpen: false });
+  }
+
+  openPopOver() {
+    if (this.fromInput.current === document.activeElement) {
+      this.setState({
+        fromInputFocused: true,
+        toInputFocused: false,
+      });
+    }
+
+    if (this.toInput.current === document.activeElement) {
+      this.setState({
+        fromInputFocused: false,
+        toInputFocused: true,
+      });
+    }
+
+    if (!this.state.isOpen) {
+      this.setState({ isOpen: true });
+    }
+  }
+
   applyDateRange() {
     const { from, to } = this.state;
     const initDates = this.getInitialState();
@@ -292,15 +289,8 @@ class DayPickerRange extends Component {
 
   render() {
     const { from, to, enteredTo } = this.state;
-    const {
-      monthsToShow,
-      popover,
-      disabledDays,
-      readOnly,
-      fieldsWrapper,
-      theme,
-      timezone,
-    } = this.props;
+    const { monthsToShow, popover, disabledDays, readOnly, fieldsWrapper, theme, timezone } =
+      this.props;
 
     const modifiers = {
       [styles.start]: from,
@@ -341,7 +331,8 @@ class DayPickerRange extends Component {
 
     const format = 'MMM DD YYYY';
 
-    const fromFormatted = from && isDateValid(from) && (getUTCDate(from, timezone).format(format) || '');
+    const fromFormatted =
+      from && isDateValid(from) && (getUTCDate(from, timezone).format(format) || '');
     const toFormatted = to && isDateValid(to) && (getUTCDate(to, timezone).format(format) || '');
 
     const fieldsWrapperImplementation = fieldsWrapper({
@@ -382,6 +373,7 @@ class DayPickerRange extends Component {
 /**
  * Displays both the date inputs and the right arrow icon
  */
+
 const inputsAndNavigation = ({
   from: { fromReadOnly, fromValue, fromRef, fromOnClick },
   to: { toReadOnly, toValue, toRef, toOnClick },
@@ -392,7 +384,9 @@ const inputsAndNavigation = ({
       refCallBack={fromRef}
       value={fromValue}
       onClick={fromOnClick}
-      theme={{ group: styles.inputGroup }}
+      theme={{
+        group: classnames(styles.inputGroup, styles.withShadow),
+      }}
     />
     <Icon icon="arrow-right" className={styles.arrowTo} />
     <Input
@@ -400,7 +394,9 @@ const inputsAndNavigation = ({
       refCallBack={toRef}
       value={toValue}
       onClick={toOnClick}
-      theme={{ group: styles.inputGroup }}
+      theme={{
+        group: classnames(styles.inputGroup, styles.withShadow),
+      }}
     />
   </div>
 );

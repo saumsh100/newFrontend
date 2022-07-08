@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import groupBy from 'lodash/groupBy';
+import classNames from 'classnames';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 import { selectAppointmentShape } from '../../library/PropTypeShapes';
 import { Icon, Button, Avatar, SHeader, getTodaysDate } from '../../library';
 import SameAppointment from './SameAppointment';
-import classNames from 'classnames';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const AppointmentSuggestions = (props) => {
   const {
@@ -44,7 +44,7 @@ const AppointmentSuggestions = (props) => {
 
   return (
     <div className={styles.container}>
-      <span>
+      <span className={styles.summeryText}>
         We found one or more appointments that are similar. Please select the appointment you would
         like to link.
       </span>

@@ -1,4 +1,4 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin.scss';
 
 .generalBodyClass {
   padding: 40px;
@@ -34,13 +34,13 @@
 
 .massOnlineEmail {
   &_date {
-    color: $primary-color;
+    color: $color-grey-400;
     margin-bottom: 15px;
     margin-top: 10px;
   }
 
   &_count {
-    color: $primary-color;
+    color: $color-grey-400;
     margin-bottom: 15px;
     margin-top: 10px;
   }
@@ -62,17 +62,18 @@
     padding-left: 6px;
     padding-right: 6px;
     > div > label {
-      color: $primary-darkgrey;
+      color: $color-grey-200;
       font-size: 9px !important;
       text-transform: uppercase;
-      // font-family: $medium-font;
       top: -15px !important;
     }
   }
 }
 
 .descriptionMessage {
-  color: $clr-dark-grey;
+  color: $color-grey-400;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
   line-height: 1.35;
   margin: 0 0 20px;
 }
@@ -84,6 +85,15 @@
   margin-bottom: 10px;
   .inlineButton {
     height: 40px;
+    margin-left: 5px;
+  }
+
+  .inlineTrashButton {
+    background-color: white;
+    border: 1px solid #e54041;
+    border-radius: 4px;
+    box-shadow: 1px 1px 4px rgba(222, 213, 246, 0.1);
+    color: #e54041;
     margin-left: 5px;
   }
 }

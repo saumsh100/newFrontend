@@ -1,4 +1,3 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import RDayPicker, { LocaleUtils } from 'react-day-picker';
@@ -20,7 +19,7 @@ import { parseDateWithFormat, getFormattedDate } from '../util/datetime';
  * @param i {Boolean}
  * @returns {string}
  */
-const formatWeekdayShort = i => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i];
+const formatWeekdayShort = (i) => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i];
 
 /**
  * Get the original date (1970-01-31T12:00:00.000Z) and sets the updateTime,
@@ -63,31 +62,6 @@ class ScheduleCalendar extends Component {
   }
 
   /**
-   * Get selected schedule, meaning that if a day is selected it will get the dailySchedule,
-   * otherwise it will get the whole weeklySchedule.
-   *
-   * @param selectedDay {Date}
-   * @returns {Serializer|dailySchedule|{}|string}
-   */
-  getSelectedSchedule(selectedDay) {
-    return selectedDay
-      ? this.props.baseSchedule.schedule[selectedDay.toISOString().split('T')[0]]
-      : this.props.baseSchedule.weeklySchedule;
-  }
-
-  /**
-   * Logic that changes the actual month of the calendar
-   *
-   * @param iterator
-   */
-  changeMonth(iterator) {
-    const month = this.daypicker.current.state.currentMonth;
-    month.setMonth(month.getMonth() + iterator);
-    this.daypicker.current.showMonth(month);
-    this.props.onChangeMonth(month);
-  }
-
-  /**
    * Change the visibility of the Modal.
    *
    * @param isModalVisible {Boolean}
@@ -103,10 +77,12 @@ class ScheduleCalendar extends Component {
    */
   handleEditSchedule(weekDay) {
     const { selectedDay, timezone } = this.props;
-    const weekDayForselectedDay = selectedDay && getFormattedDate(selectedDay, 'dddd', timezone).toLowerCase();
-    const isTheSameDay = weekDayForselectedDay
-      && weekDayForselectedDay === weekDay
-      && this.getSelectedSchedule(selectedDay).isDailySchedule;
+    const weekDayForselectedDay =
+      selectedDay && getFormattedDate(selectedDay, 'dddd', timezone).toLowerCase();
+    const isTheSameDay =
+      weekDayForselectedDay &&
+      weekDayForselectedDay === weekDay &&
+      this.getSelectedSchedule(selectedDay).isDailySchedule;
 
     this.setState(
       {
@@ -124,9 +100,9 @@ class ScheduleCalendar extends Component {
   handleToggleOverrideHours(checked) {
     return checked
       ? this.props.handleRemoveOverrideHours({
-        scheduleId: this.getSelectedSchedule(this.props.selectedDay).id,
-        date: this.props.selectedDay,
-      })
+          scheduleId: this.getSelectedSchedule(this.props.selectedDay).id,
+          date: this.props.selectedDay,
+        })
       : this.props.handleCreateCustomSchedule({ date: this.props.selectedDay });
   }
 
@@ -142,14 +118,42 @@ class ScheduleCalendar extends Component {
         breaks:
           isClosed || schedule.breaks.length === 0
             ? []
-            : schedule.breaks.map(b => ({
-              ...b,
-              endTime: setTimeToOriginalDate(b.endTime, timezone),
-              startTime: setTimeToOriginalDate(b.startTime, timezone),
-            })),
+            : schedule.breaks.map((b) => ({
+                ...b,
+                endTime: setTimeToOriginalDate(b.endTime, timezone),
+                startTime: setTimeToOriginalDate(b.startTime, timezone),
+              })),
       },
       () => this.handleModalVisibility(false),
     );
+  }
+
+  /**
+   * Get selected schedule, meaning that if a day is selected it will get the dailySchedule,
+   * otherwise it will get the whole weeklySchedule.
+   *
+   * @param selectedDay {Date}
+   * @returns {Serializer|dailySchedule|{}|string}
+   */
+  getSelectedSchedule(selectedDay) {
+    return selectedDay
+      ? this.props.baseSchedule.schedule[selectedDay.toISOString().split('T')[0]]
+      : this.props.baseSchedule.weeklySchedule;
+  }
+
+  toggleDrawer = () =>
+    this.setState((prevState) => ({ isDrawerExpanded: !prevState.isDrawerExpanded }));
+
+  /**
+   * Logic that changes the actual month of the calendar
+   *
+   * @param iterator
+   */
+  changeMonth(iterator) {
+    const month = this.daypicker.current.state.currentMonth;
+    month.setMonth(month.getMonth() + iterator);
+    this.daypicker.current.showMonth(month);
+    this.props.onChangeMonth(month);
   }
 
   render() {
@@ -158,14 +162,15 @@ class ScheduleCalendar extends Component {
     return (
       <div className={styles.calendarWrapper}>
         <Navbar
-          toggleDrawer={() =>
-            this.setState(prevState => ({ isDrawerExpanded: !prevState.isDrawerExpanded }))
-          }
+          toggleDrawer={this.toggleDrawer}
           isDrawerExpanded={isDrawerExpanded}
           month={month}
           onNextClick={() => this.changeMonth(1)}
           onPreviousClick={() => this.changeMonth(-1)}
           timezone={timezone}
+          baseSchedule={this.props.baseSchedule}
+          handleCreateCustomSchedule={this.props.handleCreateCustomSchedule}
+          handleRemoveOverrideHours={this.props.handleRemoveOverrideHours}
         />
         <div className={styles.contentWrapper}>
           <div className={styles.content}>
@@ -186,9 +191,9 @@ class ScheduleCalendar extends Component {
                 [calendar.dailySchedule]: this.props.dailyScheduleDays,
               }}
               selectedDays={selectedDay}
-              onDayClick={day => this.props.handleDayClick(day)}
+              onDayClick={(day) => this.props.handleDayClick(day)}
               className={styles.sidebar_calendar}
-              renderDay={day => this.props.renderDay(day, this.handleEditSchedule)}
+              renderDay={(day) => this.props.renderDay(day, this.handleEditSchedule)}
               classNames={{
                 ...calendar,
                 disabled: calendar.closedDay,
@@ -206,6 +211,7 @@ class ScheduleCalendar extends Component {
                 handleEditSchedule={this.handleEditSchedule}
                 schedule={this.props.weeklySchedule}
                 timezone={timezone}
+                toggleDrawer={this.toggleDrawer}
               />
             )}
           </div>

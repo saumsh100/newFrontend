@@ -19,7 +19,8 @@ const FilterTags = ({ patientTable, removeTag }) => {
   /* eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
   const { limit, page, order, segment, ...filters } = patientTable.get('filters').toJS();
 
-  /*deleting the status from filters in case of follow ups patient report*/
+/* deleting the status from filters in case of follow ups patient report */
+
   if (
     segment &&
     typeof segment !== 'undefined' &&

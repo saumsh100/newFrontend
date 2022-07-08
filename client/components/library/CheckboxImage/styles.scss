@@ -37,13 +37,11 @@
 
   &__photo {
     display: inline-block;
-    margin-bottom: 5px;
     max-width: 55px;
   }
 
   &__avatar {
     box-sizing: border-box;
-    margin-bottom: 5px;
   }
 
   &__spec {
@@ -53,32 +51,4 @@
   &:hover {
     cursor: pointer;
   }
-}
-
-.primaryColor {
-  background: linear-gradient(rgba(255, 113, 90, 1), white 70%);
-  border-color: $primary-color;
-  border-radius: 50%;
-  width: 40px;
-}
-
-.primaryYellow {
-  background: linear-gradient(rgba(255, 196, 90, 1), white 70%);
-  border-color: $primary-yellow;
-  border-radius: 50%;
-  width: 40px;
-}
-
-.primaryGreen {
-  background: linear-gradient(rgba(44, 196, 167, 1), white 70%);
-  border-color: $primary-green;
-  border-radius: 50%;
-  width: 40px;
-}
-
-.primaryBlueGreen {
-  background: linear-gradient(rgba(32, 100, 119, 1), white 70%);
-  border-color: $primary-blue;
-  border-radius: 50%;
-  width: 40px;
 }

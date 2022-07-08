@@ -1,26 +1,30 @@
-@import '../../styles/ui.scss';
-@import '../../styles/ui-kit.scss';
 @import '../../styles/fonts.scss';
-@import './AppsRequestsContainer/styles.scss';
-@import './AppsRequestsContainer/AppointmentsList/AppointmentPopover/styles.scss';
-@import './DonnaToDoListContainer/styles.scss';
-@import './DonnaToDoListContainer/DonnaToDoTabs/styles.scss';
-@import './DonnaToDoListContainer/Tasks/styles.scss';
-@import './DonnaToDoListContainer/Tasks/AppointmentReminders/styles.scss';
-@import './DonnaToDoListContainer/Tasks/PatientRecalls/styles.scss';
-@import './DonnaToDoListContainer/Tasks/ReviewsRequests/styles.scss';
-@import './PatientInsightsContainer/styles.scss';
-@import './PatientInsightsContainer/Insights/styles.scss';
-@import './RevenueContainer/styles.scss';
-@import './RevenueContainer/RevenueChart/styles.scss';
-@import './RevenueContainer/RevenueDisplay/styles.scss';
-@import './StatsContainer/styles.scss';
+@import '../../styles/reskin-font.scss';
+@import '../../styles/ui-reskin.scss';
+@import './AppsRequestsContainer/reskin-styles.scss';
+@import './AppsRequestsContainer/AppointmentsList/AppointmentPopover/reskin-styles.scss';
+@import './DonnaToDoListContainer/reskin-styles.scss';
+@import './DonnaToDoListContainer/DonnaToDoTabs/reskin-styles.scss';
+@import './DonnaToDoListContainer/Tasks/reskin-styles.scss';
+@import './DonnaToDoListContainer/Tasks/AppointmentReminders/reskin-styles.scss';
+@import './DonnaToDoListContainer/Tasks/PatientRecalls/reskin-styles.scss';
+@import './DonnaToDoListContainer/Tasks/ReviewsRequests/reskin-styles.scss';
+@import './PatientInsightsContainer/reskin-styles.scss';
+@import './PatientInsightsContainer/Insights/reskin-styles.scss';
+@import './RevenueContainer/reskin-styles.scss';
+@import './RevenueContainer/RevenueChart/reskin-styles.scss';
+@import './RevenueContainer/RevenueDisplay/reskin-styles.scss';
+@import './StatsContainer/reskin-styles.scss';
+@import '../Requests/reskin-styles.scss';
+@import '../WaitingRoom/WaitingRoomList/WaitingRoomListItem/reskin-styles.scss';
+@import '../WaitingRoom/NotifyPatientForm/reskin-styles.scss';
 
 .dashboard {
+  background-color: $color-purple-050;
   box-sizing: border-box;
   height: 100%;
   overflow: auto;
-  padding: 15px;
+  padding: 16px;
   width: 100%;
 }
 
@@ -32,27 +36,47 @@
 }
 
 .userName {
-  @extend .fontMedium;
-  font-size: 19px;
+  background: $super-white;
+  border-radius: 4px;
+  box-shadow: $box-shadow-3;
+  color: $color-purple-600;
+  font-size: 24px;
+  padding: 8px 16px;
   @media screen and (max-width: 700px) {
     display: none;
   }
 }
 
+.dateInputRow {
+  display: flex;
+  flex-direction: row;
+}
+
 .dateInput {
   align-items: center;
+  background-color: $super-white;
+  border: 1px solid $color-grey-200;
   display: flex;
   justify-content: center;
   margin-left: auto;
+  transition: border 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  &:hover {
+    background-color: $color-lavender-050;
+  }
 }
 
 .inputGroup {
   padding: 0;
   input {
-    background-color: $primary-white;
+    background-color: $super-white;
     border: 0;
-    color: $primary-dark-grey;
+    color: $color-grey-400;
+    font-size: 14px;
+    font-weight: 700;
     padding-left: 10px;
+    &:focus {
+      color: $color-purple-600;
+    }
   }
 }
 
@@ -62,8 +86,8 @@
 
 .dateIconContainer {
   align-items: center;
-  background-color: darken($clr-bg-dark-grey, 5%);
-  color: white;
+  background-color: transparent;
+  color: $super-white;
   cursor: pointer;
   display: flex;
   font-size: 14px;
@@ -95,7 +119,13 @@
 }
 
 .iconColor {
-  color: $primary-white;
+  color: $color-lavender-400;
+  i {
+    font-weight: 400;
+  }
+  &:hover {
+    color: $color-lavender-400;
+  }
 }
 
 .statsContainer {

@@ -1,8 +1,11 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin.scss';
 
 .MarkUnreadButton {
   background-color: transparent;
-  color: $primary-white;
+  color: $super-white;
   cursor: pointer;
   padding: 0;
+  &:hover {
+    background: none;
+  }
 }

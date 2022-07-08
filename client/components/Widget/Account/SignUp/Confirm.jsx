@@ -1,11 +1,11 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { Form, Field, Button } from '../../../library';
+import { Form } from '../../../library';
+import { Field, Button } from '../../components';
 import { maxDigits } from '../../../library/Form/normalize';
 import { numDigitsValidate } from '../../../library/Form/validate';
 import { confirmCode, resendPinCode } from '../../../../thunks/availabilities';
@@ -19,7 +19,7 @@ function SignUpConfirm({ handleConfirmationCode, patientPhoneNumber, handleResen
    *
    * @param {object} values
    */
-  const handleConfirmation = values =>
+  const handleConfirmation = (values) =>
     handleConfirmationCode(values).catch(({ data }) => {
       throw new SubmissionError({
         confirmCode: data,
@@ -36,17 +36,15 @@ function SignUpConfirm({ handleConfirmationCode, patientPhoneNumber, handleResen
             <span className={styles.phone}>{patientPhoneNumber}</span>. <br />
             Please type in the code below and submit to complete your booking request. <br />
             If you did not receive your SMS and want it sent again, click
-            {
-              <Button
-                className={styles.linkButton}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleResendPinCode();
-                }}
-              >
-                here
-              </Button>
-            }
+            <Button
+              className={styles.linkButton}
+              onClick={(e) => {
+                e.preventDefault();
+                handleResendPinCode();
+              }}
+            >
+              here
+            </Button>
             .
           </p>
         </div>
@@ -96,9 +94,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(SignUpConfirm),
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignUpConfirm));

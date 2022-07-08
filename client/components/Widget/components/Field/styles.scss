@@ -1,0 +1,26 @@
+@import '../../../../styles/ui.scss';
+
+.toggle {
+  background: hsl(0, 0%, 27%);
+  border-radius: calc(0.3rem * 1.6);
+  color: white;
+  display: inline-flex;
+  flex-direction: column;
+  max-width: 200px;
+  padding: calc(0.4rem * 1.6) calc(0.8rem * 1.6);
+}
+
+input:-webkit-autofill {
+  + span {
+    + span {
+      font-size: 10px !important;
+      left: 0 !important;
+      top: 10px !important;
+    }
+  }
+}
+
+.fieldLabel {
+  color: $empty-grey;
+  font-size: 10px;
+}

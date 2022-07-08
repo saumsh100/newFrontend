@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 import { Button, Avatar, Icon } from '../../library';
 import { patientShape } from '../../library/PropTypeShapes';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const PatientData = (props) => {
   const { patient, selectPatient, selectedPatient } = props;
@@ -26,13 +26,13 @@ const PatientData = (props) => {
           <div className={styles.patientContainer_fullName}>{fullName}</div>
           {patientPhoneNo && (
             <div className={styles.data}>
-              <Icon icon="phone" size={0.9} type="solid" />
+              <Icon icon="phone" size={0.9} type="solid" className={styles.dataIcon} />
               <div className={styles.data_text}>{formatPhoneNumber(patientPhoneNo)}</div>
             </div>
           )}
           {patient.email && (
             <div className={styles.data}>
-              <Icon icon="envelope" size={0.9} type="solid" />
+              <Icon icon="envelope" size={0.9} type="solid" className={styles.dataIcon} />
               <div className={styles.data_text}>{patient.email}</div>
             </div>
           )}

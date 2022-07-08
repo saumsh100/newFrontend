@@ -1,11 +1,11 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { Form, Field, Button } from '../../../library';
+import { Form } from '../../../library';
+import { Field, Button } from '../../components';
 import { emailValidate } from '../../../library/Form/validate';
 import { resetPatientUserPassword } from '../../../../thunks/patientAuth';
 import { inputTheme } from '../../theme';
@@ -67,11 +67,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ resetPatientUserPassword }, dispatch);
 }
 
-export default withRouter(
-  connect(
-    null,
-    mapDispatchToProps,
-  )(ResetPassword),
-);
+export default withRouter(connect(null, mapDispatchToProps)(ResetPassword));
 
 ResetPassword.propTypes = { resetPatientUserPassword: PropTypes.func.isRequired };

@@ -86,8 +86,8 @@ class OnlineBooking extends Component {
             </div>
             <div className={styles.snippetContainer}>
               <div className={styles.label}>
-                HTML SNIPPET Copy and paste the snippet below into your website, at the bottom of
-                your body tag.
+                <Header title="HTML SNIPPET " contentHeader />
+                Copy and paste the snippet below into your website, at the bottom of your body tag.
               </div>
               <CodeSnippet codeSnippet={snippet} />
             </div>

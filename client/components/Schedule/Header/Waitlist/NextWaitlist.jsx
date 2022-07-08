@@ -16,7 +16,7 @@ import {
 import { Create as CreateWaitSpot } from '../../../GraphQLWaitlist';
 import UpdateWaitSpot from '../../../GraphQLWaitlist/updateWaitSpot';
 import { sortPractitionersAlphabetical } from '../../../Utils';
-import styles from '../styles.scss';
+import styles from '../reskin-styles.scss';
 
 export const WAITLIST_STATE = {
   initial: 0,
@@ -25,7 +25,7 @@ export const WAITLIST_STATE = {
   form: 3,
 };
 
-const NextWaitlist = ({onOverlayClick,...props}) => {
+const NextWaitlist = ({ onOverlayClick, ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const { account, practitioners } = useCallback(
     useSelector(({ auth, entities }) => ({
@@ -196,7 +196,7 @@ const NextWaitlist = ({onOverlayClick,...props}) => {
       </DialogBox>
       {waitlistState === WAITLIST_STATE.form && (
         <DialogBox
-          title="Waitlist"
+          title="Add to Waitlist"
           active={waitlistState === WAITLIST_STATE.form}
           bodyStyles={styles.dialogBodyList}
           onEscKeyDown={resetEditForm}
@@ -233,6 +233,7 @@ export default memo(NextWaitlist);
 
 NextWaitlist.propTypes = {
   waitlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+  onOverlayClick: PropTypes.func.isRequired,
 };
 
 NextWaitlist.defaultProps = {

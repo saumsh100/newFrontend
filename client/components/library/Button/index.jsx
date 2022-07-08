@@ -1,14 +1,12 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { getClassMapper } from '../../Utils';
-import { isHub } from '../../../util/hub';
-import styles from './vbutton.scss';
+import styles from '../styles';
 
 const scheme = [
   ['size', ['sm', 'md', 'lg', 'xlg']],
-  ['color', ['white', 'red', 'grey', 'green', 'blue', 'yellow', 'darkgrey', 'darkblue']],
+  ['color', ['white', 'red', 'grey', 'green', 'yellow', 'darkgrey', 'darkblue']],
   ['border', ['blue']],
 
   'primary',
@@ -34,7 +32,11 @@ const scheme = [
 const mapper = getClassMapper(scheme, styles);
 
 function Button(props) {
-  const baseClassName = mapper.map(props, styles.baseline, props.className);
+  const { topBarSearch, scheduleHeader } = props;
+  const baseClassName =
+    topBarSearch || scheduleHeader
+      ? mapper.map(props, props.className)
+      : mapper.map(props, styles.baseline, props.className);
   let finalProps = mapper.omit(
     props,
     'as',
@@ -60,7 +62,6 @@ function Button(props) {
       {...finalProps}
       className={classNames(baseClassName, {
         disabled: props.disabled,
-        [styles.hub]: isHub(),
       })}
     >
       {props.icon && <i className={`fa fa-${props.icon} ${styles.icon}`} />}

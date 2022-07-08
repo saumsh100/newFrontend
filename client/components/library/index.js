@@ -66,6 +66,10 @@ export { default as TrendLine } from './TrendLine';
 export { default as VCard } from './VCard';
 export { default as Well } from './Well';
 export { default as ComboBox } from './ComboBox';
+export { default as Divider } from './Divider';
+export { default as SwitchToggler } from './SwitchToggler';
+export { default as EnabledFeature } from './EnabledFeature';
+export { default as StandardButton } from './StandardButton';
 
 export { BigCommentBubble } from './BigCommentBubble';
 export { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
@@ -77,7 +81,7 @@ export { List, ListItem } from './List';
 export { Nav, NavItem } from './Nav';
 export { SContainer, SHeader, SBody, SFooter } from './Layout';
 export { Tab } from './Tabs';
-
+export { default as LoginInput } from './LoginInput';
 const VButton = Button;
 export { VButton, Button };
 

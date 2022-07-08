@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -112,27 +111,6 @@ class ReasonWeeklyHoursWrapper extends Component {
   }
 
   /**
-   * When clicking to edit a weekDay, set the initialData (based on the provided data),
-   * the weekDay and the active dropdown item. After that set the modal as visible.
-   *
-   * @param data
-   * @param weekDay
-   */
-  onEditClick(data, weekDay) {
-    this.setState(
-      {
-        data,
-        initialData: data,
-        weekDay,
-        active: getSelectedValue(data),
-      },
-      () => {
-        this.handleModalVisibility();
-      },
-    );
-  }
-
-  /**
    * Change the visibility of the Modal.
    *
    * @param isModalVisible {Boolean}
@@ -156,9 +134,9 @@ class ReasonWeeklyHoursWrapper extends Component {
         id: this.state.initialData.id,
         [this.state.active]: Array.isArray(data)
           ? data.map(({ startTime, endTime }) => ({
-            startTime,
-            endTime,
-          }))
+              startTime,
+              endTime,
+            }))
           : data,
       };
 
@@ -175,7 +153,7 @@ class ReasonWeeklyHoursWrapper extends Component {
    * @param value
    */
   handleDropdownChange(value) {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       active: value,
       data: {
         ...prevState.initialData,
@@ -185,11 +163,32 @@ class ReasonWeeklyHoursWrapper extends Component {
   }
 
   /**
+   * When clicking to edit a weekDay, set the initialData (based on the provided data),
+   * the weekDay and the active dropdown item. After that set the modal as visible.
+   *
+   * @param data
+   * @param weekDay
+   */
+  onEditClick(data, weekDay) {
+    this.setState(
+      {
+        data,
+        initialData: data,
+        weekDay,
+        active: getSelectedValue(data),
+      },
+      () => {
+        this.handleModalVisibility();
+      },
+    );
+  }
+
+  /**
    * Set the state to its initial value and hide the modal.
    */
   hideModal() {
     this.setState(
-      prevState => ({ data: prevState.initialData }),
+      (prevState) => ({ data: prevState.initialData }),
       () => this.handleModalVisibility(false),
     );
   }
@@ -204,7 +203,8 @@ class ReasonWeeklyHoursWrapper extends Component {
       return false;
     }
     return (
-      this.state.data.breaks.map(b => validate(b, this.props.timezone)).filter(d => d).length > 0
+      this.state.data.breaks.map((b) => validate(b, this.props.timezone)).filter((d) => d).length >
+      0
     );
   }
 
@@ -214,10 +214,11 @@ class ReasonWeeklyHoursWrapper extends Component {
    * @param key
    */
   addTimeItem(key) {
-    const data = key === 'breaks'
-      ? genericTimeRange(this.props.timezone)
-      : genericTimeRange(this.props.timezone, this.props.reason.get('duration'));
-    this.setState(prevState => ({
+    const data =
+      key === 'breaks'
+        ? genericTimeRange(this.props.timezone)
+        : genericTimeRange(this.props.timezone, this.props.reason.get('duration'));
+    this.setState((prevState) => ({
       data: {
         ...prevState.data,
         [key]: [...prevState.data[key], data],
@@ -258,7 +259,7 @@ class ReasonWeeklyHoursWrapper extends Component {
    * @param data
    */
   updateTimeItem(key, index, data) {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       data: {
         ...prevState.data,
         [key]: prevState.data[key].map((item, i) => ({
@@ -278,7 +279,7 @@ class ReasonWeeklyHoursWrapper extends Component {
   removeTimeItem(index, key) {
     const dataToUpdate = [...this.state.data[key]];
     dataToUpdate.splice(index, 1);
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       data: {
         ...prevState.data,
         [key]: dataToUpdate,
@@ -306,7 +307,7 @@ class ReasonWeeklyHoursWrapper extends Component {
 
   render() {
     const { timezone } = this.props;
-    const removeOffSet = time => time.replace('+00', '.000Z');
+    const removeOffSet = (time) => time.replace('+00', '.000Z');
     const breaksData = {
       ...this.state.data,
       availabilities: this.state.data.availabilities.map(({ startTime, endTime, ...rest }) => ({
@@ -328,15 +329,15 @@ class ReasonWeeklyHoursWrapper extends Component {
           allowedTimeFormat={allowedFormat}
         />
         <UpdateReasonWeeklyHours>
-          {commit => (
+          {(commit) => (
             <EditReasonWeeklyHours
               data={breaksData}
               active={this.state.active}
-              timeToIsoString={time => timeToDateTimeObj(time, timezone).toISOString()}
+              timeToIsoString={(time) => timeToDateTimeObj(time, timezone).toISOString()}
               timeOptions={this.state.timeOpts}
               handleOverrideDropdownChange={this.handleDropdownChange}
               timezone={timezone}
-              validate={dateRange => validate(dateRange, timezone)}
+              validate={(dateRange) => validate(dateRange, timezone)}
               addTimeItem={this.addTimeItem}
               removeAvailability={this.removeAvailability}
               removeBreak={this.removeBreak}
@@ -353,6 +354,7 @@ class ReasonWeeklyHoursWrapper extends Component {
                 <ModalHeader
                   title={`${this.props.reason.get('name')} - ${capitalize(this.state.weekDay)}`}
                   label={`Donna’s availability settings for ${capitalize(this.state.weekDay)}`}
+                  hideModal={this.hideModal}
                 />
               }
               isModalVisible={this.state.isModalVisible}

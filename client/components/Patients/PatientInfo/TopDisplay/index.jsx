@@ -4,7 +4,16 @@ import { Map } from 'immutable';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { formatPhoneNumber } from '../../../../util/isomorphic';
-import { Card, Avatar, Icon, Grid, Row, Col, Button, getFormattedDate } from '../../../library';
+import {
+  Card,
+  Avatar,
+  Icon,
+  Grid,
+  Row,
+  Col,
+  StandardButton as Button,
+  getFormattedDate,
+} from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';
 import RecallData from '../../Shared/RecallColumn';
@@ -12,34 +21,13 @@ import { isResponsive } from '../../../../util/hub';
 import { accountShape } from '../../../library/PropTypeShapes';
 import PatientModel from '../../../../entities/models/Patient';
 import ActionsDropdown from '../ActionsDropdown';
-import ui from '../../../../styles/ui-kit.scss';
 import styles from './styles.scss';
 
-const bgImgs = [
-  'banner-01.png',
-  'banner-02.png',
-  'banner-03.png',
-  'banner-04.png',
-  'banner-05.png',
-];
-
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-const randomNum = getRandomIntInclusive(0, 4);
+const bgImg = 'banner-00.svg';
 
 function TopDisplay(props) {
-  const {
-    patient,
-    wasStatsFetched,
-    patientStats,
-    activeAccount,
-    wasPatientFetched,
-    timezone,
-  } = props;
+  const { patient, wasStatsFetched, patientStats, activeAccount, wasPatientFetched, timezone } =
+    props;
 
   if (!patient) {
     return null;
@@ -47,12 +35,13 @@ function TopDisplay(props) {
 
   const age = patient.getAge();
 
-  const production = wasStatsFetched && patientStats.get('productionCalendarYear')
-    ? `$${patientStats.get('productionCalendarYear')}`
-    : '$0';
+  const production =
+    wasStatsFetched && patientStats.get('productionCalendarYear')
+      ? `$${patientStats.get('productionCalendarYear')}`
+      : '$0';
 
   const bgStyle = {
-    background: `url('/images/banners/${bgImgs[randomNum]}')`,
+    background: `url('/images/banners/${bgImg}')`,
     backgroundSize: '70%',
   };
 
@@ -60,14 +49,14 @@ function TopDisplay(props) {
   const avatarSize = isResponsive() ? 'md' : 'xl';
 
   return (
-    <Card className={styles.card} noBorder>
+    <Card className={styles.card}>
       <div className={styles.content}>
         <div className={styles.imageContainer} style={bgStyle} />
         {wasAllFetched && (
           <div className={styles.dataContainer}>
             <div className={styles.avatarContainer}>
               <div className={styles.avatarContainer_avatar}>
-                <Avatar user={patient} size={avatarSize} />
+                <Avatar user={patient} size={avatarSize} className={styles.avatarUser} />
               </div>
               <div className={styles.badgeWrapper}>
                 <div
@@ -101,8 +90,8 @@ function TopDisplay(props) {
                     <Icon icon="phone" />{' '}
                   </span>
                   <div className={styles.avatarContainer_data_phone}>
-                    {(patient.cellPhoneNumber && formatPhoneNumber(patient.cellPhoneNumber))
-                      || 'N/A'}
+                    {(patient.cellPhoneNumber && formatPhoneNumber(patient.cellPhoneNumber)) ||
+                      'N/A'}
                   </div>
                 </div>
                 <ActionsDropdown
@@ -110,12 +99,11 @@ function TopDisplay(props) {
                   align="left"
                   render={({ onClick }) => (
                     <Button
-                      className={`${styles.actionsButtonNormal} ${styles.actionsButton} ${ui.modal__save} `}
+                      className={styles.avatarContainer_actionsButton}
                       onClick={onClick}
-                    >
-                      <div className={styles.actionText}>Actions</div>
-                      <Icon className={styles.actionIcon} icon="caret-down" type="solid" />
-                    </Button>
+                      title="Actions"
+                      iconRight="caret-down"
+                    />
                   )}
                 />
               </div>
@@ -144,10 +132,9 @@ function TopDisplay(props) {
                 </Col>
                 <Col xs={3}>
                   <InfoDump
-                    label="DUE FOR HYGIENE"
+                    label="Due For Hygiene"
                     component={HygieneData({
                       patient,
-                      className: styles.fontStyle,
                       activeAccount,
                     })}
                   />
@@ -179,10 +166,9 @@ function TopDisplay(props) {
                 </Col>
                 <Col xs={3}>
                   <InfoDump
-                    label="DUE FOR RECALL"
+                    label="Due For Recall"
                     component={RecallData({
                       patient,
-                      className: styles.fontStyle,
                       activeAccount,
                     })}
                   />

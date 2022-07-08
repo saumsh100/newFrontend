@@ -1,9 +1,8 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import { Link as RRLink } from 'react-router-dom';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 export default function Link(props) {
   const { className, disabled = false } = props;
@@ -12,7 +11,7 @@ export default function Link(props) {
   let onClick = () => {};
   if (disabled) {
     classes = classNames(classes, styles.disabled);
-    onClick = e => e.preventDefault();
+    onClick = (e) => e.preventDefault();
   }
 
   return <RRLink {...props} className={classes} onClick={onClick} />;

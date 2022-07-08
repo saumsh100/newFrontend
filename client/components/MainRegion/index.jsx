@@ -1,8 +1,7 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 export default function MainRegion({ children, isCollapsed }) {
   const mainRegionClassName = classNames(

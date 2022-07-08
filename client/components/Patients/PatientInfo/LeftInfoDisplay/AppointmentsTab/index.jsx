@@ -1,7 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '../../../../library';
+import { Divider, Grid } from '../../../../library';
 import ContinuingCareSection from './ContinuingCareSection';
 import LastAppointmentSection from './LastAppointmentSection';
 import styles from '../styles.scss';
@@ -10,7 +9,8 @@ export default function AppointmentsTab(props) {
   const { patient } = props;
   return (
     <Grid className={styles.grid}>
-      <ContinuingCareSection patient={patient} className={styles.continuingCareSection} />
+      <ContinuingCareSection patient={patient} />
+      <Divider className={styles.divider} />
       <LastAppointmentSection patient={patient} />
     </Grid>
   );

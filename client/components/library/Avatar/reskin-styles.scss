@@ -1,0 +1,122 @@
+@import '../../../styles/ui-reskin.scss';
+
+$extraSmall-size: calc(1.5rem * 1.6);
+$small-size: calc(2.3rem * 1.6);
+$avatar-medium-size: 32px;
+$large-size: calc(5rem * 1.6);
+$x-jumbo-size: calc(7.75rem * 1.6);
+
+.avatar {
+  align-items: center;
+  background: $color-grey-400;
+  border-radius: 50%;
+  display: inline-flex;
+  font-size: 20px;
+  height: $avatar-medium-size;
+  justify-content: center;
+  min-height: $avatar-medium-size;
+  min-width: $avatar-medium-size;
+  outline: none;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
+  width: $avatar-medium-size;
+}
+
+.male {
+  background: $color-grey-400;
+}
+
+.female {
+  background: $color-grey-400;
+}
+
+.user {
+  background: $color-grey-400;
+}
+
+.img {
+  height: auto;
+  width: 100%;
+}
+
+.xs {
+  font-size: 10px;
+  height: $extraSmall-size;
+  min-height: $extraSmall-size;
+  min-width: $extraSmall-size;
+  width: $extraSmall-size;
+}
+
+.sm {
+  font-size: $medium-size;
+  height: 32px;
+  line-height: normal;
+  width: 32px;
+}
+
+.md {
+  font-size: 18px;
+  height: $avatar-medium-size;
+  min-height: $avatar-medium-size;
+  min-width: $avatar-medium-size;
+  width: $avatar-medium-size;
+}
+
+.lg {
+  font-size: 32px;
+  height: $large-size;
+  min-height: $large-size;
+  min-width: $large-size;
+  width: $large-size;
+}
+
+.xl {
+  font-size: 45px;
+  height: $x-jumbo-size;
+  min-height: $x-jumbo-size;
+  min-width: $x-jumbo-size;
+  width: $x-jumbo-size;
+}
+
+.text {
+  align-items: center;
+  color: $super-white;
+  display: flex;
+  justify-content: center;
+}
+
+.gradientBackground {
+  background-color: transparent;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 3px;
+}
+
+.gradientPadding {
+  padding: 5px;
+}
+
+.salmon200 {
+  @extend .gradientPadding;
+  background: $color-salmon-200;
+  border-radius: 50%;
+}
+
+.lavender200 {
+  @extend .gradientPadding;
+  background: $color-lavender-200;
+  border-radius: 50%;
+}
+
+.yellow200 {
+  @extend .gradientPadding;
+  background: $color-yellow-200;
+  border-radius: 50%;
+}
+
+.teal200 {
+  @extend .gradientPadding;
+  background: $color-teal-200;
+  border-radius: 50%;
+}

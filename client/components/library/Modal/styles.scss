@@ -22,8 +22,13 @@
   display: flex;
 }
 
+.notify {
+  height: auto;
+  width: 486px;
+}
+
 .small {
-  width: 25%;
+  width: 35%;
 }
 
 .mediumSmall {
@@ -79,7 +84,7 @@
   box-shadow: 0 19px 60px rgba(0, 0, 0, 0.3), 0 15px 20px rgba(0, 0, 0, 0.22);
   display: flex;
   flex-direction: column;
-  max-height: 96%;
+  max-height: 700px;
   min-width: 400px;
   z-index: 301;
 

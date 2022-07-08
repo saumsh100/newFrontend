@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../../../library';
-import styles from '../../styles.scss';
+import styles from '../../reskin-styles.scss';
 
 import {
   maxLength,
@@ -65,7 +65,9 @@ export default function NewPatientForm({ onSubmit, formName, initialValues = {} 
         data-test-id={formName}
         key={`Patient Creation Form Name_${formName}`}
       >
-        <div>*This will create a new patient in your practice software and in CareCru</div>
+        <div className={styles.text}>
+          *This will create a new patient in your practice software and in CareCru
+        </div>
         <Field
           required
           name="firstName"

@@ -1,0 +1,12 @@
+@import '../../../styles/ui';
+
+.link {
+  color: $primary-blue;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.disabled {
+  color: $primary-grey;
+  cursor: not-allowed;
+}

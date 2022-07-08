@@ -1,8 +1,10 @@
 @import '../../../styles/ui';
+@import '../../../styles/ui-reskin.scss';
 
 .time {
-  color: $inactive-color;
-  font-size: 12px;
+  color: $color-grey-300;
+  font-size: $small-size;
+  font-weight: $bold-weight;
   margin: 10px 0;
   text-align: center;
 }

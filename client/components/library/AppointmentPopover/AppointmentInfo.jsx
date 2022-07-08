@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
 import {
@@ -12,8 +11,6 @@ import {
   SBody,
   SFooter,
   Button,
-  TextArea,
-  IconButton,
   PointOfContactBadge,
   nonApptWritePMS,
 } from '..';
@@ -21,7 +18,7 @@ import { patientShape, appointmentShape, practitionerShape } from '../PropTypeSh
 import Appointments from '../../../entities/models/Appointments';
 import ChairModel from '../../../entities/models/Chair';
 import EnabledFeature from '../EnabledFeature';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { getFormattedDate, getTodaysDate } from '../util/datetime';
 
 const popoverDataSections = (subHeaderText, data) => (
@@ -47,7 +44,6 @@ const AppointmentInfo = (props) => {
     chair,
     editPatient,
     title,
-    extraStyles,
     timezone,
     errorTitle,
     errorMessage,
@@ -55,11 +51,10 @@ const AppointmentInfo = (props) => {
   const { startDate, endDate, note, reason, description } = appointment;
   const age = patient?.birthDate ? getTodaysDate(timezone).diff(patient.birthDate, 'years') : null;
   const appointmentDate = getFormattedDate(startDate, 'dddd LL', timezone);
-  const textAreaTheme = { group: styles.textAreaGroup };
   const notes = description || note || '';
   const TitleComponent = errorTitle ? (
     <>
-      <Icon icon="calendar" size={1.25} className={styles.errorCalendarIcon} />
+      <Icon icon="calendar-alt" className={styles.calendarIcon} />
       <span className={styles.header_text}>{errorTitle}</span>
     </>
   ) : (
@@ -68,34 +63,32 @@ const AppointmentInfo = (props) => {
   return (
     <Card className={styles.card} noBorder>
       <SContainer>
-        <SHeader className={styles.header} hey="header">
+        <SHeader className={styles.appointmentHeader} hey="header">
+          <Icon icon="calendar-alt" className={styles.appointmentHeader_calendarIcon} />
           {patient ? (
             <>
-              <Icon icon="calendar" size={1.25} />
               <div
                 role="button"
                 tabIndex={0}
-                className={classNames(styles.patientLink, styles.textWhite)}
+                className={styles.appointmentPatientLink}
                 onDoubleClick={() => editPatient(patient.id)}
                 onKeyDown={(e) => e.keyCode === 13 && editPatient(patient.id)}
               >
                 <ActionsDropdown
                   patient={patient}
                   render={({ onClick }) => (
-                    <div
-                      role="button"
-                      className={styles.appointmentPopover}
-                      tabIndex={0}
-                      onKeyDown={() => {}}
-                      onClick={onClick}
-                    >
-                      <span className={styles.header_text}>
+                    <div role="button" tabIndex={0} onKeyDown={() => {}} onClick={onClick}>
+                      <span className={styles.appointmentHeader_text}>
                         {`${patient.firstName} ${patient.lastName}`}
                       </span>
-                      {age !== null && <span>{`, ${age}`}</span>}
-                      <span className={styles.actionsButtonSmall}>
-                        <Icon icon="caret-down" type="solid" />
-                      </span>
+                      {age !== null && (
+                        <span className={styles.appointmentHeader_age}>{`, ${age}`}</span>
+                      )}
+                      <Icon
+                        icon="caret-down"
+                        type="solid"
+                        className={styles.appointmentHeader_actionsButtonSmall}
+                      />
                     </div>
                   )}
                 />
@@ -104,9 +97,9 @@ const AppointmentInfo = (props) => {
           ) : (
             TitleComponent
           )}
-          <div className={styles.closeIcon}>
-            <IconButton icon="times" onClick={() => props.closePopover()} />
-          </div>
+          <button type="button" className={styles.closeIcon} onClick={() => props.closePopover()}>
+            <Icon icon="times" size={1.2} />
+          </button>
         </SHeader>
         <SBody className={styles.body} key="body">
           {errorMessage && (
@@ -138,18 +131,7 @@ const AppointmentInfo = (props) => {
 
           {chair && popoverDataSections('Chair', chair.name)}
 
-          {(notes &&
-            popoverDataSections(
-              'Notes',
-              <div className={styles.data_note} style={{ ...extraStyles?.note }} key="notes">
-                <TextArea
-                  disabled="disabled"
-                  theme={textAreaTheme}
-                  value={notes}
-                  style={{ ...extraStyles?.note }}
-                />
-              </div>,
-            )) ||
+          {(notes && popoverDataSections('Notes', notes)) ||
             (title && popoverDataSections('Notes', 'n/a'))}
 
           {patient?.cellPhoneNumber || patient?.email ? (
@@ -157,7 +139,9 @@ const AppointmentInfo = (props) => {
               <div className={styles.subHeader}>Patient Info</div>
 
               <div className={styles.data}>
-                {patient.cellPhoneNumber && <Icon icon="phone" size={0.9} type="solid" />}
+                {patient.cellPhoneNumber && (
+                  <Icon icon="phone" size={0.9} type="solid" className={styles.data_icon} />
+                )}
                 <div className={styles.data_text}>
                   {patient.cellPhoneNumber && patient.cellPhoneNumber[0] === '+'
                     ? formatPhoneNumber(patient.cellPhoneNumber)
@@ -169,7 +153,9 @@ const AppointmentInfo = (props) => {
               </div>
 
               <div className={styles.data}>
-                {patient.email && <Icon icon="envelope" size={0.9} type="solid" />}
+                {patient.email && (
+                  <Icon icon="envelope" size={0.9} type="solid" className={styles.data_icon} />
+                )}
                 <div className={styles.data_text}>{patient.email}</div>
                 {patient.email && <PointOfContactBadge patientId={patient.id} channel="email" />}
               </div>
@@ -227,7 +213,6 @@ AppointmentInfo.propTypes = {
     PropTypes.shape(appointmentShape),
   ]).isRequired,
   title: PropTypes.string,
-  extraStyles: PropTypes.objectOf(PropTypes.string),
   timezone: PropTypes.string.isRequired,
   nonApptWritePMS: PropTypes.bool.isRequired,
 };

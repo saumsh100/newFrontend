@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Query } from '@apollo/client/react/components';
 import classNames from 'classnames';
 import { Map } from 'immutable';
-import { Button, Col, Grid, Icon, Row, Tab, Tabs } from '../../library';
+import { StandardButton as Button, Col, Grid, Row, Tab, Tabs, Card } from '../../library';
 import PatientModel from '../../../entities/models/Patient';
 import AccountModel from '../../../entities/models/Account';
 import {
@@ -31,28 +31,40 @@ import { getEventsOffsetLimitObj } from '../Shared/helpers';
 import patientInfoQuery from './PatientInfo_Query';
 import styles from './styles.scss';
 
-const HeaderModalComponent = ({ icon, text, onClick, title }) => (
+const HeaderModalComponent = ({ icon, text, onClick, title, isTimeline }) => (
   <div
     className={classNames(styles.editButtonMobile, {
       [styles.editButton]: isResponsive(),
       [styles.textContainer]: !isResponsive(),
     })}
   >
-    <div className={styles.cardTitle}> {title} </div>
-    <Button className={classNames(styles.textHeader, styles.textHeaderButton)} onClick={onClick}>
-      <div className={styles.textHeader_icon}>
-        <Icon icon={icon} />
-      </div>
-      <div className={styles.textHeader_text}>{text}</div>
-    </Button>
+    <div
+      className={classNames(styles.cardTitle, {
+        [styles.cardTitle_timeline]: isTimeline,
+      })}
+    >
+      {' '}
+      {title}{' '}
+    </div>
+    <Button
+      onClick={onClick}
+      variant="secondary"
+      iconRight={icon}
+      title={text}
+      className={styles.headerModalButton}
+    />
   </div>
 );
+HeaderModalComponent.defaultProps = {
+  isTimeline: false,
+};
 
 HeaderModalComponent.propTypes = {
   icon: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  isTimeline: PropTypes.bool,
 };
 
 class PatientInfo extends Component {
@@ -197,7 +209,7 @@ class PatientInfo extends Component {
             />
             {isResponsive() && (
               <HeaderModalComponent
-                icon="pencil"
+                icon="edit"
                 text="Edit"
                 onClick={() => this.openModal()}
                 title="Patient Info"
@@ -236,56 +248,54 @@ class PatientInfo extends Component {
             </div>
             {shouldDisplayInfoPage && (
               <div className={styles.infoDisplay}>
-                {!isResponsive() && (
-                  <HeaderModalComponent
-                    icon="pencil"
-                    text="Edit"
-                    onClick={() => this.openModal()}
-                    title="Patient Info"
+                <Card className={styles.sideCard}>
+                  {!isResponsive() && (
+                    <HeaderModalComponent
+                      icon="edit"
+                      text="Edit"
+                      onClick={() => this.openModal()}
+                      title="Patient Info"
+                    />
+                  )}
+                  <LeftInfoDisplay
+                    accountViewer={accountViewer}
+                    patient={patient}
+                    openModal={this.openModal}
+                    reinitializeState={this.reinitializeState}
+                    tabIndex={this.state.tabIndex}
+                    handleTabChange={this.handleTabChange}
+                    activeAccount={activeAccount}
+                    isPatientInfo
                   />
-                )}
-                <LeftInfoDisplay
-                  accountViewer={accountViewer}
-                  patient={patient}
-                  openModal={this.openModal}
-                  reinitializeState={this.reinitializeState}
-                  tabIndex={this.state.tabIndex}
-                  handleTabChange={this.handleTabChange}
-                  activeAccount={activeAccount}
-                />
+                </Card>
               </div>
             )}
             {shouldDisplayTimelinePage && (
-              <div className={styles.timeline}>
+              <Card className={styles.timeline}>
                 {!isResponsive() && (
-                  <div className={styles.textContainer}>
-                    <div className={styles.cardTitle}>Timeline & Activities</div>
-                    <Popover
-                      isOpen={this.state.filterOpen}
-                      body={[
-                        <FilterTimeline
-                          addRemoveFilter={this.addRemoveFilter}
-                          defaultEvents={this.state.defaultEvents}
-                          filters={this.props.filters}
-                          clearFilters={this.props.clearAllTimelineFilters}
-                          selectAllFilters={this.props.selectAllTimelineFilters}
-                        />,
-                      ]}
-                      preferPlace="below"
-                      tipSize={0.01}
-                      onOuterAction={this.reinitializeState}
-                    >
-                      <Button
-                        className={classNames(styles.textHeader, styles.textHeaderButton)}
-                        onClick={this.openFilter}
-                      >
-                        <div className={styles.textHeader_icon}>
-                          <Icon icon="filter" />
-                        </div>
-                        <div className={styles.textHeader_text}>Filter</div>
-                      </Button>
-                    </Popover>
-                  </div>
+                  <Popover
+                    isOpen={this.state.filterOpen}
+                    body={[
+                      <FilterTimeline
+                        addRemoveFilter={this.addRemoveFilter}
+                        defaultEvents={this.state.defaultEvents}
+                        filters={this.props.filters}
+                        clearFilters={this.props.clearAllTimelineFilters}
+                        selectAllFilters={this.props.selectAllTimelineFilters}
+                      />,
+                    ]}
+                    preferPlace="below"
+                    tipSize={0.01}
+                    onOuterAction={this.reinitializeState}
+                  >
+                    <HeaderModalComponent
+                      icon="filter"
+                      text="Filter"
+                      onClick={this.openFilter}
+                      title="Timeline & Activities"
+                      isTimeline
+                    />
+                  </Popover>
                 )}
                 <Timeline
                   patient={patient}
@@ -293,7 +303,7 @@ class PatientInfo extends Component {
                   filters={this.props.filters}
                   wasPatientFetched={wasPatientFetched}
                 />
-              </div>
+              </Card>
             )}
           </Col>
         </Row>

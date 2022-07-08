@@ -1,17 +1,21 @@
-
-@import '../../../../../styles/ui';
-
-.wrapper {
-  padding: 10px 20px;
-}
+@import '../../../../../styles/ui-reskin';
 
 .title {
-  font-family: $medium-font;
-  font-weight: bolder;
-  margin-bottom: 5px;
+  color: $color-purple-600;
+  font-size: $small-size;
+  font-weight: $bold-weight;
+  line-height: 16px;
+  margin-bottom: 8px;
 }
 
 .content {
-  //padding: 20px;
-  color: darken($primary-darkgrey, 10%);
+  color: $color-purple-600;
+  font-size: $x-medium-size;
+  font-weight: $normal-weight;
+  line-height: 24px;
+  margin-bottom: 24px;
+}
+
+.noMarginBottom {
+  margin-bottom: 0;
 }

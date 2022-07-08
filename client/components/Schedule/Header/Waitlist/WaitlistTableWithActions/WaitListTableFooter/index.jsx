@@ -1,8 +1,7 @@
-
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { Button } from '../../../../../library';
+import { Button, Icon } from '../../../../../library';
 import footerStyles from './footerStyles.scss';
 
 const WaitListTableFooter = ({ waitlistCount, goToSendMassMessage, removeMultipleWaitSpots }) => {
@@ -10,9 +9,10 @@ const WaitListTableFooter = ({ waitlistCount, goToSendMassMessage, removeMultipl
   return (
     <div className={classNames(footerStyles.waitListTableFooterWrapper, isHidden)}>
       <Button className={footerStyles.removeButton} onClick={removeMultipleWaitSpots}>
+        <Icon icon="trash" className={footerStyles.trashButton} />
         Remove from Waitlist
       </Button>
-      <button className={footerStyles.sendButton} onClick={goToSendMassMessage}>
+      <button type="button" className={footerStyles.sendButton} onClick={goToSendMassMessage}>
         Send Text to {waitlistCount} Patient
       </button>
     </div>

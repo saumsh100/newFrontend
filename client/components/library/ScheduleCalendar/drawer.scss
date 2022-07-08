@@ -1,36 +1,46 @@
-@import '../../../styles/ui.scss';
-@import '../../../styles/ui-kit.scss';
-@import './color';
+@import '../../../styles/ui-reskin.scss';
 
 .wrapper {
-  border: 1px solid $grey-lighter;
+  border: 1px solid $color-grey-100;
   border-left: 0;
-  max-width: 350px;
+  max-width: 380px;
   padding: 0;
   width: 100%;
 }
 
 .title {
-  color: $teal;
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 42px;
   margin: 0;
   padding: 0;
 }
 
+.drawerBackButton {
+  background: transparent;
+
+  border: none;
+  color: $color-lavender-500;
+  font-size: $small-size;
+  font-weight: $bold-weight;
+  margin-bottom: 4px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .top {
   align-items: center;
-  background: $calendar-background;
-  box-sizing: border-box;
-  color: $calendar-grey;
+
+  background: $super-white-200;
+
+  color: $color-grey-100;
   display: flex;
-  flex-wrap: wrap;
-  font-size: 10px;
+  flex-direction: row;
+  font-size: $x-small-size;
+  font-weight: $bold-weight;
   justify-content: space-between;
-  letter-spacing: -0.15px;
+
   min-height: 42px;
-  padding: 0 12px;
+  padding: 16px;
 }
 .description {
   line-height: 1.75;
@@ -38,19 +48,15 @@
   width: 100%;
 }
 
-.toggle {
-  align-items: center;
-  display: flex;
-}
-
 .override {
-  background: $white;
-  border: 1px solid $grey-lighter;
+  background: $super-white;
+  border: 1px solid $color-grey-100;
   border-radius: 4px;
-  box-shadow: $shadow;
-  color: $grey-dark;
+  box-shadow: $box-shadow-4;
+  color: $color-grey-100;
   cursor: pointer;
-  font-size: 10px;
+  font-size: $x-small-size;
+  font-weight: $bold-weight;
   line-height: 1;
   margin-bottom: 12px;
   outline: none;
@@ -62,14 +68,58 @@
   }
 
   &.active {
-    background: $teal-dark;
-    color: $white;
+    background: $color-lavender-050;
+    color: $super-white;
     transition: all 0.2s ease-in;
   }
 }
 
 .schedules {
-  border-top: 1px solid $grey-lighter;
   min-height: 480px;
   width: 100%;
+}
+.trashIcon {
+  background-color: $super-white;
+  border: 1px solid $error-500;
+  border-radius: 4px;
+  box-shadow: $box-shadow-4;
+  color: $error-500;
+  font-size: $small-size;
+  font-weight: $medium-weight;
+  padding: 2px 6px;
+  width: 71px;
+
+  &:hover {
+    background-color: $error-100;
+  }
+}
+
+.mainText {
+  &_text {
+    color: $color-purple-400;
+    font-size: $x-medium-size;
+    font-weight: $bold-weight;
+    margin: 0;
+  }
+
+  &_iconWrapper {
+    color: $color-purple-300;
+    font-size: $small-size;
+    font-weight: $heavy-weight;
+    margin: 2px 4px 0px 0px;
+    text-align: right;
+    &:hover {
+      color: $color-lavender-500;
+    }
+    &:focus {
+      color: $color-lavender-550;
+    }
+  }
+  &:hover {
+    color: $color-lavender-500;
+  }
+  &:active {
+    color: $color-lavender-550;
+    padding: 6px;
+  }
 }

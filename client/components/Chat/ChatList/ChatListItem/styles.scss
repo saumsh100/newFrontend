@@ -90,7 +90,6 @@
 .bottomSectionUnread {
   @extend .bottomSection;
   color: black;
-  font-family: $medium-font;
   font-weight: bolder;
 }
 
@@ -101,7 +100,6 @@
 .fullNameUnread {
   @extend .fullName;
   color: black;
-  font-family: $medium-font;
   font-weight: bolder;
 }
 

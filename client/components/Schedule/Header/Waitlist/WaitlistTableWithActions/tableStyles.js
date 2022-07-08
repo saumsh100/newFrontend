@@ -1,6 +1,18 @@
+
+const ColorPurple = '#968AB7';
+const ColorGrey = '#78708D';
+const LargeWeight = '700';
+const ExtraSmallSize = '10px';
+const MediumWeight = '500';
+const MediumSize = '14px';
+const ColorLavender = '#ECEBFF';
+
 export const theadStyles = {
   background: 'white',
-  borderBottom: '1px solid #efefef',
+  borderBottom: `1px solid ${ColorLavender}`,
+  color: ColorGrey,
+  fontWeight: MediumWeight,
+  fontSize: MediumSize,
   paddingTop: '20px',
   paddingBottom: '20px',
   position: 'sticky',
@@ -19,7 +31,9 @@ export const colHeaderStyle = (override) => ({
   boxShadow: 'none',
   alignItems: 'center',
   borderRight: 'none',
-  color: '#686e74',
+  fontWeight: LargeWeight,
+  color: ColorPurple,
+  fontSize: ExtraSmallSize,
   outline: 'none',
   ...override,
 });
@@ -29,7 +43,7 @@ export const trStyles = {
 };
 
 export const trGrpStyles = {
-  borderBottom: '1px solid rgba(0,0,0,0.05)',
+  borderBottom: `1px solid ${ColorLavender}`,
   height: '64px',
 };
 

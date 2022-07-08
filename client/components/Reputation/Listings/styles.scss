@@ -1,16 +1,27 @@
-@import "../../../styles/ui.scss";
-@import "../../../styles/fonts.scss";
+@import '../../../styles/ui-reskin.scss';
 
 .padding {
   margin-bottom: 10px;
-  padding: 0 10px ;
+  padding: 0 10px;
   @media screen and (max-width: 900px) {
     margin-bottom: 15px;
   }
 }
 
 .listings {
+  margin-top: 15px;
   &__wrapper {
     padding-top: 15px;
   }
+}
+
+.reviewHeader {
+  background: $super-white;
+  border: 1px solid $color-grey-150;
+  border-radius: 4px;
+  color: $color-purple-600;
+  font-size: $xxx-medium-size;
+  margin-left: 21px;
+  padding: 8px 16px;
+  width: 6%;
 }

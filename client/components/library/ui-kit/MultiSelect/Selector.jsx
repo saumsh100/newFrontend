@@ -1,10 +1,9 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Button from '../../Button';
 import Icon from '../../Icon';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const Selector = ({ disabled, selectorProps, isEditable, selected, error, placeholder }) => (
   <Button

@@ -1,9 +1,7 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { isHub } from '../../../util/hub';
 import PatientUser from '../../../entities/models/PatientUser';
 import Practitioner from '../../../entities/models/Practitioners';
 import {
@@ -18,7 +16,7 @@ import {
   getFormattedDate,
   getTodaysDate,
 } from '../../library';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import Info from './Info';
 
 const renderDesktopHeader = ({ patient, closePopover, age }) => (
@@ -28,9 +26,9 @@ const renderDesktopHeader = ({ patient, closePopover, age }) => (
       {patient.firstName} {patient.lastName}
       {age}
     </div>
-    <Button className={styles.closeIcon} onClick={closePopover}>
+    <div className={styles.closeIcon} onClick={closePopover}>
       <Icon icon="times" />
-    </Button>
+    </div>
   </SHeader>
 );
 
@@ -71,10 +69,10 @@ renderMobileSubHeader.propTypes = {
 
 const renderDesktopFooter = ({ acceptRequest, rejectRequest }) => (
   <SFooter className={styles.footer}>
-    <Button border="blue" dense compact onClick={rejectRequest}>
+    <Button dense compact onClick={rejectRequest} className={styles.secondaryButton}>
       Reject
     </Button>
-    <Button color="blue" dense compact className={styles.editButton} onClick={acceptRequest}>
+    <Button dense compact className={styles.primaryButton} onClick={acceptRequest}>
       Accept
     </Button>
   </SFooter>
@@ -112,7 +110,6 @@ const renderMobileFooter = ({
       </Button>
     )}
     <Button
-      color="blue"
       dense
       compact
       rounded
@@ -141,7 +138,7 @@ class RequestPopover extends Component {
   }
 
   toggleActionDisplay() {
-    this.setState(prevState => ({ displayActions: !prevState.displayActions }));
+    this.setState((prevState) => ({ displayActions: !prevState.displayActions }));
   }
 
   render() {
@@ -170,22 +167,21 @@ class RequestPopover extends Component {
 
     return (
       <Card className={isMobile ? styles.cardMobile : styles.card} noBorder>
-        {!isHub()
-          && (isMobile
-            ? renderMobileHeader(this.props)
-            : renderDesktopHeader({
+        {isMobile
+          ? renderMobileHeader(this.props)
+          : renderDesktopHeader({
               ...this.props,
               age,
-            }))}
-        {isMobile
-          && renderMobileSubHeader({
+            })}
+        {isMobile &&
+          renderMobileSubHeader({
             ...this.props,
             age,
           })}
         <SContainer
           className={classNames({
-            [styles.blurredHub]: displayActions && isHub(),
-            [styles.blurred]: displayActions && !isHub(),
+            [styles.blurredHub]: displayActions,
+            [styles.blurred]: displayActions,
           })}
           onClick={displayActions && this.toggleActionDisplay}
           onScroll={(e) => {
@@ -266,10 +262,10 @@ class RequestPopover extends Component {
         )}
         {isMobile && showButton
           ? renderMobileFooter({
-            toggleActionDisplay: this.toggleActionDisplay,
-            displayActions,
-            ...this.props,
-          })
+              toggleActionDisplay: this.toggleActionDisplay,
+              displayActions,
+              ...this.props,
+            })
           : showButton && renderDesktopFooter(this.props)}
       </Card>
     );

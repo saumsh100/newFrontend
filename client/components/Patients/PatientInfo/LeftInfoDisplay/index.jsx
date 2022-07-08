@@ -1,6 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { Tabs, Tab, Card } from '../../../library';
 import { familyDataSelector } from '../../Shared/helpers';
 import AppointmentsTab from './AppointmentsTab/index';
@@ -12,7 +12,15 @@ import CollapsibleTab from '../CollapsibleTab';
 import styles from './styles.scss';
 
 export default function LeftInfoDisplay(props) {
-  const { patient, activeAccount, handleTabChange, tabIndex, openModal, accountViewer } = props;
+  const {
+    patient,
+    activeAccount,
+    handleTabChange,
+    tabIndex,
+    openModal,
+    accountViewer,
+    isPatientInfo,
+  } = props;
 
   const { family, familyLength } = familyDataSelector(accountViewer);
 
@@ -46,7 +54,10 @@ export default function LeftInfoDisplay(props) {
 
   return (
     <Card
-      className={`${styles.mainContainer} ${props.containerClass}`}
+      className={classNames(props.containerClass, {
+        [styles.mainContainer]: !isPatientInfo,
+        [styles.patientTableMainContainer]: isPatientInfo,
+      })}
       runAnimation
       loaded={!!patient}
     >
@@ -77,6 +88,7 @@ LeftInfoDisplay.propTypes = {
       family: PropTypes.instanceOf(Object),
     }),
   }),
+  isPatientInfo: PropTypes.bool,
 };
 
 LeftInfoDisplay.defaultProps = {
@@ -84,4 +96,5 @@ LeftInfoDisplay.defaultProps = {
   activeAccount: null,
   patient: null,
   containerClass: '',
+  isPatientInfo: false,
 };

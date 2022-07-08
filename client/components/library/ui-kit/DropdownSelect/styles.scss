@@ -1,38 +1,35 @@
-@import '../../../../styles/ui.scss';
-@import '../../../../styles/ui-kit';
+@import '../../../../styles/ui-reskin.scss';
 
 .ddContainer {
-  width: 100%;
-
   & ul {
-    background-color: $white !important;
-    border: 1px solid $primary-grey;
-    border-radius: $rounded;
-    box-shadow: $shadow !important;
+    background-color: $super-white;
+    border: 1px solid $color-grey-200;
+    border-radius: 4px;
 
     & > li {
-      color: $grey-dark;
-      font-family: $inter;
-      font-size: 13px;
-      -webkit-font-smoothing: antialiased;
-      height: 36px;
-      letter-spacing: 0.02px;
-      line-height: 13px;
+      background-color: $super-white;
+      border-bottom: 1px solid $color-lavender-100;
+      color: $color-grey-400;
+      font-size: $x-medium-size;
+      font-weight: $medium-weight;
+      line-height: 24px;
       transition: all 0.2s ease;
+      &:last-child {
+        border-bottom: none;
+      }
 
       &:hover {
-        background: $grey-lightest !important;
-        color: $grey !important;
+        background-color: $color-lavender-100 !important;
+        color: $color-purple-600 !important;
         transition: background-color 0.2s ease;
       }
 
       & > button {
-        cursor: pointer;
-        padding: 8px 12px;
         text-align: left !important;
-
         &:focus {
-          background: transparent !important;
+          background-color: $color-lavender-100 !important;
+          color: $color-purple-600 !important;
+          transition: background-color 0.2s ease;
         }
       }
     }
@@ -41,30 +38,25 @@
 
 .triggerButton {
   align-items: center;
-  background-color: $white;
-  border: 1px solid $primary-grey;
-  border-radius: $rounded;
-  box-shadow: $shadow;
-  box-sizing: border-box;
-  color: $grey-dark;
+
+  background-color: $super-white;
+  border: 1px solid $color-grey-200;
+  border-radius: 4px;
+
+  color: $color-grey-400;
   cursor: pointer;
   display: flex;
-  font-family: $inter;
-  font-size: 13px;
-  -webkit-font-smoothing: antialiased;
-  justify-content: space-between;
-  letter-spacing: 0.02px;
-  line-height: 40px;
-  max-height: 40px;
-  outline: none !important;
-  padding: 0 15px;
-  text-align: left;
-  width: 100%;
-  @extend .fx;
+  font-size: $xxx-medium-size;
+  font-weight: $medium-weight;
+  line-height: 36px;
+  padding: 8px 16px;
+  transition: color 0.2s ease;
 
-  &.active,
+  i {
+    margin-left: 8px;
+  }
+
   &:hover {
-    @extend .fx;
-    border-color: $grey-dark;
+    color: $color-purple-600;
   }
 }

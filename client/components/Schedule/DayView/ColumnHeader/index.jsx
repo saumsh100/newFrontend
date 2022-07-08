@@ -1,19 +1,12 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import ChairHeader from './ChairHeader';
 import PractitionerHeader from './PractitionerHeader';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 export default function ShowColumnHeader(props) {
-  const {
-    scheduleView,
-    entities,
-    headerComponentDidMount,
-    leftColumnWidth,
-    minWidth,
-    allFetched,
-  } = props;
+  const { scheduleView, entities, headerComponentDidMount, leftColumnWidth, minWidth, allFetched } =
+    props;
 
   const timeSlotContentStyle = {
     minWidth: `${minWidth}px`,
@@ -53,7 +46,7 @@ export default function ShowColumnHeader(props) {
 ShowColumnHeader.propTypes = {
   scheduleView: PropTypes.string,
   entities: PropTypes.instanceOf(Array),
-  headerComponentDidMount: PropTypes.shape({ current: PropTypes.any }),
+  headerComponentDidMount: PropTypes.shape,
   leftColumnWidth: PropTypes.number.isRequired,
   minWidth: PropTypes.number.isRequired,
   allFetched: PropTypes.bool,

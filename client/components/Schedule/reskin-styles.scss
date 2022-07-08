@@ -1,0 +1,98 @@
+@import '../../styles/ui-reskin.scss';
+
+.modal {
+  border-radius: 0;
+}
+
+.rowMainContainer {
+  box-sizing: border-box;
+  display: flex;
+  height: 100%;
+  min-width: 1200px;
+  padding: 16px;
+  width: 100%;
+}
+
+.dayViewContainer {
+  box-sizing: border-box;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.calendarContainer {
+  height: 200px;
+  width: 200px;
+}
+
+.card {
+  height: 100%;
+}
+
+.sidebar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+  width: 320px;
+
+  &_rowCalendar {
+    margin-bottom: 10px;
+  }
+  &_rowRequest {
+    flex: 2;
+    overflow: auto;
+  }
+  &_request {
+    height: 100%;
+  }
+
+  &_calendar {
+    background-color: $super-white;
+  }
+}
+
+.headerContainer {
+  border-bottom: 1px solid $color-lavender-100;
+}
+
+.header {
+  align-content: center;
+  align-items: center;
+  color: $color-purple-600;
+  display: flex;
+  font-size: $small-size;
+  justify-content: space-between;
+  margin-left: auto;
+  margin-right: 10px;
+  text-align: center;
+
+  &_text {
+    padding-right: 35px;
+  }
+}
+
+.headerLinks {
+  align-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  font-weight: 600;
+  margin-right: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &_icon {
+    padding-left: 10px;
+  }
+
+  &_add {
+    margin-left: 10px;
+  }
+
+  &_waitlist {
+    margin-right: 15px;
+  }
+}

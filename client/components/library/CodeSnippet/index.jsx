@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
@@ -38,7 +37,7 @@ const CodeSnippet = ({ codeSnippet, hideClipBoard, className }) => {
           {codeSnippet}
         </span>
       </div>
-      {showClipBoard}
+      <div className={styles.iconContainer}>{showClipBoard}</div>
     </div>
   );
 };

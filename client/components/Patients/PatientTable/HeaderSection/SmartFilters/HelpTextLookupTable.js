@@ -1,4 +1,3 @@
-
 const HelpTextLookupTable = {
   'All Patients': {
     status: 'Active',

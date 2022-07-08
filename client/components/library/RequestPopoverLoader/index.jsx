@@ -1,11 +1,10 @@
-
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import Popover from 'react-popover';
 import PropTypes from 'prop-types';
 import RequestPopover from '../../Requests/RequestPopover';
-import styles from '../PatientPopover/styles.scss';
+import styles from '../PatientPopover/reskin-styles.scss';
 import { getUTCDate } from '../util/datetime';
 
 class RequestPopoverLoader extends Component {
@@ -50,7 +49,7 @@ class RequestPopoverLoader extends Component {
       return null;
     }
     const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
-    const getTime = value => getUTCDate(value, timezone).format('LT');
+    const getTime = (value) => getUTCDate(value, timezone).format('LT');
     const time = `${getTime(data.startDate)} - ${getTime(data.endDate)}`;
     const practitionerEntity = data.practitioner && practitioners.get(data.practitioner.id);
 
@@ -79,13 +78,13 @@ class RequestPopoverLoader extends Component {
         onOuterAction={() => !isAnyFormActive && this.setOpen(false)}
       >
         <div className={classnames(styles.requestLink, patientStyles)}>
-          {React.Children.map(children, patientLink =>
+          {React.Children.map(children, (patientLink) =>
             React.cloneElement(patientLink, {
               onClick: (e) => {
                 e.stopPropagation();
                 this.setOpen(true);
               },
-            }))}
+            }),)}
         </div>
       </Popover>
     );

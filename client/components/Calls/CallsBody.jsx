@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -91,26 +90,32 @@ class CallsBody extends Component {
 
     return (
       <div className={styles.callsContainer} id="callsContainer">
-        <Card runAnimation loaded={wasStatsFetched} className={styles.cardGraph}>
+        <div className={styles.cardGraph}>
           <div className={styles.headerGraph}>
-            <div className={styles.headerGraph_title}>Calls</div>
-            <div>
-              <DayPickerRange
-                popover
-                disabledDays={{ after: new Date() }}
-                from={startDate.toDate()}
-                to={endDate.toDate()}
-                onChange={handleDateRange}
-                monthsToShow={2}
-                maxDays={60}
-                timezone={timezone}
-              />
-            </div>
+            <Card className={styles.headerGraph_title}>Calls</Card>
           </div>
           {wasStatsFetched && (
-            <CallsGraph callGraphStats={callGraphStats} startDate={startDate} endDate={endDate} />
+            <Card runAnimation loaded={wasStatsFetched}>
+              <div className={styles.graphDateInfo}>
+                <div className={styles.subHeader}>
+                  {startDate.format('MMMM DD, YYYY')} - {endDate.format('MMMM DD, YYYY')}
+                </div>
+                <DayPickerRange
+                  popover
+                  disabledDays={{ after: new Date() }}
+                  from={startDate.toDate()}
+                  to={endDate.toDate()}
+                  onChange={handleDateRange}
+                  monthsToShow={2}
+                  maxDays={60}
+                  timezone={timezone}
+                  withShadow
+                />
+              </div>
+              <CallsGraph callGraphStats={callGraphStats} startDate={startDate} endDate={endDate} />
+            </Card>
           )}
-        </Card>
+        </div>
         <Card
           runAnimation
           loaded={wasAllFetched && !fetchingCalls}

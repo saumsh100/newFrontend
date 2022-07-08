@@ -1,5 +1,3 @@
-@import '../../../styles/ui.scss';
-
 .iconCard {
   align-items: center;
   color: $color-white;
@@ -17,11 +15,11 @@
     justify-content: center;
   }
   &__count {
-    composes: font-jumbo from '../../../styles/fonts.scss';
+    @extend .font-jumbo;
   }
 
   &__title {
-    composes: font-header-title-white from '../../../styles/fonts.scss';
+    @extend .font-header-title-white;
     @media screen and (max-width: 1660px) {
       max-width: 120px;
       text-align: center;
@@ -46,7 +44,6 @@
   img {
     bottom: -15px;
     height: 100px;
-    opacity: 0.1;
     position: absolute;
     right: -15px;
     width: 100px;

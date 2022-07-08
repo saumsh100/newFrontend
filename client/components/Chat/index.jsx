@@ -21,7 +21,15 @@ import {
   selectChatByPatientId,
 } from '../../thunks/chat';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
-import { Button, Card, InfiniteScroll, List, SBody, SContainer, SHeader } from '../library';
+import {
+  StandardButton as Button,
+  Card,
+  InfiniteScroll,
+  List,
+  SBody,
+  SContainer,
+  SHeader,
+} from '../library';
 import Loader from '../Loader';
 import PatientSearch from '../PatientSearch';
 import ChatList from './ChatList';
@@ -29,7 +37,7 @@ import ChatMenu from './ChatMenu';
 import tabsConstants from './consts';
 import MessageContainer from './MessageContainer';
 import PatientInfo from './PatientInfo';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import ToHeader from './ToHeader';
 import DesktopSkeleton from './ToHeader/DesktopSkeleton';
 import ModuleError from '../ModuleError';
@@ -341,7 +349,7 @@ class ChatMessage extends Component {
             icon="edit"
             onClick={this.addNewChat}
             className={newChatStyle}
-            color="darkblue"
+            color="grey"
             data-test-id="button_addNewChat"
           />
         </div>

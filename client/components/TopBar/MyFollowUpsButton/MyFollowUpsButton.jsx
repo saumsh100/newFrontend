@@ -1,8 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { IconButton } from '../../library';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const MyFollowUpsButton = ({ count, onClick }) => (
   <IconButton

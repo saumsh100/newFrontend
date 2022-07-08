@@ -1,16 +1,9 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { ListItem, Grid, Row, Col, Toggle, IconButton } from '../../library';
+import { ListItem, Grid, Row, Col, IconButton } from '../../library';
 import LastSyncDisplay from '../../LastSyncDisplay';
 import Advanced from './Advanced';
 import styles from './item.scss';
-
-const toggleIcons = {
-  checked: <div>ON</div>,
-
-  unchecked: <div>OFF</div>,
-};
 
 export default class ConnectorsListItem extends Component {
   constructor(props) {
@@ -25,17 +18,17 @@ export default class ConnectorsListItem extends Component {
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
   }
 
-  toggleConnector(e) {
+  toggleConnector() {
     const { account } = this.props;
-    if (
-      window.confirm(`Are you sure you want to turn on the connector for ${account.name}?`)
-    ) {
-      this.setState({ active: !this.state.active });
+    if (window.confirm(`Are you sure you want to turn on the connector for ${account.name}?`)) {
+      const { active } = this.state;
+      this.setState({ active: !active });
     }
   }
 
-  toggleCollapsed(e) {
-    this.setState({ isCollapsed: !this.state.isCollapsed });
+  toggleCollapsed() {
+    const { isCollapsed } = this.state;
+    this.setState({ isCollapsed: !isCollapsed });
   }
 
   render() {
@@ -47,16 +40,13 @@ export default class ConnectorsListItem extends Component {
           <Grid className={styles.grid}>
             <Row className={styles.row}>
               <Col xs={4} className={styles.col}>
-                <div>
-                  <div className={styles.name}>{account.name}</div>
-                  <div className={styles.id}>{account.id}</div>
+                <div className={styles.nameContainer}>
+                  <p className={styles.name}>{account.name}</p>
+                  <p className={styles.id}>{account.id}</p>
                 </div>
               </Col>
               <Col xs={4} className={styles.col}>
-                <LastSyncDisplay
-                  className={styles.lastSync}
-                  date={account.lastSyncDate}
-                />
+                <LastSyncDisplay className={styles.lastSync} date={account.lastSyncDate} />
               </Col>
               <Col xs={4} className={styles.lastCol}>
                 {/* This is here so that the collapsed click does not also get called */}
@@ -87,5 +77,9 @@ export default class ConnectorsListItem extends Component {
 }
 
 ConnectorsListItem.propTypes = {
-  accounts: PropTypes.object,
+  account: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    lastSyncDate: PropTypes.string.isRequired,
+  }).isRequired,
 };

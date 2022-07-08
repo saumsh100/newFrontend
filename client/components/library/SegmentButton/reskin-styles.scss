@@ -1,0 +1,51 @@
+@import '../../../styles/ui-reskin.scss';
+
+.segmentButton {
+  align-items: center;
+  background: $super-white;
+  border: 1px solid $color-lavender-500;
+  border-radius: 4px;
+  box-shadow: $box-shadow-4;
+  box-sizing: border-box;
+  color: $color-lavender-500;
+  cursor: pointer;
+  display: block;
+  font-size: $small-size;
+  outline: none;
+  overflow: hidden;
+  padding: 6px 8px;
+  position: relative;
+  text-align: left;
+  text-overflow: ellipsis;
+  transition: all 0.2s ease-in 0s;
+  user-select: none;
+  white-space: nowrap;
+
+  &:hover {
+    background: $color-lavender-050;
+    color: $color-lavender-500;
+  }
+
+  &:focus {
+    background: $color-lavender-100;
+    color: $color-lavender-500;
+  }
+}
+
+.segmentButton_active {
+  background: $color-lavender-100;
+  color: $color-lavender-500;
+}
+
+.segmentButton_dirty {
+  background: $color-grey-200;
+  color: $color-purple-300;
+}
+
+.segmentButtonCount {
+  color: $color-grey-200;
+  font-size: $x-small-size;
+  position: absolute;
+  right: 12px;
+  text-align: right;
+}

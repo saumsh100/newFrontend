@@ -1,5 +1,6 @@
-@import '../../../../../styles/ui';
-@import '../../../../../styles/ui-kit';
+@import '../../../../../styles/ui.scss';
+@import '../../../../../styles/ui-kit.scss';
+@import '../../../../../styles/ui-reskin.scss';
 
 .waitlistFormContainer {
   color: black;
@@ -40,10 +41,9 @@
 
 .heading {
   color: #2e3845;
-  font-family: $medium-font;
-  font-size: 16px;
+  font-size: $x-medium-size;
   -webkit-font-smoothing: antialiased;
-  font-weight: 500;
+  font-weight: $medium-weight;
   margin: 20px 0 10px 40px;
 }
 
@@ -51,7 +51,6 @@
   color: $primary-blue;
   cursor: pointer;
   display: inline-flex;
-  font-family: $medium-font;
   font-size: 12px;
   font-weight: 500;
   margin-left: 18px;
@@ -81,7 +80,7 @@
 
 .columnLabel {
   align-self: flex-start;
-  color: #959595;
+  color: $color-grey-400;
   font-size: 13px;
   font-weight: 500;
   height: 16px;
@@ -104,14 +103,13 @@
 }
 
 .textArea {
-  background-color: $chat-lightgrey;
+  background-color: $color-grey-050;
   border: none;
   box-sizing: border-box;
-  color: $primary-dark;
-  font-family: $book-font;
-  font-size: 14px;
+  color: $color-purple-600;
+  font-size: $medium-size;
   -webkit-font-smoothing: antialiased;
-  font-weight: 300;
+  font-weight: $medium-weight;
   height: 100%;
   margin: 0;
   outline: none;
@@ -150,7 +148,6 @@
 
     > input {
       border-bottom: 1px solid $clr-table-light-grey;
-      font-family: $medium-font;
       height: 30px;
       padding: 1px 1px 1px 0;
 
@@ -163,7 +160,6 @@
 }
 
 .label {
-  font-family: $medium-font;
 }
 
 .placeholder {

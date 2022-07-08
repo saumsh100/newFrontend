@@ -1,4 +1,4 @@
-@import '../../../../styles/ui.scss';
+@import '../../../../styles/ui-reskin.scss';
 
 .outerContainer {
   width: 100%;
@@ -11,8 +11,7 @@
 }
 
 .generalHeader {
-  border-bottom: 1px solid;
-  border-bottom-color: $primary-lightgrey;
+  border-bottom: 1px solid $color-lavender-100;
   margin-bottom: 30px;
 }
 
@@ -79,10 +78,9 @@
   background-color: var(--primaryButtonColor);
   border: none;
   border-radius: 2px;
-  color: #ededed;
+  color: $super-white;
   cursor: pointer;
   display: block;
-  font-family: Gotham-Book, serif;
   font-size: 14px;
   font-weight: bold;
   line-height: 1em;
@@ -102,13 +100,13 @@
 
 .massOnlineEmail {
   &_date {
-    color: $primary-color;
+    color: $color-grey-400;
     margin-bottom: 15px;
     margin-top: 10px;
   }
 
   &_count {
-    color: $primary-color;
+    color: $color-grey-400;
     margin-bottom: 15px;
     margin-top: 10px;
   }
@@ -139,4 +137,28 @@
 }
 .tooltipWrapper {
   width: 170px;
+}
+.descriptionMessage {
+  color: $color-grey-400;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+}
+
+.cloudIcon {
+  color: $color-grey-150;
+  font-size: 36px;
+  font-weight: 300;
+}
+
+.title {
+  color: $color-grey-200;
+  font-size: $small-size;
+  font-weight: $bold-weight;
+  margin-left: 43px;
+  margin-right: 32px;
+  text-align: center;
+}
+
+.mainText {
+  margin-top: 5px;
 }

@@ -61,7 +61,6 @@
   @extend .row;
   box-sizing: border-box;
   color: $grey-darker;
-  font-family: Roboto, sans-serif;
   font-size: 26px;
   font-weight: 400;
   letter-spacing: 0.04px;
@@ -72,7 +71,6 @@
 .message {
   @extend .text-centered;
   color: $grey-dark;
-  font-family: Roboto, sans-serif;
   font-size: 14px;
   font-weight: 300;
   line-height: 20px;
@@ -84,7 +82,6 @@
   background-color: transparent;
   border-bottom: 1px solid $grey-light;
   color: $grey;
-  font-family: Roboto, sans-serif;
   font-size: 12px;
   margin-top: 16px;
   padding: 0 0 2px;
@@ -96,7 +93,6 @@
   border-radius: $rounded;
   box-shadow: $shadow;
   color: $white;
-  font-family: Roboto, sans-serif;
   font-size: 14px;
   font-weight: 500;
   margin-right: 0;
@@ -146,7 +142,6 @@
 
 .label {
   color: $grey;
-  font-family: Roboto, sans-serif;
   font-size: 13px !important;
   font-weight: 300;
 }
@@ -168,7 +163,6 @@
     box-shadow: $shadow;
     box-sizing: border-box;
     color: $grey-dark;
-    font-family: Roboto, sans-serif;
     font-size: 13px;
     height: 80px;
     line-height: 16px;

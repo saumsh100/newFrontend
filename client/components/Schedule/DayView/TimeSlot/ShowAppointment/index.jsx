@@ -1,10 +1,10 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import classNames from 'classnames';
 import { getOrCreateChatForPatient } from '../../../../../thunks/chat';
 import { Icon, Button } from '../../../../library';
 import AppointmentInfo from '../../../../library/AppointmentPopover/AppointmentInfo';
@@ -15,7 +15,7 @@ import {
   chairShape,
 } from '../../../../library/PropTypeShapes';
 import AppointmentHours from '../AppointmentHours';
-import styles from '../styles.scss';
+import styles from '../reskin-styles.scss';
 
 /**
  * ShowAppointment represents each block of appointment on the calendar view
@@ -74,7 +74,8 @@ class ShowAppointment extends Component {
   }
 
   togglePopover() {
-    this.setState({ isOpened: !this.state.isOpened });
+    const { isOpened } = this.state;
+    this.setState({ isOpened: !isOpened });
   }
 
   closePopover() {
@@ -119,10 +120,10 @@ class ShowAppointment extends Component {
     const patientNotFoundStyle = patient
       ? {}
       : {
-        backgroundColor: '#ffffff',
-        border: '1px solid red',
-        color: 'red',
-      };
+          backgroundColor: '#ffffff',
+          border: '1px solid red',
+          color: 'red',
+        };
 
     const applicationStyle = {
       ...appStyle,
@@ -168,18 +169,27 @@ class ShowAppointment extends Component {
         <Button
           onClick={this.togglePopover}
           onDoubleClick={this.editAppointment}
-          className={styles.appointmentContainer}
+          className={classNames(
+            styles.appointmentContainer,
+            styles[`hoverStyle-${appStyle.iconColor}`],
+          )}
           style={containerStyle}
-          data-test-id={`appointment_${patient && patient.get('firstName')}${patient
-            && patient.get('lastName')}`}
+          data-test-id={`appointment_${patient && patient.get('firstName')}${
+            patient && patient.get('lastName')
+          }`}
         >
           <div className={styles.showAppointment} style={applicationStyle}>
             {isPatientConfirmed || isReminderSent ? (
               <div className={styles.icon}>
                 {isPatientConfirmed ? (
-                  <Icon size={1} icon="check-circle" type="solid" />
+                  <Icon
+                    size={1}
+                    icon="check-circle"
+                    type="solid"
+                    className={styles[appStyle.iconColor]}
+                  />
                 ) : (
-                  <Icon size={1} icon="clock-o" />
+                  <Icon size={1} icon="clock-o" className={styles[appStyle.iconColor]} />
                 )}
               </div>
             ) : null}
@@ -230,6 +240,7 @@ ShowAppointment.propTypes = {
     height: PropTypes.string,
     backgroundColor: PropTypes.string,
     zIndex: PropTypes.number,
+    iconColor: PropTypes.string,
   }),
   patient: PropTypes.shape(patientShape).isRequired,
   isPatientConfirmed: PropTypes.bool,
@@ -263,11 +274,11 @@ const mapStateToProps = ({ chat, entities, dashboard, patientTable, auth }, { ap
   const practitioner = entities
     .getIn(['practitioners', 'models'])
     .toArray()
-    .find(prac => prac.id === appointment.practitionerId);
+    .find((prac) => prac.id === appointment.practitionerId);
   const chair = entities
     .getIn(['chairs', 'models'])
     .toArray()
-    .find(ch => ch.id === appointment.chairId);
+    .find((ch) => ch.id === appointment.chairId);
 
   return {
     chair,
@@ -281,7 +292,7 @@ const mapStateToProps = ({ chat, entities, dashboard, patientTable, auth }, { ap
   };
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       push,

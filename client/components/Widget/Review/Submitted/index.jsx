@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -7,7 +6,8 @@ import { withRouter } from 'react-router-dom';
 import sentimentContent from './content';
 import { mergeReviewValues } from '../../../../reducers/reviewsWidget';
 import { saveReview } from '../../../../thunks/reviews';
-import { Stars, TextArea, Button } from '../../../library';
+import { Stars, TextArea } from '../../../library';
+import { Button } from '../../components';
 import Picture from '../Picture';
 import EnabledFeature from '../../../library/EnabledFeature';
 import styles from './styles.scss';
@@ -22,6 +22,13 @@ class Submitted extends Component {
     this.submitGood = this.submitGood.bind(this);
   }
 
+  handleChange(field) {
+    return (value) => {
+      value = field === 'stars' ? value : value.target.value;
+      this.props.mergeReviewValues({ [field]: value });
+    };
+  }
+
   share() {
     const placeId = this.props.account.get('googlePlaceId');
     if (!placeId) {
@@ -33,18 +40,11 @@ class Submitted extends Component {
     window.open(url, '_blank');
   }
 
-  handleChange(field) {
-    return (value) => {
-      value = field === 'stars' ? value : value.target.value;
-      this.props.mergeReviewValues({ [field]: value });
-    };
-  }
-
   submitBad() {
     return this.props
       .saveReview()
       .then(() => this.props.history.push('./review/complete'))
-      .catch(err => console.error('error in submitBad', err));
+      .catch((err) => console.error('error in submitBad', err));
   }
 
   submitGood() {
@@ -53,7 +53,7 @@ class Submitted extends Component {
     return this.props
       .saveReview()
       .then(() => this.props.history.push('./review/complete'))
-      .catch(err => console.error('error in submitGood', err));
+      .catch((err) => console.error('error in submitGood', err));
   }
 
   render() {
@@ -83,8 +83,7 @@ class Submitted extends Component {
                 value={description || ''}
                 onChange={this.handleChange('description')}
                 classStyles={styles.textArea}
-                theme={{ label: styles.label,
-filled: styles.label }}
+                theme={{ label: styles.label, filled: styles.label }}
               />
             )}
           </div>
@@ -119,7 +118,9 @@ filled: styles.label }}
 }
 
 Submitted.propTypes = {
-  review: PropTypes.shape({}).isRequired,
+  review: PropTypes.shape({
+    get: PropTypes.func,
+  }).isRequired,
   reviewedPractitioner: PropTypes.shape({}).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
@@ -159,9 +160,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(Submitted),
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Submitted));

@@ -15,7 +15,7 @@ export default function EventDateSections(props) {
 
   if (getTodaysDate(timezone).format('MMMM Do YYYY') === dateHeader) {
     showHeader = 'Today';
-    dateHeaderClass = classnames(dateHeaderClass, styles.today);
+    dateHeaderClass = classnames(dateHeaderClass);
   }
   const getEventType = (eventData) => {
     const eventType = eventData.get('type');
@@ -27,19 +27,22 @@ export default function EventDateSections(props) {
   };
   return (
     <div className={styles.eventSection}>
-      <div className={styles.verticalLine}>&nbsp;</div>
       <div className={dateHeaderClass}> {showHeader} </div>
 
-      {events.map((event) => {
+      {events.map((event, index) => {
         return (
-          <Event
-            key={`eventSection_${event.id}`}
-            data={event.get('metaData')}
-            type={getEventType(event)}
-            event={event}
-            bgColor="secondary"
-            patient={patient}
-          />
+          <div className={styles.eventSectionContainer}>
+            <Event
+              key={`eventSection_${event.id}`}
+              data={event.get('metaData')}
+              type={getEventType(event)}
+              event={event}
+              bgColor="secondary"
+              patient={patient}
+              order={index}
+              length={events.length}
+            />
+          </div>
         );
       })}
     </div>

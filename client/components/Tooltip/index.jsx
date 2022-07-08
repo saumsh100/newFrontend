@@ -1,9 +1,7 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Popover from 'react-popover';
-import { Card } from '../library';
 import styles from './styles.scss';
 
 class Tooltip extends Component {
@@ -26,9 +24,9 @@ class Tooltip extends Component {
         className={styles.tooltip_Popover}
         isOpen={this.state.isOpen}
         body={[
-          <Card className={classNames(styles.tooltip_PopoverBody, styleOverride)} noBorder>
+          <div className={classNames(styleOverride ? styles.light : styles.tooltip_PopoverBody)}>
             {body}
-          </Card>,
+          </div>,
         ]}
         preferPlace={placement || 'right'}
         tipSize={tipSize}

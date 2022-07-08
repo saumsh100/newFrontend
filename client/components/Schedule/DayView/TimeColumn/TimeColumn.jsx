@@ -1,7 +1,6 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
-import styles from '../styles.scss';
+import styles from '../reskin-styles.scss';
 import { getDate } from '../../../library';
 
 export default function TimeColumn(props) {
@@ -17,7 +16,7 @@ export default function TimeColumn(props) {
         };
 
         return (
-          <div key={key}  className={styles.timeColumnItem}>
+          <div key={key} className={styles.timeColumnItem}>
             {index > 0 ? (
               <div className={styles.timeColumnItem_time} style={timePosition}>
                 {getDate({
@@ -36,7 +35,7 @@ export default function TimeColumn(props) {
 TimeColumn.propTypes = {
   timeSlots: PropTypes.arrayOf(PropTypes.shape({ position: PropTypes.number.isRequired })),
   timeSlotHeight: PropTypes.shape({ height: PropTypes.number.isRequired }),
-  timeComponentDidMount: PropTypes.shape({ current: PropTypes.any }),
+  timeComponentDidMount: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
 };
 
 TimeColumn.defaultProps = {

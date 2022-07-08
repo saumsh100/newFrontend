@@ -44,7 +44,7 @@
     align-items: center;
     background: $primary-white;
     display: flex;
-    font-weight: $large-weight;
+    font-weight: $bold-weight;
     justify-content: space-between;
   }
 
@@ -85,7 +85,7 @@
     align-items: center;
     background: $primary-white;
     display: flex;
-    font-weight: $large-weight;
+    font-weight: $bold-weight;
     justify-content: space-between;
   }
 }
@@ -168,7 +168,7 @@
   color: $primary-dark-grey;
   composes: fontMedium from '../../../../styles/fonts.scss';
   display: flex;
-  font-size: $extra-small-size;
+  font-size: $x-small-size;
   height: 100%;
   justify-content: center;
   min-height: 460px;

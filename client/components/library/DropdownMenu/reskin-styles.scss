@@ -1,0 +1,39 @@
+@import '../../../styles/ui-reskin.scss';
+
+.dropdownContainer {
+  text-align: left;
+}
+
+.menuItemLi {
+  color: $color-grey-400;
+  cursor: pointer;
+  font-weight: $medium-weight;
+  height: 48px;
+  padding: 0 16px;
+  &:hover:not([disabled]) {
+    background-color: $color-lavender-050 !important;
+    color: $color-purple-400 !important;
+  }
+  &:active:not([disabled]) {
+    background-color: $color-lavender-100 !important;
+    color: $color-purple-400 !important;
+  }
+  &:hover > .menuItemContent > .menuIcon {
+    color: $color-purple-400 !important;
+  }
+}
+
+.menuItemContent {
+  align-items: center;
+  display: flex;
+  height: 20px;
+}
+
+.menuIcon {
+  color: $color-grey-400;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 400;
+  margin-right: 10px;
+  text-align: center;
+}

@@ -1,8 +1,7 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import EnabledFeature from '../library/EnabledFeature';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 export default function NavRegion({ children, isCollapsed }) {
   const navRegionClassName = isCollapsed ? styles.navHidden : styles.leftSectionContainer;

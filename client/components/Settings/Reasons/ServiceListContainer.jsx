@@ -1,11 +1,10 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
-import { Button, BadgeHeader, Card, SContainer, SHeader, SBody } from '../../library';
+import { StandardButton as Button, Card, SContainer, SBody } from '../../library';
 import CreateServiceForm from './CreateServiceForm';
 import ServiceListItem from './ServiceListItem';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
@@ -16,15 +15,7 @@ import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 class ServiceListContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      active: false,
-    };
     this.createService = this.createService.bind(this);
-    this.setActive = this.setActive.bind(this);
-  }
-
-  setActive() {
-    this.setState({ active: !this.state.active });
   }
 
   createService(values) {
@@ -44,7 +35,7 @@ class ServiceListContainer extends Component {
       },
     };
 
-    this.setState({ active: false });
+    this.props.closeModal();
     submitForm({
       key,
       alert,
@@ -69,7 +60,7 @@ class ServiceListContainer extends Component {
         label: 'Cancel',
         onClick: this.setActive,
         component: Button,
-        props: { border: 'blue' },
+        props: { variant: 'secondary' },
       },
       {
         label: 'Save',
@@ -85,32 +76,8 @@ class ServiceListContainer extends Component {
     return (
       <Card className={styles.servicesListContainer} noBorder>
         <SContainer>
-          <SHeader>
-            <div className={styles.modalContainer}>
-              <div className={styles.displayFlexCenter}>
-                <Button
-                  onClick={this.setActive}
-                  className={styles.addServiceButton}
-                  data-test-id="button_addService"
-                  secondary
-                >
-                  Add New Reason
-                </Button>
-              </div>
-              <BadgeHeader count={services.size} title="Reasons" className={styles.badgeHeader} />
-              <DialogBox
-                active={this.state.active}
-                actions={actions}
-                onEscKeyDown={this.setActive}
-                onOverlayClick={this.setActive}
-                title="Create New Reason"
-              >
-                <CreateServiceForm formName={formName} onSubmit={this.createService} />
-              </DialogBox>
-            </div>
-          </SHeader>
           <SBody>
-            {services.toArray().map(service => (
+            {services.toArray().map((service) => (
               <ServiceListItem
                 key={service.get('id')}
                 id={service.get('id')}
@@ -122,6 +89,17 @@ class ServiceListContainer extends Component {
             ))}
           </SBody>
         </SContainer>
+        <div className={styles.modalContainer}>
+          <DialogBox
+            active={this.props.isActive}
+            actions={actions}
+            onEscKeyDown={this.props.setActive}
+            onOverlayClick={this.props.setActive}
+            title="Create New Reason"
+          >
+            <CreateServiceForm formName={formName} onSubmit={this.createService} />
+          </DialogBox>
+        </div>
       </Card>
     );
   }
@@ -133,6 +111,9 @@ ServiceListContainer.propTypes = {
   setServiceId: PropTypes.func.isRequired,
   services: PropTypes.instanceOf(Map).isRequired,
   serviceId: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  setActive: PropTypes.func.isRequired,
 };
 
 function mapActionsToProps(dispatch) {
@@ -145,9 +126,6 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  null,
-  mapActionsToProps,
-);
+const enhance = connect(null, mapActionsToProps);
 
 export default enhance(ServiceListContainer);

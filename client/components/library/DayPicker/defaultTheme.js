@@ -1,5 +1,4 @@
-
-import styles from './dayPicker.scss';
+import styles from './reskin-dayPicker.scss';
 
 export const dayPickerTheme = styles;
 
@@ -10,4 +9,5 @@ export const rangePickerTheme = {
 
   selected: styles.rangePickerDaySelected,
   disabled: styles.rangePickerDayDisabled,
+  today: styles.today,
 };

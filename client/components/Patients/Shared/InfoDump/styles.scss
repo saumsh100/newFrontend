@@ -1,4 +1,4 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin';
 
 .container {
   display: flex;
@@ -7,18 +7,17 @@
 }
 
 .label {
-  color: $primary-dark-grey;
-  composes: fontExtraSmall from '../../../../styles/fonts.scss';
-  font-family: $medium-font;
-  font-size: $extra-small-size;
-  opacity: 1;
-  padding-bottom: 10px;
-  text-transform: uppercase;
+  color: $color-purple-400;
+  font-size: $small-size;
+  font-weight: $normal-weight;
+  margin-bottom: 8px;
+  text-transform: capitalize;
 }
 
 .data {
-  color: $primary-dark;
-  composes: fontMedium from '../../../../styles/fonts.scss';
+  color: $color-purple-600;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
   margin-right: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -29,9 +28,4 @@
 .email {
   text-transform: none;
   white-space: normal;
-}
-
-.noData {
-  color: $primary-dark;
-  text-transform: uppercase;
 }

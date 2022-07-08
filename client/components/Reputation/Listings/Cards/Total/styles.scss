@@ -1,5 +1,4 @@
-@import "../../../../../styles/ui";
-@import "../../../../../styles/fonts";
+@import '../../../../../styles/ui-reskin.scss';
 
 .total {
   align-items: center;
@@ -11,7 +10,7 @@
     display: flex;
   }
   &__header {
-    border-bottom: 1px solid $primary-lightgrey;
+    border-bottom: 1px solid $color-lavender-150;
     display: flex;
     flex-direction: column;
     width: 80%;
@@ -30,8 +29,8 @@
       width: 10px;
     }
     &_text {
-      color: $primary-dark;
-      font-size: 18px;
+      color: $color-grey-500;
+      font-size: $xx-medium-size;
       padding-left: 20px;
     }
   }
@@ -39,18 +38,22 @@
     padding-top: 10px;
     width: 80%;
     &_total {
-      color: $primary-blue;
+      color: $color-purple-400;
       display: flex;
+      font-weight: $bold-weight;
       justify-content: space-between;
     }
   }
 }
 .fa-check {
-  color: $primary-green;
+  color: $color-teal-500;
+  font-weight: $heavy-weight;
 }
 .fa-exclamation {
-  color: $primary-yellow;
+  color: $warning-500;
+  font-weight: $heavy-weight;
 }
 .fa-times {
-  color: $primary-red;
+  color: $error-500;
+  font-weight: $heavy-weight;
 }

@@ -10,7 +10,8 @@ import {
   PatientPopover,
   Tooltip,
 } from '../../../library';
-import styles from './styles.scss';
+import styles from '../../../Dashboard/styles';
+import CheckIcon from '../../../library/PointOfContactBadge/CheckIcon';
 import { appointmentShape, patientShape } from '../../../library/PropTypeShapes';
 
 const WaitingRoomListItem = ({ waitingRoomPatient, onNotify, onClean, onComplete, timezone }) => {
@@ -50,51 +51,57 @@ const WaitingRoomListItem = ({ waitingRoomPatient, onNotify, onClean, onComplete
 
   return (
     <ListItem className={styles.waitingRoomListItem}>
-      <div className={styles.leftSection}>
+      <div className={styles.topSection}>
+        <CheckIcon />
         <div className={styles.checkinTime}>
-          Checked in at {getFormattedDate(enteredAt, 'h:mm a', timezone)}
-        </div>
-        <div className={styles.subLeftSection}>
-          <div className={styles.completionCircleWrapper}>
-            <Checkbox
-              checked={false}
-              onChange={() => onComplete({ isCompleted: true })}
-              className={styles.completedCheckbox}
-            />
-          </div>
-          <div>
-            <div className={styles.patientNameWrapper}>
-              <PatientPopover patient={selectedPatient}>
-                <span className={styles.patientName}>
-                  {selectedPatient.firstName} {selectedPatient.lastName}
-                </span>
-              </PatientPopover>
-              {familyMembersCount ? (
-                <Tooltip overlay={tooltipBody} placement="bottom">
-                  <span className={styles.familyMembersCount}>+{familyMembersCount}</span>
-                </Tooltip>
-              ) : null}
-            </div>
-            <div className={styles.practitionerName}>
-              {practitioner.type === 'Dentist' ? 'Dr. ' : null}
-              {practitioner.firstName} {practitioner.lastName}
-            </div>
-            <div className={styles.appointmentTimes}>
-              {getFormattedTime(startDate, endDate, timezone)}
-            </div>
-          </div>
+          Checked in at{' '}
+          <span className={styles.timezone}>{getFormattedDate(enteredAt, 'h:mm a', timezone)}</span>
         </div>
       </div>
-      <div className={styles.rightSection}>
-        <Checkbox
-          label="Cleaned"
-          checked={!!cleanedAt}
-          onChange={() => onClean({ isCleaned: !cleanedAt })}
-          className={styles.cleanedCheckbox}
-        />
-        <Button size="sm" border="blue" onClick={onNotify} className={styles.notifyButton}>
-          {sentWaitingRoomNotifications.length ? 'Re-Notify' : 'Notify'}
-        </Button>
+      <div className={styles.bottomSection}>
+        <div className={styles.leftSection}>
+          <div className={styles.subLeftSection}>
+            <div className={styles.completionCircleWrapper}>
+              <Checkbox
+                checked={false}
+                onChange={() => onComplete({ isCompleted: true })}
+                className={styles.completedCheckbox}
+              />
+            </div>
+            <div>
+              <div className={styles.patientNameWrapper}>
+                <PatientPopover patient={selectedPatient}>
+                  <span className={styles.patientName}>
+                    {selectedPatient.firstName} {selectedPatient.lastName}
+                  </span>
+                </PatientPopover>
+                {familyMembersCount ? (
+                  <Tooltip overlay={tooltipBody} placement="bottom">
+                    <span className={styles.familyMembersCount}>+{familyMembersCount}</span>
+                  </Tooltip>
+                ) : null}
+              </div>
+              <div className={styles.practitionerName}>
+                {practitioner.type === 'Dentist' ? 'Dr. ' : null}
+                {practitioner.firstName} {practitioner.lastName}
+              </div>
+              <div className={styles.appointmentTimes}>
+                {getFormattedTime(startDate, endDate, timezone)}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.rightSection}>
+          <Checkbox
+            label="Cleaned"
+            checked={!!cleanedAt}
+            onChange={() => onClean({ isCleaned: !cleanedAt })}
+            className={styles.cleanedCheckbox}
+          />
+          <Button size="sm" color="lavender" onClick={onNotify} className={styles.notifyButton}>
+            {sentWaitingRoomNotifications.length ? 'Re-Notify' : 'Notify'}
+          </Button>
+        </div>
       </div>
     </ListItem>
   );

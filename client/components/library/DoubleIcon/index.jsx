@@ -1,23 +1,11 @@
-
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import {
-  Card,
-  Checkbox,
-  Search,
-  Form,
-  Field,
-  BackgroundIcon,
-} from '../../library';
-import colorMap from '../../library/util/colorMap';
+import React from 'react';
+import { BackgroundIcon } from '..';
 import styles from './styles.scss';
 
 export default function DoubleIcon(props) {
   const { smallIcon, bigIcon } = props;
-  console.log(smallIcon);
-  const {
-    iconColor, icon, background, iconAlign,
-  } = smallIcon;
+  const { icon, background } = smallIcon;
   return (
     <div className={styles.containter}>
       <div className={styles.containter__bigIcon}>
@@ -29,3 +17,15 @@ export default function DoubleIcon(props) {
     </div>
   );
 }
+
+DoubleIcon.propTypes = {
+  smallIcon: PropTypes.shape({
+    icon: PropTypes.shape({
+      src: PropTypes.string,
+    }),
+    background: PropTypes.string,
+  }).isRequired,
+  bigIcon: PropTypes.shape({
+    src: PropTypes.string,
+  }).isRequired,
+};

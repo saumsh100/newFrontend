@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
@@ -51,7 +50,7 @@ const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt
     return [accountId];
   }
 
-  const dateKey = Object.keys(compt.name).find(key => compt.name[key] === name);
+  const dateKey = Object.keys(compt.name).find((key) => compt.name[key] === name);
   if (component === DATE_RANGE && typeof defaultValue === 'string') {
     const [defaultRange] = getRangeFromList([defaultValue]);
     return parseDate(defaultRange[dateKey], timezone).format('YYYY-MM-DD');
@@ -143,8 +142,7 @@ class ReportParametersForm extends Component {
       }
       return acc;
     }, {});
-    this.setQueryUrl(active, { ...items,
-      ...valuesToUpdate });
+    this.setQueryUrl(active, { ...items, ...valuesToUpdate });
   }
 
   /**
@@ -153,10 +151,10 @@ class ReportParametersForm extends Component {
    */
   setDefaultParamValues(page, obj = {}) {
     const defaultParams = this.reduceParams(page, (name, curr) =>
-      name.map(n => ({
+      name.map((n) => ({
         [n]:
-          obj[n]
-          || handleDefaultValue(
+          obj[n] ||
+          handleDefaultValue(
             n,
             {
               ...curr,
@@ -164,7 +162,7 @@ class ReportParametersForm extends Component {
             },
             this.props.timezone,
           ),
-      })));
+      })),);
     this.setQueryUrl(page, Object.assign(...defaultParams));
   }
 
@@ -174,7 +172,7 @@ class ReportParametersForm extends Component {
    * @return {*}
    */
   getPageValidFields(page) {
-    return this.reduceParams(page, name => name.map(n => n));
+    return this.reduceParams(page, (name) => name.map((n) => n));
   }
 
   /**
@@ -225,7 +223,7 @@ class ReportParametersForm extends Component {
 
     const validPageFields = this.getPageValidFields(page);
     const finalListOfParams = Object.assign(
-      ...validPageFields.map(field => ({ [field]: params[field] })),
+      ...validPageFields.map((field) => ({ [field]: params[field] })),
     );
     this.props.setActiveReport(page);
     this.props.setReportParameters({
@@ -243,8 +241,9 @@ class ReportParametersForm extends Component {
     const nextOptions = this.props.reports.get(page);
     this.props.setActiveReport(page);
 
-    const merge = nextOptions
-      && Object.entries(nextOptions).reduce(
+    const merge =
+      nextOptions &&
+      Object.entries(nextOptions).reduce(
         (acc, [key, value]) => ({
           ...acc,
           [key]: currentOptions[key] || value,
@@ -270,6 +269,7 @@ class ReportParametersForm extends Component {
       ({
         dateRange: {
           popover: true,
+          label: null,
           start: params[name.start],
           end: params[name.end],
           timezone,
@@ -278,25 +278,25 @@ class ReportParametersForm extends Component {
             defaultValue && typeof defaultValue === 'string'
               ? getRangeFromList([defaultValue])[0]
               : defaultValue,
-          onChange: value => this.setDateValue(name, value),
+          onChange: (value) => this.setDateValue(name, value),
         },
         dropdown: {
           selected: params[name],
-          onChange: value => this.setParam(name, value),
+          onChange: (value) => this.setParam(name, value),
         },
         multiSelectAccount: {
           selected: params[name],
           hide: shouldHideMultiAccount,
           defaultValue: [account.get('id')],
-          onChange: value => this.setParam(name, value),
+          onChange: (value) => this.setParam(name, value),
         },
         toggle: {
           checked: params[name] === 1,
-          onChange: value => this.setParam(name, +value.target.checked),
+          onChange: (value) => this.setParam(name, +value.target.checked),
         },
         selectPill: {
           selected: params[name],
-          onChange: value => this.setParam(name, value, true),
+          onChange: (value) => this.setParam(name, value, true),
         },
       }[component]);
     const activeComponents = reportsJson[active].parameters.reduce(
@@ -373,7 +373,7 @@ const mapStateToProps = ({ entities, auth, intelligenceReports, featureFlags }) 
   };
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       setActiveReport,

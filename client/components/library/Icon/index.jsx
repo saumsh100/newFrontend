@@ -1,8 +1,9 @@
-
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const typeMap = {
   light: 'fal',
@@ -12,69 +13,39 @@ const typeMap = {
 };
 
 export default function Icon(props) {
-  const {
-    icon,
-    size,
-    className,
-    style,
-    type,
-    pulse,
-    badgeText,
-    onClick,
-  } = props;
+  const { icon, className, type, pulse, badgeText, onClick } = props;
 
-  const classes = classNames(
-    className,
-    `fa-${icon}`,
-    styles.icon,
-    typeMap[type],
-    {
-      'fa-pulse': pulse,
-      [styles.pulse]: pulse,
-    },
-  );
-
-  const finalStyles = Object.assign({}, { fontSize: `${size}em` }, style);
+  const classes = classNames(className, `fa-${icon}`, styles.icon, typeMap[type], {
+    'fa-pulse': pulse,
+    [styles.pulse]: pulse,
+  });
 
   return badgeText ? (
     <div className={styles.iconWrapper}>
-      <i
-        className={classes}
-        data-test-id={props['data-test-id']}
-        style={finalStyles}
-        onClick={onClick}
-      />
-      <div className={styles.badgeWrapper}>
+      <i className={classes} data-test-id={props['data-test-id']} onClick={onClick} />
+      <div
+        className={classNames(styles.badgeWrapper, {
+          [styles.largeBadge]: badgeText === '99+',
+        })}
+      >
         <span className={styles.badge}>{badgeText}</span>
       </div>
     </div>
   ) : (
-    <i
-      className={classes}
-      data-test-id={props['data-test-id']}
-      style={finalStyles}
-      onClick={onClick}
-    />
+    <i className={classes} data-test-id={props['data-test-id']} onClick={onClick} />
   );
 }
 
 Icon.defaultProps = {
-  size: 1,
   type: 'light',
 };
 
 Icon.propTypes = {
-  icon: PropTypes.string,
-  onClick: PropTypes.func,
+  icon: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
   type: PropTypes.string,
-  size: PropTypes.number,
-  className: PropTypes.string,
-  style: PropTypes.objectOf(PropTypes.string),
-  'data-test-id': PropTypes.string,
-  badgeText: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-    PropTypes.bool,
-  ]),
-  pulse: PropTypes.bool,
+  className: PropTypes.string.isRequired,
+  'data-test-id': PropTypes.string.isRequired,
+  badgeText: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.bool]).isRequired,
+  pulse: PropTypes.bool.isRequired,
 };

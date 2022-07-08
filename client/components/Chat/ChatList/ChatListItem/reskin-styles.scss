@@ -1,0 +1,143 @@
+@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin.scss';
+
+.chatListItem {
+  box-sizing: border-box;
+  height: 100px;
+  padding: 20px;
+  transition: all 0.2s ease;
+  &:hover {
+    > .hoverSection {
+      display: block;
+    }
+  }
+}
+
+.hubListItem {
+  @extend .chatListItem;
+  border-bottom: 1px solid $electron-chat-items-bottom-border;
+}
+
+.hoverSection {
+  align-self: center;
+  cursor: pointer;
+  display: none;
+  margin-left: auto;
+
+  & > button {
+    width: auto !important;
+  }
+
+  @media (max-width: 576px) {
+    display: block;
+  }
+}
+
+.selectedChatItem {
+  background-color: $color-lavender-100;
+  border-left: none;
+  cursor: pointer !important;
+}
+
+.avatar {
+  padding: 0 10px;
+}
+
+.filled {
+  color: orange;
+}
+
+.hallow {
+}
+
+.flexSection {
+  flex: 1;
+}
+
+.topSection {
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.bottomSection {
+  -webkit-box-orient: vertical;
+  color: $color-purple-400;
+  display: -webkit-box;
+  font-size: $small-size;
+  font-style: italic;
+  font-weight: $normal-weight;
+  height: 16px;
+  -webkit-line-clamp: 1;
+  line-height: 16px;
+
+  margin-top: 5px;
+
+  overflow: hidden;
+  padding-right: 45px;
+}
+
+.bottomSectionUnread {
+  @extend .bottomSection;
+  color: $color-purple-600;
+  font-weight: 700;
+}
+
+.fullName {
+  color: $color-purple-600;
+  font-size: $medium-size;
+  font-weight: 500;
+}
+
+.fullNameUnread {
+  @extend .fullName;
+  font-size: $medium-size;
+  font-weight: $bold-weight;
+}
+
+.time {
+  color: $color-purple-400;
+  font-size: $x-small-size;
+  font-weight: $medium-weight;
+  margin-left: auto;
+  margin-top: -3px;
+}
+
+.unreadTime {
+  @extend .time;
+  font-weight: $bold-weight;
+}
+
+.nameAgeWrapper {
+  align-items: center;
+  display: flex;
+}
+
+.name {
+  display: inline;
+  max-width: 140px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nameWithAge {
+  @extend .name;
+}
+
+.age {
+  min-width: 40px;
+  &:before {
+    content: ', ';
+  }
+}
+.timesIcon {
+  color: $color-lavender-500;
+  font-size: $x-medium-size;
+  font-weight: $normal-weight;
+  width: 13px;
+}
+
+.renderStar {
+  color: $color-lavender-500;
+}

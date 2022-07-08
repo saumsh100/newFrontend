@@ -1,0 +1,199 @@
+@import '../../styles/ui-reskin.scss';
+
+.requestPopover {
+  z-index: 299;
+}
+
+.requestPopover > :global(svg.Popover-tip) {
+  fill: white;
+}
+
+@mixin requestCardMobile-mixin() {
+  border-top: 0;
+}
+
+.requestCard {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  @media screen and (max-width: 700px) {
+    @include requestCardMobile-mixin();
+  }
+}
+
+.requestCardMobile {
+  @include requestCardMobile-mixin();
+}
+
+.requestHeader {
+  //padding-left: 15px;
+  position: static;
+}
+
+.requestList {
+  flex: 1;
+  height: 100px;
+  min-height: 314px;
+  overflow: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.noRequests {
+  align-items: center;
+  color: $color-grey-200;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  opacity: 0.6;
+  text-align: center;
+}
+
+.requestBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: auto;
+  width: 100%;
+}
+
+.requestListItem {
+  box-sizing: border-box;
+  color: #2e3845;
+  cursor: pointer;
+  height: auto;
+  padding: 20px;
+
+  transition: all 0.1s ease-in-out;
+  &:hover {
+    background-color: $color-lavender-050;
+    transform: scale(1.02);
+  }
+}
+
+.requestData {
+  border-left: 1px solid $color-lavender-100;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-size: $x-small-size;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  padding-left: 1em;
+  padding-top: 5px;
+  text-align: left;
+  width: 100%;
+
+  @media screen and (max-width: 350px) {
+    max-width: 170px;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.4;
+  }
+
+  &__time {
+    color: $color-purple-400;
+    font-size: $medium-size;
+    font-weight: 700;
+    padding-bottom: 10px;
+  }
+
+  &__nameAge {
+    display: flex;
+    text-decoration: none;
+  }
+
+  &__name {
+    color: $color-purple-300;
+    font-size: $small-size;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  &__service {
+    color: $color-purple-300;
+    font-size: $small-size;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__icon {
+    padding-right: 3px;
+  }
+
+  &:hover > &__details > &__nameAge > &__name {
+    color: $color-purple-400;
+  }
+  &:hover > &__details > &__service {
+    color: $color-purple-400;
+  }
+  &:hover > .requestedText {
+    color: $color-purple-400;
+  }
+}
+
+.requestedText {
+  color: $color-grey-400;
+  font-size: 10px;
+  font-weight: 500;
+  margin-top: 8px;
+
+  &__container {
+    margin-bottom: 5px;
+  }
+
+  &__createdAt {
+    font-weight: 500;
+  }
+
+  &__requestedBy {
+    font-weight: 700;
+  }
+}
+
+.monthDay {
+  min-width: 71px;
+  text-align: center;
+
+  &_new {
+    color: $color-lavender-400;
+    font-size: $small-size;
+    font-weight: 500;
+    padding-bottom: 3px;
+    text-transform: lowercase;
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  &_day {
+    color: $color-purple-600;
+    font-size: 24px;
+    font-weight: 700;
+    padding-bottom: 3px;
+    padding-top: 3px;
+  }
+
+  &_month {
+    color: $color-purple-600;
+    font-size: $small-size;
+    font-weight: 700;
+  }
+}
+
+.calendarIcon {
+  padding-right: 7px;
+}
+
+.hidden {
+  display: none;
+}

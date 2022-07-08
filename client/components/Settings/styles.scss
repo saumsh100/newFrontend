@@ -1,44 +1,40 @@
-@import '../../styles/ui.scss';
+@import '../../styles/ui-reskin.scss';
 
 .rowContainer {
-  background-color: $background-color;
+  background-color: $color-purple-050;
   box-sizing: border-box;
   display: flex;
   height: calc(100vh - 65px);
-  padding-bottom: 15px;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-top: 15px;
+  padding: 16px;
 }
 
 .subSettingsCol {
-  //padding-top: 10px;
-  background: $primary-white;
+  background: $super-white;
   height: fit-content;
   margin-right: 15px;
   max-width: 270px;
   min-width: 270px;
+  text-transform: uppercase;
   width: 270px;
 }
 
 .subSettingsCard {
-  // height: 100%;
-  border-top: 1px solid $primary-grey;
+  border-top: 1px solid $color-lavender-150;
 }
 
 .subSettingsListItem {
-  color: $primary-darkgrey;
+  color: $color-grey-400;
+  font-size: $small-size;
+  font-weight: $semi-bold-weight;
   height: 65px;
   padding-left: 15px;
 }
 
 .settingsFormsCol {
-  background: #fafafa;
   overflow: auto;
   width: 100%;
 }
 
 .settingsFormsCard {
   height: 100%;
-  //border-top: $card-border-size $primary-blue;
 }

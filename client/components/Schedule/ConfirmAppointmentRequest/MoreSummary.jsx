@@ -1,11 +1,10 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 import { selectAppointmentShape } from '../../library/PropTypeShapes';
 import { getUTCDate, getFormattedDate } from '../../library';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import Item from './Item';
 
 const MoreSummary = (props) => {
@@ -24,22 +23,22 @@ const MoreSummary = (props) => {
   const requestedAt = getFormattedDate(request.get('createdAt'), 'MMM D, hh:mm A', timezone);
 
   return (
-    <React.Fragment>
+    <div className={styles.summery}>
       <div className={styles.summaryTitle}>Patient Summary</div>
       <div className={styles.summaryData}>
         <div className={styles.itemContainer}>
           <Item
-            title="BIRTHDAY"
+            title="Birthday"
             index="BIRTHDAY"
             value={getFormattedDate(birthDate, 'LL', timezone)}
           />
           <Item
-            title="PHONE"
+            title="Phone"
             index="PHONE"
             value={formatPhoneNumber(patientUser.get('phoneNumber'))}
           />
           <Item
-            title="INSURANCE"
+            title="Insurance"
             index="INSURANCE"
             value={carrier}
             extra={[
@@ -53,32 +52,33 @@ const MoreSummary = (props) => {
               },
             ]}
           />
-          <Item title="EMAIL" index="EMAIL" value={patientUser.get('email')} />
-          <Item title="NOTES" index="NOTES" value={request.get('note')} />
+          <Item title="Email" index="EMAIL" value={patientUser.get('email')} />
+          <Item title="Notes" index="NOTES" value={request.get('note')} />
         </div>
       </div>
+      <div className={styles.border} />
 
       <div className={styles.summaryTitle}>Requester Info</div>
       <div className={styles.summaryData}>
         <div className={styles.itemContainer}>
           <Item
-            title="REQUESTED BY"
+            title="Requested By"
             index="REQUESTED BY"
             value={requestingUser.get('firstName').concat(' ', requestingUser.get('lastName'))}
           />
           <Item
-            title="REQUESTER BIRTH DATE"
+            title="Requester Birth Date"
             index="REQUESTER BIRTH DATE"
             value={getUTCDate(requestingUser.get('birthDate'), timezone).format('LL')}
           />
           <Item
-            title="PHONE"
+            title="Phone"
             index="PHONE"
             value={formatPhoneNumber(requestingUser.get('phoneNumber'))}
           />
-          <Item title="EMAIL" index="EMAIL" value={requestingUser.get('email')} />
+          <Item title="Email" index="EMAIL" value={requestingUser.get('email')} />
           <Item
-            title="INSURANCE"
+            title="Insurance"
             index="INSURANCE"
             value={requesterCarrier}
             extra={[
@@ -92,11 +92,11 @@ const MoreSummary = (props) => {
               },
             ]}
           />
-          <Item title="REQUESTED ON" index="REQUESTED ON" value={requestedAt} />
+          <Item title="Requested On" index="REQUESTED ON" value={requestedAt} />
         </div>
       </div>
-    </React.Fragment>
-  );
+    </div>
+);
 };
 
 MoreSummary.propTypes = {

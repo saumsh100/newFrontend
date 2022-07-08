@@ -1,20 +1,19 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DropdownMenu, MenuItem } from '../../library/DropdownMenu';
 import ChatMenuLabel from './ChatMenuLabel';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const chatOptions = ['Open', 'Closed', 'Unread', 'Flagged', 'All'];
 
 function ChatMenu({ changeTab, index, chatCategoriesCount }) {
-  const count = key => (chatCategoriesCount[key] ? `(${chatCategoriesCount[key]})` : null);
+  const count = (key) => (chatCategoriesCount[key] ? `(${chatCategoriesCount[key]})` : null);
   return (
     <div className={styles.chatMenuWrapper}>
       <DropdownMenu
         upwards
-        labelComponent={props =>
+        labelComponent={(props) =>
           index !== null && <ChatMenuLabel {...props} label={chatOptions[index]} count={count} />
         }
       >

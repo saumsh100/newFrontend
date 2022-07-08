@@ -28,11 +28,7 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
         const apptKey = `${pocKey}-${pat.appointment.id}`;
         const { isPatientConfirmed } = pat.appointment;
         const { iconContainer, iconActive, flexStart, avatar } = styles;
-        const iconClass = classnames(
-          iconContainer,
-          { [iconActive]: isPatientConfirmed },
-          styles.appointmentReminder_iconSize,
-        );
+        const iconClass = classnames(iconContainer, { [iconActive]: isPatientConfirmed });
         const avatarClass = classnames(styles.tasks_avatar, avatar, {
           [flexStart]: array.length > 1,
         });
@@ -44,9 +40,9 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
             key={apptKey}
           >
             <div className={avatarClass}>{i === 0 && <Avatar size="sm" user={poc} />}</div>
-            <div className={classnames(styles.tasks_col, styles.appointmentReminder_flexStart)}>
+            <div className={classnames(styles.tasks_col, styles.appointmentReminder_center)}>
               {i === 0 && (
-                <span>
+                <span className={styles.appointmentReminder_flexStart}>
                   <PatientPopover patient={poc}>
                     <div>{`${poc.firstName} ${poc.lastName}`}</div>
                   </PatientPopover>
@@ -54,6 +50,7 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
                     className={classnames(
                       styles.appointmentReminder_muted,
                       styles.appointmentReminder_lowercase,
+                      styles.appointmentReminder_contactAt,
                     )}
                   >
                     {`at ${getFormattedDate(sendDate, 'h:mm a', timezone)}`}
@@ -61,16 +58,17 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
                 </span>
               )}
             </div>
-            <div
-              className={classnames(styles.tasks_smallCol, styles.appointmentReminder_flexStart)}
-            >
+            <div className={classnames(styles.tasks_smallCol, styles.appointmentReminder_center)}>
               {i === 0 && (
-                <span>
-                  <div>{`${reminder.interval}`}</div>
+                <span className={styles.appointmentReminder_flexStart}>
+                  <div
+                    className={styles.appointmentReminder_reminderinterval}
+                  >{`${reminder.interval}`}</div>
                   <div
                     className={classnames(
                       styles.appointmentReminder_muted,
                       styles.appointmentReminder_lowercase,
+                      styles.appointmentReminder_type,
                     )}
                   >
                     {`${primaryTypeText === 'phone' ? 'voice' : primaryTypeText}`}
@@ -78,20 +76,28 @@ const componentMapper = ({ poc, primaryTypes, timezone, reminder, sendDate, appo
                 </span>
               )}
             </div>
-            <div className={classnames(styles.appointmentReminder_flexStart, styles.tasks_col)}>
+            <div className={classnames(styles.appointmentReminder_center, styles.tasks_col)}>
               <PatientPopover patient={pat}>
                 <span>{`${pat.firstName} ${pat.lastName}`}</span>
               </PatientPopover>
             </div>
-            <div className={classnames(styles.tasks_col, styles.appointmentReminder_flexStart)}>
+            <div className={classnames(styles.tasks_col, styles.appointmentReminder_center)}>
               <AppointmentPopover patient={pat} appointment={pat.appointment}>
-                <span>
+                <span className={styles.appointmentReminder_dateAndTime}>
                   {getFormattedDate(pat.appointment.startDate, 'MMM Do - h:mm A', timezone)}
                 </span>
               </AppointmentPopover>
-              <span className={iconClass}>
-                {pat.appointment.isPatientConfirmed && <Icon icon="check" />}
-              </span>
+              {isPatientConfirmed && (
+                <span
+                  className={classnames(iconClass, {
+                    [styles.appointmentReminder_fakeIcon]: !pat.appointment.isPatientConfirmed,
+                  })}
+                >
+                  {pat.appointment.isPatientConfirmed && (
+                    <Icon icon="check" className={styles.appointmentReminder_icon} />
+                  )}
+                </span>
+              )}
             </div>
           </div>
         );

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Avatar } from '../../../library';
@@ -7,22 +6,20 @@ import styles from './styles.scss';
 
 export default function PatientNameColumn({ patient, redirect, text, isAvatar }) {
   return (
-    <div className={styles.patientRow}>
+    <div
+      className={styles.patientRow}
+      role="button"
+      tabIndex="-1"
+      onKeyDown={({ keyCode }) => keyCode === 13 && redirect()}
+      onClick={(e) => {
+        e.stopPropagation();
+        redirect();
+      }}
+    >
       <div className={styles.avatarContainer}>
         {isAvatar && <Avatar user={patient} size="xs" />}
       </div>
-      <div
-        className={styles.name}
-        role="button"
-        tabIndex="-1"
-        onKeyDown={({ keyCode }) => keyCode === 13 && redirect()}
-        onClick={(e) => {
-          e.stopPropagation();
-          redirect();
-        }}
-      >
-        {text}
-      </div>
+      <div className={styles.name}>{text}</div>
     </div>
   );
 }

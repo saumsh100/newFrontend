@@ -63,8 +63,9 @@ function WaitingRoomList(props) {
   const [selectedWaitingRoomPatient, setSelectedWaitingRoomPatient] = useState(null);
   const toggleNotifying = () => setSelectedWaitingRoomPatient(null);
 
-  const formName = `notifyPatientForm_${selectedWaitingRoomPatient &&
-    selectedWaitingRoomPatient.id}`;
+  const formName = `notifyPatientForm_${
+    selectedWaitingRoomPatient && selectedWaitingRoomPatient.id
+  }`;
 
   const isReNotifying =
     selectedWaitingRoomPatient &&
@@ -101,7 +102,7 @@ function WaitingRoomList(props) {
         active={!!selectedWaitingRoomPatient}
         onEscKeyDown={toggleNotifying}
         onOverlayClick={toggleNotifying}
-        type="small"
+        type="notify"
         actions={[
           {
             label: 'Cancel',

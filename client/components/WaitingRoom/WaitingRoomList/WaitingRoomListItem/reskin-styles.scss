@@ -1,0 +1,161 @@
+.waitingRoomListItem {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 104px;
+  padding: 20px 30px;
+  &:hover {
+    background-color: $super-white;
+    cursor: default;
+    .bottomSection > .leftSection > .subLeftSection > .completionCircleWrapper {
+      display: block;
+    }
+  }
+}
+
+.topSection {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 16px;
+  width: 100%;
+  svg {
+    color: $color-success-500;
+    height: 14px;
+    width: 12px;
+  }
+}
+.bottomSection {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Left Section */
+
+.checkinTime {
+  color: $color-success-600;
+  font-size: $small-size;
+  margin-left: 8px;
+}
+
+.timezone {
+  text-transform: uppercase;
+}
+
+.subLeftSection {
+  align-items: center;
+  display: flex;
+}
+
+.completionCircleWrapper {
+  display: none;
+}
+
+.patientNameWrapper {
+  align-items: center;
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.patientName {
+  color: $color-purple-300;
+  font-size: $medium-size;
+  font-weight: bold;
+  margin-right: 5px;
+  &:hover {
+    color: $color-lavender-500;
+  }
+}
+
+.familyMembersCount {
+  color: $primary-dark-grey;
+  padding: 0 5px;
+}
+
+.tooltip {
+  background: blue;
+}
+
+.practitionerName {
+  color: $color-purple-300;
+  font-size: $small-size;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.appointmentTimes {
+  color: $color-purple-300;
+  font-size: $small-size;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.actionFont {
+  color: $color-purple-400;
+  font-size: $small-size;
+  letter-spacing: normal;
+}
+
+.hovercheckbox {
+  background: $color-lavender-150;
+  border: 1px solid $color-lavender-550;
+}
+
+.checkbox {
+  margin-left: 0;
+  > div {
+    border: 1px solid $color-lavender-500;
+    height: 14px;
+    width: 14px;
+  }
+}
+
+.completedCheckbox {
+  @extend .checkbox;
+  margin-right: 10px;
+  > div {
+    border-radius: 20px;
+    height: 20px;
+    width: 20px;
+    &:hover {
+      border: 1px solid $color-lavender-500;
+    }
+  }
+}
+
+/* Right Section */
+
+.rightSection {
+  margin-left: auto;
+}
+
+.cleanedCheckbox {
+  @extend .checkbox;
+
+  margin-bottom: 10px;
+  > span {
+    @extend .actionFont;
+  }
+  > div {
+    &:hover {
+      border: 1px solid $color-lavender-500;
+    }
+  }
+}
+
+.notifyButton {
+  align-items: center;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  display: flex;
+  font-size: $small-size;
+  height: 28px;
+  justify-content: center;
+  letter-spacing: normal;
+  padding: 0;
+  width: 90px;
+}

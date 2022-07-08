@@ -1,0 +1,327 @@
+.insights {
+  &_body {
+    box-sizing: border-box;
+    height: 100%;
+
+    overflow: auto;
+    padding-top: 20px;
+    width: 100%;
+
+    @media screen and (max-width: 420px) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  &_header {
+    align-items: center;
+    border-bottom: 0;
+    color: $color-purple-600;
+    display: flex;
+    font-size: 24px;
+    padding: 20px 20px 15px 40px;
+    @extend .font-Medium;
+
+    &_count {
+      align-items: center;
+      background-color: $color-yellow-600;
+      border-radius: 50%;
+      color: $super-white;
+      display: flex;
+      font-size: $small-size;
+      font-weight: 700;
+      height: 15px;
+      justify-content: center;
+      margin-right: 8px;
+      padding: 6px;
+      width: 15px;
+      @extend .font-Medium;
+    }
+
+    @media screen and (max-width: 1254px) {
+      padding: 20px;
+    }
+
+    @media screen and (max-width: 420px) {
+      padding-left: 15px;
+    }
+  }
+
+  &_outerInsightsWrapper {
+    align-items: center;
+    border-bottom: 1px solid $primary-grey;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    padding: 30px 40px 25px;
+    width: 100%;
+
+    @media screen and (max-width: 1254px) {
+      height: auto;
+      padding: 20px;
+    }
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  &_innerInsightsWrapper {
+    @media screen and (max-width: 1254px) {
+      border-left: 0;
+      padding-left: 0;
+    }
+    height: 100%;
+
+    min-height: 35px;
+  }
+
+  &_insightsList {
+    display: flex;
+    flex-direction: row;
+
+    @media screen and (max-width: 1174px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  &_insightContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    margin-left: 25px;
+    @media screen and (max-width: 1174px) {
+      margin-left: 0;
+    }
+  }
+
+  &_familyData {
+    color: $color-purple-400;
+    font-size: $small-size;
+    font-weight: 500;
+  }
+
+  &_insight {
+    box-sizing: border-box;
+    padding-bottom: 20px;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    @media screen and (max-width: 1174px) {
+      padding-bottom: 10px;
+    }
+  }
+
+  &_insightBody {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &_iconContainer {
+    color: $color-yellow-500;
+    min-width: 18px;
+    width: 18px;
+
+    &_sub {
+      min-width: 18px;
+      opacity: 0.6;
+      padding-top: 5px;
+      width: 18px;
+    }
+  }
+
+  &_displayFlex {
+    align-items: center;
+    display: flex;
+    width: 100%;
+  }
+
+  &_displayFlexSubHeader {
+    align-items: center;
+    display: flex;
+    width: 100%;
+
+    @media screen and (max-width: 420px) {
+      margin-left: 0;
+    }
+  }
+
+  &_insightHeader {
+    color: $color-purple-600;
+    font-size: $medium-size;
+    font-weight: 500;
+  }
+
+  &_insightSubHeader {
+    box-sizing: border-box;
+    color: $color-purple-400;
+    font-size: $small-size;
+    width: 100%;
+    @extend .font-Medium;
+
+    @media screen and (max-width: 1174px) {
+      width: 100%;
+    }
+  }
+
+  &_insightSubHeaderList {
+    box-sizing: border-box;
+    color: $color-purple-400;
+    font-size: $small-size;
+    opacity: 0.6;
+    padding-left: 18px;
+    padding-top: 5px;
+    @extend .font-Medium;
+
+    @media screen and (max-width: 1174px) {
+    }
+  }
+
+  &_patientName {
+    text-transform: capitalize;
+  }
+
+  &_patientInfo {
+    &_name {
+      align-items: center;
+      border-left: 1px solid #efefef;
+      display: flex;
+      flex-direction: column;
+      font-size: 15px;
+      justify-content: center;
+      line-height: 1.2em;
+      margin-left: 15px;
+      padding-left: 40px;
+      white-space: nowrap;
+      @extend .fontMedium;
+
+      @media screen and (max-width: 1174px) {
+        align-items: flex-start;
+        border-left: 0;
+        flex: 0 0 25%;
+        margin-bottom: 15px;
+      }
+
+      @media screen and (max-width: 440px) {
+        margin-left: unset;
+        max-width: unset;
+        min-width: unset;
+        padding-left: unset;
+      }
+    }
+
+    &_firstLast {
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      @extend .font-Medium;
+    }
+
+    &_otherInfo {
+      color: $primary-dark-grey;
+      font-size: 10px;
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      @extend .font-Medium;
+    }
+
+    &_avatarContainer {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &_patientNameAvatar {
+    align-items: center;
+    display: flex;
+
+    &_avatar {
+      @media screen and (max-width: 475px) {
+        display: none;
+      }
+    }
+
+    &_text {
+      margin-left: 20px;
+      max-width: 95px;
+      min-width: 95px;
+
+      @media screen and (max-width: 440px) {
+        margin-left: unset;
+        max-width: unset;
+        min-width: unset;
+      }
+    }
+  }
+
+  &_insightCount {
+    align-items: center;
+    background-color: $primary-yellow;
+    border-radius: 12px;
+    color: $primary-white;
+    display: flex;
+    font-size: $small-size;
+    height: 12px;
+    justify-content: center;
+    padding: 5px;
+    text-align: center;
+    width: 12px;
+    @extend .font-Medium;
+  }
+
+  &_appBody {
+    align-items: center;
+    color: $color-purple-600;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    @media screen and (max-width: 1174px) {
+      align-items: flex-start;
+      flex: 0 0 10%;
+      margin: 0;
+    }
+  }
+
+  &_apptData {
+    align-items: left;
+    display: flex;
+    flex-direction: column;
+    font-weight: $medium-weight;
+    justify-content: flex-start;
+    text-align: left;
+    width: 100px;
+    @extend .font-Medium;
+
+    &_time {
+      font-size: $medium-size;
+      font-weight: bold;
+    }
+
+    &_date {
+      color: $color-purple-400;
+      font-size: $small-size;
+      text-transform: uppercase;
+
+      &:hover {
+        color: $color-lavender-500;
+      }
+    }
+  }
+
+  &_removePadding {
+    padding: 0 !important;
+  }
+}

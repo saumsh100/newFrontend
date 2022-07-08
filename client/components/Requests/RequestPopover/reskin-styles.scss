@@ -1,0 +1,260 @@
+@import '../../../styles/reskin-font.scss';
+
+$primary-button-color: $color-lavender-500;
+$primary-button-color-hover: $color-lavender-550;
+$primary-button-text-color: $super-white;
+
+$secondary-button-color: $super-white;
+$secondary-button-color-hover: $color-lavender-050;
+$secondary-button-text-color: $color-lavender-500;
+$secondary-button-border-color: $color-lavender-500;
+
+.card {
+  box-shadow: $card-shadow;
+  min-width: 270px;
+  width: auto;
+  z-index: 5001;
+}
+
+.cardMobile {
+  @extend .card;
+  bottom: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 299;
+}
+
+.header {
+  align-items: center;
+  background-color: $color-purple-400;
+  color: $color-lavender-150;
+  display: flex;
+  height: 45px;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  &_text {
+    font-size: 16px;
+    font-weight: 700;
+    margin-right: 10px;
+    padding-left: 5px;
+  }
+}
+
+.headerMobile {
+  @extend .header;
+  padding-left: 8px;
+}
+
+.closeIcon {
+  background: none;
+  color: $color-lavender-150;
+  font-size: 16px;
+  margin-left: auto;
+  padding: 1px 7px 2px;
+  &:hover {
+    color: $super-white;
+    cursor: pointer;
+  }
+}
+
+.closeIconMobile {
+  @extend .closeIcon;
+  margin-left: 0;
+}
+
+.calendarIcon {
+  padding-bottom: 2px;
+}
+
+.body {
+  height: auto;
+  max-height: 350px;
+  max-width: 285px;
+  min-height: 200px;
+  padding: 15px;
+}
+
+.bodyMobile {
+  @extend .body;
+  max-height: none;
+  padding-left: 25px;
+  .container {
+    margin-bottom: 35px;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.subHeader {
+  color: $color-purple-400;
+  padding-bottom: 5px;
+}
+
+.subHeaderMobile {
+  @extend .header;
+  background-color: $color-purple-400;
+  justify-content: center;
+  z-index: 1;
+  &_text {
+    @extend .header_text;
+    background: none;
+    color: $color-lavender-150;
+    cursor: auto;
+  }
+}
+
+.data {
+  align-items: center;
+  color: $color-purple-600;
+  display: flex;
+  font-size: $medium-size;
+  font-weight: 500;
+  margin-bottom: 8px;
+  &_note {
+    max-height: 40px;
+    overflow: auto;
+  }
+
+  &_text {
+    padding-left: 5px;
+    padding-top: 1px;
+  }
+}
+.multilineData {
+  @extend .data;
+  align-items: center;
+  .data_text {
+    padding-top: 0;
+  }
+}
+
+.subData {
+  color: $color-lavender-500;
+  @extend .font-subHeaderExtraSmall;
+}
+
+.footer {
+  align-items: center;
+  border-top: 1px solid $color-lavender-150;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px;
+  width: 100%;
+}
+
+.footerMobile {
+  @extend .footer;
+  border-top: none;
+  justify-content: flex-start;
+  width: auto;
+  &_actions {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    @extend .actionsOverlay;
+  }
+}
+
+.blurred {
+  @include blurred-mixin();
+  top: 90px;
+}
+
+.actionButtonMobile {
+  font-size: 20px;
+  height: auto;
+  padding: 12px 13px;
+}
+
+.actionsOverlay {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.actionOverlayButtonMobile {
+  align-items: center;
+  background: none;
+  color: $super-white;
+  display: flex;
+  margin-bottom: 10px;
+  padding: 0 0.5em;
+  text-transform: uppercase;
+}
+
+.actionOverlayButtonIconMobile {
+  background: $super-white;
+  border-radius: 20px;
+  color: $super-white;
+  margin-right: 10px;
+  padding: 7px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: $color-lavender-500;
+    color: $super-white;
+  }
+}
+
+.primaryButton {
+  background-color: $primary-button-color;
+  border-radius: 4px;
+  color: $primary-button-text-color;
+  margin-left: 5px;
+  &:hover {
+    background: $primary-button-color-hover;
+  }
+}
+
+.secondaryButton {
+  background-color: $secondary-button-color;
+  border: 1px solid $secondary-button-border-color;
+  border-radius: 4px;
+  color: $secondary-button-text-color;
+  &:hover {
+    background-color: $secondary-button-color-hover;
+  }
+}
+
+.requestedAt {
+  color: $color-grey-400;
+  font-size: $x-small-size;
+  font-weight: $bold-weight;
+
+  &_diffUserContainer {
+    margin-bottom: 5px;
+  }
+
+  &_byDiffUser {
+    color: $color-purple-400;
+
+    font-size: $x-small-size;
+    opacity: 1;
+  }
+
+  &_on {
+    opacity: 0.6;
+    padding-right: 5px;
+  }
+}
+
+.requestIcon {
+  font-weight: 400;
+}

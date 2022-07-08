@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -10,7 +9,7 @@ import { patientShape } from '../../library/PropTypeShapes';
 import PatientData from './PatientData';
 import { Button } from '../../library';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 class AddPatientSuggestions extends Component {
   constructor(props) {
@@ -91,17 +90,13 @@ class AddPatientSuggestions extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.patientSpeel}>
-          <b>
-            It looks like <span className={styles.bold}>{fullName}</span> already exists in your
-            system.
-          </b>{' '}
-          Let{"'"}s connect this request with their patient record. Please select one of the
-          following options and then click on <span className={styles.bold}>Connect Patient</span>.{' '}
-          <br /> <br /> <b>If this is a new patient</b>, please click{' '}
-          <span className={styles.bold}>Create New Patient</span> to add a new patient record.{' '}
+          It looks like <span>{fullName}</span> already exists in your system. Let's connect this
+          request with their patient record. Please select one of the following options and then
+          click on <span>Connect Patient</span>. <br /> <br /> If this is a new patient, please
+          click <span>Create New Patient</span> to add a new patient record.{' '}
         </div>
         <div className={styles.suggestionsList}>
-          {suggestions.map(patient => (
+          {suggestions.map((patient) => (
             <PatientData
               key={patient.id}
               patient={patient}
@@ -140,13 +135,10 @@ AddPatientSuggestions.propTypes = {
 
 AddPatientSuggestions.defaultProps = { patients: new Map() };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ updateEntityRequest }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ updateEntityRequest }, dispatch);
 
 const mapStateToProps = ({ entities }) => ({ patients: entities.getIn(['patients', 'models']) });
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(AddPatientSuggestions);

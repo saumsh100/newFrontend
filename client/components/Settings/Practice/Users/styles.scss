@@ -1,16 +1,21 @@
+@import '../../../../styles/ui-reskin.scss';
 .usersBodyClass {
   padding: 40px;
 }
 
 .userListItem {
-  border: 1px solid #f0f0f0;
+  border: 1px solid $color-grey-100;
   border-bottom: 0;
   min-width: 560px;
   padding-bottom: 20px;
   padding-top: 20px;
 
   &:last-child {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid $color-grey-100;
+  }
+
+  &:hover {
+    background-color: #fbfbfc;
   }
 }
 
@@ -19,7 +24,6 @@
   border-radius: 25%;
   color: black;
   display: inline-block;
-  font-family: 'Gotham-Medium', sans-serif;
   font-size: 10px;
   padding-bottom: 2px;
   padding-left: 6px;
@@ -48,6 +52,11 @@
 .inviteUser {
   margin-right: 10px;
   //margin: 25px 25px 25px 0;
+  i {
+    color: $primary-purple-100;
+    font-size: 12px;
+    font-weight: 400;
+  }
 }
 
 .mainHead {
@@ -96,14 +105,15 @@
 }
 
 .name {
-  font-family: 'Gotham-Medium', sans-serif;
-  font-size: 1.3em;
+  color: $color-purple-500;
+  font-size: $x-medium-size;
+  font-weight: $medium-weight;
   margin: 0 0 0 15px;
 }
 
 .email {
-  color: grey;
-  font-family: 'Gotham-Medium', sans-serif;
+  color: $color-grey-400;
+  font-weight: $medium-weight;
   margin: 0 15px;
 }
 
@@ -126,7 +136,11 @@
   display: flex;
 
   i {
+    color: $color-purple-200;
     margin-top: -1.7px;
+    &:hover {
+      color: $color-lavender-500;
+    }
   }
 }
 
@@ -135,19 +149,23 @@
   margin-right: 25px;
 
   i {
+    color: $color-purple-200;
     margin-top: -1px;
+    &:hover {
+      color: $color-lavender-500;
+    }
   }
 }
 
 .cancel {
   display: flex;
-
-  &:last-of-type {
-    margin-right: 10px;
-  }
+  line-height: normal;
+  margin-left: 10px;
+  width: 20%;
 
   i {
-    margin-top: -1px;
+    font-weight: $normal-weight;
+    margin-top: 1px;
   }
 }
 
@@ -165,4 +183,14 @@
 
 .usernameInput {
   margin-top: 10px;
+}
+
+.icon {
+  font-weight: $normal-weight;
+  margin-right: 11px;
+}
+.userIcon {
+  font-size: $x-small-size;
+  margin-left: 4px;
+  margin-right: 8px;
 }

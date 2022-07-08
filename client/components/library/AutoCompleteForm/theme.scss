@@ -18,7 +18,7 @@
 
 .suggestionsContainerOpen {
   border-radius: 0;
-  box-shadow: 0 8px 4px -3px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 4px -3px rgba(0, 0, 0, 0.2);
   display: block;
   margin: 0;
   padding: 0;
@@ -30,9 +30,8 @@
 
 .suggestionsList {
   //border: 1px solid #aaa;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 0;
-  font-family: Gotham-Book, sans-serif;
   list-style-type: none;
   margin: 0;
   max-height: 170px;
@@ -41,7 +40,6 @@
   width: 100%;
   z-index: 2;
 }
-
 
 .inputFocused {
   outline: none;
@@ -57,6 +55,5 @@
 }
 
 .suggestionHighlighted {
-  background-color: #E7E7E7;
+  background-color: #e7e7e7;
 }
-

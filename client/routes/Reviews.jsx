@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route, Switch, BrowserRouter } from 'react-router-dom';
@@ -37,9 +36,10 @@ const GuestRoute = ({
   <Route
     {...rest}
     render={(props) => {
-      if (isAuth && (patientUser && patientUser.isPhoneNumberConfirmed)) {
+      if (isAuth && patientUser && patientUser.isPhoneNumberConfirmed) {
         return <Redirect to={redirecPath} />;
-      } else if (isAuth && (patientUser && !patientUser.isPhoneNumberConfirmed)) {
+      }
+      if (isAuth && patientUser && !patientUser.isPhoneNumberConfirmed) {
         return <Redirect to={redirecAccountPath} />;
       }
       return <Component {...props} />;
@@ -70,12 +70,12 @@ const AuthenticatedRoute = ({
 }) => (
   <Route
     {...rest}
-    render={props =>
-      (!isAuth || (isAuth && (patientUser && !patientUser.isPhoneNumberConfirmed)) ? (
+    render={(props) =>
+      !isAuth || (isAuth && patientUser && !patientUser.isPhoneNumberConfirmed) ? (
         <Redirect to={redirecPath} />
       ) : (
         <Component {...props} />
-      ))
+      )
     }
   />
 );
@@ -153,7 +153,7 @@ const EmbedRouter = ({ match, isAuth, patientUser }) => {
       <Redirect exact from={b('/book')} to={b('/book/reason')} />
       <Route
         path={b('/book')}
-        render={props => <BookingRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
+        render={(props) => <BookingRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
       />
       <GuestRoute
         exact
@@ -177,7 +177,9 @@ const WidgetRouter = ({ history, isAuth, patientUser }) => (
           <Switch>
             <Route
               path={base()}
-              render={props => <EmbedRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
+              render={(props) => (
+                <EmbedRouter {...props} isAuth={isAuth} patientUser={patientUser} />
+              )}
             />
           </Switch>
         </Widget>
@@ -198,7 +200,7 @@ export default connect(mapStateToProps)(WidgetRouter);
 ReviewsRouter.propTypes = {
   match: PropTypes.shape({
     isExact: PropTypes.bool,
-    params: PropTypes.object,
+    params: PropTypes.shape,
     path: PropTypes.string,
     url: PropTypes.string,
   }).isRequired,
@@ -208,7 +210,7 @@ BookingRouter.propTypes = {
   isAuth: PropTypes.bool.isRequired,
   match: PropTypes.shape({
     isExact: PropTypes.bool,
-    params: PropTypes.object,
+    params: PropTypes.shape,
     path: PropTypes.string,
     url: PropTypes.string,
   }).isRequired,
@@ -232,7 +234,7 @@ EmbedRouter.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
   match: PropTypes.shape({
     isExact: PropTypes.bool,
-    params: PropTypes.object,
+    params: PropTypes.shape,
     path: PropTypes.string,
     url: PropTypes.string,
   }).isRequired,

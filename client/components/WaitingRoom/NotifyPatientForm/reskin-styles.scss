@@ -1,0 +1,54 @@
+.heading {
+  background: $super-white;
+  color: $color-purple-600;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  margin-bottom: 32px;
+}
+
+.messageContainer {
+  padding-bottom: 0;
+  > div {
+    top: 0;
+  }
+}
+
+.messageTextArea {
+  background-color: $color-grey-050;
+  border: 1px solid $color-lavender-100;
+  box-sizing: border-box;
+  color: $color-purple-600;
+
+  font-size: $medium-size;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 500;
+  line-height: 20px;
+  margin: 0;
+  min-height: 114px;
+  outline: none;
+  padding: 16px 20px;
+  resize: none;
+  width: 100%;
+}
+
+.refreshTemplateButton {
+  align-items: center;
+  border: none;
+  display: inline-block;
+  font-size: 10px;
+  justify-content: center;
+  margin-left: 10px;
+  padding: 0;
+  &:hover {
+    background-color: transparent;
+    color: initial;
+  }
+  > i {
+    font-size: 10px;
+  }
+}
+
+.errorFetchingTemplateContainer {
+  color: $danger-color;
+  margin-top: 10px;
+}

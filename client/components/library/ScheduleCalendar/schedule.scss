@@ -1,6 +1,4 @@
-@import '../../../styles/ui.scss';
-@import '../../../styles/ui-kit.scss';
-@import './color';
+@import '../../../styles/ui-reskin.scss';
 
 .contentWrapper {
   display: flex;
@@ -31,53 +29,53 @@
 
 .legend {
   align-items: center;
-  color: $calendar-grey-lighter;
+  color: $color-purple-600;
   display: flex;
-  font-size: 10px;
+  font-size: $x-small-size;
+  font-weight: $normal-weight;
   line-height: 1;
   margin-right: 20px;
 }
 
 .toggleDivDisabled {
-  background: $grey-lighter;
+  background: $color-grey-200;
   border: 0;
   border-radius: 4px;
   min-height: 40px;
   padding: 0 16px;
 
   .caretIconWrapper {
-    color: $grey-dark;
+    color: $color-grey-300;
   }
 }
 
 .baseLegend {
-  border-radius: 4px;
   display: block;
-  height: 20px;
+  height: 15.47px;
   margin-right: 4px;
-  width: 36px;
+  width: 15.47px;
 }
 
 .defaultLegend {
   @extend .baseLegend;
-  background: $white;
-  box-shadow: inset 0 0 0 1px $grey-lighter;
+  background: $super-white;
+  border: 1px solid $color-grey-200;
 }
 
 .overrideLegend {
   @extend .baseLegend;
-  background: $calendar-override;
-  box-shadow: inset 0 0 0 1px $calendar-override;
+  background: $color-yellow-200;
+  border: 1px solid $color-purple-200;
 }
 
 .closedLegend {
   @extend .baseLegend;
-  background: $calendar-closed;
-  box-shadow: inset 0 0 0 1px $calendar-closed;
+  background: $color-grey-050;
+  border: 1px solid $color-grey-200;
 }
 
 .loading {
-  background: transparentize($white, 0.25);
+  background: $super-white;
   bottom: 0;
   font-size: 34px;
   left: 0;
@@ -103,12 +101,12 @@
 
 .input {
   -webkit-appearance: none;
-  background: $white;
-  border: 1px solid $grey-lighter;
+  background: $super-white;
+  border: 1px solid $color-grey-200;
   border-radius: 4px;
-  box-shadow: $shadow;
+  box-shadow: $box-shadow-4;
   box-sizing: border-box;
-  color: $calendar-grey;
+  color: $color-grey-400;
   font-size: 14px;
   font-weight: 500;
   min-height: 40px;
@@ -116,8 +114,13 @@
   transition: border-color 0.2s ease;
   width: 100%;
 
+  &:hover {
+    background-color: $color-lavender-050;
+    border: 1px solid $color-lavender-500;
+  }
+
   &:focus {
-    border-color: $grey-dark;
+    border-color: $color-lavender-100;
     transition: border-color 0.2s ease;
   }
 
@@ -127,14 +130,24 @@
 }
 
 .inputToggler {
-  color: $calendar-grey;
+  background-color: transparent;
+  color: $color-grey-400;
   font-size: 13px;
   line-height: 1.4;
+
+  &:hover {
+    background: $color-lavender-050;
+  }
+
+  &:focus {
+    background: $color-lavender-100;
+  }
 }
 
 .inputActive {
-  border-color: $grey-dark;
-  transition: all 0.2s ease;
+  background: $color-lavender-100;
+  border: 1px solid $color-lavender-500;
+  border-radius: 4px;
 }
 
 .textarea {
@@ -151,7 +164,7 @@
 
 .error {
   bottom: -5px;
-  color: $red;
+  color: $error-400;
   display: block;
   font-size: 12px;
   font-weight: 500;
@@ -161,12 +174,12 @@
 }
 
 .erroredInput {
-  border-color: $red;
-  color: $red;
+  border-color: $error-500;
+  color: $error-400;
 }
 
 .errorIcon {
-  color: $red;
+  color: $error-400;
 }
 
 .bar {
@@ -174,15 +187,15 @@
 }
 
 .erroredLabel {
-  color: $calendar-grey-lighter;
+  color: $color-grey-100;
 }
 
 .erroredLabelFilled {
-  color: $calendar-grey-lighter;
+  color: $color-grey-100;
 }
 
 .label {
-  color: $calendar-grey-lighter;
+  color: $color-grey-100;
   font-size: 14px;
   left: 16px;
   top: 21px;
@@ -205,15 +218,15 @@
     transform: translateX(0);
 
     > ul {
-      background: $white;
-      border: 1px solid $grey-dark;
+      background: $super-white;
+      border: 1px solid $color-grey-200;
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;
       border-top: 0;
-      box-shadow: $shadow;
+      box-shadow: $box-shadow-4;
 
       > div {
-        background: $white;
+        background: $super-white;
         box-shadow: none;
         max-height: 170px;
         padding: 0;
@@ -224,6 +237,6 @@
 
 .outside {
   background: transparent;
-  color: $calendar-outside;
+  color: $color-grey-200;
   cursor: default;
 }

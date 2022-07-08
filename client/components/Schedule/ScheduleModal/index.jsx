@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -18,7 +17,7 @@ import {
 } from '../../library';
 import appoitmentsStyle from '../AddNewAppointment/styles.scss';
 import getFinalDailySchedules from './getFinalDailySchedules';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 class ScheduleModal extends React.Component {
   constructor(props) {
@@ -60,7 +59,7 @@ class ScheduleModal extends React.Component {
               practitionersData,
             }),
           500,
-        ))
+        ),)
       .catch((error) => {
         this.setState({
           error,
@@ -200,7 +199,7 @@ class ScheduleModal extends React.Component {
                                       </span>
                                       <span>{type}</span>
                                     </div>
-                                ))
+                                  ))
                                 : 'None'}
                             </div>
                             <div
@@ -219,7 +218,7 @@ class ScheduleModal extends React.Component {
                                         {getFormattedDate(endDate, 'hh:mma', this.props.timezone)}
                                       </span>
                                     </div>
-                                ))
+                                  ))
                                 : 'None'}
                             </div>
                             <div
@@ -241,7 +240,7 @@ class ScheduleModal extends React.Component {
                                         {getFormattedDate(endDate, 'hh:mma', this.props.timezone)}
                                       </span>
                                     </div>
-                                ))
+                                  ))
                                 : 'None'}
                             </div>
                           </div>
@@ -283,7 +282,7 @@ const mapStateToProps = ({ schedule, entities, auth }) => ({
   accountId: auth.get('accountId'),
   timezone: auth.get('timezone'),
   scheduleDate: schedule.get('scheduleDate'),
-  reasons: Object.values(entities.getIn(['services', 'models']).toJS()).map(v => ({
+  reasons: Object.values(entities.getIn(['services', 'models']).toJS()).map((v) => ({
     value: v.id,
     label: v.name,
   })),

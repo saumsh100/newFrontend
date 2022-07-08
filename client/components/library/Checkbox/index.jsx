@@ -1,9 +1,8 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames/bind';
 import withTheme from '../../../hocs/withTheme';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const Checkbox = ({
   id,

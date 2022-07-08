@@ -17,7 +17,6 @@
 .activeTab {
   border-bottom: $selection-border $primary-color;
   color: black;
-  font-family: $medium-font;
 }
 
 .disabledTab {
@@ -41,7 +40,6 @@
 }
 
 .content {
-  max-height: 520px;
   overflow: auto;
 }
 

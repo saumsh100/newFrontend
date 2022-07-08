@@ -1,7 +1,6 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const Item = ({ title, value, extra }) => (
   <div className={styles.item}>

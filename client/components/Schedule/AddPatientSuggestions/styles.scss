@@ -1,4 +1,5 @@
 @import '../../../styles/ui';
+@import '../../../styles/fonts.scss';
 
 .suggestionsContainer {
   background: $primary-white;
@@ -21,21 +22,21 @@
 
 .title {
   color: $primary-color;
-  font-size: $extra-medium-size;
-  font-weight: $jumbo-weight;
+  font-size: $xxx-medium-size;
+  font-weight: $semi-bold-weight;
   padding-left: 15px;
   padding-top: 15px;
 }
 .listItemHeader {
-  composes: listItemHeader from '../../../styles/fonts.scss';
+  @extend .listItemHeader;
 }
 
 .subHeaderSmall {
-  composes: subHeaderSmall from '../../../styles/fonts.scss';
+  @extend .subHeaderSmall;
 }
 
 .fontBold {
-  composes: fontBold from '../../../styles/fonts.scss';
+  @extend .fontBold;
 }
 
 .container {
@@ -102,7 +103,7 @@
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  font-size: $medium-plus-size;
+  font-size: $x-medium-size;
   justify-content: center;
 
   &_img {
@@ -147,6 +148,6 @@
 
 .bold {
   color: $primary-blue;
-  composes: fontMedium from '../../../styles/fonts.scss';
   text-transform: capitalize;
+  @extend .fontMedium;
 }

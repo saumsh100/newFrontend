@@ -1,8 +1,7 @@
-
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const SegmentButton = ({ children, buttonState, count, ...rest }) => {
   const buttonStateClassName = buttonState && styles[`segmentButton_${buttonState}`];

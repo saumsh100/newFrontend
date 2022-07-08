@@ -14,11 +14,11 @@ class PatientPage extends Component {
     const { bookingWidgetPrimaryColor } = this.props.params.account;
     document.documentElement.style.setProperty(
       '--primaryColor',
-      bookingWidgetPrimaryColor || '#ff715a',
+      bookingWidgetPrimaryColor || '#574BD2',
     );
     document.documentElement.style.setProperty(
       '--primaryButtonColor',
-      bookingWidgetPrimaryColor || '#ff715a',
+      bookingWidgetPrimaryColor || '#574BD2',
     );
   }
 

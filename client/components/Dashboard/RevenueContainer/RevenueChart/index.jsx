@@ -6,13 +6,14 @@ import styles from '../../styles';
 
 const generateChartOptions = () => {
   const ticks = {
-    fontSize: 10,
-    fontFamily: 'Gotham-Book',
-    fontColor: '#ffffff',
+    fontSize: 12,
+    fontStyle: 'bold',
+    fontFamily: 'Inter',
+    fontColor: '#ecebff',
     maxRotation: 0,
     autoSkip: true,
     beginAtZero: true,
-    padding: 20,
+    padding: 8,
     callback(value) {
       if (
         typeof value === 'number' &&
@@ -22,10 +23,7 @@ const generateChartOptions = () => {
       ) {
         return `${value / 1000}k`;
       }
-      if (typeof value !== 'number' || value === 0) {
-        return value;
-      }
-      return '';
+      return value;
     },
   };
 
@@ -39,9 +37,10 @@ const generateChartOptions = () => {
           gridLines: {
             display: true,
             drawTicks: false,
-            color: '#2e3845',
+            color: '#412c7d',
             tickMarkLength: 20,
-            offsetGridLines: true,
+            offsetGridLines: false,
+            zeroLineColor: '#412c7d',
           },
         },
       ],
@@ -59,11 +58,20 @@ const generateChartOptions = () => {
         paddingTop: 30,
       },
     },
+
+    layout: {
+      padding: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 16,
+      },
+    },
   };
 
   const toolTips = {
     enabled: true,
-    fontFamily: 'Gotham-Book',
+    fontFamily: 'Inter',
     fontSize: 10,
     callbacks: {
       title: (tooltipItem) => {
@@ -81,8 +89,8 @@ const generateChartOptions = () => {
   const legend = {
     display: false,
     labels: {
-      fontColor: colorMap.white,
-      fontFamily: 'Gotham-Book',
+      fontColor: '#ecebff',
+      fontFamily: 'Inter',
     },
   };
 
@@ -93,46 +101,51 @@ const generateChartOptions = () => {
   };
 };
 
-const defaultDataSet = {
-  fill: true,
-  lineTension: 0,
-  backgroundColor: '#242c36',
-  borderColor: colorMap.white,
-  borderCapStyle: 'butt',
-  borderDash: [],
-  borderDashOffset: 0.0,
-  borderJoinStyle: 'miter',
-  pointBorderColor: colorMap.white,
-  pointBackgroundColor: '#242c36',
-  pointBorderWidth: 1,
-  pointHoverRadius: 5,
-  pointHoverBackgroundColor: colorMap.green,
-  pointHoverBorderColor: colorMap.dark,
-  pointHoverBorderWidth: 2,
-  pointRadius: 5,
-  pointHitRadius: 10,
-};
+const generateDataSet = (labels, billedData, estimatedData, canvas) => {
+  const ctx = canvas.getContext('2d');
+  const gradientFill = ctx.createLinearGradient(0, 0, 0, 317);
+  gradientFill.addColorStop(0, 'rgba(103, 76, 255, 0.57)');
+  gradientFill.addColorStop(1, 'rgba(103, 76, 255, 0.05)');
 
-const generateDataSet = (labels, billedData, estimatedData) => ({
-  labels,
-  datasets: [
-    {
-      ...defaultDataSet,
-      label: 'Booked',
-      backgroundColor: '#242c36',
-      pointBackgroundColor: '#242c36',
-      data: billedData,
-    },
-    {
-      ...defaultDataSet,
-      label: 'Estimated',
-      backgroundColor: '#4f5966',
-      pointBackgroundColor: '#4f5966',
-      pointHoverBackgroundColor: colorMap.blue,
-      data: estimatedData,
-    },
-  ],
-});
+  const defaultDataSet = {
+    fill: true,
+    lineTension: 0,
+    backgroundColor: gradientFill,
+    borderColor: '#C7C2FF',
+    borderCapStyle: 'butt',
+    borderDash: [],
+    borderDashOffset: 0.0,
+    borderJoinStyle: 'miter',
+    pointBorderColor: '#C7C2FF',
+    pointBackgroundColor: '#241158',
+    pointBorderWidth: 1,
+    pointHoverRadius: 5,
+    pointHoverBackgroundColor: colorMap.green,
+    pointHoverBorderColor: colorMap.dark,
+    pointHoverBorderWidth: 2,
+    pointRadius: 5,
+    pointHitRadius: 10,
+    borderWidth: 2,
+  };
+  return {
+    labels,
+    datasets: [
+      {
+        ...defaultDataSet,
+        label: 'Booked',
+        pointBackgroundColor: '#241158',
+        data: billedData,
+      },
+      {
+        ...defaultDataSet,
+        label: 'Estimated',
+        pointBackgroundColor: '#241158',
+        pointHoverBackgroundColor: colorMap.blue,
+        data: estimatedData,
+      },
+    ],
+  };
+};
 
 export default function RevenueChart(props) {
   const { labels, billedData, estimatedData, isValid } = props;
@@ -142,7 +155,7 @@ export default function RevenueChart(props) {
       {isValid ? (
         <Line
           options={generateChartOptions()}
-          data={generateDataSet(labels, billedData, estimatedData)}
+          data={(canvas) => generateDataSet(labels, billedData, estimatedData, canvas)}
         />
       ) : (
         <div className={styles.revenueChart_noRevenue}> No Revenue </div>

@@ -1,4 +1,4 @@
-@import '../../../styles/ui.scss';
+@import '../../../styles/ui-reskin.scss';
 
 .callTableContainer {
   box-sizing: border-box;
@@ -10,8 +10,7 @@
 }
 
 .title {
-  color: $primary-dark;
-  composes: fontMedium from '../../../styles/fonts.scss';
+  color: $color-grey-500;
   font-size: 25px;
   padding: 30px;
 }
@@ -25,7 +24,7 @@
   cursor: pointer;
   outline: none;
   &:hover {
-    background-color: $primary-grey;
+    background-color: $color-lavender-050;
   }
 
   &:last-child {
@@ -37,35 +36,44 @@
   border-bottom: 1px solid $primary-grey;
 }
 
+.rowBorder {
+  border-bottom: 1px solid $color-lavender-150;
+  border-top: 1px solid $color-lavender-150;
+}
+
 .rowHeader {
-  color: $primary-dark-grey;
+  background-color: $color-grey-050;
+  color: $color-purple-300;
+
   display: flex;
   flex-direction: row;
-  font-size: 12px;
-  padding-bottom: 20px;
-  padding-left: 30px;
+  font-size: $x-small-size;
+  font-weight: $bold-weight;
+  height: 40px;
+  justify-content: flex-start;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   width: 100%;
+  @extend .rowBorder;
 }
 
 .row {
   border-bottom: 1px solid $primary-grey;
-  color: $primary-dark;
+  color: $color-grey-400;
   display: flex;
   flex-direction: row;
   font-size: 12px;
   height: 55px;
-  padding-left: 30px;
+  line-height: $x-medium-size;
   width: 100%;
+  @extend .rowBorder;
 }
 
 .colStyling {
   align-items: center;
-  composes: fontMedium from '../../../styles/fonts.scss';
   display: flex;
   justify-content: flex-start;
   text-align: left;
-  text-transform: capitalize;
 }
 
 .col {
@@ -80,8 +88,7 @@
 
 .colSmall {
   @extend .colStyling;
-  padding-left: 10px;
-  width: 100px;
+  padding: 0px 24px;
 }
 
 .colExtraSmall {
@@ -90,11 +97,13 @@
 }
 
 .phone {
-  color: $primary-green;
+  color: $color-teal-500;
+  font-weight: $normal-weight;
 }
 
 .phoneMissed {
-  color: $primary-red;
+  color: $error-500;
+  font-weight: $normal-weight;
 }
 
 .appBooked {
@@ -104,10 +113,13 @@
   min-width: 50px;
   width: 30%;
 }
-
-.volumeIcon {
+.volumeIconContainer {
   text-align: center;
   width: 60%;
+}
+
+.volumeIcon {
+  font-weight: $normal-weight;
 }
 
 .playIcon {
@@ -115,7 +127,7 @@
 }
 
 .unknown {
-  color: $primary-green;
+  color: $color-teal-500;
 }
 
 .patientStyle {
@@ -132,6 +144,7 @@
 }
 
 .callerName {
+  font-weight: $bold-weight;
   max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;

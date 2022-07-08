@@ -29,7 +29,7 @@ import {
   bodyStyle,
   columnHeaderStyle,
 } from './tableStyle';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const baseColumn = {
   className: styles.colBg,
@@ -170,30 +170,12 @@ class PatientTable extends React.PureComponent {
       },
       {
         ...baseColumn,
-        sortable: false,
-        maxWidth: 60,
-        accessor: '',
-        Cell: ({ value, original }) => (
-          <div className={styles.displayFlex}>
-            <PatientNameColumn
-              isAvatar
-              value={value}
-              patient={original}
-              redirect={() => {
-                this.props.push(`/patients/${original.id}`);
-              }}
-              text=""
-            />
-          </div>
-        ),
-      },
-      {
-        ...baseColumn,
-        Header: 'First Name',
+        Header: 'FIRST NAME',
         accessor: 'firstName',
         Cell: ({ value, original }) => (
           <div className={styles.displayFlex}>
             <PatientNameColumn
+              isAvatar
               value={value}
               patient={original}
               redirect={() => {
@@ -206,7 +188,7 @@ class PatientTable extends React.PureComponent {
       },
       {
         ...baseColumn,
-        Header: 'Last Name',
+        Header: 'LAST NAME',
         accessor: 'lastName',
         Cell: ({ value, original }) => (
           <div className={styles.displayFlex}>
@@ -248,10 +230,10 @@ class PatientTable extends React.PureComponent {
       },
       {
         ...baseColumn,
-        Header: 'Last Appt',
+        Header: 'LAST APPT',
         id: 'lastApptDate',
         accessor: ({ lastApptDate }) =>
-          lastApptDate ? getFormattedDate(lastApptDate, 'MMM DD YYYY', timezone) : '-',
+          lastApptDate ? getFormattedDate(lastApptDate, 'MMM DD, YYYY', timezone) : '-',
         Cell: ({ value }) => (
           <div className={styles.displayFlex}>
             <div className={styles.cellText_lastAppt}>{value}</div>
@@ -260,7 +242,7 @@ class PatientTable extends React.PureComponent {
       },
       {
         ...baseColumn,
-        Header: 'Next Appt',
+        Header: 'NEXT APPT',
         id: 'nextApptDate',
         accessor: ({ nextApptDate }) =>
           nextApptDate ? getFormattedDate(nextApptDate, 'MMM DD YYYY', timezone) : '-',
@@ -272,19 +254,19 @@ class PatientTable extends React.PureComponent {
       },
       {
         ...baseColumn,
-        Header: 'Due for Hygiene',
+        Header: 'DUE FOR HYGIENE',
         id: 'dueForHygieneDate',
         Cell: ({ original }) => <HygieneColumn showTable patient={original} />,
       },
       {
         ...baseColumn,
-        Header: 'Due for Recall',
+        Header: 'DUE FOR RECALL',
         id: 'dueForRecallExamDate',
         Cell: ({ original }) => <RecallColumn showTable patient={original} />,
       },
       {
         ...baseColumn,
-        Header: 'Due for Follow Up',
+        Header: 'DUE FOR FOLLOW UP',
         id: 'patientFollowUps.dueAt',
         Cell: ({ original }) => <FollowUpsColumn showTable patient={original} />,
       },

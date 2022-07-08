@@ -1,4 +1,4 @@
-@import '../../../../styles/ui-kit.scss';
+@import '../../../../styles/ui-reskin.scss';
 
 .toggleWrapper {
   align-items: center;
@@ -8,19 +8,17 @@
 }
 
 .toggleTitle {
-  color: $grey;
-  font-family: $inter;
-  font-size: 14px;
-  font-weight: 500;
+  color: $color-purple-600;
+  font-size: $xx-medium-size;
+  font-weight: $medium-weight;
   margin: 0 32px 0 0;
   text-align: left;
 }
 
 .wrapper {
-  border: 1px solid $grey-lighter;
+  border: 1px solid $color-lavender-100;
   border-bottom: 0;
   border-radius: 4px;
-  box-shadow: $shadow;
   display: flex;
   flex-wrap: wrap;
 }
@@ -41,38 +39,37 @@
 }
 
 .weekDay {
-  color: $grey;
-  font-family: $inter;
-  font-size: 14px;
-  font-weight: 500;
+  color: $color-grey-400;
+  font-size: $x-medium-size;
+  font-weight: $bold-weight;
   margin: 0 0 8px;
 }
 .edit {
   background-color: transparent;
-  color: $grey-light;
+  color: $color-lavender-500;
   display: flex;
-  font-family: $inter;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: $small-size;
+  font-weight: $bold-weight;
   letter-spacing: 0;
   margin: 0;
   padding: 0;
   transition: all 0.2s ease;
   svg {
-    bottom: 1px;
     fill: currentColor;
     height: 12px;
     margin-right: 4px;
     position: relative;
+    top: 2px;
     width: 12px;
   }
   &:hover {
-    color: $grey;
+    background-color: transparent;
+    color: $color-lavender-550;
     transition: all 0.2s ease;
   }
 }
 .body {
-  border-top: 1px solid $grey-lightest;
+  border-top: 1px solid $color-lavender-100;
   display: flex;
   flex-wrap: wrap;
   max-height: 775px;
@@ -84,16 +81,15 @@
   flex: 1;
 }
 .hours {
-  width: 72px;
+  width: 100px;
   .hour {
     align-items: flex-start;
     border-bottom: 1px solid transparent;
     box-sizing: border-box;
-    color: $grey-light;
+    color: $color-purple-600;
     display: flex;
-    font-family: $inter;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: $x-small-size;
+    font-weight: $medium-weight;
     justify-content: center;
     line-height: 12px;
     min-height: 75px;
@@ -102,6 +98,7 @@
       color: transparent;
     }
     span {
+      left: 27px;
       position: relative;
       top: -6px;
     }
@@ -109,33 +106,30 @@
 }
 .subHeader {
   display: flex;
+  min-height: 75px;
   width: 100%;
   .availabilityTitle {
     align-items: center;
-    border-bottom: 1px solid $grey-lightest;
-    color: #808080;
+    border-bottom: 1px solid $color-lavender-100;
+    color: $color-grey-400;
     display: flex;
-    font-family: $inter;
-    font-size: 10px;
-    font-weight: 500;
+    font-weight: $medium-weight;
     justify-content: center;
     letter-spacing: 0;
-    width: 72px;
+    width: 100px;
   }
   .available {
     align-items: center;
-    border-bottom: 1px solid $grey-lightest;
-    border-left: 1px solid $grey-lightest;
-    color: $green-light;
+    border-bottom: 1px solid $color-lavender-100;
+    border-left: 1px solid $color-lavender-100;
+    color: $color-success-700;
     display: flex;
     flex: 1;
-    font-family: $inter;
-    font-size: 12px;
     justify-content: center;
     line-height: 28px;
   }
   .notAvailable {
-    color: $grey-light;
+    color: $color-success-700;
   }
 }
 .days {
@@ -143,7 +137,7 @@
   flex: 1;
   .column {
     align-items: center;
-    border-left: 1px solid $grey-lightest;
+    border-left: 1px solid $color-lavender-100;
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -168,24 +162,22 @@
       position: absolute;
       width: calc(100% - 4px);
       .value {
-        color: #6e6e6e;
-        font-family: $inter;
+        color: $color-purple-300;
         font-size: 9px;
         font-weight: 600;
         margin: 0;
       }
       .label {
-        color: #6e6e6e;
+        color: $color-purple-300;
         display: block;
-        font-family: $inter;
         font-size: 12px;
         font-weight: 400;
         line-height: 1;
         margin-bottom: 4px;
       }
       &.availabilities {
-        background: #f4f7f8;
-        border-color: #8fb1bb;
+        background: $color-grey-050;
+        border-color: 1px solid $color-purple-300;
       }
       &.breaks {
         background: #fff8f7;
@@ -195,13 +187,12 @@
     .closedColumn {
       @extend .slot;
       align-items: center;
-      background: $grey-lightest;
-      border: 1px solid $grey-lightest;
+      background: $color-grey-100;
+      border: 1px solid $color-lavender-100;
       border-radius: 4px;
       box-sizing: border-box;
-      color: $grey-light;
+      color: $color-purple-600;
       display: flex;
-      font-family: $inter;
       font-size: 12px;
       font-weight: 500;
       height: calc(100% - 4px);
@@ -212,13 +203,123 @@
       z-index: 10;
     }
     .row {
-      border-top: 1px solid $grey-lightest;
+      border-top: 1px solid $color-lavender-100;
       box-sizing: border-box;
       min-height: 75px;
       width: 100%;
-      &:first-of-type {
-        border-color: transparent;
-      }
     }
   }
+}
+
+.modal {
+  &_header {
+    align-items: center;
+    background-color: $color-purple-400;
+    border-bottom: 0;
+    box-sizing: border-box;
+    color: $super-white;
+    display: flex;
+    font-size: 18px;
+    height: 43px;
+    justify-content: space-between;
+    padding: 10px 20px;
+    width: 100%;
+  }
+
+  &_helper {
+    font-size: $x-medium-size;
+    font-weight: $small-size;
+    margin-left: 23px;
+  }
+
+  &__label {
+    color: $color-grey-500;
+    font-size: $medium-size;
+    font-weight: $normal-weight;
+  }
+
+  &__group {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0;
+
+    &:last-of-type {
+      margin-bottom: 16px;
+    }
+  }
+}
+.addButton {
+  display: block;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.dropdown {
+  &__input__wrapper {
+    background: $super-white;
+    border: 1px solid $color-purple-100;
+    border-radius: 4px;
+    box-sizing: border-box;
+    min-height: 40px;
+    padding: 0 16px;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      background-color: $color-lavender-050;
+      border: 1px solid $color-lavender-500;
+      color: $color-lavender-500;
+    }
+  }
+
+  &__input {
+    color: $color-grey-400;
+  }
+
+  &__wrapper {
+    box-sizing: border-box;
+    padding: 8px 0;
+    // we don't have access to the react-dd-menu item
+    // so we need to access it using the div selector
+    > :not(.dd-menu-items) + div,
+    > :not(.dd-menu-items) + div ul {
+      border: 0;
+      box-shadow: none !important;
+    }
+  }
+
+  &__listItem {
+    border: 0;
+    color: $color-grey-400;
+    font-size: $x-medium-size;
+    justify-content: flex-start;
+    padding: 0 16px;
+  }
+
+  &__selectedListItem {
+    border: 0;
+  }
+
+  &__list {
+    border: 1px solid $color-grey-100;
+    border-radius: 4px;
+    box-shadow: $box-shadow-4;
+    max-height: 200px;
+    overflow-y: scroll;
+  }
+
+  &__errorIcon {
+    color: $error-600;
+  }
+
+  &__errorInput {
+    color: $error-200;
+  }
+}
+
+.checked_circle {
+  color: $color-teal-700;
+  font-size: $medium-size;
+  font-weight: 400;
+  margin-right: 6px;
 }

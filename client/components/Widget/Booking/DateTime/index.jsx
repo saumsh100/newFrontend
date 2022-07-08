@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from 'react';
 import { List } from 'immutable';
 import PropTypes from 'prop-types';
@@ -15,7 +14,7 @@ import {
   setSelectedStartDate,
   setTimeFrame,
 } from '../../../../reducers/availabilities';
-import Button from '../../../library/Button';
+import Button from '../../components/Button';
 import DayPicker from '../../../library/DayPicker';
 import Join from '../Waitlist/Join';
 import { fetchAvailabilities } from '../../../../thunks/availabilities';
@@ -46,7 +45,7 @@ import { getFormattedDate, getTodaysDate, getUTCDate, parseDate } from '../../..
  */
 const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) =>
   availabilities
-    .filter(date => getUTCDate(date.startDate, accountTimezone).isSame(selectedDate, 'day'))
+    .filter((date) => getUTCDate(date.startDate, accountTimezone).isSame(selectedDate, 'day'))
     .reduce(groupTimesPerPeriod(accountTimezone), {
       morning: [],
       afternoon: [],
@@ -83,17 +82,17 @@ class DateTime extends PureComponent {
     }
     // This can be removed when the new booking widget is released
     if (
-      !this.props.nextAvailability
-      && this.props.availabilities.total === 0
-      && !this.props.dueDate
+      !this.props.nextAvailability &&
+      this.props.availabilities.total === 0 &&
+      !this.props.dueDate
     ) {
       this.props.setSelectedStartDate('');
     }
 
     if (
-      this.props.selectedAvailability !== null
-      && !!this.props.availabilities.total
-      && !!this.props.selectedAvailability
+      this.props.selectedAvailability !== null &&
+      !!this.props.availabilities.total &&
+      !!this.props.selectedAvailability
     ) {
       this.props.showButton();
     }
@@ -116,8 +115,13 @@ class DateTime extends PureComponent {
    * @param date
    * @param nextAvailability
    */
+
+  handleClosingModal() {
+    return this.setState({ isModal: false });
+  }
+
   changeSelectedDate(date, nextAvailability = false) {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       needToUpdateWaitlist: true,
       month: nextAvailability
         ? parseDate(date, this.props.accountTimezone).toDate()
@@ -127,10 +131,6 @@ class DateTime extends PureComponent {
     this.props.setSelectedAvailability(null);
     this.props.setSelectedStartDate(date);
     this.props.fetchAvailabilities();
-  }
-
-  handleClosingModal() {
-    return this.setState({ isModal: false });
   }
 
   /**
@@ -169,9 +169,7 @@ class DateTime extends PureComponent {
       return history.push(nextLoc);
     }
 
-    const currentDayPlus24 = getTodaysDate(accountTimezone)
-      .add(1, 'day')
-      .toISOString();
+    const currentDayPlus24 = getTodaysDate(accountTimezone).add(1, 'day').toISOString();
 
     if (selectedAvailability.startDate < currentDayPlus24) {
       this.props.hideButton();
@@ -238,7 +236,7 @@ class DateTime extends PureComponent {
      * @param timeframe
      * @return React.element
      */
-    const renderTimesOnTimeFrame = timeframe => (availability) => {
+    const renderTimesOnTimeFrame = (timeframe) => (availability) => {
       const availabilityClasses = classNames(styles.slot, {
         [styles.selectedSlot]:
           selectedAvailability && selectedAvailability.startDate === availability.startDate,
@@ -282,8 +280,8 @@ class DateTime extends PureComponent {
         );
       }
       return (
-        selectedStartDate
-        && !isFetching && (
+        selectedStartDate &&
+        !isFetching && (
           <div className={styles.cardsWrapper}>
             {availabilities.morning.length > 0 && (
               <Element className={styles.timeFrameWrapper} name="morning">
@@ -309,12 +307,13 @@ class DateTime extends PureComponent {
     };
     const currentDate = getTodaysDate(accountTimezone).toDate();
     const queryVars = parse(this.props.location.search);
-    const disabledDates = queryVars
-      && queryVars.dueDate
-      && this.props.isRecall
-      && queryVars.dueDate > currentDate.toISOString()
-      ? getUTCDate(queryVars.dueDate, accountTimezone).toDate()
-      : currentDate;
+    const disabledDates =
+      queryVars &&
+      queryVars.dueDate &&
+      this.props.isRecall &&
+      queryVars.dueDate > currentDate.toISOString()
+        ? getUTCDate(queryVars.dueDate, accountTimezone).toDate()
+        : currentDate;
     return (
       <Element id="scrollableContainer" className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
@@ -336,8 +335,8 @@ class DateTime extends PureComponent {
                 // selectedStartDate needs to be iso string because of the API needs it
                 // but it can sometimes be a future date depending on the timezone you currently are
                 value={
-                  selectedStartDate
-                  && getFormattedDate(selectedStartDate, 'YYYY-MM-DD', accountTimezone)
+                  selectedStartDate &&
+                  getFormattedDate(selectedStartDate, 'YYYY-MM-DD', accountTimezone)
                 }
                 tipSize={0.01}
                 showPreviousMonth={false}
@@ -380,10 +379,10 @@ function mapStateToProps({ availabilities, widgetNavigation }) {
   const isFetching = availabilities.get('isFetching');
   const availabilitiesSorted = selectedStartDate
     ? getSortedAvailabilities(
-      selectedStartDate,
-      availabilities.get('availabilities'),
-      accountTimezone,
-    )
+        selectedStartDate,
+        availabilities.get('availabilities'),
+        accountTimezone,
+      )
     : {};
   return {
     accountTimezone,

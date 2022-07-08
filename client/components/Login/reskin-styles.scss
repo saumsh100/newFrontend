@@ -1,0 +1,111 @@
+@import '../../styles/ui-reskin.scss';
+
+.backDrop {
+  background-image: url('../../../public/images/reskin-login-bg.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.loginForm {
+  border-radius: 8px;
+  margin: 100px auto 0;
+  padding: 30px 50px;
+  width: 300px;
+  z-index: 200;
+  @media screen and (min-height: 720px) {
+    transform: translateY(-150px);
+  }
+  @media screen and (max-width: $medium-screen-width) {
+    width: 60%;
+  }
+}
+
+.logoContainer {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.input {
+  margin-bottom: 16px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.button {
+  height: 40px;
+  margin-left: 16px;
+}
+
+.logoImage {
+  height: 5%;
+  left: 83px;
+  position: absolute;
+  top: 81px;
+}
+
+.submitButton {
+  width: 100%;
+}
+
+.text {
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.title {
+  color: $color-purple-600;
+  font-family: $font-inter;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px;
+  text-align: center;
+}
+
+.textLogin {
+  cursor: pointer;
+  padding-top: 15px;
+  text-align: center;
+  &:hover {
+    color: $color-purple-600;
+  }
+}
+
+.textError {
+  @extend .text;
+  color: $error-400;
+}
+
+.textSuccess {
+  background-color: $color-success-500;
+  padding: 10px;
+}
+
+.textSuccess2 {
+  padding: 10px;
+  text-align: center;
+}
+
+.submitText {
+  text-align: center;
+}
+
+.displayCenter {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.email {
+  color: $color-purple-600;
+  font-weight: 500;
+}
+
+.errorMessage {
+  color: $error-400;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  margin: -8px 0 16px 0;
+}

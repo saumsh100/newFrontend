@@ -1,22 +1,21 @@
-@import '../../../styles/ui.scss';
+@import '../../../styles/ui-reskin.scss';
 
 .optionDiv {
-  font-family: $dashboard-font !important;
   padding: 0 !important;
   white-space: normal !important;
 }
 
 .optionListItem {
   align-items: center;
-  background-color: $primary-white;
+  background-color: $super-white;
   border: 0;
-  border-bottom: 1px solid;
-  border-bottom-color: $primary-grey;
-  color: $primary-dark;
+  border-bottom: 1px solid $color-lavender-200;
+  color: $color-grey-400;
   cursor: pointer;
 
   display: flex;
   font-size: $small-size;
+  font-weight: $medium-weight;
   height: calc(2.5rem * 1.6);
   justify-content: center;
   letter-spacing: 0;
@@ -27,14 +26,13 @@
   text-overflow: ellipsis;
   width: 100%;
   &:hover {
-    background-color: lighten($primary-grey, 5%);
-    background-color: $primary-lightgrey !important;
-    color: $primary-dark !important;
+    background-color: $color-lavender-050;
+    color: $color-purple-400;
     cursor: pointer;
   }
 }
 
 .selectedListItem {
-  border-left: $selection-border $primary-color;
+  border-left: $color-lavender-500;
   padding-left: 15px;
 }

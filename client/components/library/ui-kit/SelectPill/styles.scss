@@ -1,42 +1,54 @@
-@import '../../../../styles/ui.scss';
+@import '../../../../styles/ui-reskin.scss';
 
 .wrapper {
   background-color: #fafafa;
   border-radius: 4px;
-  box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
+  box-shadow: $box-shadow-3;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .pill {
-  @extend .ui-kit-smoother;
   cursor: pointer;
   display: inline-block;
 
   & > button {
-    @extend .ui-kit-smoother;
     background: transparent;
     border: none;
-    color: #aaaaaa;
+    color: $color-grey-400;
     cursor: pointer;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: $medium-size;
+    font-weight: $medium-weight;
     letter-spacing: 0.02px;
-    line-height: 15px;
+    line-height: 20px;
     outline: none !important;
-    padding: 12px 26px;
+    padding: 8px 0px;
     text-align: center;
+    width: 100px;
   }
 
   &.active,
   &:hover {
-    background-color: #ffffff;
+    background-color: $color-lavender-150;
     border-radius: 4px;
-    box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
+    box-shadow: $box-shadow-3;
 
     & > button {
-      color: #184b5a;
+      border: 1px solid $color-lavender-500;
+      border-radius: 4px;
+      color: $color-lavender-500;
+    }
+  }
+  &:hover:not(.active) {
+    background-color: $color-lavender-050;
+    border-radius: 4px;
+    box-shadow: $box-shadow-3;
+
+    & > button {
+      border: 1px solid $color-lavender-500;
+      border-radius: 4px;
+      color: $color-lavender-500;
     }
   }
 }

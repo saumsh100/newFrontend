@@ -8,7 +8,7 @@ import styles from './styles.scss';
 
 export default function PreferencesForm({ role, handleSubmit, activeAccount }) {
   const initialValues = {
-    bookingWidgetPrimaryColor: activeAccount.get('bookingWidgetPrimaryColor') || '#FF715A',
+    bookingWidgetPrimaryColor: activeAccount.get('bookingWidgetPrimaryColor') || '#574BD2',
     bookingWidgetButtonLabel: activeAccount.get('bookingWidgetButtonLabel') || 'Book Online',
   };
   const isRoleNotSuperOrOwner = role !== 'SUPERADMIN' && role !== 'OWNER';

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
@@ -7,7 +6,7 @@ import { isHub } from '../../util/hub';
 import RequestList from './RequestList';
 import RequestsModel from '../../entities/models/Request';
 import { Card, CardHeader } from '../library';
-import styles from './styles.scss';
+import styles from '../Dashboard/styles';
 
 const Requests = (props) => {
   const {
@@ -28,10 +27,7 @@ const Requests = (props) => {
 
   let requestHeaderClassNames = styles.requestHeader;
   if (disableHeader) {
-    requestHeaderClassNames = classNames(
-      requestHeaderClassNames,
-      styles.hidden,
-    );
+    requestHeaderClassNames = classNames(requestHeaderClassNames, styles.hidden);
   }
 
   let display = (
@@ -65,6 +61,7 @@ const Requests = (props) => {
             data-test-id="requestCount"
             count={sortedRequests.length || 0}
             title="Online Requests"
+            requests
           />
         </div>
       )}

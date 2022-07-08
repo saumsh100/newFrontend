@@ -56,9 +56,8 @@
 .emptyList {
   background-color: lighten($primary-lightgrey, 2%);
   color: lighten($primary-darkgrey, 5%);
-  font-family: $medium-font;
   font-size: $medium-size;
-  font-weight: $large-weight;
+  font-weight: $bold-weight;
   text-align: center;
 }
 
@@ -98,7 +97,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  font-size: $extra-small-size;
+  font-size: $x-small-size;
   justify-content: space-between;
   padding-bottom: 5px;
   padding-left: 1em;
@@ -119,7 +118,6 @@
 
   &__time {
     //@extend .mediumFont;
-    font-family: Gotham-Bold;
     font-size: $small-size;
     padding-bottom: 10px;
     //line-height: 1.5em;
@@ -174,14 +172,14 @@
 
   &__createdAt {
     color: #a7a9ac;
-    font-size: $extra-small-size;
+    font-size: $x-small-size;
     opacity: 0.6;
     @extend .fontDefault;
   }
 
   &__requestedBy {
     color: $primary-dark-grey;
-    font-size: $extra-small-size;
+    font-size: $x-small-size;
     opacity: 1;
     @extend .fontDefault;
   }
@@ -194,7 +192,7 @@
 
   &_new {
     color: $primary-green;
-    font-size: $extra-small-size;
+    font-size: $x-small-size;
     padding-bottom: 3px;
   }
 
@@ -206,7 +204,7 @@
   }
 
   &_month {
-    font-size: $extra-small-size;
+    font-size: $x-small-size;
   }
 }
 

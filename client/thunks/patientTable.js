@@ -9,15 +9,14 @@ import { httpClient } from '../util/httpClient';
 export const fetchPatientTableData = () => async (dispatch, getState) => {
   const { patientTable, auth } = getState();
   if (!patientTable.get('isLoadingTable')) {
-    try {
       dispatch(setIsLoading(true));
       const params = {
         ...patientTable.get('filters').toJS(),
         isHoH: true,
         authUserId: auth.get('userId'),
       };
-      /*deleting the status from params in case of follow ups patient report*/
-      if (
+     /* deleting the status from params in case of follow ups patient report */
+     if (
         params &&
         params.segment &&
         typeof params.segment !== 'undefined' &&
@@ -42,9 +41,7 @@ export const fetchPatientTableData = () => async (dispatch, getState) => {
       );
 
       dispatch(setIsLoading(false));
-    } catch (err) {
-      throw err;
-    }
+
   }
 };
 

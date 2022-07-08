@@ -18,7 +18,7 @@ import {
   pgStyles,
 } from './tableStyles';
 import tableStyles from '../tableStyles.scss';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import {
   FirstNameCell,
   LastNameCell,
@@ -118,7 +118,7 @@ const WaitlistTableWithActions = ({
       width: 70,
     },
     {
-      Header: 'Date Added',
+      Header: 'DATE ADDED',
       accessor: 'addedDate', // String-based value accessors!
     },
     {
@@ -131,7 +131,7 @@ const WaitlistTableWithActions = ({
     },
     {
       id: 'firstName',
-      Header: 'First Name',
+      Header: 'FIRST NAME',
       accessor: (waitspot) => waitspot,
       sortMethod: (a, b) =>
         sortHelper(a.patient.firstName.toLowerCase(), b.patient.firstName.toLowerCase()),
@@ -139,7 +139,7 @@ const WaitlistTableWithActions = ({
     },
     {
       id: 'lastName',
-      Header: 'Last Name',
+      Header: 'LAST NAME',
       accessor: (waitspot) => waitspot,
       sortMethod: (a, b) =>
         sortHelper(a.patient.lastName.toLowerCase(), b.patient.lastName.toLowerCase()),
@@ -147,19 +147,19 @@ const WaitlistTableWithActions = ({
     },
     {
       id: 'reasonText',
-      Header: 'Reason',
+      Header: 'REASON',
       accessor: (waitspot) => capitalize(waitspot.reasonText || ''),
     },
     {
       id: 'practitioners',
-      Header: 'Practitioner',
+      Header: 'PRACTITIONERS',
       accessor: (waitspot) => capitalize(waitspot.practitioner?.firstName || ''),
     },
     {
       id: 'duration',
       Header: () => (
         <>
-          Units{' '}
+          UNITS{' '}
           <Tooltip body={<div>Units are in {defaultUnit}-minute intervals</div>} placement="above">
             <Icon icon="question-circle" size={0.9} />
           </Tooltip>
@@ -169,7 +169,7 @@ const WaitlistTableWithActions = ({
     },
     {
       id: 'dates',
-      Header: 'Days',
+      Header: 'DAYS',
       accessor: (waitspot) => waitspot,
       sortMethod: (a, b) => sortHelper(a.dates, b.dates),
       Cell: DaysCell,
@@ -177,25 +177,25 @@ const WaitlistTableWithActions = ({
 
     {
       id: 'times',
-      Header: 'Times',
+      Header: 'TIMES',
       accessor: (waitspot) => waitspot,
       sortMethod: (a, b) => sortHelper(a.availableTimes, b.availableTimes),
       Cell: TimesCell,
     },
     {
-      Header: 'Next Appt',
+      Header: 'NEXT APPT',
       accessor: 'nextApptDate',
     },
     {
       id: 'waitspotNotes',
-      Header: 'Notes',
+      Header: 'NOTES',
       sortMethod: (a, b) => sortHelper(a.note.toLowerCase(), b.note.toLowerCase()),
       accessor: (waitspot) => waitspot,
       Cell: WaitspotNotesCell,
     },
     {
       id: 'manage',
-      Header: 'Manage',
+      Header: 'MANAGE',
       accessor: (waitspot) => waitspot,
       className: styles.manageCell,
       Cell: ManageCell,
@@ -219,6 +219,7 @@ const WaitlistTableWithActions = ({
             updateSegmentedWaitList={updateSegmentedWaitList}
             setIsFilterActive={setIsFilterActive}
           />
+          <div className={styles.separator} />
           <div className={tableStyles.addTo}>
             <button
               type="button"
@@ -226,7 +227,7 @@ const WaitlistTableWithActions = ({
               onClick={goToAddWaitListForm}
               data-test-id="button_addToWaitlist"
             >
-              <Icon icon="plus" color="#3c444c" />
+              <Icon icon="plus" />
             </button>
           </div>
         </div>

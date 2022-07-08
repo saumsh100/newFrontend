@@ -1,33 +1,23 @@
-@import '../../../../styles/ui';
+@import '../../../../styles/ui-reskin.scss';
 
 .card {
-  background: white;
+  background: $super-white;
+  border-top: 1px solid $color-grey-150;
   box-sizing: border-box;
   flex: 1;
-  height: 700px;
-  min-height: 700px;
   overflow: hidden;
   position: relative;
-
   @media screen and (max-width: 576px) {
-    border-top: none;
     height: 100%;
     min-height: unset;
   }
 }
 
-.header {
-  color: $primary-dark;
-  composes: fontMedium from '../../../../styles/fonts.scss';
-  font-size: 23px;
-  padding: 20px 0 10px 20px;
-}
-
 .eventsContainer {
+  background-color: $super-white-100;
   box-sizing: border-box;
   display: flex;
-  max-height: 100%;
-  min-height: 100%;
+  height: 100%;
   overflow: scroll;
   padding: 30px 30px 10px;
 
@@ -45,18 +35,36 @@
 .eventsList {
   width: 100%;
 }
-
-.verticalLine {
-  border-left: 1px dashed darken($primary-grey, 10%);
-  height: 100%;
-  left: 16px;
-  margin-top: 70px;
+.eventSectionContainer {
+  position: relative;
+}
+.eventVerticalLineTop {
+  background-image: linear-gradient($color-purple-300 33%, rgba(255, 255, 255, 0) 0%);
+  background-size: 3px 8px;
+  height: 70px;
+  left: 25px;
   position: absolute;
-  z-index: 1;
+  top: -8px;
+  width: 2px;
+  &_invisible {
+    width: 0;
+  }
+}
+.eventVerticalLineBottom {
+  background-image: linear-gradient($color-purple-300 33%, rgba(255, 255, 255, 0) 0%);
+  background-size: 3px 10px;
+  bottom: 8px;
+  height: 60px;
+  left: 25px;
+  position: absolute;
+  width: 2px;
+  &_invisible {
+    width: 0;
+  }
 }
 
 .loader {
-  background: white;
+  background: $super-white;
   bottom: 0;
   left: 0;
   position: absolute;
@@ -72,19 +80,16 @@
 
 .eventSection:last-child {
   padding-bottom: 50px;
-
-  div.verticalLine {
-    display: none;
-  }
 }
 
 .dateHeader {
-  color: $primary-dark-grey;
-  font-family: $medium-font;
-  font-size: 10px;
-  letter-spacing: 0.5px;
-  margin-bottom: 10px;
-  margin-left: 3px;
+  color: $color-grey-400;
+  font-size: $x-small-size;
+  font-weight: $bold-weight;
+  letter-spacing: 0.06em;
+  line-height: 15px;
+  margin-bottom: 12.5px;
+  margin-left: 16px;
   padding-left: 55px;
   padding-top: 10px;
   text-transform: uppercase;
@@ -96,25 +101,13 @@
   }
 }
 
-.today {
-  color: $primary-blue;
-  font-size: 10px;
-
-  @media screen and (max-width: 576px) {
-    font-size: 16px;
-    padding-bottom: 20px;
-    padding-left: 0;
-    padding-top: 5px;
-  }
-}
-
 .disclaimer {
   height: 100%;
   overflow: hidden;
   position: relative;
   width: 100%;
   &_text {
-    color: $inactive-color;
+    color: $color-grey-200;
     font-size: 14px;
     left: 50%;
     line-height: 1.5em;

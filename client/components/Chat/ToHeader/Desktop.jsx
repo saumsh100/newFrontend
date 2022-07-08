@@ -56,6 +56,7 @@ const DesktopHeader = ({
       onSelect={onSearch}
       inputProps={toInputProps}
       theme={toInputTheme}
+      noBorder
     />
   );
 };

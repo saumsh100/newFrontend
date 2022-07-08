@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from '../../../../library';
 
-const handleForm = callback => (values) => {
+const handleForm = (callback) => (values) => {
   callback(values);
 };
 

@@ -1,4 +1,3 @@
-
 export const backgroundWhite = { style: { background: 'white' } };
 export const tableStyle = {
   background: 'white',
@@ -27,7 +26,9 @@ export const columnHeaderStyle = {
   boxShadow: 'none',
   alignItems: 'center',
   borderRight: 'none',
-  color: '#a7a9ac',
+  color: '#968AB7',
+  fontWeight: '700',
+  fontSize: '10px',
   outline: 'none',
 };
 

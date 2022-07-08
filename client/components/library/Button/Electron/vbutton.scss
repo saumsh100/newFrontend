@@ -13,7 +13,6 @@
   composes: letterSpacing from '../../../../styles/fonts.scss';
   cursor: pointer;
 
-  font-family: $dashboard-font;
   font-size: 12px;
   line-height: 1em;
   margin: 0 em(5px) 0 0;

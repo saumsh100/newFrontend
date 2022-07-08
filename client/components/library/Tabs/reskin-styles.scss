@@ -1,0 +1,75 @@
+@import '../../../styles/ui-reskin.scss';
+
+.tab {
+  align-items: center;
+  color: $color-purple-300;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  line-height: 1.2;
+  margin: 0px;
+  padding: 10px;
+}
+
+.noUnderLine {
+  border-bottom: 0 !important;
+}
+
+.activeTab {
+  border-bottom: 2px solid $color-lavender-500 !important;
+  color: $color-purple-600;
+}
+
+.disabledTab {
+  color: $color-purple-600;
+  cursor: not-allowed;
+}
+
+.fluidTab {
+  flex: 1;
+  text-align: center;
+}
+
+.nav {
+  display: flex;
+  flex: 0 0 auto;
+}
+.tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  max-height: 520px;
+  overflow: auto;
+}
+
+.tabCard {
+  align-items: center;
+  background-color: $color-grey-100;
+  border-bottom: 1px solid $color-grey-150;
+  border-right: 1px solid $color-grey-150;
+  box-sizing: border-box;
+
+  color: $color-purple-600;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  height: 50px;
+  justify-content: center;
+  line-height: 20px;
+  width: 50%;
+
+  &:last-child {
+    border-right: 0;
+  }
+}
+
+.activeTabCard {
+  background-color: $super-white-100;
+  border-bottom: none;
+  color: $color-purple-600;
+  transition: ease 0.2s all;
+}

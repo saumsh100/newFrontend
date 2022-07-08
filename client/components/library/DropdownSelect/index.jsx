@@ -1,4 +1,3 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import RDropdownMenu from 'react-dd-menu';
@@ -6,7 +5,7 @@ import classNames from 'classnames';
 import Icon from '../Icon';
 import Input from '../Input';
 import withTheme from '../../../hocs/withTheme';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 function DefaultOption({ option }) {
   return <div>{option.label || option.value}</div>;
@@ -74,33 +73,6 @@ class DropdownSelect extends Component {
     this.clearSearchValue();
   }
 
-  clearSearchValue() {
-    this.searchValue = '';
-  }
-
-  searchListener(event) {
-    if (
-      (event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 48 && event.keyCode <= 57) ||
-      event.keyCode === 186
-    ) {
-      this.searchValue += event.key;
-      this.handleSearch(this.searchValue);
-    }
-  }
-
-  toggle() {
-    this.clearSearchValue();
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
-  }
-
-  close() {
-    this.clearSearchValue();
-    document.removeEventListener('keydown', this.searchListener);
-
-    this.setState({ isOpen: false });
-  }
-
   handleSearch(value) {
     const { options } = this.props;
 
@@ -116,6 +88,33 @@ class DropdownSelect extends Component {
         }
       }
     }
+  }
+
+  toggle() {
+    this.clearSearchValue();
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
+  }
+
+  close() {
+    this.clearSearchValue();
+    document.removeEventListener('keydown', this.searchListener);
+
+    this.setState({ isOpen: false });
+  }
+
+  searchListener(event) {
+    if (
+      (event.keyCode >= 65 && event.keyCode <= 90) ||
+      (event.keyCode >= 48 && event.keyCode <= 57) ||
+      event.keyCode === 186
+    ) {
+      this.searchValue += event.key;
+      this.handleSearch(this.searchValue);
+    }
+  }
+
+  clearSearchValue() {
+    this.searchValue = '';
   }
 
   selectOption(e, value) {
@@ -152,7 +151,7 @@ class DropdownSelect extends Component {
               data-test-id={`option_${i}`}
               ref={isSelected && this.valueScrollComponent}
               tabIndex={0}
-              onKeyUp={e => e.keyCode === 13 && this.selectOption(e, option.value)}
+              onKeyUp={(e) => e.keyCode === 13 && this.selectOption(e, option.value)}
             >
               <div
                 className={styles.optionDiv}
@@ -174,7 +173,7 @@ class DropdownSelect extends Component {
     const ToggleTemplate = template || defaultTemplate;
 
     let toggleDiv = null;
-    const option = options.find(opt => opt.value === value);
+    const option = options.find((opt) => opt.value === value);
 
     let labelClassName = theme.label;
 

@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import { week, capitalize } from '../../../../../../util/isomorphic';
@@ -7,7 +6,7 @@ import SegmentButton from '../../../../../library/SegmentButton';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';
 import { NOT_SET_VALUE, NOT_SET_LABEL, DEFAULT_DAY_OF_WEEK } from '../consts';
 import CustomMultiSelectLabel from './customComponents/customMultiSelectLabel';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek, rowCountByDayOfWeek }) => {
   const { rule: dayOfWeekFilter, showNotSet, isActive } = selectedDayOfWeek;
@@ -22,7 +21,7 @@ const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek, rowCountByDayOfW
   const allWeekDays = useMemo(
     () =>
       week.all
-        .map(day => ({
+        .map((day) => ({
           value: day,
           label: (
             <CustomMultiSelectLabel count={rowCountByDayOfWeek[day]}>
@@ -45,7 +44,7 @@ const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek, rowCountByDayOfW
 
   const onDaysOfTheWeekChange = (values) => {
     setSelectedOptions(values);
-    const days = values.filter(v => v !== NOT_SET_VALUE);
+    const days = values.filter((v) => v !== NOT_SET_VALUE);
     const payload = {
       rule: convertArrayOfOptionsInMap(days, DEFAULT_DAY_OF_WEEK),
       isActive: values.length !== 0,
@@ -55,8 +54,8 @@ const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek, rowCountByDayOfW
   };
 
   const onToggleDayPicker = (key) => {
-    const allChecked = week[key].every(day => selectedDaysArr.includes(day));
-    const newValue = selectedDaysArr.filter(day => !week[key].includes(day));
+    const allChecked = week[key].every((day) => selectedDaysArr.includes(day));
+    const newValue = selectedDaysArr.filter((day) => !week[key].includes(day));
     if (allChecked) {
       onDaysOfTheWeekChange(newValue);
     } else {
@@ -65,10 +64,10 @@ const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek, rowCountByDayOfW
   };
 
   function generateSegmentButtonText() {
-    const selectedOptionsCapitalized = selectedOptions.map(option => capitalize(option));
+    const selectedOptionsCapitalized = selectedOptions.map((option) => capitalize(option));
     const noSetSelected = selectedOptionsCapitalized.includes(capitalize(NOT_SET_VALUE));
     const selectedOptionsLength = selectedOptionsCapitalized.length;
-    const selectedDays = selectedOptionsCapitalized.filter(v => v !== NOT_SET_VALUE);
+    const selectedDays = selectedOptionsCapitalized.filter((v) => v !== NOT_SET_VALUE);
 
     if (selectedOptionsLength === 0) {
       return 'Days';
@@ -80,7 +79,7 @@ const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek, rowCountByDayOfW
         : selectedOptionsCapitalized[0];
     }
 
-    if (selectedDays.length === allWeekDays.filter(v => v.value !== NOT_SET_VALUE).length) {
+    if (selectedDays.length === allWeekDays.filter((v) => v.value !== NOT_SET_VALUE).length) {
       return 'All Days';
     }
 

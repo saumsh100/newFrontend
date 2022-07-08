@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,7 +5,8 @@ import { isPristine } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
-import { Button, Field, Form } from '../../../../library';
+import { Form } from '../../../../library';
+import { Button, Field } from '../../../components';
 import { logout } from '../../../../../thunks/patientAuth';
 import { refreshAvailabilitiesState } from '../../../../../reducers/availabilities';
 import patientUserShape from '../../../../library/PropTypeShapes/patientUserShape';
@@ -22,7 +22,7 @@ import { inputTheme } from '../../../theme';
 import styles from './styles.scss';
 
 function Logged({ patientUser, location, history, pristine, ...props }) {
-  const b = path =>
+  const b = (path) =>
     location.pathname
       .split('/')
       .filter((v, index) => index < 4)
@@ -34,19 +34,19 @@ function Logged({ patientUser, location, history, pristine, ...props }) {
    *
    * @param {object} values
    */
-  const asyncEmailValidation = values =>
-    (values.email === this.props.patientUser.email ? false : asyncEmailValidatePatient(values));
+  const asyncEmailValidation = (values) =>
+    values.email === props.patientUser.email ? false : asyncEmailValidatePatient(values);
   /**
    * Check if the passed phoneNumber is not already used,
    * but first check if the phoneNumber is not the same as the patient.
    *
    * @param {object} values
    */
-  const asyncPhoneNumberValidation = values =>
-    (values.phoneNumber === this.props.patientUser.phoneNumber ||
-    values.phoneNumber === normalizePhone(this.props.patientUser.phoneNumber)
+  const asyncPhoneNumberValidation = (values) =>
+    values.phoneNumber === props.patientUser.phoneNumber ||
+    values.phoneNumber === normalizePhone(props.patientUser.phoneNumber)
       ? false
-      : asyncPhoneNumberValidatePatient(values));
+      : asyncPhoneNumberValidatePatient(values);
 
   const initialValues = patientUser && {
     firstName: patientUser.firstName,
@@ -153,9 +153,4 @@ Logged.propTypes = {
   refreshAvailabilitiesState: PropTypes.func.isRequired,
 };
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(Logged),
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Logged));

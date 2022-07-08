@@ -1,0 +1,33 @@
+@import '../../../styles/ui-reskin.scss';
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+}
+
+.icon {
+  border: 5px solid $color-success-400;
+  border-radius: 50%;
+  color: $color-success-400;
+  font-size: 24px;
+  font-weight: $bold-weight;
+  padding: 20px;
+}
+
+.title {
+  color: $color-purple-600;
+  font-size: $xxx-medium-size;
+  font-weight: $bold-weight;
+  line-height: 40px;
+  margin: 19px 0 16px 0;
+}
+
+.textSuccess {
+  color: $color-purple-600;
+  font-size: $medium-size;
+  line-height: 24px;
+  margin-bottom: 24px;
+}

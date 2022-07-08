@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Popover from 'react-popover';
@@ -11,7 +10,7 @@ import { dayPickerTheme } from './defaultTheme';
 import { StyleExtender } from '../../Utils/Themer';
 import Button from '../Button';
 import { DropdownSelect } from '../index';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 import { getDate, getTodaysDate, getUTCDate } from '../util/datetime';
 
 const subtractDays = (days) => {
@@ -65,7 +64,7 @@ class DayPickerWithHelper extends Component {
   }
 
   togglePopOver() {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isOpen: !prevState.isOpen,
       isRelative: false,
       relativeValue: 3,
@@ -93,7 +92,7 @@ class DayPickerWithHelper extends Component {
       <div className={styles.outerContainer}>
         <div className={styles.helpersContainer}>
           <div className={styles.helpersWrapper}>
-            {helpersList.map(item => (
+            {helpersList.map((item) => (
               <Button
                 key={item.label}
                 className={styles.helperButton}
@@ -108,7 +107,7 @@ class DayPickerWithHelper extends Component {
               })}
               onClick={() =>
                 this.setState(
-                  prevState => ({ isRelative: !prevState.isRelative }),
+                  (prevState) => ({ isRelative: !prevState.isRelative }),
                   () => this.handleRelativeChange(),
                 )
               }
@@ -123,8 +122,7 @@ class DayPickerWithHelper extends Component {
             initialMonth={value ? getUTCDate(value, timezone).toDate() : new Date()}
             month={value ? getUTCDate(value, timezone).toDate() : new Date()}
             classNames={StyleExtender(
-              { ...dayPickerTheme,
-                container: styles.calendarContainer },
+              { ...dayPickerTheme, container: styles.calendarContainer },
               theme,
             )}
             {...this.props}
@@ -137,14 +135,14 @@ class DayPickerWithHelper extends Component {
               <Input
                 type="number"
                 value={this.state.relativeValue}
-                onChange={e =>
+                onChange={(e) =>
                   this.setState({ relativeValue: e.target.value }, () =>
-                    this.handleRelativeChange())
+                    this.handleRelativeChange(),)
                 }
               />
               <DropdownSelect
                 value={this.state.relativeUnit}
-                onChange={relativeUnit =>
+                onChange={(relativeUnit) =>
                   this.setState({ relativeUnit }, () => this.handleRelativeChange())
                 }
                 options={[
@@ -174,8 +172,8 @@ class DayPickerWithHelper extends Component {
             theme={theme}
             value={displayValue}
             label={this.props.label}
-            onChange={e => e.preventDefault()}
-            onKeyDown={e => this.handleClose(e)}
+            onChange={(e) => e.preventDefault()}
+            onKeyDown={(e) => this.handleClose(e)}
             onFocus={this.togglePopOver}
           />
         </div>
@@ -200,7 +198,7 @@ DayPickerWithHelper.propTypes = {
 };
 
 DayPickerWithHelper.defaultProps = {
-  onChange: e => e,
+  onChange: (e) => e,
   tipSize: 12,
   label: '',
   value: '',
