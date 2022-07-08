@@ -1,15 +1,13 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Card } from '../library';
 import ReportParametersForm from '../ReportParametersForm';
 import styles from './tabStyles.scss';
 
-const Index = props => (
-  <Card className={styles.card}>
+const Index = (props) => (
+  <div className={styles.card}>
     <ReportParametersForm {...props} />
-  </Card>
+  </div>
 );
 
 Index.propTypes = { timezone: PropTypes.string };

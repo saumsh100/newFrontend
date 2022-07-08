@@ -6,7 +6,7 @@
   flex-direction: column;
   height: 100%;
   min-width: 1280px;
-  padding: 20px;
+  padding: 16px;
   width: 100%;
 }
 
@@ -29,7 +29,7 @@
   width: 100%;
   &_title {
     align-items: center;
-    color: $color-grey-400;
+    color: $color-purple-600;
     display: flex;
     font-size: $xxx-medium-size;
     font-weight: $medium-weight;
@@ -314,7 +314,7 @@ $height: 6px;
 }
 
 .smartFilter {
-  width: 100%;
+  width: fit-content;
 }
 
 .filterItem {

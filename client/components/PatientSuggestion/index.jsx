@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -24,13 +23,13 @@ const PatientSuggestion = ({
     ? `, ${getTodaysDate(timezone).diff(patient.birthDate, 'years')}`
     : '';
   const patientString = `${fullName}${age}`;
-  const inputSearch = inputValue.split(' ').filter(v => v !== '');
+  const inputSearch = inputValue.split(' ').filter((v) => v !== '');
 
   return (
     <div
-    key={patient.id}
-    {...getItemProps}
-    className={classNames({ [newTheme.highlightedIndex]: highlightedIndex === index })}
+      key={patient.id}
+      {...getItemProps}
+      className={classNames({ [newTheme.highlightedIndex]: highlightedIndex === index })}
     >
       <div className={newTheme.suggestionContainer}>
         <Avatar user={patient} size="xs" />

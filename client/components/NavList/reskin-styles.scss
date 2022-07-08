@@ -6,7 +6,7 @@
 
 .navItem {
   align-items: center;
-  color: $color-purple-400 !important;
+  color: $color-grey-400 !important;
   display: flex;
   font-weight: 600;
   height: 65px;
@@ -66,8 +66,7 @@
 .iconContainer {
   align-items: center;
   display: flex;
-  justify-content: start;
-  margin-left: 2px;
+  justify-content: center;
   min-width: 33px;
 }
 

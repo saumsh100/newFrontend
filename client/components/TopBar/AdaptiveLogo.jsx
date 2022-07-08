@@ -10,6 +10,7 @@ const AdaptiveLogo = ({ imagePath, description, isCollapsed }) => (
         src={imagePath}
         alt={description}
       />
+      <div className={styles.logoBottomBorder} />
     </div>
   </div>
 );

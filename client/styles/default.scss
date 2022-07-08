@@ -155,6 +155,9 @@ $intercom-side-margin: 50px;
   .dd-menu .dd-menu-items ul,
   .dd-menu .dd-menu-items ol {
     background-color: $primary-grey;
+    button {
+      letter-spacing: 0.06em;
+    }
   }
 
   .separator {

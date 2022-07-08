@@ -57,28 +57,39 @@ $padding-size-border: 10px;
   align-items: center;
   box-sizing: border-box;
   display: flex;
+  flex: 1;
+  flex-direction: column;
   height: 100%;
   justify-content: center;
   text-align: center;
   transition: ease-out 0.3s all;
   width: $side-nav-width - 2 * $padding-size-border;
 }
+.logoBottomBorder {
+  background-color: $color-lavender-100;
+  content: ' ';
+  height: 1px;
+  width: 80%;
+}
 
 .logoImageCollapsed {
+  height: 100%;
   @extend .logoImage;
   @media screen and (min-width: $medium-screen-width) {
     width: $mini-side-nav-width - 2 * $padding-size-border;
-    // background-color: green;
   }
 }
 
 .logoImageImage {
+  height: 100%;
   transition: ease-out 0.3s all;
-  width: 140px;
+  width: 159px;
 }
 
 .logoImageImageCollapsed {
-  width: 30px;
+  height: 100%;
+  margin-left: 4px;
+  width: 43px;
 }
 
 .collapseButton {
@@ -172,7 +183,7 @@ $padding-size-border: 10px;
   align-items: center;
   background-color: transparent;
   border-radius: 0;
-  color: $color-grey-400 !important;
+  color: $color-purple-600 !important;
   display: flex;
   height: 100%;
   margin: 0;
@@ -180,13 +191,13 @@ $padding-size-border: 10px;
 
   &:hover {
     background-color: $color-lavender-050 !important;
-    color: $color-purple-600;
+    color: $color-lavender-500;
 
     .businessName {
-      color: $color-purple-600;
+      color: $color-lavender-500;
     }
     .greeting {
-      color: $color-purple-600;
+      color: $color-lavender-500;
     }
     .userMenuIcon {
       color: $color-purple-400 !important;
@@ -228,7 +239,7 @@ $padding-size-border: 10px;
 
 .businessName {
   font-size: 10px;
-  font-weight: 400;
+  font-weight: $medium-weight;
 }
 
 .userAvatar {
@@ -242,7 +253,7 @@ $padding-size-border: 10px;
 .activeAccountButton {
   background: none;
   border-radius: 0px;
-  color: $color-grey-400;
+  color: $color-purple-600;
   cursor: pointer;
   height: 100%;
   line-height: 42px;
@@ -348,6 +359,8 @@ $padding-size-border: 10px;
   input {
     border: none;
     height: 100%;
+    margin-left: 5px;
+    max-width: 96%;
     padding-left: 33px;
   }
 

@@ -82,7 +82,7 @@ export const MenuItem = ({ icon, children, className, onClick, disabled, tooltip
       >
         <div className={`dd-item-ignore ${styles.menuItemContent}`}>
           {icon ? <Icon icon={icon} className={styles.menuIcon} /> : null}
-          {children}
+          <span className={styles.menuItemContent}>{children}</span>
         </div>
       </ListItem>
     </Wrapper>

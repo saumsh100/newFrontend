@@ -1,7 +1,19 @@
 @import '../../../styles/ui-reskin.scss';
 
 .dropdownContainer {
+  background-color: $super-white;
   text-align: left;
+  &:hover:not([disabled]) {
+    background-color: $color-lavender-050 !important;
+    color: $color-purple-400 !important;
+  }
+  &:active:not([disabled]) {
+    background-color: $color-lavender-100 !important;
+    color: $color-purple-400 !important;
+  }
+  &:hover > .menuItemContent > .menuIcon {
+    color: $color-purple-400 !important;
+  }
 }
 
 .menuItemLi {
@@ -27,6 +39,7 @@
   align-items: center;
   display: flex;
   height: 20px;
+  letter-spacing: 0.027em;
 }
 
 .menuIcon {
