@@ -8,7 +8,7 @@ import Modal from './modal';
  * @param iframeSrc
  * @constructor
  */
-function CareCru({ iframeSrc }) {
+function CareCru({ iframeSrc, externalID, practiceName, accID }) {
   this.modal = new Modal();
   this.host = new Host(() => this.modal.inner, iframeSrc, {
     id: 'CareCruIframe',
@@ -34,6 +34,15 @@ function CareCru({ iframeSrc }) {
   });
 
   this.host.onEvent('completeBooking', () => {
+    let dataLayerLabel;
+    if (externalID) {
+      dataLayerLabel = externalID;
+    } else if (practiceName) {
+      dataLayerLabel = practiceName;
+    } else {
+      dataLayerLabel = accID;
+    }
+
     const eventAction = 'New Appointment Request';
     const analyticsEvent = {
       // eslint-disable-next-line camelcase
@@ -52,6 +61,8 @@ function CareCru({ iframeSrc }) {
       // using dataLayer to fire events to google tag manager
       window.dataLayer.push({
         event: 'New Appointment Request',
+        category: 'CareCru Online Scheduler',
+        label: dataLayerLabel,
       });
     } else if (window.gtag) {
       window.gtag('event', eventAction, analyticsEvent);

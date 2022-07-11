@@ -43,6 +43,10 @@ widgetsRouter.get('/:accountId/cc.js', async (req, res, next) => {
       new RegExp('__CARECRU_WIDGET_BUTTON_LABEL__', 'g'),
       basicAccount.bookingWidgetButtonLabel,
     );
+    js = js.replace(new RegExp('__CARECRU_EXTERNAL_ID__', 'g'), basicAccount?.externalId);
+    js = js.replace(new RegExp('__CARECRU_PRACTICE_NAME__', 'g'), basicAccount?.name);
+    js = js.replace(new RegExp('__CARECRU_ACC_ID__', 'g'), basicAccount.id);
+
     js = js.replace(new RegExp('__CARECRU_IFRAME_SRC__', 'g'), iframeSrc);
 
     res.type('javascript').send(js);

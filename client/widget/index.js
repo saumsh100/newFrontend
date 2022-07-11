@@ -10,6 +10,9 @@ const __CARECRU_WIDGET_PRIMARY_COLOR__ = '__CARECRU_WIDGET_PRIMARY_COLOR__';
 const __CARECRU_WIDGET_BUTTON_LABEL__ = '__CARECRU_WIDGET_BUTTON_LABEL__';
 const __CARECRU_STYLE_CSS__ = '__CARECRU_STYLE_CSS__';
 const __CARECRU_IFRAME_SRC__ = '__CARECRU_IFRAME_SRC__';
+const __CARECRU_EXTERNAL_ID__ = '__CARECRU_EXTERNAL_ID__';
+const __CARECRU_ACC_ID__ = '__CARECRU_ACC_ID__';
+const __CARECRU_PRACTICE_NAME__ = '__CARECRU_PRACTICE_NAME__';
 
 function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
@@ -89,8 +92,12 @@ function main() {
 
   console.log('iframeSrc', __CARECRU_IFRAME_SRC__, iframeSrc);
 
+  const externalID = __CARECRU_EXTERNAL_ID__;
+  const accID = __CARECRU_ACC_ID__;
+  const practiceName = __CARECRU_PRACTICE_NAME__;
+
   // Create API for that clinic's widget
-  window.CareCru = new CareCruAPI({ iframeSrc });
+  window.CareCru = new CareCruAPI({ iframeSrc, externalID, practiceName, accID });
 
   // Add to clinic registry so pages with multiple widgets can programmitcally manage
   window.CareCruz[__CARECRU_ACCOUNT_ID__] = window.CareCru;
