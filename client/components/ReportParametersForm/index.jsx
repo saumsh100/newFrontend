@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { getDate, getMonth, getYear } from 'date-fns';
 import { accountShape } from '../library/PropTypeShapes';
 import DropdownSelect from '../library/ui-kit/DropdownSelect';
 import SelectPill from '../library/ui-kit/SelectPill';
@@ -16,7 +17,6 @@ import ModeReport from '../ModeReport';
 import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 import MultiSelectAccount from '../library/MultiSelectAccount';
 import styles from './style.scss';
-import { parseDate } from '../library';
 import getRangeFromList from '../../util/getRangeFromList';
 
 const DATE_RANGE = 'dateRange';
@@ -45,7 +45,11 @@ const reportAccessPermissions = {
   },
 };
 
-const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt }, timezone) => {
+const parseDate = (date) => {
+  return `${getYear(date)}-${getMonth(date) + 1}-${getDate(date)}`;
+};
+
+const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt }) => {
   if (component === MULTI_SELECT_ACCOUNT && defaultValue === undefined) {
     return [accountId];
   }
@@ -53,7 +57,8 @@ const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt
   const dateKey = Object.keys(compt.name).find((key) => compt.name[key] === name);
   if (component === DATE_RANGE && typeof defaultValue === 'string') {
     const [defaultRange] = getRangeFromList([defaultValue]);
-    return parseDate(defaultRange[dateKey], timezone).format('YYYY-MM-DD');
+
+    return parseDate(defaultRange[dateKey]);
   }
 
   const nullIfUndefined = defaultValue === undefined ? null : defaultValue;
@@ -133,7 +138,7 @@ class ReportParametersForm extends Component {
     const { reports, active } = this.props;
     const items = reports.get(active);
     const valuesToUpdate = Object.entries(param).reduce((acc, [key, value]) => {
-      const sanitizedDate = parseDate(data[key], this.props.timezone).format('YYYY-MM-DD');
+      const sanitizedDate = parseDate(data[key]);
       if (items[value] !== sanitizedDate) {
         return {
           ...acc,
@@ -154,14 +159,11 @@ class ReportParametersForm extends Component {
       name.map((n) => ({
         [n]:
           obj[n] ||
-          handleDefaultValue(
-            n,
-            {
-              ...curr,
-              accountId: this.props.account.get('id'),
-            },
-            this.props.timezone,
-          ),
+          handleDefaultValue(n, {
+            ...curr,
+            accountId: this.props.account.get('id'),
+          }),
+
       })),);
     this.setQueryUrl(page, Object.assign(...defaultParams));
   }
