@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import loadable from '@loadable/component';
 import { Map, List } from 'immutable';
 import Popover from 'react-popover';
 import { connect } from 'react-redux';
@@ -24,7 +25,11 @@ import CurrentDate from './CurrentDate';
 import { setScheduleView } from '../../../actions/schedule';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
 import { Delete as DeleteWaitSpot, MassDelete } from '../../GraphQLWaitlist';
+import MicroFrontendRenderer from '../../../micro-front-ends/MicroFrontendRenderer';
 import styles from './reskin-styles.scss';
+
+// eslint-disable-next-line import/no-unresolved
+const WaitlistMFEComponent = loadable(() => import('WAITLIST_MFE/home'));
 
 const confirmDelete = (ids) =>
   window.confirm(
@@ -106,6 +111,7 @@ class Header extends Component {
       appointments,
       newWaitlist,
       timezone,
+      waitlistMFEActive,
     } = this.props;
 
     const scheduleDate = schedule.get('scheduleDate');
@@ -229,22 +235,29 @@ class Header extends Component {
               onOverlayClick={this.toggleWaitlist}
               type={newWaitlist ? 'large' : 'medium'}
             >
-              <MassDelete>
-                {(massRemoveCallback) => (
-                  <DeleteWaitSpot>
-                    {(removeCallback) => (
-                      <Waitlist
-                        newWaitlist={newWaitlist}
-                        removeWaitSpot={this.removeWaitSpot(removeCallback)}
-                        removeMultipleWaitSpots={this.removeMultipleWaitSpots(massRemoveCallback)}
-                        openAddTo={this.openAddToWaitlist}
-                        accountId={this.props.accountId}
-                        onOverlayClick={this.toggleWaitlist}
-                      />
-                    )}
-                  </DeleteWaitSpot>
-                )}
-              </MassDelete>
+              {waitlistMFEActive ? (
+                <MicroFrontendRenderer
+                  load={waitlistMFEActive}
+                  component={<WaitlistMFEComponent />}
+                />
+              ) : (
+                <MassDelete>
+                  {(massRemoveCallback) => (
+                    <DeleteWaitSpot>
+                      {(removeCallback) => (
+                        <Waitlist
+                          newWaitlist={newWaitlist}
+                          removeWaitSpot={this.removeWaitSpot(removeCallback)}
+                          removeMultipleWaitSpots={this.removeMultipleWaitSpots(massRemoveCallback)}
+                          openAddTo={this.openAddToWaitlist}
+                          accountId={this.props.accountId}
+                          onOverlayClick={this.toggleWaitlist}
+                        />
+                      )}
+                    </DeleteWaitSpot>
+                  )}
+                </MassDelete>
+              )}
             </Modal>
             <AddToWaitlist
               toggleModal={this.openAddToWaitlist}
@@ -278,6 +291,7 @@ Header.propTypes = {
   setCurrentDay: PropTypes.func.isRequired,
   newWaitlist: PropTypes.bool.isRequired,
   timezone: PropTypes.string.isRequired,
+  waitlistMFEActive: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ setScheduleView }, dispatch);
@@ -289,6 +303,7 @@ const mapStateToProps = ({ auth, schedule, apiRequests, featureFlags }) => ({
   chairsFetched: apiRequests.getIn(['chairsSchedule', 'wasFetched'], false),
   newWaitlist: featureFlags.getIn(['flags', 'waitlist-2-0']),
   timezone: auth.get('timezone'),
+  waitlistMFEActive: featureFlags.getIn(['flags', 'waitlist-mfe-active']),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

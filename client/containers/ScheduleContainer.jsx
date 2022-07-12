@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -95,7 +94,7 @@ class ScheduleContainer extends PureComponent {
             key: 'events',
             params: eventsQuery,
           }),
-        ]));
+        ]),);
     }
   }
 
@@ -136,17 +135,15 @@ class ScheduleContainer extends PureComponent {
 
   isSameDay(currentDate, updateDate) {
     return (
-      !updateDate.isSame(currentDate, 'month')
-      || !updateDate.isSame(currentDate, 'day')
-      || !updateDate.isSame(currentDate, 'year')
+      !updateDate.isSame(currentDate, 'month') ||
+      !updateDate.isSame(currentDate, 'day') ||
+      !updateDate.isSame(currentDate, 'year')
     );
   }
 
   refetchRecentlyUpdatedAppointments() {
     const currentDate = parseDate(this.props.currentDate, this.props.timezone);
-    const fiveMinutesAgo = getTodaysDate(this.props.timezone)
-      .subtract(1, 'minutes')
-      .toISOString();
+    const fiveMinutesAgo = getTodaysDate(this.props.timezone).subtract(1, 'minutes').toISOString();
 
     const apppointmentsQuery = this.buildAppointmentQuery(
       currentDate,

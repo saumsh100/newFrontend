@@ -73,6 +73,26 @@ const webpackConfig = merge(common, {
         },
       },
     }),
+    new ModuleFederationPlugin({
+      name: 'WaitlistContainer',
+      remotes: {
+        WAITLIST_MFE: `WAITLIST_MFE@${process.env.WAITLIST_MFE_HOST}/waitlistRemoteEntry.js`,
+      },
+      shared: {
+        react: {
+          singleton: true,
+          eager: true,
+        },
+        'react-dom': {
+          singleton: true,
+          eager: true,
+        },
+        '@carecru/component-library': {
+          singleton: true,
+          eager: true,
+        },
+      },
+    }),
     new HtmlWebpackPlugin({
       inject: true,
       chunks: ['app'],
