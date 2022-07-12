@@ -21,6 +21,7 @@ import SubscriptionManager from '../util/graphqlSubscriptions';
 import { identifyPracticeUser } from '../util/fullStory';
 import { receiveEntities } from '../reducers/entities';
 import ErrorPage from '../components/ErrorPage';
+import zendesk from '../../public/scripts/zendesk';
 
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -64,6 +65,22 @@ load()(store.dispatch).then(() => {
           clearInterval(handleIntercomCheck);
         }
       }, 1000);
+
+      // Initialize zendesk support chat with User information
+      zendesk().then(() => {
+        const handleZendeskCheck = setInterval(() => {
+          if (window.zE && typeof window.zE === 'function') {
+            window.zE(() => {
+              window.zE.identify({
+                name: `${user.firstName} ${user.lastName}`,
+                email: user.username,
+                organization: enterprise.name,
+              });
+            });
+            clearInterval(handleZendeskCheck);
+          }
+        }, 1000);
+      });
 
       DesktopNotification.requestPermission();
     }

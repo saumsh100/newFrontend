@@ -9,7 +9,6 @@ import DashboardRoutes from '../routes/Dashboard';
 import { isFeatureEnabledSelector } from '../reducers/featureFlags';
 import appendFonts from './appendFonts';
 import '../styles/default.scss';
-import '../../public/scripts/zendesk';
 
 const DashboardApp = ({ browserHistory, store }) => {
   const canUseNewFonts = isFeatureEnabledSelector(

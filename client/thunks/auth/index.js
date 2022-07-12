@@ -53,17 +53,6 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
         },
       };
 
-      const handleZendeskCheck = setInterval(() => {
-        if (window.$zopim && typeof window.$zopim === 'function') {
-          window.$zopim(function () {
-            window.$zopim.livechat.setName(`${user.firstName} ${user.lastName}`);
-            window.$zopim.livechat.setEmail(user.username);
-            window.$zopim.livechat.addTags(userSession.enterprise.name);
-          });
-          clearInterval(handleZendeskCheck);
-        }
-      }, 1000);
-
       dispatch(updateFeatureFlagsContext(userData));
       dispatch(loginSuccess(userSession));
       return userSession;
