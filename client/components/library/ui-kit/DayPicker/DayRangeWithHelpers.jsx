@@ -7,7 +7,6 @@ import PopoverConfirm from '../Button/PopoverConfirm';
 import GhostButton from '../Button/GhostButton';
 import DayRangeInput from './DayRangeInput';
 import dayPickerClasses from './dayPickerClasses';
-import defaultHelpers from './defaultRangeHelpers';
 import dayPicker from './dayPicker.scss';
 import ui from '../../../../styles/ui-kit.scss';
 import { Icon } from '../..';
@@ -112,7 +111,6 @@ class DayRangeWithHelpers extends Component {
    */
   handleDayClick(day) {
     day = formatDate(day, this.props.timezone);
-    console.log(this.state.start);
     if (!this.state.activeElement) {
       const key = !this.state.start || day < this.state.start ? 'start' : 'end';
       return this.setDateValues(key, day);
@@ -392,7 +390,7 @@ DayRangeWithHelpers.propTypes = {
       end: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
       start: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
     }),
-  ),
+  ).isRequired,
   defaultValue: PropTypes.shape({
     label: PropTypes.string,
     end: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
@@ -410,7 +408,6 @@ DayRangeWithHelpers.propTypes = {
 
 DayRangeWithHelpers.defaultProps = {
   start: null,
-  helpers: defaultHelpers,
   defaultValue: null,
   label: '',
   onChange: undefined,

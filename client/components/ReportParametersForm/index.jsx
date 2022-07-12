@@ -5,6 +5,7 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getDate, getMonth, getYear } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { accountShape } from '../library/PropTypeShapes';
 import DropdownSelect from '../library/ui-kit/DropdownSelect';
 import SelectPill from '../library/ui-kit/SelectPill';
@@ -45,11 +46,12 @@ const reportAccessPermissions = {
   },
 };
 
-const parseDate = (date) => {
+const parseDate = (rawDate, timezone) => {
+  const date = new Date(formatInTimeZone(new Date(rawDate), timezone, 'yyyy-MM-dd'));
   return `${getYear(date)}-${getMonth(date) + 1}-${getDate(date)}`;
 };
 
-const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt }) => {
+const handleDefaultValue = (name, { defaultValue, component, accountId, timezone, ...compt }) => {
   if (component === MULTI_SELECT_ACCOUNT && defaultValue === undefined) {
     return [accountId];
   }
@@ -57,8 +59,7 @@ const handleDefaultValue = (name, { defaultValue, component, accountId, ...compt
   const dateKey = Object.keys(compt.name).find((key) => compt.name[key] === name);
   if (component === DATE_RANGE && typeof defaultValue === 'string') {
     const [defaultRange] = getRangeFromList([defaultValue]);
-
-    return parseDate(defaultRange[dateKey]);
+    return parseDate(defaultRange[dateKey], timezone);
   }
 
   const nullIfUndefined = defaultValue === undefined ? null : defaultValue;
@@ -135,10 +136,10 @@ class ReportParametersForm extends Component {
    * @param data
    */
   setDateValue(param, data) {
-    const { reports, active } = this.props;
+    const { reports, active, timezone } = this.props;
     const items = reports.get(active);
     const valuesToUpdate = Object.entries(param).reduce((acc, [key, value]) => {
-      const sanitizedDate = parseDate(data[key]);
+      const sanitizedDate = parseDate(data[key], timezone);
       if (items[value] !== sanitizedDate) {
         return {
           ...acc,
@@ -163,7 +164,6 @@ class ReportParametersForm extends Component {
             ...curr,
             accountId: this.props.account.get('id'),
           }),
-
       })),);
     this.setQueryUrl(page, Object.assign(...defaultParams));
   }
@@ -271,7 +271,6 @@ class ReportParametersForm extends Component {
       ({
         dateRange: {
           popover: true,
-          label: null,
           start: params[name.start],
           end: params[name.end],
           timezone,
