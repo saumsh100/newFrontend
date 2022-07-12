@@ -16,18 +16,18 @@ const SwitchToggler = ({ onChange, leftLabel, rightLabel, checked }) => {
     <div className={styles.switchToggler}>
       <button
         type="button"
-        onClick={() => handleChange(false)}
+        onClick={() => handleChange(true)}
         className={classNames(styles.switchToggler_left, {
-          [styles.switchToggler_left_checked]: !isChecked,
+          [styles.switchToggler_left_checked]: isChecked,
         })}
       >
         {leftLabel}
       </button>
       <button
         type="button"
-        onClick={() => handleChange(true)}
+        onClick={() => handleChange(false)}
         className={classNames(styles.switchToggler_right, {
-          [styles.switchToggler_right_checked]: isChecked,
+          [styles.switchToggler_right_checked]: !isChecked,
         })}
       >
         {rightLabel}
