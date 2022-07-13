@@ -150,6 +150,9 @@ $intercom-side-margin: 50px;
     white-space: nowrap;
     width: 100%;
     z-index: 2500 !important;
+    .dd-items-right {
+      width: fit-content;
+    }
   }
 
   .dd-menu .dd-menu-items ul,
