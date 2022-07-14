@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -9,7 +8,8 @@ import { Form, Field, Toggle, Grid, Row, Col } from '../../../../library/index';
 import { updateEntityRequest, createEntityRequest } from '../../../../../thunks/fetchEntities';
 import accountShape from '../../../../library/PropTypeShapes/accountShape';
 import wordsForTime from './selectConstants';
-import { onlyNumber } from '../../../../../components/library/Form/validate';
+import { onlyNumber } from '../../../../library/Form/validate';
+import styles from '../styles.scss';
 
 class ChatSection extends Component {
   constructor(props) {
@@ -38,9 +38,7 @@ class ChatSection extends Component {
       autoRespondOutsideOfficeHoursLimit:
         (toggle &&
           limit &&
-          `${values.autoRespondOutsideOfficeHoursLimitNum} ${
-            values.autoRespondOutsideOfficeHoursLimitWord
-          }`) ||
+          `${values.autoRespondOutsideOfficeHoursLimitNum} ${values.autoRespondOutsideOfficeHoursLimitWord}`) ||
         null,
     };
 
@@ -109,7 +107,7 @@ class ChatSection extends Component {
       >
         <div>
           <Grid>
-            <Row>
+            <Row className={styles.chatSectionRow}>
               <Col xs={9}>
                 <span>Communication Outside Buffer</span>
               </Col>
@@ -235,9 +233,6 @@ function mapStateToProps(state, { activeAccount }) {
   };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToActions,
-);
+const enhance = connect(mapStateToProps, mapDispatchToActions);
 
 export default enhance(ChatSection);

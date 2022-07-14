@@ -77,7 +77,13 @@ const AppointmentInfo = (props) => {
                 <ActionsDropdown
                   patient={patient}
                   render={({ onClick }) => (
-                    <div role="button" tabIndex={0} onKeyDown={() => {}} onClick={onClick}>
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={() => {}}
+                      onClick={onClick}
+                      className={styles.appointmentPatientButton}
+                    >
                       <span className={styles.appointmentHeader_text}>
                         {`${patient.firstName} ${patient.lastName}`}
                       </span>
@@ -196,7 +202,6 @@ AppointmentInfo.defaultProps = {
   chair: null,
   practitioner: null,
   patient: null,
-  extraStyles: {},
 };
 
 AppointmentInfo.propTypes = {
