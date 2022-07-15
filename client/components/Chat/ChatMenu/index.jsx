@@ -13,6 +13,7 @@ function ChatMenu({ changeTab, index, chatCategoriesCount }) {
     <div className={styles.chatMenuWrapper}>
       <DropdownMenu
         upwards
+        className={styles.chatDropDownMenu}
         labelComponent={(props) =>
           index !== null && <ChatMenuLabel {...props} label={chatOptions[index]} count={count} />
         }

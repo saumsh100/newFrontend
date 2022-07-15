@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import DateSchedule from './DateSchedule';
-import { Button, Icon } from '../index';
+import { StandardButton } from '../index';
 import EnabledFeature from '../EnabledFeature';
 import styles from './drawer.scss';
 import { getFormattedDate } from '../util/datetime';
@@ -16,15 +16,10 @@ const ScheduleDrawer = ({
   toggleCustomSchedule,
   shouldDisplayWeeklyHours,
   handleEditSchedule,
-  toggleDrawer,
 }) => (
   <div className={styles.wrapper}>
     <div className={styles.top}>
       <h2 className={styles.title}>
-        <button type="button" className={styles.drawerBackButton} onClick={() => toggleDrawer()}>
-          <Icon size={1} icon="chevron-left" className={styles.mainText_iconWrapper} />
-          Back
-        </button>
         {isOverride && selectedDay ? (
           <p className={styles.mainText_text}>
             Holiday Hours {getFormattedDate(selectedDay, 'MMM. D, YYYY', timezone, true)}
@@ -45,7 +40,7 @@ const ScheduleDrawer = ({
               : flags.get('connector-delete-practitioner-weeklySchedule');
             const isAllow = isOverride ? dailyDeletionRule : dailyCreationRule;
             return (
-              <Button
+              <StandardButton
                 onClick={() => isAllow && toggleCustomSchedule(isOverride)}
                 disabled={!isAllow}
                 icon={isOverride ? 'trash' : 'plus'}
@@ -56,7 +51,7 @@ const ScheduleDrawer = ({
                 })}
               >
                 {isOverride ? 'Delete' : 'Holiday Hours'}
-              </Button>
+              </StandardButton>
             );
           }}
         />
@@ -82,7 +77,7 @@ ScheduleDrawer.propTypes = {
   isOverride: PropTypes.bool.isRequired,
   schedule: PropTypes.objectOf(
     PropTypes.shape({
-      breaks: PropTypes.arrayOf(PropTypes.any),
+      breaks: PropTypes.arrayOf(),
       chairIds: PropTypes.arrayOf(PropTypes.string),
       endTime: PropTypes.string,
       isClosed: PropTypes.bool,
@@ -95,7 +90,6 @@ ScheduleDrawer.propTypes = {
   shouldDisplayWeeklyHours: PropTypes.bool.isRequired,
   timezone: PropTypes.string.isRequired,
   toggleCustomSchedule: PropTypes.func.isRequired,
-  toggleDrawer: PropTypes.func.isRequired,
 };
 
 ScheduleDrawer.defaultProps = {

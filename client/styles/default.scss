@@ -99,7 +99,6 @@ $intercom-side-margin: 50px;
     font-weight: $medium-weight;
     height: 100%;
     overflow: hidden;
-    padding: 8px;
   }
 
   html.MyPatientApp {
@@ -180,7 +179,7 @@ $intercom-side-margin: 50px;
     border-top-color: $color-grey-700;
   }
   .rc-tooltip {
-    width: 250px;
+    width: fit-content;
     z-index: 9999;
     &.light {
       max-width: 100%;

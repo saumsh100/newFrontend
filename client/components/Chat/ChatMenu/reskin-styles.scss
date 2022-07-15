@@ -9,6 +9,16 @@
   justify-content: center;
   line-height: 0;
   width: 350px;
+
+  .dd-menu-items .dd-items-right {
+    width: 310px;
+  }
+}
+
+.chatDropDownMenu {
+  div ul {
+    width: 310px !important;
+  }
 }
 
 .chatDropDown {

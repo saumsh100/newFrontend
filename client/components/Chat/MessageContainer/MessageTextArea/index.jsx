@@ -120,15 +120,9 @@ class MessageTextArea extends Component {
         )}
         {!isPoC && hasPatient && (
           <div className={styles.textAreaPoC}>
-            <img
-              src="/images/donna-poc.png"
-              height="335px"
-              width="338px"
-              alt="Donna"
-              className={styles.donnaImg}
-            />
+            <img src="/images/donna-poc.png" alt="Donna" className={styles.donnaImg} />
             <div className={styles.notPoC}>
-              <p>
+              <p className={styles.infoTextNotPoC}>
                 Looks like <strong>{patient.firstName}</strong>, is not the{' '}
                 <Tooltip
                   trigger={['hover']}

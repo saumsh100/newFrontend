@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Popover from 'react-popover';
 import 'react-day-picker/lib/style.css';
 import omit from 'lodash/omit';
@@ -29,17 +29,29 @@ const convertValueToDate = (value) => {
   return toDateObject(value);
 };
 
-class DayPicker extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isOpen: false };
-    this.handleDayClick = this.handleDayClick.bind(this);
-    this.togglePopOver = this.togglePopOver.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
+const DayPicker = (props) => {
+  const {
+    multiple,
+    onChange,
+    target,
+    TargetComponent,
+    tipSize,
+    iconClassName,
+    value,
+    noTarget,
+    theme,
+    timezone,
+  } = props;
+  const [displayValue, setDisplayValue] = useState(() => {
+    const onlyDate = parseDateWithFormat(value, 'l', timezone, true);
+    if (typeof value === 'string' && onlyDate.isValid()) return onlyDate.format('l');
+    // If value is defined and it is in UTC, format to 10/8/2017 style
+    const newDisplayValue = value ? getUTCDate(value, timezone).format('l') : value;
+    return newDisplayValue;
+  });
+  const [isOpen, setIsOpen] = useState(false);
 
-  handleDayClick(day, { disabled }) {
-    const { multiple, value, onChange, timezone } = this.props;
+  const handleDayClick = (day, { disabled }) => {
     const dates = getDate(day).format('YYYY-MM-DD');
 
     day = timezone
@@ -51,7 +63,7 @@ class DayPicker extends Component {
 
     if (!multiple) {
       onChange(day);
-      this.setState({ isOpen: false });
+      setIsOpen(false);
     } else {
       const selectedIndex = value.findIndex((v) => {
         const date = getDate(new Date(v)).toDate();
@@ -64,113 +76,94 @@ class DayPicker extends Component {
         onChange([...value, day]);
       }
     }
-  }
+  };
 
-  togglePopOver() {
-    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
-  }
+  const togglePopOver = () => {
+    setIsOpen(!isOpen);
+  };
 
-  handleInputChange(e) {
-    const { value } = e.target;
-    const momentDay = getDate(value, 'L', true);
-    if (momentDay.isValid() && this.props.handleThisInput) {
-      this.props.onChange(momentDay.toISOString());
-    }
-  }
+  const handleInputChange = (inputDate) => {
+    setDisplayValue(inputDate);
+    onChange(inputDate);
+  };
 
-  handleClose(e) {
+  function handleClose(e) {
     const { key } = e;
     if (key === 'Tab' || key === 'Enter' || key === 'Escape') {
-      this.setState({ isOpen: false });
+      setIsOpen(false);
     }
   }
 
-  render() {
-    const { target, TargetComponent, tipSize, iconClassName, value, noTarget, theme, timezone } =
-      this.props;
+  const newPickerProps = omit(props, [
+    'iconClassName',
+    'timezone',
+    'handleThisInput',
+    'noTarget',
+    'TargetComponent',
+    'disabledDays',
+    'onChange',
+    'onClick',
+    'onBlur',
+  ]);
 
-    let displayValue;
+  let dayPickerTargetComponent = (
+    <Input
+      {...newPickerProps}
+      value={displayValue}
+      onChange={(e) => handleInputChange(e.target.value)}
+      onKeyDown={(e) => handleClose(e)}
+      onFocus={togglePopOver}
+      data-test-id={props['data-test-id']}
+    />
+  );
 
-    // If the defined value is in the 10/8/2017 style, parse the date
-    const onlyDate = parseDateWithFormat(value, 'l', timezone, true);
-    if (typeof value === 'string' && onlyDate.isValid()) {
-      displayValue = onlyDate.format('l');
-    } else {
-      // If value is defined and it is in UTC, format to 10/8/2017 style
-      displayValue = value ? getUTCDate(value, timezone).format('l') : value;
-    }
-
-    const newPickerProps = omit(this.props, [
-      'iconClassName',
-      'timezone',
-      'handleThisInput',
-      'noTarget',
-      'TargetComponent',
-      'disabledDays',
-      'onChange',
-      'onClick',
-      'onBlur',
-    ]);
-
-    let dayPickerTargetComponent = (
-      <Input
-        {...newPickerProps}
-        value={displayValue}
-        onChange={(e) => e.preventDefault()}
-        onKeyDown={(e) => this.handleClose(e)}
-        onFocus={this.togglePopOver}
-        data-test-id={this.props['data-test-id']}
-      />
-    );
-
-    if (target) {
-      // const iconProps = pick(this.props, ['icon']);
-      if (target === 'icon') {
-        dayPickerTargetComponent = (
-          <IconButton
-            // {...iconProps}
-            icon="calendar"
-            type="button"
-            className={iconClassName}
-            onClick={this.togglePopOver}
-            data-test-id={this.props['data-test-id']}
-          />
-        );
-      } else if (target === 'custom') {
-        dayPickerTargetComponent = <TargetComponent onClick={this.togglePopOver} />;
-      }
-    }
-
-    const body = (
-      <div className={styles.outerContainer} key="body">
-        <RDayPicker
-          onDayClick={this.handleDayClick}
-          selectedDays={convertValueToDate(value)}
-          handleInputChange={this.handleInputChange}
-          initialMonth={value ? new Date(convertValueToDate(value)) : new Date()}
-          classNames={StyleExtender(dayPickerTheme, theme)}
-          {...this.props}
-          month={value ? new Date(convertValueToDate(value)) : this.props.month}
+  if (target) {
+    // const iconProps = pick(props, ['icon']);
+    if (target === 'icon') {
+      dayPickerTargetComponent = (
+        <IconButton
+          // {...iconProps}
+          icon="calendar"
+          type="button"
+          className={iconClassName}
+          onClick={togglePopOver}
+          data-test-id={props['data-test-id']}
         />
-      </div>
-    );
-
-    const popOverWrapper = (
-      <Popover
-        preferPlace="below"
-        className={styles.zIndex}
-        onOuterAction={this.togglePopOver}
-        isOpen={this.state.isOpen}
-        tipSize={tipSize}
-        body={[body]}
-      >
-        {target === 'custom' ? <div>{dayPickerTargetComponent}</div> : dayPickerTargetComponent}
-      </Popover>
-    );
-
-    return noTarget ? body : popOverWrapper;
+      );
+    } else if (target === 'custom') {
+      dayPickerTargetComponent = <TargetComponent onClick={togglePopOver} />;
+    }
   }
-}
+
+  const body = (
+    <div className={styles.outerContainer} key="body">
+      <RDayPicker
+        onDayClick={handleDayClick}
+        selectedDays={convertValueToDate(value)}
+        handleInputChange={handleInputChange}
+        initialMonth={value ? new Date(convertValueToDate(value)) : new Date()}
+        classNames={StyleExtender(dayPickerTheme, theme)}
+        {...props}
+        month={value ? new Date(convertValueToDate(value)) : props.month}
+      />
+    </div>
+  );
+
+  const popOverWrapper = (
+    <Popover
+      preferPlace="below"
+      className={styles.zIndex}
+      onOuterAction={togglePopOver}
+      isOpen={isOpen}
+      tipSize={tipSize}
+      body={[body]}
+    >
+      {target === 'custom' ? <div>{dayPickerTargetComponent}</div> : dayPickerTargetComponent}
+    </Popover>
+  );
+
+  return noTarget ? body : popOverWrapper;
+};
 
 DayPicker.propTypes = {
   target: PropTypes.string,

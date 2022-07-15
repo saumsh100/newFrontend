@@ -3,11 +3,13 @@
 .textAreaContainer {
   background-color: $super-white;
   border: 1px solid $color-lavender-100;
+  height: 207px;
   position: relative;
 }
 
 .textAreaBody {
   > div {
+    height: 130px;
     > form {
       height: 100%;
     }
@@ -22,12 +24,14 @@
 }
 
 .textAreaPoC {
+  align-items: center;
   animation: fadeIn 0.5s ease;
   background: $super-white;
   border: 1px solid $color-purple-300;
   border-radius: 4px;
   bottom: 0;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   left: 0;
   overflow: hidden;
@@ -42,12 +46,8 @@
     flex-direction: column;
     font-size: $x-medium-size;
     justify-content: center;
-    padding: 0 10px;
+    padding: 40px 10px;
     width: 500px;
-    p {
-      line-height: 1.5;
-      margin-top: 0;
-    }
   }
   .pocHelper {
     border-bottom: 1px solid;
@@ -55,13 +55,19 @@
   }
   .donnaImg {
     display: none;
-    max-height: 80%;
+    height: 120px;
     width: auto;
     @media (min-width: 1220px) {
       display: block;
     }
   }
 }
+.infoTextNotPoC {
+  line-height: 24px;
+  margin: 6px 0px;
+  width: 353px;
+}
+
 .sendButton {
   margin-left: 4px;
 }
