@@ -3,7 +3,7 @@
 .dropdownContainer {
   background-color: $super-white;
   text-align: left;
-  &:hover:not([disabled]) {
+  &:hover:not([disabled]):not(.manageCell) {
     background-color: $color-lavender-050 !important;
     color: $color-purple-400 !important;
   }

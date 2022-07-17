@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import MultiSelect from '../../../../../library/ui-kit/MultiSelect';
 import SegmentButton from '../../../../../library/SegmentButton';
 import styles from './reskin-styles.scss';
@@ -57,7 +58,7 @@ const PractitionersSegment = ({ practitionerRule, updatePractitioners }) => {
       onChange={handleSelectePractitioner}
       options={practitionerOptions}
       selected={getSelectedOptions}
-      theme={{ listWrapper: styles.listWrapper }}
+      theme={{ listWrapper: classNames(styles.alignRight, styles.listWrapper) }}
       selector={(disabled, selectedItems, error, getToggleButtonProps) => {
         const toggleButtonProps = getToggleButtonProps();
         const activeState = toggleButtonProps['aria-expanded'] && 'active';

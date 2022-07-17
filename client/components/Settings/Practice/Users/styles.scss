@@ -159,9 +159,14 @@
 
 .cancel {
   display: flex;
+  justify-content: center;
   line-height: normal;
   margin-left: 10px;
-  width: 20%;
+  width: 164px;
+
+  + .cancel {
+    margin-right: 16px;
+  }
 
   i {
     font-weight: $normal-weight;

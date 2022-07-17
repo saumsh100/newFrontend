@@ -272,7 +272,10 @@ class PatientInfo extends Component {
             )}
             {shouldDisplayTimelinePage && (
               <Card className={styles.timeline}>
-                {!isResponsive() && (
+                <div className={styles.timeline_header}>
+                  <div className={classNames(styles.cardTitle, [styles.cardTitle_timeline])}>
+                    Timeline & Activities
+                  </div>
                   <Popover
                     isOpen={this.state.filterOpen}
                     body={[
@@ -284,19 +287,19 @@ class PatientInfo extends Component {
                         selectAllFilters={this.props.selectAllTimelineFilters}
                       />,
                     ]}
-                    preferPlace="below"
+                    preferPlace="left"
                     tipSize={0.01}
                     onOuterAction={this.reinitializeState}
                   >
-                    <HeaderModalComponent
-                      icon="filter"
-                      text="Filter"
+                    <Button
                       onClick={this.openFilter}
-                      title="Timeline & Activities"
-                      isTimeline
+                      variant="secondary"
+                      iconRight="filter"
+                      title="Filter"
+                      className={styles.headerModalButton}
                     />
                   </Popover>
-                )}
+                </div>
                 <Timeline
                   patient={patient}
                   patientId={patientId}

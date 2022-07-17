@@ -1,6 +1,6 @@
-
 import React, { useState, memo } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { capitalize } from '../../../../../../util/isomorphic';
 import { convertArrayOfOptionsInMap } from '../../helpers';
 import SegmentButton from '../../../../../library/SegmentButton';
@@ -19,7 +19,7 @@ const ReasonSegment = ({ selectedReasons, updateReasons }) => {
     : selectedReasonsArr;
   const isDirty = selectedReasonsArrWithUnSet.length > 0;
   const allReasonsOptions = Object.keys(DEFAULT_REASONS)
-    .map(reason => ({
+    .map((reason) => ({
       value: reason,
       label: capitalize(reason),
     }))
@@ -27,7 +27,7 @@ const ReasonSegment = ({ selectedReasons, updateReasons }) => {
 
   const onReasonsChange = (values) => {
     setSelectedOptions(values);
-    const reasons = values.filter(v => v !== NOT_SET_VALUE);
+    const reasons = values.filter((v) => v !== NOT_SET_VALUE);
     const payload = {
       rule: convertArrayOfOptionsInMap(reasons, DEFAULT_REASONS),
       isActive: values.length !== 0,
@@ -37,10 +37,12 @@ const ReasonSegment = ({ selectedReasons, updateReasons }) => {
   };
 
   function generateSegmentButtonText() {
-    const selectedOptionsCapitalized = selectedOptions.map(option => capitalize(option));
+    const selectedOptionsCapitalized = selectedOptions.map((option) => capitalize(option));
     const noSetSelected = selectedOptionsCapitalized.includes(capitalize(NOT_SET_VALUE));
     const selectedOptionsLength = selectedOptionsCapitalized.length;
-    const selectedReasonsCapitalized = selectedOptionsCapitalized.filter(v => v !== NOT_SET_VALUE);
+    const selectedReasonsCapitalized = selectedOptionsCapitalized.filter(
+      (v) => v !== NOT_SET_VALUE,
+    );
 
     if (selectedOptionsLength === 0) {
       return 'Reasons';
@@ -53,8 +55,8 @@ const ReasonSegment = ({ selectedReasons, updateReasons }) => {
     }
 
     if (
-      selectedReasonsCapitalized.length
-      === allReasonsOptions.filter(v => v.value !== NOT_SET_VALUE).length
+      selectedReasonsCapitalized.length ===
+      allReasonsOptions.filter((v) => v.value !== NOT_SET_VALUE).length
     ) {
       return 'All Reasons';
     }
@@ -68,7 +70,7 @@ const ReasonSegment = ({ selectedReasons, updateReasons }) => {
       options={allReasonsOptions}
       selected={selectedReasonsArrWithUnSet}
       defaultValue={selectedReasonsArrWithUnSet}
-      theme={{ listWrapper: styles.listWrapper }}
+      theme={{ listWrapper: classNames(styles.alignRight, styles.listWrapper) }}
       selector={(disabled, selectedItems, error, getToggleButtonProps) => {
         const toggleButtonProps = getToggleButtonProps();
         const activeState = toggleButtonProps['aria-expanded'] && 'active';

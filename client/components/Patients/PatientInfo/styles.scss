@@ -58,6 +58,14 @@
   flex: 2 1;
   flex-direction: column;
   max-height: 900px;
+
+  &_header {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 53px;
+    justify-content: space-between;
+  }
 }
 
 .loadingContainer {

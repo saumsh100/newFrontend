@@ -24,15 +24,17 @@ const WaitListTableHeader = ({ exitFullScreen, segmentedWaitList, isFilterActive
         <>
           <span className={waitlistTableStyles.waitListCountWrapper}>
             {segmentedWaitList?.length}
-          </span>{' '}
-          of {waitlist?.length} In Waitlist
+          </span>
+          <span className={waitlistTableStyles.waitListHeaderLength}>
+            of {waitlist?.length} In Waitlist
+          </span>
         </>
       ) : (
         <>
           <span className={waitlistTableStyles.waitListCountWrapper}>
             {segmentedWaitList?.length}
-          </span>{' '}
-          In Waitlist
+          </span>
+          <span className={waitlistTableStyles.waitListHeaderLength}>In Waitlist</span>
         </>
       )}
     </div>

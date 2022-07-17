@@ -6,18 +6,22 @@
 }
 
 .waitListTableHeaderTitle {
+  align-items: center;
   background: $super-white;
   border: 1px solid $color-grey-150;
   border-radius: 4px;
+
   box-shadow: $box-shadow-3;
-  box-sizing: border-box;
   color: $color-purple-600;
+  display: flex;
   font-family: $font-inter;
   font-size: $xxx-medium-size;
   font-weight: $medium-weight;
+  justify-content: center;
   margin-left: -48px;
   margin-top: 34px;
   padding: 8px 16px;
+  width: 100%;
 }
 
 .closeButton {

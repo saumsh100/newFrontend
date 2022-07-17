@@ -1,5 +1,6 @@
 import React, { useMemo, useState, memo } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { week, capitalize } from '../../../../../../util/isomorphic';
 import { convertArrayOfOptionsInMap, getDayPickers } from '../../helpers';
 import SegmentButton from '../../../../../library/SegmentButton';
@@ -92,7 +93,7 @@ const DayOfWeekSegment = ({ selectedDayOfWeek, updateDayOfWeek, rowCountByDayOfW
       options={allWeekDays}
       selected={selectedDaysArrWithUnSet}
       defaultValue={selectedDaysArrWithUnSet}
-      theme={{ listWrapper: styles.listWrapper }}
+      theme={{ listWrapper: classNames(styles.alignRight, styles.listWrapper) }}
       selector={(disabled, selectedItems, error, getToggleButtonProps) => {
         const toggleButtonProps = getToggleButtonProps();
         const activeState = toggleButtonProps['aria-expanded'] && 'active';

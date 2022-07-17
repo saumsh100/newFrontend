@@ -37,6 +37,9 @@
 
 .manageCell {
   overflow: visible !important;
+  .dropdownContainer {
+    background-color: none;
+  }
 }
 
 .waitSpotCheckboxWrapper {
@@ -131,20 +134,25 @@ $height: 4px;
     color: $color-lavender-500;
   }
 }
+.waitListHeaderLength {
+  margin-left: 8px;
+  white-space: nowrap;
+}
 
 .waitListCountWrapper {
   align-items: center;
+
   background: $color-yellow-600;
-  border-radius: 1000px;
+  border-radius: 50%;
   color: $super-white;
-  display: inline-flex;
+  display: flex;
   font-size: $small-size;
   font-weight: $bold-weight;
-  height: 16px;
   height: 18px;
   justify-content: center;
   letter-spacing: 0px;
-  min-width: 25px;
+  line-height: 16px;
+  min-width: 18px;
 }
 
 .paginationComp {
