@@ -1,14 +1,14 @@
 @import '../../../styles/ui-reskin.scss';
 
 .dropdownContainer {
-  background-color: $super-white;
   text-align: left;
   &:hover:not([disabled]):not(.manageCell) {
-    background-color: $color-lavender-050 !important;
-    color: $color-purple-400 !important;
+    background-color: $color-lavender-050;
+    color: $color-purple-400;
+    cursor: pointer;
   }
   &:active:not([disabled]) {
-    background-color: $color-lavender-100 !important;
+    background-color: $color-lavender-100;
     color: $color-purple-400 !important;
   }
   &:hover > .menuItemContent > .menuIcon {

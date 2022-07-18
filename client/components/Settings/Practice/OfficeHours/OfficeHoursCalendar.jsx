@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -93,9 +92,8 @@ class OfficeHoursCalendar extends Component {
         }
       });
 
-      return this.setState({ baseSchedule: { ...data,
-        weeklySchedule } }, () =>
-        setTimeout(() => this.setState({ isLoading: false }), 1000));
+      return this.setState({ baseSchedule: { ...data, weeklySchedule } }, () =>
+        setTimeout(() => this.setState({ isLoading: false }), 1000),);
     });
   }
 
@@ -122,17 +120,22 @@ class OfficeHoursCalendar extends Component {
     return this.state.selectedDailySchedule.isDailySchedule || false;
   }
 
+  clearOverride = () => {
+    this.setState({ selectedDailySchedule: { isDailySchedule: false }, selectedDay: null });
+  };
+
   /**
    * Normalize the schedule that will be provided to ScheduleDrawer component
    *
    */
   scheduleMap() {
-    const normalizedSchedule = this.state.selectedDay && this.state.selectedDailySchedule.isDailySchedule
-      ? this.getFeaturedDay()
-      : {
-        ...this.state.baseSchedule.weeklySchedule,
-        ...(this.state.selectedDay ? this.getFeaturedDay() : null),
-      };
+    const normalizedSchedule =
+      this.state.selectedDay && this.state.selectedDailySchedule.isDailySchedule
+        ? this.getFeaturedDay()
+        : {
+            ...this.state.baseSchedule.weeklySchedule,
+            ...(this.state.selectedDay ? this.getFeaturedDay() : null),
+          };
     const parsedWeeklySchedule = pick(normalizedSchedule, [
       'sunday',
       'monday',
@@ -167,7 +170,8 @@ class OfficeHoursCalendar extends Component {
    * @param callback
    */
   handleDayClick(date, callback) {
-    const selectedDay = this.state.selectedDay && this.state.selectedDay.getTime() === date.getTime() ? null : date;
+    const selectedDay =
+      this.state.selectedDay && this.state.selectedDay.getTime() === date.getTime() ? null : date;
     this.setState(
       {
         selectedDay,
@@ -188,14 +192,14 @@ class OfficeHoursCalendar extends Component {
   handleDoubleClick(day, handleEditSchedule) {
     return () =>
       this.handleDayClick(day, () =>
-        handleEditSchedule(getFormattedDate(day, 'dddd', this.props.timezone).toLowerCase()));
+        handleEditSchedule(getFormattedDate(day, 'dddd', this.props.timezone).toLowerCase()),);
   }
 
   async handleCreateCustomSchedule({ date } = {}) {
     try {
       await createDailyHours(date.toISOString().split('T')[0]);
       await this.getSchedule();
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         selectedDailySchedule: prevState.selectedDay
           ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
           : null,
@@ -236,13 +240,14 @@ class OfficeHoursCalendar extends Component {
     })
       .then(() => {
         this.getSchedule(this.state.month);
-        const body = date && isDailySchedule
-          ? `Updated holiday hours for the practice on ${getFormattedDate(
-            date,
-            'dddd, MMMM Do',
-            this.props.timezone,
-          )}`
-          : 'Updated default schedule for the practice';
+        const body =
+          date && isDailySchedule
+            ? `Updated holiday hours for the practice on ${getFormattedDate(
+                date,
+                'dddd, MMMM Do',
+                this.props.timezone,
+              )}`
+            : 'Updated default schedule for the practice';
         this.props.showAlertTimeout({
           alert: { body },
           type: 'success',
@@ -255,7 +260,7 @@ class OfficeHoursCalendar extends Component {
     try {
       await deleteDailyHours(scheduleId);
       await this.getSchedule();
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         selectedDailySchedule: prevState.selectedDay
           ? Object.values(this.getFeaturedDay(prevState.selectedDay))[0]
           : null,
@@ -290,6 +295,7 @@ class OfficeHoursCalendar extends Component {
           handleUpdateSchedule={this.handleUpdateSchedule}
           isLoading={this.state.isLoading}
           isOverride={this.isOverride()}
+          clearOverride={this.clearOverride}
           month={this.state.month}
           onChangeMonth={this.onChangeMonth}
           practitioner={null}
@@ -319,7 +325,7 @@ const mapStateToProps = ({ auth, entities }) => {
   };
 };
 
-const mapActionsToProps = dispatch => bindActionCreators({ showAlertTimeout }, dispatch);
+const mapActionsToProps = (dispatch) => bindActionCreators({ showAlertTimeout }, dispatch);
 
 export default connect(mapStateToProps, mapActionsToProps)(OfficeHoursCalendar);
 

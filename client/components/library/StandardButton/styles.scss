@@ -73,11 +73,23 @@
   }
 }
 
+.link {
+  @extend .baseButton;
+  background-color: transparent;
+  border: none;
+  color: $color-lavender-500;
+  padding: 0;
+  &:hover {
+    color: $color-lavender-600;
+  }
+}
+
 .flat {
+  @extend .baseButton;
+  align-items: center;
   background-color: transparent;
   border: none;
   box-shadow: none;
-  color: $color-grey-200;
   display: flex;
   font-size: $x-small-size;
   font-weight: $bold-weight;

@@ -16,45 +16,53 @@ const ScheduleDrawer = ({
   toggleCustomSchedule,
   shouldDisplayWeeklyHours,
   handleEditSchedule,
+  clearOverride,
 }) => (
   <div className={styles.wrapper}>
-    <div className={styles.top}>
-      <h2 className={styles.title}>
-        {isOverride && selectedDay ? (
-          <p className={styles.mainText_text}>
-            Holiday Hours {getFormattedDate(selectedDay, 'MMM. D, YYYY', timezone, true)}
-          </p>
-        ) : (
-          <p className={styles.mainText_text}>Default Weekly Schedule</p>
+    <div className={styles.header}>
+      <div className={styles.backButton}>
+        {isOverride && selectedDay && (
+          <StandardButton onClick={clearOverride} icon="chevron-left" variant="link" title="Back" />
         )}
-      </h2>
-      <div>
-        <EnabledFeature
-          predicate={() => !!selectedDay}
-          render={({ flags }) => {
-            const dailyCreationRule = selectedDay
-              ? flags.get('connector-create-practitioner-dailySchedules')
-              : flags.get('connector-create-practitioner-weeklySchedule');
-            const dailyDeletionRule = selectedDay
-              ? flags.get('connector-delete-practitioner-dailySchedules')
-              : flags.get('connector-delete-practitioner-weeklySchedule');
-            const isAllow = isOverride ? dailyDeletionRule : dailyCreationRule;
-            return (
-              <StandardButton
-                onClick={() => isAllow && toggleCustomSchedule(isOverride)}
-                disabled={!isAllow}
-                icon={isOverride ? 'trash' : 'plus'}
-                className={classNames({
-                  [styles.active]: isOverride && isAllow,
-                  [styles.disabled]: !isAllow,
-                  [styles.trashIcon]: isOverride,
-                })}
-              >
-                {isOverride ? 'Delete' : 'Holiday Hours'}
-              </StandardButton>
-            );
-          }}
-        />
+      </div>
+      <div className={styles.top}>
+        <h2 className={styles.title}>
+          {isOverride && selectedDay ? (
+            <p className={styles.mainText_text}>
+              Holiday Hours {getFormattedDate(selectedDay, 'MMM. D, YYYY', timezone, true)}
+            </p>
+          ) : (
+            <p className={styles.mainText_text}>Default Weekly Schedule</p>
+          )}
+        </h2>
+        <div>
+          <EnabledFeature
+            predicate={() => !!selectedDay}
+            render={({ flags }) => {
+              const dailyCreationRule = selectedDay
+                ? flags.get('connector-create-practitioner-dailySchedules')
+                : flags.get('connector-create-practitioner-weeklySchedule');
+              const dailyDeletionRule = selectedDay
+                ? flags.get('connector-delete-practitioner-dailySchedules')
+                : flags.get('connector-delete-practitioner-weeklySchedule');
+              const isAllow = isOverride ? dailyDeletionRule : dailyCreationRule;
+              return (
+                <StandardButton
+                  onClick={() => isAllow && toggleCustomSchedule(isOverride)}
+                  disabled={!isAllow}
+                  icon={isOverride ? 'trash' : 'plus'}
+                  className={classNames({
+                    [styles.active]: isOverride && isAllow,
+                    [styles.disabled]: !isAllow,
+                    [styles.trashIcon]: isOverride,
+                  })}
+                >
+                  {isOverride ? 'Delete' : 'Holiday Hours'}
+                </StandardButton>
+              );
+            }}
+          />
+        </div>
       </div>
     </div>
     <div className={styles.schedules}>
@@ -90,6 +98,7 @@ ScheduleDrawer.propTypes = {
   shouldDisplayWeeklyHours: PropTypes.bool.isRequired,
   timezone: PropTypes.string.isRequired,
   toggleCustomSchedule: PropTypes.func.isRequired,
+  clearOverride: PropTypes.func.isRequired,
 };
 
 ScheduleDrawer.defaultProps = {

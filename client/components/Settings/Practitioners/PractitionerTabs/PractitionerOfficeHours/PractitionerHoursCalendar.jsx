@@ -312,6 +312,10 @@ class PractitionerHoursCalendar extends Component {
     );
   }
 
+  clearOverride = () => {
+    this.setState({ selectedDailySchedule: { isDailySchedule: false }, selectedDay: null });
+  };
+
   render() {
     const { timezone, chairs } = this.props;
 
@@ -343,6 +347,7 @@ class PractitionerHoursCalendar extends Component {
           shouldDisplayWeeklyHours={this.shouldDisplayWeeklyHours()}
           timezone={timezone}
           weeklySchedule={this.scheduleMap()}
+          clearOverride={this.clearOverride}
         />
       </div>
     );

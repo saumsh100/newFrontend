@@ -1,8 +1,15 @@
+@import '../../../../styles/ui-reskin.scss';
+
 .patientActions {
+  background-color: transparent !important;
+  color: $color-lavender-050 !important;
   margin-right: 3px;
+  &:hover {
+    background-color: transparent !important;
+    color: $color-lavender-150 !important;
+  }
   > div[class*='dd-menu-items'] {
     margin-right: 5px;
-    width: 150px;
   }
 }
 

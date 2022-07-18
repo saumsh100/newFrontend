@@ -141,8 +141,10 @@ class ScheduleCalendar extends Component {
       : this.props.baseSchedule.weeklySchedule;
   }
 
-  toggleDrawer = () =>
-    this.setState((prevState) => ({ isDrawerExpanded: !prevState.isDrawerExpanded }));
+  toggleDrawer = () => {
+    const { isDrawerExpanded } = this.state;
+    this.setState({ isDrawerExpanded: !isDrawerExpanded });
+  };
 
   /**
    * Logic that changes the actual month of the calendar
@@ -207,6 +209,7 @@ class ScheduleCalendar extends Component {
                 toggleCustomSchedule={this.handleToggleOverrideHours}
                 selectedDay={selectedDay}
                 isOverride={this.props.isOverride}
+                clearOverride={this.props.clearOverride}
                 shouldDisplayWeeklyHours={this.props.shouldDisplayWeeklyHours}
                 handleEditSchedule={this.handleEditSchedule}
                 schedule={this.props.weeklySchedule}
