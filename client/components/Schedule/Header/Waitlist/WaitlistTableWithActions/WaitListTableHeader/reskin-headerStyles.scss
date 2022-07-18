@@ -1,8 +1,10 @@
 @import '../../../../../../styles/ui-reskin.scss';
 .waitListTableHeaderWrapper {
+  align-items: flex-start;
   background-color: $color-purple-050;
   display: flex;
-  padding: 32px 24px 26px 32px;
+  flex-direction: column;
+  padding: 24px 0px 16px 24px;
 }
 
 .waitListTableHeaderTitle {
@@ -18,16 +20,13 @@
   font-size: $xxx-medium-size;
   font-weight: $medium-weight;
   justify-content: center;
-  margin-left: -48px;
-  margin-top: 34px;
+  max-width: 200px;
   padding: 8px 16px;
   width: 100%;
 }
 
-.closeButton {
-  font-weight: 500;
-  margin-left: 82%;
-  margin-top: 18px;
+.backButton {
+  margin-bottom: 16px;
 }
 
 .redirect {

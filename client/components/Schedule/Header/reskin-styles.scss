@@ -11,6 +11,10 @@
   padding: 0;
 }
 
+.waitlistModal {
+  padding: 16px;
+}
+
 .headerContainer {
   border-bottom: 1px solid $color-lavender-100;
 }
@@ -169,7 +173,7 @@
 }
 .waitlistFullScreen {
   background: $super-white;
-  height: 100%;
+  height: 90%;
   max-height: 100%;
-  width: 100%;
+  width: 90%;
 }

@@ -22,7 +22,7 @@ export const ManageCell = ({ value }) => (
     </Button>
     <Button className={tableStyles.actionItem} onClick={value.onRemove}>
       <Icon icon="trash" />
-      Delete
+      <span className={tableStyles.text}>Delete</span>
     </Button>
   </DropdownMenu>
 );

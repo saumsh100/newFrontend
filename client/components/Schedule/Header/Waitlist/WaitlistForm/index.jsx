@@ -231,7 +231,7 @@ const WaitlistForm = ({
       )}
       <div className={styles.heading}>
         {isNewWaitSpot
-          ? 'This will add an existing patientin your practice Waitlist'
+          ? 'This will add an existing patient in your practice Waitlist'
           : 'Update Wait Spot'}
       </div>
       <form id="waitlist-form" onSubmit={handleSubmitForm} className={styles.waitlistFormWrapper}>

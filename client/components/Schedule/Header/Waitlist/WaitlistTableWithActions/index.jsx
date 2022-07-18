@@ -205,13 +205,13 @@ const WaitlistTableWithActions = ({
 
   return (
     <>
-      <WaitListTableHeader
-        exitFullScreen={parentProps.onOverlayClick}
-        segmentedWaitList={segmentedWaitList}
-        isFilterActive={isFilterActive}
-        waitlist={waitlist}
-      />
       <div className={tableStyles.waitList}>
+        <WaitListTableHeader
+          exitFullScreen={parentProps.onOverlayClick}
+          segmentedWaitList={segmentedWaitList}
+          isFilterActive={isFilterActive}
+          waitlist={waitlist}
+        />
         <div className={tableStyles.headerTable}>
           <FilterBar
             waitlist={waitlist}

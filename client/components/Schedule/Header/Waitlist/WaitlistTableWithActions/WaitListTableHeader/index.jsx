@@ -2,23 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './reskin-headerStyles.scss';
 import waitlistTableStyles from '../reskin-styles.scss';
-import { Icon, IconButton } from '../../../../../library';
+import { StandardButton as Button } from '../../../../../library';
 
 const WaitListTableHeader = ({ exitFullScreen, segmentedWaitList, isFilterActive, waitlist }) => (
   <div className={styles.waitListTableHeaderWrapper}>
-    <div
-      className={styles.redirect}
+    <Button
+      className={styles.backButton}
+      icon="chevron-left"
+      variant="link"
+      title="Back"
       onClick={exitFullScreen}
-      role="button"
-      tabIndex={0}
-      onKeyUp={(e) => e.keyCode === 13 && exitFullScreen}
-    >
-      <div className={styles.iconWrapper}>
-        <Icon size={1} icon="chevron-left" />
-      </div>
-      Back
-    </div>
-
+    />
     <div className={styles.waitListTableHeaderTitle}>
       {segmentedWaitList?.length && isFilterActive ? (
         <>
@@ -38,7 +32,6 @@ const WaitListTableHeader = ({ exitFullScreen, segmentedWaitList, isFilterActive
         </>
       )}
     </div>
-    <IconButton icon="times" size={2.5} onClick={exitFullScreen} className={styles.closeButton} />
   </div>
 );
 

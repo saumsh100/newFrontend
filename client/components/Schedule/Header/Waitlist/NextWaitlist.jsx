@@ -163,6 +163,7 @@ const NextWaitlist = ({ onOverlayClick, ...props }) => {
         onEscKeyDown={setWaitListToInitialState}
         onOverlayClick={setWaitListToInitialState}
         type="large"
+        className={styles.waitlistModal}
       >
         <DraftMessage
           {...props}
