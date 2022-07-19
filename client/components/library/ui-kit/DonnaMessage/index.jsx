@@ -1,11 +1,10 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.scss';
 
 const DonnaMessage = ({ message, accountName }) => (
   <div className={styles.wrapper}>
-    <img src="/images/donna.png" alt="Donna" className={styles.donna} />
+    <img src="/images/donna.svg" alt="Donna" className={styles.donna} />
     <div className={styles.message}>
       <p>{`Working hard to ${message} for ${accountName}`}</p>
       <span className={styles.signature}>- Donna</span>

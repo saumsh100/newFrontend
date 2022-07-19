@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { Tabs, Tab } from '../../../library';
 import styles from './reskin-styles.scss';
 
-const OFFSET_HEIGHT = 37;
+const OFFSET_HEIGHT = 81.5;
 
-const INDEX_HEIGHT = 55.5875;
+const INDEX_HEIGHT = 140;
 
-const DIV_HEIGHT = 335 / 3;
+const DIV_HEIGHT = 140;
 
 const setToDoTabLineStartingPosition = (toDoIndex) => {
-  const scaledHeight = INDEX_HEIGHT * (toDoIndex + 1);
+  const scaledHeight = INDEX_HEIGHT * 1.13;
   const scaledOffsetHeight = toDoIndex * OFFSET_HEIGHT;
   const addToHeight = toDoIndex ? scaledHeight + scaledOffsetHeight : INDEX_HEIGHT;
   const divideHeight = INDEX_HEIGHT / 2;
@@ -48,7 +48,8 @@ class DonnaToDoTabs extends Component {
     let top = `${this.state.startingPosition}px`;
 
     let height = `${DIV_HEIGHT - this.state.startingPosition}px`;
-
+    console.log('startingPosition', this.state.startingPosition);
+    console.log('DIV_HEIGHT', DIV_HEIGHT);
     const lineStyle = {
       top: `${this.state.startingPosition}px`,
       left: 0,
@@ -86,10 +87,10 @@ class DonnaToDoTabs extends Component {
       top: `${DIV_HEIGHT}px`,
       left: '85%',
       width: '0px',
-      height: `${INDEX_HEIGHT * 1.5}px`,
+      height: `${INDEX_HEIGHT}px`,
     };
 
-    const multipleHeight = INDEX_HEIGHT * 1.5;
+    const multipleHeight = INDEX_HEIGHT;
     const lineStyle6 = {
       top: `${DIV_HEIGHT + multipleHeight}px`,
       left: '85%',
@@ -123,7 +124,7 @@ class DonnaToDoTabs extends Component {
           </div>
 
           <div className={styles.imageWrapper}>
-            <img src="/images/donna.png" height="335px" width="338px" alt="Donna" />
+            <img src="/images/donna.svg" height="335px" width="338px" alt="Donna" />
             <div style={lineStyle} className={styles.dynamicLines} />
             <div style={lineStyle2} className={styles.dynamicLines} />
             <div style={lineStyle3} className={styles.dynamicLines} />

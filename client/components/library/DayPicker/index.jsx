@@ -53,6 +53,7 @@ const DayPicker = (props) => {
 
   const handleDayClick = (day, { disabled }) => {
     const dates = getDate(day).format('YYYY-MM-DD');
+    const displayDate = getDate(day).format('MM/DD/YYYY');
 
     day = timezone
       ? parseDate(dates, timezone).add(12, 'hours').toISOString()
@@ -64,6 +65,7 @@ const DayPicker = (props) => {
     if (!multiple) {
       onChange(day);
       setIsOpen(false);
+      setDisplayValue(displayDate);
     } else {
       const selectedIndex = value.findIndex((v) => {
         const date = getDate(new Date(v)).toDate();
