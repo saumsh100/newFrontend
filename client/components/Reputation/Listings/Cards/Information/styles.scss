@@ -1,7 +1,12 @@
 @import '../../../../../styles/ui-reskin.scss';
 
 .total {
-  height: 210px;
+  display: flex;
+  flex-direction: column;
+  height: 272px;
+  justify-content: center;
+  padding: 0px 16px;
+
   &__header {
     border-bottom: 0px;
     color: $color-grey-400;
@@ -21,6 +26,7 @@
   }
   &__item {
     display: flex;
+    justify-content: space-between;
     width: 100%;
     &_wrapper {
       margin-right: 5px;
@@ -45,7 +51,7 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
     &_text {
       color: $color-purple-400;

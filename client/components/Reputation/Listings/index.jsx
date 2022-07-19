@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -22,7 +21,7 @@ function generateSearchData(entityList, statuses) {
   return entityList
     .filter((entity) => {
       if (statuses.length) {
-        const listings = entity.listings;
+        const { listings } = entity;
         let accurateListing = 'Not Found';
         if (listings.length) {
           accurateListing = 'Accurate';
@@ -38,7 +37,7 @@ function generateSearchData(entityList, statuses) {
       }
       return null;
     })
-    .map(entity => ({
+    .map((entity) => ({
       img: entity.iconUrl,
       name: entity.sourceName,
       listing: entity.listings,
@@ -108,34 +107,23 @@ class Listings extends Component {
     ];
 
     const totalData = [
-      { icon: 'check',
-        title: 'Accurate',
-        count: listingsData.sourcesFound },
+      { icon: 'check', title: 'Accurate', count: listingsData.sourcesFound },
       {
         icon: 'exclamation',
         title: 'Found with Possible Errors',
         count: listingsData.sourcesFoundWithErrors,
       },
-      { icon: 'times',
-        title: 'Not Found',
-        count: listingsData.sourcesNotFound },
+      { icon: 'times', title: 'Not Found', count: listingsData.sourcesNotFound },
     ];
 
     const informationData = [
-      { title: 'Business Name',
-        data: listingsAcctInfo.companyName },
-      { title: 'Street Address',
-        data: listingsAcctInfo.address },
-      { title: 'City',
-        data: listingsAcctInfo.city },
-      { title: 'State / Prov / Region ',
-        data: listingsAcctInfo.state },
-      { title: 'Zip / Postal Code',
-        data: listingsAcctInfo.zip },
-      { title: 'Phone',
-        data: listingsAcctInfo.workNumber },
-      { title: 'Website',
-        data: listingsAcctInfo.website },
+      { title: 'Business Name', data: listingsAcctInfo.companyName },
+      { title: 'Street Address', data: listingsAcctInfo.address },
+      { title: 'City', data: listingsAcctInfo.city },
+      { title: 'State / Prov / Region ', data: listingsAcctInfo.state },
+      { title: 'Zip / Postal Code', data: listingsAcctInfo.zip },
+      { title: 'Phone', data: listingsAcctInfo.workNumber },
+      { title: 'Website', data: listingsAcctInfo.website },
     ];
 
     const listingsSearchData = listings.get('searchData').toJS();
@@ -176,25 +164,18 @@ class Listings extends Component {
       {
         title: 'Source Type',
         items: [
-          { type: 'checkbox',
-            value: 'Search Engines' },
-          { type: 'checkbox',
-            value: 'Review Sites' },
-          { type: 'checkbox',
-            value: 'Directories' },
-          { type: 'checkbox',
-            value: 'Social Sites' },
+          { type: 'checkbox', value: 'Search Engines' },
+          { type: 'checkbox', value: 'Review Sites' },
+          { type: 'checkbox', value: 'Directories' },
+          { type: 'checkbox', value: 'Social Sites' },
         ],
       },
       {
         title: 'Listing Status',
         items: [
-          { type: 'checkbox',
-            value: 'Accurate' },
-          { type: 'checkbox',
-            value: 'Found with Possible Errors' },
-          { type: 'checkbox',
-            value: 'Not Found' },
+          { type: 'checkbox', value: 'Accurate' },
+          { type: 'checkbox', value: 'Found with Possible Errors' },
+          { type: 'checkbox', value: 'Not Found' },
         ],
       },
     ];
@@ -224,10 +205,10 @@ class Listings extends Component {
               listingScore={listingsData.listingPointScore}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={4}>
+          <Col className={styles.padding} xs={12} md={3}>
             <Total borderColor={colorMap.blue} title="Listing Score" data={totalData} />
           </Col>
-          <Col className={styles.padding} xs={12} md={5}>
+          <Col className={styles.padding} xs={12} md={6}>
             <Information borderColor={colorMap.blue} title="Listing Score" data={informationData} />
           </Col>
           <Col className={styles.padding} xs={12} md={9}>
@@ -288,7 +269,4 @@ Listings.defaultProps = {
   listingsFilter: null,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Listings);
+export default connect(mapStateToProps, mapDispatchToProps)(Listings);
