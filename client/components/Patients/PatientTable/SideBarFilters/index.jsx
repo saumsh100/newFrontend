@@ -215,7 +215,6 @@ class SideBarFilters extends Component {
             onClick={this.clearTags}
             variant="secondary"
             title="Reset"
-            disabled={!(Object.keys(filters).length > 5)}
           />
         </div>
 
