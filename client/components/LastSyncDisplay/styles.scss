@@ -1,8 +1,9 @@
 @import '../../styles/ui-reskin.scss';
+
 .on {
-  color: $color-purple-600;
+  color: $color-success-500;
 }
 
 .off {
-  color: $color-grey-400;
+  color: $error-500;
 }
