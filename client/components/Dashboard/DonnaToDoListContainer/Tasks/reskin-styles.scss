@@ -3,10 +3,12 @@
     border-left: 1px solid $color-lavender-300;
     height: 100%;
     width: 50%;
+
     @media screen and (max-width: 1164px) {
       width: 100%;
     }
   }
+
   &_countHeader {
     align-items: center;
     background-color: $color-purple-400;
@@ -17,6 +19,7 @@
     font-size: 24px;
     height: 50px;
     padding: 8px 20px;
+
     @media screen and (max-width: 1000px) {
       font-size: 15px;
     }
@@ -42,7 +45,7 @@
 
     .tasks_avatar {
       padding: 0 4px;
-      width: 40px;
+      width: 62px;
     }
   }
 
@@ -55,7 +58,7 @@
     color: inherit;
     display: flex;
     font-size: 10px;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 0px 16px;
     text-align: center;
     @extend .font-Medium;
@@ -64,6 +67,7 @@
   &_col {
     flex: 1;
     @extend .tasks_colStyling;
+
     @media screen and (max-width: 1000px) {
       box-sizing: border-box;
       flex: 1;
@@ -76,6 +80,7 @@
     color: $color-black;
     flex: 1;
     @extend .tasks_colStyling;
+
     @media screen and (max-width: 1000px) {
       box-sizing: border-box;
       flex: 1;
@@ -88,6 +93,7 @@
     @extend .tasks_colStyling;
 
     width: 90px;
+
     @media screen and (max-width: 1000px) {
       box-sizing: border-box;
       flex: 1;
@@ -100,6 +106,7 @@
     @extend .tasks_colStyling;
 
     width: 140px;
+
     @media screen and (max-width: 1000px) {
       box-sizing: border-box;
       flex: 1;
@@ -111,6 +118,7 @@
   &_avatar {
     @extend .tasks_colStyling;
     height: 100%;
+
     @media screen and (max-width: 1000px) {
       display: none;
     }

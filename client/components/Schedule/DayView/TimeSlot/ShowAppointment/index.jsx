@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import classNames from 'classnames';
+import { differenceInMinutes } from 'date-fns';
 import { getOrCreateChatForPatient } from '../../../../../thunks/chat';
 import { Icon, Button } from '../../../../library';
 import AppointmentInfo from '../../../../library/AppointmentPopover/AppointmentInfo';
@@ -112,6 +113,7 @@ class ShowAppointment extends Component {
       isFollowUpsFormActive,
       isRecallsFormActive,
       timezone,
+      minHeight,
     } = this.props;
 
     const isAnyFormActive = isNoteFormActive || isFollowUpsFormActive || isRecallsFormActive;
@@ -131,6 +133,7 @@ class ShowAppointment extends Component {
       boxShadow: isOpened
         ? '0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2)'
         : 'none',
+      minHeight,
     };
 
     // functions to check if there is enough room to display the AppointmentHours inline
@@ -138,7 +141,8 @@ class ShowAppointment extends Component {
 
     const canInlineAppointment = () =>
       !canShowAppointmentBelow() && nameContainerOffsetWidth >= nameContainerOffset;
-
+    const timeBoxInMinutes = differenceInMinutes(new Date(endDate), new Date(startDate));
+    const isShortTimeBox = timeBoxInMinutes <= 30;
     return (
       <Popover
         isOpen={isOpened && !selectedAppointment}
@@ -172,6 +176,9 @@ class ShowAppointment extends Component {
           className={classNames(
             styles.appointmentContainer,
             styles[`hoverStyle-${appStyle.iconColor}`],
+            {
+              [styles.less30minTimebox]: isShortTimeBox,
+            },
           )}
           style={containerStyle}
           data-test-id={`appointment_${patient && patient.get('firstName')}${
@@ -197,11 +204,12 @@ class ShowAppointment extends Component {
             <div className={styles.nameContainer} ref={this.nameContainer}>
               <div className={styles.nameContainer_name}>{this.patientNameDisplay}</div>
 
-              {canInlineAppointment() && (
+              {(canInlineAppointment() || isShortTimeBox) && (
                 <AppointmentHours
                   timezone={timezone}
                   startDate={startDate}
                   endDate={endDate}
+                  timeBoxInMinutes={timeBoxInMinutes}
                   inline
                   className={this.appointmentHoursClassName}
                 />
@@ -212,6 +220,7 @@ class ShowAppointment extends Component {
               <AppointmentHours
                 timezone={timezone}
                 startDate={startDate}
+                timeBoxInMinutes={timeBoxInMinutes}
                 endDate={endDate}
                 className={this.appointmentHoursClassName}
               />
@@ -256,6 +265,7 @@ ShowAppointment.propTypes = {
   isFollowUpsFormActive: PropTypes.bool.isRequired,
   isRecallsFormActive: PropTypes.bool.isRequired,
   timezone: PropTypes.string.isRequired,
+  minHeight: PropTypes.string.isRequired,
 };
 
 ShowAppointment.defaultProps = {

@@ -56,9 +56,18 @@ const buildHoursString = (startDate, endDate, timezone, inline = false) =>
  * @param {date} endDate
  * @param {boolean} inline - add a comma if true
  */
-const AppointmentHours = ({ className, startDate, endDate, inline = false, timezone }) => (
+const AppointmentHours = ({
+  className,
+  startDate,
+  endDate,
+  inline = false,
+  timezone,
+  timeBoxInMinutes,
+}) => (
   <span className={classnames(styles.nameContainer_hours, className)}>
-    {inline && ','} {buildHoursString(startDate, endDate, timezone, inline)}
+    {timeBoxInMinutes <= 15 || inline
+      ? `, ${timeBoxInMinutes} min`
+      : buildHoursString(startDate, endDate, timezone, inline)}
   </span>
 );
 
@@ -69,6 +78,7 @@ AppointmentHours.propTypes = {
   endDate: PropTypes.string.isRequired,
   inline: PropTypes.bool,
   timezone: PropTypes.string.isRequired,
+  timeBoxInMinutes: PropTypes.number.isRequired,
 };
 
 AppointmentHours.defaultProps = {

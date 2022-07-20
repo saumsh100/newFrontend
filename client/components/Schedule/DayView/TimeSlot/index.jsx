@@ -43,6 +43,7 @@ const renderDisplayComponent = (params) => (item, index, array) => {
     numOfColumns,
     minWidth,
     fontColor,
+    minHeight: '25px',
   };
 
   return item.mark || item.event ? (
@@ -73,7 +74,6 @@ const renderDisplayComponent = (params) => (item, index, array) => {
 
 export default function TimeSlot(props) {
   const { timeSlots, timeSlotHeight, items, startHour, unit, entityId, timezone } = props;
-
   return (
     <div className={styles.timeSlotColumn}>
       <TimeSlotColumn prefixKey={entityId} timeSlots={timeSlots} />

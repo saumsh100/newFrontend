@@ -1,3 +1,4 @@
+import { differenceInMinutes } from 'date-fns/esm';
 import {
   APPOITMENT_POSITION_LEFT_PADDING,
   APPOITMENT_WIDTH_LEFT_PADDING,
@@ -91,7 +92,6 @@ export const calculateAppointmentTop = (params) => (appointment) => {
   const { startHour, timeSlotHeight, unit, timezone } = params;
 
   const { startDate, endDate, customBufferTime } = appointment;
-
   const durationTime = getDuration(startDate, endDate, customBufferTime || 0, timezone);
   const startDateHours = getUTCDate(startDate, timezone).hours();
   const startDateMinutes = getUTCDate(startDate, timezone).minutes();
@@ -106,12 +106,13 @@ export const calculateAppointmentTop = (params) => (appointment) => {
     durationTime > unit ? durationTime : unit,
     timeSlotHeight.height,
   );
-
   appointment.top = `${appointment.topCalc + positionTopPadding}px`;
-  appointment.height = `${appointment.heightCalc - 1}px`;
+  const timeBoxInMinutes = differenceInMinutes(new Date(endDate), new Date(startDate));
+  appointment.height = timeBoxInMinutes <= 30 ? 27 : `${appointment.heightCalc - 1}px`;
 
   // set the minimum height to display the hours below the name. Set to 30 min
-  appointment.displayDurationHeight = calculateHeight(30, timeSlotHeight.height);
+  const MIN_HEIGHT = 27;
+  appointment.displayDurationHeight = calculateHeight(MIN_HEIGHT, timeSlotHeight.height);
 
   return appointment;
 };
