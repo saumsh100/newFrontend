@@ -58,6 +58,9 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
   const useCCPReSkinning = isDev
     ? true
     : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-ccp-reskinning-ui');
+  const useInlineEditingSaveButton = isDev
+    ? true
+    : isFeatureEnabledSelector(featureFlags.get('flags'), 'wf-hide-save-button');
 
   return {
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
@@ -69,6 +72,7 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
     useCCPRecall: !useRecallService,
     useCCPReview: !useReviewService,
     useCCPReSkinning,
+    useInlineEditingSaveButton,
   };
 };
 
