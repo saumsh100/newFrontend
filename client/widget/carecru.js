@@ -35,7 +35,7 @@ function CareCru({ iframeSrc, externalID, practiceName, accID }) {
 
   this.host.onEvent('completeBooking', () => {
     let dataLayerLabel;
-    if (externalID) {
+    if (externalID !== 'null' && externalID !== 'undefined' && externalID) {
       dataLayerLabel = externalID;
     } else if (practiceName) {
       dataLayerLabel = practiceName;
