@@ -23,6 +23,7 @@ export const practitionerFilterOptions = {
 };
 
 export default function PractitionerListFilter(props) {
+  const { practitionerCount } = props;
   function menuItemClickHandler(name) {
     props.updateFilter({
       name,
@@ -37,8 +38,7 @@ export default function PractitionerListFilter(props) {
       labelComponent={(cb) => (
         <Button {...cb} iconRight="caret-down" variant="secondary" className={styles.button}>
           <div className={styles.button_content}>
-            <p>{props.filterName}</p>{' '}
-            <div className={styles.button_badge}>{props.practitioners.size}</div>
+            <p>{props.filterName}</p> <div className={styles.button_badge}>{practitionerCount}</div>
           </div>
         </Button>
       )}
@@ -66,4 +66,5 @@ PractitionerListFilter.propTypes = {
   filterName: PropTypes.string.isRequired,
   practitioners: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
   updateFilter: PropTypes.func.isRequired,
+  practitionerCount: PropTypes.number.isRequired,
 };

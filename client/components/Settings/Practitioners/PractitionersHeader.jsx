@@ -12,6 +12,7 @@ const PractitionersHeader = ({ practitioners, setActive, listFilterProp }) => {
         practitioners={practitioners}
         filterName={filterName}
         updateFilter={updateFilter}
+        practitionerCount={practitionerCount}
       >
         <div className={styles.servicesHeader_counter_badge}>{practitionerCount}</div>
       </PractitionerListFilter>

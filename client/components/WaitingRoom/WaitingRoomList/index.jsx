@@ -6,6 +6,7 @@ import { Button, DialogBox, List, RemoteSubmitButton } from '../../library';
 import NotifyPatientForm from '../NotifyPatientForm';
 import WaitingRoomListItem from './WaitingRoomListItem';
 import { fetchWaitingRoomNotificationTemplate as fetchWaitingRoomNotificationTemplateAction } from '../../../thunks/waitingRoom';
+import styles from './styles.scss';
 
 const notifyAlert = ({ waitingRoomPatient: { patient, sentWaitingRoomNotifications } }) => ({
   success: {
@@ -72,89 +73,91 @@ function WaitingRoomList(props) {
     selectedWaitingRoomPatient.sentWaitingRoomNotifications.length > 0;
 
   return (
-    <List>
-      {waitingRoomPatients.map((waitingRoomPatient) => (
-        <WaitingRoomListItem
-          key={waitingRoomPatient.id}
-          waitingRoomPatient={waitingRoomPatient}
-          onNotify={() => setSelectedWaitingRoomPatient(waitingRoomPatient)}
-          onClean={({ isCleaned }) =>
-            onClean({
-              isCleaned,
-              waitingRoomPatient,
-              alert: cleanAlert({
+    <div className={styles.listBody}>
+      <List>
+        {waitingRoomPatients.map((waitingRoomPatient) => (
+          <WaitingRoomListItem
+            key={waitingRoomPatient.id}
+            waitingRoomPatient={waitingRoomPatient}
+            onNotify={() => setSelectedWaitingRoomPatient(waitingRoomPatient)}
+            onClean={({ isCleaned }) =>
+              onClean({
                 isCleaned,
                 waitingRoomPatient,
-              }),
-            })
-          }
-          onComplete={({ isCompleted }) =>
-            onComplete({
-              isCompleted,
-              waitingRoomPatient,
-              alert: completeAlert({ waitingRoomPatient }),
-            })
-          }
-        />
-      ))}
-      <DialogBox
-        title={`${isReNotifying ? 'Re-Notify' : 'Notify'} Patient You Are Ready`}
-        active={!!selectedWaitingRoomPatient}
-        onEscKeyDown={toggleNotifying}
-        onOverlayClick={toggleNotifying}
-        type="notify"
-        actions={[
-          {
-            label: 'Cancel',
-            onClick: toggleNotifying,
-            component: Button,
-            props: { border: 'blue' },
-          },
-          {
-            label: `${isReNotifying ? 'Re-Notify' : 'Notify'} Patient`,
-            component: RemoteSubmitButton,
-            props: {
-              color: 'blue',
-              form: formName,
-              removePristineCheck: true,
-            },
-          },
-        ]}
-      >
-        {selectedWaitingRoomPatient && (
-          <NotifyPatientForm
-            activeAccount={activeAccount}
-            formName={formName}
-            defaultTemplate={defaultTemplate}
-            // On Refresh, we close the modal and re-open after the template call,
-            // to allow redux form to repopulate.
-            onRefresh={() => {
-              const selectedWaitingRoomPatientCache = selectedWaitingRoomPatient;
-              setSelectedWaitingRoomPatient(null);
-
-              const reOpenPatientModal = () => {
-                setSelectedWaitingRoomPatient(selectedWaitingRoomPatientCache);
-              };
-
-              fetchWaitingRoomNotificationTemplate({
-                accountId,
-                successCallback: reOpenPatientModal,
-                errorCallback: reOpenPatientModal,
-              });
-            }}
-            displayNameOption={displayNameOption}
-            waitingRoomPatient={selectedWaitingRoomPatient}
-            onSubmit={({ message }) =>
-              onNotify({
-                message,
-                waitingRoomPatient: selectedWaitingRoomPatient,
-                alert: notifyAlert({ waitingRoomPatient: selectedWaitingRoomPatient }),
-              }).then(toggleNotifying)
+                alert: cleanAlert({
+                  isCleaned,
+                  waitingRoomPatient,
+                }),
+              })
+            }
+            onComplete={({ isCompleted }) =>
+              onComplete({
+                isCompleted,
+                waitingRoomPatient,
+                alert: completeAlert({ waitingRoomPatient }),
+              })
             }
           />
-        )}
-      </DialogBox>
-    </List>
+        ))}
+        <DialogBox
+          title={`${isReNotifying ? 'Re-Notify' : 'Notify'} Patient You Are Ready`}
+          active={!!selectedWaitingRoomPatient}
+          onEscKeyDown={toggleNotifying}
+          onOverlayClick={toggleNotifying}
+          type="notify"
+          actions={[
+            {
+              label: 'Cancel',
+              onClick: toggleNotifying,
+              component: Button,
+              props: { border: 'blue' },
+            },
+            {
+              label: `${isReNotifying ? 'Re-Notify' : 'Notify'} Patient`,
+              component: RemoteSubmitButton,
+              props: {
+                color: 'blue',
+                form: formName,
+                removePristineCheck: true,
+              },
+            },
+          ]}
+        >
+          {selectedWaitingRoomPatient && (
+            <NotifyPatientForm
+              activeAccount={activeAccount}
+              formName={formName}
+              defaultTemplate={defaultTemplate}
+              // On Refresh, we close the modal and re-open after the template call,
+              // to allow redux form to repopulate.
+              onRefresh={() => {
+                const selectedWaitingRoomPatientCache = selectedWaitingRoomPatient;
+                setSelectedWaitingRoomPatient(null);
+
+                const reOpenPatientModal = () => {
+                  setSelectedWaitingRoomPatient(selectedWaitingRoomPatientCache);
+                };
+
+                fetchWaitingRoomNotificationTemplate({
+                  accountId,
+                  successCallback: reOpenPatientModal,
+                  errorCallback: reOpenPatientModal,
+                });
+              }}
+              displayNameOption={displayNameOption}
+              waitingRoomPatient={selectedWaitingRoomPatient}
+              onSubmit={({ message }) =>
+                onNotify({
+                  message,
+                  waitingRoomPatient: selectedWaitingRoomPatient,
+                  alert: notifyAlert({ waitingRoomPatient: selectedWaitingRoomPatient }),
+                }).then(toggleNotifying)
+              }
+            />
+          )}
+        </DialogBox>
+      </List>
+    </div>
   );
 }
 

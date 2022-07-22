@@ -1,8 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Button } from '..';
+import Button from '../../Widget/components/Button';
 import styles from './styles.scss';
 
 /**
@@ -11,9 +10,7 @@ import styles from './styles.scss';
  * @param {*} props
  */
 export default function DataSlot(props) {
-  const {
-    type, selected, option, onClick, theme, children,
-  } = props;
+  const { type, selected, option, onClick, theme, children } = props;
 
   const className = classNames(styles.optionListItem, theme.slotButton, {
     [theme.selectedListItem || styles.selectedListItem]: selected,

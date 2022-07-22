@@ -184,7 +184,7 @@ class Widget extends Component {
             {this.props.children}
           </Element>
           <div className={styles.poweredBy}>
-            We run on <img src="/images/carecru_logo_color_horizontal.png" alt="CareCru" />
+            We run on <img src="/images/carecru_logo_reskin.svg" alt="CareCru" />
           </div>
           <FloatingButton visible={floatingButtonIsVisible}>
             <Button

@@ -174,7 +174,7 @@ function TopDisplay(props) {
                   />
                 </Col>
                 <Col xs={3}>
-                  <InfoDump label="PRODUCTION YTD" data={production} />
+                  <InfoDump label="Production YTD" data={production} />
                 </Col>
               </Row>
             </Grid>

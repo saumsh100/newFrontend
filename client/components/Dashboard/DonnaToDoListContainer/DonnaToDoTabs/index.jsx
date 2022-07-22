@@ -48,8 +48,6 @@ class DonnaToDoTabs extends Component {
     let top = `${this.state.startingPosition}px`;
 
     let height = `${DIV_HEIGHT - this.state.startingPosition}px`;
-    console.log('startingPosition', this.state.startingPosition);
-    console.log('DIV_HEIGHT', DIV_HEIGHT);
     const lineStyle = {
       top: `${this.state.startingPosition}px`,
       left: 0,
