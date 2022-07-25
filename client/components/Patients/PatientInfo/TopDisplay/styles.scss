@@ -3,6 +3,7 @@
 .card {
   background: $super-white;
   height: 100%;
+  margin-top: 7px;
   width: 100%;
 }
 
@@ -226,4 +227,8 @@
   margin-top: 12px;
   padding: 7px 12px !important;
   width: 105px;
+}
+.backButton {
+  font-size: $medium-size;
+  font-weight: $bold-weight;
 }
