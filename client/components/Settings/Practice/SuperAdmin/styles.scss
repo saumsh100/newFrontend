@@ -24,7 +24,7 @@
     align-items: center;
     display: flex;
     padding-top: 10px;
-    width: 40%;
+    width: 50%;
   }
 
   &_toggle {
@@ -81,19 +81,19 @@
 .buttonsWrapper {
   align-items: center;
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 10px;
   .inlineButton {
-    height: 40px;
-    margin-left: 5px;
+    height: 26px;
+    margin-left: 18px;
+    padding: 6px 8px;
+    width: 30px;
   }
 
   .inlineTrashButton {
-    background-color: white;
-    border: 1px solid #e54041;
+    background-color: $super-white;
+    border: 1px solid $error-500;
     border-radius: 4px;
-    box-shadow: 1px 1px 4px rgba(222, 213, 246, 0.1);
-    color: #e54041;
+    box-shadow: $box-shadow-4;
+    color: $error-500;
     margin-left: 5px;
   }
 }

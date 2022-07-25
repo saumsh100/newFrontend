@@ -3,8 +3,7 @@
 .toggleWrapper {
   align-items: center;
   display: flex;
-  margin-bottom: 20px;
-  padding-top: 20px;
+  margin-bottom: 30px;
 }
 
 .toggleTitle {
@@ -230,6 +229,7 @@
     font-size: $x-medium-size;
     font-weight: $small-size;
     margin-left: 23px;
+    margin-top: 10px;
   }
 
   &__label {
