@@ -1,4 +1,3 @@
-
 import createModel from '../createModel';
 import { getUTCDate, getFormattedDate } from '../../components/library/util/datetime';
 
@@ -20,6 +19,7 @@ const RequestsSchema = {
   isConfirmed: null,
   isCancelled: null,
   sentRecallId: null,
+  appointmentId: null,
 };
 
 export default class Requests extends createModel(RequestsSchema, 'Requests') {
