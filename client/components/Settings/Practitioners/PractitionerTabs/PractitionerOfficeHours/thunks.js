@@ -1,5 +1,6 @@
 
 import { httpClient } from '../../../../../util/httpClient';
+import { getISODate } from '../../../../library';
 
 /**
  * Creates a dailyHours instance, setting as default a generic time range.
@@ -24,11 +25,11 @@ export const createDailyHours = (practitionerId, date) =>
  * @param endDate
  * @returns {Promise}
  */
-export const getFinalDailyHours = ({ practitionerId, startDate, endDate }) =>
+export const getFinalDailyHours = ({ practitionerId, startDate, endDate,timezone }) =>
   httpClient().get(`/api/practitioners/${practitionerId}/finalDailySchedules`, {
     params: {
-      startDate,
-      endDate,
+      startDate:getISODate(new Date(startDate+moment.tz(timezone).format('Z'))),
+      endDate:getISODate(new Date(endDate+moment.tz(timezone).format('Z'))),
     },
   });
 

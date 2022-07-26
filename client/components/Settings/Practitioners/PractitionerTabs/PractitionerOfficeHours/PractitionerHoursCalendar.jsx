@@ -227,6 +227,7 @@ class PractitionerHoursCalendar extends Component {
       practitionerId: this.props.practitioner.get('id'),
       startDate: getStartOfTheMonth(month),
       endDate: getEndOfTheMonth(month),
+      timezone:this.props.timezone
     }).then(({ data }) =>
       this.setState({ baseSchedule: data }, () =>
         setTimeout(() => this.setState({ isLoading: false }), 1000),),);

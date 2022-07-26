@@ -77,11 +77,12 @@ class OfficeHoursCalendar extends Component {
    *
    * @returns {*}
    */
-  getSchedule(month = this.state.month) {
+  getSchedule(month = this.state.month) { 
     return getFinalDailyHours({
       accountId: this.props.accountId,
       startDate: getStartOfTheMonth(month),
       endDate: getEndOfTheMonth(month),
+      timezone:this.props.timezone
     }).then(({ data }) => {
       const { weeklySchedule } = data;
       const defaultDaysKeys = Object.keys(defaultDays);
