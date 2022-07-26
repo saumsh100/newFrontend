@@ -5,7 +5,7 @@ import groupBy from 'lodash/groupBy';
 import classNames from 'classnames';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 import { selectAppointmentShape } from '../../library/PropTypeShapes';
-import { Icon, Button, Avatar, SHeader, getTodaysDate } from '../../library';
+import { Icon, StandardButton as Button, Avatar, SHeader, getTodaysDate } from '../../library';
 import SameAppointment from './SameAppointment';
 import styles from './reskin-styles.scss';
 
@@ -98,11 +98,11 @@ const AppointmentSuggestions = (props) => {
         })}
       </div>
       <div className={styles.buttonContainer}>
-        <Button border="blue" onClick={onClickCreate}>
+        <Button onClick={onClickCreate}>
           No appointment match, create new
         </Button>
         <Button
-          color={selectedApp ? 'blue' : 'grey'}
+          disabled ={!selectedApp}
           className={classNames(styles.buttonContainer_yes, cursor)}
           onClick={() => {
             if (!selectedApp) return null;

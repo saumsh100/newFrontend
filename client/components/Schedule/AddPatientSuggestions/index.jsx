@@ -7,7 +7,7 @@ import PatientUser from '../../../entities/models/PatientUser';
 import RequestModel from '../../../entities/models/Request';
 import { patientShape } from '../../library/PropTypeShapes';
 import PatientData from './PatientData';
-import { Button } from '../../library';
+import { StandardButton as Button } from '../../library';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
 import styles from './reskin-styles.scss';
 
@@ -108,10 +108,10 @@ class AddPatientSuggestions extends Component {
           ))}
         </div>
         <div className={styles.createPatientButtonContainer}>
-          <Button border="blue" onClick={this.handleCreatePatient}>
+          <Button variant="secondary" onClick={this.handleCreatePatient}>
             Create New Patient
           </Button>
-          <Button color="blue" onClick={this.handleConnectPatient} className={styles.connectButton}>
+          <Button onClick={this.handleConnectPatient} className={styles.connectButton}>
             Connect Patient
           </Button>
         </div>

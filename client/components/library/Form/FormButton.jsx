@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import Button from '../Button';
+import { StandardButton as Button} from '../../library';
 
 export default function FormButton(props) {
   const { pristine } = props;
