@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
@@ -17,14 +16,14 @@ export default function FilterTimeline({
     <SContainer className={styles.filterContainer}>
       <SHeader className={styles.header}>
         <Icon icon="filter" className={styles.filterIcon} />
-        Filter Timeline
+        Filters
         <div className={styles.headerOptions}>
           <div
             className={styles.selectText}
             onClick={selectAllFilters}
             role="button"
             tabIndex={0}
-            onKeyUp={e => e.keyCode === 13 && selectAllFilters}
+            onKeyUp={(e) => e.keyCode === 13 && selectAllFilters}
           >
             Select All
           </div>
@@ -33,7 +32,7 @@ export default function FilterTimeline({
             onClick={clearFilters}
             role="button"
             tabIndex={0}
-            onKeyUp={e => e.keyCode === 13 && clearFilters}
+            onKeyUp={(e) => e.keyCode === 13 && clearFilters}
           >
             Clear All
           </div>
