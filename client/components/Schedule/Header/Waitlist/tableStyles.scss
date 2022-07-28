@@ -4,20 +4,13 @@
 
 .headerTable {
   align-items: center;
+  background-color: $super-white;
   display: flex;
+  margin: 0px 22px;
   padding: 20px;
-
-  h3 {
-    color: $primary-dark;
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0;
-
-    margin: 0;
-  }
 }
 .waitList {
-  background: $super-white;
+  background: $color-purple-050;
   border-radius: 4px;
   display: flex;
   flex-direction: column;

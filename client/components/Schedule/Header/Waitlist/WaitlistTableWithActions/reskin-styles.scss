@@ -1,8 +1,10 @@
 @import '../../../../../styles/ui-reskin.scss';
 .waitlistTable {
+  background: $super-white;
   border: none;
   color: $color-grey-400;
   flex: 1;
+  margin: 0px 22px;
   min-width: unset;
   overflow: hidden;
 

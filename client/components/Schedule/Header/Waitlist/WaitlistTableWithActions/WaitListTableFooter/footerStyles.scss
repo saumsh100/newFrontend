@@ -8,8 +8,8 @@
   display: flex;
   height: 64px;
   justify-content: space-between;
+  margin: 0px 22px;
   transition: all 0.2s ease-in 0.2s;
-  width: 100%;
 }
 
 .waitListTableFooterWrapper_Hidden {
@@ -27,7 +27,7 @@
   font-size: $medium-size;
   font-weight: $medium-weight;
   height: 38px;
-  margin-right: 120px;
+  margin-right: 30px;
   min-width: 192px;
 }
 
