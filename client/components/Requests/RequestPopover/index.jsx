@@ -12,7 +12,7 @@ import {
   SHeader,
   SBody,
   SFooter,
-  Button,
+  StandardButton as Button,
   getFormattedDate,
   getTodaysDate,
 } from '../../library';
@@ -26,9 +26,9 @@ const renderDesktopHeader = ({ patient, closePopover, age }) => (
       {patient.firstName} {patient.lastName}
       {age}
     </div>
-    <div className={styles.closeIcon} onClick={closePopover}>
+    <Button className={styles.closeIcon} onClick={closePopover}>
       <Icon icon="times" />
-    </div>
+    </Button>
   </SHeader>
 );
 
@@ -69,10 +69,10 @@ renderMobileSubHeader.propTypes = {
 
 const renderDesktopFooter = ({ acceptRequest, rejectRequest }) => (
   <SFooter className={styles.footer}>
-    <Button dense compact onClick={rejectRequest} className={styles.secondaryButton}>
+    <Button dense variant="secondary" className={styles.RequestButton} onClick={rejectRequest}>
       Reject
     </Button>
-    <Button dense compact className={styles.primaryButton} onClick={acceptRequest}>
+    <Button dense className={styles.RequestButton} onClick={acceptRequest}>
       Accept
     </Button>
   </SFooter>
