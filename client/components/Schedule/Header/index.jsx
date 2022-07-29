@@ -21,7 +21,6 @@ import {
 } from '../../library/index';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
-import CurrentDate from './CurrentDate';
 import { setScheduleView } from '../../../actions/schedule';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
 import { Delete as DeleteWaitSpot, MassDelete } from '../../GraphQLWaitlist';
@@ -116,35 +115,52 @@ class Header extends Component {
 
     const scheduleDate = schedule.get('scheduleDate');
     const currentDate = getUTCDate(scheduleDate, timezone);
-
+    const getDateValues = (value) => {
+      const mDate = getUTCDate(value, timezone);
+      return {
+        weekday: mDate.format('dddd'),
+        date: mDate.format('DD'),
+        month: mDate.format('MMM'),
+      };
+    };
+    const { date, month, weekday } = getDateValues(scheduleDate);
     return (
       <SHeader className={styles.headerContainer}>
-        <CurrentDate timezone={timezone} currentDate={scheduleDate}>
-          <div className={styles.changeDay}>
-            <div className={styles.changeDay_left_container}>
-              <IconButton
-                icon="angle-left"
-                onClick={() => this.props.previousDay(currentDate)}
-                className={styles.changeDay_left}
-                data-test-id="button_previousDay"
-              />
+        <div className={styles.monthDay}>
+          <div className={styles.number}>{date}</div>
+          <div className={styles.month}>{month}</div>
+        </div>
+        <div className={styles.currentDateContainer}>
+          <div className={styles.dateSelectors}>
+            <div className={styles.container}>
+              <div className={styles.dayOfWeek}>{weekday}</div>
             </div>
-            <div className={styles.changeDay_right_container}>
-              <IconButton
-                icon="angle-right"
-                onClick={() => this.props.nextDay(currentDate)}
-                className={styles.changeDay_right}
-              />
+            <div className={styles.changeDay}>
+              <div className={styles.changeDay_left_container}>
+                <IconButton
+                  icon="angle-left"
+                  onClick={() => this.props.previousDay(currentDate)}
+                  className={styles.changeDay_left}
+                  data-test-id="button_previousDay"
+                />
+              </div>
+              <div className={styles.changeDay_right_container}>
+                <IconButton
+                  icon="angle-right"
+                  onClick={() => this.props.nextDay(currentDate)}
+                  className={styles.changeDay_right}
+                />
+              </div>
             </div>
-          </div>
 
-          <StandardButton
-            onClick={() => this.props.setCurrentDay(new Date())}
-            variant="secondary"
-            className={styles.headerLinks_waitlist}
-          >
-            Today
-          </StandardButton>
+            <StandardButton
+              onClick={() => this.props.setCurrentDay(new Date())}
+              variant="secondary"
+              className={styles.headerLinks_waitlist}
+            >
+              Today
+            </StandardButton>
+          </div>
           <div className={styles.header}>
             <Popover
               isOpen={this.state.openFilters}
@@ -192,7 +208,7 @@ class Header extends Component {
                 <StandardButton
                   onClick={showSchedule}
                   className={styles.headerLinks_waitlist}
-                  variant="primary"
+                  variant="secondary"
                 >
                   Debug Schedule
                 </StandardButton>
@@ -264,7 +280,7 @@ class Header extends Component {
               active={this.state.showAddToWaitlist}
             />
           </div>
-        </CurrentDate>
+        </div>
       </SHeader>
     );
   }
