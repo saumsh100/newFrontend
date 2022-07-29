@@ -20,6 +20,7 @@ const RequestsSchema = {
   isCancelled: null,
   sentRecallId: null,
   appointmentId: null,
+  patientId: null,
 };
 
 export default class Requests extends createModel(RequestsSchema, 'Requests') {

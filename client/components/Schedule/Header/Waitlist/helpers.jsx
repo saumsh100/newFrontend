@@ -274,8 +274,8 @@ export const propsGenerator = ({
     addedDate: getFormattedDate(createdAt, 'YYYY/MM/DD', timezone),
     dates: waitlistDatesFormatter(daysOfTheWeek),
     nextApptDate: nextAppt ? getFormattedDate(nextAppt, 'YYYY/MM/DD', timezone) : null,
-    patient: isPatientUser ? patientUser : patient,
-    PopOverComponent: isPatientUser ? PatientUserPopover : PatientPopover,
+    patient: isPatientUser && !patient ? patientUser : patient,
+    PopOverComponent: isPatientUser && !patient ? PatientUserPopover : PatientPopover,
     times: hasTimes ? waitlistTimesFormatter([...availableTimes].sort(), timezone) : '',
   };
 };

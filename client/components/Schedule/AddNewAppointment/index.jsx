@@ -242,7 +242,7 @@ class AddNewAppointment extends Component {
                 this.props
                   .updateEntityRequest({
                     url: `/api/requests/${requestId}/confirm/${Object.keys(data.appointments)[0]}`,
-                    values: {},
+                    values: { patientId: newAppointment.patientId },
                   })
                   .then(() => {
                     reinitializeState();

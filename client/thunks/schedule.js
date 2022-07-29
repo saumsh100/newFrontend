@@ -10,7 +10,7 @@ import { updateEntityRequest } from './fetchEntities';
 import { getUTCDate, nonApptWritePMS } from '../components/library';
 
 export function checkPatientUser(patientUser, requestData) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     const { auth } = getState();
     const apptWrite = !nonApptWritePMS(auth.get('adapterType'));
     suggestedPatients(dispatch, requestData, patientUser, apptWrite);
@@ -64,7 +64,7 @@ async function suggestedPatients(dispatch, requestData, patientUser, apptWrite) 
       dispatch(
         updateEntityRequest({
           url: `/api/requests/${requestData.requestId}/confirm/${selectedApp.id}`,
-          values: {},
+          values: { patientId: modifiedPatient.id },
           alert: alertRequestUpdate(name),
         }),
       );
@@ -165,7 +165,7 @@ function inRangeOf(range, unit, appointment, requestData) {
 }
 
 export function setAllFilters(entityKeys) {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const { entities } = getState();
 
     entityKeys.forEach((key) => {

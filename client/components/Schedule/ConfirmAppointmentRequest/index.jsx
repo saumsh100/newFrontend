@@ -67,17 +67,18 @@ class ConfirmAppointmentRequest extends Component {
       this.props
         .updateEntityRequest({
           url: `/api/requests/${requestModel.get('id')}/confirm/${this.state.selectedApp.id}`,
-          values: {},
+          values: { patientId: this.state.selectedApp.patientId },
           alert: alertRequestUpdate,
         })
         .then(() => {
           reinitializeState();
         });
     } else {
-      const modifiedAppointment = selectedAppointment.requestModel.set(
+      let modifiedAppointment = selectedAppointment.requestModel.set(
         'appointmentId',
         this.state.selectedApp.id,
       );
+      modifiedAppointment = modifiedAppointment.set('patientId', this.state.selectedApp.patientId);
       const alertRequestUpdate = {
         success: { body: `Request updated for ${patient.getFullName()}` },
         error: { body: `Request failed for ${patient.getFullName()} Failed` },
