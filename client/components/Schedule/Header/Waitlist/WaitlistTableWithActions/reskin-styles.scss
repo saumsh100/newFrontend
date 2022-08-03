@@ -150,11 +150,12 @@ $height: 4px;
   display: flex;
   font-size: $small-size;
   font-weight: $bold-weight;
-  height: 18px;
+  height: fit-content;
   justify-content: center;
   letter-spacing: 0px;
   line-height: 16px;
-  min-width: 18px;
+  padding: 2px 6px;
+  width: fit-content;
 }
 
 .paginationComp {
