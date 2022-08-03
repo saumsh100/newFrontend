@@ -18,6 +18,7 @@ import { isFeatureEnabledSelector } from '../reducers/featureFlags';
 import { fetchWaitingRoomQueue } from '../thunks/waitingRoom';
 import { loadUnreadChatCount } from '../thunks/chat';
 import MicroFrontendRenderer from '../micro-front-ends/MicroFrontendRenderer';
+import { browserHistory as history } from '../store/factory';
 
 // eslint-disable-next-line import/no-unresolved
 const EmPracticeSwitcher = loadable(() => import('EM_MFE/EmPracticeSwitcher'));
@@ -93,7 +94,8 @@ class DashboardApp extends React.Component {
       isSearchCollapsed,
     } = this.props;
 
-    if (location.pathname.includes('login')) return <div>{children}</div>;
+    if (location.pathname.includes('login') || location.pathname.includes('enterprise-management'))
+      return <div>{children}</div>;
 
     return (
       <div>
@@ -124,6 +126,9 @@ class DashboardApp extends React.Component {
                 <EmAvatarWidget
                   isCollapsed={isCollapsed}
                   className={isCollapsed ? {} : styles.collapsedWidth}
+                  onClick={() => {
+                    history.push('/enterprise-management');
+                  }}
                 />
               }
             />

@@ -127,6 +127,14 @@ $intercom-side-margin: 50px;
         height: 100%;
         justify-content: center;
       }
+      .em-mfe-container {
+        align-items: center;
+        background: $background-color;
+        display: block;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+      }
     }
   }
 

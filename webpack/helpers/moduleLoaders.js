@@ -50,20 +50,21 @@ const getStyleLoaders = (cssOptions, isSass = false) => {
       options: cssOptions,
     },
     {
-      loader: require.resolve('postcss-loader'),
+      loader: 'postcss-loader',
       options: {
         postcssOptions: {
-          plugins: () => [
+          plugins: [
             require('postcss-flexbugs-fixes'),
-            require('postcss-preset-env')({
-              features: {
-                customProperties: false,
+
+            [
+              'postcss-preset-env',
+              {
+                features: {
+                  'custom-properties': false,
+                },
+                stage: 3,
               },
-              autoprefixer: {
-                flexbox: 'no-2009',
-              },
-              stage: 3,
-            }),
+            ],
             postcssNormalize(),
           ],
         },

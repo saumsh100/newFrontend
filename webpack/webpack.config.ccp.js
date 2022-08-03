@@ -33,6 +33,8 @@ const pluginsForDevOrProd = () => {
   return [];
 };
 
+const sharedDeps = ['react', 'react-dom', '@carecru/component-library'];
+
 const getHTMLWebpackPluginConfig = !isEnvProduction
   ? {
       minify: {
@@ -54,24 +56,20 @@ const webpackConfig = merge(common, {
   entry: paths.entries,
   plugins: [
     new ModuleFederationPlugin({
-      name: 'Container',
+      name: 'CCP_Frontend',
+      filename: 'remoteEntry.js',
       remotes: {
         EM_MFE: `EM_MFE@${process.env.ENTERPRISE_MANAGEMENT_HOST}/remoteEntry.js`,
       },
-      shared: {
-        react: {
-          singleton: true,
-          eager: true,
-        },
-        'react-dom': {
-          singleton: true,
-          eager: true,
-        },
-        '@carecru/component-library': {
-          singleton: true,
-          eager: true,
-        },
+      exposes: {
+        './factory': './client/store/factory.js',
       },
+      shared: sharedDeps.reduce((acc, dep) => {
+        return {
+          ...acc,
+          [dep]: { singleton: true, eager: true },
+        };
+      }, {}),
     }),
     new ModuleFederationPlugin({
       name: 'WaitlistContainer',
