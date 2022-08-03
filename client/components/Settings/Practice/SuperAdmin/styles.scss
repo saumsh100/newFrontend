@@ -82,10 +82,16 @@
   align-items: center;
   display: flex;
   .inlineButton {
-    height: 26px;
+    align-items: center;
+    display: flex;
+    height: 28px;
+    justify-content: center;
     margin-left: 18px;
-    padding: 6px 8px;
-    width: 30px;
+    padding: 6px;
+    width: 28px;
+    i {
+      margin: 0px;
+    }
   }
 
   .inlineTrashButton {
