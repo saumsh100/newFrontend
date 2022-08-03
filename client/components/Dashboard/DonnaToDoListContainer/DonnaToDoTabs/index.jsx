@@ -122,7 +122,7 @@ class DonnaToDoTabs extends Component {
           </div>
 
           <div className={styles.imageWrapper}>
-            <img src="/images/donna.svg" height="335px" width="338px" alt="Donna" />
+            <img src="/images/donna.svg" alt="Donna" />
             <div style={lineStyle} className={styles.dynamicLines} />
             <div style={lineStyle2} className={styles.dynamicLines} />
             <div style={lineStyle3} className={styles.dynamicLines} />
