@@ -363,6 +363,10 @@ export function loadChatMessages(chatId, offset = 0, limit = 15) {
       .then((total) => {
         dispatch(setChatMessagesListForChat(chatId, total));
       })
+      .catch((error) => {
+        dispatch(setChatMessagesListForChat(chatId));
+        throw new Error(error);
+      })
       .finally(() => {
         dispatch(setCancelTokenForChat(null));
 
