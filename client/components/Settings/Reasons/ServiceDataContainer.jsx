@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import ServiceDataItem from './ServiceDataItem';
 import { updateEntityRequest, deleteEntityRequest } from '../../../thunks/fetchEntities';
 import SettingsCard from '../Shared/SettingsCard';
-import { Card, IconButton, Tab, Tabs, Tooltip } from '../../library';
+import { Card, Tab, Tabs, Tooltip, StandardButton as Button } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
 import ReasonWeeklyHoursWrapper from './ReasonHours/Wrapper';
 import styles from './styles.scss';
@@ -70,25 +70,25 @@ class ServiceDataContainer extends Component {
                 placement="top"
                 overlayClassName="light"
               >
-                <div
+                <Button
                   data-test-id="removeService"
+                  className={styles.removeService}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.keyCode === 13 && this.deleteService()}
-                >
-                  <IconButton icon="trash" iconType="solid" disabled />
-                </div>
+                  icon="trash"
+                  variant="danger"
+                />
               </Tooltip>
             ) : (
-              <div
+              <Button
                 data-test-id="removeService"
+                className={styles.removeService}
                 onClick={this.deleteService}
-                role="button"
-                tabIndex={0}
                 onKeyDown={(e) => e.keyCode === 13 && this.deleteService()}
-              >
-                <IconButton icon="trash" iconType="solid" />
-              </div>
+                icon="trash"
+                variant="danger"
+              />
             )
           }
           subHeader={

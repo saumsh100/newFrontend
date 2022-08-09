@@ -5,7 +5,7 @@ import DropdownTimeSuggestion from '../DropdownTimeSuggestion';
 import { dropdownTheme } from '../../Widget/theme';
 import styles from './modal.scss';
 import schedule from './schedule.scss';
-import { IconButton } from '../index';
+import { StandardButton as Button } from '../index';
 import { parseDateWithFormat } from '../util/datetime';
 
 export const validFormats = ['LT', 'HH:mm:ss.SSS[Z]', 'hh:mm:ssZ'];
@@ -82,11 +82,12 @@ const InputGroup = ({
         />,
       ]}
       {isRemovable && (
-        <IconButton
+        <Button
           icon="trash"
           className={classNames(styles.delete, { [styles.disabled]: !isAllow })}
           disabled={!isAllow}
           onClick={onClick}
+          variant="danger"
         />
       )}
     </div>

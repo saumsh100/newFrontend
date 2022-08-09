@@ -72,26 +72,10 @@
   }
 
   .delete {
-    background: $super-white;
-    border: 1px solid $error-500;
-    border-radius: 4px;
-    box-shadow: $box-shadow-4;
-    color: $error-500;
-    margin-left: 10px;
-    padding: 8px 10px;
-    width: 70px;
-
-    &:hover {
-      background: $error-100 !important;
-      color: $error-600 !important;
-    }
-
-    &.disabled {
-      display: none;
-    }
-
-    svg {
-      width: 12px;
+    margin-left: 8px;
+    padding: 8px;
+    i {
+      margin: 0;
     }
   }
 

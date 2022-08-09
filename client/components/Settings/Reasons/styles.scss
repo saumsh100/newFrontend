@@ -6,6 +6,14 @@
   flex-direction: column;
 }
 
+.removeService {
+  padding: 8px;
+  i {
+    font-size: 12px;
+    margin: 0;
+  }
+}
+
 .servicesHeader {
   align-items: center;
   display: flex;

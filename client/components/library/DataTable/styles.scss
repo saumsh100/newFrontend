@@ -1,21 +1,21 @@
-@import '../../../styles/ui';
+@import '../../../styles/ui-reskin';
 
 .tbStyle {
-  background: $primary-white;
+  background: $super-white;
   border: 0;
   height: 100%;
 }
 
 .mainTableStyle {
-  background-color: $primary-white;
+  background-color: $super-white;
 }
 
 .footerStyle {
-  background-color: $primary-white;
+  background-color: $super-white;
 }
 
 .headerStyle {
-  background: $primary-white;
+  background: $super-white;
   border-bottom: 1px solid #efefef;
   font-size: 12px;
   padding-bottom: 10px;
@@ -23,13 +23,13 @@
 }
 
 .bodyStyle {
-  background: $primary-white;
+  background: $super-white;
   height: 100%;
 }
 
 .columnHeaderStyle {
   align-items: center;
-  background: $primary-white;
+  background: $super-white;
   border-right: 0;
   box-shadow: none;
   color: #a7a9ac;
@@ -98,5 +98,11 @@ $height: 6px;
 }
 
 :global(.ReactTable .rt-thead.-header) {
+  background-color: $color-grey-050 !important;
   box-shadow: none !important;
+  height: 47px;
+  padding: 0 !important;
+}
+:global(.rt-th) {
+  background-color: transparent !important;
 }
