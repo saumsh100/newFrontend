@@ -45,8 +45,12 @@
     flex-direction: column;
     font-size: $x-medium-size;
     justify-content: center;
-    padding: 40px 16px;
+    padding: 40px 16px 40px 0px;
     width: 500px;
+
+    @media (max-width: 1024px) {
+      padding: 40px 16px;
+    }
   }
   .pocHelper {
     border-bottom: 1px solid;
@@ -55,9 +59,13 @@
   .donnaImg {
     display: none;
     height: 120px;
+    padding: 16px;
     width: auto;
     @media (min-width: 1220px) {
       display: block;
+    }
+    @media (max-width: 1024px) {
+      display: none;
     }
   }
 }
