@@ -10,7 +10,7 @@ import {
   SHeader,
   SBody,
   SFooter,
-  Button,
+  StandardButton as Button,
   PointOfContactBadge,
   nonApptWritePMS,
 } from '..';
@@ -176,11 +176,10 @@ const AppointmentInfo = (props) => {
             render={() => (
               <SFooter className={styles.footer}>
                 <Button
-                  dense
-                  compact
                   className={styles.editButton}
                   onClick={() => props.editAppointment()}
                   disabled={props.nonApptWritePMS}
+                  variant="primary"
                 >
                   Edit Appointment
                 </Button>

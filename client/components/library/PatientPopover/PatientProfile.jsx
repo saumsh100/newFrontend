@@ -11,7 +11,7 @@ import {
   SFooter,
   Avatar,
   Icon,
-  Button,
+  StandardButton as Button,
   PointOfContactBadge,
   getUTCDate,
   getTodaysDate,
@@ -148,7 +148,7 @@ const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, tim
 
         <SFooter className={styles.footer}>
           {!isPatientUser && (
-            <Button onClick={() => editPatient(patient.id)} dense compact>
+            <Button onClick={() => editPatient(patient.id)} variant="primary">
               Edit Patient
             </Button>
           )}
