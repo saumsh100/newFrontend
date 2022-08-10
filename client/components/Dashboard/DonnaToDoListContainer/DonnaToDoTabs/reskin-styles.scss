@@ -51,35 +51,15 @@
   position: relative;
 
   img {
+    height: 250px;
     z-index: 3;
-  }
-
-  @media screen and (min-width: 2400px) {
-    img {
-      height: 250px;
-    }
-  }
-
-  @media screen and (max-width: 1360px) {
-    img {
-      height: 190px;
-    }
-  }
-
-  @media screen and (max-width: 1260px) {
-    img {
-      height: 220px;
-      width: 220px;
-    }
   }
 
   @media screen and (max-width: 1164px) {
     img {
       bottom: 0;
-      height: 190px;
       position: absolute;
       right: 10px;
-      width: 300px;
     }
   }
 
