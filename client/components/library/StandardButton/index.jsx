@@ -37,11 +37,11 @@ function Button(props) {
       })}
       onClick={handleClick}
     >
-      {icon && <i className={`fa fa-${icon} ${styles.icon} ${typeMap[iconType]}`} />}
+      {icon && <i className={`${typeMap[iconType]} fa-${icon} ${styles.icon} `} />}
 
       {children || (title && <span className={styles.text}>{children || title}</span>)}
 
-      {iconRight && <i className={`fa fa-${iconRight} ${styles.iconRight} ${typeMap[iconType]}`} />}
+      {iconRight && <i className={`${typeMap[iconType]} fa-${iconRight} ${styles.iconRight}`} />}
     </button>
   );
 }

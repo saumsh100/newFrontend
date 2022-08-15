@@ -1,4 +1,3 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -6,7 +5,7 @@ import RDropdownMenu from 'react-dd-menu';
 import withTheme from '../../../hocs/withTheme';
 import SuggestionInput from './SuggestionInput';
 import TimeList from './TimeList';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 class DropdownTimeSuggestion extends Component {
   constructor(props) {
@@ -102,7 +101,7 @@ class DropdownTimeSuggestion extends Component {
    * Toggle the dropdown
    */
   toggle() {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isOpen: !prevState.isOpen,
     }));
   }
@@ -326,17 +325,17 @@ export default withTheme(DropdownTimeSuggestion, styles);
 /**
  * Default format props
  */
-const formatValue = value => value;
+const formatValue = (value) => value;
 
 /**
  * Default render prop
  */
-const renderValue = value => value;
+const renderValue = (value) => value;
 
 /**
  * Default validate props
  */
-const validateValue = val => val.length;
+const validateValue = (val) => val.length;
 
 DropdownTimeSuggestion.defaultProps = {
   formatValue,

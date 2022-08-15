@@ -89,10 +89,11 @@ $empty-grey: darken(lightgrey, 5%);
     cursor: pointer;
   }
 }
-
 .dropDownList {
   max-height: 300px;
+  overflow-x: hidden;
   overflow-y: auto;
+  width: 120px;
 }
 
 .selectedListItem {

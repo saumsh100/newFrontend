@@ -49,6 +49,7 @@ const HeaderModalComponent = ({ icon, text, onClick, title, isTimeline }) => (
     <Button
       onClick={onClick}
       variant="secondary"
+      iconType="light"
       iconRight={icon}
       title={text}
       className={styles.headerModalButton}
@@ -295,6 +296,7 @@ class PatientInfo extends Component {
                       onClick={this.openFilter}
                       variant="secondary"
                       iconRight="filter"
+                      iconType="light"
                       title="Filter"
                       className={styles.headerModalButton}
                     />

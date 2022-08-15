@@ -1,10 +1,9 @@
-
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../Icon';
 import { Input } from '..';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 class SuggestionInput extends Component {
   constructor(props) {
@@ -67,7 +66,7 @@ class SuggestionInput extends Component {
         role="button"
         tabIndex={0}
         onClick={this.displaySuggestions}
-        onKeyDown={e => e.keyCode === 13 && this.displaySuggestions()}
+        onKeyDown={(e) => e.keyCode === 13 && this.displaySuggestions()}
         className={disabled ? theme.toggleDivDisabled : toggleClassName}
       >
         <div className={theme.toggleValueDiv}>
@@ -78,7 +77,7 @@ class SuggestionInput extends Component {
             value={value}
             onClick={this.displaySuggestions}
             onFocus={this.displaySuggestions}
-            onChange={e => handleChange(e.target.value)}
+            onChange={(e) => handleChange(e.target.value)}
             onBlur={handleBlur}
             onKeyDown={handleKeydown}
             className={classNames(styles.inputToggler, theme.inputToggler, {
