@@ -18,12 +18,11 @@ import { isFeatureEnabledSelector } from '../reducers/featureFlags';
 import { fetchWaitingRoomQueue } from '../thunks/waitingRoom';
 import { loadUnreadChatCount } from '../thunks/chat';
 import MicroFrontendRenderer from '../micro-front-ends/MicroFrontendRenderer';
-import { browserHistory as history } from '../store/factory';
 
 // eslint-disable-next-line import/no-unresolved
 const EmPracticeSwitcher = loadable(() => import('EM_MFE/EmPracticeSwitcher'));
 // eslint-disable-next-line import/no-unresolved
-const EmAvatarWidget = loadable(() => import('EM_MFE/EmAvatarWidget'));
+const EmSwitcher = loadable(() => import('EM_MFE/EmSwitcher'));
 class DashboardApp extends React.Component {
   constructor(props) {
     super(props);
@@ -122,15 +121,7 @@ class DashboardApp extends React.Component {
           <div className={styles.emNavFooter}>
             <MicroFrontendRenderer
               load={enterpriseManagementPhaseTwoActive}
-              component={
-                <EmAvatarWidget
-                  isCollapsed={isCollapsed}
-                  className={isCollapsed ? {} : styles.collapsedWidth}
-                  onClick={() => {
-                    history.push('/enterprise-management');
-                  }}
-                />
-              }
+              component={<EmSwitcher inverted isCollapsed={isCollapsed} />}
             />
           </div>
         </NavRegionContainer>

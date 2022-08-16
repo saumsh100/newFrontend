@@ -1,7 +1,10 @@
 @import '../../styles/ui-reskin.scss';
 
 .navListWrapper {
+  height: calc(100vh - 372px);
   margin-top: 25px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .navItem {
