@@ -27,6 +27,7 @@
     "lint-staged": "lint-staged",
     "ngrok": "ngrok http localhost:5100",
     "npmrc": "dotenv -- node scripts/npmrcGenerate.js",
+    "preinstall": "npx npm-force-resolutions",
     "start": "npm run client:dev:server",
     "serve:build": "dotenv -- webpack build --config ./webpack/webpack.config.server.js",
     "serve:build:watch": "npm run serve:build -- --watch --progress",
@@ -110,14 +111,14 @@
     "raf": "^3.4.0",
     "rc-slider": "^8.6.13",
     "rc-tooltip": "^3.4.2",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "react-autosuggest": "9.4.0",
     "react-chartjs-2": "^2.7.6",
     "react-color": "^2.12.0",
     "react-day-picker": "^7.3.2",
     "react-dd-menu": "^2.0.0",
     "react-document-title": "^2.0.3",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.2.0",
     "react-dropzone": "^3.13.2",
     "react-error-boundary": "^3.1.4",
     "react-flexbox-grid": "^2.1.2",
@@ -202,5 +203,9 @@
     "twilio-run": "^2.9.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-dev-server": "^4.0.0"
+  },
+  "resolutions": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
