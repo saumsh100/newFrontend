@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import {
   IconButton,
+  Button,
   SHeader,
   Modal,
   getUTCDate,
@@ -18,7 +19,7 @@ import {
   SwitchToggler,
   StandardButton,
   Tooltip,
-} from '../../library/index';
+} from '../../library';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
 import { setScheduleView } from '../../../actions/schedule';
@@ -251,11 +252,28 @@ class Header extends Component {
               onOverlayClick={this.toggleWaitlist}
               type={newWaitlist ? 'large' : 'medium'}
             >
-              {waitlistMFEActive ? (
-                <MicroFrontendRenderer
-                  load={waitlistMFEActive}
-                  component={<WaitlistMFEComponent />}
-                />
+              {waitlistMFEActive && this.state.showWaitlist ? (
+                <div className={styles.CCPWaitlistContainer}>
+                  <div className={styles.mfeClosingWrapper}>
+                    <Button
+                      icon="arrow-left"
+                      variant="link"
+                      title="Back"
+                      onClick={this.toggleWaitlist}
+                    />
+                    <IconButton
+                      icon="times"
+                      size={2.5}
+                      onClick={this.toggleWaitlist}
+                      className={styles.closeButton}
+                    />
+                  </div>
+                  <MicroFrontendRenderer
+                    load={waitlistMFEActive}
+                    className="waitlist-mfe-container"
+                    component={<WaitlistMFEComponent />}
+                  />
+                </div>
               ) : (
                 <MassDelete>
                   {(massRemoveCallback) => (

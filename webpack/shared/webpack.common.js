@@ -39,6 +39,7 @@ const {
   ENTERPRISE_MANAGEMENT_HOST,
   MY_SUBDOMAIN = 'my',
   ONLINE_SCHEDULER_URL,
+  WAITLIST_MFE_HOST
 } = process.env;
 
 const isEnvDevelopment = NODE_ENV === 'development';
@@ -147,6 +148,7 @@ const webpackConfig = {
         ENTERPRISE_MANAGEMENT_HOST: JSON.stringify(ENTERPRISE_MANAGEMENT_HOST),
         MY_SUBDOMAIN: JSON.stringify(MY_SUBDOMAIN),
         ONLINE_SCHEDULER_URL: JSON.stringify(ONLINE_SCHEDULER_URL),
+        WAITLIST_MFE_HOST: JSON.stringify(WAITLIST_MFE_HOST),
       },
       VERSION: JSON.stringify(paths.appPackageJson.version),
       'typeof window': JSON.stringify('object'),

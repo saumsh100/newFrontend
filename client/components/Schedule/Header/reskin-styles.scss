@@ -50,9 +50,11 @@
   margin-left: auto;
   margin-right: 10px;
   text-align: center;
+
   &_text {
     padding-right: 35px;
   }
+
   @media (max-width: 1440px) {
     justify-content: start;
     margin-top: 8px;
@@ -71,9 +73,11 @@
     flex-direction: row;
     height: 28px;
     padding: 6px 7.5px;
+
     i {
       font-weight: 400;
     }
+
     i + i {
       font-weight: 900;
     }
@@ -89,6 +93,7 @@
     display: flex;
     height: 28px;
     margin-left: 10px;
+
     i {
       color: $color-purple-100;
       font-size: $small-size;
@@ -112,6 +117,7 @@
   height: 28px;
   justify-content: center;
   width: 44px;
+
   &:hover {
     background-color: $color-lavender-100;
   }
@@ -125,6 +131,7 @@
   height: 40px;
   justify-content: center;
   margin: 0px 16px;
+
   i {
     font-size: 17px;
     font-weight: 900;
@@ -133,13 +140,16 @@
   &_left {
     color: inherit;
     width: 32px;
+
     &_container {
       border-radius: 4px;
       display: flex;
       justify-content: center;
+
       &:hover {
         background-color: $color-lavender-100;
       }
+
       &:active {
         i {
           color: $color-lavender-600;
@@ -151,14 +161,17 @@
   &_right {
     color: inherit;
     width: 32px;
+
     &_container {
       border-radius: 4px;
       display: flex;
       justify-content: center;
       margin-right: 8px;
+
       &:hover {
         background-color: $color-lavender-100;
       }
+
       &:active {
         i {
           color: $color-lavender-600;
@@ -197,11 +210,35 @@
   font-size: 13px;
   text-align: center;
 }
+
 .waitlistFullScreen {
-  background: $super-white;
   height: 90%;
   max-height: 100%;
   width: 90%;
+
+  .CCPWaitlistContainer {
+    .waitListTableHeaderWrapper {
+      align-items: flex-start;
+      background-color: $color-purple-050;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0px 16px 24px;
+    }
+
+    .mfeClosingWrapper {
+      align-items: center;
+      background-color: $color-purple-050;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 16px 24px;
+    }
+
+    .closeButton {
+      color: $color-lavender-500;
+      font-weight: 500;
+    }
+  }
 }
 
 .container {
