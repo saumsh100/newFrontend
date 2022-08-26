@@ -147,11 +147,13 @@ const PatientProfile = ({ patient, closePopover, isPatientUser, editPatient, tim
         </SBody>
 
         <SFooter className={styles.footer}>
+
           {!isPatientUser && (
             <Button onClick={() => editPatient(patient.id)} variant="primary">
               Edit Patient
             </Button>
           )}
+
         </SFooter>
       </SContainer>
     </Card>
