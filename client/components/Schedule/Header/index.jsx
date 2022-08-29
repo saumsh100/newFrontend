@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import {
   IconButton,
-  Button,
   SHeader,
   Modal,
   getUTCDate,
@@ -255,7 +254,7 @@ class Header extends Component {
               {waitlistMFEActive && this.state.showWaitlist ? (
                 <div className={styles.CCPWaitlistContainer}>
                   <div className={styles.mfeClosingWrapper}>
-                    <Button
+                    <StandardButton
                       icon="arrow-left"
                       variant="link"
                       title="Back"

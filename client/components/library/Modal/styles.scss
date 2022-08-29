@@ -11,7 +11,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 9999;
+  z-index: 299;
 
   @media screen and (max-width: 576px) {
     position: static;
@@ -62,6 +62,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 0.6;
   }
@@ -96,6 +97,7 @@
     align-items: center;
     display: flex;
   }
+
   &__closeIcon {
     color: grey;
     cursor: pointer;
@@ -103,6 +105,7 @@
     font-weight: 900;
     margin-left: auto;
   }
+
   &__footer {
     margin-left: auto;
   }
@@ -121,6 +124,7 @@
     opacity: 0;
     transform: translateY(calc(-4rem * 1.6));
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -137,12 +141,14 @@
   top: 2%;
   visibility: visible;
   z-index: 10;
+
   @media screen and (max-width: 1000px) {
     display: none;
   }
 
   &__mobile {
     display: none;
+
     @media screen and (max-width: 1000px) {
       display: flex;
       justify-content: flex-end;
