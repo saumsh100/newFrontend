@@ -201,6 +201,6 @@
     "supertest": "^3.4.2",
     "twilio-run": "^2.9.0",
     "webpack-bundle-analyzer": "^4.4.2",
-    "webpack-dev-server": "^4.0.0"
+    "webpack-dev-server": "^4.10.0"
   }
 }
