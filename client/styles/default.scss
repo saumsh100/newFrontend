@@ -228,6 +228,12 @@ $intercom-side-margin: 50px;
       }
     }
   }
+
+  .enterprise-management-phase-two {
+    .reskin-styles__navListWrapper___uFKPz {
+      height: calc(100vh - 372px);
+    }
+  }
 }
 
 .loadBar {
