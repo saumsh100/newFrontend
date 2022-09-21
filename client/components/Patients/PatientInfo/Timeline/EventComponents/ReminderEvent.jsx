@@ -4,6 +4,24 @@ import EventContainer from './Shared/EventContainer';
 import { getFormattedDate, PatientPopover } from '../../../../library';
 import styles from './styles.scss';
 
+const getFirstAppointmentFromSentRemindersPatients = (sentRemindersPatients) => {
+  const firstAppointmentDate = new Date(
+    Math.min(
+      ...sentRemindersPatients.map((sentReminderPatient) => {
+        const {
+          appointment: { startDate: beginFirstApptDate },
+        } = sentReminderPatient;
+
+        if (sentReminderPatient?.appointmentStartDate) {
+          return new Date(sentReminderPatient.appointmentStartDate);
+        }
+        return new Date(beginFirstApptDate);
+      }),
+    ),
+  );
+  return firstAppointmentDate.toISOString();
+};
+
 const renderFamilyDetails = (data, timezone) => {
   const { contactedPatientId, sentRemindersPatients } = data;
 
@@ -78,26 +96,21 @@ export default function ReminderEvent({ data, timezone, smsFailed, patient }) {
   const contactNumber = patient?.cellPhoneNumber || 'cell phone number';
   const intervalText = <span className={styles.reminder_interval}>{data.reminder.interval}</span>;
   const { sentRemindersPatients } = data;
-  const {
-    appointment: { startDate },
-    appointmentStartDate,
-  } = sentRemindersPatients[0];
 
-  const appDate = getFormattedDate(
-    appointmentStartDate || startDate,
-    'MMMM Do, YYYY h:mma',
-    timezone,
-  );
+  const firstAppointmentStartDate =
+    getFirstAppointmentFromSentRemindersPatients(sentRemindersPatients);
 
-  const showReminderMessage =  smsFailed ? `Reminder for the appointment on ${appDate} failed as ${contactNumber} does not support ${contactMethod}`: `Reminder for the appointment on ${appDate}`
+  const appDate = getFormattedDate(firstAppointmentStartDate, 'MMMM Do, YYYY h:mma', timezone);
+
+  const showReminderMessage = smsFailed
+    ? `Reminder for the appointment on ${appDate} failed as ${contactNumber} does not support ${contactMethod}`
+    : `Reminder for the appointment on ${appDate}`;
 
   const component = (
     <div className={styles.body_header}>
       Sent &#39;
       {intervalText} Before &#39; {contactMethod}{' '}
-      {data.isFamily
-        ? renderFamilyDetails(data, timezone)
-        : showReminderMessage}
+      {data.isFamily ? renderFamilyDetails(data, timezone) : showReminderMessage}
     </div>
   );
 
