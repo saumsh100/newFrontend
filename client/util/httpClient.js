@@ -39,12 +39,13 @@ export const httpClient = (config) =>
     ...config,
   });
 
+window.$httpClient = httpClient;
+
 export const bookingWidgetHttpClient = (config) =>
   buildHttpClient(getTokenBookingWidget, {
     baseURL: `${apiHost}/my`,
     ...config,
   });
-
 
 export const httpClientbookingWidget = (config) =>
   buildHttpClient(getTokenBookingWidget, {

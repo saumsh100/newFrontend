@@ -17,7 +17,6 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   let sessionId;
   if (token && token !== null) {
     localStorage.setItem('token', token);
-    localStorage.setItem('waitlistMfeToken', token);
     ({ sessionId } = jwt(token));
   }
 
