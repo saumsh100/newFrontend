@@ -260,12 +260,6 @@ class Header extends Component {
                       title="Back"
                       onClick={this.toggleWaitlist}
                     />
-                    <IconButton
-                      icon="times"
-                      size={2.5}
-                      onClick={this.toggleWaitlist}
-                      className={styles.closeButton}
-                    />
                   </div>
                   <MicroFrontendRenderer
                     load={waitlistMFEActive}
