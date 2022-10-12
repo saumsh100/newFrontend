@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { push } from 'connected-react-router';
 import TopBar from '../components/TopBar';
-import { setIsCollapsed } from '../actions/toolbar';
+import { setIsCollapsed, setIsHovered } from '../actions/toolbar';
 import { setIsSearchCollapsed } from '../reducers/toolbar';
 import { logout, switchActiveAccount } from '../thunks/auth';
 import runOnDemandSync from '../thunks/runOnDemandSync';
@@ -67,6 +67,7 @@ const mapStateToProps = ({ entities, toolbar, auth, featureFlags }) => {
     isSuperAdmin,
     authAccountId,
     isCollapsed: toolbar.get('isCollapsed'),
+    isHovered: toolbar.get('isHovered'),
     isSearchCollapsed: toolbar.get('isSearchCollapsed'),
     user: auth.get('user'),
     enterprise: auth.get('enterprise'),
@@ -78,6 +79,7 @@ const mapActionsToProps = (dispatch) =>
   bindActionCreators(
     {
       setIsCollapsed,
+      setIsHovered,
       setIsSearchCollapsed,
       logout,
       runOnDemandSync,

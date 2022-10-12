@@ -4,7 +4,16 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import classNames from 'classnames';
-import { AppBar, Avatar, Button, DropdownMenu, Icon, IconButton, Link, MenuItem } from '../library';
+import {
+  AppBar,
+  Avatar,
+  DropdownMenu,
+  Icon,
+  IconButton,
+  Link,
+  MenuItem,
+  StandardButton as Button,
+} from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
 import GraphQLPatientSearch from '../GraphQLPatientSearch';
 import accountShape from '../library/PropTypeShapes/accountShape';
@@ -13,6 +22,7 @@ import AdaptiveLogo from './AdaptiveLogo';
 import MyFollowUpsButton from './MyFollowUpsButton';
 import styles from './reskin-styles.scss';
 import FormNotificationsButton from './FormNotificationsButton';
+import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
 const UserMenu = ({ user, activeAccount, enterprise, role, multipleAccounts, ...props }) => {
   const isEnterprise = multipleAccounts && (role === 'OWNER' || role === 'SUPERADMIN');
@@ -65,7 +75,6 @@ class TopBar extends Component {
     this.sync = this.sync.bind(this);
     this.openSearch = this.openSearch.bind(this);
     this.closeSearch = this.closeSearch.bind(this);
-    this.renderLogo = this.renderLogo.bind(this);
   }
 
   onSearchSelect(patient) {
@@ -87,25 +96,12 @@ class TopBar extends Component {
     this.props.setIsSearchCollapsed({ isCollapsed: true });
   }
 
-  renderLogo({ imagePath, description }) {
-    const { isCollapsed } = this.props;
-    return (
-      <div className={!isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed}>
-        <div className={!isCollapsed ? styles.logoImage : styles.logoImageCollapsed}>
-          <img
-            className={!isCollapsed ? styles.logoImageImage : styles.logoImageImageCollapsed}
-            src={imagePath}
-            alt={description}
-          />
-        </div>
-      </div>
-    );
-  }
-
   render() {
     const {
       isCollapsed,
+      isHovered,
       setIsCollapsed,
+      setIsHovered,
       location,
       withEnterprise,
       enterprise,
@@ -118,6 +114,7 @@ class TopBar extends Component {
       enterpriseAccountsMap,
       activeAccountMap,
       enterpriseManagementAuthenticationActive,
+      allNotificationsCount,
     } = this.props;
 
     const allowedAccounts = accountsFlagMap && accountsFlagMap.toJS().map((a) => a.value);
@@ -178,41 +175,45 @@ class TopBar extends Component {
       suggestionsList: styles.suggestionsList,
     };
 
+    const handleHamburgerButtonClick = () => {
+      setIsCollapsed(!isCollapsed);
+      setIsHovered(false);
+    };
+
     return (
       <AppBar className={topBarClassName}>
-        <EnabledFeature
-          drillProps={false}
-          predicate={({ flags }) => flags.get('dcc-custom-sidebar')}
-          render={
-            <AdaptiveLogo
-              imagePath={
-                !isCollapsed
-                  ? '/images/dentalcorp_logo.svg'
-                  : '/images/dentalcorp_logo_collapsed.svg'
-              }
-              description="DentalCorp logo"
-              isCollapsed={isCollapsed}
-            />
-          }
-          fallback={
-            <AdaptiveLogo
-              imagePath={
-                !isCollapsed
-                  ? '/images/carecru_logo_reskin.svg'
-                  : '/images/carecru_logo_collapsed_reskin.svg'
-              }
-              description="CareCru logo"
-              isCollapsed={isCollapsed}
-            />
-          }
-        />
-        <div className={styles.fullVerticalDivider} />
-
-        <IconButton
-          icon="bars"
-          className={styles.hamburger}
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        />
+        {!isCollapsed ? (
+          <>
+            <AdaptiveLogo description="CareCru logo" isCollapsed={isCollapsed} />
+            <div className={styles.fullVerticalDivider} />
+            <Button variant="flat" onClick={() => setIsCollapsed(!isCollapsed)}>
+              <img src="/images/icons/chevrons-left.svg" alt="collapse side menu" />
+            </Button>
+          </>
+        ) : (
+          <div className={styles.menuButtonContainer}>
+            {allNotificationsCount > 0 && (
+              <span className={styles.menuButtonBadge}>{allNotificationsCount}</span>
+            )}
+            <Button
+              variant="flat"
+              onClick={handleHamburgerButtonClick}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              icon={isHovered ? null : 'bars'}
+              className={styles.collapseButton}
+            >
+              {isHovered && (
+                <img
+                  src="/images/icons/chevrons-left.svg"
+                  alt="expand side menu"
+                  className={styles.invert180degrees}
+                />
+              )}
+            </Button>
+            <AdaptiveLogo description="CareCru logo" isCollapsed={isCollapsed} />
+          </div>
+        )}
         <div className={styles.rightContainer}>
           <div className={styles.searchContainer}>
             <div
@@ -348,6 +349,7 @@ TopBar.propTypes = {
   enterpriseManagementAuthenticationActive: PropTypes.bool.isRequired,
   isCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
+  setIsHovered: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   switchActiveAccount: PropTypes.func.isRequired,
   location: PropTypes.shape({ pathname: PropTypes.string }).isRequired,
@@ -364,6 +366,8 @@ TopBar.propTypes = {
   activeAccountMap: PropTypes.instanceOf(Map),
   accountsFlagMap: PropTypes.instanceOf(Map).isRequired,
   enterpriseAccountsMap: PropTypes.instanceOf(Map).isRequired,
+  isHovered: PropTypes.bool.isRequired,
+  allNotificationsCount: PropTypes.number.isRequired,
 };
 
 TopBar.defaultProps = {
@@ -372,11 +376,31 @@ TopBar.defaultProps = {
   activeAccountMap: null,
 };
 
-const mapStateToProps = ({ featureFlags }) => ({
-  enterpriseManagementAuthenticationActive: featureFlags.getIn([
-    'flags',
-    'enterprise-management-authentication',
-  ]),
-});
+const mapStateToProps = ({ featureFlags, toolbar, chat, entities, waitingRoom }) => {
+  const onlineRequests = entities.getIn(['requests', 'models']);
+  const unreadChatMessagesLength = chat.get('unreadChatsCount');
+  const canSeeVirtualWaitingRoom = isFeatureEnabledSelector(
+    featureFlags.get('flags'),
+    'virtual-waiting-room-ui',
+  );
+  const waitingRoomQueue = waitingRoom.get('waitingRoomQueue');
+  const waitingRoomQueueLength =
+    waitingRoomQueue && canSeeVirtualWaitingRoom ? waitingRoomQueue.length : 0;
+  const filteredRequests = onlineRequests
+    .toArray()
+    .filter((req) => !req.get('isCancelled') && !req.get('isConfirmed'));
+
+  const allNotificationsCount =
+    waitingRoomQueueLength + unreadChatMessagesLength + filteredRequests.length;
+
+  return {
+    allNotificationsCount: allNotificationsCount > 99 ? '99+' : allNotificationsCount,
+    enterpriseManagementAuthenticationActive: featureFlags.getIn([
+      'flags',
+      'enterprise-management-authentication',
+    ]),
+    isHovered: toolbar.get('isHovered'),
+  };
+};
 
 export default withAuthProps(withRouter(connect(mapStateToProps)(TopBar)));

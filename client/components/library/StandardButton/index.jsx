@@ -16,6 +16,8 @@ function Button(props) {
     onClick,
     type = 'button',
     iconType = 'solid',
+    onMouseEnter,
+    onMouseLeave,
   } = props;
 
   const typeMap = {
@@ -36,6 +38,10 @@ function Button(props) {
         [styles[variant]]: !disabled,
       })}
       onClick={handleClick}
+      onMouseOver={onMouseEnter}
+      onFocus={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onBlur={onMouseLeave}
     >
       {icon && <i className={`${typeMap[iconType]} fa-${icon} ${styles.icon} `} />}
 
@@ -57,6 +63,8 @@ Button.propTypes = {
   onClick: PropTypes.func.isRequired,
   type: PropTypes.string,
   iconType: PropTypes.oneOf(['light', 'solid', 'regular', 'brand']),
+  onMouseEnter: PropTypes.func,
+  onMouseLeave: PropTypes.func,
 };
 
 Button.defaultProps = {
@@ -69,6 +77,8 @@ Button.defaultProps = {
   variant: 'primary',
   type: 'button',
   iconType: 'solid',
+  onMouseEnter: () => {},
+  onMouseLeave: () => {},
 };
 
 export default Button;

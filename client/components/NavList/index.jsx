@@ -10,13 +10,13 @@ import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
 
 function NavList({
   location,
-  isCollapsed,
   isSuperAdmin,
   unreadChats,
   onlineRequests,
   navigationPreferences,
   waitingRoomQueueLength,
   enterpriseManagementPhaseTwoActive,
+  isCollapsed,
 }) {
   const { navItem, activeItem } = styles;
 
@@ -44,7 +44,7 @@ function NavList({
     });
 
     const labelComponent = (
-      <div className={classNames(inactiveLabelClass, { [styles.hiddenLabel]: isCollapsed })}>
+      <div className={classNames(inactiveLabelClass)}>
         <p className={styles.labelText}>{label}</p>
       </div>
     );
@@ -88,7 +88,7 @@ function NavList({
   const MultiNavItem = ({ path, icon, label, children, iconType, type }) => {
     const active = location.pathname.indexOf(path) === 0;
     let content = null;
-    if (active && !isCollapsed) {
+    if (active) {
       content = <ul className={styles.multiple_nav}>{children}</ul>;
     }
 
@@ -153,9 +153,13 @@ function NavList({
 
   // Helper to reduce code length on for single line components
   const getNavigationPreference = (key) => navigationPreferences[key];
-
   return (
-    <div className={styles.navListWrapper}>
+    <div
+      className={classNames({
+        [styles.navListWrapper]: isCollapsed,
+        [styles.navListWrapper_marginTop]: !isCollapsed,
+      })}
+    >
       <Nav>
         <SingleNavItem
           path="/"
@@ -236,7 +240,6 @@ function NavList({
 }
 
 NavList.propTypes = {
-  isCollapsed: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool,
   unreadChats: PropTypes.number,
   onlineRequests: PropTypes.number,
@@ -252,6 +255,7 @@ NavList.propTypes = {
   }),
   waitingRoomQueueLength: PropTypes.number.isRequired,
   enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,
+  isCollapsed: PropTypes.bool.isRequired,
 };
 
 NavList.defaultProps = {
@@ -261,7 +265,7 @@ NavList.defaultProps = {
   navigationPreferences: {},
 };
 
-function mapStateToProps({ chat, entities, waitingRoom, featureFlags }) {
+function mapStateToProps({ chat, entities, waitingRoom, featureFlags, toolbar }) {
   const unreadChatsCount = chat.get('unreadChatsCount');
   const requests = entities.getIn(['requests', 'models']);
   const filteredRequests = requests
@@ -287,6 +291,7 @@ function mapStateToProps({ chat, entities, waitingRoom, featureFlags }) {
       'flags',
       'enterprise-management-phase-2',
     ]),
+    isCollapsed: toolbar.get('isCollapsed'),
   };
 }
 

@@ -13,22 +13,12 @@
   width: 100%;
 }
 
-.fullWidth {
-  // padding-left: 0;
-}
-
 .notFullWidth {
   padding-left: $side-nav-width;
 }
 
 .mainRegionContainerCollapsed {
-  @media screen and (max-width: $medium-screen-width) {
-    padding-left: 0;
-  }
-
-  @media screen and (min-width: $medium-screen-width) {
-    padding-left: $mini-side-nav-width;
-  }
+  padding-left: 0;
 }
 
 .mainRegionContainer {

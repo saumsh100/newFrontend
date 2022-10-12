@@ -1,5 +1,5 @@
-
 export const SET_IS_COLLAPSED = 'SET_IS_COLLAPSED';
+export const SET_IS_HOVERED = 'SET_IS_HOVERED';
 
 export const FETCH_REPUTATION = 'vendasta/fetchReputation';
 export const FETCH_REPUTATION_SUCCESS = 'vendasta/fetchReputationSuccess';

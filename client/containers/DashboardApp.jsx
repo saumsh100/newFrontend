@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import loadable from '@loadable/component';
+import classNames from 'classnames';
 import TopBarContainer from './TopBarContainer';
 import NavRegionContainer from './NavRegionContainer';
 import MainRegionContainer from './MainRegionContainer';
@@ -20,127 +21,123 @@ import { loadUnreadChatCount } from '../thunks/chat';
 import MicroFrontendRenderer from '../micro-front-ends/MicroFrontendRenderer';
 
 // eslint-disable-next-line import/no-unresolved
-const EmPracticeSwitcher = loadable(() => import('EM_MFE/EmPracticeSwitcher'));
-// eslint-disable-next-line import/no-unresolved
 const EmSwitcher = loadable(() => import('EM_MFE/EmSwitcher'));
-class DashboardApp extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.unreadChatIntervalId = null;
-    this.vwrIntervalId = null;
-  }
+const DashboardApp = (props) => {
+  let unreadChatIntervalId = null;
+  let vwrIntervalId = null;
+  const [isSidebarHovered, setIsSidebarHovered] = useState(false);
 
-  componentDidMount() {
-    this.setupPolling();
-  }
+  useEffect(() => {
+    setupPolling();
+    return () => resetIntervals();
+  }, []);
 
-  componentDidUpdate() {
-    this.setupPolling();
-  }
-
-  componentWillUnmount() {
-    this.resetIntervals();
-  }
-
-  setupPolling() {
-    const { isPollingNeeded } = this.props;
+  const setupPolling = () => {
+    const { isPollingNeeded } = props;
 
     if (isPollingNeeded) {
-      this.startPollingUnreadChats();
-      this.startPollingWaitingRoom();
+      startPollingUnreadChats();
+      startPollingWaitingRoom();
     } else {
-      this.resetIntervals();
+      resetIntervals();
     }
-  }
+  };
 
-  initiatePolling({ interval, pollFn }) {
+  const initiatePolling = ({ interval, pollFn }) => {
     return setInterval(() => pollFn(), interval * 1000);
-  }
+  };
 
-  startPollingUnreadChats() {
-    if (!this.unreadChatIntervalId) {
-      this.unreadChatIntervalId = this.initiatePolling({
+  const startPollingUnreadChats = () => {
+    if (!unreadChatIntervalId) {
+      unreadChatIntervalId = initiatePolling({
         interval: Number(process.env.POLLING_UNREAD_CHAT_INTERVAL || '300'),
-        pollFn: () => this.props.loadUnreadChatCount(),
+        pollFn: () => props.loadUnreadChatCount(),
       });
     }
-  }
+  };
 
-  startPollingWaitingRoom() {
-    if (!this.vwrIntervalId) {
-      this.vwrIntervalId = this.initiatePolling({
+  const startPollingWaitingRoom = () => {
+    if (!vwrIntervalId) {
+      vwrIntervalId = initiatePolling({
         interval: Number(process.env.POLLING_VWR_INTERVAL || '60'),
-        pollFn: () => this.props.fetchWaitingRoomQueue({ accountId: this.props.accountId }),
+        pollFn: () => props.fetchWaitingRoomQueue({ accountId: props.accountId }),
       });
     }
+  };
+
+  const resetIntervals = () => {
+    clearInterval(unreadChatIntervalId);
+    clearInterval(vwrIntervalId);
+
+    unreadChatIntervalId = null;
+    vwrIntervalId = null;
+  };
+
+  const {
+    location,
+    children,
+    enterpriseManagementPhaseTwoActive,
+    isCollapsed,
+    isHovered,
+    isSearchCollapsed,
+  } = props;
+
+  if (location.pathname.includes('login') || location.pathname.includes('enterprise-management')) {
+    return <div>{children}</div>;
   }
-
-  resetIntervals() {
-    clearInterval(this.unreadChatIntervalId);
-    clearInterval(this.vwrIntervalId);
-
-    this.unreadChatIntervalId = null;
-    this.vwrIntervalId = null;
-  }
-
-  render() {
-    const {
-      location,
-      children,
-      enterpriseManagementPhaseTwoActive,
-      isCollapsed,
-      isSearchCollapsed,
-    } = this.props;
-
-    if (location.pathname.includes('login') || location.pathname.includes('enterprise-management'))
-      return <div>{children}</div>;
-
-    return (
-      <div>
-        <CallerModal />
-        <TopBarContainer />
-        {!isCollapsed && (
+  return (
+    <div>
+      <CallerModal />
+      <TopBarContainer />
+      {!isCollapsed && (
+        <div
+          className={styles.overlay}
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          role="button"
+          label="collapse"
+          onKeyDown={() => null}
+          tabIndex={0}
+        />
+      )}
+      <NavRegionContainer
+        className={classNames({
+          [styles.sideNavWidth_expanded]: isHovered || !isCollapsed || isSidebarHovered,
+          [styles.sideNavWidth_collapsed]: !(isHovered || !isCollapsed || isSidebarHovered),
+          [styles.sideNavWidth_expanded_activeMenu]: isCollapsed,
+        })}
+        setIsSidebarHovered={setIsSidebarHovered}
+      >
+        <NavList location={location} />
+        <MicroFrontendRenderer
+          load={enterpriseManagementPhaseTwoActive}
+          component={
+            <EmSwitcher inverted isCollapsed={!(isHovered || !isCollapsed || isSidebarHovered)} />
+          }
+          className={styles.emSwitcher}
+          style={{ overflowX: 'hidden' }}
+        />
+      </NavRegionContainer>
+      <MainRegionContainer>
+        {isSearchCollapsed && (
           <div
-            className={styles.overlay}
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            role="button"
-            label="collapse"
-            onKeyDown={() => null}
-            tabIndex={0}
-          />
+            className={classNames({
+              [styles.subTabs_collapsed]: isCollapsed,
+              [styles.subTabs_expanded]: !isCollapsed,
+            })}
+          >
+            <SubTabs location={location} />
+          </div>
         )}
-        <NavRegionContainer>
-          <MicroFrontendRenderer
-            load={enterpriseManagementPhaseTwoActive}
-            component={<EmPracticeSwitcher isCollapsed={isCollapsed} />}
-          />
-
-          <NavList location={location} isCollapsed={isCollapsed} />
-
-          <div className={styles.emNavFooter}>
-            <MicroFrontendRenderer
-              load={enterpriseManagementPhaseTwoActive}
-              component={<EmSwitcher inverted isCollapsed={isCollapsed} />}
-            />
-          </div>
-        </NavRegionContainer>
-        <MainRegionContainer>
-          {isSearchCollapsed && (
-            <div className={styles.subTabs}>
-              <SubTabs location={location} />
-            </div>
-          )}
-          <div className={styles.mainRegionChildren}>
-            {children}
-            <AlertContainer />
-            <PatientActionsContainer />
-          </div>
-        </MainRegionContainer>
-      </div>
-    );
-  }
-}
+        <div className={styles.mainRegionChildren}>
+          {children}
+          <AlertContainer />
+          <PatientActionsContainer />
+        </div>
+      </MainRegionContainer>
+    </div>
+  );
+};
 
 function mapStateToProps({ featureFlags, toolbar, auth }) {
   const isPollingNeeded = isFeatureEnabledSelector(featureFlags.get('flags'), 'is-polling-needed');
@@ -148,6 +145,7 @@ function mapStateToProps({ featureFlags, toolbar, auth }) {
   return {
     isPollingNeeded,
     isCollapsed: toolbar.get('isCollapsed'),
+    isHovered: toolbar.get('isHovered'),
     isSearchCollapsed: toolbar.get('isSearchCollapsed'),
     accountId: auth.get('accountId'),
     enterpriseManagementPhaseTwoActive: featureFlags.getIn([
@@ -171,6 +169,7 @@ DashboardApp.propTypes = {
   children: PropTypes.node.isRequired,
   location: PropTypes.shape(locationShape).isRequired,
   isCollapsed: PropTypes.PropTypes.bool.isRequired,
+  isHovered: PropTypes.bool.isRequired,
   isSearchCollapsed: PropTypes.bool.isRequired,
   isPollingNeeded: PropTypes.bool.isRequired,
   accountId: PropTypes.string.isRequired,

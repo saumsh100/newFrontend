@@ -1,30 +1,25 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import EnabledFeature from '../library/EnabledFeature';
 import styles from './reskin-styles.scss';
 
-export default function NavRegion({ children, isCollapsed }) {
-  const navRegionClassName = isCollapsed ? styles.navHidden : styles.leftSectionContainer;
-
+export default function NavRegion({ children, className, setIsSidebarHovered }) {
   const PoweredByFooter = () => (
     <div className={styles.footer}>
       <div>Powered By</div>
       <div>
-        {isCollapsed ? (
-          <img
-            className={styles.logoCareCruCollapsed}
-            src="/images/carecru_logo_collapsed.png"
-            alt="CareCru Logo"
-          />
-        ) : (
-          <img className={styles.logoCareCru} src="/images/carecru_logo.png" alt="CareCru Logo" />
-        )}
+        <img className={styles.logoCareCru} src="/images/carecru_logo.png" alt="CareCru Logo" />
       </div>
     </div>
   );
 
   return (
-    <div className={navRegionClassName}>
+    <div
+      className={classNames(styles.leftSectionContainer, className)}
+      onMouseEnter={() => setIsSidebarHovered(true)}
+      onMouseLeave={() => setIsSidebarHovered(false)}
+    >
       <div className={styles.navListWrapper}>{children}</div>
       <EnabledFeature
         predicate={({ flags }) => flags.get('dcc-custom-sidebar')}
@@ -36,9 +31,12 @@ export default function NavRegion({ children, isCollapsed }) {
 
 NavRegion.propTypes = {
   children: PropTypes.node,
-  isCollapsed: PropTypes.bool.isRequired,
+  className: PropTypes.string,
+  setIsSidebarHovered: PropTypes.func,
 };
 
 NavRegion.defaultProps = {
   children: null,
+  className: '',
+  setIsSidebarHovered: () => {},
 };

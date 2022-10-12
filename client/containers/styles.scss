@@ -67,12 +67,20 @@
 
 .subTabs {
   display: block;
-  margin-left: 52px;
+  margin-left: 335px;
   margin-top: -49px;
-  position: fixed;
+  position: relative;
   z-index: 20;
   @media screen and (max-width: 800px) {
     display: none;
+  }
+  &_collapsed {
+    @extend .subTabs;
+    margin-left: 335px;
+  }
+  &_expanded {
+    @extend .subTabs;
+    margin-left: 64px;
   }
 }
 
@@ -107,4 +115,25 @@
 
 .collapsedWidth {
   min-width: 135;
+}
+
+.sideNavWidth {
+  &_collapsed {
+    -webkit-transition: width 0.3s ease-in-out;
+    -moz-transition: width 0.3s ease-in-out;
+    -o-transition: width 0.3s ease-in-out;
+    transition: width 0.3s ease-in-out;
+    width: 0%;
+  }
+  &_expanded {
+    width: 248px;
+    &_activeMenu {
+      border-top-right-radius: 4px;
+      margin-top: 4px;
+    }
+  }
+}
+
+.emSwitcher {
+  overflow-x: hidden;
 }

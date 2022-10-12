@@ -1,24 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 import styles from './reskin-styles.scss';
+import EnabledFeature from '../library/EnabledFeature';
 
-const AdaptiveLogo = ({ imagePath, description, isCollapsed }) => (
-  <div className={!isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed}>
-    <div className={!isCollapsed ? styles.logoImage : styles.logoImageCollapsed}>
-      <img
-        className={!isCollapsed ? styles.logoImageImage : styles.logoImageImageCollapsed}
-        src={imagePath}
-        alt={description}
-      />
-      <div className={styles.logoBottomBorder} />
-    </div>
-  </div>
+const AdaptiveLogo = ({ description, enterpriseManagementPhaseTwoActive }) => (
+  <EnabledFeature
+    drillProps={false}
+    predicate={({ flags }) => flags.get('dcc-custom-sidebar')}
+    render={
+      <div
+        className={classNames(styles.logoWrapperButton, {
+          [styles.logoWrapperButton_emAccount]: enterpriseManagementPhaseTwoActive,
+        })}
+      >
+        <div className={styles.logoImage}>
+          <img
+            className={styles.logoImageImage}
+            src="/images/dentalcorp_logo.svg"
+            alt={description}
+          />
+        </div>
+      </div>
+    }
+    fallback={
+      <div
+        className={classNames(styles.logoWrapperButton, {
+          [styles.logoWrapperButton_emAccount]: enterpriseManagementPhaseTwoActive,
+        })}
+      >
+        <div className={styles.logoImage}>
+          <img
+            className={styles.logoImageImage}
+            src="/images/carecru_logo_reskin.svg"
+            alt={description}
+          />
+        </div>
+      </div>
+    }
+  />
 );
 
 AdaptiveLogo.propTypes = {
-  imagePath: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  isCollapsed: PropTypes.bool.isRequired,
+  enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,
 };
 
-export default AdaptiveLogo;
+const mapStateToProps = ({ featureFlags }) => ({
+  enterpriseManagementPhaseTwoActive: featureFlags.getIn([
+    'flags',
+    'enterprise-management-phase-2',
+  ]),
+});
+
+export default connect(mapStateToProps, null)(AdaptiveLogo);

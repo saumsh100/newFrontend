@@ -1,22 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connect } from 'react-redux';
 import NavRegion from '../components/NavRegion';
 
-function NavRegionContainer(props) {
-  return <NavRegion {...props} />;
+function NavRegionContainer({ children, className, setIsSidebarHovered }) {
+  return (
+    <NavRegion className={className} setIsSidebarHovered={setIsSidebarHovered}>
+      {children}
+    </NavRegion>
+  );
 }
 
 NavRegionContainer.propTypes = {
-  isCollapsed: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string.isRequired,
+  setIsSidebarHovered: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ toolbar }) {
-  return {
-    isCollapsed: toolbar.get('isCollapsed'),
-  };
-}
-
-const enhance = connect(mapStateToProps, null);
-
-export default enhance(NavRegionContainer);
+export default NavRegionContainer;

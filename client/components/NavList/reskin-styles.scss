@@ -1,9 +1,13 @@
 @import '../../styles/ui-reskin.scss';
 
 .navListWrapper {
-  margin-top: 25px;
+  margin-top: 0px;
   overflow-x: hidden;
   overflow-y: auto;
+  &_marginTop {
+    @extend .navListWrapper;
+    margin-top: 25px;
+  }
 }
 
 .navItem {

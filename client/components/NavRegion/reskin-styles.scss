@@ -12,10 +12,18 @@
   position: fixed;
   top: 65px;
   transition: ease-out 0.3s all;
-  width: 321px;
+  width: 248px;
   z-index: 20;
+  .collapsed {
+    box-shadow: $box-shadow-3;
+  }
 }
-
+.navListWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
 .navHidden {
   @extend .leftSectionContainer;
   @media screen and (max-width: 700px) {

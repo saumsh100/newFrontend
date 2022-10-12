@@ -34,7 +34,7 @@ $padding-size-border: 10px;
   }
 }
 
-.logoWrapper {
+.logoWrapperButton {
   background-color: $super-white;
   box-sizing: border-box;
   color: white;
@@ -42,15 +42,49 @@ $padding-size-border: 10px;
   padding-left: $padding-size-border;
   padding-right: $padding-size-border;
   transition: ease-out 0.3s all;
-  width: 321px;
+  width: 248px;
+  &_emAccount {
+    &:hover {
+      background: linear-gradient(
+          95.88deg,
+          rgba($color-lavender-200, 0.2) -2.36%,
+          rgba($color-lavender-200, 0) 43.66%
+        ),
+        $color-lavender-050;
+      cursor: pointer;
+    }
+  }
 }
 
-.logoWrapperCollapsed {
-  @extend .logoWrapper;
-  width: 75px;
-  @media screen and (max-width: $medium-screen-width) {
-    display: none;
-  }
+.invert180degrees {
+  transform: rotate(180deg);
+}
+
+.menuButtonContainer {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: fit-content;
+}
+
+.menuButtonBadge {
+  align-items: center;
+  background-color: $color-salmon-500;
+  border-radius: 6px;
+  color: $super-white;
+  display: flex;
+  font-size: 8px;
+  font-weight: 700;
+  height: 12px;
+  justify-content: center;
+  left: 45px;
+  padding: 0px 3px;
+  position: absolute;
+  top: 16px;
+  width: 12px;
 }
 
 .logoImage {
@@ -63,21 +97,6 @@ $padding-size-border: 10px;
   justify-content: center;
   text-align: center;
   transition: ease-out 0.3s all;
-  width: $side-nav-width - 2 * $padding-size-border;
-}
-.logoBottomBorder {
-  background-color: $color-lavender-100;
-  content: ' ';
-  height: 1px;
-  width: 80%;
-}
-
-.logoImageCollapsed {
-  height: 100%;
-  @extend .logoImage;
-  @media screen and (min-width: $medium-screen-width) {
-    width: $mini-side-nav-width - 2 * $padding-size-border;
-  }
 }
 
 .logoImageImage {
@@ -86,24 +105,12 @@ $padding-size-border: 10px;
   width: 159px;
 }
 
-.logoImageImageCollapsed {
-  height: 100%;
-  width: 43px;
-}
-
 .collapseButton {
-  color: $color-lavender-500;
-  cursor: pointer;
-  display: inline;
-  @media screen and (max-width: $medium-screen-width) {
-    font-size: calc(1.2rem * 1.6);
-    margin-left: 5px;
-  }
-
-  @media screen and (min-width: $medium-screen-width) {
-    font-size: calc(1.4rem * 1.6);
-    margin-left: 10px;
-  }
+  display: flex;
+  font-size: 14px;
+  height: 100%;
+  justify-content: center;
+  width: 75px;
 }
 
 .hamburger {
