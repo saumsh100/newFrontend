@@ -192,9 +192,6 @@ class TopBar extends Component {
           </>
         ) : (
           <div className={styles.menuButtonContainer}>
-            {allNotificationsCount > 0 && (
-              <span className={styles.menuButtonBadge}>{allNotificationsCount}</span>
-            )}
             <Button
               variant="flat"
               onClick={handleHamburgerButtonClick}
@@ -203,6 +200,9 @@ class TopBar extends Component {
               icon={isHovered ? null : 'bars'}
               className={styles.collapseButton}
             >
+              {allNotificationsCount > 0 && (
+                <span className={styles.menuButtonBadge}>{allNotificationsCount}</span>
+              )}
               {isHovered && (
                 <img
                   src="/images/icons/chevrons-left.svg"
