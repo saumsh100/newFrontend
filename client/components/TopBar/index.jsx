@@ -23,6 +23,7 @@ import MyFollowUpsButton from './MyFollowUpsButton';
 import styles from './reskin-styles.scss';
 import FormNotificationsButton from './FormNotificationsButton';
 import { isFeatureEnabledSelector } from '../../reducers/featureFlags';
+import SubTabs from '../SubTabs';
 
 const UserMenu = ({ user, activeAccount, enterprise, role, multipleAccounts, ...props }) => {
   const isEnterprise = multipleAccounts && (role === 'OWNER' || role === 'SUPERADMIN');
@@ -179,7 +180,6 @@ class TopBar extends Component {
       setIsCollapsed(!isCollapsed);
       setIsHovered(false);
     };
-
     return (
       <AppBar className={topBarClassName}>
         {!isCollapsed ? (
@@ -215,6 +215,14 @@ class TopBar extends Component {
           </div>
         )}
         <div className={styles.rightContainer}>
+          <div
+            className={classNames(styles.tabs, {
+              [styles.subTabs_collapsed]: isCollapsed,
+              [styles.subTabs_expanded]: !isCollapsed,
+            })}
+          >
+            {this.props.isSearchCollapsed && <SubTabs location={location} />}
+          </div>
           <div className={styles.searchContainer}>
             <div
               className={classNames(styles.wrapper, {

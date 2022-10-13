@@ -9,7 +9,6 @@ import NavRegionContainer from './NavRegionContainer';
 import MainRegionContainer from './MainRegionContainer';
 import { setIsCollapsed } from '../actions/toolbar';
 import NavList from '../components/NavList';
-import SubTabs from '../components/SubTabs';
 import CallerModal from '../components/CallerModal';
 import AlertContainer from './AlertContainer';
 import PatientActionsContainer from '../components/Patients/Shared/PatientActionsContainer';
@@ -31,7 +30,7 @@ const DashboardApp = (props) => {
   useEffect(() => {
     setupPolling();
     return () => resetIntervals();
-  }, []);
+  });
 
   const setupPolling = () => {
     const { isPollingNeeded } = props;
@@ -74,14 +73,7 @@ const DashboardApp = (props) => {
     vwrIntervalId = null;
   };
 
-  const {
-    location,
-    children,
-    enterpriseManagementPhaseTwoActive,
-    isCollapsed,
-    isHovered,
-    isSearchCollapsed,
-  } = props;
+  const { location, children, enterpriseManagementPhaseTwoActive, isCollapsed, isHovered } = props;
 
   if (location.pathname.includes('login') || location.pathname.includes('enterprise-management')) {
     return <div>{children}</div>;
@@ -115,20 +107,9 @@ const DashboardApp = (props) => {
             <EmSwitcher inverted isCollapsed={!(isHovered || !isCollapsed || isSidebarHovered)} />
           }
           className={styles.emSwitcher}
-          style={{ overflowX: 'hidden' }}
         />
       </NavRegionContainer>
       <MainRegionContainer>
-        {isSearchCollapsed && (
-          <div
-            className={classNames({
-              [styles.subTabs_collapsed]: isCollapsed,
-              [styles.subTabs_expanded]: !isCollapsed,
-            })}
-          >
-            <SubTabs location={location} />
-          </div>
-        )}
         <div className={styles.mainRegionChildren}>
           {children}
           <AlertContainer />
@@ -170,7 +151,6 @@ DashboardApp.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
   isCollapsed: PropTypes.PropTypes.bool.isRequired,
   isHovered: PropTypes.bool.isRequired,
-  isSearchCollapsed: PropTypes.bool.isRequired,
   isPollingNeeded: PropTypes.bool.isRequired,
   accountId: PropTypes.string.isRequired,
   fetchWaitingRoomQueue: PropTypes.func.isRequired,

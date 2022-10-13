@@ -1,26 +1,20 @@
-
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import classNames from 'classnames';
-import styles from './styles.scss';
+import React from 'react';
 
-class TabContent extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const { children, className, label } = this.props;
-
-    return (
-      // Order is important, classNames={classes} needs to override props.className
-      <div className={className}>{children}</div>
-    );
-  }
-}
+const TabContent = ({ children, className }) => {
+  return (
+    // Order is important, classNames={classes} needs to override props.className
+    <div className={className}>{children}</div>
+  );
+};
 
 TabContent.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+};
+
+TabContent.defaultProps = {
+  className: '',
 };
 
 export default TabContent;

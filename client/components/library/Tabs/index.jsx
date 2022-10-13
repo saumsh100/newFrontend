@@ -1,4 +1,3 @@
-
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
 import omit from 'lodash/omit';
@@ -6,11 +5,11 @@ import classNames from 'classnames';
 
 import Tab from './Tab';
 import TabContent from './TabContent';
-import styles from './styles.scss';
+import styles from './reskin-styles.scss';
 
 // Workaround to be able compare class with type
 // https://github.com/gaearon/react-hot-loader/issues/304
-const tabType = <Tab />.type;
+const tabType = (<Tab />).type;
 
 class Tabs extends Component {
   constructor(props) {
@@ -59,7 +58,7 @@ class Tabs extends Component {
         },
 
         noUnderLine: this.props.noUnderLine,
-      }));
+      }),);
   }
 
   renderContents(contents) {
@@ -69,7 +68,7 @@ class Tabs extends Component {
         active: this.props.index === idx,
         tabIndex: idx,
         noUnderLine: this.props.noUnderLine,
-      }));
+      }),);
 
     return contentElements.filter((item, idx) => idx === this.props.index);
   }
@@ -125,7 +124,7 @@ Tabs.defaultProps = {
   noHeaders: false,
   noUnderLine: false,
   fluid: false,
-  onChange: e => e,
+  onChange: (e) => e,
 };
 
 export default Tabs;
