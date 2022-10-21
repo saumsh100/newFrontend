@@ -253,11 +253,16 @@ DashboardRouter.defaultProps = {
   navigationPreferences: null,
 };
 
-const mapStateToProps = ({ featureFlags }) => ({
-  enterpriseManagementPhaseTwoActive:
-    featureFlags.getIn(['flags', 'enterprise-management-phase-2']) || false,
-  enterpriseManagementAuthenticationActive:
-    featureFlags.getIn(['flags', 'enterprise-management-authentication']) || false,
-});
+const mapStateToProps = ({ featureFlags }) => {
+  const enterpriseManagementPhaseTwoActive =
+    process.env.NODE_ENV === 'development'
+      ? true
+      : featureFlags.getIn(['flags', 'enterprise-management-phase-2']) || false;
+  return {
+    enterpriseManagementPhaseTwoActive,
+    enterpriseManagementAuthenticationActive:
+      featureFlags.getIn(['flags', 'enterprise-management-authentication']) || false,
+  };
+};
 
 export default withAuthProps(connect(mapStateToProps)(DashboardRouter));

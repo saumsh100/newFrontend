@@ -1,43 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
-import styles from './reskin-styles.scss';
 import EnabledFeature from '../library/EnabledFeature';
+import LogoButton from './LogoButton';
 
 const AdaptiveLogo = ({ description, enterpriseManagementPhaseTwoActive }) => (
   <EnabledFeature
     drillProps={false}
     predicate={({ flags }) => flags.get('dcc-custom-sidebar')}
     render={
-      <div
-        className={classNames(styles.logoWrapperButton, {
-          [styles.logoWrapperButton_emAccount]: enterpriseManagementPhaseTwoActive,
-        })}
-      >
-        <div className={styles.logoImage}>
-          <img
-            className={styles.logoImageImage}
-            src="/images/dentalcorp_logo.svg"
-            alt={description}
-          />
-        </div>
-      </div>
+      <LogoButton
+        description={description}
+        enterpriseManagementPhaseTwoActive={enterpriseManagementPhaseTwoActive}
+        imgSrc="/images/dentalcorp_logo.svg"
+      />
     }
     fallback={
-      <div
-        className={classNames(styles.logoWrapperButton, {
-          [styles.logoWrapperButton_emAccount]: enterpriseManagementPhaseTwoActive,
-        })}
-      >
-        <div className={styles.logoImage}>
-          <img
-            className={styles.logoImageImage}
-            src="/images/carecru_logo_reskin.svg"
-            alt={description}
-          />
-        </div>
-      </div>
+      <LogoButton
+        description={description}
+        enterpriseManagementPhaseTwoActive={enterpriseManagementPhaseTwoActive}
+        imgSrc="/images/carecru_logo_reskin.svg"
+      />
     }
   />
 );
@@ -47,11 +30,14 @@ AdaptiveLogo.propTypes = {
   enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = ({ featureFlags }) => ({
-  enterpriseManagementPhaseTwoActive: featureFlags.getIn([
-    'flags',
-    'enterprise-management-phase-2',
-  ]),
-});
+const mapStateToProps = ({ featureFlags }) => {
+  const enterpriseManagementPhaseTwoActive =
+    process.env.NODE_ENV === 'development'
+      ? true
+      : featureFlags.getIn(['flags', 'enterprise-management-phase-2']) || false;
+  return {
+    enterpriseManagementPhaseTwoActive,
+  };
+};
 
 export default connect(mapStateToProps, null)(AdaptiveLogo);
