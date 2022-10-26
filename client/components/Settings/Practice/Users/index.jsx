@@ -91,19 +91,6 @@ class Users extends Component {
     ) : null;
   }
 
-  get addConnectorUserButton() {
-    return this.props.role === SUPERADMIN_ROLE ? (
-      <Button
-        className={styles.inviteUser}
-        onClick={this.addNewUser}
-        data-test-id="addUserButton"
-        secondary
-      >
-        Add a Connector User
-      </Button>
-    ) : null;
-  }
-
   deleteInvite(id) {
     const { accountId } = this.props;
 
@@ -370,6 +357,7 @@ class Users extends Component {
           onEscKeyDown={this.reinitializeStateInviteUser}
           onOverlayClick={this.reinitializeStateInviteUser}
           data-test-id="inviteUserDialog"
+          bodyStyles={styles.inviteUserFormBody}
         >
           <InviteUserForm
             mainStyle={styles.emailInvite}
