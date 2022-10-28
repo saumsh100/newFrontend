@@ -281,7 +281,7 @@ const WaitlistForm = ({
               <div className={styles.waitlistFormColumnLeft}>
                 <DropdownSelect
                   onChange={onChange('reasonText')}
-                  value={formValues.reasonText || ''}
+                  value={formValues.reasonText.toLowerCase() || ''}
                   theme={{ label: styles.label }}
                   label="Reason"
                   options={reasons}

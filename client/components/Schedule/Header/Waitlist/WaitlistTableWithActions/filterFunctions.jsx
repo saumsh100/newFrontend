@@ -59,7 +59,7 @@ function reasonsFilter(waitlist, filterRule, showNotSet) {
       return showNotSet;
     }
 
-    return activeReasons.includes(reasonText);
+    return activeReasons.includes(reasonText.toLowerCase());
   });
 }
 
