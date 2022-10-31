@@ -26,12 +26,15 @@ const LogoButton = ({ enterpriseManagementPhaseTwoActive, imgSrc, description })
   };
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
-
+  const handleClick = () => {
+    if (!enterpriseManagementPhaseTwoActive) return;
+    setIsDropdownOpen(!isDropdownOpen);
+  };
   return (
     <>
       <button
         type="button"
-        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        onClick={() => handleClick()}
         className={classNames(styles.logoWrapperButton, {
           [styles.logoWrapperButton_emAccount]: enterpriseManagementPhaseTwoActive,
         })}
