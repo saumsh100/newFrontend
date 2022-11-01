@@ -62,7 +62,13 @@ class ChatListItem extends Component {
   }
 
   render() {
-    const { chat, patient, lastTextMessage, selectedChatId, timezone } = this.props;
+    const { chat, patient, lastTextMessage, selectedChatId, timezone, pendingMessages } =
+      this.props;
+
+    const botAvatar = {
+      fullAvatarUrl: '/images/chatDonna.svg',
+      bot: true,
+    };
 
     const mDate = getUTCDate(lastTextMessage.createdAt || chat.updatedAt, timezone);
     const daysDifference = getTodaysDate(timezone).diff(mDate, 'days');
@@ -73,7 +79,15 @@ class ChatListItem extends Component {
     const isUnread = chat.hasUnread;
 
     const listItemClass = styles.chatListItem;
+    const hasFailed = lastTextMessage.get('smsStatus') === 'failed';
+    const isFromPatient = lastTextMessage.get('smsStatus') === 'received';
+   
 
+    let avatarUser;
+    if (!isFromPatient) {
+      avatarUser =
+        lastTextMessage?.user && lastTextMessage?.user?.id ? lastTextMessage?.user : botAvatar;
+    }
     return (
       <ListItem
         selectedClass={styles.selectedChatItem}
@@ -85,6 +99,20 @@ class ChatListItem extends Component {
         <div className={styles.avatar}>
           <Avatar size="sm" user={patient} />
         </div>
+        {!hasFailed && avatarUser ? (
+          <div className={styles.bottom_avatar}>
+            <Avatar
+              size="xs"
+              className={styles.bubbleAvatar}
+              user={avatarUser}
+              isPatient={isFromPatient}
+              textClassName={styles.bubbleAvatar_text}
+            />
+          </div>
+        ) : (
+          ''
+        )}
+
         <div className={styles.flexSection}>
           <div className={styles.topSection}>
             <div className={isUnread ? styles.fullNameUnread : styles.fullName}>
@@ -96,7 +124,30 @@ class ChatListItem extends Component {
             data-test-id="chat_lastMessage"
             className={isUnread ? styles.bottomSectionUnread : styles.bottomSection}
           >
-            {lastTextMessage && lastTextMessage.body}
+            {isActive && pendingMessages?.length !== 0 ? (
+              <>
+                <Icon className={styles.avatar__pending} icon="clock" size={2} type="solid" />
+                <span className={styles.pendingMessage}>Sending Message</span>
+              </>
+            ) : hasFailed ? (
+              <>
+                <Icon
+                  className={styles.avatar__failed}
+                  icon="exclamation-circle"
+                  size={2}
+                  type="solid"
+                />
+                <span className={styles.failedMessage}>Message not sent</span>
+              </>
+            ) : avatarUser ? (
+              <>
+                <span className={styles.bottom_body}>
+                  {lastTextMessage && lastTextMessage.body}
+                </span>
+              </>
+            ) : (
+              lastTextMessage && lastTextMessage.body
+            )}
           </div>
         </div>
       </ListItem>
@@ -135,6 +186,7 @@ ChatListItem.propTypes = {
 ChatListItem.defaultProps = {
   selectedChatId: null,
   onChatClick: (e) => e,
+  pendingMessages: [],
 };
 
 function mapStateToProps(state, { chat = {} }) {
@@ -145,12 +197,14 @@ function mapStateToProps(state, { chat = {} }) {
   };
 
   const selectedChatId = state.chat.get('selectedChatId');
+  const pendingMessages = state.chat.get('pendingMessages');
 
   return {
     selectedChatId,
     patient: patients.get(chat.patientId) || UnknownPatient(chat.patientPhoneNumber),
     lastTextMessage,
     timezone: state.auth.get('timezone'),
+    pendingMessages,
   };
 }
 

@@ -40,6 +40,7 @@
 }
 
 .avatar {
+  margin-bottom: 46px;
   padding: 0 10px;
 }
 
@@ -57,19 +58,20 @@
 .topSection {
   align-items: center;
   display: flex;
+  margin-bottom: 32px;
+  margin-left: -6px;
   width: 100%;
 }
 
 .bottomSection {
   -webkit-box-orient: vertical;
-  color: $color-purple-400;
+  color: $color-grey-400;
   display: -webkit-box;
   font-size: $small-size;
-  font-style: italic;
-  font-weight: $normal-weight;
-  height: 16px;
+  font-weight: $medium-weight;
   -webkit-line-clamp: 1;
   line-height: 16px;
+  margin-left: -44px;
 
   margin-top: 5px;
 
@@ -84,9 +86,10 @@
 }
 
 .fullName {
-  color: $color-purple-600;
+  color: $color-grey-600;
   font-size: $medium-size;
-  font-weight: 500;
+  font-weight: $semi-bold-weight;
+  text-transform: capitalize;
 }
 
 .fullNameUnread {
@@ -140,4 +143,54 @@
 
 .renderStar {
   color: $color-lavender-500;
+  font-size: $small-size;
+  font-weight: $heavy-weight;
+  height: 11px;
+  line-height: 12px;
+  width: 12px;
+}
+.avatar__failed {
+  color: $error-600;
+  font-size: $small-size;
+  font-weight: $heavy-weight;
+  margin-top: 2px;
+}
+
+.failedMessage {
+  color: $error-600;
+  font-size: $small-size;
+  font-weight: $medium-weight;
+  margin-left: 5px;
+}
+.bubbleAvatar {
+  background: $color-lavender-200;
+  border: 1px solid $color-lavender-200;
+  display: flex;
+  height: 20px;
+  margin-left: -48px;
+  margin-top: 48px;
+  width: 20px;
+  &_text {
+    color: $color-grey-600;
+    font-size: 8px;
+    font-weight: $bold-weight;
+  }
+}
+.pendingMessage {
+  color: $color-grey-300;
+  font-size: $small-size;
+  font-weight: $medium-weight;
+  margin-left: 5px;
+}
+.avatar__pending {
+  color: $color-grey-300;
+  font-size: $small-size;
+  font-weight: $normal-weight;
+}
+
+.bottom_body {
+  margin-left: 30px;
+}
+.bottom_avatar {
+  margin-left: 0px;
 }

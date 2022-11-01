@@ -15,6 +15,7 @@ export default function Avatar({
   bgColor,
   isPatient,
   noPadding,
+  textClassName
 }) {
   let classes = classNames(className, styles.avatar);
   if (size) {
@@ -24,7 +25,7 @@ export default function Avatar({
   const centerContent = url ? (
     <img className={styles.img} src={url} alt={user.firstName} />
   ) : (
-    <div className={classNames(styles.text, styles[size])}>
+    <div className={classNames(styles.text,textClassName, styles[size])}>
       {!user.isUnknown || user.isProspect ? (
         generateInitials(user.firstName, user.lastName)
       ) : (
