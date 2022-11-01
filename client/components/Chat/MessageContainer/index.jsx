@@ -40,8 +40,8 @@ const getMessageTime = (message, timezone) =>
     nextDay: '[Tomorrow]',
     nextWeek: 'dddd',
     lastDay: '[Yesterday], h:mm a',
-    lastWeek: '[Last] dddd h:mm a',
-    sameElse: 'YYYY/MM/DD, h:mm a',
+    lastWeek: 'dddd, MMM Do YYYY, h:mm a',
+    sameElse: 'dddd, MMM Do YYYY, h:mm a',
   });
 
 const isWithinTimePeriod = (
