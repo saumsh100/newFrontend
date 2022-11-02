@@ -81,7 +81,6 @@ class ChatListItem extends Component {
     const listItemClass = styles.chatListItem;
     const hasFailed = lastTextMessage.get('smsStatus') === 'failed';
     const isFromPatient = lastTextMessage.get('smsStatus') === 'received';
-   
 
     let avatarUser;
     if (!isFromPatient) {
@@ -99,7 +98,12 @@ class ChatListItem extends Component {
         <div className={styles.avatar}>
           <Avatar size="sm" user={patient} />
         </div>
-        {!hasFailed && avatarUser ? (
+
+        {isActive && pendingMessages?.length !== 0 ? (
+          <div className={styles.avatarPending}>
+            <Icon className={styles.pendingIcon} icon="clock" size={2} type="solid" />
+          </div>
+        ) : !hasFailed && avatarUser ? (
           <div className={styles.bottom_avatar}>
             <Avatar
               size="xs"
@@ -126,8 +130,7 @@ class ChatListItem extends Component {
           >
             {isActive && pendingMessages?.length !== 0 ? (
               <>
-                <Icon className={styles.avatar__pending} icon="clock" size={2} type="solid" />
-                <span className={styles.pendingMessage}>Sending Message</span>
+                <span className={styles.pendingMessage}>Sending Message...</span>
               </>
             ) : hasFailed ? (
               <>

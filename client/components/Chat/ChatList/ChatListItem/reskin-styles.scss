@@ -180,12 +180,16 @@
   color: $color-grey-300;
   font-size: $small-size;
   font-weight: $medium-weight;
-  margin-left: 5px;
+  margin-left: 18px;
 }
-.avatar__pending {
+.pendingIcon {
   color: $color-grey-300;
   font-size: $small-size;
   font-weight: $normal-weight;
+  margin-left: -44px;
+}
+.avatarPending {
+  margin-top: 47px;
 }
 
 .bottom_body {
