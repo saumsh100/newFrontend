@@ -61,6 +61,15 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
   const useInlineEditingSaveButton = isDev
     ? true
     : isFeatureEnabledSelector(featureFlags.get('flags'), 'wf-hide-save-button');
+  const useCustomTemplatePreview = isDev
+    ? true
+    : isFeatureEnabledSelector(
+        featureFlags.get('flags'),
+        'preview-custom-html-template-inline-edits',
+      );
+  const useCommunicationService = isDev
+    ? true
+    : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-communication-service');
 
   return {
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]).toJS(),
@@ -73,6 +82,8 @@ const mapStateToProps = ({ entities, auth, featureFlags }) => {
     useCCPReview: !useReviewService,
     useCCPReSkinning,
     useInlineEditingSaveButton,
+    useCustomTemplatePreview,
+    useCommunicationService,
   };
 };
 
