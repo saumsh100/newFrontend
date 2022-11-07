@@ -8,6 +8,13 @@ import { toggleFlagged, selectChat } from '../../../../thunks/chat';
 import UnknownPatient from '../../unknownPatient';
 import styles from './reskin-styles.scss';
 
+const getMessageTime = (message, timezone) =>
+  getUTCDate(message, timezone).calendar(null, {
+    lastDay: '[Yesterday]',
+    lastWeek: 'dddd',
+    sameElse: 'YYYY-MM-DD',
+  });
+
 class ChatListItem extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +42,7 @@ class ChatListItem extends Component {
         icon="star"
         onClick={onClickListener}
         className={isFlagged ? styles.filled : styles.hallow}
-        type={isFlagged ? 'solid' : 'light'}
+        type={'solid'}
       />
     );
   }
@@ -74,19 +81,23 @@ class ChatListItem extends Component {
     const daysDifference = getTodaysDate(timezone).diff(mDate, 'days');
     const isActive = selectedChatId === chat.id;
 
-    const messageDate = daysDifference ? mDate.format('YY/MM/DD') : mDate.format('h:mma');
+    const messageDate = daysDifference ? getMessageTime(mDate, timezone) : mDate.format('hh:mma');
 
     const isUnread = chat.hasUnread;
 
     const listItemClass = styles.chatListItem;
     const hasFailed = lastTextMessage.get('smsStatus') === 'failed';
     const isFromPatient = lastTextMessage.get('smsStatus') === 'received';
+    const user = lastTextMessage.get('user')
+    const newUser =   user?.size ? Object.fromEntries(user): user
+    const message = lastTextMessage && lastTextMessage?.size ? lastTextMessage.get('body') : lastTextMessage?.body
 
     let avatarUser;
     if (!isFromPatient) {
       avatarUser =
-        lastTextMessage?.user && lastTextMessage?.user?.id ? lastTextMessage?.user : botAvatar;
+        lastTextMessage && newUser && newUser?.id ? newUser : botAvatar;
     }
+  
     return (
       <ListItem
         selectedClass={styles.selectedChatItem}
@@ -145,11 +156,11 @@ class ChatListItem extends Component {
             ) : avatarUser ? (
               <>
                 <span className={styles.bottom_body}>
-                  {lastTextMessage && lastTextMessage.body}
+                  {message}
                 </span>
               </>
             ) : (
-              lastTextMessage && lastTextMessage.body
+              message
             )}
           </div>
         </div>
