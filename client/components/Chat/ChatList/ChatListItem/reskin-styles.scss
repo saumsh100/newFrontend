@@ -50,11 +50,11 @@
 }
 
 .hallow {
-  -webkit-text-stroke: 1px $color-lavender-500;
   color: $super-white;
-&:hover{
-  color: $color-lavender-150
-}
+  -webkit-text-stroke: 1px $color-lavender-500;
+  &:hover {
+    color: $color-lavender-150;
+  }
 }
 
 .flexSection {
@@ -125,6 +125,7 @@
 
 .name {
   display: inline;
+  letter-spacing: 0.3px;
   max-width: 140px;
   overflow-x: hidden;
   text-overflow: ellipsis;
@@ -149,7 +150,6 @@
 }
 
 .renderStar {
-
   color: $color-lavender-500;
   font-size: $small-size;
   font-weight: $heavy-weight;
