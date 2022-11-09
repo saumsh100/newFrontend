@@ -16,11 +16,15 @@ import {
   SBody,
   SFooter,
   Tooltip,
+  StandardButton,
 } from '../../../library';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import '../../../../../node_modules/emoji-mart/css/emoji-mart.css';
 import Patient from '../../../../entities/models/Patient';
 import styles from './styles.scss';
+import SearchableUrlFormList from './searchableUrlFormList/SearchableUrlFormList';
+import ListPracticesForms from '../../../GraphQL/GraphQLChat/formListInChat';
+import Loader from '../../../Loader';
 
 const EMOJI_SET = 'apple';
 const EMOJI_SIZE = 32;
@@ -35,7 +39,9 @@ class MessageTextArea extends Component {
     xhr.send();
 
     this.emojiDropdown = createRef();
+    this.formUrlDropdown = createRef();
     this.addEmoji = this.addEmoji.bind(this);
+    this.addFormUrl = this.addFormUrl.bind(this);
     this.contactPoC = this.contactPoC.bind(this);
   }
 
@@ -59,6 +65,17 @@ class MessageTextArea extends Component {
     this.emojiDropdown?.current.props.clickToogle();
   }
 
+  addFormUrl(url) {
+    const { chat, textBoxValue } = this.props;
+    const messageArea = document.getElementsByName('message')[0];
+    const caretPossition = messageArea?.selectionStart;
+    const newMessage = `${textBoxValue.slice(0, caretPossition)}${
+      url?.shortUrl
+    }${textBoxValue.slice(caretPossition)}`;
+    this.props.change(`chatMessageForm_${chat.id}`, 'message', newMessage);
+    this.formUrlDropdown?.current.props.clickToogle();
+  }
+
   renderSendButton() {
     const { canSend, chat, sendingMessage } = this.props;
 
@@ -69,10 +86,16 @@ class MessageTextArea extends Component {
     };
 
     return (
-      <div {...sendButtonProps} data-test-id="button_sendMessage" data-testid="button_sendMessage">
-        <Icon icon="paper-plane" type="solid" />
-        <span className={styles.sendButton}>SEND</span>
-      </div>
+      <StandardButton
+        icon="paper-plane"
+        type="solid"
+        {...sendButtonProps}
+        data-test-id="button_sendMessage"
+        data-testid="button_sendMessage"
+        disabled={!(canSend && !sendingMessage)}
+      >
+        Send
+      </StandardButton>
     );
   }
 
@@ -88,8 +111,17 @@ class MessageTextArea extends Component {
   }
 
   render() {
-    const { chat, canSend, error, isPoC, patient, poc, isPhoneNoAvailable, phoneLookupObj } =
-      this.props;
+    const {
+      chat,
+      canSend,
+      error,
+      isPoC,
+      patient,
+      poc,
+      isPhoneNoAvailable,
+      phoneLookupObj,
+      accountId,
+    } = this.props;
     if (!chat || isPoC === null) return null;
 
     const hasPatient = patient && patient.id;
@@ -210,6 +242,36 @@ class MessageTextArea extends Component {
                 </li>
               </DropdownMenu>
             </div>
+            <div className={styles.chatFileIcon}>
+              <ListPracticesForms practiceId={accountId}>
+                {({ loading, error: apiError, data }) => {
+                  if (loading) return <Loader isLoaded={loading} />;
+                  if (apiError) return `Error!: ${apiError}`;
+                  const listData = data?.getPractice?.forms;
+                  return (
+                    <DropdownMenu
+                      ref={this.formUrlDropdown}
+                      labelComponent={(props) => (
+                        <Button {...props}>
+                          <Icon icon="file-alt" />
+                        </Button>
+                      )}
+                      closeOnInsideClick={false}
+                      className={styles.chatFormUrlOptions}
+                      align="left"
+                      upwards
+                    >
+                      <SearchableUrlFormList
+                        placeholder="Search"
+                        addFormUrl={this.addFormUrl}
+                        formListData={listData}
+                        loading={loading}
+                      />
+                    </DropdownMenu>
+                  );
+                }}
+              </ListPracticesForms>
+            </div>
             {canSend ? (
               this.renderSendButton()
             ) : (
@@ -244,6 +306,7 @@ MessageTextArea.propTypes = {
     isSMSEnabled: PropTypes.bool,
     isVoiceEnabled: PropTypes.bool,
   }),
+  accountId: PropTypes.string,
 };
 
 MessageTextArea.defaultProps = {
@@ -254,6 +317,7 @@ MessageTextArea.defaultProps = {
   patient: {},
   isPoC: true,
   phoneLookupObj: {},
+  accountId: '',
 };
 
 function mapStateToProps(state, { chat = {} }) {

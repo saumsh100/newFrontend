@@ -1,0 +1,62 @@
+@import '../../../../../styles/ui-reskin.scss';
+
+.chatFormUrl {
+  &__inputContainer {
+    background: $super-white-200;
+    border-bottom: 1px solid $color-purple-100;
+    padding: 8px;
+    position: relative;
+    width: auto;
+  }
+
+  &__searchIcon {
+    color: $color-grey-400 !important;
+    font-size: $medium-size !important;
+    margin-left: 1.2rem;
+    position: absolute;
+    text-align: center;
+    top: 1.5rem;
+  }
+  &__searchField {
+    &::placeholder {
+      color: $color-grey-400;
+    }
+    background: $super-white;
+    border: 1px solid $color-grey-200;
+    border-radius: 4px;
+    color: $color-grey-600;
+    font-family: 'Inter', sans-serif;
+    font-size: $medium-size;
+    font-style: normal;
+    font-weight: $normal-weight;
+    line-height: 20px;
+    outline: none;
+    padding: 0.25rem;
+    padding-left: 3.2rem;
+    width: -webkit-fill-available;
+  }
+
+  &__loading {
+    background: $super-white;
+    max-height: 41px;
+    padding: 1rem 1.2rem;
+  }
+
+  &__option {
+    align-items: center;
+    background: $super-white;
+    border-bottom: 1px solid $color-purple-100;
+    color: $color-grey-600;
+    display: flex;
+    font-family: 'Inter', sans-serif;
+    font-size: $medium-size;
+    font-style: normal;
+    font-weight: $medium-weight;
+    line-height: 21px;
+    max-height: 41px;
+    padding: 1rem 1.2rem;
+    &:hover {
+      background: $color-lavender-050;
+    }
+  }
+}
