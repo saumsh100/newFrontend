@@ -8,6 +8,7 @@ function Button(props) {
   const {
     className,
     disabled = false,
+    disableVariant = 'disabled',
     icon,
     children,
     title,
@@ -34,7 +35,7 @@ function Button(props) {
       type={type}
       disabled={disabled}
       className={classNames(className, {
-        [styles.disabled]: disabled,
+        [styles[disableVariant]]: disabled,
         [styles[variant]]: !disabled,
       })}
       onClick={handleClick}
@@ -59,12 +60,13 @@ Button.propTypes = {
   iconRight: PropTypes.string,
   title: PropTypes.string,
   disabled: PropTypes.bool,
-  variant: PropTypes.oneOf(['primary', 'secondary', 'success']),
+  variant: PropTypes.oneOf(['primary', 'secondary', 'success', 'destructive']),
   onClick: PropTypes.func.isRequired,
   type: PropTypes.string,
   iconType: PropTypes.oneOf(['light', 'solid', 'regular', 'brand']),
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
+  disableVariant: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -77,6 +79,7 @@ Button.defaultProps = {
   variant: 'primary',
   type: 'button',
   iconType: 'solid',
+  disableVariant: 'disabled',
   onMouseEnter: () => {},
   onMouseLeave: () => {},
 };

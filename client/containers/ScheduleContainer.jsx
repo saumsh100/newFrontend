@@ -14,6 +14,8 @@ import {
   setCreatingPatient,
   setMergingPatient,
   setScheduleDate,
+  rejectAppointment,
+  setReject,
 } from '../actions/schedule';
 import { setAllFilters } from '../thunks/schedule';
 import { DateTimeObj, getTodaysDate, parseDate } from '../components/library/util/datetime';
@@ -216,6 +218,8 @@ class ScheduleContainer extends PureComponent {
           setScheduleDate={this.props.setScheduleDate}
           selectedAppointment={this.props.selectedAppointment}
           selectAppointment={this.props.selectAppointment}
+          rejectedAppointment={this.props.rejectedAppointment}
+          setReject={this.props.setReject}
         />
       </Loader>
     );
@@ -242,6 +246,7 @@ function mapStateToProps({ apiRequests, entities, schedule, auth }) {
     schedule,
     currentDate: schedule.get('scheduleDate'),
     selectedAppointment: schedule.get('selectedAppointment'),
+    rejectedAppointment: schedule.get('rejectedAppointment'),
     practitioners: entities.get('practitioners'),
     appointments: entities.get('appointments'),
     events: entities.get('events'),
@@ -269,8 +274,10 @@ function mapDispatchToProps(dispatch) {
       setAllFilters,
       setScheduleDate,
       selectAppointment,
+      rejectAppointment,
       setMergingPatient,
       setCreatingPatient,
+      setReject,
     },
     dispatch,
   );
@@ -310,6 +317,8 @@ ScheduleContainer.propTypes = {
   accountId: PropTypes.string,
   timezone: PropTypes.string.isRequired,
   unit: PropTypes.number,
+  rejectedAppointment: PropTypes.func.isRequired,
+  setReject: PropTypes.func.isRequired,
 };
 
 ScheduleContainer.defaultProps = {
@@ -320,6 +329,7 @@ ScheduleContainer.defaultProps = {
   chairsFetched: false,
   accountsFetched: false,
   selectedAppointment: null,
+  rejectedAppointment: null,
   accountId: undefined,
   unit: undefined,
 };

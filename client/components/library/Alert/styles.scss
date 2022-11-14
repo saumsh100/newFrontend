@@ -1,4 +1,5 @@
 @import '../../../styles/ui';
+@import '../../../styles/ui-reskin.scss';
 
 .alert {
   align-items: center;
@@ -7,7 +8,7 @@
   display: flex;
   height: auto;
   margin-bottom: 5px;
-  max-width: 250px;
+  max-width: 457px;
   padding-bottom: 15px;
 
   padding-left: 20px;
@@ -16,22 +17,24 @@
 
   transition-timing-function: ease-in;
   visibility: hidden;
-  width: 250px;
+  width: 370px;
 }
 
 .title {
-  color: $primary-dark;
-  font-size: 16px;
-  padding-bottom: 10px;
+  color: $color-purple-400;
+  font-size: $x-medium-size;
+  font-weight: $bold-weight;
   padding-top: 15px;
   text-transform: capitalize;
 }
 .textContainer {
-  max-width: 225px;
   word-wrap: break-word;
 }
 
 .alertBodyText {
+  color: $color-purple-400;
+  font-size: $x-medium-size;
+  font-weight: $normal-weight;
 }
 
 .clickableLink {
@@ -44,32 +47,21 @@
   }
 }
 .iconContainer {
-  color: $inactive-color;
+  color: $color-lavender-500;
   cursor: pointer;
   margin-left: auto;
   position: absolute;
+  position: absolute;
   right: 20px;
   top: 2px;
-}
-
-.successHover {
-  &:hover {
-    color: $primary-green;
-  }
-}
-
-.errorHover {
-  &:hover {
-    color: $primary-color;
-  }
+  top: 15px;
 }
 
 .alert--error {
-  background-color: $primary-white;
-  border: 1px solid $primary-color;
-  border-left: 10px solid $primary-color;
-  margin-top: 0;
-  opacity: 1;
+  background-color: $super-white;
+  border: 1px solid $color-purple-200;
+  border-left: 10px solid $error-400;
+  box-shadow: 2px 2px 32px rgba(7, 0, 82, 0.24);
   transform: translateX(-5em);
   transition: 0.1s;
 
@@ -92,4 +84,10 @@
 
 .alert--hidden {
   visibility: hidden;
+}
+.errorIcon {
+  color: $error-400;
+  margin-bottom: 54px;
+  margin-right: 10px;
+  width: 20.57px;
 }

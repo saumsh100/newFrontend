@@ -110,3 +110,21 @@
     outline: none;
   }
 }
+.destructive {
+  @extend .baseButton;
+  background: $error-500;
+  border: none;
+  color: $icon-card-bg-salmon;
+  font-size: $medium-size;
+  font-weight: $bold-weight;
+  &:hover {
+    background: $error-600;
+  }
+}
+.destructiveDisable {
+  @extend .baseButton;
+  background: $color-salmon-300;
+  color: $icon-card-bg-salmon;
+  font-size: $medium-size;
+  font-weight: $bold-weight;
+}

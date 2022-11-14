@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames/bind';
@@ -11,18 +10,13 @@ export default function Alert(props) {
   let alertStyle = styles.alert;
   alertStyle = classNames(styles[`alert--${alert.type}`], alertStyle);
 
-  const cursorStyle =
-    alert && alert.clickable
-      ? {
-        cursor: 'pointer',
-      }
-      : {};
-
-  let iconStyle = styles.iconContainer;
-  iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
-
   return (
     <div className={alertStyle}>
+      {alert.type === 'error' ? (
+        <Icon icon="exclamation-triangle" type="solid" className={styles.errorIcon} />
+      ) : (
+        ''
+      )}
       <div className={styles.textContainer}>
         <div className={styles.title}>
           <span>{alert.title}</span>
@@ -35,10 +29,11 @@ export default function Alert(props) {
           </div>
         ) : null}
       </div>
-      <div className={iconStyle}>
+      <div>
         <Icon
           icon="times"
           size={0.8}
+          className={styles.iconContainer}
           onClick={(e) => {
             e.stopPropagation();
             removeAlert({ alert });
@@ -52,6 +47,5 @@ export default function Alert(props) {
 Alert.propTypes = {
   alert: PropTypes.object.isRequired,
   removeAlert: PropTypes.func.isRequired,
-  handleAction: PropTypes.func,
   alertClick: PropTypes.func,
 };

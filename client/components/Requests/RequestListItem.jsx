@@ -5,7 +5,7 @@ import { ListItem, getFormattedTime, getUTCDate } from '../library';
 import { checkIfUsersEqual } from '../Utils';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
-import styles from '../Dashboard/styles'
+import styles from '../Dashboard/styles';
 import RequestPopover from './RequestPopover';
 import PatientUser from '../../entities/models/PatientUser';
 import Practitioner from '../../entities/models/Practitioners';
@@ -26,7 +26,7 @@ class RequestListItem extends Component {
   }
 
   onClickRemove() {
-    this.props.removeRequest(this.props.request);
+    this.props.removeRequest(this.props.request, this.props.patientUser);
   }
 
   renderListItem({ patientUser, data, request, requestingUser, requestType, openRequest }) {

@@ -1,4 +1,3 @@
-
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 
@@ -9,11 +8,13 @@ import {
   REMOVE_SCHEDULE_FILTER,
   SET_SCHEDULE_DATE,
   SELECT_APPOINTMENT,
+  REJECT_APPOINTMENT,
   SELECT_WAITSPOT,
   SET_SYNCING,
   SET_MERGING,
   SET_SCHEDULE_VIEW,
   CREATE_NEW_PATIENT,
+  REJECT,
 } from '../constants';
 
 const initialState = fromJS({
@@ -30,6 +31,7 @@ const initialState = fromJS({
   servicesFilter: [],
   remindersFilter: ['Reminder Sent', 'PMS Not Synced', 'Patient Confirmed'],
   selectedAppointment: null,
+  rejectedAppointment: null,
   selectedWaitSpot: null,
   syncingWithPMS: false,
   mergingPatientData: {
@@ -38,6 +40,7 @@ const initialState = fromJS({
     suggestions: [],
   },
   createNewPatient: false,
+  reject: false,
 });
 
 export default handleActions(
@@ -60,18 +63,27 @@ export default handleActions(
       return state.set('selectedAppointment', appointment);
     },
 
+    [REJECT_APPOINTMENT](state, action) {
+      const rejected = action.payload;
+      return state.set('rejectedAppointment', rejected);
+    },
+
     [SELECT_WAITSPOT](state, action) {
       const waitSpot = action.payload;
       return state.set('selectedWaitSpot', waitSpot);
     },
 
     [CREATE_NEW_PATIENT](state, action) {
-      const createPatientBool = action.payload.createPatientBool;
+      const { createPatientBool } = action.payload;
       return state.set('createNewPatient', createPatientBool);
+    },
+    [REJECT](state, action) {
+      const { rejectBool } = action.payload;
+      return state.set('reject', rejectBool);
     },
 
     [ADD_SCHEDULE_FILTER](state, action) {
-      const key = action.payload.key;
+      const { key } = action.payload;
       const filterEntities = state.toJS()[key];
       filterEntities.push(action.payload.id);
       const mergeObj = {};
@@ -80,16 +92,16 @@ export default handleActions(
     },
 
     [REMOVE_SCHEDULE_FILTER](state, action) {
-      const key = action.payload.key;
+      const { key } = action.payload;
       const filterEntities = state.toJS()[key];
       const mergeObj = {};
-      mergeObj[key] = filterEntities.filter(id => id !== action.payload.id);
+      mergeObj[key] = filterEntities.filter((id) => id !== action.payload.id);
       return state.merge(mergeObj);
     },
 
     [ADD_ALL_SCHEDULE_FILTER](state, action) {
-      const key = action.payload.key;
-      const entities = action.payload.entities;
+      const { key } = action.payload;
+      const { entities } = action.payload;
       const filterEntities = state.toJS()[key];
 
       entities.forEach((entity) => {
@@ -105,7 +117,7 @@ export default handleActions(
     },
 
     [CLEAR_SCHEDULE_FILTER](state, action) {
-      const key = action.payload.key;
+      const { key } = action.payload;
       const temp = {};
       temp[key] = [];
       return state.merge(temp);

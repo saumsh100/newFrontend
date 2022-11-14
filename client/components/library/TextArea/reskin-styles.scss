@@ -29,6 +29,13 @@
   &:focus ~ .label {
     color: $color-lavender-500;
   }
+
+  &::-webkit-input-placeholder {
+    color: $color-grey-300;
+    font-size: $small-size;
+    font-weight: $medium-weight;
+    padding-left: 10px;
+  }
 }
 
 .erroredInput {

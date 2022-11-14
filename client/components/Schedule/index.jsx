@@ -30,6 +30,7 @@ import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 import AssignPatientToChatDialog from '../Patients/AssignPatientToChatDialog';
 import { selectAppointmentShape, practitionerShape } from '../library/PropTypeShapes';
 import styles from './reskin-styles.scss';
+import RejectAppointment from './RejectAppointment';
 
 class ScheduleComponent extends PureComponent {
   constructor(props) {
@@ -44,6 +45,7 @@ class ScheduleComponent extends PureComponent {
       showInput: false,
       showApptSummary: false,
       lastSummaryRequest: null,
+      showModal: false,
     };
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
@@ -207,6 +209,7 @@ class ScheduleComponent extends PureComponent {
     });
     this.props.setCreatingPatient(false);
     this.props.selectAppointment(null);
+    this.props.setReject(false);
     this.setState({
       showSchedule: false,
       addNewAppointment: false,
@@ -214,6 +217,7 @@ class ScheduleComponent extends PureComponent {
       sendEmail: false,
       showInput: false,
       showApptSummary: false,
+      showModal: false,
     });
   }
 
@@ -254,6 +258,7 @@ class ScheduleComponent extends PureComponent {
 
     const mergingPatientData = schedule.get('mergingPatientData');
     const createNewPatient = schedule.get('createNewPatient');
+    const reject = schedule.get('reject');
     const leftColumnWidth = schedule.get('leftColumnWidth');
     const currentDate = getUTCDate(schedule.get('scheduleDate'), this.props.timezone);
 
@@ -375,6 +380,10 @@ class ScheduleComponent extends PureComponent {
     this.pageTitle = displayTitle;
     const appsEventsFetched = appsFetched && eventsFetched;
     const allFetched = appsEventsFetched && accountsFetched && chairsFetched && pracsFetched;
+    const rejected = reject;
+    if (rejected === true) {
+      this.setState({ showModal: true });
+    }
 
     return (
       <div className={styles.rowMainContainer}>
@@ -431,6 +440,20 @@ class ScheduleComponent extends PureComponent {
                       selectedAppointment={this.props.selectedAppointment}
                       setCreatingPatient={this.props.setCreatingPatient}
                       timezone={this.props.timezone}
+                    />
+                  </Modal>
+                ) : null}
+                {this.state.showModal && reject ? (
+                  <Modal
+                    onEscKeyDown={this.reinitializeState}
+                    onOverlayClick={this.reinitializeState}
+                    type="rejectModal"
+                    active={rejected}
+                  >
+                    <RejectAppointment
+                      formName="RejectAappointment"
+                      reinitializeState={this.reinitializeState}
+                      parentCallback={this.handleCallback}
                     />
                   </Modal>
                 ) : null}
@@ -504,6 +527,7 @@ ScheduleComponent.propTypes = {
   chairs: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   timezone: PropTypes.string.isRequired,
   apptWrite: PropTypes.bool.isRequired,
+  setReject: PropTypes.func.isRequired,
 };
 
 ScheduleComponent.defaultProps = {

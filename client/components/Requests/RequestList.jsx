@@ -11,14 +11,14 @@ import Requests from '../../entities/models/Request';
 import { List, Media, Icon, getFormattedTime } from '../library';
 import { checkIfUsersEqual } from '../Utils';
 import { isHub } from '../../util/hub';
-import styles from '../Dashboard/styles'
+import styles from '../Dashboard/styles';
 import {
   updateEntityRequest,
   deleteEntityRequest,
   createEntityRequest,
 } from '../../thunks/fetchEntities';
 import { setHoverRequestId, setUndoRequest } from '../../actions/requests';
-import { selectAppointment } from '../../actions/schedule';
+import { selectAppointment, rejectAppointment, setReject } from '../../actions/schedule';
 import { checkPatientUser } from '../../thunks/schedule';
 
 class RequestList extends Component {
@@ -83,14 +83,17 @@ class RequestList extends Component {
   }
 
   removeRequest(request) {
-    const confirmRemove = window.confirm('Are you sure you want to reject this request?');
-    if (confirmRemove) {
-      this.openRequest(null);
-      this.props.updateEntityRequest({
-        url: `/api/requests/${request.id}/reject`,
-        values: {},
-      });
-    }
+    const { location, redirect } = this.props;
+    this.props.push({
+      ...location,
+      ...redirect,
+    });
+    this.props.setReject({ rejectBool: true });
+    this.props.rejectAppointment(request);
+    this.props.push({
+      ...location,
+      ...redirect,
+    });
   }
 
   backHandler() {
@@ -229,10 +232,11 @@ RequestList.propTypes = {
   services: PropTypes.instanceOf(Map).isRequired,
   setHoverRequestId: PropTypes.func.isRequired,
   sortedRequests: PropTypes.arrayOf(PropTypes.instanceOf(Requests)),
-  updateEntityRequest: PropTypes.func.isRequired,
   setBackHandler: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
+  setReject: PropTypes.func.isRequired,
+  rejectAppointment: PropTypes.func.isRequired,
 };
 
 RequestList.defaultProps = {
@@ -243,19 +247,22 @@ RequestList.defaultProps = {
   sortedRequests: [],
 };
 
-const mapStateToProps = ({ auth, router: { location } }) => ({
+const mapStateToProps = ({ auth, schedule, router: { location } }) => ({
   location,
   timezone: auth.get('timezone'),
+  reject: schedule.get('reject'),
 });
 
 const mapActionsToProps = (dispatch) =>
   bindActionCreators(
     {
+      setReject,
       updateEntityRequest,
       deleteEntityRequest,
       createEntityRequest,
       setHoverRequestId,
       selectAppointment,
+      rejectAppointment,
       checkPatientUser,
       push,
       setUndoRequest,

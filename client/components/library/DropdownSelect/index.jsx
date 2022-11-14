@@ -132,7 +132,7 @@ class DropdownSelect extends Component {
       <div className={theme.dropDownList} ref={this.scrollComponent}>
         {options.map((option, i) => {
           const isSelected = value === option.value;
-          let className = styles.optionListItem;
+          let className = theme.optionListItem;
 
           if (isSelected) {
             className = classNames(className, styles.selectedListItem);
