@@ -42,7 +42,7 @@ class ChatListItem extends Component {
         icon="star"
         onClick={onClickListener}
         className={isFlagged ? styles.filled : styles.hallow}
-        type={'solid'}
+        type="solid"
       />
     );
   }
@@ -86,18 +86,20 @@ class ChatListItem extends Component {
     const isUnread = chat.hasUnread;
 
     const listItemClass = styles.chatListItem;
-    const hasFailed = lastTextMessage.get('smsStatus') === 'failed';
-    const isFromPatient = lastTextMessage.get('smsStatus') === 'received';
-    const user = lastTextMessage.get('user')
-    const newUser =   user?.size ? Object.fromEntries(user): user
-    const message = lastTextMessage && lastTextMessage?.size ? lastTextMessage.get('body') : lastTextMessage?.body
+    const hasFailed = lastTextMessage?.smsStatus === 'failed';
+    const isFromPatient = lastTextMessage?.smsStatus === 'received';
+    const user = lastTextMessage?.body !== '' ? lastTextMessage?.get('user') : '';
+    const newUser = user?.size ? Object.fromEntries(user) : user;
+    const message =
+      lastTextMessage && lastTextMessage?.size
+        ? lastTextMessage.get('body')
+        : lastTextMessage?.body;
 
     let avatarUser;
-    if (!isFromPatient) {
-      avatarUser =
-        lastTextMessage && newUser && newUser?.id ? newUser : botAvatar;
+    if (!isFromPatient && lastTextMessage?.body) {
+      avatarUser = newUser && newUser?.id ? newUser : botAvatar;
     }
-  
+
     return (
       <ListItem
         selectedClass={styles.selectedChatItem}
@@ -110,12 +112,14 @@ class ChatListItem extends Component {
           <Avatar size="sm" user={patient} />
         </div>
 
-        {isActive && pendingMessages?.length !== 0 ? (
+        {isActive && pendingMessages?.length !== 0 && (
           <div className={styles.avatarPending}>
             <Icon className={styles.pendingIcon} icon="clock" size={2} type="solid" />
           </div>
-        ) : !hasFailed && avatarUser ? (
-          <div className={styles.bottom_avatar}>
+        )}
+        
+          {!hasFailed && avatarUser ? (
+            <div className={styles.bottom_avatar}>
             <Avatar
               size="xs"
               className={styles.bubbleAvatar}
@@ -123,13 +127,10 @@ class ChatListItem extends Component {
               isPatient={isFromPatient}
               textClassName={styles.bubbleAvatar_text}
             />
-          </div>
-        ) : (
-          ''
-        )}
+        </div>):''}
 
         <div className={styles.flexSection}>
-          <div className={styles.topSection}>
+          <div className={lastTextMessage?.body ? styles.topSection : styles.topSectionNoBody}>
             <div className={isUnread ? styles.fullNameUnread : styles.fullName}>
               {this.renderPatient()}
             </div>
@@ -139,11 +140,13 @@ class ChatListItem extends Component {
             data-test-id="chat_lastMessage"
             className={isUnread ? styles.bottomSectionUnread : styles.bottomSection}
           >
-            {isActive && pendingMessages?.length !== 0 ? (
+            {isActive && pendingMessages?.length !== 0 && (
               <>
                 <span className={styles.pendingMessage}>Sending Message...</span>
               </>
-            ) : hasFailed ? (
+            )}
+
+            {hasFailed ? (
               <>
                 <Icon
                   className={styles.avatar__failed}
@@ -155,11 +158,9 @@ class ChatListItem extends Component {
               </>
             ) : avatarUser ? (
               <>
-                <span className={styles.bottom_body}>
-                  {message}
-                </span>
+                <span className={styles.bottom_body}>{message}</span>
               </>
-            ) : (
+            ) :  (
               message
             )}
           </div>

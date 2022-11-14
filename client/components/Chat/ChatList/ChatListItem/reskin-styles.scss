@@ -25,7 +25,7 @@
   margin-left: auto;
 
   & > button {
-    width: auto !important;
+     width: auto !important;
   }
 
   @media (max-width: 576px) {
@@ -68,6 +68,13 @@
   margin-left: -6px;
   width: 100%;
 }
+.topSectionNoBody {
+  align-items: center;
+  display: flex;
+  margin-bottom: 44px;
+  margin-left: -6px;
+  width: 100%;
+}
 
 .bottomSection {
   -webkit-box-orient: vertical;
@@ -94,7 +101,7 @@
 .fullName {
   color: $color-grey-600;
   font-size: $medium-size;
-  font-weight: $semi-bold-weight;
+  font-weight: $medium-weight;
   text-transform: capitalize;
 }
 
