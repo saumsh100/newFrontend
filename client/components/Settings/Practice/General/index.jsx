@@ -78,6 +78,7 @@ class General extends Component {
       phoneNumber: activeAccount.get('phoneNumber'),
       contactEmail: activeAccount.get('contactEmail'),
       facebookUrl: activeAccount.get('facebookUrl'),
+      instagramUrl: activeAccount.get('instagramUrl'),
       unit: activeAccount.get('unit'),
       notificationEmails: activeAccount.get('notificationEmails')
         ? activeAccount.get('notificationEmails').join(', ')

@@ -24,6 +24,7 @@ const accountShape = {
   enterpriseId: PropTypes.string,
   externalId: PropTypes.string,
   facebookUrl: PropTypes.string,
+  instagramUrl: PropTypes.string,
   fullLogoUrl: PropTypes.string,
   googlePlaceId: PropTypes.string,
   hygieneInterval: PropTypes.string,

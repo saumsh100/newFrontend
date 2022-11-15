@@ -37,6 +37,7 @@ const AccountSchema = {
   lastSyncDate: new Date(2016, 5, 1).toISOString(),
   googlePlaceId: null,
   facebookUrl: null,
+  instagramUrl: null,
   vendastaMsId: null,
   sendRequestEmail: null,
   vendastaAccountId: null,

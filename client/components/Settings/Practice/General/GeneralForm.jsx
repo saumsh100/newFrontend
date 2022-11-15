@@ -127,6 +127,7 @@ const GeneralForm = ({
         data-test-id="contactEmail"
       />
       <Field name="facebookUrl" label="Facebook URL" data-test-id="facebookUrl" />
+      <Field name="instagramUrl" label="Instagram URL" data-test-id="instagramUrl" />
       <Field
         name="unit"
         label="Schedule Unit Value"
@@ -191,6 +192,7 @@ GeneralForm.propTypes = {
     website: PropTypes.string,
     phoneNumber: PropTypes.string,
     facebookUrl: PropTypes.string,
+    instagramUrl: PropTypes.string,
     contactEmail: PropTypes.string,
     notificationEmails: PropTypes.string,
     useNotificationEmails: PropTypes.bool,
@@ -210,6 +212,7 @@ GeneralForm.defaultProps = {
     website: '',
     phoneNumber: '',
     facebookUrl: '',
+    instagramUrl: '',
     contactEmail: '',
     notificationEmails: '',
     useNotificationEmails: false,
