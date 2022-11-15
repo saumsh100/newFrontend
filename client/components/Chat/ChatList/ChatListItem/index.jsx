@@ -10,6 +10,7 @@ import styles from './reskin-styles.scss';
 
 const getMessageTime = (message, timezone) =>
   getUTCDate(message, timezone).calendar(null, {
+    sameDay: 'hh:mma',
     lastDay: '[Yesterday]',
     lastWeek: 'dddd',
     sameElse: 'YYYY-MM-DD',
@@ -81,7 +82,7 @@ class ChatListItem extends Component {
     const daysDifference = getTodaysDate(timezone).diff(mDate, 'days');
     const isActive = selectedChatId === chat.id;
 
-    const messageDate = daysDifference ? getMessageTime(mDate, timezone) : mDate.format('hh:mma');
+    const messageDate = getMessageTime(mDate, timezone);
 
     const isUnread = chat.hasUnread;
 
@@ -112,13 +113,13 @@ class ChatListItem extends Component {
           <Avatar size="sm" user={patient} />
         </div>
 
-        {isActive && pendingMessages?.length !== 0 && (
+        {isActive && pendingMessages?.length !== 0 ? (
           <div className={styles.avatarPending}>
             <Icon className={styles.pendingIcon} icon="clock" size={2} type="solid" />
           </div>
-        )}
+        ):
         
-          {!hasFailed && avatarUser ? (
+          !hasFailed && avatarUser ? (
             <div className={styles.bottom_avatar}>
             <Avatar
               size="xs"
@@ -140,13 +141,13 @@ class ChatListItem extends Component {
             data-test-id="chat_lastMessage"
             className={isUnread ? styles.bottomSectionUnread : styles.bottomSection}
           >
-            {isActive && pendingMessages?.length !== 0 && (
+            {isActive && pendingMessages?.length !== 0 ? (
               <>
                 <span className={styles.pendingMessage}>Sending Message...</span>
               </>
-            )}
+            ):
 
-            {hasFailed ? (
+            hasFailed ? (
               <>
                 <Icon
                   className={styles.avatar__failed}

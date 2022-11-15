@@ -89,16 +89,21 @@ function RejectAppointment(props) {
           </div>
           <div className={styles.patientData}>
             <div>
-              <b>Date:</b> {appointmentDate}
+              <span className={styles.headingData}>Date:</span>
+              <span className={styles.data}> {appointmentDate}</span>
             </div>
             <div>
-              <b>Time:</b> {time}
+              <span className={styles.headingData}>Time:</span>
+              <span className={styles.data}> {time}</span>
             </div>
             <div>
-              <b>Appointment Type:</b> {service.name}
+              <span className={styles.headingData}>Appointment Type:</span>
+              <span className={styles.data}> {service.name}</span>
             </div>
             <div>
-              <b>Practitioner:</b> {practitioner ? practitioner.getPrettyName() : 'No Preference'}
+              <span className={styles.headingData}>practitioner:</span>
+              <span className={styles.data}> {practitioner ? practitioner.getPrettyName() : 'No Preference'}
+              </span>
             </div>
           </div>
 
@@ -125,37 +130,33 @@ function RejectAppointment(props) {
                   toggleValueDiv: styles.toggleValueDiv,
                   label: styles.label,
                   optionListItem: styles.optionListItem,
-                  dropDownList : styles.dropDownList,
+                  dropDownList: styles.dropDownList,
                 }}
               />
             </Col>
           </Row>
 
           {reason === 'Other' ? (
-            <div className = {styles.textContent}>
-             <TextArea
-              placeholder="e.g,Patient Could have made a mistake..."
-              theme={{
-                group: styles.group,
-                filled: styles.filled,
-                bar: styles.bar,
-                labelWrapper: styles.labelWrapper,
-              }}
-              classStyles={styles.textArea}
-              value={notes || ''}
-              onChange={(e) => {
-               setNotes(e.target.value);
-              }}
-            />
-            <Icon
-            icon ="asterisk"  className={styles.asteriskIcon} type = "solid"
-            
-            />
-            </div>) 
-            : (
+            <div className={styles.textContent}>
+              <TextArea
+                placeholder="e.g,Patient Could have made a mistake..."
+                theme={{
+                  group: styles.group,
+                  filled: styles.filled,
+                  bar: styles.bar,
+                  labelWrapper: styles.labelWrapper,
+                }}
+                classStyles={styles.textArea}
+                value={notes || ''}
+                onChange={(e) => {
+                  setNotes(e.target.value);
+                }}
+              />
+              <Icon icon="asterisk" className={styles.asteriskIcon} type="solid" />
+            </div>
+          ) : (
             ''
-            )}
-           
+          )}
         </SBody>
         <SFooter className={styles.footer}>
           <div className={styles.button_cancel}>

@@ -68,11 +68,16 @@
   border: 1px solid $color-grey-100;
   border-radius: 4px;
   font-size: $small-size;
-  font-weight: $bold-weight;
   height: 80px;
   line-height: 16px;
   margin-top: 20px;
   padding: 12px;
+}
+.headingData{
+ font-weight: $bold-weight;
+}
+.data{
+  font-weight: $normal-weight;
 }
 .reasonHeading {
   color: $color-grey-600;
@@ -139,11 +144,11 @@
   display: flex;
 }
 .asteriskIcon {
-  margin-top: 7px;
-  font-weight: 500;
-  font-size: 12px;
+  margin-top: 10px;
+  font-weight: $widget-mobile-width;
+  font-size: $x-small-size;
   color: $color-salmon-600;
-  -webkit-text-stroke: 0.5px;
+  -webkit-text-stroke: 0.3px;
 }
 .caretIconWrapper {
   align-items: center;
