@@ -12,16 +12,16 @@ export default function Alert(props) {
 
   return (
     <div className={alertStyle}>
-      {alert.type === 'error' ? (
+      <div className={styles.textContainer}>
+        <div className={styles.title}>
+        {alert.type === 'error' ? (
         <Icon icon="exclamation-triangle" type="solid" className={styles.errorIcon} />
       ) : (
         ''
       )}
-      <div className={styles.textContainer}>
-        <div className={styles.title}>
           <span>{alert.title}</span>
         </div>
-        <div className={styles.alertBodyText}>{alert.body}</div>
+        <div className={classNames(alert.type === 'error' ? styles.errorAlertBodyText : styles.alertBodyText)}>{alert.body}</div>
         <div className={styles.alertBodyText}>{alert.subText}</div>
         {alert.clickable ? (
           <div className={styles.clickableLink}>

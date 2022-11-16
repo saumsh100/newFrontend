@@ -89,11 +89,7 @@ class RequestList extends Component {
       ...redirect,
     });
     this.props.setReject({ rejectBool: true });
-    this.props.rejectAppointment(request);
-    this.props.push({
-      ...location,
-      ...redirect,
-    });
+    this.props.rejectAppointment(request);;
   }
 
   backHandler() {
