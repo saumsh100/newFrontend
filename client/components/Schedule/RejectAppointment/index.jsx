@@ -118,7 +118,7 @@ function RejectAppointment(props) {
                   { label: 'Patient Unreachable', value: 'Patient Unreachable' },
                   { label: 'Patient Reconsidered', value: 'Patient Reconsidered' },
                   { label: 'Duplicate Request', value: 'Duplicate Request' },
-                  { label: 'Time Unavilable', value: 'Time Unavilable' },
+                  { label: 'Time Unavailable', value: 'Time Unavailable' },
                   { label: 'Other', value: 'Other' },
                 ]}
                 onChange={(graph) => {
