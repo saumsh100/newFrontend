@@ -52,7 +52,7 @@ function RejectAppointment(props) {
       .updateEntityRequest({
         url: `/api/requests/${rejectAppointment?.id}/reject`,
         values: {
-          rejectionReason: notes || reason,
+          rejectionReason: notes ? `${reason} - ${notes}` : reason,
         },
       })
       .then(() => {
