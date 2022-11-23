@@ -86,10 +86,9 @@ class ScheduleCalendar extends Component {
 
     this.setState(
       {
-        editSchedule:
-          isTheSameDay !== null
-            ? this.getSelectedSchedule(selectedDay)
-            : this.props.baseSchedule?.weeklySchedule[weekDay],
+        editSchedule: isTheSameDay
+          ? this.getSelectedSchedule(selectedDay)
+          : this.props.baseSchedule?.weeklySchedule?.[weekDay],
         editTitle: isTheSameDay
           ? `Holiday Hours (${getFormattedDate(selectedDay, 'MMM. D, YYYY', timezone)})`
           : `Default Weekly Schedule (${capitalize(weekDay)})`,
@@ -271,6 +270,7 @@ ScheduleCalendar.propTypes = {
   renderDay: PropTypes.func,
   shouldDisplayWeeklyHours: PropTypes.bool,
   editChairs: PropTypes.bool,
+  clearOverride: PropTypes.func.isRequired,
 };
 
 ScheduleCalendar.defaultProps = {

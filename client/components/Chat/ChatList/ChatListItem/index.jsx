@@ -117,10 +117,8 @@ class ChatListItem extends Component {
           <div className={styles.avatarPending}>
             <Icon className={styles.pendingIcon} icon="clock" size={2} type="solid" />
           </div>
-        ):
-        
-          !hasFailed && avatarUser ? (
-            <div className={styles.bottom_avatar}>
+        ) : !hasFailed && avatarUser ? (
+          <div className={styles.bottom_avatar}>
             <Avatar
               size="xs"
               className={styles.bubbleAvatar}
@@ -128,7 +126,10 @@ class ChatListItem extends Component {
               isPatient={isFromPatient}
               textClassName={styles.bubbleAvatar_text}
             />
-        </div>):''}
+          </div>
+        ) : (
+          ''
+        )}
 
         <div className={styles.flexSection}>
           <div className={lastTextMessage?.body ? styles.topSection : styles.topSectionNoBody}>
@@ -145,9 +146,7 @@ class ChatListItem extends Component {
               <>
                 <span className={styles.pendingMessage}>Sending Message...</span>
               </>
-            ):
-
-            hasFailed ? (
+            ) : hasFailed ? (
               <>
                 <Icon
                   className={styles.avatar__failed}
@@ -161,7 +160,7 @@ class ChatListItem extends Component {
               <>
                 <span className={styles.bottom_body}>{message}</span>
               </>
-            ) :  (
+            ) : (
               message
             )}
           </div>

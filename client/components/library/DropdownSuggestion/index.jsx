@@ -254,7 +254,7 @@ const renderValue = value => value;
 /**
  * Default validate props
  */
-const validateValue = val => val.length;
+const validateValue = val => val?.length;
 
 /**
  * The default renderList function.

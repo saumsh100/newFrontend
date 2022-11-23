@@ -14,14 +14,20 @@ export default function Alert(props) {
     <div className={alertStyle}>
       <div className={styles.textContainer}>
         <div className={styles.title}>
-        {alert.type === 'error' ? (
-        <Icon icon="exclamation-triangle" type="solid" className={styles.errorIcon} />
-      ) : (
-        ''
-      )}
+          {alert.type === 'error' ? (
+            <Icon icon="exclamation-triangle" type="solid" className={styles.errorIcon} />
+          ) : (
+            ''
+          )}
           <span>{alert.title}</span>
         </div>
-        <div className={classNames(alert.type === 'error' ? styles.errorAlertBodyText : styles.alertBodyText)}>{alert.body}</div>
+        <div
+          className={classNames(
+            alert.type === 'error' ? styles.errorAlertBodyText : styles.alertBodyText,
+          )}
+        >
+          {alert.body}
+        </div>
         <div className={styles.alertBodyText}>{alert.subText}</div>
         {alert.clickable ? (
           <div className={styles.clickableLink}>

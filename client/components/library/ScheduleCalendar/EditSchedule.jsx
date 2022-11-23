@@ -102,7 +102,7 @@ class EditSchedule extends Component {
   sanitizeScheduleTimeValues(schedule, timezone) {
     const activeChairIDs = this.props.chairs.toArray().map(({ id }) => id);
     // only show chairs that are active
-    const selectedChairIds = schedule.chairIds.filter((id) => activeChairIDs.includes(id));
+    const selectedChairIds = schedule?.chairIds?.filter((id) => activeChairIDs.includes(id));
     return {
       ...schedule,
       chairIds: selectedChairIds,
@@ -110,7 +110,7 @@ class EditSchedule extends Component {
       startTime: getFormattedTime(schedule.startTime, timezone),
       endTime: getFormattedTime(schedule.endTime, timezone),
       breaks:
-        schedule.breaks.length > 0
+        schedule?.breaks?.length > 0
           ? schedule.breaks.map((b) => ({
               ...b,
               startTime: getFormattedTime(b.startTime, timezone),

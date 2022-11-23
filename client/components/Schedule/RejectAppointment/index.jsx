@@ -102,8 +102,7 @@ function RejectAppointment(props) {
             </div>
             <div>
               <span className={styles.headingData}>practitioner:</span>
-              <span className={styles.data}> {practitioner ? practitioner.getPrettyName() : 'No Preference'}
-              </span>
+              <span className={styles.data}> {practitioner ? practitioner.getPrettyName() : 'No Preference'}</span>
             </div>
           </div>
 
