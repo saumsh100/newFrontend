@@ -9,39 +9,38 @@ import { httpClient } from '../util/httpClient';
 export const fetchPatientTableData = () => async (dispatch, getState) => {
   const { patientTable, auth } = getState();
   if (!patientTable.get('isLoadingTable')) {
-      dispatch(setIsLoading(true));
-      const params = {
-        ...patientTable.get('filters').toJS(),
-        isHoH: true,
-        authUserId: auth.get('userId'),
-      };
-     /* deleting the status from params in case of follow ups patient report */
-     if (
-        params &&
-        params.segment &&
-        typeof params.segment !== 'undefined' &&
-        (params.segment[0] === 'followUps' || params.segment[0] === 'myFollowUps')
-      ) {
-        delete params.status;
-      }
-      const {
-        data: { entities },
-      } = await httpClient().get('/api/table/search', { params });
-      const dataArray = getEntities(entities);
+    dispatch(setIsLoading(true));
+    const params = {
+      ...patientTable.get('filters').toJS(),
+      isHoH: true,
+      authUserId: auth.get('userId'),
+    };
+    /* deleting the status from params in case of follow ups patient report */
+    if (
+      params &&
+      params.segment &&
+      typeof params.segment !== 'undefined' &&
+      (params.segment[0] === 'followUps' || params.segment[0] === 'myFollowUps')
+    ) {
+      delete params.status;
+    }
+    const {
+      data: { entities },
+    } = await httpClient().get('/api/table/search', { params });
+    const dataArray = getEntities(entities);
 
-      const TOTAL_PATIENTS_KEY = 'totalPatients';
-      const { count } = dataArray.find(({ id }) => id === TOTAL_PATIENTS_KEY);
-      const patients = dataArray.filter(({ id }) => id !== TOTAL_PATIENTS_KEY);
+    const TOTAL_PATIENTS_KEY = 'totalPatients';
+    const { count } = dataArray.find(({ id }) => id === TOTAL_PATIENTS_KEY);
+    const patients = dataArray.filter(({ id }) => id !== TOTAL_PATIENTS_KEY);
 
-      dispatch(
-        setTableData({
-          count,
-          data: patients,
-        }),
-      );
+    dispatch(
+      setTableData({
+        count,
+        data: patients,
+      }),
+    );
 
-      dispatch(setIsLoading(false));
-
+    dispatch(setIsLoading(false));
   }
 };
 

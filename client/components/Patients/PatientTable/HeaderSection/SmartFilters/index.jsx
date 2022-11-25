@@ -2,19 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { change } from 'redux-form';
 import { DropdownMenu, List, MenuItem } from '../../../../library';
-import { addFilter } from '../../../../../reducers/patientTable';
+import { addFilter, setFilterActiveSegmentLabel } from '../../../../../reducers/patientTable';
 import { fetchPatientTableData } from '../../../../../thunks/patientTable';
 import HelpText from './HelpText';
 import Tooltip from '../../../../Tooltip';
 import Icon from '../../../../library/Icon';
 import styles from '../../reskin-styles.scss';
+import { initialSentRecalls } from '../../../Shared/helpers';
 
 class SmartFilters extends Component {
   constructor(props) {
     super(props);
     this.setSmartFilter = this.setSmartFilter.bind(this);
     this.setDefaultSmartList = this.setDefaultSmartList.bind(this);
+    this.state = {
+      segmentLabel: null,
+    };
   }
 
   componentDidMount() {
@@ -23,6 +28,7 @@ class SmartFilters extends Component {
 
   componentDidUpdate() {
     this.setDefaultSmartList();
+    this.props.setFilterActiveSegmentLabel(this.state.segmentLabel);
   }
 
   setDefaultSmartList() {
@@ -42,8 +48,12 @@ class SmartFilters extends Component {
     return selectedSegment && selectedSegment.label;
   }
 
-  setSmartFilter({ segment, value = [] }) {
+  setSmartFilter({ segment, value = [] }, label = '') {
     const params = {};
+    this.props.setFilterActiveSegmentLabel(label);
+    this.setState({
+      segmentLabel: label,
+    });
     if (segment === 'followUps') {
       params.order = [
         ['patientFollowUps.dueAt', 'asc'],
@@ -58,6 +68,11 @@ class SmartFilters extends Component {
       ];
     }
 
+    if (label === '19-24 Months Late' || label === '25-36 Months Late') {
+      params.sentRecalls = initialSentRecalls;
+      this.props.change('recalls', 'sentRecalls', initialSentRecalls);
+    }
+
     this.props.addFilter({
       segment: [segment, ...value],
       page: 0,
@@ -68,7 +83,6 @@ class SmartFilters extends Component {
 
   render() {
     const { segments, selectedSegment, totalPatients } = this.props;
-
     if (!selectedSegment) return null;
 
     const segmentsToJS = (segments && segments.toJS()) || [];
@@ -96,7 +110,7 @@ class SmartFilters extends Component {
               {segmentsToJS.map(({ label, ...filter }, index) => {
                 return (
                   <MenuItem
-                    onClick={() => this.setSmartFilter(filter)}
+                    onClick={() => this.setSmartFilter(filter, label)}
                     data-test-id={`option_${index}`}
                     key={`smartFilter_${label}`}
                   >
@@ -127,6 +141,8 @@ SmartFilters.propTypes = {
   segments: PropTypes.arrayOf(PropTypes.object),
   totalPatients: PropTypes.number,
   selectedSegment: PropTypes.string.isRequired,
+  change: PropTypes.func.isRequired,
+  setFilterActiveSegmentLabel: PropTypes.func.isRequired,
 };
 
 SmartFilters.defaultProps = {
@@ -149,6 +165,8 @@ const mapDispatchToProps = (dispatch) =>
     {
       addFilter,
       fetchPatientTableData,
+      change,
+      setFilterActiveSegmentLabel,
     },
     dispatch,
   );

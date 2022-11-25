@@ -1,4 +1,3 @@
-
 import classnames from 'classnames';
 import { getTodaysDate, getUTCDate } from '../../library';
 
@@ -27,7 +26,7 @@ export const familyDataSelector = (accountViewer) => {
   };
 };
 
-export const sortEvents = collection =>
+export const sortEvents = (collection) =>
   collection.sort((a, b) => {
     if (b.metaData.timelineDate < a.metaData.timelineDate) return -1;
     if (b.metaData.timelineDate > a.metaData.timelineDate) return 1;
@@ -62,9 +61,7 @@ export const getEventsOffsetLimitObj = (limit = 5) => ({
 });
 
 export const buildDotStyles = (dueForDate, styles, timezone = null) => {
-  const monthsDiff = getTodaysDate(timezone)
-    .startOf('day')
-    .diff(dueForDate, 'months', true);
+  const monthsDiff = getTodaysDate(timezone).startOf('day').diff(dueForDate, 'months', true);
 
   return classnames(styles.dot, {
     [styles.dotGrey]: monthsDiff >= 18,
@@ -73,3 +70,10 @@ export const buildDotStyles = (dueForDate, styles, timezone = null) => {
     [styles.dotGreen]: monthsDiff >= -2 && monthsDiff < 0,
   });
 };
+
+export const initialSentRecalls = [
+  'false',
+  'null',
+  new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString(),
+  new Date().toISOString(),
+];

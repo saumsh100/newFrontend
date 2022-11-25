@@ -42,6 +42,7 @@ const HelpTextLookupTable = {
     description:
       'Active patients who are 19-24 months overdue for hygiene/recall and not scheduled',
     communication: null,
+    recalls: 'No recalls logged in the last 30 days',
     followUp: null,
   },
   '25-36 Months Late': {
@@ -49,6 +50,7 @@ const HelpTextLookupTable = {
     description:
       'Active patients who are 25-36 months overdue for hygiene/recall and not scheduled',
     communication: null,
+    recalls: 'No recalls logged in the last 30 days',
     followUp: null,
   },
   'Missed/Cancelled': {

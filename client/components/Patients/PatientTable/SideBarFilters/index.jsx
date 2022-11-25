@@ -21,6 +21,7 @@ import FilterBodyDisplay from './FilterBodyDisplay';
 import { addFilter, removeFilter, removeAllFilters } from '../../../../reducers/patientTable';
 import fetchEntities from '../../../../thunks/fetchEntities/fetchEntities';
 import styles from './styles.scss';
+import { initialSentRecalls } from '../../Shared/helpers';
 
 const forms = (flags) => ({
   demographics: {
@@ -154,14 +155,22 @@ class SideBarFilters extends Component {
   }
 
   clearTags() {
+    const label = this.props.filterActiveSegmentLabel;
     if (Object.keys(this.props.filters).length === 0) return;
 
     this.props.removeAllFilters();
-    this.props.addFilter({
+    const filterObj = {
       segment: this.props.filters.segment,
       order: this.props.filters.order,
-    });
+    };
+
     Object.keys(this.props.filterForms).forEach((form) => this.props.reset(form));
+
+    if (label === '19-24 Months Late' || label === '25-36 Months Late') {
+      filterObj.sentRecalls = initialSentRecalls;
+      this.props.change('recalls', 'sentRecalls', initialSentRecalls);
+    }
+    this.props.addFilter(filterObj);
     this.props.setFilterCallback();
   }
 
@@ -188,7 +197,6 @@ class SideBarFilters extends Component {
           this.props.removeFilter(key);
         }
       });
-
       this.props.addFilter(parsedFilters);
       this.props.setFilterCallback(parsedFilters);
     }
@@ -264,6 +272,7 @@ SideBarFilters.propTypes = {
   ).isRequired,
   timezone: PropTypes.string.isRequired,
   values: PropTypes.objectOf(PropTypes.any).isRequired,
+  filterActiveSegmentLabel: PropTypes.string.isRequired,
 };
 
 SideBarFilters.defaultProps = { filters: new Map() };
@@ -281,12 +290,14 @@ const mapStateToProps = ({ patientTable, form, featureFlags, auth }) => {
     );
 
   const { ...filters } = patientTable.get('filters').toJS();
+  const filterActiveSegmentLabel = patientTable?.get('filterActiveSegmentLabel');
 
   return {
     timezone: auth.get('timezone'),
     filterForms,
     filters,
     flags,
+    filterActiveSegmentLabel,
   };
 };
 

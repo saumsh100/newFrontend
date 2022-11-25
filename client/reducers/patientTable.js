@@ -1,4 +1,3 @@
-
 import { fromJS, Map, List } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
 
@@ -26,6 +25,7 @@ export const SET_IS_FOLLOW_UPS_FORM_ACTIVE = `${reducer}/SET_IS_FOLLOW_UPS_FORM_
 export const SET_IS_RECALLS_FORM_ACTIVE = `${reducer}/SET_IS_RECALLS_FORM_ACTIVE`;
 
 export const SET_ACTIVE_PATIENT = `${reducer}/SET_ACTIVE_PATIENT`;
+export const SET_FILTER_ACTIVE_SEGMENT_LABEL = `${reducer}/SET_FILTER_ACTIVE_SEGMENT_LABEL`;
 
 /**
  * Actions
@@ -49,11 +49,12 @@ export const setIsFollowUpsFormActive = createAction(SET_IS_FOLLOW_UPS_FORM_ACTI
 export const setIsRecallsFormActive = createAction(SET_IS_RECALLS_FORM_ACTIVE);
 
 export const setActivePatient = createAction(SET_ACTIVE_PATIENT);
+export const setFilterActiveSegmentLabel = createAction(SET_FILTER_ACTIVE_SEGMENT_LABEL);
 
 /**
  * Initial State
  */
-export const createInitialPatientState = state =>
+export const createInitialPatientState = (state) =>
   fromJS({
     data: List(),
     filters: Map({
@@ -88,7 +89,7 @@ export const createInitialPatientState = state =>
     isRecallsFormActive: false,
 
     activePatient: null,
-
+    filterActiveSegmentLabel: null,
     ...state,
   });
 
@@ -99,12 +100,7 @@ export const initialState = createInitialPatientState();
  */
 export default handleActions(
   {
-    [SET_DATA](
-      state,
-      {
-        payload: { data, count },
-      },
-    ) {
+    [SET_DATA](state, { payload: { data, count } }) {
       return state.merge({
         data,
         count,
@@ -128,7 +124,7 @@ export default handleActions(
 
     [ADD_REMOVE_TIMELINE_FILTERS](state, { payload }) {
       const filters = state.get('timelineFilters');
-      const index = filters.findIndex(ev => ev === payload.type);
+      const index = filters.findIndex((ev) => ev === payload.type);
       return state.set(
         'timelineFilters',
         index === -1 ? filters.push(payload.type) : filters.delete(index),
@@ -170,6 +166,9 @@ export default handleActions(
 
     [SET_ACTIVE_PATIENT](state, { payload }) {
       return state.set('activePatient', payload);
+    },
+    [SET_FILTER_ACTIVE_SEGMENT_LABEL](state, { payload }) {
+      return state.set('filterActiveSegmentLabel', payload);
     },
   },
 

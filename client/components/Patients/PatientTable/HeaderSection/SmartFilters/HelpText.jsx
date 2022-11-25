@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import HelpTextLookupTable from './HelpTextLookupTable';
@@ -6,8 +5,8 @@ import styles from '../../styles.scss';
 
 export default function HelpText(props) {
   const { activeSegmentLabel } = props;
-  const { status, description, communication, followUp } = HelpTextLookupTable[activeSegmentLabel];
-
+  const { status, description, communication, followUp, recalls } =
+    HelpTextLookupTable[activeSegmentLabel];
   return (
     <div className={styles.helptext_container}>
       {status && (
@@ -21,6 +20,13 @@ export default function HelpText(props) {
         <div className={styles.container}>
           <div className={styles.helptext_subHeader}>Description</div>
           <div className={styles.data}>{description}</div>
+        </div>
+      )}
+
+      {recalls && (
+        <div className={styles.container}>
+          <div className={styles.helptext_subHeader}>Recalls</div>
+          <div className={styles.data}>{recalls}</div>
         </div>
       )}
 
