@@ -164,13 +164,14 @@ class ChatMessage extends Component {
   }
 
   selectChatOrCreate(patient) {
+    const chatState = this.props.isChatOpens ? tabsConstants.OPEN_TAB : tabsConstants.CLOSED_TAB;
     const selectChatCallback = async () => {
       if (!this.state.showMessageContainer) {
         this.toggleShowMessageContainer();
       }
       this.props.selectChatByPatientId(patient.ccId || patient.id);
     };
-    this.changeTab(tabsConstants.ALL_TAB, selectChatCallback);
+    this.changeTab(chatState, selectChatCallback);
   }
 
   receivedChatsPostUpdate(result) {
@@ -420,15 +421,20 @@ ChatMessage.propTypes = {
   setChatIsLoading: PropTypes.func.isRequired,
   setConversationIsLoading: PropTypes.func.isRequired,
   cancelToken: PropTypes.func.isRequired,
+  isChatOpens: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps({ apiRequests, chat }) {
+function mapStateToProps({ entities, apiRequests, chat }) {
   const wasChatsFetched =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('wasFetched');
   const chatsFetching =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('isFetching');
-
+  const chats = entities.getIn(['chats', 'models']);
+  const selectedChatId = chat.get('selectedChatId');
+  const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
+  const isChatOpens = selectedChat && selectedChat.isOpen;
   return {
+    isChatOpens,
     wasChatsFetched,
     chatsFetching,
     conversationIsLoading: chat.get('conversationIsLoading'),
