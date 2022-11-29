@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List, Map } from 'immutable';
@@ -29,8 +28,8 @@ class ServicesPractForm extends Component {
     if (practitioners.size === 0 || !practitionerIds) return null;
     const mappedPractitioners = practitioners
       .toArray()
-      .filter(practitioner => practitioner.isActive)
-      .map(practitioner => ({
+      .filter((practitioner) => practitioner.isActive)
+      .map((practitioner) => ({
         value: practitioner.get('id'),
         label: practitioner.getPrettyName(),
       }));
@@ -42,12 +41,14 @@ class ServicesPractForm extends Component {
           contentHeader
         />
         <div className={styles.servicesPractForm}>
-          <MultiSelect
-            onChange={this.handleChange}
-            options={mappedPractitioners}
-            placeholder="Select practitioners"
-            selected={this.state.selectedItems}
-          />
+          {practitionerIds !== null && (
+            <MultiSelect
+              onChange={this.handleChange}
+              options={mappedPractitioners}
+              placeholder="Select practitioners"
+              selected={practitionerIds}
+            />
+          )}
           <Button
             className={styles.saveButton}
             disabled={isEqual(this.state.selectedItems, this.props.practitionerIds)}

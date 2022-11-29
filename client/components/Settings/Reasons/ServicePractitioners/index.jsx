@@ -1,11 +1,17 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import ServicesPractForm from './ServicesPractForm';
 import Service from '../../../../entities/models/Service';
 
-const ServicePractitioners = ({ service, updateService, practitioners }) => {
+const ServicePractitioners = ({ service, updateService, practitioners, practitionerIds }) => {
+  const [practitionerId, setpractitionerId] = useState(null);
+  useEffect(() => {
+    setTimeout(() => {
+      setpractitionerId(practitionerIds);
+    }, 100);
+  }, [practitionerIds]);
+  
   const handleSubmit = (values) => {
     const alert = {
       success: {
@@ -26,7 +32,7 @@ const ServicePractitioners = ({ service, updateService, practitioners }) => {
       service={service}
       practitioners={practitioners}
       handleSubmit={handleSubmit}
-      practitionerIds={service.get('practitioners')}
+      practitionerIds={practitionerId}
       formName={`${service.get('id')}practitioners`}
     />
   ) : null;
