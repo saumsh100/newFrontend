@@ -391,6 +391,7 @@ class Users extends Component {
           active={editActive}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
+          bodyStyles={styles.editUserFormBody}
         >
           {this.state.editUserId && this.state.editPermissionId && (
             <EditUserForm
