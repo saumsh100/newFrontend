@@ -5,13 +5,7 @@ import styles from './styles.scss';
 
 export default function ToggleChatButton({ toggleChat, isChatOpen }) {
   return (
-    <div
-      className={styles.toggleChatWrapper}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.keyCode === 13 && toggleChat()}
-      onClick={toggleChat}
-    >
+    <div className={styles.toggleChatWrapper} role="button" tabIndex={0}>
       {isChatOpen ? (
         <StandardButton variant="primary" onClick={toggleChat} title="Close" icon="check" />
       ) : (

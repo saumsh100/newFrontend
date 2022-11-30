@@ -46,7 +46,7 @@ class MessageTextArea extends Component {
   }
 
   patientProfile = (patient) => {
-    this.props.push(`/patients/${patient.id}`);
+    this.props.push(`/patients/${patient?.id}`);
   };
 
   contactPoC() {
@@ -72,17 +72,16 @@ class MessageTextArea extends Component {
     const newMessage = `${textBoxValue.slice(0, caretPossition)}${
       url?.shortUrl
     }${textBoxValue.slice(caretPossition)}`;
-    this.props.change(`chatMessageForm_${chat.id}`, 'message', newMessage);
+    this.props.change(`chatMessageForm_${chat?.id}`, 'message', newMessage);
     this.formUrlDropdown?.current.props.clickToogle();
   }
 
   renderSendButton() {
     const { canSend, chat, sendingMessage } = this.props;
-
     const sendButtonProps = {
       className: canSend && !sendingMessage ? styles.sendIcon : styles.sendIconDisabled,
       onClick:
-        canSend && !sendingMessage ? () => this.props.submit(`chatMessageForm_${chat.id}`) : null,
+        canSend && !sendingMessage ? () => this.props.submit(`chatMessageForm_${chat?.id}`) : null,
     };
 
     return (
@@ -124,7 +123,7 @@ class MessageTextArea extends Component {
     } = this.props;
     if (!chat || isPoC === null) return null;
 
-    const hasPatient = patient && patient.id;
+    const hasPatient = patient?.id;
     const tooltipPlacement = 'top';
     const patientFirstName = hasPatient && capitalize(patient.firstName);
 
@@ -155,7 +154,7 @@ class MessageTextArea extends Component {
             <img src="/images/donna-poc.png" alt="Donna" className={styles.donnaImg} />
             <div className={styles.notPoC}>
               <p className={styles.infoTextNotPoC}>
-                Looks like <strong>{patient.firstName}</strong>, is not the{' '}
+                Looks like <strong>{patient?.firstName}</strong>, is not the{' '}
                 <Tooltip
                   trigger={['hover']}
                   overlay={this.renderHelper}
@@ -165,10 +164,10 @@ class MessageTextArea extends Component {
                   <span className={styles.pocHelper}>Point of Contact</span>
                 </Tooltip>{' '}
                 for their cell phone number. I think you are really trying to contact{' '}
-                <strong>{`${poc.firstName} ${poc.lastName}`}</strong> instead.
+                <strong>{`${poc?.firstName} ${poc?.lastName}`}</strong> instead.
               </p>
               <Button className={styles.pocButton} onClick={this.contactPoC}>
-                Contact {poc.firstName}
+                Contact {poc?.firstName}
               </Button>
             </div>
           </div>
@@ -199,8 +198,8 @@ class MessageTextArea extends Component {
             <Form
               destroyOnUnmount={false}
               ignoreSaveButton
-              key={`chatMessageForm_${chat.id}`}
-              form={`chatMessageForm_${chat.id}`}
+              key={`chatMessageForm_${chat?.id}`}
+              form={`chatMessageForm_${chat?.id}`}
               onSubmit={this.props.onSendMessage}
               data-test-id="chatMessageForm"
               className={styles.textWrapper}
@@ -321,10 +320,10 @@ MessageTextArea.defaultProps = {
 };
 
 function mapStateToProps(state, { chat = {} }) {
-  const values = getFormValues(`chatMessageForm_${chat.id}`)(state);
-  const patient = state.entities.getIn(['patients', 'models', chat.patientId]);
-  const phoneNumber = patient ? patient.get('cellPhoneNumber') : chat.patientPhoneNumber;
-  const isPoC = state.chat.get('isPoC') || !!(!patient && chat.patientPhoneNumber);
+  const values = getFormValues(`chatMessageForm_${chat?.id}`)(state);
+  const patient = state.entities.getIn(['patients', 'models', chat?.patientId]);
+  const phoneNumber = patient ? patient.get('cellPhoneNumber') : chat?.patientPhoneNumber;
+  const isPoC = state.chat.get('isPoC') || !!(!patient && chat?.patientPhoneNumber);
   const canSend = !!phoneNumber && !!(values && values.message) && isPoC;
   const error =
     (!patient && 'Select a patient above') ||
