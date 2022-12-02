@@ -1,4 +1,3 @@
-
 export const caProvinces = [
   { value: 'AB' },
   { value: 'BC' },
@@ -398,8 +397,7 @@ export const languages = [
     value: 'Ojibwe, Ojibwa',
   },
   {
-    value:
-      'Old Church Slavonic, Church Slavic, Church Slavonic, Old Bulgarian, Old Slavonic',
+    value: 'Old Church Slavonic, Church Slavic, Church Slavonic, Old Bulgarian, Old Slavonic',
   },
   {
     value: 'Oromo',
@@ -602,7 +600,6 @@ export const usStates = [
   { value: 'Connecticut' },
   { value: 'Delaware' },
   { value: 'District of Columbia' },
-  { value: 'Federated States of Micronesia' },
   { value: 'Florida' },
   { value: 'Georgia' },
   { value: 'Guam' },
@@ -615,7 +612,7 @@ export const usStates = [
   { value: 'Kentucky' },
   { value: 'Louisiana' },
   { value: 'Maine' },
-  { value: 'Marshall Islands' },
+  { value: 'Maryland' },
   { value: 'Massachusetts' },
   { value: 'Michigan' },
   { value: 'Minnesota' },
@@ -634,7 +631,6 @@ export const usStates = [
   { value: 'Ohio' },
   { value: 'Oklahoma' },
   { value: 'Oregon' },
-  { value: 'Palau' },
   { value: 'Pennsylvania' },
   { value: 'Puerto Rico' },
   { value: 'Rhode Island' },
