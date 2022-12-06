@@ -42,6 +42,7 @@ import ToHeader from './ToHeader';
 import DesktopSkeleton from './ToHeader/DesktopSkeleton';
 import ModuleError from '../ModuleError';
 import ErrorPage from '../ErrorPage';
+import { httpClient } from '../../util/httpClient';
 
 const patientSearchTheme = {
   container: styles.patientSearchClass,
@@ -164,14 +165,25 @@ class ChatMessage extends Component {
   }
 
   selectChatOrCreate(patient) {
-    const chatState = this.props.isChatOpens ? tabsConstants.OPEN_TAB : tabsConstants.CLOSED_TAB;
     const selectChatCallback = async () => {
       if (!this.state.showMessageContainer) {
         this.toggleShowMessageContainer();
       }
       this.props.selectChatByPatientId(patient.ccId || patient.id);
     };
-    this.changeTab(chatState, selectChatCallback);
+    const patientId = patient.ccId || patient.id;
+    httpClient()
+      .get(`/api/patients/${patientId}/chat`)
+      .then(({ data: { chatId } }) => {
+        console.log('chatId=', chatId);
+        Promise.resolve(this.props.getChatEntity(chatId)).then((selectedChat) => {
+          if (selectedChat) {
+            const { isOpen } = selectedChat.toJS();
+            const chatState = isOpen ? tabsConstants.OPEN_TAB : tabsConstants.CLOSED_TAB;
+            this.changeTab(chatState, selectChatCallback);
+          }
+        });
+      });
   }
 
   receivedChatsPostUpdate(result) {
@@ -421,20 +433,14 @@ ChatMessage.propTypes = {
   setChatIsLoading: PropTypes.func.isRequired,
   setConversationIsLoading: PropTypes.func.isRequired,
   cancelToken: PropTypes.func.isRequired,
-  isChatOpens: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps({ entities, apiRequests, chat }) {
+function mapStateToProps({ apiRequests, chat }) {
   const wasChatsFetched =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('wasFetched');
   const chatsFetching =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('isFetching');
-  const chats = entities.getIn(['chats', 'models']);
-  const selectedChatId = chat.get('selectedChatId');
-  const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
-  const isChatOpens = selectedChat && selectedChat.isOpen;
   return {
-    isChatOpens,
     wasChatsFetched,
     chatsFetching,
     conversationIsLoading: chat.get('conversationIsLoading'),
