@@ -115,7 +115,6 @@ class PractitionerBasicData extends Component {
                 { value: 'Dentist' },
                 { value: 'Hygienist' },
                 { value: 'Specialist' },
-                { value: '-' },
               ]}
             />
             <div className={styles.practFormContainer_practHidden}>
