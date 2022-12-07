@@ -21,6 +21,10 @@ const RequestsSchema = {
   sentRecallId: null,
   appointmentId: null,
   patientId: null,
+  onWaitlist: null,
+  availableTimes: null,
+  preferences: null,
+  daysOfTheWeek: null,
 };
 
 export default class Requests extends createModel(RequestsSchema, 'Requests') {

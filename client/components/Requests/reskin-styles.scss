@@ -197,3 +197,23 @@
 .hidden {
   display: none;
 }
+
+.waitlistDetails {
+  display: flex;
+  gap: 8px;
+}
+.joinedWaitlist {
+  align-items: center;
+  background: $super-white;
+  border: 1px solid $color-lavender-200;
+  border-radius: 44px;
+  box-shadow: 1px 1px 4px rgb(222 213 246 / 10%);
+  color: $color-lavender-500;
+  font-size: $x-small-size;
+  font-weight: $medium-weight;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  padding: 2px 6px;
+  text-align: center;
+  width: 85px;
+}

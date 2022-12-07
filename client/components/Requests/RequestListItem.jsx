@@ -42,6 +42,7 @@ class RequestListItem extends Component {
           requestCreatedAt={request.createdAt}
           birthDate={patientUser.get('birthDate')}
           requestingUser={checkIfUsersEqual(patientUser, requestingUser)}
+          onWaitlist={request.onWaitlist}
         />
       </ListItem>
     );
@@ -107,6 +108,8 @@ class RequestListItem extends Component {
             acceptRequest={this.onClickConfirm}
             rejectRequest={this.onClickRemove}
             requestingUser={checkIfUsersEqual(patientUser, requestingUser)}
+            preferences={request.preferences}
+            availableTimes={request.availableTimes}
           />,
         ]}
         preferPlace={popoverRight || 'left'}

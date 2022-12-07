@@ -13,12 +13,20 @@ const RequestData = ({
   requestingUser,
   birthDate,
   timezone,
+  onWaitlist,
 }) => {
   const age = birthDate ? `, ${getTodaysDate(timezone).diff(birthDate, 'years')}` : '';
 
   return (
     <div className={styles.requestData}>
-      <div className={styles.requestData__time}>{time}</div>
+      <div className={styles.waitlistDetails}>
+        <div className={styles.requestData__time}>{time}</div>
+        {onWaitlist === true && (
+          <button type="button" className={styles.joinedWaitlist}>
+            Joined Waitlist
+          </button>
+        )}
+      </div>
       <div className={styles.requestData__details}>
         <div className={styles.requestData__nameAge}>
           <div className={styles.requestData__name}>
@@ -53,6 +61,7 @@ RequestData.propTypes = {
   time: PropTypes.string.isRequired,
   birthDate: PropTypes.string.isRequired,
   timezone: PropTypes.string.isRequired,
+  onWaitlist: PropTypes.bool.isRequired,
 };
 
 RequestData.defaultProps = { requestingUser: null };

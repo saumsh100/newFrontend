@@ -1,4 +1,5 @@
 @import '../../../styles/reskin-font.scss';
+@import '../../../styles/ui-reskin.scss';
 
 $primary-button-color: $color-lavender-500;
 $primary-button-color-hover: $color-lavender-550;
@@ -103,6 +104,8 @@ $secondary-button-border-color: $color-lavender-500;
 
 .subHeader {
   color: $color-purple-400;
+  font-size: $small-size;
+  font-weight: $medium-weight;
   padding-bottom: 5px;
 }
 
@@ -242,4 +245,9 @@ $secondary-button-border-color: $color-lavender-500;
 .RequestButton {
   margin-left: 12px;
   padding: 6px 8px;
+}
+.waitlistDataIcon {
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 2px;
 }
