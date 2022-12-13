@@ -311,6 +311,10 @@ class ChatMessage extends Component {
     });
 
     const container = classnames(styles.leftSplit, { [styles.hideContainer]: showPatientInfo });
+    const compareChatId =
+      this.props.match.params.chatId &&
+      this.props.selectedChat &&
+      this.props.match.params.chatId === this.props.selectedChat.id;
 
     return (
       <SBody>
@@ -330,7 +334,7 @@ class ChatMessage extends Component {
                   />
                 )}
               </SHeader>
-              {!conversationIsLoading ? (
+              {!conversationIsLoading && compareChatId  ? (
                 <MessageContainer
                   setTab={this.changeTab}
                   isNewconversation={isNewconversation}
@@ -411,6 +415,7 @@ class ChatMessage extends Component {
 ChatMessage.defaultProps = {
   match: { params: { chatId: null } },
   chatsFetching: false,
+  selectedChat: null,
 };
 
 ChatMessage.propTypes = {
@@ -433,18 +438,23 @@ ChatMessage.propTypes = {
   setChatIsLoading: PropTypes.func.isRequired,
   setConversationIsLoading: PropTypes.func.isRequired,
   cancelToken: PropTypes.func.isRequired,
+  selectedChat: PropTypes.shape({ id: PropTypes.string }),
 };
 
-function mapStateToProps({ apiRequests, chat }) {
+function mapStateToProps({ entities, apiRequests, chat }) {
+  const chats = entities.getIn(['chats', 'models']);
+  const selectedChatId = chat.get('selectedChatId');
   const wasChatsFetched =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('wasFetched');
   const chatsFetching =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('isFetching');
+  const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
   return {
     wasChatsFetched,
     chatsFetching,
     conversationIsLoading: chat.get('conversationIsLoading'),
     cancelToken: chat.get('cancelToken'),
+    selectedChat,
   };
 }
 
