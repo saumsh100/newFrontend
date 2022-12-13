@@ -83,12 +83,7 @@ DonnaContainer.propTypes = {
   isFeatureFlagOn: PropTypes.bool.isRequired,
 };
 
-const Settings = ({
-  useReminderWorkflowService,
-  useFormsFromFormService,
-  useReviewService,
-  useRecallService,
-}) => {
+const Settings = ({ useReminderWorkflowService, useReviewService, useRecallService }) => {
   const isFeatureFlagOn = useReminderWorkflowService || useReviewService || useRecallService;
   return (
     <DocumentTitle title="CareCru | Settings">
@@ -112,12 +107,7 @@ const Settings = ({
             />
             <Route path={base('/reasons')} component={Routes.reasons} />
             <Route path={base('/practitioners')} component={Routes.practitioners} />
-            <Route
-              path={base('/forms')}
-              render={(props) =>
-                !useFormsFromFormService ? <Routes.forms {...props} /> : <Forms {...props} />
-              }
-            />
+            <Route path={base('/forms')} render={(props) => <Forms {...props} />} />
             <Route exact path={base()} component={() => <Redirect to={practiceBase()} />} />
           </Container>
         </Switch>
@@ -146,9 +136,6 @@ function mapStateToProps({ featureFlags }) {
         featureFlags.get('flags'),
         'use-templates-from-workflow-service-recall',
       );
-  const useFormsFromFormService = isDev
-    ? true
-    : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-forms-from-form-service');
   const useCCPReSkinning = isDev
     ? true
     : isFeatureEnabledSelector(featureFlags.get('flags'), 'use-ccp-reskinning-ui');
@@ -157,7 +144,6 @@ function mapStateToProps({ featureFlags }) {
     useReminderWorkflowService,
     useRecallService,
     useReviewService,
-    useFormsFromFormService,
     useCCPReSkinning,
   };
 }
@@ -166,7 +152,6 @@ Settings.propTypes = {
   useReminderWorkflowService: PropTypes.bool.isRequired,
   useRecallService: PropTypes.bool.isRequired,
   useReviewService: PropTypes.bool.isRequired,
-  useFormsFromFormService: PropTypes.bool.isRequired,
   useCCPReSkinning: PropTypes.bool.isRequired,
 };
 
