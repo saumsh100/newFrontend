@@ -341,11 +341,14 @@ class AddNewAppointment extends Component {
       reinitializeState,
       unit,
       currentDate,
+      openAcceptAppt,
+      isAddNewAppointment,
     } = this.props;
 
     const remoteButtonProps = {
       onClick: reinitializeState,
       form: formName,
+      disabled: openAcceptAppt && !isAddNewAppointment,
     };
 
     let title =
@@ -400,6 +403,7 @@ class AddNewAppointment extends Component {
               reset={this.props.reset}
               timezone={this.props.timezone}
               suggestionList={this.state.suggestionList}
+              disabled={openAcceptAppt && !isAddNewAppointment}
             />
           </SBody>
           <SFooter className={styles.footer}>
@@ -502,6 +506,8 @@ AddNewAppointment.propTypes = {
   timezone: PropTypes.string.isRequired,
   unit: PropTypes.number,
   updateEntityRequest: PropTypes.func.isRequired,
+  isAddNewAppointment: PropTypes.bool,
+  openAcceptAppt: PropTypes.bool,
 };
 
 AddNewAppointment.defaultProps = {
@@ -511,6 +517,8 @@ AddNewAppointment.defaultProps = {
   selectedAppointment: null,
   redirect: {},
   appFormValues: null,
+  openAcceptAppt: false,
+  isAddNewAppointment: true,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewAppointment);

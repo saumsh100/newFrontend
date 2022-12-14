@@ -251,6 +251,10 @@
   padding: 10px 20px;
   width: 100%;
 
+  &.disablePatientContainer {
+    cursor: not-allowed !important;
+  }
+
   &_name {
     composes: fontMedium from '../../../styles/fonts.scss';
     font-size: 15px;

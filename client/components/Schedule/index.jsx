@@ -272,11 +272,29 @@ class ScheduleComponent extends PureComponent {
     let displayTitle = this.state.sendEmail ? 'Send Confirmation Email?' : sameApptTitle;
     const noNextAppt = !!selectedAppointment && !selectedAppointment.nextAppt;
     const showApptSummary = this.state.showApptSummary || noNextAppt;
-    if (showApptSummary) {
-      displayTitle = 'Accept Appointment';
-    }
     let displayModalComponent = null;
     let actions = [];
+    if (showApptSummary) {
+      displayTitle = 'Accept Appointment';
+      actions = [
+        {
+          label: 'Cancel',
+          onClick: this.reinitializeState,
+          component: Button,
+          props: { border: 'blue' },
+        },
+        {
+          label: 'Save',
+          onClick: this.reinitializeState,
+          component: RemoteSubmitButton,
+          props: {
+            color: 'blue',
+            removePristineCheck: true,
+            disabled: true,
+          },
+        },
+      ];
+    }
 
     if (selectedAppointment && (selectedAppointment.nextAppt || !apptWrite)) {
       displayModalComponent = (
@@ -384,7 +402,6 @@ class ScheduleComponent extends PureComponent {
     if (rejected === true) {
       this.setState({ showModal: true });
     }
-
     return (
       <div className={styles.rowMainContainer}>
         <div className={styles.dayViewContainer}>
@@ -457,7 +474,34 @@ class ScheduleComponent extends PureComponent {
                     />
                   </Modal>
                 ) : null}
-                {allFetched && (!isAddNewAppointment || createNewPatient) ? (
+                {allFetched && !isAddNewAppointment ? (
+                  <Modal
+                    active={showDialog}
+                    onEscKeyDown={this.reinitializeState}
+                    onOverlayClick={this.reinitializeState}
+                    custom
+                  >
+                    <AddNewAppointment
+                      formName={formName}
+                      chairs={filterChairs}
+                      practitioners={filterPractitioners}
+                      patients={patients.get('models')}
+                      reinitializeState={this.reinitializeState}
+                      setPatientSearched={this.setPatientSearched}
+                      patientSearched={this.state.patientSearched}
+                      unit={unit}
+                      currentDate={currentDate}
+                      showInput={this.state.showInput}
+                      setShowInput={this.setShowInput}
+                      openAcceptAppt
+                      isAddNewAppointment={false}
+                      selectedAppointment={this.props.selectedAppointment}
+                      setCreatingPatient={this.props.setCreatingPatient}
+                      timezone={this.props.timezone}
+                    />
+                  </Modal>
+                ) : null}
+                {allFetched && createNewPatient ? (
                   <DialogBox
                     title={displayTitle}
                     type={createNewPatient ? 'small' : 'medium'}

@@ -1,20 +1,25 @@
-
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
 import { Avatar, Icon } from '../../library';
 import styles from './styles.scss';
 
 export default function DisplaySearchedPatient(props) {
-  const { patient } = props;
+  const { patient, disabled } = props;
 
   return (
     <div>
       {patient ? (
         <div
-          className={styles.patientContainer}
+          className={classNames(styles.patientContainer, {
+            [styles.disablePatientContainer]: disabled,
+          })}
           onClick={() => {
-            props.setShowInput(true);
-            props.setPatientSearched(null);
+            if (!disabled) {
+              props.setShowInput(true);
+              props.setPatientSearched(null);
+            }
           }}
         >
           <Avatar user={patient} size="sm" />
@@ -30,4 +35,8 @@ export default function DisplaySearchedPatient(props) {
   );
 }
 
-DisplaySearchedPatient.propTypes = { patient: PropTypes.object };
+DisplaySearchedPatient.propTypes = { patient: PropTypes.object, disabled: PropTypes.bool };
+
+DisplaySearchedPatient.defaultProps = {
+  disabled: false,
+};

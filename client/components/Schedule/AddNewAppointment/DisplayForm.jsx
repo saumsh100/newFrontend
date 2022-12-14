@@ -120,6 +120,7 @@ class DisplayForm extends Component {
       currentDate,
       patientSearched,
       timezone,
+      disabled,
     } = this.props;
 
     const initDuration = 60;
@@ -240,6 +241,7 @@ class DisplayForm extends Component {
           setPatientSearched={this.props.setPatientSearched}
           setShowInput={this.props.setShowInput}
           focusAutoSuggest={this.focusAutoSuggest}
+          disabled={disabled}
         />
 
         <div className={searchStyles}>
@@ -257,6 +259,7 @@ class DisplayForm extends Component {
             validate={[this.validatePatient]}
             onBlurFunction={() => this.props.setShowInput(false)}
             data-test-id="patientSelected"
+            disabled={disabled}
           />
         </div>
         {this.state.validatePatient && this.props.suggestionList?.length === 0 && (
@@ -282,6 +285,7 @@ class DisplayForm extends Component {
           handleStartTimeChange={this.props.handleStartTimeChange}
           handleEndTimeChange={this.props.handleEndTimeChange}
           timezone={timezone}
+          disabled={disabled}
         />
       </Form>
     );
@@ -312,10 +316,12 @@ DisplayForm.propTypes = {
   unit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   timezone: PropTypes.string.isRequired,
   suggestionList: PropTypes.arrayOf(PropTypes.any),
+  disabled: PropTypes.bool,
 };
 
 DisplayForm.defaultProps = {
   selectedAppointment: null,
   patientSearched: '',
   suggestionList: [],
+  disabled: false,
 };

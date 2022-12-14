@@ -27,6 +27,7 @@ function AppointmentForm(props) {
     handleStartTimeChange,
     timezone,
     date,
+    disabled,
   } = props;
 
   const [actualDate, setActualDate] = useState(
@@ -122,6 +123,7 @@ function AppointmentForm(props) {
             theme={inputTheme}
             timezone={timezone}
             onChange={onChange}
+            disabled={disabled}
           />
         </Col>
         <Col xs={6} className={styles.col}>
@@ -140,6 +142,7 @@ function AppointmentForm(props) {
               validateValue={validateTimeField}
               onChange={(e, value) => handleStartTimeChange(formatTimeField(value))}
               theme={dropDownTheme}
+              disabled={disabled}
             />
           </Col>
           <Col xs={1} />
@@ -157,6 +160,7 @@ function AppointmentForm(props) {
               validateValue={validateTimeField}
               onChange={(e, value) => handleEndTimeChange(formatTimeField(value))}
               theme={dropDownTheme}
+              disabled={disabled}
             />
           </Col>
         </Col>
@@ -172,6 +176,7 @@ function AppointmentForm(props) {
             data-test-id="chairId"
             theme={dropDownTheme}
             search="label"
+            disabled={disabled}
           />
         </Col>
         <Col xs={6} className={styles.col}>
@@ -186,6 +191,7 @@ function AppointmentForm(props) {
               onChange={(e, value) => handleUnitChange(value)}
               data-test-id="unit"
               theme={inputTheme}
+              disabled={disabled}
             />
           </Col>
           <Col xs={1} />
@@ -199,6 +205,7 @@ function AppointmentForm(props) {
               onChange={(e, value) => handleDurationChange(value)}
               data-test-id="duration"
               theme={inputTheme}
+              disabled={disabled}
             />
           </Col>
         </Col>
@@ -215,6 +222,7 @@ function AppointmentForm(props) {
             className={styles.dropDownWrapper}
             theme={dropDownTheme}
             search="label"
+            disabled={disabled}
           />
         </Col>
 
@@ -228,6 +236,7 @@ function AppointmentForm(props) {
               data-test-id="isPatientConfirmed"
               id="isPatientConfirmed"
               labelClassNames={styles.checkBox}
+              disabled={disabled}
             />
             <Field
               component="Checkbox"
@@ -237,6 +246,7 @@ function AppointmentForm(props) {
               data-test-id="isCancelled"
               id="isCancelled"
               labelClassNames={styles.checkBox}
+              disabled={disabled}
             />
           </div>
         </Col>
@@ -250,6 +260,7 @@ function AppointmentForm(props) {
             rows={9}
             data-test-id="note"
             classStyles={styles.textArea}
+            disabled={disabled}
           />
         </Col>
       </Row>
@@ -274,8 +285,10 @@ AppointmentForm.propTypes = {
   unit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   date: PropTypes.oneOfType([PropTypes.instanceOf(DateTimeObj), PropTypes.string]).isRequired,
   timezone: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
 };
 
 AppointmentForm.defaultProps = {
   unit: 15,
+  disabled: false,
 };
