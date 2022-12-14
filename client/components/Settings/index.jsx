@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { Card } from '../library';
 import SettingsSubNav from './SettingsSubNav';
 import styles from './styles.scss';
+import { fetchEntities } from '../../thunks/fetchEntities';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-export default function Settings(props) {
+ function Settings(props) {
   const { location, children, users } = props;
 
   let showNav = null;
+  useEffect(() => {
+    props.fetchEntities({
+      key: 'services',
+      join: ['practitioners'],
+    });
+  }, []);
 
   if (
     location.pathname === '/settings/reasons' ||
@@ -46,3 +55,15 @@ Settings.propTypes = {
   children: PropTypes.element.isRequired,
   users: PropTypes.instanceOf(Map).isRequired,
 };
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      fetchEntities,
+    },
+    dispatch,
+  );
+}
+const enhance = connect(null, mapDispatchToProps);
+
+export default enhance(Settings);
