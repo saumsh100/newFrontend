@@ -21,11 +21,7 @@ const RequestData = ({
     <div className={styles.requestData}>
       <div className={styles.waitlistDetails}>
         <div className={styles.requestData__time}>{time}</div>
-        {onWaitlist === true && (
-          <button type="button" className={styles.joinedWaitlist}>
-            Joined Waitlist
-          </button>
-        )}
+        {onWaitlist && <div className={styles.joinedWaitlist}>Joined Waitlist</div>}
       </div>
       <div className={styles.requestData__details}>
         <div className={styles.requestData__nameAge}>

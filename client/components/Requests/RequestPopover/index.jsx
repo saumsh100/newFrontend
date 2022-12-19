@@ -158,9 +158,10 @@ class RequestPopover extends Component {
       showButton,
       timezone,
     } = this.props;
-
-    const preferedTimeRaw =request.availableTimes &&  request.availableTimes.toArray();
-    
+    const preferedTimeRaw =
+      request.availableTimes && request.availableTimes.size
+        ? request.availableTimes.toArray()
+        : request.availableTimes;
     const preferedDaySlot = request.preferences
       ? request.preferences.size
         ? Object.fromEntries(request.preferences)

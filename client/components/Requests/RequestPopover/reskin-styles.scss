@@ -246,6 +246,15 @@ $secondary-button-border-color: $color-lavender-500;
   margin-left: 12px;
   padding: 6px 8px;
 }
+.waitlistData {
+  align-items: center;
+  color: $color-purple-600;
+  display: flex;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  margin-bottom: 8px;
+  width: max-content;
+}
 .waitlistDataIcon {
   font-size: 12px;
   font-weight: 400;

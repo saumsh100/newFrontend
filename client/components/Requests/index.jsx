@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import classNames from 'classnames';
@@ -7,6 +7,18 @@ import RequestList from './RequestList';
 import RequestsModel from '../../entities/models/Request';
 import { Card, CardHeader } from '../library';
 import styles from '../Dashboard/styles';
+import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
 
 const Requests = (props) => {
   const {
@@ -24,6 +36,20 @@ const Requests = (props) => {
     isLoaded,
     redirect,
   } = props;
+
+  const prevAmount = usePrevious({ sortedRequests });
+  document.addEventListener('visibilitychange', () => {
+    if (
+      document.visibilityState === 'visible' &&
+      (prevAmount.sortedRequests.length !== sortedRequests.length)
+    ) {
+      props.fetchEntitiesRequest({
+        id: 'dashRequests',
+        key: 'requests',
+        join: ['service', 'patientUser', 'requestingPatientUser', 'practitioner'],
+      });
+    }
+  });
 
   let requestHeaderClassNames = styles.requestHeader;
   if (disableHeader) {
@@ -65,16 +91,25 @@ const Requests = (props) => {
           />
         </div>
       )}
-      <div className={styles.requestBody}>{isLoaded && display}</div>
+      <div className={styles.requestBody}> {isLoaded && display}</div>
     </Card>
   );
 };
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+    },
+    dispatch,
+  );
+}
 
 Requests.propTypes = {
   disableHeader: PropTypes.bool,
   isLoaded: PropTypes.bool,
   noBorder: PropTypes.bool,
   patientUsers: PropTypes.instanceOf(Map),
+  fetchEntitiesRequest: PropTypes.func.isRequired,
   popoverRight: PropTypes.string,
   practitioners: PropTypes.instanceOf(Map),
   redirect: PropTypes.shape({
@@ -89,5 +124,6 @@ Requests.propTypes = {
   runAnimation: PropTypes.bool,
   services: PropTypes.instanceOf(Map),
 };
+const enhance = connect(null, mapDispatchToProps);
 
-export default Requests;
+export default enhance(Requests);
