@@ -78,7 +78,7 @@ $secondary-button-border-color: $color-lavender-500;
 .body {
   height: auto;
   max-height: 350px;
-  max-width: 285px;
+  max-width: 272px;
   min-height: 200px;
   padding: 15px;
 }
@@ -129,6 +129,7 @@ $secondary-button-border-color: $color-lavender-500;
   font-size: $medium-size;
   font-weight: 500;
   margin-bottom: 8px;
+  width: max-content;
   &_note {
     max-height: 40px;
     overflow: auto;
