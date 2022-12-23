@@ -13,6 +13,7 @@ import {
   SET_SCHEDULE_VIEW,
   CREATE_NEW_PATIENT,
   REJECT,
+  SET_IS_SELECT_APPOINTMENT_DBCLICK,
 } from '../constants';
 
 export const setMergingPatient = createAction(SET_MERGING);
@@ -28,3 +29,4 @@ export const setSyncingWithPMS = createAction(SET_SYNCING);
 export const setScheduleView = createAction(SET_SCHEDULE_VIEW);
 export const setCreatingPatient = createAction(CREATE_NEW_PATIENT);
 export const setReject = createAction(REJECT);
+export const setIsSelectAppointmentDbClick = createAction(SET_IS_SELECT_APPOINTMENT_DBCLICK);

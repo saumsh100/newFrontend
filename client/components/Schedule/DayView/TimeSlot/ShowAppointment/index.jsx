@@ -7,6 +7,8 @@ import { push } from 'connected-react-router';
 import classNames from 'classnames';
 import { differenceInMinutes } from 'date-fns';
 import { getOrCreateChatForPatient } from '../../../../../thunks/chat';
+import { setIsSelectAppointmentDbClick } from '../../../../../actions/schedule';
+
 import { Icon, Button } from '../../../../library';
 import AppointmentInfo from '../../../../library/AppointmentPopover/AppointmentInfo';
 import {
@@ -172,7 +174,10 @@ class ShowAppointment extends Component {
       >
         <Button
           onClick={this.togglePopover}
-          onDoubleClick={this.editAppointment}
+          onDoubleClick={() => {
+            this.props.setIsSelectAppointmentDbClick(true);
+            this.editAppointment();
+          }}
           className={classNames(
             styles.appointmentContainer,
             styles[`hoverStyle-${appStyle.iconColor}`],
@@ -235,6 +240,7 @@ class ShowAppointment extends Component {
 ShowAppointment.propTypes = {
   appointment: PropTypes.shape(appointmentShape).isRequired,
   selectAppointment: PropTypes.func.isRequired,
+  setIsSelectAppointmentDbClick: PropTypes.func.isRequired,
   selectedAppointment: PropTypes.shape({ id: PropTypes.string }),
   scheduleView: PropTypes.string.isRequired,
   displayDurationHeight: PropTypes.number.isRequired,
@@ -307,6 +313,7 @@ const mapDispatchToProps = (dispatch) =>
     {
       push,
       getOrCreateChatForPatient,
+      setIsSelectAppointmentDbClick,
     },
     dispatch,
   );

@@ -15,6 +15,7 @@ import {
   SET_SCHEDULE_VIEW,
   CREATE_NEW_PATIENT,
   REJECT,
+  SET_IS_SELECT_APPOINTMENT_DBCLICK,
 } from '../constants';
 
 const initialState = fromJS({
@@ -41,6 +42,7 @@ const initialState = fromJS({
   },
   createNewPatient: false,
   reject: false,
+  isSelectedAppointmentDbClick: false,
 });
 
 export default handleActions(
@@ -61,6 +63,9 @@ export default handleActions(
     [SELECT_APPOINTMENT](state, action) {
       const appointment = action.payload;
       return state.set('selectedAppointment', appointment);
+    },
+    [SET_IS_SELECT_APPOINTMENT_DBCLICK](state, action) {
+      return state.set('isSelectedAppointmentDbClick', action?.payload);
     },
 
     [REJECT_APPOINTMENT](state, action) {

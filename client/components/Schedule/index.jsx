@@ -31,6 +31,7 @@ import AssignPatientToChatDialog from '../Patients/AssignPatientToChatDialog';
 import { selectAppointmentShape, practitionerShape } from '../library/PropTypeShapes';
 import styles from './reskin-styles.scss';
 import RejectAppointment from './RejectAppointment';
+import { setIsSelectAppointmentDbClick } from '../../actions/schedule';
 
 class ScheduleComponent extends PureComponent {
   constructor(props) {
@@ -219,6 +220,7 @@ class ScheduleComponent extends PureComponent {
       showApptSummary: false,
       showModal: false,
     });
+    this.props.setIsSelectAppointmentDbClick(false);
   }
 
   closeAssignPatientModal() {
@@ -247,6 +249,7 @@ class ScheduleComponent extends PureComponent {
       chairsFetched,
       accountsFetched,
       apptWrite,
+      isdbEditClicked,
     } = this.props;
 
     const { addNewAppointment, showSchedule, lastSummaryRequest } = this.state;
@@ -402,6 +405,7 @@ class ScheduleComponent extends PureComponent {
     if (rejected === true) {
       this.setState({ showModal: true });
     }
+
     return (
       <div className={styles.rowMainContainer}>
         <div className={styles.dayViewContainer}>
@@ -474,7 +478,21 @@ class ScheduleComponent extends PureComponent {
                     />
                   </Modal>
                 ) : null}
-                {allFetched && !isAddNewAppointment ? (
+                {allFetched && (!isAddNewAppointment || createNewPatient) && !isdbEditClicked ? (
+                  <DialogBox
+                    title={displayTitle}
+                    type={createNewPatient ? 'small' : 'medium'}
+                    actions={actions}
+                    active={showDialog}
+                    onEscKeyDown={this.reinitializeState}
+                    onOverlayClick={
+                      createNewPatient ? this.setCreatingPatient : this.reinitializeState
+                    }
+                  >
+                    {displayModalComponent}
+                  </DialogBox>
+                ) : null}
+                {allFetched && !isAddNewAppointment && isdbEditClicked ? (
                   <Modal
                     active={showDialog}
                     onEscKeyDown={this.reinitializeState}
@@ -500,20 +518,6 @@ class ScheduleComponent extends PureComponent {
                       timezone={this.props.timezone}
                     />
                   </Modal>
-                ) : null}
-                {allFetched && createNewPatient ? (
-                  <DialogBox
-                    title={displayTitle}
-                    type={createNewPatient ? 'small' : 'medium'}
-                    actions={actions}
-                    active={showDialog}
-                    onEscKeyDown={this.reinitializeState}
-                    onOverlayClick={
-                      createNewPatient ? this.setCreatingPatient : this.reinitializeState
-                    }
-                  >
-                    {displayModalComponent}
-                  </DialogBox>
                 ) : null}
               </SBody>
             </SContainer>
@@ -572,6 +576,8 @@ ScheduleComponent.propTypes = {
   timezone: PropTypes.string.isRequired,
   apptWrite: PropTypes.bool.isRequired,
   setReject: PropTypes.func.isRequired,
+  isdbEditClicked: PropTypes.bool,
+  setIsSelectAppointmentDbClick: PropTypes.func.isRequired,
 };
 
 ScheduleComponent.defaultProps = {
@@ -584,12 +590,14 @@ ScheduleComponent.defaultProps = {
   events: null,
   selectedAppointment: null,
   patients: null,
+  isdbEditClicked: false,
 };
 
-const mapStateToProps = ({ router, auth }) => ({
+const mapStateToProps = ({ router, auth, schedule }) => ({
   router,
   timezone: auth.get('timezone'),
   apptWrite: !nonApptWritePMS(auth.get('adapterType')),
+  isdbEditClicked: schedule.get('isSelectedAppointmentDbClick'),
 });
 
 const mapActionsToProps = (dispatch) =>
@@ -597,6 +605,7 @@ const mapActionsToProps = (dispatch) =>
     {
       push,
       reset,
+      setIsSelectAppointmentDbClick,
     },
     dispatch,
   );
