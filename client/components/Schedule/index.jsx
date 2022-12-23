@@ -277,7 +277,7 @@ class ScheduleComponent extends PureComponent {
     const showApptSummary = this.state.showApptSummary || noNextAppt;
     let displayModalComponent = null;
     let actions = [];
-    if (showApptSummary) {
+    if (showApptSummary && isdbEditClicked) {
       displayTitle = 'Accept Appointment';
       actions = [
         {
@@ -298,7 +298,9 @@ class ScheduleComponent extends PureComponent {
         },
       ];
     }
-
+    if (showApptSummary) {
+      displayTitle = 'Accept Appointment';
+    }
     if (selectedAppointment && (selectedAppointment.nextAppt || !apptWrite)) {
       displayModalComponent = (
         <ConfirmAppointmentRequest
