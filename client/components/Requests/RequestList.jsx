@@ -154,7 +154,7 @@ class RequestList extends Component {
   }
 
   renderRequestList() {
-    const { sortedRequests, services, patientUsers, practitioners, popoverRight } = this.props;
+    const { sortedRequests, services, patientUsers, practitioners, popoverRight, tab } = this.props;
     const urlParams = new URLSearchParams(window.location.search);
     const selectedRequest = urlParams.get('selectedRequest');
 
@@ -190,6 +190,7 @@ class RequestList extends Component {
               openRequest={this.openRequest}
               popoverRight={popoverRight}
               timezone={this.props.timezone}
+              tab={tab}
             />
           );
         })}
@@ -233,6 +234,7 @@ RequestList.propTypes = {
   timezone: PropTypes.string.isRequired,
   setReject: PropTypes.func.isRequired,
   rejectAppointment: PropTypes.func.isRequired,
+  tab: PropTypes.string.isRequired,
 };
 
 RequestList.defaultProps = {

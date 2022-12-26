@@ -155,6 +155,7 @@ class AppsRequestsContainer extends Component {
         disableHeader
         runAnimation={false}
         isLoaded
+        tab="dasboardReq"
         redirect={{
           pathname: '/schedule',
         }}

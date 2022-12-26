@@ -2,15 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { isHub } from '../../util/hub';
 import RequestList from './RequestList';
 import RequestsModel from '../../entities/models/Request';
 import { Card, CardHeader } from '../library';
 import styles from '../Dashboard/styles';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
 
 function usePrevious(value) {
   const ref = useRef();
@@ -35,13 +34,14 @@ const Requests = (props) => {
     runAnimation,
     isLoaded,
     redirect,
+    tab,
   } = props;
 
   const prevAmount = usePrevious({ sortedRequests });
   document.addEventListener('visibilitychange', () => {
     if (
       document.visibilityState === 'visible' &&
-      (prevAmount.sortedRequests.length !== sortedRequests.length)
+      prevAmount.sortedRequests.length !== sortedRequests.length
     ) {
       props.fetchEntitiesRequest({
         id: 'dashRequests',
@@ -66,6 +66,7 @@ const Requests = (props) => {
       practitioners={practitioners}
       popoverRight={popoverRight}
       redirect={redirect}
+      tab={tab}
     />
   );
 
@@ -123,6 +124,7 @@ Requests.propTypes = {
   selectedRequest: PropTypes.instanceOf(RequestsModel),
   runAnimation: PropTypes.bool,
   services: PropTypes.instanceOf(Map),
+  tab: PropTypes.string.isRequired,
 };
 const enhance = connect(null, mapDispatchToProps);
 

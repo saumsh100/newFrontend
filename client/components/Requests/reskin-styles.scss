@@ -67,7 +67,19 @@
   padding: 10px;
 
   transition: all 0.1s ease-in-out;
-  width: 314px;
+  &:hover {
+    background-color: $color-lavender-050;
+    transform: scale(1.02);
+  }
+}
+.dashRequestListItem {
+  box-sizing: border-box;
+  color: #2e3845;
+  cursor: pointer;
+  height: auto;
+  padding: 20px;
+
+  transition: all 0.1s ease-in-out;
   &:hover {
     background-color: $color-lavender-050;
     transform: scale(1.02);
@@ -141,6 +153,23 @@
     color: $color-purple-400;
   }
 }
+.dashRequestData {
+  border-left: 1px solid $color-lavender-100;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-size: $x-small-size;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-top: 5px;
+  text-align: left;
+  width: 100%;
+
+  @media screen and (max-width: 350px) {
+    max-width: 170px;
+  }
+}
 
 .requestedText {
   color: $color-grey-400;
@@ -157,6 +186,7 @@
   }
 
   &__requestedBy {
+    color: $color-grey-600;
     font-weight: 700;
   }
 }
@@ -192,6 +222,10 @@
   }
 }
 
+.dashReqMonthDay {
+  min-width: 71px;
+  text-align: center;
+}
 .calendarIcon {
   padding-right: 7px;
 }
@@ -202,20 +236,21 @@
 
 .waitlistDetails {
   display: flex;
-  gap: 13px;
 }
 .joinedWaitlist {
-  align-items: center;
   background: $super-white;
   border: 1px solid $color-lavender-200;
   border-radius: 44px;
   box-shadow: 1px 1px 4px rgb(222 213 246 / 10%);
   color: $color-lavender-500;
+  display: flex;
   font-size: $x-small-size;
   font-weight: $medium-weight;
+  justify-content: flex-end;
   letter-spacing: 0.02em;
   margin-bottom: 11px;
+  margin-left: auto;
+  margin-right: 0px;
   margin-top: -2px;
   padding: 2px 4px;
-  text-align: center;
 }

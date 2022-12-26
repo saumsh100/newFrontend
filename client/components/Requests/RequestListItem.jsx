@@ -29,10 +29,13 @@ class RequestListItem extends Component {
     this.props.removeRequest(this.props.request, this.props.patientUser);
   }
 
-  renderListItem({ patientUser, data, request, requestingUser, requestType, openRequest }) {
+  renderListItem({ patientUser, data, request, requestingUser, requestType, openRequest, tab }) {
     return (
-      <ListItem className={styles.requestListItem} onClick={() => openRequest(request.id)}>
-        <MonthDay month={data.month} day={data.day} type={requestType} />
+      <ListItem
+        className={tab === 'dasboardReq' ? styles.dashRequestListItem : styles.requestListItem}
+        onClick={() => openRequest(request.id)}
+      >
+        <MonthDay month={data.month} day={data.day} type={requestType} tab={tab} />
         <RequestData
           time={data.time}
           name={data.name}
@@ -43,6 +46,7 @@ class RequestListItem extends Component {
           birthDate={patientUser.get('birthDate')}
           requestingUser={checkIfUsersEqual(patientUser, requestingUser)}
           onWaitlist={request.onWaitlist}
+          tab={tab}
         />
       </ListItem>
     );
@@ -58,6 +62,7 @@ class RequestListItem extends Component {
       popoverRight,
       requestingUser,
       timezone,
+      tab,
     } = this.props;
 
     if (!request || !patientUser) {
@@ -123,6 +128,7 @@ class RequestListItem extends Component {
           requestingUser,
           requestType,
           openRequest: this.props.openRequest,
+          tab,
         })}
       </Popover>
     );
@@ -141,6 +147,7 @@ RequestListItem.propTypes = {
   removeRequest: PropTypes.func.isRequired,
   openRequest: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
+  tab: PropTypes.string.isRequired,
 };
 
 RequestListItem.defaultProps = {
