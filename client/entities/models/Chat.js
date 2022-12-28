@@ -1,4 +1,3 @@
-
 import createModel from '../createModel';
 
 const ChatSchema = {
@@ -9,6 +8,7 @@ const ChatSchema = {
   textMessages: null,
   lastTextMessageDate: null,
   lastTextMessageId: null,
+  lastUserTextMessageId: null,
   isFlagged: null,
   hasUnread: null,
   createdAt: null,

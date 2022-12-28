@@ -18,13 +18,13 @@ class Tooltip extends Component {
   }
 
   render() {
-    const { children, body, placement, tipSize, styleOverride } = this.props;
+    const { children, body, placement, tipSize, styleOverride, overlayClassName,tooltipPopover} = this.props;
     return (
       <Popover
-        className={styles.tooltip_Popover}
+        className={tooltipPopover ? tooltipPopover : styles.tooltip_Popover}
         isOpen={this.state.isOpen}
         body={[
-          <div className={classNames(styleOverride ? styles.light : styles.tooltip_PopoverBody)}>
+          <div className={classNames(styleOverride ? styles.light : overlayClassName ? overlayClassName :styles.tooltip_PopoverBody)}>
             {body}
           </div>,
         ]}

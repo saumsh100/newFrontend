@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -7,6 +8,8 @@ import { Icon, ListItem, Avatar, getTodaysDate, getUTCDate } from '../../../libr
 import { toggleFlagged, selectChat } from '../../../../thunks/chat';
 import UnknownPatient from '../../unknownPatient';
 import styles from './reskin-styles.scss';
+import PreviewTooltipText from './PreviewTooltipText';
+import Tooltip from '../../../Tooltip';
 
 const getMessageTime = (message, timezone) =>
   getUTCDate(message, timezone).calendar(null, {
@@ -70,8 +73,15 @@ class ChatListItem extends Component {
   }
 
   render() {
-    const { chat, patient, lastTextMessage, selectedChatId, timezone, pendingMessages } =
-      this.props;
+    const {
+      chat,
+      patient,
+      lastTextMessage,
+      selectedChatId,
+      timezone,
+      pendingMessages,
+      lastUserTextMessage,
+    } = this.props;
 
     const botAvatar = {
       fullAvatarUrl: '/images/chatDonna.svg',
@@ -79,11 +89,8 @@ class ChatListItem extends Component {
     };
 
     const mDate = getUTCDate(lastTextMessage.createdAt || chat.updatedAt, timezone);
-    const daysDifference = getTodaysDate(timezone).diff(mDate, 'days');
     const isActive = selectedChatId === chat.id;
-
     const messageDate = getMessageTime(mDate, timezone);
-
     const isUnread = chat.hasUnread;
 
     const listItemClass = styles.chatListItem;
@@ -91,6 +98,9 @@ class ChatListItem extends Component {
     const isFromPatient = lastTextMessage?.smsStatus === 'received';
     const user = lastTextMessage?.body !== '' ? lastTextMessage?.get('user') : '';
     const newUser = user?.size ? Object.fromEntries(user) : user;
+    const lastUser = lastUserTextMessage?.userId ? lastUserTextMessage?.get('user') : '';
+    const newlastUser = lastUser?.size ? Object.fromEntries(lastUser) : lastUser;
+
     const message =
       lastTextMessage && lastTextMessage?.size
         ? lastTextMessage.get('body')
@@ -98,8 +108,15 @@ class ChatListItem extends Component {
 
     let avatarUser;
     if (!isFromPatient && lastTextMessage?.body) {
-      avatarUser = newUser && newUser?.id ? newUser : botAvatar;
+      avatarUser = newUser && newUser?.id ? newUser : newlastUser;
     }
+    let lastTextMessageUser;
+    if (!isFromPatient && lastTextMessage?.body) {
+      lastTextMessageUser = newUser && newUser?.id ? newUser : botAvatar;
+    }
+
+    const finalbottomSectionUnread =
+      user?.id || lastUser?.id ? styles.bottomSectionUnread : styles.noUserbottomSectionUnread;
 
     return (
       <ListItem
@@ -110,29 +127,51 @@ class ChatListItem extends Component {
       >
         <div className={styles.renderStar}>{this.renderStar(chat.isFlagged, this.toggleFlag)}</div>
         <div className={styles.avatar}>
-          <Avatar size="sm" user={patient} />
+          <Avatar
+            className={classNames(
+              {
+                [styles.avatarIconUser]: !hasFailed && avatarUser,
+                [styles.avatarIcon]: !avatarUser,
+              },
+              styles.avatarIcon,
+            )}
+            size="chatAvatar"
+            user={patient}
+          />
         </div>
 
-        {isActive && pendingMessages?.length !== 0 ? (
-          <div className={styles.avatarPending}>
-            <Icon className={styles.pendingIcon} icon="clock" size={2} type="solid" />
-          </div>
-        ) : !hasFailed && avatarUser ? (
-          <div className={styles.bottom_avatar}>
-            <Avatar
-              size="xs"
-              className={styles.bubbleAvatar}
-              user={avatarUser}
-              isPatient={isFromPatient}
-              textClassName={styles.bubbleAvatar_text}
-            />
-          </div>
+        {!hasFailed && avatarUser ? (
+          <Tooltip
+            overlayClassName={styles.avatarTooltipContainer}
+            trigger={['hover']}
+            placement="below"
+            tooltipPopover={styles.popover_tip}
+            body={
+              <PreviewTooltipText
+                lastUserTextMessage={lastUserTextMessage}
+                lastTextMessage={lastTextMessage}
+                timezone={timezone}
+                patient={patient}
+                chat={chat}
+              />
+            }
+          >
+            <div className={styles.bottom_avatar}>
+              <Avatar
+                size="xs"
+                className={styles.bubbleAvatar}
+                user={avatarUser}
+                isPatient={isFromPatient}
+                textClassName={styles.bubbleAvatar_text}
+              />
+            </div>
+          </Tooltip>
         ) : (
           ''
         )}
 
         <div className={styles.flexSection}>
-          <div className={lastTextMessage?.body ? styles.topSection : styles.topSectionNoBody}>
+          <div className={avatarUser && !hasFailed ? styles.userTopSection : styles.topSection}>
             <div className={isUnread ? styles.fullNameUnread : styles.fullName}>
               {this.renderPatient()}
             </div>
@@ -140,14 +179,21 @@ class ChatListItem extends Component {
           </div>
           <div
             data-test-id="chat_lastMessage"
-            className={isUnread ? styles.bottomSectionUnread : styles.bottomSection}
+            className={
+              isUnread
+                ? finalbottomSectionUnread
+                : user?.id || lastUser?.id
+                ? styles.bottomSection
+                : styles.noUserbottomSection
+            }
           >
             {isActive && pendingMessages?.length !== 0 ? (
               <>
+                <Icon className={styles.pendingIcon} icon="clock" size={2} type="solid" />
                 <span className={styles.pendingMessage}>Sending Message...</span>
               </>
             ) : hasFailed ? (
-              <>
+              <div className={styles.notSentMessage}>
                 <Icon
                   className={styles.avatar__failed}
                   icon="exclamation-circle"
@@ -155,13 +201,22 @@ class ChatListItem extends Component {
                   type="solid"
                 />
                 <span className={styles.failedMessage}>Message not sent</span>
-              </>
-            ) : avatarUser ? (
-              <>
-                <span className={styles.bottom_body}>{message}</span>
-              </>
+              </div>
+            ) : lastTextMessageUser ? (
+              lastTextMessageUser.firstName ? (
+                <>
+                  <span className={styles.bottom_Userbody}>
+                    <b>{lastTextMessageUser.firstName}:</b> {message}
+                  </span>
+                </>
+              ) : (
+                <span className={lastUser?.id ? styles.lastUser_bottom_body : styles.bottom_body}>
+                  <b>Donna: </b>
+                  {message}
+                </span>
+              )
             ) : (
-              message
+              <span className={styles.patientMessage}>{message}</span>
             )}
           </div>
         </div>
@@ -175,11 +230,18 @@ ChatListItem.propTypes = {
     read: PropTypes.bool,
     body: PropTypes.string,
     createdAt: PropTypes.string,
+    smsStatus: PropTypes.string,
+  }).isRequired,
+  lastUserTextMessage: PropTypes.shape({
+    body: PropTypes.string,
+    createdAt: PropTypes.string,
+    userId: PropTypes.string,
   }).isRequired,
   chat: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,
     lastTextMessageId: PropTypes.string,
+    lastUserTextMessageId: PropTypes.string,
     isFlagged: PropTypes.bool,
     hasUnread: PropTypes.bool,
     updatedAt: PropTypes.string,
@@ -205,9 +267,16 @@ ChatListItem.defaultProps = {
 };
 
 function mapStateToProps(state, { chat = {} }) {
-  const { lastTextMessageId } = chat;
+  const { lastTextMessageId, lastUserTextMessageId } = chat;
   const patients = state.entities.getIn(['patients', 'models']);
   const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]) || {
+    body: '',
+  };
+  const lastUserTextMessage = state.entities.getIn([
+    'textMessages',
+    'models',
+    lastUserTextMessageId,
+  ]) || {
     body: '',
   };
 
@@ -220,6 +289,7 @@ function mapStateToProps(state, { chat = {} }) {
     lastTextMessage,
     timezone: state.auth.get('timezone'),
     pendingMessages,
+    lastUserTextMessage,
   };
 }
 
