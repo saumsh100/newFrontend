@@ -98,17 +98,17 @@ class ChatListItem extends Component {
     const isFromPatient = lastTextMessage?.smsStatus === 'received';
     const user = lastTextMessage?.body !== '' ? lastTextMessage?.get('user') : '';
     const newUser = user?.size ? Object.fromEntries(user) : user;
-    const lastUser = lastUserTextMessage?.userId ? lastUserTextMessage?.get('user') : '';
+    const lastUser = lastUserTextMessage?.body !== '' && lastUserTextMessage?.userId ? lastUserTextMessage?.get('user') : '';
     const newlastUser = lastUser?.size ? Object.fromEntries(lastUser) : lastUser;
 
     const message =
       lastTextMessage && lastTextMessage?.size
         ? lastTextMessage.get('body')
         : lastTextMessage?.body;
-
+     
     let avatarUser;
-    if (!isFromPatient && lastTextMessage?.body) {
-      avatarUser = newUser && newUser?.id ? newUser : newlastUser;
+    if (lastTextMessage?.body !== '') {
+      avatarUser = !isFromPatient && newUser?.id ? newUser : newlastUser;
     }
     let lastTextMessageUser;
     if (!isFromPatient && lastTextMessage?.body) {

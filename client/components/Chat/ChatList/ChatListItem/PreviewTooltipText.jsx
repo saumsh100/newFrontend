@@ -30,8 +30,8 @@ export default function   PreviewTooltipText(props) {
     const isFromPatient = lastTextMessage?.smsStatus === 'received';
 
     let avatarUser;
-    if (!isFromPatient && lastTextMessage?.body) {
-      avatarUser = newUser && newUser?.id ? newUser : newlastUser;
+    if (lastTextMessage?.body) {
+      avatarUser = !isFromPatient && newUser?.id ? newUser : newlastUser;
     }
     const finalTooltipMessageDate =
     user && user?.id ? tooltipMessageDate : lastUserTooltipMessageDate;
