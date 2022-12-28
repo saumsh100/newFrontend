@@ -276,18 +276,18 @@
 }
 .avatarTooltipContainer {
   background-color: $color-grey-700;
+  border-radius: 8px;
 
   box-sizing: border-box;
   color: $super-white;
-
-  opacity: 1;
-  border-radius: 8px;
   font-size: $x-medium-size;
   font-weight: $normal-weight;
+  line-height: 20px;
   margin-left: 66px;
+
+  opacity: 1;
   padding: 8px 12px;
   width: fit-content;
-  line-height: 20px;
 }
 
 .popover_tip {
