@@ -229,6 +229,7 @@ class RequestPopover extends Component {
       }
 
       let rangeLast;
+      availableTimes = availableTimes.sort((date1, date2) => new Date(date1) - new Date(date2));
       let timeStr = waitlistTableTimeParser(availableTimes[0]);
 
       for (let i = 0; i < availableTimes.length - 1; i++) {
@@ -279,9 +280,9 @@ class RequestPopover extends Component {
         {isMobile
           ? renderMobileHeader(this.props)
           : renderDesktopHeader({
-              ...this.props,
-              age,
-            })}
+            ...this.props,
+            age,
+          })}
         {isMobile &&
           renderMobileSubHeader({
             ...this.props,
@@ -387,10 +388,10 @@ class RequestPopover extends Component {
         )}
         {isMobile && showButton
           ? renderMobileFooter({
-              toggleActionDisplay: this.toggleActionDisplay,
-              displayActions,
-              ...this.props,
-            })
+            toggleActionDisplay: this.toggleActionDisplay,
+            displayActions,
+            ...this.props,
+          })
           : showButton && renderDesktopFooter(this.props)}
       </Card>
     );
