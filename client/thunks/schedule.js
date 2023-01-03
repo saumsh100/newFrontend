@@ -98,6 +98,10 @@ const suggestionParams = (patientUser, requestData) => ({
   mobilePhoneNumber: patientUser.get('phoneNumber'),
   birthDate: patientUser.get('birthDate'),
   requestCreatedAt: requestData.createdAt,
+  requestingPatientUserId:
+    patientUser.get('id') !== requestData.requestingPatientUserId
+      ? requestData.requestingPatientUserId
+      : null,
 });
 
 function alertRequestUpdate(name) {
