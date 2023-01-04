@@ -98,14 +98,17 @@ class ChatListItem extends Component {
     const isFromPatient = lastTextMessage?.smsStatus === 'received';
     const user = lastTextMessage?.body !== '' ? lastTextMessage?.get('user') : '';
     const newUser = user?.size ? Object.fromEntries(user) : user;
-    const lastUser = lastUserTextMessage?.body !== '' && lastUserTextMessage?.userId ? lastUserTextMessage?.get('user') : '';
+    const lastUser =
+      lastUserTextMessage?.body !== '' && lastUserTextMessage?.userId
+        ? lastUserTextMessage?.get('user')
+        : '';
     const newlastUser = lastUser?.size ? Object.fromEntries(lastUser) : lastUser;
 
     const message =
       lastTextMessage && lastTextMessage?.size
         ? lastTextMessage.get('body')
         : lastTextMessage?.body;
-     
+
     let avatarUser;
     if (lastTextMessage?.body !== '') {
       avatarUser = !isFromPatient && newUser?.id ? newUser : newlastUser;
@@ -125,99 +128,107 @@ class ChatListItem extends Component {
         selectItem={isActive}
         onClick={this.selectChat}
       >
-        <div className={styles.renderStar}>{this.renderStar(chat.isFlagged, this.toggleFlag)}</div>
-        <div className={styles.avatar}>
-          <Avatar
-            className={classNames(
-              {
-                [styles.avatarIconUser]: !hasFailed && avatarUser,
-                [styles.avatarIcon]: !avatarUser,
-              },
-              styles.avatarIcon,
-            )}
-            size="chatAvatar"
-            user={patient}
-          />
-        </div>
-
-        {!hasFailed && avatarUser ? (
-          <Tooltip
-            overlayClassName={styles.avatarTooltipContainer}
-            trigger={['hover']}
-            placement="below"
-            tooltipPopover={styles.popover_tip}
-            body={
-              <PreviewTooltipText
-                lastUserTextMessage={lastUserTextMessage}
-                lastTextMessage={lastTextMessage}
-                timezone={timezone}
-                patient={patient}
-                chat={chat}
-              />
-            }
-          >
-            <div className={styles.bottom_avatar}>
-              <Avatar
-                size="xs"
-                className={styles.bubbleAvatar}
-                user={avatarUser}
-                isPatient={isFromPatient}
-                textClassName={styles.bubbleAvatar_text}
-              />
-            </div>
-          </Tooltip>
-        ) : (
-          ''
-        )}
-
-        <div className={styles.flexSection}>
-          <div className={avatarUser && !hasFailed ? styles.userTopSection : styles.topSection}>
-            <div className={isUnread ? styles.fullNameUnread : styles.fullName}>
-              {this.renderPatient()}
-            </div>
-            <div className={isUnread ? styles.unreadTime : styles.time}>{messageDate}</div>
+        <div className={styles.patientDetails}>
+          <div className={styles.renderStar}>
+            {this.renderStar(chat.isFlagged, this.toggleFlag)}
           </div>
-          <div
-            data-test-id="chat_lastMessage"
-            className={
-              isUnread
-                ? finalbottomSectionUnread
-                : user?.id || lastUser?.id
-                ? styles.bottomSection
-                : styles.noUserbottomSection
-            }
-          >
-            {isActive && pendingMessages?.length !== 0 ? (
-              <>
-                <Icon className={styles.pendingIcon} icon="clock" size={2} type="solid" />
-                <span className={styles.pendingMessage}>Sending Message...</span>
-              </>
-            ) : hasFailed ? (
-              <div className={styles.notSentMessage}>
-                <Icon
-                  className={styles.avatar__failed}
-                  icon="exclamation-circle"
-                  size={2}
-                  type="solid"
+          <div className={styles.avatar}>
+            <Avatar
+              className={classNames(
+                {
+                  [styles.avatarIconUser]: !hasFailed && avatarUser,
+                  [styles.avatarIcon]: !avatarUser,
+                },
+                styles.avatarIcon,
+              )}
+              size="chatAvatar"
+              user={patient}
+              noPadding
+            />
+          </div>
+
+          {!hasFailed && avatarUser ? (
+            <Tooltip
+              overlayClassName={styles.avatarTooltipContainer}
+              trigger={['hover']}
+              placement="below"
+              tooltipPopover={styles.popover_tip}
+              body={
+                <PreviewTooltipText
+                  lastUserTextMessage={lastUserTextMessage}
+                  lastTextMessage={lastTextMessage}
+                  timezone={timezone}
+                  patient={patient}
+                  chat={chat}
                 />
-                <span className={styles.failedMessage}>Message not sent</span>
+              }
+            >
+              <div className={styles.bottom_avatar}>
+                <Avatar
+                  size="xs"
+                  className={styles.bubbleAvatar}
+                  user={avatarUser}
+                  isPatient={isFromPatient}
+                  textClassName={styles.bubbleAvatar_text}
+                  noPadding
+                />
               </div>
-            ) : lastTextMessageUser ? (
-              lastTextMessageUser.firstName ? (
+            </Tooltip>
+          ) : (
+            ''
+          )}
+
+          <div className={styles.flexSection}>
+            <span className={isUnread ? styles.unreadTime : styles.time}>{messageDate}</span>
+            <div className={avatarUser && !hasFailed ? styles.userTopSection : styles.topSection}>
+              <div className={isUnread ? styles.fullNameUnread : styles.fullName}>
+                {this.renderPatient()}
+              </div>
+            </div>
+            <div
+              data-test-id="chat_lastMessage"
+              className={
+                isUnread
+                  ? finalbottomSectionUnread
+                  : user?.id || lastUser?.id
+                  ? styles.bottomSection
+                  : styles.noUserbottomSection
+              }
+            >
+              {isActive && pendingMessages?.length !== 0 ? (
                 <>
-                  <span className={styles.bottom_Userbody}>
-                    <b>{lastTextMessageUser.firstName}:</b> {message}
-                  </span>
+                  <Icon className={styles.pendingIcon} icon="clock" size={2} type="solid" />
+                  <span className={styles.pendingMessage}>Sending Message...</span>
                 </>
+              ) : hasFailed ? (
+                <div>
+                  <Icon
+                    className={styles.avatar__failed}
+                    icon="exclamation-circle"
+                    size={2}
+                    type="solid"
+                  />
+                  <span className={styles.failedMessage}>Message not sent</span>
+                </div>
+              ) : lastTextMessageUser ? (
+                lastTextMessageUser.firstName ? (
+                  <>
+                    <span className={styles.bottom_Userbody}>
+                      <b>{lastTextMessageUser.firstName}:</b> {message}
+                    </span>
+                  </>
+                ) : (
+                  <div className={lastUser?.id ? styles.lastUser_bottom_body : styles.bottom_body}>
+                    <b>Donna: </b>
+                    {message}
+                  </div>
+                )
               ) : (
-                <span className={lastUser?.id ? styles.lastUser_bottom_body : styles.bottom_body}>
-                  <b>Donna: </b>
+                <span className={lastUser?.id ? styles.UserpatientMessage : styles.patientMessage}>
                   {message}
                 </span>
-              )
-            ) : (
-              <span className={styles.patientMessage}>{message}</span>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </ListItem>

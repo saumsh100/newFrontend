@@ -37,14 +37,15 @@ export default function   PreviewTooltipText(props) {
     user && user?.id ? tooltipMessageDate : lastUserTooltipMessageDate;
 
   return (
-    <div className={styles.lookupTooltip}>
+    <div className={styles.avatarTooltip}>
     {avatarUser && avatarUser.firstName && (
       <>
         <div className={styles.userName}>
           {avatarUser.firstName} {avatarUser.lastName}
         </div>
         <div className={styles.tooltipLastMessage}>
-          {avatarUser.firstName} last messaged <span className = {styles.tooltipLastMessage_patientName}>{patient.firstName}</span> at: {finalTooltipMessageDate}
+          <div>{avatarUser.firstName} last messaged <span className = {styles.tooltipLastMessage_patientName}>{patient.firstName}</span> at:</div>
+          <div className = {styles.finalMessageDate}>{finalTooltipMessageDate}</div>
         </div>
       </>
     )}

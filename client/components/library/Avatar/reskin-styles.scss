@@ -79,8 +79,8 @@ $x-jumbo-size: calc(7.75rem * 1.6);
   width: $x-jumbo-size;
 }
 .chatAvatar {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: $xxx-medium-size;
+  font-weight: $medium-weight;
 }
 
 .text {

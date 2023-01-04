@@ -4,8 +4,8 @@
 .chatListItem {
   box-sizing: border-box;
   height: 100px;
-  padding: 20px;
   transition: all 0.2s ease;
+  width: 336px;
   &:hover {
     > .hoverSection {
       display: block;
@@ -40,12 +40,10 @@
 }
 
 .avatar {
-  margin-bottom: 29px;
   padding: 0 10px;
 }
 .avatarIcon {
   border: 1px solid $color-grey-400;
-  margin-top: 30px;
   min-height: 61px;
   min-width: 61px;
 }
@@ -81,6 +79,7 @@
   align-items: center;
   display: flex;
   margin-left: 7px;
+  width: 100%;
 }
 
 .topSectionNoBody {
@@ -98,9 +97,7 @@
   font-weight: $medium-weight;
   -webkit-line-clamp: 1;
   line-height: 16px;
-  margin-bottom: -18px;
-  margin-left: -26px;
-
+  margin: 2px 0px 0px -26px;
   overflow: hidden;
 }
 .noUserbottomSection {
@@ -110,10 +107,8 @@
   font-size: $small-size;
   font-weight: $medium-weight;
   -webkit-line-clamp: 1;
-  line-height: 12px;
-  margin-bottom: -8px;
-  margin-left: -26px;
-
+  line-height: 16px;
+  margin: 2px 0px 0px -26px;
   overflow: hidden;
 }
 
@@ -131,10 +126,10 @@
 
 .fullName {
   color: $color-grey-600;
-  font-size: $medium-size;
-  font-weight: $medium-weight;
-  margin-bottom: 9px;
+  font-size: $x-medium-size;
+  font-weight: $normal-weight;
   text-transform: capitalize;
+  line-height: 24px;
 }
 
 .fullNameUnread {
@@ -145,15 +140,12 @@
 
 .time {
   color: $color-grey-600;
+  float: right;
   font-size: $small-size;
   font-weight: $medium-weight;
-  margin-left: auto;
-  margin-right: -15px;
-  margin-top: -30px;
+  line-height: 12px;
 }
-.notSentMessage {
-  margin-bottom: 10px;
-}
+
 
 .unreadTime {
   @extend .time;
@@ -168,7 +160,7 @@
 .name {
   display: inline;
   letter-spacing: 0.3px;
-  max-width: 108px;
+  max-width: 180px;
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -179,7 +171,6 @@
 }
 
 .age {
-  min-width: 40px;
   &:before {
     content: ', ';
   }
@@ -197,6 +188,7 @@
   font-weight: $heavy-weight;
   height: 11px;
   line-height: 12px;
+  margin-top: 26px;
   width: 12px;
 }
 .avatar__failed {
@@ -218,6 +210,10 @@
   display: flex;
   height: 29px;
   width: 29px;
+  min-width: 29px;
+  min-height: 29px;
+  font-weight: 700;
+  font-size: 11.6px;
   &_text {
     color: $color-grey-600;
     font-size: 11.6px;
@@ -247,31 +243,35 @@
   margin-left: 33px;
 }
 .bottom_avatar {
-  margin-left: -33px;
-  margin-top: 42px;
+  margin-left: -28px;
+  margin-top: 30px;
   position: relative;
 }
 .userName {
   color: $color-grey-050;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: $medium-weight;
+  line-height: 24px;
 }
 .tooltipLastMessage {
   color: $color-grey-300;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: $medium-weight;
   &_patientName {
     text-transform: capitalize;
   }
 }
 .avatarTooltip {
-  background: #342e43;
+  background: $color-grey-700;
   border-radius: 8px;
   padding: 8px 12px;
-  transform: matrix(1, 0, 0, -1, 0, 0);
+  width: max-content;
 }
 
 .patientMessage {
+  margin-left: 27px;
+}
+.UserpatientMessage {
   margin-left: 35px;
 }
 .avatarTooltipContainer {
@@ -286,8 +286,6 @@
   margin-left: 66px;
 
   opacity: 1;
-  padding: 8px 12px;
-  width: fit-content;
 }
 
 .popover_tip {
@@ -297,4 +295,15 @@
     fill: $color-grey-700;
     margin-left: -16px;
   }
+}
+.patientDetails {
+  display: flex;
+  height: 61px;
+  width: 318px;
+  max-width: 318px;
+  padding:16px;
+
+}
+.finalMessageDate{
+  margin-top: -3px;
 }
