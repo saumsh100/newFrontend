@@ -101,13 +101,15 @@ const DashboardApp = (props) => {
         setIsSidebarHovered={setIsSidebarHovered}
       >
         <NavList location={location} />
-        <MicroFrontendRenderer
-          load={enterpriseManagementPhaseTwoActive}
-          component={
-            <EmSwitcher inverted isCollapsed={!(isHovered || !isCollapsed || isSidebarHovered)} />
-          }
-          className={styles.emSwitcher}
-        />
+        {props.isSuperAdmin && (
+          <MicroFrontendRenderer
+            load={enterpriseManagementPhaseTwoActive}
+            component={
+              <EmSwitcher inverted isCollapsed={!(isHovered || !isCollapsed || isSidebarHovered)} />
+            }
+            className={styles.emSwitcher}
+          />
+        )}
       </NavRegionContainer>
       <MainRegionContainer>
         <div className={styles.mainRegionChildren}>
@@ -122,6 +124,11 @@ const DashboardApp = (props) => {
 
 function mapStateToProps({ featureFlags, toolbar, auth }) {
   const isPollingNeeded = isFeatureEnabledSelector(featureFlags.get('flags'), 'is-polling-needed');
+  const isSuperAdmin = auth.get('role') === 'SUPERADMIN';
+  const enterpriseManagementPhaseTwoActive = featureFlags.getIn([
+    'flags',
+    'enterprise-management-phase-2',
+  ]);
 
   return {
     isPollingNeeded,
@@ -129,10 +136,8 @@ function mapStateToProps({ featureFlags, toolbar, auth }) {
     isHovered: toolbar.get('isHovered'),
     isSearchCollapsed: toolbar.get('isSearchCollapsed'),
     accountId: auth.get('accountId'),
-    enterpriseManagementPhaseTwoActive: featureFlags.getIn([
-      'flags',
-      'enterprise-management-phase-2',
-    ]),
+    enterpriseManagementPhaseTwoActive,
+    isSuperAdmin,
   };
 }
 
@@ -153,6 +158,7 @@ DashboardApp.propTypes = {
   isHovered: PropTypes.bool.isRequired,
   isPollingNeeded: PropTypes.bool.isRequired,
   accountId: PropTypes.string.isRequired,
+  isSuperAdmin: PropTypes.bool.isRequired,
   fetchWaitingRoomQueue: PropTypes.func.isRequired,
   loadUnreadChatCount: PropTypes.func.isRequired,
   enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,
