@@ -15,15 +15,7 @@ export const fetchPatientTableData = () => async (dispatch, getState) => {
       isHoH: true,
       authUserId: auth.get('userId'),
     };
-    /* deleting the status from params in case of follow ups patient report */
-    if (
-      params &&
-      params.segment &&
-      typeof params.segment !== 'undefined' &&
-      (params.segment[0] === 'followUps' || params.segment[0] === 'myFollowUps')
-    ) {
-      delete params.status;
-    }
+
     const {
       data: { entities },
     } = await httpClient().get('/api/table/search', { params });

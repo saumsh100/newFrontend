@@ -61,6 +61,10 @@ class SmartFilters extends Component {
       ];
     }
 
+    if (segment === 'followUps' || segment === 'myFollowUps') {
+      params.status = null;
+    }
+
     if (segment === 'smartRecare') {
       params.order = [
         ['dueForHygieneDate', 'desc'],

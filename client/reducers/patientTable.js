@@ -26,6 +26,7 @@ export const SET_IS_RECALLS_FORM_ACTIVE = `${reducer}/SET_IS_RECALLS_FORM_ACTIVE
 
 export const SET_ACTIVE_PATIENT = `${reducer}/SET_ACTIVE_PATIENT`;
 export const SET_FILTER_ACTIVE_SEGMENT_LABEL = `${reducer}/SET_FILTER_ACTIVE_SEGMENT_LABEL`;
+export const REMOVE_FOLLOWUP_FILTERS = `${reducer}/REMOVE_FOLLOWUP_FILTERS`;
 
 /**
  * Actions
@@ -35,6 +36,7 @@ export const setIsLoading = createAction(SET_IS_LOADING);
 export const addFilter = createAction(ADD_FILTER);
 export const removeFilter = createAction(REMOVE_FILTER);
 export const removeAllFilters = createAction(REMOVE_ALL_FILTERS);
+export const removeFollowUpFilters = createAction(REMOVE_FOLLOWUP_FILTERS);
 
 export const addRemoveTimelineFilters = createAction(ADD_REMOVE_TIMELINE_FILTERS);
 export const selectAllTimelineFilters = createAction(SELECT_ALL_TIMELINE_FILTERS);
@@ -120,6 +122,10 @@ export default handleActions(
     },
     [REMOVE_ALL_FILTERS]() {
       return initialState;
+    },
+    [REMOVE_FOLLOWUP_FILTERS](state) {
+      const filters = state.get('filters');
+      return filters;
     },
 
     [ADD_REMOVE_TIMELINE_FILTERS](state, { payload }) {

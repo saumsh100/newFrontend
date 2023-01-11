@@ -18,7 +18,12 @@ import FollowUpsSettingsForm from './FollowUpsSettings';
 import FilterTags from './FilterTags';
 import FilterForm from './FilterForm';
 import FilterBodyDisplay from './FilterBodyDisplay';
-import { addFilter, removeFilter, removeAllFilters } from '../../../../reducers/patientTable';
+import {
+  addFilter,
+  removeFilter,
+  removeAllFilters,
+  removeFollowUpFilters,
+} from '../../../../reducers/patientTable';
 import fetchEntities from '../../../../thunks/fetchEntities/fetchEntities';
 import styles from './styles.scss';
 import { initialSentRecalls } from '../../Shared/helpers';
@@ -28,7 +33,7 @@ const forms = (flags) => ({
     validateForm: () => true,
     headerTitle: 'Demographics',
     formComponent: DemographicsForm,
-    props: {},
+    props: { fieldName: 'Demographics' },
     initialValues: {
       firstName: '',
       lastName: '',
@@ -158,7 +163,8 @@ class SideBarFilters extends Component {
     const label = this.props.filterActiveSegmentLabel;
     if (Object.keys(this.props.filters).length === 0) return;
 
-    this.props.removeAllFilters();
+    label === 'Follow Ups' ? this.props.removeFollowUpFilters() : this.props.removeAllFilters();
+
     const filterObj = {
       segment: this.props.filters.segment,
       order: this.props.filters.order,
@@ -169,6 +175,9 @@ class SideBarFilters extends Component {
     if (label === '19-24 Months Late' || label === '25-36 Months Late') {
       filterObj.sentRecalls = initialSentRecalls;
       this.props.change('recalls', 'sentRecalls', initialSentRecalls);
+    }
+    if (label === 'Follow Ups' || label === 'My Follow Ups (past 30 days)') {
+      this.props.change('demographics', 'status', '');
     }
     this.props.addFilter(filterObj);
     this.props.setFilterCallback();
@@ -247,7 +256,7 @@ class SideBarFilters extends Component {
                     this.formHandler(formValues, value.validateForm)
                   }
                 >
-                  <value.formComponent {...value.props} timezone={timezone} />
+                  <value.formComponent formName={key} {...value.props} timezone={timezone} />
                 </FilterForm>
               </FilterBodyDisplay>
             ))}
@@ -264,6 +273,7 @@ SideBarFilters.propTypes = {
   change: PropTypes.func.isRequired,
   fetchEntities: PropTypes.func.isRequired,
   removeAllFilters: PropTypes.func.isRequired,
+  removeFollowUpFilters: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   flags: PropTypes.objectOf(PropTypes.any).isRequired,
   filters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
@@ -310,6 +320,7 @@ const mapDispatchToProps = (dispatch) =>
       removeAllFilters,
       change,
       fetchEntities,
+      removeFollowUpFilters,
     },
     dispatch,
   );
