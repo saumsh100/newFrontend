@@ -1,5 +1,5 @@
 const NON_APPT_WRITE_PMS = ['dentrix'];
-const DENTRIX_APPT_WRITE_PMS = ['DENTRIX_ENTERPRISE_V80'];
+const DENTRIX_APPT_WRITE_PMS = ['DENTRIX_ENTERPRISE_V80', 'DENTRIX_ENTERPRISE_V110'];
 /**
  * Check if PMS is non appointment write,
  * for now, any version of Dentrix not able to write.
