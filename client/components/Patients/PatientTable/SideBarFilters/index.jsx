@@ -163,7 +163,9 @@ class SideBarFilters extends Component {
     const label = this.props.filterActiveSegmentLabel;
     if (Object.keys(this.props.filters).length === 0) return;
 
-    label === 'Follow Ups' ? this.props.removeFollowUpFilters() : this.props.removeAllFilters();
+    label === 'Follow Ups' || label === 'My Follow Ups (past 30 days)'
+      ? this.props.removeFollowUpFilters()
+      : this.props.removeAllFilters();
 
     const filterObj = {
       segment: this.props.filters.segment,

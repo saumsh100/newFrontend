@@ -21,12 +21,12 @@ const DemographicsForm = (props) => {
 
   useEffect(() => {
     if (
-      (formName === 'demographics' && filterActiveSegmentLabel === 'Follow Ups') ||
-      filterActiveSegmentLabel === 'My Follow Ups (past 30 days)'
+      (formName === 'demographics' && (filterActiveSegmentLabel === 'Follow Ups') ||
+      filterActiveSegmentLabel === 'My Follow Ups (past 30 days)')
     ) {
       props.change(formName, 'status', '');
     }
-  }, [filterActiveSegmentLabel, formName,]);
+  }, [filterActiveSegmentLabel, formName]);
 
   return (
     <div className={styles.formContainer}>
