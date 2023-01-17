@@ -28,6 +28,8 @@ export const SET_ACTIVE_PATIENT = `${reducer}/SET_ACTIVE_PATIENT`;
 export const SET_FILTER_ACTIVE_SEGMENT_LABEL = `${reducer}/SET_FILTER_ACTIVE_SEGMENT_LABEL`;
 export const REMOVE_FOLLOWUP_FILTERS = `${reducer}/REMOVE_FOLLOWUP_FILTERS`;
 
+export const REMOVE_LOG_RECALL_PATIENT = `${reducer}/REMOVE_LOG_RECALL_PATIENT`;
+
 /**
  * Actions
  */
@@ -53,6 +55,7 @@ export const setIsRecallsFormActive = createAction(SET_IS_RECALLS_FORM_ACTIVE);
 export const setActivePatient = createAction(SET_ACTIVE_PATIENT);
 export const setFilterActiveSegmentLabel = createAction(SET_FILTER_ACTIVE_SEGMENT_LABEL);
 
+export const removeLogRecallPatient = createAction(REMOVE_LOG_RECALL_PATIENT);
 /**
  * Initial State
  */
@@ -175,6 +178,17 @@ export default handleActions(
     },
     [SET_FILTER_ACTIVE_SEGMENT_LABEL](state, { payload }) {
       return state.set('filterActiveSegmentLabel', payload);
+    },
+    [REMOVE_LOG_RECALL_PATIENT](state, { payload }) {
+      const currentState = state?.toJS();
+      const activeSegment = currentState?.filters?.segment[0];
+      const hasSentRecallFilterApplied = currentState?.filters?.sentRecalls;
+      if (activeSegment === 'smartRecare' || hasSentRecallFilterApplied) {
+        const patientList = currentState?.data || [];
+        const data = patientList.filter((patient) => patient.id !== payload.patientId);
+        return state.merge({ data });
+      }
+      return state;
     },
   },
 

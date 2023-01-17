@@ -10,6 +10,7 @@ import {
 } from '../thunks/chat';
 import { fetchWaitingRoomQueue } from '../thunks/waitingRoom';
 import DesktopNotification from '../util/desktopNotification';
+import { removeLogRecallPatient } from '../reducers/patientTable';
 
 export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
@@ -142,6 +143,10 @@ export default function connectSocketToStoreLogin(store, socket) {
           }),
         );
       });
+      socket.on('log:Recall', (data) => {
+        dispatch(removeLogRecallPatient(data));
+      });
+
       socket.on('update:SentRecall', (data) => {
         dispatch(
           receiveEntities({
