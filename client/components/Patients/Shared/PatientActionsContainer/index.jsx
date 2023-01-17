@@ -189,12 +189,21 @@ class PatientActionsContainer extends Component {
 
   async handleSentRecallFormSubmit(values, commit) {
     const { patientFamily } = values;
-    const { activePatient, activeAccount, userId, selectedRecall } = this.props;
+    const {
+      activePatient,
+      activeAccount,
+      userId,
+      selectedRecall,
+      filterActiveSegmentLabel,
+      segments,
+    } = this.props;
+    const defaultSegment = segments.toJS().find(({ isDefault }) => isDefault);
     try {
       const variables = {
         ...values,
         accountId: activeAccount.id,
         userId,
+        source: filterActiveSegmentLabel || defaultSegment?.label,
       };
 
       const toggleForm = this.toggleForm(
@@ -442,6 +451,7 @@ PatientActionsContainer.propTypes = {
   isNoteFormActive: PropTypes.bool,
   isFollowUpsFormActive: PropTypes.bool,
   isRecallsFormActive: PropTypes.bool,
+  filterActiveSegmentLabel: PropTypes.string,
   setSelectedNote: PropTypes.func.isRequired,
   setSelectedFollowUp: PropTypes.func.isRequired,
   setSelectedRecall: PropTypes.func.isRequired,
@@ -449,6 +459,7 @@ PatientActionsContainer.propTypes = {
   setIsFollowUpsFormActive: PropTypes.func.isRequired,
   setIsRecallsFormActive: PropTypes.func.isRequired,
   fetchEntities: PropTypes.func.isRequired,
+  segments: PropTypes.arrayOf(PropTypes.object),
 };
 
 PatientActionsContainer.defaultProps = {
@@ -461,12 +472,15 @@ PatientActionsContainer.defaultProps = {
   isNoteFormActive: false,
   isFollowUpsFormActive: false,
   isRecallsFormActive: false,
+  filterActiveSegmentLabel: '',
+  segments: [],
 };
 
-function mapStateToProps({ entities, patientTable, auth }) {
+function mapStateToProps({ entities, patientTable, auth, featureFlags }) {
   const waitForAuth = auth.get('accountId');
   const userId = auth.get('userId');
   const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
+  const segments = featureFlags?.getIn(['flags', 'custom-segments']);
   const accountUsers = entities
     .getIn(['users', 'models'])
     .toArray()
@@ -480,6 +494,7 @@ function mapStateToProps({ entities, patientTable, auth }) {
     activeAccount,
     userId,
     accountUsers,
+    segments,
     activePatient: patientTable.get('activePatient'),
     selectedNote: patientTable.get('selectedNote'),
     selectedFollowUp: patientTable.get('selectedFollowUp'),
@@ -487,6 +502,7 @@ function mapStateToProps({ entities, patientTable, auth }) {
     isNoteFormActive: patientTable.get('isNoteFormActive'),
     isFollowUpsFormActive: patientTable.get('isFollowUpsFormActive'),
     isRecallsFormActive: patientTable.get('isRecallsFormActive'),
+    filterActiveSegmentLabel: patientTable.get('filterActiveSegmentLabel'),
   };
 }
 

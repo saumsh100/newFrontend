@@ -9,6 +9,7 @@ export default gql`
     $createdAt: String
     $note: String
     $sentRecallOutcomeId: String
+    $source: String
   ) {
     createManualSentRecall(
       sentRecallCreateInput: {
@@ -19,12 +20,14 @@ export default gql`
         createdAt: $createdAt
         note: $note
         sentRecallOutcomeId: $sentRecallOutcomeId
+        source: $source
       }
     ) {
       id
       accountId
       patientId
       primaryType
+      source
       note
       userId
       createdAt
