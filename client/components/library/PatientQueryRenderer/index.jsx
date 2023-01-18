@@ -4,6 +4,21 @@ import { gql } from '@apollo/client';
 import { Query } from '@apollo/client/react/components';
 import { Loading, ErrorBadge } from '..';
 
+export const gqlQueryFetchIsPoc = gql`
+  query fetchIsPocStatus($patientId: String!) {
+    accountViewer {
+      id
+      patient(id: $patientId) {
+        id
+        firstName
+        lastName
+        isEmailPoc
+        isPhonePoc
+      }
+    }
+  }
+`;
+
 const gqlQuery = (patientId) => gql`
     query fetchIsPocStatus {
         accountViewer {

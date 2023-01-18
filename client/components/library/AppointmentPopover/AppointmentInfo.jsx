@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useQuery } from '@apollo/client';
 import { formatPhoneNumber } from '../../../util/isomorphic';
 import ActionsDropdown from '../../Patients/PatientInfo/ActionsDropdown';
 import {
@@ -20,6 +21,7 @@ import ChairModel from '../../../entities/models/Chair';
 import EnabledFeature from '../EnabledFeature';
 import styles from './reskin-styles.scss';
 import { getFormattedDate, getTodaysDate } from '../util/datetime';
+import { gqlQueryFetchIsPoc } from '../PatientQueryRenderer';
 
 const popoverDataSections = (subHeaderText, data) => (
   <div className={styles.container} key={subHeaderText}>
@@ -48,6 +50,9 @@ const AppointmentInfo = (props) => {
     errorTitle,
     errorMessage,
   } = props;
+  const { data } = useQuery(gqlQueryFetchIsPoc, {
+    variables: { patientId: patient?.id },
+  });
   const { startDate, endDate, note, reason, description } = appointment;
   const age = patient?.birthDate ? getTodaysDate(timezone).diff(patient.birthDate, 'years') : null;
   const appointmentDate = getFormattedDate(startDate, 'dddd LL', timezone);
@@ -60,6 +65,7 @@ const AppointmentInfo = (props) => {
   ) : (
     <span className={styles.header_text}>{title}</span>
   );
+
   return (
     <Card className={styles.card} noBorder>
       <SContainer>
@@ -71,8 +77,16 @@ const AppointmentInfo = (props) => {
                 role="button"
                 tabIndex={0}
                 className={styles.appointmentPatientLink}
-                onDoubleClick={() => editPatient(patient.id)}
-                onKeyDown={(e) => e.keyCode === 13 && editPatient(patient.id)}
+                onDoubleClick={() => {
+                  if (data?.accountViewer?.patient) {
+                    editPatient(patient.id);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.keyCode === 13 && data?.accountViewer?.patient) {
+                    editPatient(patient.id);
+                  }
+                }}
               >
                 <ActionsDropdown
                   patient={patient}
@@ -81,7 +95,11 @@ const AppointmentInfo = (props) => {
                       role="button"
                       tabIndex={0}
                       onKeyDown={() => {}}
-                      onClick={onClick}
+                      onClick={() => {
+                        if (data?.accountViewer?.patient) {
+                          onClick();
+                        }
+                      }}
                       className={styles.appointmentPatientButton}
                     >
                       <span className={styles.appointmentHeader_text}>
@@ -90,11 +108,13 @@ const AppointmentInfo = (props) => {
                       {age !== null && (
                         <span className={styles.appointmentHeader_age}>{`, ${age}`}</span>
                       )}
-                      <Icon
-                        icon="caret-down"
-                        type="solid"
-                        className={styles.appointmentHeader_actionsButtonSmall}
-                      />
+                      {data?.accountViewer?.patient && (
+                        <Icon
+                          icon="caret-down"
+                          type="solid"
+                          className={styles.appointmentHeader_actionsButtonSmall}
+                        />
+                      )}
                     </div>
                   )}
                 />

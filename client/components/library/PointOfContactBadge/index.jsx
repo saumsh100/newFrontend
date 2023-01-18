@@ -65,10 +65,10 @@ class PointOfContactBadge extends React.PureComponent {
     return (
       <PatientQueryRenderer patientId={patientId}>
         {(data) => {
-          if (!data || !('accountViewer' in data)) {
+          if (!data || !('accountViewer' in data) || !data?.accountViewer?.patient) {
             return null;
           }
-          const isPoC = data.accountViewer.patient[`is${capitalize(channel)}Poc`];
+          const isPoC = data.accountViewer?.patient[`is${capitalize(channel)}Poc`];
           return this.renderBadge(isPoC);
         }}
       </PatientQueryRenderer>
