@@ -1,4 +1,3 @@
-
 import createModel from '../createModel';
 
 const generateFullName = (firstName = '', lastName = '') => {
@@ -22,6 +21,7 @@ const PractitionerSchema = {
   isActive: null,
   type: null,
   isHidden: null,
+  multipleBookingEnabled: null,
 };
 
 export default class Practitioner extends createModel(PractitionerSchema, 'Practitioner') {

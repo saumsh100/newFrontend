@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 const practitionerShape = {
@@ -8,6 +7,7 @@ const practitionerShape = {
   type: PropTypes.string,
   isActive: PropTypes.bool,
   isHidden: PropTypes.bool,
+  multipleBookingEnabled: PropTypes.bool,
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   avatarUrl: PropTypes.string,
