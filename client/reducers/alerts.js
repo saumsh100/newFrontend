@@ -1,8 +1,5 @@
 import { Map } from 'immutable';
-import { v4 as uuid } from 'uuid';
 import { createAction, handleActions } from 'redux-actions';
-import Alert from '../entities/models/Alert';
-import DesktopNotification from '../util/desktopNotification';
 
 const reducer = '@alerts';
 
@@ -25,26 +22,8 @@ export const initialState = Map({});
 
 export default handleActions(
   {
-    [CREATE_ALERT](state, { payload: { alert, type } }) {
-      const title = alert.title || (type === 'success' ? 'Success' : 'Error');
-      const id = alert.id || uuid();
-      const alertData = new Alert({
-        id,
-        title,
-        body: alert.body,
-        subText: alert.subText || '',
-        type,
-        caller: alert.caller || false,
-        time: 3000,
-        sticky: alert.sticky || false,
-        browserAlert: alert.browserAlert || false,
-        clickable: alert.clickable || false,
-      });
-
-      if (alert.browserAlert) {
-        DesktopNotification.showNotification(title, { body: alert.body });
-      }
-
+    [CREATE_ALERT](state, { payload: alertData }) {
+      const id = alertData.get('id');
       return state.set(id, alertData);
     },
 
