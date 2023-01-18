@@ -60,6 +60,13 @@ const HelpTextLookupTable = {
     communication: null,
     followUp: null,
   },
+  'Missed Pre-appointment (Hygiene/ Recall)': {
+    status: 'Active',
+    description:
+      ' Patients who completed a Hygiene/Recall appointment in the last 30 days and did not reschedule',
+    communication: null,
+    followUp: null,
+  },
   'Missed Pre-appointed': {
     status: 'Active',
     description: 'Patients who completed an appt in the past 30 days, and did not reschedule',
