@@ -10,6 +10,10 @@ import styles from '../styles.scss';
 
 const optionsGender = [{ value: 'Male' }, { value: 'Female' }];
 const optionsStatus = [{ value: 'Active' }, { value: 'Inactive' }];
+const followUpLabel = 'FOLLOW UPS';
+const myFollowUpLabel = 'MY FOLLOW UPS (PAST 30 DAYS)';
+
+export { followUpLabel, myFollowUpLabel };
 
 const theme = {
   filled: styles.filledLabelStyle,
@@ -19,11 +23,10 @@ const theme = {
 const DemographicsForm = (props) => {
   const { formName, filterActiveSegmentLabel } = props;
 
+  const label = filterActiveSegmentLabel?.toUpperCase();
+
   useEffect(() => {
-    if (
-      (formName === 'demographics' && (filterActiveSegmentLabel === 'Follow Ups') ||
-      filterActiveSegmentLabel === 'My Follow Ups (past 30 days)')
-    ) {
+    if (formName === 'demographics' && (label === followUpLabel || label === myFollowUpLabel)) {
       props.change(formName, 'status', '');
     }
   }, [filterActiveSegmentLabel, formName]);

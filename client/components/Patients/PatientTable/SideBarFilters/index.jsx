@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';
 import { Icon, Card, StandardButton as Button } from '../../../library';
-import DemographicsForm from './Demographics';
+import DemographicsForm, { followUpLabel, myFollowUpLabel } from './Demographics';
 import AppointmentsForm from './Appointments';
 import PractitionersForm from './Practitioners';
 import CommunicationsForm from './Communications';
@@ -161,9 +161,11 @@ class SideBarFilters extends Component {
 
   clearTags() {
     const label = this.props.filterActiveSegmentLabel;
+
+    const newLabel = label?.toUpperCase();
     if (Object.keys(this.props.filters).length === 0) return;
 
-    label === 'Follow Ups' || label === 'My Follow Ups (past 30 days)'
+    newLabel === followUpLabel || newLabel === myFollowUpLabel
       ? this.props.removeFollowUpFilters()
       : this.props.removeAllFilters();
 
@@ -178,7 +180,7 @@ class SideBarFilters extends Component {
       filterObj.sentRecalls = initialSentRecalls;
       this.props.change('recalls', 'sentRecalls', initialSentRecalls);
     }
-    if (label === 'Follow Ups' || label === 'My Follow Ups (past 30 days)') {
+    if (newLabel === followUpLabel || newLabel === myFollowUpLabel) {
       this.props.change('demographics', 'status', '');
     }
     this.props.addFilter(filterObj);
