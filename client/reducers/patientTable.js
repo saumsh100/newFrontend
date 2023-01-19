@@ -183,10 +183,29 @@ export default handleActions(
       const currentState = state?.toJS();
       const activeSegment = currentState?.filters?.segment[0];
       const hasSentRecallFilterApplied = currentState?.filters?.sentRecalls;
+
       if (activeSegment === 'smartRecare' || hasSentRecallFilterApplied) {
         const patientList = currentState?.data || [];
-        const data = patientList.filter((patient) => patient.id !== payload.patientId);
-        return state.merge({ data });
+        let count = currentState?.count;
+        let filteredLoggedPatientList = patientList.filter(
+          (patient) => patient.id !== payload.patientId,
+        );
+
+        if (patientList.length !== filteredLoggedPatientList.length) {
+          const patientIndex = patientList.findIndex((patient) => patient.id === payload.patientId);
+          filteredLoggedPatientList = filteredLoggedPatientList.map((patient, index) => {
+            if (index >= patientIndex) {
+              return {
+                ...patient,
+                rowNumber: patient.rowNumber - 1,
+              };
+            }
+            return patient;
+          });
+          count = currentState?.count - (patientList.length - filteredLoggedPatientList.length);
+        }
+
+        return state.merge({ data: filteredLoggedPatientList, count });
       }
       return state;
     },
