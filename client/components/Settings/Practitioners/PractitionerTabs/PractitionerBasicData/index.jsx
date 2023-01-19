@@ -129,7 +129,7 @@ class PractitionerBasicData extends Component {
             </div>
             <div className={styles.practFormContainer_practHidden}>
               <span className={styles.practFormContainer_practHidden_text}>
-                Would you like to enable double booking on the booking widget?
+                Would you like this practitioner to be double-booked on the booking widget?
               </span>
               <div className={styles.practFormContainer_practHidden_hiddenToggle}>
                 <Field name="multipleBookingEnabled" component="Toggle" />
