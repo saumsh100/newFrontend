@@ -80,7 +80,7 @@ class PractitionerBasicData extends Component {
       fullAvatarUrl: practitioner.get('fullAvatarUrl'),
       type: practitioner.get('type'),
       isHidden: practitioner.get('isHidden'),
-      multipleBookingEnabled: practitioner.get('multipleBookingEnabled'),
+      multiBookingEnabled: practitioner.get('multiBookingEnabled'),
     };
 
     return (
@@ -132,7 +132,7 @@ class PractitionerBasicData extends Component {
                 Would you like this practitioner to be double-booked on the booking widget?
               </span>
               <div className={styles.practFormContainer_practHidden_hiddenToggle}>
-                <Field name="multipleBookingEnabled" component="Toggle" />
+                <Field name="multiBookingEnabled" component="Toggle" />
               </div>
             </div>
           </div>

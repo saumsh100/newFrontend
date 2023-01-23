@@ -7,7 +7,7 @@ const practitionerShape = {
   type: PropTypes.string,
   isActive: PropTypes.bool,
   isHidden: PropTypes.bool,
-  multipleBookingEnabled: PropTypes.bool,
+  multiBookingEnabled: PropTypes.bool,
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   avatarUrl: PropTypes.string,

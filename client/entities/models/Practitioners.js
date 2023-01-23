@@ -21,7 +21,7 @@ const PractitionerSchema = {
   isActive: null,
   type: null,
   isHidden: null,
-  multipleBookingEnabled: null,
+  multiBookingEnabled: null,
 };
 
 export default class Practitioner extends createModel(PractitionerSchema, 'Practitioner') {
