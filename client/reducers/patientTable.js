@@ -95,6 +95,7 @@ export const createInitialPatientState = (state) =>
 
     activePatient: null,
     filterActiveSegmentLabel: null,
+    patientLogged: null,
     ...state,
   });
 
@@ -205,7 +206,11 @@ export default handleActions(
           count = currentState?.count - (patientList.length - filteredLoggedPatientList.length);
         }
 
-        return state.merge({ data: filteredLoggedPatientList, count });
+        return state.merge({
+          data: filteredLoggedPatientList,
+          count,
+          patientLogged: payload.patientId,
+        });
       }
       return state;
     },

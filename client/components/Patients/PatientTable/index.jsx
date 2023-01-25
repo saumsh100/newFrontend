@@ -56,6 +56,13 @@ class PatientTable extends React.PureComponent {
     this.props.fetchPatientTableData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.patientLogged && prevProps.patientLogged !== this.props.patientLogged) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ expanded: {} });
+    }
+  }
+
   /**
    * Expand or collapse a row, based on its current status.
    *
@@ -366,13 +373,18 @@ PatientTable.propTypes = {
   push: PropTypes.func.isRequired,
   removeFilter: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
+  patientLogged: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ entities, patientTable, auth }) => ({
-  practitioners: entities.getIn(['practitioners', 'models']),
-  patientTable,
-  timezone: auth.get('timezone'),
-});
+const mapStateToProps = ({ entities, patientTable, auth }) => {
+  const patientLogged = patientTable.get('patientLogged');
+  return {
+    practitioners: entities.getIn(['practitioners', 'models']),
+    patientTable,
+    timezone: auth.get('timezone'),
+    patientLogged,
+  };
+};
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
