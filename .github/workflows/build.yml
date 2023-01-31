@@ -1,0 +1,29 @@
+name: Matrix Build
+on:
+  workflow_dispatch:
+
+
+jobs:
+  setup:
+    runs-on: self-hosted
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          echo "git SHA: ${{ github.sha }}"
+          echo "::set-output name=matrix::{\"include\":[{\"environment\":\"dev01\"},{\"environment\":\"dev\"},{\"environment\":\"test\"},{\"environment\":\"demo\"},{\"environment\":\"prod\"},{\"environment\":\"prod-us\"}]}"
+  build:
+    needs: setup
+    strategy:
+      matrix: ${{ fromJSON(needs.setup.outputs.matrix) }}
+    uses: CareCru/gh_pipelines/.github/workflows/build_tag_push_with_buildenv.yml@main
+    with:
+      image_name: frontend
+      environment: ${{ matrix.environment }}
+      ecr_repo: frontend
+      secret_name: frontend
+      region: ca-central-1
+    secrets:
+      aws_access_key_id: ${{secrets.GITHUBACTIONS_AWS_ACCESS_KEY}}
+      aws_secret_access_key: ${{secrets.GITHUBACTIONS_AWS_SECRET_ACCESS_KEY}}
