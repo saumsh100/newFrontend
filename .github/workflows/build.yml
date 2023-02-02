@@ -24,6 +24,7 @@ jobs:
       ecr_repo: frontend
       secret_name: frontend
       region: ca-central-1
+      dockerfile: infra/Dockerfile
     secrets:
       aws_access_key_id: ${{secrets.GITHUBACTIONS_AWS_ACCESS_KEY}}
       aws_secret_access_key: ${{secrets.GITHUBACTIONS_AWS_SECRET_ACCESS_KEY}}
