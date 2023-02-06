@@ -7,7 +7,6 @@ import { Header, CodeSnippet } from '../../../library/index';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import accountModel from '../../../../entities/models/Account';
 import PreferencesForm from './PreferencesForm';
-import ChairSchedulingForm from './ChairSchedulingForm';
 import SchedulingUrlForm from './SchedulingUrlForm';
 import SchedulingPreviewForm from './SchedulingPreviewForm';
 import SettingsCard from '../../Shared/SettingsCard';
@@ -79,19 +78,13 @@ class OnlineBooking extends Component {
           />
         </div>
         {(role === 'SUPERADMIN' || role === 'OWNER') && (
-          <>
-            <div className={styles.formContainer}>
-              <Header title="Chair Scheduling" contentHeader />
-              <ChairSchedulingForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
+          <div className={styles.snippetContainer}>
+            <div className={styles.label}>
+              <Header title="HTML SNIPPET " contentHeader />
+              Copy and paste the snippet below into your website, at the bottom of your body tag.
             </div>
-            <div className={styles.snippetContainer}>
-              <div className={styles.label}>
-                <Header title="HTML SNIPPET " contentHeader />
-                Copy and paste the snippet below into your website, at the bottom of your body tag.
-              </div>
-              <CodeSnippet codeSnippet={snippet} />
-            </div>
-          </>
+            <CodeSnippet codeSnippet={snippet} />
+          </div>
         )}
       </SettingsCard>
     );
