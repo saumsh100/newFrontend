@@ -1,0 +1,87 @@
+@import '../../styles/ui-reskin.scss';
+
+.notificationContainer {
+  background-color: $super-white;
+  border: 1px solid $color-purple-200;
+  border-left: 8px solid $color-lavender-400;
+
+  border-left-width: 8px;
+  border-radius: 0.4rem;
+  box-shadow: $card-shadow;
+
+  display: flex;
+  flex-direction: row;
+
+  gap: 1.6rem;
+
+  padding: 1.6rem;
+  position: absolute;
+  right: 1.2rem;
+  top: 1.2rem;
+  z-index: 1000;
+}
+
+.notificationRefreshImg {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.notificationContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  width: 310px;
+
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+}
+
+.notificationHeader {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.closeButton {
+  color: $color-lavender-500;
+  font-size: $xx-medium-size;
+
+  &:hover {
+    i {
+      font-weight: $normal-weight;
+    }
+  }
+}
+
+.title {
+  color: $color-purple-500;
+  font-size: $x-medium-size;
+  font-weight: $bold-weight;
+  line-height: 2.4rem;
+
+  margin: 0;
+}
+
+.textBody {
+  color: $color-purple-500;
+  font-size: $x-medium-size;
+  font-weight: $normal-weight;
+  line-height: 2.4rem;
+
+  margin: 0;
+}
+
+.notificationFooter {
+  color: $color-lavender-400;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+  line-height: 2rem;
+  text-decoration: underline;
+}

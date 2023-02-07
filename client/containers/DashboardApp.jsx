@@ -18,6 +18,7 @@ import { isFeatureEnabledSelector } from '../reducers/featureFlags';
 import { fetchWaitingRoomQueue } from '../thunks/waitingRoom';
 import { loadUnreadChatCount } from '../thunks/chat';
 import MicroFrontendRenderer from '../micro-front-ends/MicroFrontendRenderer';
+import RefreshNotification from '../components/RefreshNotification';
 
 // eslint-disable-next-line import/no-unresolved
 const EmSwitcher = loadable(() => import('EM_MFE/EmSwitcher'));
@@ -82,6 +83,7 @@ const DashboardApp = (props) => {
     <div>
       <CallerModal />
       <TopBarContainer />
+      <RefreshNotification />
       {!isCollapsed && (
         <div
           className={styles.overlay}
