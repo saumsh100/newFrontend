@@ -18,6 +18,7 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+
   @media screen and (max-width: 700px) {
     @include requestCardMobile-mixin();
   }
@@ -35,9 +36,8 @@
 .requestList {
   flex: 1;
   height: 100px;
-  min-height: 314px;
-  overflow: auto;
   overflow-x: hidden;
+  overflow-y: scroll;
   width: 100%;
 }
 
@@ -55,7 +55,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  overflow: auto;
+  overflow-x: auto;
   width: 100%;
 }
 
@@ -67,11 +67,13 @@
   padding: 10px;
 
   transition: all 0.1s ease-in-out;
+
   &:hover {
     background-color: $color-lavender-050;
     transform: scale(1.02);
   }
 }
+
 .dashRequestListItem {
   box-sizing: border-box;
   color: #2e3845;
@@ -80,6 +82,7 @@
   padding: 20px;
 
   transition: all 0.1s ease-in-out;
+
   &:hover {
     background-color: $color-lavender-050;
     transform: scale(1.02);
@@ -146,13 +149,16 @@
   &:hover > &__details > &__nameAge > &__name {
     color: $color-purple-400;
   }
+
   &:hover > &__details > &__service {
     color: $color-purple-400;
   }
+
   &:hover > .requestedText {
     color: $color-purple-400;
   }
 }
+
 .dashRequestData {
   border-left: 1px solid $color-lavender-100;
   box-sizing: border-box;
@@ -213,9 +219,11 @@
   &:hover > .requestData__details > .requestData__nameAge > .requestData__name {
     color: $color-purple-400;
   }
+
   &:hover > .requestData__details > .requestData__service {
     color: $color-purple-400;
   }
+
   &:hover > .requestedText {
     color: $color-purple-400;
   }
@@ -252,6 +260,7 @@
     font-weight: 500;
     padding-bottom: 3px;
     text-transform: lowercase;
+
     &::first-letter {
       text-transform: uppercase;
     }
@@ -276,6 +285,7 @@
   min-width: 71px;
   text-align: center;
 }
+
 .calendarIcon {
   padding-right: 7px;
 }
@@ -287,6 +297,7 @@
 .waitlistDetails {
   display: flex;
 }
+
 .joinedWaitlist {
   background: $super-white;
   border: 1px solid $color-lavender-200;
