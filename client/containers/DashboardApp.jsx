@@ -74,11 +74,30 @@ const DashboardApp = (props) => {
     vwrIntervalId = null;
   };
 
-  const { location, children, enterpriseManagementPhaseTwoActive, isCollapsed, isHovered } = props;
+  const {
+    location,
+    children,
+    enterpriseManagementPhaseTwoActive,
+    isCollapsed,
+    isHovered,
+    userRole,
+  } = props;
+
+  const roleEnum = {
+    SUPERADMIN: true,
+    ADMIN: true,
+    OWNER: true,
+    MANAGER: false,
+    USER: false,
+    INVITED: false,
+  };
+
+  const hasEMAccess = roleEnum[userRole] || false;
 
   if (location.pathname.includes('login') || location.pathname.includes('enterprise-management')) {
     return <div>{children}</div>;
   }
+
   return (
     <div>
       <CallerModal />
@@ -103,7 +122,7 @@ const DashboardApp = (props) => {
         setIsSidebarHovered={setIsSidebarHovered}
       >
         <NavList location={location} />
-        {props.isSuperAdmin && (
+        {hasEMAccess && (
           <MicroFrontendRenderer
             load={enterpriseManagementPhaseTwoActive}
             component={
@@ -127,12 +146,14 @@ const DashboardApp = (props) => {
 function mapStateToProps({ featureFlags, toolbar, auth }) {
   const isPollingNeeded = isFeatureEnabledSelector(featureFlags.get('flags'), 'is-polling-needed');
   const isSuperAdmin = auth.get('role') === 'SUPERADMIN';
+  const userRole = auth.get('role');
   const enterpriseManagementPhaseTwoActive = featureFlags.getIn([
     'flags',
     'enterprise-management-phase-2',
   ]);
 
   return {
+    userRole,
     isPollingNeeded,
     isCollapsed: toolbar.get('isCollapsed'),
     isHovered: toolbar.get('isHovered'),
@@ -160,7 +181,7 @@ DashboardApp.propTypes = {
   isHovered: PropTypes.bool.isRequired,
   isPollingNeeded: PropTypes.bool.isRequired,
   accountId: PropTypes.string.isRequired,
-  isSuperAdmin: PropTypes.bool.isRequired,
+  userRole: PropTypes.string.isRequired,
   fetchWaitingRoomQueue: PropTypes.func.isRequired,
   loadUnreadChatCount: PropTypes.func.isRequired,
   enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,

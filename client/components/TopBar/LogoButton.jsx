@@ -8,7 +8,7 @@ import MicroFrontendRenderer from '../../micro-front-ends/MicroFrontendRenderer'
 // eslint-disable-next-line import/no-unresolved
 const EmPracticeSwitcher = loadable(() => import('EM_MFE/EmPracticeSwitcher'));
 
-const LogoButton = ({ enterpriseManagementPhaseTwoActive, imgSrc, description }) => {
+const LogoButton = ({ enterpriseManagementPhaseTwoActive, imgSrc, description, userRole }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const useOutsideAlerter = (ref) => {
@@ -26,8 +26,21 @@ const LogoButton = ({ enterpriseManagementPhaseTwoActive, imgSrc, description })
   };
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
+
+  const roleEnum = {
+    SUPERADMIN: true,
+    ADMIN: true,
+    OWNER: true,
+    MANAGER: false,
+    USER: false,
+    INVITED: false,
+  };
+
+  const roleCanAccessEM = roleEnum[userRole] || false;
+  const hasEMAccess = roleCanAccessEM && enterpriseManagementPhaseTwoActive;
+
   const handleClick = () => {
-    if (!enterpriseManagementPhaseTwoActive) return;
+    if (!hasEMAccess) return;
     setIsDropdownOpen(!isDropdownOpen);
   };
   return (
@@ -36,7 +49,7 @@ const LogoButton = ({ enterpriseManagementPhaseTwoActive, imgSrc, description })
         type="button"
         onClick={() => handleClick()}
         className={classNames(styles.logoWrapperButton, {
-          [styles.logoWrapperButton_emAccount]: enterpriseManagementPhaseTwoActive,
+          [styles.logoWrapperButton_emAccount]: hasEMAccess,
         })}
       >
         <div className={styles.logoImage}>
@@ -58,6 +71,7 @@ LogoButton.propTypes = {
   enterpriseManagementPhaseTwoActive: PropTypes.bool.isRequired,
   imgSrc: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  userRole: PropTypes.string.isRequired,
 };
 
 export default LogoButton;
