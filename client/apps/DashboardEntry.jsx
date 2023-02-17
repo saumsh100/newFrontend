@@ -39,6 +39,7 @@ load()(store.dispatch).then(() => {
   const { auth } = store.getState();
   if (auth.get('isAuthenticated')) {
     const user = auth.get('user').toJS();
+    const role = auth.get('role');
     const account = auth.get('account').toJS();
     const enterprise = auth.get('enterprise').toJS();
     const userId = user.id;
@@ -61,6 +62,12 @@ load()(store.dispatch).then(() => {
             name: fullName,
             email,
             created_at: user.createdAt,
+            accountId,
+            enterpriseName: enterprise.name,
+            country: account.address.country,
+            timezone: account.timezone,
+            role,
+            externalId: account.externalId || '',
           });
           clearInterval(handleIntercomCheck);
         }
