@@ -25,6 +25,8 @@ const RequestsSchema = {
   availableTimes: null,
   preferences: null,
   daysOfTheWeek: null,
+  suggestedChairId: null,
+  suggestedPractitionerId: null,
 };
 
 export default class Requests extends createModel(RequestsSchema, 'Requests') {

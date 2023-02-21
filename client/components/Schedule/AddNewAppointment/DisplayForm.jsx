@@ -171,8 +171,9 @@ class DisplayForm extends Component {
         endTime,
         date: getUTCDate(startDate, timezone).toISOString(),
         serviceId,
-        practitionerId: practitionerId || '',
-        chairId: chairId || '',
+        practitionerId:
+          practitionerId || selectedAppointment.requestModel.get('suggestedPractitionerId') || '',
+        chairId: chairId || selectedAppointment.requestModel.get('suggestedChairId') || '',
         isPatientConfirmed,
         isCancelled,
         duration: durationTime,
