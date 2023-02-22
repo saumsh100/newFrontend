@@ -34,6 +34,7 @@ const AccountSchema = {
   canSendReminders: null,
   canSendRecalls: null,
   canSendReviews: null,
+  cancellationListTimeFrame: null,
   lastSyncDate: new Date(2016, 5, 1).toISOString(),
   googlePlaceId: null,
   facebookUrl: null,

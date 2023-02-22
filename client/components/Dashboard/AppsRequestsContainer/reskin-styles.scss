@@ -47,6 +47,24 @@
     }
   }
 
+  &_scheduleTab {
+    background-color: $primary-grey-3;
+    border-right: 1px solid $chat-tabs-border-color;
+    box-sizing: border-box;
+    color: $color-grey-700;
+    display: inline-flex;
+    font-size: $s-small-size;
+    font-weight: $bold-weight;
+    height: 48px;
+    justify-content: center;
+    padding-top: 16px 12px;
+    width: 50%;
+
+    &:hover {
+      background-color: $color-purple-050;
+    }
+  }
+
   &_activeTab {
     background-color: $super-white;
 

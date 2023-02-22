@@ -1,0 +1,294 @@
+@import '../../../styles/ui-reskin.scss';
+
+.timeFrameContainer {
+  align-items: center;
+  border: 1px solid $color-lavender-100;
+  display: flex;
+  font-size: 13px;
+  gap: 10px;
+  height: 33px;
+  padding: 8px 12px;
+}
+.timeFrameButton {
+  border: 1px solid $color-lavender-200;
+  display: flex;
+  font-size: $small-size;
+  font-weight: $heavy-weight;
+  height: 17px;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: 0px;
+  padding: 2px 4px;
+  width: 17px;
+}
+.timeFrameText {
+  color: $color-grey-600;
+}
+
+.cancellationList {
+  flex: 1;
+  height: 100px;
+  overflow-x: hidden;
+  overflow-y: overlay;
+  width: 100%;
+}
+.cancellationListItem {
+  box-sizing: border-box;
+  cursor: pointer;
+  height: auto;
+  padding: 16px;
+
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    background-color: $color-lavender-050;
+    transform: scale(1.02);
+  }
+}
+
+.cancellationData {
+  border-left: 1px solid $color-lavender-100;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-size: $x-small-size;
+  justify-content: space-between;
+  padding-left: 12px;
+  text-align: left;
+  width: 100%;
+
+  @media screen and (max-width: 350px) {
+    max-width: 170px;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.4;
+  }
+
+  &__time {
+    color: $color-purple-400;
+    font-size: $medium-size;
+    font-weight: $bold-weight;
+  }
+
+  &__nameAge {
+    display: flex;
+    text-decoration: none;
+  }
+
+  &__name {
+    color: $color-purple-300;
+    font-size: $small-size;
+    font-weight: $bold-weight;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  &__service {
+    color: $color-purple-300;
+    font-size: $small-size;
+    font-weight: $semi-bold-weight;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__icon {
+    padding-right: 3px;
+  }
+
+  &__trashIcon {
+    color: $color-lavender-500;
+    font-size: $x-medium-size;
+    font-weight: $light-weight;
+    letter-spacing: 0.01px;
+    text-align: center;
+    float: right;
+    visibility: hidden;
+    width: 16px;
+  }
+
+  &:hover > &__details > &__nameAge > &__name {
+    color: $color-purple-400;
+  }
+
+  &:hover > &__details > &__service {
+    color: $color-purple-400;
+  }
+}
+.cancellationListItem:hover .cancellationData {
+  &__trashIcon {
+    visibility: visible;
+  }
+}
+.activeIcon{
+  $color: $color-grey-200;
+}
+
+
+.cancellationText {
+  color: $color-grey-600;
+  font-size: $small-size;
+  font-weight: $medium-weight;
+  margin-top: 8px;
+
+  &__container {
+    margin-bottom: 5px;
+  }
+
+  &__createdAt {
+    font-weight: $medium-weight;
+  }
+
+  &__requestedBy {
+    font-weight: $bold-weight;
+  }
+  &__patientWaitlist {
+    color: $color-purple-400;
+    display: flex;
+    font-weight: $bold-weight;
+    margin-top: 8px;
+  }
+}
+.CancellationButton {
+  margin-top: 12px;
+  width: 118px;
+}
+.unitValue{
+  margin-left: 4px;
+}
+.circleIcon {
+  margin-left: 5px;
+}
+
+.noCancellation {
+  background: $color-purple-050;
+  align-items: center;
+  color: $color-purple-300;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  opacity: 0.6;
+  text-align: center;
+  font-weight: $medium-weight;
+  font-size: $medium-size;
+}
+.formContainer {
+  background: $super-white;
+  border: 1px solid $color-lavender-100;
+  margin-right: 34px;
+  margin-top: -7px;
+  min-width: 405px;
+  padding: 16px;
+
+  @media screen and (max-width: 576px) {
+    height: auto;
+    min-height: unset;
+  }
+}
+.timeFramePopOver > :global(svg.Popover-tip) {
+  fill: white;
+}
+
+.dropdownConatiner {
+  background: $color-grey-100;
+}
+.timeFramePopover {
+  width: 405px;
+}
+.badgeContent {
+  align-items: center;
+  background: $color-lavender-400;
+  border-radius: 1000px;
+  color: $super-white;
+  display: flex;
+  font-size: $x-small-size;
+  height: 16px;
+  justify-content: center;
+  padding: 0px 5px;
+  width: max-content;
+}
+.waitlistText {
+  font-size: $small-size;
+  margin-left: 10px;
+}
+
+//Time Frame css
+.header {
+  color: $color-grey-600;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+}
+.body {
+  align-items: center;
+  background: $color-grey-050;
+  border: 1px solid $color-grey-100;
+  border-radius: 4px;
+  display: flex;
+  height: 58px;
+  margin-top: 10px;
+}
+
+.wrapper {
+  margin-left: 10px;
+  width: 20%;
+}
+.applyButton {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.toggleDiv {
+  border: 1px solid $color-purple-200;
+  border-radius: 4px;
+  height: 40px;
+  padding: 8px 12px;
+  width: 69px;
+  &:hover{
+    border-bottom: 1px solid $color-purple-200;
+  }
+}
+.disabledToggleDiv {
+  background: $color-grey-100;
+  border: 1px solid $color-grey-200;
+  border-radius: 4px;
+  height: 40px;
+  padding: 8px 12px;
+  width: 69px;
+  &:hover{
+    border-bottom: 1px solid $color-purple-200;
+  }
+}
+.caretIconWrapper{
+  color: $color-grey-200;
+  &:hover {
+    color: $color-grey-200;
+  }
+}
+.label {
+  left: 19px;
+  top: unset;
+  $color: $color-grey-200;
+}
+.check {
+  margin-right: 5px;
+}
+.waitlistSentMessage {
+  align-items: center;
+  color: $color-teal-700;
+  display: flex;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  height: 16px;
+  line-height: 16px;
+  width: 203px;
+}
+.checkCircle {
+  color: $color-teal-600;
+  font-size: 14px;
+  font-weight: 900;
+}

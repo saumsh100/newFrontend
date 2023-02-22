@@ -248,6 +248,10 @@
     font-weight: 700;
   }
 }
+.cancellationMonthDay {
+  padding-right: 12px;
+  text-align: center
+}
 
 .monthDay {
   min-width: 48px;
@@ -270,6 +274,14 @@
     color: $color-purple-600;
     font-size: 24px;
     font-weight: 700;
+    padding-bottom: 3px;
+    padding-top: 3px;
+  }
+  &_cancellationDay {
+    color: $color-purple-600;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
     padding-bottom: 3px;
     padding-top: 3px;
   }

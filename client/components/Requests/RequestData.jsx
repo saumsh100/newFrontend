@@ -17,7 +17,6 @@ const RequestData = ({
   tab,
 }) => {
   const age = birthDate ? `, ${getTodaysDate(timezone).diff(birthDate, 'years')}` : '';
-
   return (
     <div className={tab ? styles.dashRequestData : styles.requestData}>
       <div className={styles.waitlistDetails}>

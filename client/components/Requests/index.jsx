@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import classNames from 'classnames';
@@ -6,10 +6,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isHub } from '../../util/hub';
 import RequestList from './RequestList';
+import CancellationList from './CancellationData/CancellationList';
 import RequestsModel from '../../entities/models/Request';
-import { Card, CardHeader } from '../library';
+import { Card, Tabs, Tab } from '../library';
 import styles from '../Dashboard/styles';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
+import {cancellationListItem} from './CancellationData/thunks';
+import { httpClient } from '../../util/httpClient';
 
 function usePrevious(value) {
   const ref = useRef();
@@ -35,7 +38,28 @@ const Requests = (props) => {
     isLoaded,
     redirect,
     tab,
+    accountId,
   } = props;
+
+  const [index, setIndex] = useState(0);
+  const [cancellationList, setCancellationList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    cancellationListItem(accountId).then(({ data }) => {
+      setLoading(false);
+      setCancellationList(data);
+    });
+    const interval = setInterval(() => {
+      cancellationListItem(accountId).then(({ data }) => {
+        setLoading(false);
+        setCancellationList(data);
+      });
+    }, 15 * 60 * 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const prevAmount = usePrevious({ sortedRequests });
   document.addEventListener('visibilitychange', () => {
@@ -55,8 +79,14 @@ const Requests = (props) => {
   if (disableHeader) {
     requestHeaderClassNames = classNames(requestHeaderClassNames, styles.hidden);
   }
-
-  let display = (
+  const displayApps = (
+    <CancellationList
+      cancellationList={cancellationList}
+      setCancellationList={setCancellationList}
+      setLoading={setLoading}
+    />
+  );
+  let displayRequests = (
     <RequestList
       sortedRequests={sortedRequests}
       requestId={requestId}
@@ -69,10 +99,14 @@ const Requests = (props) => {
       tab={tab}
     />
   );
+ 
+  const isLoadeds = isLoaded === true ? !loading : isLoaded;
+  
 
   if (filteredRequests && filteredRequests.length === 0) {
-    display = <div className={styles.noRequests}>No Requests</div>;
+    displayRequests = <div className={styles.noRequests}>No Requests</div>;
   }
+  const display = [displayRequests, displayApps][index];
   return (
     <Card
       className={classNames(styles.requestCard, {
@@ -80,22 +114,36 @@ const Requests = (props) => {
       })}
       noBorder={noBorder}
       runAnimation={runAnimation}
-      loaded={isLoaded}
+      loaded={isLoadeds}
     >
       {!isHub() && (
         <div className={requestHeaderClassNames}>
-          <CardHeader
-            data-test-id="requestCount"
-            count={sortedRequests.length || 0}
-            title="Online Requests"
-            requests
-          />
+          <Tabs index={index} onChange={(i) => setIndex(i)} noUnderLine>
+            <Tab
+              label={`${sortedRequests.length || 0} Online Requests`}
+              className={styles.appRequestContainer_scheduleTab}
+              activeClass={styles.appRequestContainer_activeTab}
+            />
+            <Tab
+              label={`${cancellationList.length || 0} Appointments`}
+              className={styles.appRequestContainer_scheduleTab}
+              activeClass={styles.appRequestContainer_activeTab}
+            />
+          </Tabs>
         </div>
       )}
-      <div className={styles.requestBody}> {isLoaded && display}</div>
+      <div className={styles.requestBody}> {display}</div>
     </Card>
   );
 };
+function mapStateToProps({ auth, schedule }) {
+  return {
+    timezone: auth.get('timezone'),
+    role: auth.get('role'),
+    accountId: auth.get('accountId'),
+    timeFrame: schedule.get('timeFrame'),
+  };
+}
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
@@ -126,6 +174,6 @@ Requests.propTypes = {
   services: PropTypes.instanceOf(Map),
   tab: PropTypes.string.isRequired,
 };
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Requests);
