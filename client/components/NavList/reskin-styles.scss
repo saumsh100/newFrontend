@@ -119,7 +119,8 @@
 
   &__item {
     background: $color-lavender-200;
-    height: 11px;
+    box-sizing: border-box;
+    height: 31px;
     list-style-type: none;
     padding-top: 20px;
     position: relative;
