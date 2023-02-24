@@ -77,41 +77,42 @@ function TimeFrameSetting(props) {
           </Tooltip>
         </div>
         <div className={styles.body}>
-          {role === 'OWNER' ? (
-            <DropdownSelect
-              className={styles.dropdown}
-              align="left"
-              options={dropDownOptionValue}
-              value={
-                timeFrameValue === null ? <span className={styles.select}>2</span> : timeFrameValue
-              }
-              label={timeFrameValue === null ? '2' : ''}
-              required
-              onChange={(graph) => {
-                setTimeFrameValue(graph);
-              }}
-              theme={{
-                wrapper: styles.wrapper,
-                toggleDiv: styles.toggleDiv,
-                label: styles.label,
-                activeIcon: styles.activeIcon,
-              }}
-            />
-          ) : (
-            <DropdownSelect
-              className={styles.dropdown}
-              align="left"
-              label={timeFrameValue === null ? '2' : ''}
-              required
-              theme={{
-                wrapper: styles.wrapper,
-                toggleDiv: styles.disabledToggleDiv,
-                label: styles.label,
-                caretIconWrapper: styles.caretIconWrapper,
-                caretIcon: styles.activeIcon,
-              }}
-            />
-          )}
+          {
+            role === 'OWNER' || role === 'SUPERADMIN' ? (
+              <DropdownSelect
+                className={styles.dropdown}
+                align="left"
+                options={dropDownOptionValue}
+                value={
+                  timeFrameValue === null ? <span className={styles.select}>2</span> : timeFrameValue
+                }
+                label={timeFrameValue === null ? '2' : ''}
+                required
+                onChange={(graph) => {
+                  setTimeFrameValue(graph);
+                }}
+                theme={{
+                  wrapper: styles.wrapper,
+                  toggleDiv: styles.toggleDiv,
+                  label: styles.label,
+                  activeIcon: styles.activeIcon,
+                }}
+              />
+            ) : (
+              <DropdownSelect
+                className={styles.dropdown}
+                align="left"
+                label={timeFrameValue === null ? '2' : ''}
+                required
+                theme={{
+                  wrapper: styles.wrapper,
+                  toggleDiv: styles.disabledToggleDiv,
+                  label: styles.label,
+                  caretIconWrapper: styles.caretIconWrapper,
+                  caretIcon: styles.activeIcon,
+                }}
+              />
+            )}
           <span className={styles.timeFrameText}>business day before appt.</span>
           <Button
             variant={timeFrameValue ? 'primary' : 'disabled'}
