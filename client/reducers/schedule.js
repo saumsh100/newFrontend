@@ -16,6 +16,7 @@ import {
   CREATE_NEW_PATIENT,
   REJECT,
   SET_IS_SELECT_APPOINTMENT_DBCLICK,
+  SET_NOTIFICATION,
 } from '../constants';
 
 const initialState = fromJS({
@@ -43,6 +44,7 @@ const initialState = fromJS({
   createNewPatient: false,
   reject: false,
   isSelectedAppointmentDbClick: false,
+  scheduleNotification: null,
 });
 
 export default handleActions(
@@ -130,6 +132,10 @@ export default handleActions(
 
     [SET_SYNCING](state, action) {
       return state.set('syncingWithPMS', action.payload.isSyncing);
+    },
+    [SET_NOTIFICATION](state, action) {
+      const notification = action.payload;
+      return state.set('scheduleNotification', notification);
     },
   },
   initialState,

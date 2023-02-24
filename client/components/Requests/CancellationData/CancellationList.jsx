@@ -38,7 +38,7 @@ const CancellationList = (props) => {
                 setTime={setTime}
                 setCancellationList={props.setCancellationList}
                 role={role}
-                setLoading ={props.setLoading}
+                setLoading={props.setLoading}
               />
             }
             onOuterAction={setOuterTime}
@@ -72,7 +72,7 @@ const CancellationList = (props) => {
                   cancellationListId={id}
                   setCancellationList={props.setCancellationList}
                   accountId={accountId}
-                  setLoading = {props.setLoading}
+                  setLoading={props.setLoading}
                 />
               );
             })
@@ -93,7 +93,7 @@ CancellationList.propTypes = {
   Account: PropTypes.instanceOf(AccountModel).isRequired,
 };
 
-function mapStateToProps({ auth, schedule, entities }) {
+function mapStateToProps({ auth, schedule, entities}) {
   return {
     timezone: auth.get('timezone'),
     role: auth.get('role'),

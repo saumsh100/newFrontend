@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   ListItem,
@@ -9,12 +9,14 @@ import {
   Icon,
   IconButton,
   getFormattedDate,
+  List,
+  MenuItem,
 } from '../../library';
 import MonthDay from '../MonthDay';
 import styles from './styles.scss';
 import { httpClient } from '../../../util/httpClient';
-import {truncateStr} from '../../../util/isomorphic';
-import {cancellationListItem } from './thunks';
+import { truncateStr } from '../../../util/isomorphic';
+import { cancellationListItem } from './thunks';
 
 export default function CancellationListItem(props) {
   const {
@@ -31,11 +33,22 @@ export default function CancellationListItem(props) {
     createdAt,
   } = props;
 
+  //mocked patient data
+  const mockedPatientList = [
+    { label: 'Mark Jill' },
+    { label: 'don vick' },
+    { label: 'von sam' },
+    { label: 'som papaya' },
+  ];
+//mock data to show sendwaitlist Message card
   const waitlist = false;
+// mock waitlist patient count
+  const waitlistPatientCount = 6;
+
   const age = patient?.birthDate
     ? `, ${getTodaysDate(timezone).diff(patient.birthDate, 'years')}`
     : '';
-  
+
   const fullName = patient?.firstName.concat(' ', patient?.lastName);
   const patientFullname = truncateStr(fullName, 7);
   const practitionerFullName = Practitioner?.firstName.concat(' ', Practitioner?.lastName);
@@ -44,17 +57,17 @@ export default function CancellationListItem(props) {
   const cancellationDate = getFormattedDate(createdAt, 'MMM DD, h:mm a', timezone);
   const time = getFormattedTime(startDate, endDate, timezone);
 
-  const waitlistPatientCount = 6;
+
+
   const removeItem = () => {
-    setLoading(true)
+    setLoading(true);
     httpClient()
       .delete(`/api/cancellationsNotFilled/${cancellationListId}`)
       .then(() => {
-        cancellationListItem( accountId)
-          .then(({ data }) => {
-            setCancellationList(data);
-            setLoading(false)
-          });
+        cancellationListItem(accountId).then(({ data }) => {
+          setCancellationList(data);
+          setLoading(false);
+        });
       });
   };
   return (
@@ -93,16 +106,24 @@ export default function CancellationListItem(props) {
           <span className={styles.cancellationText__createdAt}> Practitioner </span>
           <span className={styles.cancellationText__requestedBy}>{practitionerFullName}</span>
         </div>
-        <div className={styles.cancellationText__patientWaitlist}>
-          {waitlist ? (
-            <>
+
+        {waitlist ? (
+          <>
+            <div className={styles.cancellationText__patientWaitlist}>
               <Icon type="solid" icon="check-circle" className={styles.checkCircle} />
               <Tooltip
-                trigger={['hover']}
+                trigger={['click']}
+                overlayClassName="light-menu"
                 overlay={
-                  <div className={styles.tooltipWrapper}>
-                    <div className={styles.tooltipBodyRow}>Cancelled on Oct 30,</div>
-                  </div>
+                  <List className={styles.waitlistPatientList} data-test-id="smartFiltersList">
+                    {mockedPatientList.map(({ label, ...filter }, index) => {
+                      return (
+                        <MenuItem data-test-id={`option_${index}`} key={`smartFilter_${label}`}>
+                          {label}
+                        </MenuItem>
+                      );
+                    })}
+                  </List>
                 }
                 placement="top"
               >
@@ -110,21 +131,31 @@ export default function CancellationListItem(props) {
                   Message sent to 5 Waitlisted patient
                 </span>
               </Tooltip>
-              
-            </>
-          ) : (
-            <>
-              <span className={styles.badgeContent}>{waitlistPatientCount}</span>
-              <span className={styles.waitlistText}>Patients Available on waitlist</span>
-            </>
-          )}
-        </div>
+            </div>
+            <div className={styles.sendByMessage}>
+              <span className={styles.bar} />
+              <span className={styles.MessageSendBy}>
+                By: <b>Terry Mota- oct 30, 05:45 AM</b>
+              </span>
+            </div>
+          </>
+        ) : (
+          <div className={styles.cancellationText__patientWaitlist}>
+            <span className={styles.badgeContent}>{waitlistPatientCount}</span>
+            <span className={styles.waitlistText}>Patients Available on waitlist</span>
+          </div>
+        )}
         {waitlist ? (
-          <div type="submit" variant="primary" className={styles.CancellationButton}>
+          <div type="submit" variant="primary" className={styles.FillAgain}>
             Fill Again
+            <Icon type="solid" icon="arrows-rotate" className={styles.rotateIcon} />
           </div>
         ) : (
-          <Button type="submit" variant="primary" className={styles.CancellationButton}>
+          <Button
+            type="submit"
+            variant="primary"
+            className={styles.CancellationButton}
+          >
             Fill Cancellation
           </Button>
         )}

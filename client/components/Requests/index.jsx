@@ -11,8 +11,8 @@ import RequestsModel from '../../entities/models/Request';
 import { Card, Tabs, Tab } from '../library';
 import styles from '../Dashboard/styles';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
-import {cancellationListItem} from './CancellationData/thunks';
-import { httpClient } from '../../util/httpClient';
+import { cancellationListItem } from './CancellationData/thunks';
+import { setNotification } from '../../actions/schedule';
 
 function usePrevious(value) {
   const ref = useRef();
@@ -39,6 +39,7 @@ const Requests = (props) => {
     redirect,
     tab,
     accountId,
+    setNotification,
   } = props;
 
   const [index, setIndex] = useState(0);
@@ -79,34 +80,39 @@ const Requests = (props) => {
   if (disableHeader) {
     requestHeaderClassNames = classNames(requestHeaderClassNames, styles.hidden);
   }
+  {
+    setNotification(cancellationList.length);
+  }
   const displayApps = (
-    <CancellationList
-      cancellationList={cancellationList}
-      setCancellationList={setCancellationList}
-      setLoading={setLoading}
-    />
+      <CancellationList
+        cancellationList={cancellationList}
+        setCancellationList={setCancellationList}
+        setLoading={setLoading}
+      />
   );
   let displayRequests = (
-    <RequestList
-      sortedRequests={sortedRequests}
-      requestId={requestId}
-      selectedRequest={selectedRequest}
-      services={services}
-      patientUsers={patientUsers}
-      practitioners={practitioners}
-      popoverRight={popoverRight}
-      redirect={redirect}
-      tab={tab}
-    />
+    <>
+      <RequestList
+        sortedRequests={sortedRequests}
+        requestId={requestId}
+        selectedRequest={selectedRequest}
+        services={services}
+        patientUsers={patientUsers}
+        practitioners={practitioners}
+        popoverRight={popoverRight}
+        redirect={redirect}
+        tab={tab}
+      />
+    </>
   );
- 
+
   const isLoadeds = isLoaded === true ? !loading : isLoaded;
-  
 
   if (filteredRequests && filteredRequests.length === 0) {
     displayRequests = <div className={styles.noRequests}>No Requests</div>;
   }
   const display = [displayRequests, displayApps][index];
+
   return (
     <Card
       className={classNames(styles.requestCard, {
@@ -148,6 +154,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       fetchEntitiesRequest,
+      setNotification,
     },
     dispatch,
   );

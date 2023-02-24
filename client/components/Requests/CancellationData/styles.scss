@@ -20,6 +20,11 @@
   margin-right: 0px;
   padding: 2px 4px;
   width: 17px;
+  &:focus {
+    align-items: center;
+    border: 2px solid $color-lavender-300;
+    filter: drop-shadow(1px 1px 2px rgba(7, 0, 82, 0.06));
+  }
 }
 .timeFrameText {
   color: $color-grey-600;
@@ -102,11 +107,11 @@
 
   &__trashIcon {
     color: $color-lavender-500;
+    float: right;
     font-size: $x-medium-size;
     font-weight: $light-weight;
     letter-spacing: 0.01px;
     text-align: center;
-    float: right;
     visibility: hidden;
     width: 16px;
   }
@@ -124,10 +129,6 @@
     visibility: visible;
   }
 }
-.activeIcon{
-  $color: $color-grey-200;
-}
-
 
 .cancellationText {
   color: $color-grey-600;
@@ -152,12 +153,14 @@
     font-weight: $bold-weight;
     margin-top: 8px;
   }
+  &__sentPatientMessage {
+    color: $color-purple-400;
+    font-weight: $bold-weight;
+    margin-top: 8px;
+  }
 }
-.CancellationButton {
-  margin-top: 12px;
-  width: 118px;
-}
-.unitValue{
+
+.unitValue {
   margin-left: 4px;
 }
 .circleIcon {
@@ -165,16 +168,16 @@
 }
 
 .noCancellation {
-  background: $color-purple-050;
   align-items: center;
+  background: $color-purple-050;
   color: $color-purple-300;
   display: flex;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
   height: 100%;
   justify-content: center;
   opacity: 0.6;
   text-align: center;
-  font-weight: $medium-weight;
-  font-size: $medium-size;
 }
 .formContainer {
   background: $super-white;
@@ -247,7 +250,7 @@
   height: 40px;
   padding: 8px 12px;
   width: 69px;
-  &:hover{
+  &:hover {
     border-bottom: 1px solid $color-purple-200;
   }
 }
@@ -258,20 +261,23 @@
   height: 40px;
   padding: 8px 12px;
   width: 69px;
-  &:hover{
+  &:hover {
     border-bottom: 1px solid $color-purple-200;
   }
 }
-.caretIconWrapper{
+.caretIconWrapper {
   color: $color-grey-200;
   &:hover {
     color: $color-grey-200;
   }
 }
+.activeIcon {
+  color: $color-grey-200;
+}
 .label {
+  color: $color-grey-200;
   left: 19px;
   top: unset;
-  $color: $color-grey-200;
 }
 .check {
   margin-right: 5px;
@@ -285,10 +291,40 @@
   font-weight: 700;
   height: 16px;
   line-height: 16px;
-  width: 203px;
+  margin-left: 6px;
 }
 .checkCircle {
   color: $color-teal-600;
   font-size: 14px;
   font-weight: 900;
+  margin-top: 2px;
+}
+
+.sendByMessage {
+  color: $color-grey-600;
+  margin-top: 8px;
+}
+.bar {
+  border-left: 1px solid $color-success-600;
+  margin-left: 7px;
+}
+.MessageSendBy {
+  color: $color-grey-600;
+  font-size: 10px;
+  font-weight: 500;
+  margin-left: 7px;
+}
+.CancellationButton {
+  margin-top: 12px;
+  width: 118px;
+}
+.FillAgain {
+  color: $color-lavender-500;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 12px;
+  width: 118px;
+}
+.rotateIcon {
+  margin-left: 10px;
 }

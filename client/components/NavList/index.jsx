@@ -17,6 +17,7 @@ function NavList({
   waitingRoomQueueLength,
   enterpriseManagementPhaseTwoActive,
   isCollapsed,
+  scheduleNotification,
 }) {
   const { navItem, activeItem } = styles;
 
@@ -24,6 +25,7 @@ function NavList({
   const activeClass = classNames(navItem, activeItem);
 
   const inactiveLabelClass = styles.label;
+  const scheduleBadgeCount = onlineRequests + scheduleNotification;
 
   const SingleNavItem = ({
     path,
@@ -178,7 +180,7 @@ function NavList({
           path="/schedule"
           icon="calendar-alt"
           label="Schedule"
-          badge={onlineRequests}
+          badge={scheduleBadgeCount}
           type={getNavigationPreference('schedule')}
         />
         <SingleNavItem
@@ -265,12 +267,13 @@ NavList.defaultProps = {
   navigationPreferences: {},
 };
 
-function mapStateToProps({ chat, entities, waitingRoom, featureFlags, toolbar }) {
+function mapStateToProps({ chat, entities, waitingRoom, featureFlags, toolbar, schedule }) {
   const unreadChatsCount = chat.get('unreadChatsCount');
   const requests = entities.getIn(['requests', 'models']);
   const filteredRequests = requests
     .toArray()
     .filter((req) => !req.get('isCancelled') && !req.get('isConfirmed'));
+  const { scheduleNotification } = schedule.toJS();
 
   const chatsLength = unreadChatsCount > 100 ? '99+' : unreadChatsCount;
   const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
@@ -292,6 +295,7 @@ function mapStateToProps({ chat, entities, waitingRoom, featureFlags, toolbar })
       'enterprise-management-phase-2',
     ]),
     isCollapsed: toolbar.get('isCollapsed'),
+    scheduleNotification,
   };
 }
 
