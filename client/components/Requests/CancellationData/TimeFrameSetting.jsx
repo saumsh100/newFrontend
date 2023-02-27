@@ -16,8 +16,8 @@ import { updateTimeFrame, cancellationListItem } from './thunks';
 import { updateEntity } from '../../../reducers/entities';
 
 function TimeFrameSetting(props) {
-  const [timeFrameValue, setTimeFrameValue] = useState(null);
-  const { accountId, setTime, setCancellationList, role, setLoading } = props;
+  const { accountId, setTime, setCancellationList, role, setLoading, cancellationTime } = props;
+  const [timeFrameValue, setTimeFrameValue] = useState(cancellationTime);
 
   const dropDownOptionValue = [
     { label: 1, value: 1 },
@@ -65,7 +65,7 @@ function TimeFrameSetting(props) {
             overlay={
               <div className={styles.tooltipWrapper}>
                 <div className={styles.tooltipBodyRow}>
-                  This is how far in the future we will notify you of appointment cancellations
+                  This is how far in the future we will notify&nbsp;&nbsp;&nbsp;&nbsp;<br />you of appointment cancellations
                 </div>
               </div>
             }
@@ -115,7 +115,7 @@ function TimeFrameSetting(props) {
             )}
           <span className={styles.timeFrameText}>business day before appt.</span>
           <Button
-            variant={timeFrameValue ? 'primary' : 'disabled'}
+            variant={timeFrameValue !== cancellationTime ? 'primary' : 'disabled'}
             className={styles.applyButton}
             onClick={updateValue}
           >
