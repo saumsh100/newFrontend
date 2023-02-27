@@ -58,7 +58,19 @@ const CancellationList = (props) => {
         <List className={styles.cancellationList}>
           {props.cancellationList.length !== 0 ? (
             props.cancellationList.map((cancellation) => {
-              const { startDate, endDate, patient, practitioner, id } = cancellation;
+              const {
+                startDate,
+                endDate,
+                patient,
+                practitioner,
+                id,
+                totalSuggestedPatients = 0,
+                suggestedWaitSpotIds = [],
+                totalContactedPatients = 0,
+                contactedPatients = [],
+                patientsContactedByUser = {},
+                patientsContactedAt = '',
+              } = cancellation;
 
               return (
                 <CancellationListItem
@@ -73,6 +85,12 @@ const CancellationList = (props) => {
                   cancellationListId={id}
                   setCancellationList={props.setCancellationList}
                   accountId={accountId}
+                  totalSuggestedPatients={totalSuggestedPatients}
+                  suggestedWaitSpotIds={suggestedWaitSpotIds}
+                  totalContactedPatients={totalContactedPatients}
+                  contactedPatients={contactedPatients}
+                  patientsContactedByUser={patientsContactedByUser}
+                  patientsContactedAt={patientsContactedAt}
                   setLoading={props.setLoading}
                 />
               );

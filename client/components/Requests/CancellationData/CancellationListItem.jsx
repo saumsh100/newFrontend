@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import {
   ListItem,
   getFormattedTime,
@@ -31,19 +32,15 @@ export default function CancellationListItem(props) {
     setLoading,
     accountId,
     createdAt,
+    totalSuggestedPatients,
+    suggestedWaitSpotIds, // It will be used in sent message flow
+    totalContactedPatients,
+    contactedPatients,
+    patientsContactedByUser,
+    patientsContactedAt,
   } = props;
 
-  //mocked patient data
-  const mockedPatientList = [
-    { label: 'Mark Jill' },
-    { label: 'don vick' },
-    { label: 'von sam' },
-    { label: 'som papaya' },
-  ];
-//mock data to show sendwaitlist Message card
-  const waitlist = false;
-// mock waitlist patient count
-  const waitlistPatientCount = 6;
+  const waitlist = !!totalContactedPatients;
 
   const age = patient?.birthDate
     ? `, ${getTodaysDate(timezone).diff(patient.birthDate, 'years')}`
@@ -56,8 +53,6 @@ export default function CancellationListItem(props) {
   const appointmentDate = getFormattedDate(startDate, 'DD', timezone);
   const cancellationDate = getFormattedDate(createdAt, 'MMM DD, h:mm a', timezone);
   const time = getFormattedTime(startDate, endDate, timezone);
-
-
 
   const removeItem = () => {
     setLoading(true);
@@ -116,10 +111,14 @@ export default function CancellationListItem(props) {
                 overlayClassName="light-menu"
                 overlay={
                   <List className={styles.waitlistPatientList} data-test-id="smartFiltersList">
-                    {mockedPatientList.map(({ label, ...filter }, index) => {
+                    {contactedPatients.map(({ firstName, lastName, birthDate }, index) => {
+                      const name = String(`${firstName} ${lastName}`).trim();
+                      const patientsAge = birthDate
+                        ? `, ${getTodaysDate(timezone).diff(birthDate, 'years')}`
+                        : '';
                       return (
-                        <MenuItem data-test-id={`option_${index}`} key={`smartFilter_${label}`}>
-                          {label}
+                        <MenuItem data-test-id={`option_${index}`} key={`smartFilter_${name}`}>
+                          {name} {patientsAge}
                         </MenuItem>
                       );
                     })}
@@ -128,20 +127,24 @@ export default function CancellationListItem(props) {
                 placement="top"
               >
                 <span className={styles.waitlistSentMessage}>
-                  Message sent to 5 Waitlisted patient
+                  Message sent to {totalContactedPatients} Waitlisted patient
                 </span>
               </Tooltip>
             </div>
             <div className={styles.sendByMessage}>
               <span className={styles.bar} />
               <span className={styles.MessageSendBy}>
-                By: <b>Terry Mota- oct 30, 05:45 AM</b>
+                By:{' '}
+                <b>
+                  {String(`${patientsContactedByUser.firstName} ${patientsContactedByUser.lastName}`).trim()}-{' '}
+                  {moment(patientsContactedAt).format('MMM DD,hh:mm A')}
+                </b>
               </span>
             </div>
           </>
         ) : (
           <div className={styles.cancellationText__patientWaitlist}>
-            <span className={styles.badgeContent}>{waitlistPatientCount}</span>
+            <span className={styles.badgeContent}>{totalSuggestedPatients}</span>
             <span className={styles.waitlistText}>Patients Available on waitlist</span>
           </div>
         )}
@@ -151,11 +154,7 @@ export default function CancellationListItem(props) {
             <Icon type="solid" icon="arrows-rotate" className={styles.rotateIcon} />
           </div>
         ) : (
-          <Button
-            type="submit"
-            variant="primary"
-            className={styles.CancellationButton}
-          >
+          <Button type="submit" variant="primary" className={styles.CancellationButton}>
             Fill Cancellation
           </Button>
         )}
@@ -175,4 +174,10 @@ CancellationListItem.propTypes = {
   accountId: PropTypes.string.isRequired,
   cancellationListId: PropTypes.string.isRequired,
   setCancellationList: PropTypes.func.isRequired,
+  totalSuggestedPatients: PropTypes.number.isRequired,
+  suggestedWaitSpotIds: PropTypes.array.isRequired,
+  totalContactedPatients: PropTypes.number.isRequired,
+  contactedPatients: PropTypes.array.isRequired,
+  patientsContactedByUser: PropTypes.object.isRequired,
+  patientsContactedAt: PropTypes.string.isRequired,
 };
