@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 $container-padding: 10px 15px 0 10px;
 
 $color-black: rgb(0, 0, 0);
@@ -163,7 +165,7 @@ $badge-notification-background: $primary-color;
     $context: $context * 1px;
   }
 
-  @return $pixels / $context * 1em;
+  @return math.div($pixels, $context) * 1em;
 }
 
 /**

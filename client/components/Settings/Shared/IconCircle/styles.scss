@@ -1,4 +1,4 @@
-
+@use 'sass:math';
 @import '../../../../styles/ui';
 
 $width: 26px;
@@ -7,7 +7,7 @@ $wrapper-thickness: 6px;
 .iconCircle {
   align-items: center;
   background-color: $primary-green;
-  border-radius: $width / 2;
+  border-radius: math.div($width, 2);
   color: white;
   display: flex;
   height: $width;
@@ -43,7 +43,7 @@ $outer-width: $width + $wrapper-thickness;
 .wrapperCircle {
   align-items: center;
   background-color: $primary-white;
-  border-radius: $outer-width / 2;
+  border-radius: math.div($outer-width, 2);
   display: flex;
   height: $outer-width;
   justify-content: center;
@@ -54,7 +54,7 @@ $outest-width: $outer-width + $wrapper-thickness;
 
 .selectWrapperCircle {
   align-items: center;
-  border-radius: $outest-width / 2;
+  border-radius: math.div($outest-width, 2);
   display: flex;
   height: $outest-width;
   justify-content: center;

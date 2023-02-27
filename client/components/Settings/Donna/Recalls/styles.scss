@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import '../../../../styles/ui';
 @import '../../../../styles/ui-kit';
 
@@ -99,9 +100,9 @@ $width: 26px;
 $wrapper-thickness: 6px;
 
 .bottomIconContainer {
-  left: -($width + 2 * $wrapper-thickness) / 2;
+  left: math.div(-($width + 2 * $wrapper-thickness), 2);
   position: relative;
-  top: -($width + 2 * $wrapper-thickness) / 2;
+  top: math.div(-($width + 2 * $wrapper-thickness), 2);
 }
 
 .filledLabel {

@@ -1,4 +1,6 @@
+@use 'sass:math';
 @import '../../../../../styles/ui-reskin.scss';
+
 .waitlistTable {
   background: $super-white;
   border: none;
@@ -57,10 +59,10 @@ $width: 6px;
 $height: 4px;
 
 .caretButton {
-  border-bottom: $height/2 solid transparent;
-  border-left: $width/2 solid transparent;
-  border-right: $width/2 solid transparent;
-  border-top: $height/2 solid transparent;
+  border-bottom: math.div($height, 2) solid transparent;
+  border-left: math.div($width, 2) solid transparent;
+  border-right: math.div($width, 2) solid transparent;
+  border-top: math.div($height, 2) solid transparent;
   content: '';
   cursor: pointer;
   height: 0;

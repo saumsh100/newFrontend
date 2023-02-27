@@ -1,4 +1,4 @@
-
+@use 'sass:math';
 @import '../../styles/ui.scss';
 
 .outboxWrapper {
@@ -40,13 +40,13 @@ $diameter: 10px;
   /*&:after {
     width: $diameter;
     height: $diameter;
-    border-radius: $diameter / 2;
+    border-radius: math.div($diameter, 2);
     background-color: black;
   }*/
 }
 
 .dot {
-  border-radius: $diameter / 2;
+  border-radius: math.div($diameter, 2);
   height: $diameter;
   margin-bottom: 3px;
   margin-left: 10px;

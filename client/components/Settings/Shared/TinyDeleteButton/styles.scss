@@ -1,4 +1,4 @@
-
+@use 'sass:math';
 @import '../../../../styles/ui';
 
 $tiny: 14px;
@@ -6,7 +6,7 @@ $tiny: 14px;
 .tinyDeleteButton {
   align-items: center;
   background-color: $primary-red;
-  border-radius: $tiny / 2;
+  border-radius: math.div($tiny, 2);
   box-sizing: border-box;
   color: white;
   display: flex;
