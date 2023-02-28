@@ -102,7 +102,7 @@ function TimeFrameSetting(props) {
               <DropdownSelect
                 className={styles.dropdown}
                 align="left"
-                label={timeFrameValue === null ? '2' : ''}
+                label={timeFrameValue || 2}
                 required
                 theme={{
                   wrapper: styles.wrapper,
