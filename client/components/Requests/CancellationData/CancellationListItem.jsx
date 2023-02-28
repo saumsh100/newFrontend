@@ -51,7 +51,7 @@ export default function CancellationListItem(props) {
   const practitionerFullName = Practitioner?.firstName.concat(' ', Practitioner?.lastName);
   const appointmentMonth = getFormattedDate(startDate, 'MMM', timezone);
   const appointmentDate = getFormattedDate(startDate, 'DD', timezone);
-  const cancellationDate = getFormattedDate(createdAt, 'MMM DD, h:mm a', timezone);
+  const cancellationDate = getFormattedDate(createdAt, 'MMM DD, h:mm A', timezone);
   const time = getFormattedTime(startDate, endDate, timezone);
 
   const removeItem = () => {
@@ -87,7 +87,8 @@ export default function CancellationListItem(props) {
                 trigger={['hover']}
                 overlay={
                   <div className={styles.tooltipWrapper}>
-                    <div className={styles.tooltipBodyRow}>{cancellationDate}</div>
+                    <div className={styles.tooltipBodyRow}>Cancelled on{' '}
+                      <span className={styles.cancellationDateToolTip}>{cancellationDate}</span></div>
                   </div>
                 }
                 placement="top"

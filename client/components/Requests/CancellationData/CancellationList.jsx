@@ -59,11 +59,12 @@ const CancellationList = (props) => {
           {props.cancellationList.length !== 0 ? (
             props.cancellationList.map((cancellation) => {
               const {
+                id,
                 startDate,
                 endDate,
                 patient,
                 practitioner,
-                id,
+                createdAt,
                 totalSuggestedPatients = 0,
                 suggestedWaitSpotIds = [],
                 totalContactedPatients = 0,
@@ -85,6 +86,7 @@ const CancellationList = (props) => {
                   cancellationListId={id}
                   setCancellationList={props.setCancellationList}
                   accountId={accountId}
+                  createdAt={createdAt}
                   totalSuggestedPatients={totalSuggestedPatients}
                   suggestedWaitSpotIds={suggestedWaitSpotIds}
                   totalContactedPatients={totalContactedPatients}
