@@ -53,7 +53,7 @@ def parallelDeployApp(Deployment pipeline, String environment, String ecsCluster
     }
     if (isProduction()) {
       serviceName["${appName}-us"] = {
-        pipeline.deployApplication(appName, "${environment}-us", ecsClusterName, appName, "prod-us_" + version, usRegion)
+        pipeline.deployApplication(appName, "${environment}-us", "${environment}-us-ecs-cluster", appName, "prod-us_" + version, usRegion)
       }
       serviceName["${appName}-demo"] = {
         pipeline.deployApplication(appName, "demo", "demo-ecs-cluster", appName, "demo_" + version)
