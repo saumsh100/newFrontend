@@ -98,8 +98,6 @@ class Filters extends Component {
   render() {
     const { filters, selectAll, initialValues, reset, filterKey } = this.props;
 
-    console.log(selectAll,"selectAll")
-
     return (
       <Card className={styles.card}>
         <div className={styles.filters}>

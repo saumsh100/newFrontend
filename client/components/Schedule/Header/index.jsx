@@ -21,7 +21,7 @@ import {
 } from '../../library';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
-import { setScheduleView } from '../../../actions/schedule';
+import { setScheduleView, setWaitlistOpen } from '../../../actions/schedule';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
 import { Delete as DeleteWaitSpot, MassDelete } from '../../GraphQLWaitlist';
 import MicroFrontendRenderer from '../../../micro-front-ends/MicroFrontendRenderer';
@@ -70,6 +70,13 @@ class Header extends Component {
       showWaitlist: !prevState.showWaitlist,
       showAddToWaitlist: prevState.showWaitlist ? false : prevState.showAddToWaitlist,
     }));
+    this.props.setWaitlistOpen({ waitlistBool: false })
+  }
+
+  componentDidUpdate() {
+    if (!this.state.showWaitlist && this.props.isOpenWaitlist) {
+      this.toggleWaitlist();
+    }
   }
 
   openAddToWaitlist() {
@@ -321,8 +328,15 @@ Header.propTypes = {
   waitlistMFEActive: PropTypes.bool.isRequired,
 };
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ setScheduleView }, dispatch);
-
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setScheduleView,
+      setWaitlistOpen,
+    },
+    dispatch,
+  );
+}
 const mapStateToProps = ({ auth, schedule, apiRequests, featureFlags }) => ({
   accountId: auth.get('accountId'),
   scheduleView: schedule.get('scheduleView'),
@@ -331,6 +345,7 @@ const mapStateToProps = ({ auth, schedule, apiRequests, featureFlags }) => ({
   newWaitlist: featureFlags.getIn(['flags', 'waitlist-2-0']),
   timezone: auth.get('timezone'),
   waitlistMFEActive: featureFlags.getIn(['flags', 'waitlist-mfe-active']),
+  isOpenWaitlist: schedule.get('isOpenWaitlist'),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

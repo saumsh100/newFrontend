@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
   ListItem,
   getFormattedTime,
@@ -18,8 +20,9 @@ import styles from './styles.scss';
 import { httpClient } from '../../../util/httpClient';
 import { truncateStr } from '../../../util/isomorphic';
 import { cancellationListItem } from './thunks';
+import { setWaitlistOpen } from '../../../actions/schedule';
 
-export default function CancellationListItem(props) {
+function CancellationListItem(props) {
   const {
     timezone,
     startDate,
@@ -38,10 +41,14 @@ export default function CancellationListItem(props) {
     contactedPatients,
     patientsContactedByUser,
     patientsContactedAt,
+    setWaitlistOpen,
   } = props;
 
   const waitlist = !!totalContactedPatients;
 
+  const openWaitlist = () => {
+    setWaitlistOpen({ waitlistBool: true });
+  };
   const age = patient?.birthDate
     ? `, ${getTodaysDate(timezone).diff(patient.birthDate, 'years')}`
     : '';
@@ -87,8 +94,10 @@ export default function CancellationListItem(props) {
                 trigger={['hover']}
                 overlay={
                   <div className={styles.tooltipWrapper}>
-                    <div className={styles.tooltipBodyRow}>Cancelled on{' '}
-                      <span className={styles.cancellationDateToolTip}>{cancellationDate}</span></div>
+                    <div className={styles.tooltipBodyRow}>
+                      Cancelled on{' '}
+                      <span className={styles.cancellationDateToolTip}>{cancellationDate}</span>
+                    </div>
                   </div>
                 }
                 placement="top"
@@ -137,8 +146,10 @@ export default function CancellationListItem(props) {
               <span className={styles.MessageSendBy}>
                 By:{' '}
                 <b>
-                  {String(`${patientsContactedByUser.firstName} ${patientsContactedByUser.lastName}`).trim()}-{' '}
-                  {moment(patientsContactedAt).format('MMM DD,hh:mm A')}
+                  {String(
+                    `${patientsContactedByUser.firstName} ${patientsContactedByUser.lastName}`,
+                  ).trim()}
+                  - {moment(patientsContactedAt).format('MMM DD,hh:mm A')}
                 </b>
               </span>
             </div>
@@ -155,7 +166,12 @@ export default function CancellationListItem(props) {
             <Icon type="solid" icon="arrows-rotate" className={styles.rotateIcon} />
           </div>
         ) : (
-          <Button type="submit" variant="primary" className={styles.CancellationButton}>
+          <Button
+            onClick={openWaitlist}
+            type="submit"
+            variant="primary"
+            className={styles.CancellationButton}
+          >
             Fill Cancellation
           </Button>
         )}
@@ -163,6 +179,7 @@ export default function CancellationListItem(props) {
     </ListItem>
   );
 }
+
 CancellationListItem.propTypes = {
   timezone: PropTypes.string.isRequired,
   startDate: PropTypes.string.isRequired,
@@ -182,3 +199,14 @@ CancellationListItem.propTypes = {
   patientsContactedByUser: PropTypes.object.isRequired,
   patientsContactedAt: PropTypes.string.isRequired,
 };
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setWaitlistOpen,
+    },
+    dispatch,
+  );
+}
+const enhance = connect(null, mapDispatchToProps);
+
+export default enhance(CancellationListItem);

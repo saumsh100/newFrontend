@@ -15,6 +15,7 @@ import {
   REJECT,
   SET_IS_SELECT_APPOINTMENT_DBCLICK,
   SET_NOTIFICATION,
+  SET_IS_OPEN_WAITLIST,
 } from '../constants';
 
 export const setMergingPatient = createAction(SET_MERGING);
@@ -32,3 +33,4 @@ export const setCreatingPatient = createAction(CREATE_NEW_PATIENT);
 export const setReject = createAction(REJECT);
 export const setIsSelectAppointmentDbClick = createAction(SET_IS_SELECT_APPOINTMENT_DBCLICK);
 export const setNotification = createAction(SET_NOTIFICATION);
+export const setWaitlistOpen = createAction(SET_IS_OPEN_WAITLIST);

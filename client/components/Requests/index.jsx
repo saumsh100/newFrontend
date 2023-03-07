@@ -84,11 +84,11 @@ const Requests = (props) => {
     setNotification(cancellationList.length);
   }
   const displayApps = (
-      <CancellationList
-        cancellationList={cancellationList}
-        setCancellationList={setCancellationList}
-        setLoading={setLoading}
-      />
+    <CancellationList
+      cancellationList={cancellationList}
+      setCancellationList={setCancellationList}
+      setLoading={setLoading}
+    />
   );
   let displayRequests = (
     <>
@@ -180,6 +180,7 @@ Requests.propTypes = {
   runAnimation: PropTypes.bool,
   services: PropTypes.instanceOf(Map),
   tab: PropTypes.string.isRequired,
+  accountId: PropTypes.string.isRequired,
 };
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 

@@ -175,7 +175,6 @@ class ChatMessage extends Component {
     httpClient()
       .get(`/api/patients/${patientId}/chat`)
       .then(({ data: { chatId } }) => {
-        console.log('chatId=', chatId);
         Promise.resolve(this.props.getChatEntity(chatId)).then((selectedChat) => {
           if (selectedChat) {
             const { isOpen } = selectedChat.toJS();
@@ -334,7 +333,7 @@ class ChatMessage extends Component {
                   />
                 )}
               </SHeader>
-              {!conversationIsLoading && compareChatId  ? (
+              {!conversationIsLoading && compareChatId ? (
                 <MessageContainer
                   setTab={this.changeTab}
                   isNewconversation={isNewconversation}
