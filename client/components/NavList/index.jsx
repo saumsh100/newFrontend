@@ -246,6 +246,7 @@ NavList.propTypes = {
   unreadChats: PropTypes.number,
   onlineRequests: PropTypes.number,
   location: PropTypes.objectOf(PropTypes.any).isRequired,
+  scheduleNotification: PropTypes.number.isRequired,
   navigationPreferences: PropTypes.shape({
     dashboard: PropTypes.string,
     intelligence: PropTypes.string,
@@ -273,10 +274,12 @@ function mapStateToProps({ chat, entities, waitingRoom, featureFlags, toolbar, s
   const filteredRequests = requests
     .toArray()
     .filter((req) => !req.get('isCancelled') && !req.get('isConfirmed'));
-  const { scheduleNotification } = schedule.toJS();
+  const { scheduleNotification, cancelationList } = schedule.toJS();
 
   const chatsLength = unreadChatsCount > 100 ? '99+' : unreadChatsCount;
-  const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
+  const requestsAndCancelationsLength = filteredRequests.length + cancelationList.length;
+  const requestsLength =
+    requestsAndCancelationsLength > 100 ? '99+' : requestsAndCancelationsLength;
 
   const canSeeVirtualWaitingRoom = isFeatureEnabledSelector(
     featureFlags.get('flags'),

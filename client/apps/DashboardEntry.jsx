@@ -22,6 +22,7 @@ import { identifyPracticeUser } from '../util/fullStory';
 import { receiveEntities } from '../reducers/entities';
 import ErrorPage from '../components/ErrorPage';
 import zendesk from '../../public/scripts/zendesk';
+import loadCancelations from '../thunks/cancelations';
 
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -106,6 +107,7 @@ load()(store.dispatch).then(() => {
     store.dispatch(loadUnreadMessages());
     store.dispatch(loadUnreadChatCount());
     store.dispatch(loadOnlineRequest());
+    store.dispatch(loadCancelations(accountId));
     store.dispatch(fetchWaitingRoomQueue({ accountId }));
     connectSocketToStoreLogin(store, socket);
   }

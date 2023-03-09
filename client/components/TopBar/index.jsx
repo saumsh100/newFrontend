@@ -384,8 +384,9 @@ TopBar.defaultProps = {
   activeAccountMap: null,
 };
 
-const mapStateToProps = ({ featureFlags, toolbar, chat, entities, waitingRoom }) => {
+const mapStateToProps = ({ featureFlags, toolbar, chat, entities, waitingRoom, schedule }) => {
   const onlineRequests = entities.getIn(['requests', 'models']);
+  const cancelations = schedule.get('cancelationList') || [];
   const unreadChatMessagesLength = chat.get('unreadChatsCount');
   const canSeeVirtualWaitingRoom = isFeatureEnabledSelector(
     featureFlags.get('flags'),
@@ -397,9 +398,11 @@ const mapStateToProps = ({ featureFlags, toolbar, chat, entities, waitingRoom })
   const filteredRequests = onlineRequests
     .toArray()
     .filter((req) => !req.get('isCancelled') && !req.get('isConfirmed'));
-
   const allNotificationsCount =
-    waitingRoomQueueLength + unreadChatMessagesLength + filteredRequests.length;
+    waitingRoomQueueLength +
+    unreadChatMessagesLength +
+    filteredRequests.length +
+    cancelations.length;
 
   return {
     allNotificationsCount: allNotificationsCount > 99 ? '99+' : allNotificationsCount,

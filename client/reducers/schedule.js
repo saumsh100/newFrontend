@@ -18,6 +18,7 @@ import {
   SET_IS_SELECT_APPOINTMENT_DBCLICK,
   SET_NOTIFICATION,
   SET_IS_OPEN_WAITLIST,
+  SET_CANCELATION_LIST,
 } from '../constants';
 
 const initialState = fromJS({
@@ -47,6 +48,7 @@ const initialState = fromJS({
   isSelectedAppointmentDbClick: false,
   scheduleNotification: 0,
   isOpenWaitlist: false,
+  cancelationList: [],
 });
 
 export default handleActions(
@@ -75,6 +77,10 @@ export default handleActions(
     [SET_IS_OPEN_WAITLIST](state, action) {
       const { waitlistBool } = action.payload;
       return state.set('isOpenWaitlist', waitlistBool);
+    },
+
+    [SET_CANCELATION_LIST](state, action) {
+      return state.set('cancelationList', action.payload);
     },
 
     [REJECT_APPOINTMENT](state, action) {
