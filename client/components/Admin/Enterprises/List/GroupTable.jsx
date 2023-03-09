@@ -64,14 +64,14 @@ export const GroupTable = ({
 
   const getManageCell = useCallback(
     (cellProps) => (
-      <ManageCell label="Group" {...cellProps} onEdit={onEditName} onDelete={onDeleteGroup} />
+      <ManageCell label="Enterprise" {...cellProps} onEdit={onEditName} onDelete={onDeleteGroup} />
     ),
     [onEditName, onDeleteGroup],
   );
 
   const columns = [
     {
-      Header: 'Group Name',
+      Header: 'Enterprise Name',
       id: 'name',
       width: 500,
       accessor: (d) => `${d.name} (${d.id})`,
@@ -114,7 +114,7 @@ export const GroupTable = ({
   return (
     <DataTable
       className={styles.dataTable}
-      key="Group Table"
+      key="Enterprise Table"
       data={data}
       pages={pages}
       columns={columns}
@@ -123,7 +123,7 @@ export const GroupTable = ({
       expanded={expanded}
       handleRowClick={handleRowClick}
       loadingText=""
-      noDataText="No Groups Found"
+      noDataText="No Enterprises Found"
       showPageSizeOptions
       onFetchData={onFetchData}
       manual

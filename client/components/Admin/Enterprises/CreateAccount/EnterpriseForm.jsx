@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, Field } from '../../../library';
 
-const requiredValidation = (val) => (val ? undefined : `Group name is required`);
+const requiredValidation = (val) => (val ? undefined : `Enterprise name is required`);
 
 export default function EnterpriseForm(props) {
   const { onSubmit, index, initialValues, formName } = props;
@@ -14,7 +14,13 @@ export default function EnterpriseForm(props) {
       onSubmit={(data) => onSubmit(index, data)}
       ignoreSaveButton
     >
-      <Field autoFocus required name="name" label="Group name" validate={[requiredValidation]} />
+      <Field
+        autoFocus
+        required
+        name="name"
+        label="Enterprise name"
+        validate={[requiredValidation]}
+      />
       <Field name="organization" label="Organization" />
       <Field
         label="CSM Account Owner"

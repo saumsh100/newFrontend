@@ -264,7 +264,7 @@ export class Enterprises extends Component {
             this.props.navigate(baseUrl('/create'));
           }}
         >
-          Add Group
+          Add Enterprise
         </Button>
         <Button
           color="darkblue"
@@ -290,7 +290,7 @@ export class Enterprises extends Component {
       <div className={styles.enterpriseContainer}>
         <Card className={styles.enterpriseCard} runAnimation loaded={this.state.loaded}>
           <div className={styles.header}>
-            <span className={styles.header_title}>Groups</span>
+            <span className={styles.header_title}>Enterprises</span>
             <div>{renderAddButton()}</div>
           </div>
 
@@ -330,14 +330,14 @@ export class Enterprises extends Component {
         {this.state.editGroupNameActive && (
           <DialogBox
             actions={this.editGroupNameActions}
-            title="Edit Group"
+            title="Edit Enterprise"
             type="small"
             active={this.state.editGroupNameActive}
             onEscKeyDown={() => this.setEditNameActive()}
             onOverlayClick={() => this.setEditNameActive()}
           >
             <EnterpriseForm
-              key="Edit Group"
+              key="Edit Enterprise"
               label="Group"
               formName={this.editFormName}
               index={this.state.selectedGroupIndex}
