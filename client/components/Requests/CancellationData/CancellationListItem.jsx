@@ -20,7 +20,7 @@ import styles from './styles.scss';
 import { httpClient } from '../../../util/httpClient';
 import { truncateStr } from '../../../util/isomorphic';
 import { cancellationListItem } from './thunks';
-import { setWaitlistOpen } from '../../../actions/schedule';
+import { setWaitlistOpen, setCancellationListData,  setSelectedCancellationId} from '../../../actions/schedule';
 
 function CancellationListItem(props) {
   const {
@@ -42,11 +42,16 @@ function CancellationListItem(props) {
     patientsContactedByUser,
     patientsContactedAt,
     setWaitlistOpen,
+    setCancellationListData,
+    setSelectedCancellationId,
+    cancellation
   } = props;
 
   const waitlist = !!totalContactedPatients;
 
   const openWaitlist = () => {
+    setCancellationListData(cancellation)
+    setSelectedCancellationId(cancellationListId)
     setWaitlistOpen({ waitlistBool: true });
   };
   const age = patient?.birthDate
@@ -54,7 +59,7 @@ function CancellationListItem(props) {
     : '';
 
   const fullName = patient?.firstName.concat(' ', patient?.lastName);
-  const patientFullname = truncateStr(fullName, 7);
+  const patientFullname = truncateStr(fullName, 12);
   const practitionerFullName = Practitioner?.firstName.concat(' ', Practitioner?.lastName);
   const appointmentMonth = getFormattedDate(startDate, 'MMM', timezone);
   const appointmentDate = getFormattedDate(startDate, 'DD', timezone);
@@ -108,7 +113,7 @@ function CancellationListItem(props) {
               </Tooltip>
             </span>
           </div>
-          <span className={styles.cancellationText__createdAt}> Practitioner </span>
+          <span className={styles.cancellationText__createdAt}> Practitioner: </span>
           <span className={styles.cancellationText__requestedBy}>{practitionerFullName}</span>
         </div>
 
@@ -203,6 +208,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       setWaitlistOpen,
+      setCancellationListData,
+      setSelectedCancellationId,
     },
     dispatch,
   );

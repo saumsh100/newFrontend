@@ -94,6 +94,7 @@ const CancellationList = (props) => {
                   patientsContactedByUser={patientsContactedByUser}
                   patientsContactedAt={patientsContactedAt}
                   setLoading={props.setLoading}
+                  cancellation = {props.cancellationList}
                 />
               );
             })

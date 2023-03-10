@@ -21,7 +21,7 @@ import {
 } from '../../library';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
-import { setScheduleView, setWaitlistOpen } from '../../../actions/schedule';
+import { setScheduleView, setWaitlistOpen, setSelectedCancellationId, setCancellationListData } from '../../../actions/schedule';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
 import { Delete as DeleteWaitSpot, MassDelete } from '../../GraphQLWaitlist';
 import MicroFrontendRenderer from '../../../micro-front-ends/MicroFrontendRenderer';
@@ -66,11 +66,17 @@ class Header extends Component {
   }
 
   toggleWaitlist() {
-    this.setState((prevState) => ({
-      showWaitlist: !prevState.showWaitlist,
-      showAddToWaitlist: prevState.showWaitlist ? false : prevState.showAddToWaitlist,
-    }));
-    this.props.setWaitlistOpen({ waitlistBool: false })
+    this.setState((prevState) => {
+      if (prevState.showWaitlist) {
+        this.props.setSelectedCancellationId("");
+        this.props.setCancellationListData([]);
+      }
+      return ({
+        showWaitlist: !prevState.showWaitlist,
+        showAddToWaitlist: prevState.showWaitlist ? false : prevState.showAddToWaitlist,
+      })
+    });
+    this.props.setWaitlistOpen({ waitlistBool: false });
   }
 
   componentDidUpdate() {
@@ -118,8 +124,9 @@ class Header extends Component {
       newWaitlist,
       timezone,
       waitlistMFEActive,
+      cancellationList,
+      selectedCancellationId,
     } = this.props;
-
     const scheduleDate = schedule.get('scheduleDate');
     const currentDate = getUTCDate(scheduleDate, timezone);
     const getDateValues = (value) => {
@@ -130,6 +137,10 @@ class Header extends Component {
         month: mDate.format('MMM'),
       };
     };
+    const cancellationWaitlist = {
+      cancellationList: cancellationList,
+      selectedCancellationId: selectedCancellationId,
+    }
     const { date, month, weekday } = getDateValues(scheduleDate);
     return (
       <SHeader className={styles.headerContainer}>
@@ -271,7 +282,11 @@ class Header extends Component {
                   <MicroFrontendRenderer
                     load={waitlistMFEActive}
                     className="waitlist-mfe-container"
-                    component={<WaitlistMFEComponent />}
+                    component={
+                      <WaitlistMFEComponent
+                        cancellationWaitlistData={cancellationWaitlist}
+                      />
+                    }
                   />
                 </div>
               ) : (
@@ -333,6 +348,8 @@ function mapDispatchToProps(dispatch) {
     {
       setScheduleView,
       setWaitlistOpen,
+      setSelectedCancellationId,
+      setCancellationListData
     },
     dispatch,
   );
@@ -346,6 +363,8 @@ const mapStateToProps = ({ auth, schedule, apiRequests, featureFlags }) => ({
   timezone: auth.get('timezone'),
   waitlistMFEActive: featureFlags.getIn(['flags', 'waitlist-mfe-active']),
   isOpenWaitlist: schedule.get('isOpenWaitlist'),
+  cancellationList: schedule.get('cancellationList'),
+  selectedCancellationId: schedule.get('selectedCancellationId'),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

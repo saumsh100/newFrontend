@@ -17,6 +17,8 @@ import {
   SET_NOTIFICATION,
   SET_IS_OPEN_WAITLIST,
   SET_CANCELATION_LIST,
+  CANCELLATION_LIST,
+  SELECTED_CANCELLATION_LIST_ID,
 } from '../constants';
 
 export const setMergingPatient = createAction(SET_MERGING);
@@ -35,4 +37,6 @@ export const setReject = createAction(REJECT);
 export const setIsSelectAppointmentDbClick = createAction(SET_IS_SELECT_APPOINTMENT_DBCLICK);
 export const setNotification = createAction(SET_NOTIFICATION);
 export const setWaitlistOpen = createAction(SET_IS_OPEN_WAITLIST);
+export const setCancellationListData = createAction(CANCELLATION_LIST);
+export const setSelectedCancellationId = createAction(SELECTED_CANCELLATION_LIST_ID)
 export const setCancelationList = createAction(SET_CANCELATION_LIST);
