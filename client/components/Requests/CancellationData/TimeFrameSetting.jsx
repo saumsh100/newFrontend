@@ -96,6 +96,7 @@ function TimeFrameSetting(props) {
                   toggleDiv: styles.toggleDiv,
                   label: styles.label,
                   activeIcon: styles.activeIcon,
+                  optionListItem: styles.optionListItem,
                 }}
               />
             ) : (
