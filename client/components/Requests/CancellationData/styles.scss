@@ -332,3 +332,13 @@
 .cancellationDateToolTip {
   font-weight: $semi-bold-weight;
 }
+.dropdown {
+  > :global(.dd-menu-items ul) {
+    background-color: $super-white;
+    border: 1px solid $color-purple-200;
+    width: 69px;
+  }
+}
+.optionListItem {
+  border: 1px solid $color-purple-100;
+}

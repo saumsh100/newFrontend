@@ -110,6 +110,7 @@ function TimeFrameSetting(props) {
                   label: styles.label,
                   caretIconWrapper: styles.caretIconWrapper,
                   caretIcon: styles.activeIcon,
+                  optionListItem: styles.optionListItem,
                 }}
               />
             )}

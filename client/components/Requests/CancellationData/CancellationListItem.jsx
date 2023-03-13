@@ -96,6 +96,7 @@ function CancellationListItem(props) {
             <span className={styles.cancellationText__requestedBy}>
               {patientFullname} {age}
               <Tooltip
+                overlayClassName="cancelled-on"
                 trigger={['hover']}
                 overlay={
                   <div className={styles.tooltipWrapper}>
